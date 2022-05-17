@@ -11,8 +11,8 @@ export interface InputProps
   className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
-  variant?: "filled" | "outlined";
   helperText?: string;
+  variant?: "filled" | "outlined";
   size?: "small" | "medium" | "large";
 }
 
