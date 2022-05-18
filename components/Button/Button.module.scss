@@ -1,0 +1,55 @@
+@import "styles/variables.scss";
+
+.button {
+  display: flex;
+  align-items: center;
+  background-color: $primary-500;
+  height: fit-content;
+  min-width: 100px;
+  color: white;
+  font-weight: $fw-bold;
+  font-size: $fs-md;
+  border: 1px solid transparent;
+  border-radius: $border-radius;
+  padding: $p-md;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+
+  .container {
+    height: $input-height;
+    width: 100%;
+    min-width: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1px 0;
+  }
+}
+
+.small {
+  font-size: $fs-sm;
+  padding: $p-sm;
+}
+
+.large {
+  min-width: 130px;
+  font-size: $fs-lg;
+  padding: $p-lg;
+}
+
+.outlined {
+  color: $primary-500;
+  border: 1px solid $primary-500;
+  background-color: transparent;
+}
+
+.disabled {
+  color: $bg-700;
+  border: 1px solid transparent;
+  background-color: $bg-100;
+  &:hover {
+    box-shadow: none;
+  }
+}
