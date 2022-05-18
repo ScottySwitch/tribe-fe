@@ -4,14 +4,14 @@
   label {
     display: block;
     font-size: $fs-sm;
-    font-weight: $fw-normal;
+    font-weight: $fw-light;
     color: $bg-400;
   }
 
   input {
     width: 100%;
     height: $input-height;
-    font-weight: $fw-normal;
+    font-weight: $fw-light;
     font-size: $fs-md;
     text-overflow: ellipsis;
     border: none;
