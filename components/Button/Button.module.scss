@@ -1,15 +1,14 @@
 @import "styles/variables.scss";
 
 .button {
+  height: $field-height-md;
   display: flex;
   align-items: center;
   background-color: $primary-500;
-  height: fit-content;
   min-width: 100px;
   color: white;
   font-weight: $fw-bold;
   font-size: $fs-md;
-  border: 1px solid transparent;
   border-radius: $border-radius;
   padding: $p-md;
 
@@ -24,16 +23,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 1px 0;
   }
 }
 
 .small {
+  height: fit-content;
   font-size: $fs-sm;
   padding: $p-sm;
 }
 
 .large {
+  height: fit-content;
   min-width: 130px;
   font-size: $fs-lg;
   padding: $p-lg;
