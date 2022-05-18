@@ -136,6 +136,7 @@ const Header = () => {
           <Image src={require("public/logo.svg")} alt="logo" />
           <Input
             className={styles.search}
+            prefix={<Icon icon="search" size={20} />}
             variant="filled"
             placeholder="Search"
           />
