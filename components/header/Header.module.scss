@@ -43,19 +43,31 @@
       .categories {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 10px;
         width: 35%;
         min-width: fit-content;
         justify-content: space-between;
+
         .category {
+          height: 100%;
+          box-sizing: border-box;
           cursor: pointer;
           display: flex;
           align-items: center;
           gap: 4px;
+
           .icon {
             opacity: 0;
           }
+
           &:hover {
+            .icon {
+              opacity: 1;
+            }
+          }
+
+          &.selected {
+            font-weight: $fw-semi-bold;
             .icon {
               opacity: 1;
             }

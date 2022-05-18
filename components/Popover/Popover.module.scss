@@ -1,0 +1,42 @@
+@import "styles/variables.scss";
+
+.popover {
+  position: relative;
+  height: 100%;
+  .content {
+    position: absolute;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: white;
+    box-shadow: $box-shadow;
+    border-radius: $border-radius;
+
+    & > div {
+      cursor: pointer;
+      padding: 8px;
+      line-height: 1;
+      border-radius: $border-radius;
+      min-width: 100px;
+
+      &:hover {
+        background-color: $primary-20;
+      }
+    }
+
+    &.top-right {
+      left: 0;
+    }
+    &.top-left {
+      right: 0;
+    }
+    &.bottom-right {
+      left: 0;
+      top: calc(100% + 10px);
+    }
+    &.bottom-left {
+      right: 0;
+    }
+  }
+}

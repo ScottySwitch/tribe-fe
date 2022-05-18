@@ -1,8 +1,11 @@
+import classNames from "classnames";
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
+import Popover from "components/Popover/Popover";
 import Select from "components/Select/Select";
 import Image from "next/image";
+import React, { useState } from "react";
 import styles from "./Header.module.scss";
 
 const locations = [
@@ -19,7 +22,94 @@ const languages = [
   { label: "Vietnam", value: "vn" },
 ];
 
+const categories = [
+  {
+    width: "w-[30px]",
+    icon: "buy-color",
+    label: "Buy",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+  {
+    width: "w-[30px]",
+    icon: "eat-color",
+    label: "Eet",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+  {
+    width: "w-[70px]",
+    icon: "camera-color",
+    label: "See & Do",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+  {
+    width: "w-[80px]",
+    icon: "car-color",
+    label: "Transport",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+  {
+    width: "w-[30px]",
+    icon: "bed-color",
+    label: "Stay",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+];
+
 const Header = () => {
+  const [currentCategory, setCurrentCategory] = useState<string | undefined>();
+
+  const renderCategories = categories.map((cat) => {
+    const isSelected = currentCategory === cat.label;
+    const content = (
+      <React.Fragment>
+        {cat.values.map((value) => (
+          <div key={value.value}>{value.value}</div>
+        ))}
+      </React.Fragment>
+    );
+    return (
+      <Popover key={cat.label} content={content} visible={isSelected}>
+        <div
+          className={`${styles.category} ${isSelected && styles.selected}`}
+          onClick={() => setCurrentCategory(cat.label)}
+        >
+          <Icon icon={cat.icon} size={20} className={styles.icon} />
+          <div className={cat.width}>{cat.label}</div>
+        </div>
+      </Popover>
+    );
+  });
+
   return (
     <div className={styles.header}>
       <div className={styles.navbar_top}>
@@ -49,27 +139,12 @@ const Header = () => {
             variant="filled"
             placeholder="Search"
           />
-          <div className={styles.categories}>
-            <div className={styles.category}>
-              <Icon icon="buy-color" size={20} className={styles.icon} />
-              Buy
-            </div>
-            <div className={styles.category}>
-              <Icon icon="eat-color" size={20} className={styles.icon} />
-              Eat
-            </div>
-            <div className={styles.category}>
-              <Icon icon="camera-color" size={20} className={styles.icon} />
-              See & Do
-            </div>
-            <div className={styles.category}>
-              <Icon icon="car-color" size={20} className={styles.icon} />
-              Transport
-            </div>
-            <div className={styles.category}>
-              <Icon icon="bed-color" size={20} className={styles.icon} />
-              Stay
-            </div>
+          <div
+            className={styles.categories}
+            tabIndex={1}
+            onBlur={() => setCurrentCategory(undefined)}
+          >
+            {renderCategories}
           </div>
         </div>
       </div>
