@@ -113,14 +113,45 @@
   }
 }
 
+@media screen and (max-width: $tablet) {
+  .infor_card {
+    width: 200px;
+    height: 270px;
+
+    .cover {
+      width: 200px;
+      height: 118px;
+    }
+
+    .details {
+      padding: 4px 8px 8px 8px;
+      font-size: $fs-xxs;
+      .title {
+        font-size: $fs-sm;
+      }
+      .price {
+        font-size: $fs-xs;
+      }
+      .break {
+        margin: 8px 0;
+        border-top: 1px solid $bg-100;
+      }
+
+      .tags {
+        margin-top: 8px;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: $mobile) {
   .infor_card {
     width: 168px;
     height: 247px;
 
     .cover {
-      height: 95px;
       width: 168px;
+      height: 95px;
     }
 
     .details {
