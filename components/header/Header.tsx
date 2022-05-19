@@ -17,9 +17,9 @@ const locations = [
 ];
 
 const languages = [
-  { label: "English", value: "en" },
-  { label: "Thailand", value: "th" },
-  { label: "Vietnam", value: "vn" },
+  { label: <Icon icon="eng-flag" size={30} />, value: "en" },
+  { label: <Icon icon="indo-flag" size={30} />, value: "th" },
+  { label: <Icon icon="sing-flag" size={30} />, value: "vn" },
 ];
 
 const categories = [
@@ -115,7 +115,7 @@ const Header = () => {
       <div className={styles.header_top}>
         <div className={styles.content}>
           <div className={styles.left_col}>
-            <Icon icon="location" size={50} />
+            <Icon icon="map" size={20} />
             <Select
               className={styles.location}
               variant="no-outlined"
@@ -123,8 +123,10 @@ const Header = () => {
               options={locations}
             />
             <Select
+              size="large"
               className={styles.language}
               options={languages}
+              isSearchable={false}
               variant="no-outlined"
             />
           </div>

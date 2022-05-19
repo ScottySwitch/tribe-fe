@@ -18,6 +18,7 @@ export interface SelectProps {
   disabled?: boolean;
   placeholder?: string;
   isMulti?: boolean;
+  isSearchable?: boolean;
   onChange?: (value: any) => void;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
@@ -34,6 +35,7 @@ const Select = (props: SelectProps) => {
     options,
     placeholder,
     onChange,
+    isSearchable = true,
     defaultValue,
     variant = "outlined",
     size = "medium",
@@ -48,6 +50,9 @@ const Select = (props: SelectProps) => {
     [styles.large]: size === "large",
     [styles.small]: size === "small",
   });
+
+  const primary500 = "#E60112";
+  const primary20 = "#FEF1F2";
 
   const customStyles: StylesConfig = {
     control: (styles) => ({
@@ -68,15 +73,16 @@ const Select = (props: SelectProps) => {
         },
         ":hover": {
           ...styles[":hover"],
-          backgroundColor: isSelected ? "#E60112" : "#FEF1F2",
+          backgroundColor: isSelected ? primary500 : primary20,
         },
-        backgroundColor: isSelected ? "#E60112" : "white",
+        backgroundColor: isSelected ? primary500 : "white",
       };
     },
     dropdownIndicator: (styles) => ({ ...styles, padding: 0 }),
-    input: (styles) => ({ ...styles, padding: 0 }),
+    input: (styles) => ({ ...styles, padding: 0, margin: 0 }),
     valueContainer: (styles) => ({ ...styles, padding: 0 }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
+    indicatorsContainer: (styles) => ({ ...styles, alignItems: "flex-start" }),
   };
 
   const handleChange = (dropdownValues: any) => {
@@ -100,6 +106,7 @@ const Select = (props: SelectProps) => {
           isDisabled={disabled}
           styles={customStyles}
           isMulti={isMulti}
+          isSearchable={isSearchable}
         />
       </div>
       {helperText && <div>{helperText}</div>}
