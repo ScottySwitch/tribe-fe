@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import React, { ReactElement } from "react";
-import styles from "./Sectionlayout.module.scss";
+
+import styles from "./SectionLayout.module.scss";
 
 export interface SectionLayoutProps {
   title?: string;
