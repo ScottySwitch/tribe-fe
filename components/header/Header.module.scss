@@ -1,14 +1,16 @@
 @import "styles/variables.scss";
 
 .header {
+  position: sticky;
+  top: 0;
   width: 100%;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
   color: $bg-600;
   font-size: $fs-md;
   font-weight: $fw-light;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
 
-  .navbar_top {
-    padding: 4px 0;
+  .header_top {
+    padding: 8px 0;
     border-bottom: 1px solid $bg-100;
 
     .content {
@@ -17,6 +19,14 @@
       max-width: $content-max-width;
       display: flex;
       justify-content: space-between;
+
+      .language {
+        width: 110px;
+      }
+
+      .location {
+        width: 130px;
+      }
 
       .left_col,
       .right_col {
@@ -30,15 +40,24 @@
     }
   }
 
-  .navbar_bottom {
+  .header_bottom {
     .content {
       margin: auto;
       width: $content-width;
       max-width: $content-max-width;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 10px 0;
       gap: 20px;
+
+      .mobile {
+        display: none;
+        &_search,
+        &_hamburger {
+          display: none;
+        }
+      }
 
       .categories {
         display: flex;
@@ -77,6 +96,33 @@
 
       .search {
         width: 30%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .header {
+    .header_top {
+      display: none;
+    }
+
+    .header_bottom {
+      .content {
+        .search,
+        .categories {
+          display: none;
+        }
+
+        .mobile {
+          display: flex;
+          gap: 10px;
+
+          &_search,
+          &_hamburger {
+            display: block;
+          }
+        }
       }
     }
   }

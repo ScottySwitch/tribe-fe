@@ -112,16 +112,21 @@ const Header = () => {
 
   return (
     <div className={styles.header}>
-      <div className={styles.navbar_top}>
+      <div className={styles.header_top}>
         <div className={styles.content}>
           <div className={styles.left_col}>
             <Icon icon="location" size={50} />
             <Select
+              className={styles.location}
               variant="no-outlined"
               placeholder="Location"
               options={locations}
             />
-            <Select options={languages} variant="no-outlined" />
+            <Select
+              className={styles.language}
+              options={languages}
+              variant="no-outlined"
+            />
           </div>
           <div className={styles.right_col}>
             <Icon icon="business" size={20} />
@@ -131,7 +136,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className={styles.navbar_bottom}>
+      <div className={styles.header_bottom}>
         <div className={styles.content}>
           <Image src={require("public/logo.svg")} alt="logo" />
           <Input
@@ -146,6 +151,14 @@ const Header = () => {
             onBlur={() => setCurrentCategory(undefined)}
           >
             {renderCategories}
+          </div>
+          <div className={styles.mobile}>
+            <Icon className={styles.mobile_searchr} icon="search" size={25} />
+            <Icon
+              className={styles.mobile_hamburger}
+              icon="ham-menu"
+              size={25}
+            />
           </div>
         </div>
       </div>

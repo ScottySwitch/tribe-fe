@@ -1,13 +1,7 @@
 import classNames from "classnames";
-import { MouseEventHandler, ReactNode, useState } from "react";
-import ReactSelect, {
-  components,
-  ControlProps,
-  Props,
-  StylesConfig,
-} from "react-select";
+import { ReactNode, useState } from "react";
+import ReactSelect, { StylesConfig } from "react-select";
 import styles from "./Select.module.scss";
-import makeAnimated from "react-select/animated";
 
 interface IOption {
   label: string | ReactNode;
@@ -23,6 +17,8 @@ export interface SelectProps {
   helperText?: string;
   disabled?: boolean;
   placeholder?: string;
+  isMulti?: boolean;
+  onChange?: (value: any) => void;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
 }
@@ -34,14 +30,16 @@ const Select = (props: SelectProps) => {
     helperText,
     id,
     disabled,
+    isMulti,
     options,
     placeholder,
+    onChange,
     defaultValue,
     variant = "outlined",
     size = "medium",
   } = props;
 
-  const [selected, setSelected] = useState<IOption[]>(defaultValue || []);
+  const [selected, setSelected] = useState<IOption[] | IOption | undefined>();
 
   const selectWrapperClassName = classNames(className, styles.select, {
     [styles.filled]: variant === "filled",
@@ -51,26 +49,39 @@ const Select = (props: SelectProps) => {
     [styles.small]: size === "small",
   });
 
-  const changes = {
-    padding: 0,
+  const customStyles: StylesConfig = {
+    control: (styles) => ({
+      ...styles,
+      cursor: "pointer",
+      border: "none",
+      boxShadow: "none",
+      fontSize: "14px",
+      minHeight: "min-content",
+    }),
+    option: (styles, { isSelected }) => {
+      return {
+        ...styles,
+        cursor: isSelected ? "default" : "pointer",
+        ":active": {
+          ...styles[":active"],
+          backgroundColor: "#E5E5E5",
+        },
+        ":hover": {
+          ...styles[":hover"],
+          backgroundColor: isSelected ? "#E60112" : "#FEF1F2",
+        },
+        backgroundColor: isSelected ? "#E60112" : "white",
+      };
+    },
+    dropdownIndicator: (styles) => ({ ...styles, padding: 0 }),
+    input: (styles) => ({ ...styles, padding: 0 }),
+    valueContainer: (styles) => ({ ...styles, padding: 0 }),
+    indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
   };
 
-  const customStyles = {
-    dropdownIndicator: (base: any) => Object.assign(base, changes),
-    input: (base: any) => Object.assign(base, changes),
-    valueContainer: (base: any) => Object.assign(base, changes),
-    indicatorSeparator: (base: any) =>
-      Object.assign(base, {
-        display: "none",
-      }),
-  };
-
-  const CustomOption = ({ children, ...props }: any) => {
-    return (
-      <components.Option {...props} className={styles.option}>
-        {children}
-      </components.Option>
-    );
+  const handleChange = (dropdownValues: any) => {
+    onChange?.(dropdownValues);
+    setSelected(dropdownValues);
   };
 
   return (
@@ -80,15 +91,15 @@ const Select = (props: SelectProps) => {
         <ReactSelect
           id={id}
           options={options}
-          controlShouldRenderValue={false}
-          isClearable={false}
           value={selected}
-          defaultValue={defaultValue}
+          onChange={handleChange}
           placeholder={placeholder}
+          isClearable={false}
+          defaultValue={defaultValue}
           closeMenuOnSelect={false}
-          components={{ Option: CustomOption }}
           isDisabled={disabled}
           styles={customStyles}
+          isMulti={isMulti}
         />
       </div>
       {helperText && <div>{helperText}</div>}
