@@ -1,4 +1,5 @@
-.header {
-  color: red;
-  font-size: 10px;
+.card_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }

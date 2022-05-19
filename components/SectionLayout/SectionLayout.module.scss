@@ -1,0 +1,22 @@
+@import "styles/variables.scss";
+
+.section_layout {
+  width: 100%;
+  padding: 50px 0;
+
+  .container {
+    margin: auto;
+    width: $content-width;
+    max-width: $content-max-width;
+
+    .title {
+      font-size: $fs-xl;
+      font-weight: $fw-bold;
+      margin-bottom: 30px;
+    }
+
+    .content {
+      width: 100%;
+    }
+  }
+}

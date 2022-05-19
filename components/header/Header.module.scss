@@ -1,6 +1,7 @@
 @import "styles/variables.scss";
 
 .header {
+  z-index: 2;
   position: sticky;
   top: 0;
   width: 100%;
@@ -8,6 +9,7 @@
   color: $bg-600;
   font-size: $fs-md;
   font-weight: $fw-light;
+  background-color: white;
 
   .header_top {
     border-bottom: 1px solid $bg-100;
