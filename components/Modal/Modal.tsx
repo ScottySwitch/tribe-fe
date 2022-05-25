@@ -7,19 +7,26 @@ export interface ModalProps {
   transparent?: boolean;
   title?: string;
   closable?: boolean;
+  width?: string | number;
   onClose?: () => void;
 }
 
 const Modal = (props: ModalProps) => {
-  const { children, visible, title, transparent, closable, onClose } = props;
+  const {
+    children,
+    visible,
+    title,
+    transparent,
+    width = "fit-content",
+    closable,
+    onClose,
+  } = props;
 
   return !visible ? null : (
     <div className={styles.modal}>
       <div
-        style={{ background: transparent ? "" : "white" }}
+        style={{ background: transparent ? "" : "white", width }}
         className={styles.container}
-        tabIndex={1}
-        onBlur={onClose}
       >
         <div className={styles.header}>
           <div className={styles.title}>{title}</div>
@@ -37,9 +44,10 @@ const Modal = (props: ModalProps) => {
 
 export const ModalFooter = (props: {
   children: ReactElement | ReactElement[];
+  className?: string;
 }) => {
-  const { children } = props;
-  return <div className={styles.footer}>{children}</div>;
+  const { children, className } = props;
+  return <div className={`${styles.footer} ${className}`}>{children}</div>;
 };
 
 export default Modal;
