@@ -11,7 +11,7 @@ export interface ButtonProps
   className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
-  variant?: "default" | "outlined";
+  variant?: "default" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
   type?: "button" | "submit" | "reset";
 }
@@ -33,6 +33,7 @@ const Button = (props: ButtonProps) => {
   const buttonClassName = classNames(className, styles.button, {
     [styles.disabled]: disabled,
     [styles.outlined]: variant === "outlined",
+    [styles.no_outlined]: variant === "no-outlined",
     [styles.large]: size === "large",
     [styles.small]: size === "small",
   });

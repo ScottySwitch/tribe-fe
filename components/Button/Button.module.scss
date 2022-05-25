@@ -1,11 +1,12 @@
 @import "styles/variables.scss";
 
 .button {
-  height: $field-height-md;
   display: flex;
   align-items: center;
   background-color: $primary-500;
+  height: $field-height-md;
   min-width: 100px;
+  width: 100%;
   color: white;
   font-weight: $fw-bold;
   font-size: $fs-md;
@@ -52,4 +53,10 @@
   &:hover {
     box-shadow: none;
   }
+}
+
+.no_outlined {
+  color: $primary-500;
+  border: none;
+  background-color: white;
 }
