@@ -131,7 +131,7 @@ const Header = () => {
             />
           </div>
           <div className={styles.right_col}>
-            <Icon icon="business" size={20} />
+            <Icon icon="business" size={60} />
             <div>Business</div>
             <Button text="Sign up" variant="outlined" />
             <Button text="Login" />
