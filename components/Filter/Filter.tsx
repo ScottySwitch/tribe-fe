@@ -1,5 +1,8 @@
 import classNames from "classnames";
 import Button from "components/Button/Button";
+import Checkbox from "components/Checkbox/Checkbox";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
 import Modal, { ModalFooter, ModalProps } from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Range from "components/Range/Range";
@@ -23,6 +26,15 @@ const sortList = [
   { label: "Price (High to low)" },
   { label: "Rating (Low to high)" },
   { label: "Recently added" },
+];
+
+const otherList = [
+  { label: "Halal Certified" },
+  { label: "Mulism Owned" },
+  { label: "Halal Ingredients used" },
+  { label: "Vegetarian" },
+  { label: "Halal meals available on request" },
+  { label: "Vegetarian options available" },
 ];
 
 const Sort = () => (
@@ -51,9 +63,28 @@ const PriceRange = () => {
   );
 };
 
-const Other = () => <div>Other</div>;
+const Other = () => (
+  <div className="flex flex-col gap-[20px]">
+    <Input
+      size="large"
+      placeholder="Search"
+      prefix={<Icon icon="search" size={25} />}
+    />
+    {otherList.map((opt) => (
+      <Checkbox key={opt.label} label={opt.label} />
+    ))}
+  </div>
+);
 
-const Location = () => <div>Location</div>;
+const Location = () => (
+  <div>
+    <Input
+      size="large"
+      placeholder="Search"
+      prefix={<Icon icon="search" size={20} />}
+    />
+  </div>
+);
 
 const Filter = (props: FilterProps) => {
   const { visible, onClose } = props;

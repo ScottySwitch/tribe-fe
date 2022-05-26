@@ -1,15 +1,17 @@
 import styles from "./Checkbox.module.scss";
 
-const Checkbox = () => {
+export interface CheckboxProps {
+  label?: string;
+  value?: string;
+  name?: string;
+}
+
+const Checkbox = (props: CheckboxProps) => {
+  const { label, value, name } = props;
   return (
     <div className={styles.checkbox}>
-      <input id={"all"} type="checkbox" />
-      <label
-        htmlFor={"all"}
-        className="flex flex-col items-center justify-center cursor-pointer"
-      >
-        all
-      </label>
+      <input name={name} id={label} type="checkbox" />
+      <label htmlFor={label}>{label}</label>
     </div>
   );
 };
