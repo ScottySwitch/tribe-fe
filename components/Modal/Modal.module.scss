@@ -17,17 +17,18 @@
     z-index: 10;
 
     .container {
-      height: 530px;
+      max-height: 1000px;
     }
   }
 
   .container {
     width: fit-content;
     min-width: 300px;
-    height: 0;
+    max-height: 0;
     border-radius: $border-radius;
     overflow-y: hidden;
-    transition: all 0.4s ease-in-out;
+    box-sizing: border-box;
+    transition: all 0.5s ease-in-out;
 
     .header {
       display: flex;
@@ -45,6 +46,10 @@
         cursor: pointer;
       }
     }
+    .body {
+      width: 100%;
+      margin: auto;
+    }
   }
 }
 
@@ -53,13 +58,28 @@
   padding: 16px;
 }
 
+.body {
+  display: flex;
+  justify-content: center;
+}
+
 @media screen and (max-width: $mobile) {
   .modal {
-    align-items: flex-end;
-
     .container {
       width: 100% !important;
       border-radius: $border-radius $border-radius 0 0;
+    }
+
+    &.bottom {
+      align-items: flex-end;
+    }
+
+    &.center {
+      align-items: center;
+    }
+
+    &.top {
+      align-items: flex-start;
     }
   }
 } ;

@@ -3,7 +3,11 @@ import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
-import Modal, { ModalFooter, ModalProps } from "components/Modal/Modal";
+import Modal, {
+  ModalFooter,
+  ModalBody,
+  ModalProps,
+} from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Range from "components/Range/Range";
 import { setValues } from "framer-motion/types/render/utils/setters";
@@ -29,6 +33,9 @@ const sortList = [
 ];
 
 const otherList = [
+  { label: "Halal Certified" },
+  { label: "Halal Certified" },
+  { label: "Halal Certified" },
   { label: "Halal Certified" },
   { label: "Mulism Owned" },
   { label: "Halal Ingredients used" },
@@ -64,16 +71,18 @@ const PriceRange = () => {
 };
 
 const Other = () => (
-  <div className="flex flex-col gap-[20px]">
+  <>
     <Input
       size="large"
       placeholder="Search"
       prefix={<Icon icon="search" size={25} />}
     />
-    {otherList.map((opt) => (
-      <Checkbox key={opt.label} label={opt.label} />
-    ))}
-  </div>
+    <div className={styles.option_container}>
+      {otherList.map((opt) => (
+        <Checkbox key={opt.label} label={opt.label} />
+      ))}
+    </div>
+  </>
 );
 
 const Location = () => (
@@ -111,9 +120,9 @@ const Filter = (props: FilterProps) => {
       onClose={onClose}
       closable
       title="Filter & Sort"
-      width="670px"
+      width={700}
     >
-      <div className={styles.body}>
+      <ModalBody>
         <div className={styles.tab_container}>
           {tabList.map((tab) => {
             const tabClassNames = classNames(styles.tab, {
@@ -132,7 +141,7 @@ const Filter = (props: FilterProps) => {
           })}
         </div>
         <div className={styles.panel}>{renderPanel()}</div>
-      </div>
+      </ModalBody>
       <ModalFooter className="flex justify-between">
         <div className={styles.reset_btn}>Reset all</div>
         <Button text="Apply" className={styles.apply_btn} />

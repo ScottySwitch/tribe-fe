@@ -9,6 +9,8 @@ export interface ModalProps {
   title?: string;
   closable?: boolean;
   width?: string | number;
+  notBlur?: Boolean;
+  mobilePosition?: "center" | "bottom" | "top";
   onClose?: () => void;
 }
 
@@ -20,15 +22,17 @@ const Modal = (props: ModalProps) => {
     transparent,
     width = "fit-content",
     closable,
+    notBlur,
+    mobilePosition = "bottom",
     onClose,
   } = props;
 
-  const modalClassName = classNames(styles.modal, {
+  const modalClassName = classNames(styles.modal, styles[mobilePosition], {
     [styles.show]: visible,
   });
 
   const handleOnBlurModal: MouseEventHandler<HTMLDivElement> = (e) => {
-    e.target === e.currentTarget && onClose?.();
+    !notBlur && e.target === e.currentTarget && onClose?.();
   };
 
   return (
@@ -49,6 +53,14 @@ const Modal = (props: ModalProps) => {
       </div>
     </div>
   );
+};
+
+export const ModalBody = (props: {
+  children: ReactElement | ReactElement[];
+  className?: string;
+}) => {
+  const { children, className } = props;
+  return <div className={`${styles.body} ${className}`}>{children}</div>;
 };
 
 export const ModalFooter = (props: {
