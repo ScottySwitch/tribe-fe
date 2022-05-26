@@ -1,10 +1,10 @@
-import "../styles/globals.css";
+import { useState } from "react";
 
 import type { AppProps } from "next/app";
 import Header from "components/Header/Header";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { useState } from "react";
-import Modal, { ModalBody } from "components/Modal/Modal";
+
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [showAuthPopup, setShowPopup] = useState(true);
@@ -12,7 +12,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Header />
       <Component {...pageProps} />
-
       <AuthPopup onClose={() => setShowPopup(false)} visible={showAuthPopup} />
     </>
   );

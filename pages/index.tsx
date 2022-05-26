@@ -12,8 +12,8 @@ const Home: NextPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   return (
     <div>
-      <div onClick={() => setShowFilter(true)}>Filter</div>
-      <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
+      {/* <div onClick={() => setShowFilter(true)}>Filter</div>
+      <Filter onClose={() => setShowFilter(false)} visible={showFilter} /> */}
       <SectionLayout title="Exclusive deals">
         <Carousel>
           {inforCardList?.map((card) => (
