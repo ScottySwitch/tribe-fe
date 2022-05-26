@@ -5,6 +5,7 @@ import Header from "components/Header/Header";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import "../styles/globals.css";
+import Footer from "components/Footer/Footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [showAuthPopup, setShowPopup] = useState(true);
@@ -13,6 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Header />
       <Component {...pageProps} />
       <AuthPopup onClose={() => setShowPopup(false)} visible={showAuthPopup} />
+      <Footer />
     </>
   );
 }

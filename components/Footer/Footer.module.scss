@@ -1,0 +1,68 @@
+@import "styles/variables.scss";
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  color: $bg-400;
+
+  .left_col {
+    margin-right: 5rem;
+  }
+
+  .right_col {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 50px;
+    column-gap: 50px;
+
+    .nav {
+      width: 16%;
+      font-size: $fs-sm;
+      .header {
+        color: $bg-500;
+        font-size: $fs-md;
+        font-weight: $fw-semi-bold;
+      }
+      .item_container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+
+        .label {
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+.rights {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid $bg-100;
+  padding-top: 16px;
+  margin-top: 16px;
+  font-size: $fs-xs;
+  color: $bg-400;
+}
+
+@media screen and (max-width: $mobile) {
+  .footer {
+    flex-direction: column;
+
+    .left_col {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+  }
+  .rights {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

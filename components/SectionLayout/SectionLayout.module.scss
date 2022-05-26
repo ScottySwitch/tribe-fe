@@ -21,4 +21,8 @@
       width: 100%;
     }
   }
+
+  &.colored_background {
+    background-color: $bg-50;
+  }
 }
