@@ -1,4 +1,5 @@
-import { ReactElement, useEffect } from "react";
+import classNames from "classnames";
+import { MouseEventHandler, ReactElement, useEffect } from "react";
 import styles from "./Modal.module.scss";
 
 export interface ModalProps {
@@ -22,8 +23,16 @@ const Modal = (props: ModalProps) => {
     onClose,
   } = props;
 
-  return !visible ? null : (
-    <div className={styles.modal}>
+  const modalClassName = classNames(styles.modal, {
+    [styles.show]: visible,
+  });
+
+  const handleOnBlurModal: MouseEventHandler<HTMLDivElement> = (e) => {
+    e.target === e.currentTarget && onClose?.();
+  };
+
+  return (
+    <div className={modalClassName} onClick={handleOnBlurModal}>
       <div
         style={{ background: transparent ? "" : "white", width }}
         className={styles.container}

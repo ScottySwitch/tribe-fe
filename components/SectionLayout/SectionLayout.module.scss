@@ -3,6 +3,8 @@
 .section_layout {
   width: 100%;
   padding: 50px 0;
+  z-index: 1;
+  background-color: white;
 
   .container {
     margin: auto;

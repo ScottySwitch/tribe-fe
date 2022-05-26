@@ -5,24 +5,36 @@
   top: 0;
   left: 0;
   display: flex;
-  width: 100vw;
-  height: 100vh;
   align-items: center;
   justify-content: center;
+  height: 100vh;
+  width: 100vw;
   background-color: #3c4467a1;
-  z-index: 3;
+  transition: all 0.01s;
+  z-index: -1;
+
+  &.show {
+    z-index: 10;
+
+    .container {
+      height: 530px;
+    }
+  }
 
   .container {
-    border-radius: $border-radius;
     width: fit-content;
-    height: fit-content;
     min-width: 300px;
+    height: 0;
+    border-radius: $border-radius;
+    overflow-y: hidden;
+    transition: all 0.4s ease-in-out;
 
     .header {
       display: flex;
       justify-content: space-between;
       padding: 16px;
       align-items: center;
+
       .title {
         color: $bg-700;
         font-size: $fs-lg;
@@ -40,3 +52,14 @@
   display: flex;
   padding: 16px;
 }
+
+@media screen and (max-width: $mobile) {
+  .modal {
+    align-items: flex-end;
+
+    .container {
+      width: 100% !important;
+      border-radius: $border-radius $border-radius 0 0;
+    }
+  }
+} ;
