@@ -2,11 +2,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import type { AppProps } from "next/app";
-import Header from "components/Header/Header";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import "../styles/globals.css";
 import Footer from "components/Footer/Footer";
+import Header from "components/TheHeader/Header";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
