@@ -98,3 +98,15 @@ export const inforCardList = [
     isVerified: true,
   },
 ];
+
+export const interestingList = [
+  { avatar: "https://picsum.photos/200/300", label: "Animal" },
+  { avatar: "https://picsum.photos/200/300", label: "Spicy" },
+  { avatar: "https://picsum.photos/200/300", label: "DIY" },
+  { avatar: "https://picsum.photos/200/300", label: "Festival" },
+  { avatar: "https://picsum.photos/200/300", label: "Anime" },
+  { avatar: "https://picsum.photos/200/300", label: "Hot food" },
+  { avatar: "https://picsum.photos/200/300", label: "Travel" },
+  { avatar: "https://picsum.photos/200/300", label: "Ice cream" },
+  { avatar: "https://picsum.photos/200/300", label: "Shopping" },
+];
