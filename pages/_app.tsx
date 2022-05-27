@@ -11,7 +11,13 @@ import { useRouter } from "next/router";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const pathname = router.pathname;
-  const notAuthPages = ["/login", "/signup", "/forgot-password"];
+  const notAuthPages = [
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/forgot-password/otp",
+    "/forgot-password/reset",
+  ];
   const isAuthPage = !notAuthPages.includes(pathname);
   const [showAuthPopup, setShowPopup] = useState(isAuthPage);
 

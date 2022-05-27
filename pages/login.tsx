@@ -1,12 +1,15 @@
+import Link from "next/link";
+import { MouseEventHandler, useState } from "react";
 import classNames from "classnames";
+
 import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Modal, { ModalHeader } from "components/Modal/Modal";
-import Link from "next/link";
-import { MouseEventHandler, useState } from "react";
-import styles from "styles/Login.module.scss";
+
+import styles from "styles/Auth.module.scss";
+import { useRouter } from "next/router";
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -30,9 +33,10 @@ const tabList = [
 const LoginPage = () => {
   const [method, setMethod] = useState(LoginMethod.EMAIL);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   return (
-    <div className={styles.login}>
+    <div className={styles.auth}>
       <Modal visible={true} backdrop={false} width={580}>
         <div className={styles.form_container}>
           <ModalHeader alignTitle="center">Log in</ModalHeader>
@@ -54,9 +58,9 @@ const LoginPage = () => {
           </div>
           <div className={styles.body}>
             {method === LoginMethod.PHONE_NUMBER ? (
-              <Input size="large" />
+              <Input size="large" placeholder="Phone number" />
             ) : (
-              <Input label="Email" />
+              <Input label="Email" placeholder="Ypur email" />
             )}
             <Input
               size="large"
@@ -78,7 +82,7 @@ const LoginPage = () => {
               <Icon icon="facebook-color" size={20} className={styles.icon} />
               <Icon icon="instagram-color" size={20} className={styles.icon} />
             </div>
-            <Button text="Log in" />
+            <Button text="Log in" onClick={() => router.push("/")} />
             <div className={styles.sign_up}>
               No account yet?
               <span>

@@ -1,6 +1,6 @@
 @import "./variables.scss";
 
-.login {
+.auth {
   height: 100vh;
   width: 100vw;
   background-color: $orange-50;
@@ -52,6 +52,11 @@
       flex-direction: column;
       gap: 20px;
       font-size: $fs-sm;
+      color: $bg-500;
+
+      .instruction {
+        text-align: center;
+      }
 
       .actions {
         color: $bg-400;
