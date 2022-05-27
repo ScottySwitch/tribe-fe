@@ -118,7 +118,6 @@ const Filter = (props: FilterProps) => {
     <Modal
       visible={visible}
       onClose={onClose}
-      closable
       title="Filter & Sort"
       width={700}
     >

@@ -27,6 +27,7 @@ const Input = (props: InputProps) => {
     size = "medium",
     id,
     disabled,
+    type,
     ...rest
   } = props;
 
@@ -35,15 +36,16 @@ const Input = (props: InputProps) => {
     [styles.disabled]: disabled,
     [styles.large]: size === "large",
     [styles.small]: size === "small",
+    [styles.label]: label,
   });
 
   return (
     <div className={inputWrapperClassName}>
       <div className={styles.container}>
-        <label htmlFor={id}>{label}</label>
+        {label && <label htmlFor={id}>{label}</label>}
         <div className={styles.content}>
           {prefix && <div>{prefix}</div>}
-          <input disabled={disabled} id={id} {...rest} />
+          <input type={type} disabled={disabled} id={id} {...rest} />
           {suffix && <div>{suffix}</div>}
         </div>
       </div>

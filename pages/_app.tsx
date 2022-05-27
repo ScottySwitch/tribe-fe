@@ -6,16 +6,22 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import "../styles/globals.css";
 import Footer from "components/Footer/Footer";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [showAuthPopup, setShowPopup] = useState(true);
+  const router = useRouter();
+  const pathname = router.pathname;
+  const notAuthPages = ["/login", "/signup", "/forgot-password"];
+  const isAuthPage = !notAuthPages.includes(pathname);
+  const [showAuthPopup, setShowPopup] = useState(isAuthPage);
+
   return (
-    <>
+    <div>
       <Header />
       <Component {...pageProps} />
       <AuthPopup onClose={() => setShowPopup(false)} visible={showAuthPopup} />
-      <Footer />
-    </>
+      {isAuthPage && <Footer />}
+    </div>
   );
 }
 

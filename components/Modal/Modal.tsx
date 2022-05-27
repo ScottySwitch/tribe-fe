@@ -11,6 +11,7 @@ export interface ModalProps {
   width?: string | number;
   notBlur?: Boolean;
   mobilePosition?: "center" | "bottom" | "top";
+  backdrop?: boolean;
   onClose?: () => void;
 }
 
@@ -21,14 +22,17 @@ const Modal = (props: ModalProps) => {
     title,
     transparent,
     width = "fit-content",
-    closable,
+    closable = true,
     notBlur,
     mobilePosition = "bottom",
+    backdrop = true,
     onClose,
   } = props;
 
   const modalClassName = classNames(styles.modal, styles[mobilePosition], {
     [styles.show]: visible,
+    [styles.no_backdrop]: backdrop === false,
+    [styles.transparent]: transparent,
   });
 
   const handleOnBlurModal: MouseEventHandler<HTMLDivElement> = (e) => {
@@ -37,22 +41,33 @@ const Modal = (props: ModalProps) => {
 
   return (
     <div className={modalClassName} onClick={handleOnBlurModal}>
-      <div
-        style={{ background: transparent ? "" : "white", width }}
-        className={styles.container}
-      >
-        <div className={styles.header}>
-          <div className={styles.title}>{title}</div>
-          {closable && (
-            <div className={styles.close} onClick={onClose}>
-              &#x2715;
-            </div>
-          )}
-        </div>
+      <div style={{ width }} className={styles.container}>
+        {title && (
+          <div className={styles.header}>
+            <div className={styles.title}>{title}</div>
+            {closable && (
+              <div className={styles.close} onClick={onClose}>
+                &#x2715;
+              </div>
+            )}
+          </div>
+        )}
         {children}
       </div>
     </div>
   );
+};
+
+export const ModalHeader = (props: {
+  children: ReactElement | ReactElement[] | string;
+  className?: string;
+  alignTitle?: "center" | "left";
+}) => {
+  const { children, alignTitle = "left", className } = props;
+  const headerClassName = classNames(styles.header, className, {
+    [styles.center]: alignTitle === "center",
+  });
+  return <div className={headerClassName}>{children}</div>;
 };
 
 export const ModalBody = (props: {

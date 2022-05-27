@@ -123,7 +123,6 @@ const Header = () => {
               options={locations}
             />
             <Select
-              size="large"
               className={styles.language}
               options={languages}
               isSearchable={false}

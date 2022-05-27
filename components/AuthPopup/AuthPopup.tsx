@@ -30,12 +30,17 @@ const AuthPopup = (props: AuthPopupProps) => {
           <Image src={authPopup} layout="responsive" alt="" />
           <div className={styles.button_container}>
             <Link href="/login" passHref>
-              <Button text="Log in" className={styles.login} />
+              <Button
+                text="Log in"
+                className={styles.login}
+                onClick={onClose}
+              />
             </Link>
             <Link href="/signup" passHref>
               <Button
                 text="Sign up"
                 variant="no-outlined"
+                onClick={onClose}
                 className={styles.sign_up}
               />
             </Link>
