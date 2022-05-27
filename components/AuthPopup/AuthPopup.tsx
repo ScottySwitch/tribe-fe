@@ -6,6 +6,7 @@ import camera from "public/icons/camera.svg";
 import Button from "components/Button/Button";
 import Link from "next/link";
 import Modal, { ModalBody } from "components/Modal/Modal";
+import { useRouter } from "next/router";
 
 export interface AuthPopupProps {
   visible?: boolean;
@@ -14,6 +15,15 @@ export interface AuthPopupProps {
 
 const AuthPopup = (props: AuthPopupProps) => {
   const { onClose, visible } = props;
+  const router = useRouter();
+  const goToLogin = () => {
+    onClose();
+    router.push("/login");
+  };
+  const goToSignup = () => {
+    onClose();
+    router.push("/signup");
+  };
   return (
     <Modal
       mobilePosition="center"
@@ -29,21 +39,17 @@ const AuthPopup = (props: AuthPopupProps) => {
           </div>
           <Image src={authPopup} layout="responsive" alt="" />
           <div className={styles.button_container}>
-            <Link href="/login" passHref>
-              <Button
-                text="Log in"
-                className={styles.login}
-                onClick={onClose}
-              />
-            </Link>
-            <Link href="/signup" passHref>
-              <Button
-                text="Sign up"
-                variant="no-outlined"
-                onClick={onClose}
-                className={styles.sign_up}
-              />
-            </Link>
+            <Button
+              text="Log in"
+              className={styles.login}
+              onClick={goToLogin}
+            />
+            <Button
+              text="Sign up"
+              variant="no-outlined"
+              onClick={goToSignup}
+              className={styles.sign_up}
+            />
           </div>
         </div>
       </ModalBody>

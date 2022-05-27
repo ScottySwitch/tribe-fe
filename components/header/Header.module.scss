@@ -11,6 +11,10 @@
   font-weight: $fw-light;
   background-color: white;
 
+  &.sticky {
+    position: sticky;
+  }
+
   .header_top {
     border-bottom: 1px solid $bg-100;
 

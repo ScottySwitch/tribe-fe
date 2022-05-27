@@ -79,8 +79,16 @@ const Footer = () => {
     <SectionLayout backgroundColor>
       <div className={styles.footer}>
         <div className={styles.left_col}>
-          <Image src={require("public/logo.svg")} alt="logo" />
-          <Image src={require("public/icons/socials.svg")} alt="" width={100} />
+          <div>
+            <Image src={require("public/logo.svg")} alt="logo" />
+          </div>
+          <div>
+            <Image
+              src={require("public/icons/socials.svg")}
+              alt=""
+              width={100}
+            />
+          </div>
         </div>
         <div className={styles.right_col}>
           {navList.map((nav) => {

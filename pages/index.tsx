@@ -6,8 +6,6 @@ import { inforCardList } from "contants";
 import type { NextPage } from "next";
 import { useState } from "react";
 
-import styles from "../styles/Home.module.scss";
-
 const Home: NextPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   return (

@@ -5,6 +5,7 @@ import Input from "components/Input/Input";
 import Popover from "components/Popover/Popover";
 import Select from "components/Select/Select";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styles from "./Header.module.scss";
 
@@ -85,8 +86,10 @@ const categories = [
   },
 ];
 
-const Header = () => {
+const Header = (props: { isAuthPage?: boolean }) => {
+  const { isAuthPage } = props;
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
+  const router = useRouter();
 
   const renderCategories = categories.map((cat) => {
     const isSelected = currentCategory === cat.label;
@@ -110,8 +113,12 @@ const Header = () => {
     );
   });
 
+  const headerClassName = classNames(styles.header, {
+    [styles.sticky]: isAuthPage,
+  });
+
   return (
-    <div className={styles.header}>
+    <div className={headerClassName}>
       <div className={styles.header_top}>
         <div className={styles.content}>
           <div className={styles.left_col}>
@@ -132,8 +139,12 @@ const Header = () => {
           <div className={styles.right_col}>
             <Icon icon="business" size={60} />
             <div>Business</div>
-            <Button text="Sign up" variant="outlined" />
-            <Button text="Login" />
+            <Button
+              text="Sign up"
+              variant="outlined"
+              onClick={() => router.push("/signup")}
+            />
+            <Button text="Login" onClick={() => router.push("/login")} />
           </div>
         </div>
       </div>

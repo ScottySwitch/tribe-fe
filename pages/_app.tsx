@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <div>
-      <Header />
+      <Header isAuthPage={isAuthPage} />
       <Component {...pageProps} />
       <AuthPopup onClose={() => setShowPopup(false)} visible={showAuthPopup} />
       {isAuthPage && <Footer />}
