@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import type { AppProps } from "next/app";
@@ -6,7 +7,6 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import "../styles/globals.css";
 import Footer from "components/Footer/Footer";
-import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -17,6 +17,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     "/forgot-password",
     "/forgot-password/otp",
     "/forgot-password/reset",
+    "/signup/otp",
+    "/signup/setup-profile",
   ];
   const isAuthPage = !notAuthPages.includes(pathname);
   const [showAuthPopup, setShowPopup] = useState(isAuthPage);

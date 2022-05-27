@@ -1,6 +1,8 @@
 import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Modal, { ModalHeader } from "components/Modal/Modal";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import styles from "styles/Auth.module.scss";
@@ -12,7 +14,7 @@ const OtpPage = () => {
     <div className={styles.auth}>
       <Modal visible={true} backdrop={false} width={580}>
         <div className={styles.form_container}>
-          <ModalHeader alignTitle="center">Forgot password</ModalHeader>
+          <ModalHeader alignTitle="center">Sign up</ModalHeader>
           <div className={styles.body}>
             <div className={styles.instruction}>
               <div>
@@ -26,9 +28,19 @@ const OtpPage = () => {
               <div>Resend</div>
             </div>
             <Button
-              text="Next"
-              onClick={() => router.push("/forgot-password/reset")}
+              text="Sign up"
+              onClick={() => router.push("/signup/setup-profile")}
             />
+            <div className={styles.sign_up}>
+              Already have account?
+              <span>
+                <Link href="/login"> Log in now</Link>
+              </span>
+            </div>
+          </div>
+          <div className={styles.footer}>
+            <Icon icon="business" size={20} />
+            <div>Login / Sign up for Business</div>
           </div>
         </div>
       </Modal>

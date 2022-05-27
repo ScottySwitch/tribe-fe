@@ -1,12 +1,14 @@
+import React, { useState } from "react";
 import classNames from "classnames";
+import Image from "next/image";
+import { useRouter } from "next/router";
+
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Popover from "components/Popover/Popover";
 import Select from "components/Select/Select";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+
 import styles from "./Header.module.scss";
 
 const locations = [
