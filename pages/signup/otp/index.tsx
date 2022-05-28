@@ -12,7 +12,13 @@ const OtpPage = () => {
 
   return (
     <div className={styles.auth}>
-      <Modal visible={true} backdrop={false} width={580}>
+      <Modal
+        visible
+        backdrop={false}
+        width={580}
+        mobileFullHeight
+        mobilePosition="bottom"
+      >
         <div className={styles.form_container}>
           <ModalHeader alignTitle="center">Sign up</ModalHeader>
           <div className={styles.body}>

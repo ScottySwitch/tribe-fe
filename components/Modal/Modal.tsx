@@ -12,6 +12,7 @@ export interface ModalProps {
   notBlur?: Boolean;
   mobilePosition?: "center" | "bottom" | "top";
   backdrop?: boolean;
+  mobileFullHeight?: boolean;
   onClose?: () => void;
 }
 
@@ -25,6 +26,7 @@ const Modal = (props: ModalProps) => {
     closable = true,
     notBlur,
     mobilePosition = "bottom",
+    mobileFullHeight,
     backdrop = true,
     onClose,
   } = props;
@@ -33,6 +35,7 @@ const Modal = (props: ModalProps) => {
     [styles.show]: visible,
     [styles.no_backdrop]: backdrop === false,
     [styles.transparent]: transparent,
+    [styles.full_height]: mobileFullHeight,
   });
 
   const handleOnBlurModal: MouseEventHandler<HTMLDivElement> = (e) => {

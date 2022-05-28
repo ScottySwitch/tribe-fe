@@ -26,3 +26,19 @@
     background-color: $bg-50;
   }
 }
+
+@media screen and (max-width: $mobile) {
+  .section_layout {
+    .container {
+      width: 82%;
+    }
+  }
+}
+
+@media screen and (max-width: $small-mobile) {
+  .section_layout {
+    .container {
+      width: 90%;
+    }
+  }
+}

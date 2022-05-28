@@ -37,7 +37,13 @@ const LoginPage = () => {
 
   return (
     <div className={styles.auth}>
-      <Modal visible={true} backdrop={false} width={580}>
+      <Modal
+        visible
+        backdrop={false}
+        width={580}
+        mobileFullHeight
+        mobilePosition="bottom"
+      >
         <div className={styles.form_container}>
           <ModalHeader alignTitle="center">Log in</ModalHeader>
           <div className={styles.tabs}>

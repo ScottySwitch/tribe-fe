@@ -72,7 +72,13 @@ const ResetPasswordPage = () => {
 
   return (
     <div className={styles.auth}>
-      <Modal visible={true} backdrop={false} width={580}>
+      <Modal
+        visible
+        backdrop={false}
+        width={580}
+        mobileFullHeight
+        mobilePosition="bottom"
+      >
         {renderStauts()}
       </Modal>
     </div>

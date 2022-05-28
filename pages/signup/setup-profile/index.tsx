@@ -140,7 +140,13 @@ const SetupProfilePage = () => {
 
   return (
     <div className={styles.auth}>
-      <Modal visible={true} backdrop={false} width={580}>
+      <Modal
+        visible
+        backdrop={false}
+        width={580}
+        mobileFullHeight
+        mobilePosition="bottom"
+      >
         <div className={styles.form_container}>
           {step === ProfileSteps.STEP_ONE ? (
             <StepOne setStep={() => setStep(ProfileSteps.STEP_TWO)} />
