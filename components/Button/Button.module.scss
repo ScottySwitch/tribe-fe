@@ -43,7 +43,13 @@
 .outlined {
   color: $primary-500;
   border: 1px solid $primary-500;
-  background-color: transparent;
+  background-color: white;
+}
+
+.secondary {
+  color: $bg-500;
+  border: 1px solid $bg-500;
+  background-color: white;
 }
 
 .disabled {

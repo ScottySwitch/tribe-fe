@@ -1,3 +1,4 @@
+import Button from "components/Button/Button";
 import Carousel from "components/Carousel/Carousel";
 import Filter from "components/Filter/Filter";
 import InforCard from "components/InforCard/InforCard";
@@ -10,9 +11,15 @@ const Home: NextPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   return (
     <div>
-      <div onClick={() => setShowFilter(true)}>Filter</div>
       <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
       <SectionLayout title="Exclusive deals">
+        <Button
+          size="small"
+          text="Filter"
+          variant="secondary"
+          onClick={() => setShowFilter(true)}
+          className="w-[50px] mb-5"
+        />
         <Carousel>
           {inforCardList?.map((card) => (
             <div key={card.title} className="pb-5">
