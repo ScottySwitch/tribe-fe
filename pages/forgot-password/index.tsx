@@ -24,7 +24,11 @@ const ForgotPasswordPage = () => {
 
   return (
     <div className={styles.auth}>
-      <Modal visible={true} backdrop={false} width={580}>
+      <Modal
+        visible={true}
+        backdrop={false}
+        width={580}
+      >
         <div className={styles.form_container}>
           <ModalHeader alignTitle="center">Forgot password</ModalHeader>
           <div className={styles.tabs}>

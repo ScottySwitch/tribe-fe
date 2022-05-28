@@ -1,0 +1,85 @@
+@import "styles/variables.scss";
+
+.upload {
+  display: flex;
+  gap: 20px;
+
+  .image,
+  .input {
+    width: 140px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    background-color: white;
+    cursor: pointer;
+
+    img {
+      object-fit: cover;
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      z-index: 1000;
+      cursor: pointer;
+    }
+
+    .add_icon {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:hover {
+      .add_icon {
+        display: block;
+      }
+    }
+  }
+
+  .input {
+    .add_icon {
+      display: block;
+    }
+  }
+}
+
+.avatar {
+  .image,
+  .input {
+    width: 110px;
+    height: 110px;
+    border: 4px solid white;
+    border-radius: 50%;
+  }
+}
+
+.cover {
+  .image,
+  .input {
+    width: 100%;
+    height: 181px;
+    border: none;
+    border-radius: unset;
+
+    .add_icon {
+      top: unset;
+      left: unset;
+      bottom: 20px;
+      right: 20px;
+      transform: unset;
+    }
+  }
+}

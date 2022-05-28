@@ -1,16 +1,17 @@
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import Image from "next/image";
+import classNames from "classnames";
 
+import Upload from "components/Upload/Upload";
 import Button from "components/Button/Button";
 import Input from "components/Input/Input";
 import Modal, { ModalHeader } from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Select from "components/Select/Select";
+import { interestingList } from "contants";
 
 import styles from "styles/Auth.module.scss";
-import React, { useState } from "react";
-import Image from "next/image";
-import { interestingList } from "contants";
-import classNames from "classnames";
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
@@ -25,6 +26,18 @@ const StepOne = ({ setStep }: { setStep: Function }) => {
         <div>Almost there... set up your profile</div>
       </ModalHeader>
       <div className={styles.body}>
+        <div className={styles.profile_imgs}>
+          <Upload
+            type="cover"
+            className={styles.cover}
+            fileList={["https://picsum.photos/200/300"]}
+          />
+          <Upload
+            fileList={["https://picsum.photos/200"]}
+            type="avatar"
+            className={styles.avatar}
+          />
+        </div>
         <Input placeholder="Your name" label="Name" />
         <Select placeholder="Your country" />
         <div>

@@ -12,6 +12,8 @@
   .form_container {
     .tabs {
       display: flex;
+      border-bottom: 1px solid $bg-100;
+      
       .tab {
         color: $bg-300;
         width: 50%;
@@ -56,6 +58,16 @@
 
       .instruction {
         text-align: center;
+      }
+
+      .profile_imgs {
+        position: relative;
+        height: 235px;
+        .avatar {
+          position: absolute;
+          bottom: 0;
+          left: 40px;
+        }
       }
 
       .interesting {

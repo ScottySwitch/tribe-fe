@@ -152,7 +152,12 @@ const Header = (props: { isAuthPage?: boolean }) => {
       </div>
       <div className={styles.header_bottom}>
         <div className={styles.content}>
-          <Image src={require("public/logo.svg")} alt="logo" />
+          <Image
+            style={{ cursor: "pointer" }}
+            src={require("public/logo.svg")}
+            alt="logo"
+            onClick={() => router.push("/")}
+          />
           <Input
             className={styles.search}
             prefix={<Icon icon="search" size={20} />}

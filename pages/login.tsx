@@ -60,7 +60,7 @@ const LoginPage = () => {
             {method === LoginMethod.PHONE_NUMBER ? (
               <Input size="large" placeholder="Phone number" />
             ) : (
-              <Input label="Email" placeholder="Ypur email" />
+              <Input label="Email" placeholder="Your email" />
             )}
             <Input
               size="large"
