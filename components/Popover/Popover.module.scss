@@ -5,13 +5,20 @@
   height: 100%;
   .content {
     position: absolute;
-    padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 20px;
     background-color: white;
     box-shadow: $box-shadow;
     border-radius: $border-radius;
+    transition: all 0.4s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+
+    &.show {
+      max-height: 1000px;
+      padding: 16px;
+    }
 
     & > div {
       cursor: pointer;
@@ -28,13 +35,21 @@
     &.top-right {
       left: 0;
     }
+
+    &.top {
+      top: unset;
+      bottom: calc(100% + 20px);
+    }
+
     &.top-left {
       right: 0;
     }
+
     &.bottom-right {
       left: 0;
       top: calc(100% + 10px);
     }
+
     &.bottom-left {
       right: 0;
     }

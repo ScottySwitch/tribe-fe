@@ -4,15 +4,13 @@ import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 
-import "../styles/globals.css";
 import Footer from "components/Footer/Footer";
 import Header from "components/TheHeader/Header";
-import Modal from "components/Modal/Modal";
-import Icon from "components/Icon/Icon";
+import HamModal from "components/HamModal/HamModal";
 
 import styles from "styles/App.module.scss";
-import Button from "components/Button/Button";
-import classNames from "classnames";
+import "../styles/globals.css";
+import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -29,10 +27,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   const isAuthPage = !notAuthPages.includes(pathname);
 
   const [isLoggedIn, setILoggedIn] = useState(false);
-  const [showAuthPopup, setShowAuthPopup] = useState(isLoggedIn);
-  const [showHamMenu, setShowHamMenu] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [showHamModal, setShowHamModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    if (screen.width < 501) {
+      setIsMobile(true);
+    }
     const token = localStorage.getItem("access_token");
     if (token) {
       setILoggedIn(true);
@@ -41,14 +43,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       setILoggedIn(false);
       setShowAuthPopup(true);
     }
+  }, []);
 
+  useEffect(() => {
     var prevScrollpos = window.pageYOffset;
-    let width = screen.width;
 
     const handleScroll = function () {
       var currentScrollPos = window.pageYOffset;
       const header = document.getElementById("header") as any;
-      if (prevScrollpos < currentScrollPos && !showHamMenu) {
+      if (prevScrollpos < currentScrollPos && !showHamModal) {
         header.style.top = "-120px";
       } else {
         header.style.top = "0";
@@ -56,78 +59,30 @@ function MyApp({ Component, pageProps }: AppProps) {
       prevScrollpos = currentScrollPos;
     };
 
-    if (width < 501) {
+    if (isMobile) {
       window.addEventListener("scroll", handleScroll, { passive: true });
       return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, [showHamMenu]);
-
-  const hamItems = [
-    { icon: "categories-color", label: "Categories" },
-    { icon: "categories-color", label: "Saved deals" },
-    { icon: "heart-color", label: "Favorited", borderBottom: true },
-    { icon: "comment-color", label: "Edit profile" },
-    { icon: "settings-color", label: "Settings", borderBottom: true },
-    { icon: "like-color-2", label: "Referral code" },
-    { icon: "business", label: "Tribes for Businesses" },
-    { icon: "support-color", label: "Support" },
-    { icon: "eng-flag", label: "Languages" },
-    // { icon: "eng-flag", label: "Log out", red: true },
-  ];
-
-  const gotoLogin = () => {
-    setShowHamMenu(false);
-    router.push("/login");
-  };
-
-  const gotoSignup = () => {
-    setShowHamMenu(false);
-    router.push("/signup");
-  };
-
-  const handleCloseAuthModal = () => {
-    setShowHamMenu(false);
-  };
+  }, [showHamModal, isMobile]);
 
   return (
     <div className={styles.app}>
       <Header
         id="header"
         isAuthPage={isAuthPage}
-        onOpenHamMenu={() => setShowHamMenu(!showHamMenu)}
+        onOpenHamMenu={() => setShowHamModal(!showHamModal)}
       />
       <Component {...pageProps} />
       <AuthPopup
         onClose={() => setShowAuthPopup(false)}
-        visible={isAuthPage && showAuthPopup}
+        visible={isAuthPage && showAuthPopup && !isLoggedIn}
       />
-      <Modal
-        visible={showHamMenu}
-        mobileFullHeight
-        mobilePosition="right"
-        onClose={handleCloseAuthModal}
-      >
-        <div className={styles.banner} />
-        <div className={styles.ham_modal}>
-          <div className={styles.button_container}>
-            <Button text="Sign up" variant="outlined" onClick={gotoSignup} />
-            <Button text="Login" onClick={gotoLogin} />
-          </div>
-          {hamItems.map((item) => {
-            const itemClassName = classNames(styles.ham_modal_item, {
-              [styles.border_bottom]: item.borderBottom,
-              // [styles.red]: item.red,
-            });
-            return (
-              <div key={item.label} className={itemClassName}>
-                <Icon icon={item.icon} size={20} />
-                <div>{item.label}</div>
-              </div>
-            );
-          })}
-        </div>
-      </Modal>
+      <HamModal
+        showHamModal={showHamModal}
+        onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
+      />
       <Footer visible={isAuthPage} />
+      <ContributeTabBar visible={isAuthPage && isLoggedIn && isMobile} />
     </div>
   );
 }

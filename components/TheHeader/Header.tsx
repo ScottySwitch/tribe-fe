@@ -9,8 +9,6 @@ import Popover from "components/Popover/Popover";
 import Select from "components/Select/Select";
 
 import styles from "./Header.module.scss";
-import Modal from "components/Modal/Modal";
-import classNames from "classnames";
 
 const locations = [
   { label: "Singapore", value: "singapore" },
@@ -42,7 +40,7 @@ const categories = [
   {
     width: "w-[30px]",
     icon: "eat-color",
-    label: "Eet",
+    label: "Eat",
     values: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Quick bites", value: "quick-bites" },
@@ -94,7 +92,7 @@ const Header = (props: {
   isAuthPage?: boolean;
   id: string;
 }) => {
-  const { isAuthPage, id, onOpenHamMenu } = props;
+  const { id, onOpenHamMenu } = props;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
   const router = useRouter();
@@ -114,7 +112,7 @@ const Header = (props: {
       </React.Fragment>
     );
     return (
-      <Popover key={cat.label} content={content} visible={isSelected}>
+      <Popover key={cat.label} content={content}>
         <div
           className={`${styles.category} ${isSelected && styles.selected}`}
           onClick={() => setCurrentCategory(cat.label)}
@@ -126,12 +124,8 @@ const Header = (props: {
     );
   });
 
-  const headerClassName = classNames(styles.header, {
-    // [styles.sticky]: isAuthPage,
-  });
-
   return (
-    <div id={id} className={headerClassName}>
+    <div id={id} className={styles.header}>
       <div className={styles.header_top}>
         <div className={styles.content}>
           <div className={styles.left_col}>
