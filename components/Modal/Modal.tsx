@@ -10,7 +10,7 @@ export interface ModalProps {
   closable?: boolean;
   width?: string | number;
   notBlur?: Boolean;
-  mobilePosition?: "center" | "bottom" | "top";
+  mobilePosition?: "center" | "bottom" | "top" | "left" | "right";
   backdrop?: boolean;
   mobileFullHeight?: boolean;
   onClose?: () => void;
@@ -22,7 +22,7 @@ const Modal = (props: ModalProps) => {
     visible,
     title,
     transparent,
-    width = "fit-content",
+    width,
     closable = true,
     notBlur,
     mobilePosition = "bottom",

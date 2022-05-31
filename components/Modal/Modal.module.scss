@@ -10,7 +10,7 @@
   height: 100vh;
   width: 100vw;
   background-color: #3c4467a1;
-  transition: all 0.01s;
+  transition: all 0.001s;
   z-index: -1;
 
   &.show {
@@ -36,6 +36,7 @@
       display: flex;
       justify-content: space-between;
       padding: 30px;
+      padding-bottom: 0;
       align-items: center;
 
       .title {
@@ -48,6 +49,7 @@
         cursor: pointer;
       }
     }
+
     .body {
       width: 100%;
       margin: auto;
@@ -71,6 +73,7 @@
   font-weight: $fw-semi-bold;
   font-size: $fs-lg;
   padding: 30px;
+  padding-bottom: 0;
   width: 100%;
 
   &.center {
@@ -92,30 +95,55 @@
 @media screen and (max-width: $mobile) {
   .modal {
     .container {
-      width: 100% !important;
       border-radius: $border-radius $border-radius 0 0;
     }
+  }
 
-    &.full_height {
+  .bottom {
+    align-items: flex-end;
+  }
+
+  .center {
+    align-items: center;
+  }
+
+  .top {
+    align-items: flex-start;
+  }
+
+  .left {
+    justify-content: flex-start;
+    align-items: end;
+  }
+
+  .right {
+    justify-content: flex-end;
+    align-items: end;
+
+    .container {
+      position: absolute;
+      width: fit-content;
+      padding: 30px;
+      right: -100%;
+      height: 100%;
+      max-height: unset;
+    }
+
+    &.show {
+      z-index: 2;
+
       .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: calc(100% - 60px);
+        right: 0;
       }
     }
+  }
 
-    &.bottom {
-      align-items: flex-end;
-    }
-
-    &.center {
+  .full_height {
+    .container {
+      height: calc(100% - 60px);
+      border-radius: 0;
+      display: flex;
       align-items: center;
-    }
-
-    &.top {
-      align-items: flex-start;
     }
   }
 } ;

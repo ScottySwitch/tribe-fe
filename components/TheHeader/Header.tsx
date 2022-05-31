@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import classNames from "classnames";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -10,6 +9,8 @@ import Popover from "components/Popover/Popover";
 import Select from "components/Select/Select";
 
 import styles from "./Header.module.scss";
+import Modal from "components/Modal/Modal";
+import classNames from "classnames";
 
 const locations = [
   { label: "Singapore", value: "singapore" },
@@ -88,8 +89,8 @@ const categories = [
   },
 ];
 
-const Header = (props: { isAuthPage?: boolean }) => {
-  const { isAuthPage } = props;
+const Header = (props: { onOpenHamMenu: () => void; isAuthPage?: boolean }) => {
+  const { isAuthPage, onOpenHamMenu } = props;
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
   const router = useRouter();
 
@@ -173,11 +174,13 @@ const Header = (props: { isAuthPage?: boolean }) => {
           </div>
           <div className={styles.mobile}>
             <Icon className={styles.mobile_searchr} icon="search" size={25} />
-            <Icon
-              className={styles.mobile_hamburger}
-              icon="ham-menu"
-              size={25}
-            />
+            <div onClick={onOpenHamMenu}>
+              <Icon
+                className={styles.mobile_hamburger}
+                icon="ham-menu"
+                size={25}
+              />
+            </div>
           </div>
         </div>
       </div>
