@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -89,10 +89,20 @@ const categories = [
   },
 ];
 
-const Header = (props: { onOpenHamMenu: () => void; isAuthPage?: boolean }) => {
-  const { isAuthPage, onOpenHamMenu } = props;
+const Header = (props: {
+  onOpenHamMenu: () => void;
+  isAuthPage?: boolean;
+  id: string;
+}) => {
+  const { isAuthPage, id, onOpenHamMenu } = props;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) setIsLoggedIn(true);
+  }, []);
 
   const renderCategories = categories.map((cat) => {
     const isSelected = currentCategory === cat.label;
@@ -117,11 +127,11 @@ const Header = (props: { onOpenHamMenu: () => void; isAuthPage?: boolean }) => {
   });
 
   const headerClassName = classNames(styles.header, {
-    [styles.sticky]: isAuthPage,
+    // [styles.sticky]: isAuthPage,
   });
 
   return (
-    <div className={headerClassName}>
+    <div id={id} className={headerClassName}>
       <div className={styles.header_top}>
         <div className={styles.content}>
           <div className={styles.left_col}>

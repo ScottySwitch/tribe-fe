@@ -74,7 +74,9 @@ const navList = [
   },
 ];
 
-const Footer = () => {
+const Footer = (props: { visible: boolean }) => {
+  const { visible } = props;
+  if (!visible) return null;
   return (
     <SectionLayout backgroundColor>
       <div className={styles.footer}>

@@ -35,6 +35,11 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
+  const handleLogin = () => {
+    localStorage.setItem("access_token", "something");
+    router.push("/");
+  };
+
   return (
     <div className={styles.auth}>
       <Modal
@@ -88,7 +93,7 @@ const LoginPage = () => {
               <Icon icon="facebook-color" size={20} className={styles.icon} />
               <Icon icon="instagram-color" size={20} className={styles.icon} />
             </div>
-            <Button text="Log in" onClick={() => router.push("/")} />
+            <Button text="Log in" onClick={handleLogin} />
             <div className={styles.sign_up}>
               No account yet?
               <span>

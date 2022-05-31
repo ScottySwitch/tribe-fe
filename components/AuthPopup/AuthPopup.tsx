@@ -30,14 +30,12 @@ const AuthPopup = (props: AuthPopupProps) => {
       transparent
       visible={visible}
       onClose={onClose}
-      notBlur
     >
       <ModalBody>
         <div className={styles.auth_popup}>
           <div className={styles.close} onClick={onClose}>
             &#x2715;
           </div>
-          <Image src={authPopup} layout="responsive" alt="" />
           <div className={styles.button_container}>
             <Button
               text="Log in"

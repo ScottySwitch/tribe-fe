@@ -2,9 +2,28 @@
 
 .auth_popup {
   position: relative;
-  height: min-content;
   max-width: 97%;
+  height: 370px;
   width: 578px;
+
+  background-image: url("/images/authPopup.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: bottom;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 100px;
+
+  &::after {
+    content: "Log in or Sign up now to explore more with Tribes";
+    font-weight: $fw-bold;
+    font-size: $fs-xl;
+    width: 65%;
+    text-align: center;
+    color: white;
+  }
 
   .close {
     line-height: 1;
@@ -13,7 +32,7 @@
     color: white;
     font-size: 30px;
     position: absolute;
-    top: 20px;
+    top: 50px;
     right: 50px;
     z-index: 4;
   }
@@ -23,7 +42,7 @@
     width: 80%;
     padding: 20px;
     position: absolute;
-    bottom: 10px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -36,17 +55,24 @@
 
 @media screen and (max-width: $mobile) {
   .auth_popup {
+    height: 220px;
+    padding-top: 40px;
+
+    &::after {
+      width: 60%;
+      font-size: $fs-md;
+    }
+
     .close {
       font-size: 20px;
-      top: 14px;
-      right: 34px;
+      top: 16px;
+      right: 40px;
       padding: 0 4px;
     }
 
     .button_container {
-      gap: 6px;
-      padding-bottom: 6px;
-      padding-top: 0;
+      gap: 10px;
+      bottom: -4px;
     }
   }
 }

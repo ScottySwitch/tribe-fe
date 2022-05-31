@@ -9,7 +9,6 @@ export interface ModalProps {
   title?: string;
   closable?: boolean;
   width?: string | number;
-  notBlur?: Boolean;
   mobilePosition?: "center" | "bottom" | "top" | "left" | "right";
   backdrop?: boolean;
   mobileFullHeight?: boolean;
@@ -24,7 +23,6 @@ const Modal = (props: ModalProps) => {
     transparent,
     width,
     closable = true,
-    notBlur,
     mobilePosition = "bottom",
     mobileFullHeight,
     backdrop = true,
@@ -39,7 +37,7 @@ const Modal = (props: ModalProps) => {
   });
 
   const handleOnBlurModal: MouseEventHandler<HTMLDivElement> = (e) => {
-    !notBlur && e.target === e.currentTarget && onClose?.();
+    e.target === e.currentTarget && onClose?.();
   };
 
   return (

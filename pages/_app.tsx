@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { AppProps } from "next/app";
 import AuthPopup from "components/AuthPopup/AuthPopup";
@@ -27,8 +27,38 @@ function MyApp({ Component, pageProps }: AppProps) {
     "/signup/setup-profile",
   ];
   const isAuthPage = !notAuthPages.includes(pathname);
-  const [showAuthPopup, setShowPopup] = useState(isAuthPage);
+
+  const [isLoggedIn, setILoggedIn] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(isLoggedIn);
   const [showHamMenu, setShowHamMenu] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      setILoggedIn(true);
+      setShowAuthPopup(false);
+    } else {
+      setILoggedIn(false);
+      setShowAuthPopup(true);
+    }
+
+    var prevScrollpos = window.pageYOffset;
+
+    const handleScroll = function () {
+      var currentScrollPos = window.pageYOffset;
+      const header = document.getElementById("header") as any;
+      if (prevScrollpos > currentScrollPos) {
+        header.style.top = "0";
+      } else {
+        header.style.top = "-120px";
+      }
+      prevScrollpos = currentScrollPos;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const hamItems = [
     { icon: "categories-color", label: "Categories" },
@@ -53,21 +83,27 @@ function MyApp({ Component, pageProps }: AppProps) {
     router.push("/signup");
   };
 
+  const handleCloseAuthModal = () => {
+    setShowHamMenu(false);
+  };
+
   return (
     <div className={styles.app}>
       <Header
+        id="header"
         isAuthPage={isAuthPage}
         onOpenHamMenu={() => setShowHamMenu(!showHamMenu)}
       />
       <Component {...pageProps} />
-      <AuthPopup onClose={() => setShowPopup(false)} visible={showAuthPopup} />
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
       <Modal
-        visible={showHamMenu}
+        visible={isAuthPage && showHamMenu}
         mobileFullHeight
         mobilePosition="right"
-        onClose={() => {
-          setShowHamMenu(false);
-        }}
+        onClose={handleCloseAuthModal}
       >
         <div className={styles.banner} />
         <div className={styles.ham_modal}>
@@ -89,7 +125,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           })}
         </div>
       </Modal>
-      {isAuthPage && <Footer />}
+      <Footer visible={isAuthPage} />
     </div>
   );
 }
