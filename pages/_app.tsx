@@ -43,22 +43,24 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
 
     var prevScrollpos = window.pageYOffset;
+    let width = screen.width;
 
     const handleScroll = function () {
       var currentScrollPos = window.pageYOffset;
       const header = document.getElementById("header") as any;
-      if (prevScrollpos > currentScrollPos) {
-        header.style.top = "0";
-      } else {
+      if (prevScrollpos < currentScrollPos && !showHamMenu) {
         header.style.top = "-120px";
+      } else {
+        header.style.top = "0";
       }
       prevScrollpos = currentScrollPos;
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    if (width < 501) {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+  }, [showHamMenu]);
 
   const hamItems = [
     { icon: "categories-color", label: "Categories" },
@@ -97,10 +99,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />
       <AuthPopup
         onClose={() => setShowAuthPopup(false)}
-        visible={showAuthPopup}
+        visible={isAuthPage && showAuthPopup}
       />
       <Modal
-        visible={isAuthPage && showHamMenu}
+        visible={showHamMenu}
         mobileFullHeight
         mobilePosition="right"
         onClose={handleCloseAuthModal}

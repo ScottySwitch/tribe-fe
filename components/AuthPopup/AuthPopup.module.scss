@@ -32,8 +32,8 @@
     color: white;
     font-size: 30px;
     position: absolute;
-    top: 50px;
-    right: 50px;
+    top: 55px;
+    right: 55px;
     z-index: 4;
   }
 
@@ -66,13 +66,27 @@
     .close {
       font-size: 20px;
       top: 16px;
-      right: 40px;
+      right: 60px;
       padding: 0 4px;
     }
 
     .button_container {
       gap: 10px;
       bottom: -4px;
+    }
+  }
+}
+
+@media screen and (max-width: $small-mobile) {
+  .auth_popup {
+    padding-top: 40px;
+    &::after {
+      width: 55%;
+      font-size: $fs-md;
+    }
+    .close {
+      top: 20px;
+      right: 40px;
     }
   }
 }
