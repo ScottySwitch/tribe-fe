@@ -9,7 +9,7 @@ import Input from "components/Input/Input";
 import Modal, { ModalHeader } from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Select from "components/Select/Select";
-import { interestingList } from "contants";
+import { interestingList } from "constant";
 
 import styles from "styles/Auth.module.scss";
 

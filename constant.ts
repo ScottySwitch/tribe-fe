@@ -1,3 +1,4 @@
+
 export const inforCardList = [
   {
     imgUrl: "https://picsum.photos/200/300",
@@ -115,4 +116,87 @@ export const contributePopOverList = [
   { icon: "map-color", label: "Add new listing" },
   { icon: "comment-color", label: "Add new review" },
   { icon: "update-color", label: "Update listing" },
+];
+
+export const locations = [
+  { label: "Singapore", value: "singapore" },
+  { label: "Malaysia", value: "malaysia" },
+  { label: "Indonesia", value: "indonesia" },
+  { label: "India", value: "india" },
+  { label: "Thailand", value: "thailand" },
+];
+
+export const categories = [
+  {
+    width: "w-[30px]",
+    icon: "buy-color",
+    label: "Buy",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+  {
+    width: "w-[30px]",
+    icon: "eat-color",
+    label: "Eat",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+  {
+    width: "w-[70px]",
+    icon: "camera-color",
+    label: "See & Do",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+  {
+    width: "w-[80px]",
+    icon: "car-color",
+    label: "Transport",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+  {
+    width: "w-[30px]",
+    icon: "bed-color",
+    label: "Stay",
+    values: [
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Dessert", value: "dessert" },
+    ],
+  },
+];
+
+export const hamItems = [
+  { icon: "categories-color", label: "Categories" },
+  { icon: "categories-color", label: "Saved deals" },
+  { icon: "heart-color", label: "Favorited", borderBottom: true },
+  { icon: "comment-color", label: "Edit profile" },
+  { icon: "settings-color", label: "Settings", borderBottom: true },
+  { icon: "like-color-2", label: "Referral code" },
+  { icon: "business", label: "Tribes for Businesses" },
+  { icon: "support-color", label: "Support" },
+  { icon: "eng-flag", label: "Languages" },
 ];

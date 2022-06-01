@@ -31,19 +31,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [showHamModal, setShowHamModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    if (screen.width < 501) {
-      setIsMobile(true);
-    }
-  }, []);
-
+  //handle logic hide header when scroll, not hide when in desktop || when opening ham modal || in unAuthPages
   useEffect(() => {
     var prevScrollpos = window.pageYOffset;
 
     const handleScroll = function () {
       var currentScrollPos = window.pageYOffset;
       const header = document.getElementById("header") as any;
-      if (prevScrollpos < currentScrollPos && !showHamModal) {
+      if (prevScrollpos < currentScrollPos && !showHamModal && isAuthPage) {
         header.style.top = "-120px";
       } else {
         header.style.top = "0";
@@ -55,11 +50,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       window.addEventListener("scroll", handleScroll, { passive: true });
       return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, [showHamModal, isMobile]);
+  }, [showHamModal, isMobile, isAuthPage]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    
+    if (screen.width < 501) {
+      setIsMobile(true);
+    }
+
     const token = localStorage.getItem("access_token");
     if (token) {
       setILoggedIn(true);
@@ -88,7 +86,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
       />
       <Footer visible={isAuthPage} />
-      <ContributeTabBar visible={isAuthPage && isLoggedIn && isMobile} />
+      <ContributeTabBar visible={isAuthPage && isMobile} />
     </div>
   );
 }

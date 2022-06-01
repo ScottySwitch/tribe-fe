@@ -3,7 +3,7 @@ import Carousel from "components/Carousel/Carousel";
 import Filter from "components/Filter/Filter";
 import InforCard from "components/InforCard/InforCard";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { inforCardList } from "contants";
+import { inforCardList } from "constant";
 import type { NextPage } from "next";
 import { useState } from "react";
 

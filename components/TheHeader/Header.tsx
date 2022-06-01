@@ -1,91 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
-import Popover from "components/Popover/Popover";
 import Select from "components/Select/Select";
+import { locations } from "constant";
+import { Categories, UserInfor } from "./HeaderSubComponents";
 
 import styles from "./Header.module.scss";
-import { contributePopOverList } from "contants";
 
-const locations = [
-  { label: "Singapore", value: "singapore" },
-  { label: "Malaysia", value: "malaysia" },
-  { label: "Indonesia", value: "indonesia" },
-  { label: "India", value: "india" },
-  { label: "Thailand", value: "thailand" },
-];
-
-const languages = [
+export const languages = [
   { label: <Icon icon="eng-flag" size={30} />, value: "en" },
   { label: <Icon icon="indo-flag" size={30} />, value: "th" },
   { label: <Icon icon="sing-flag" size={30} />, value: "vn" },
-];
-
-const categories = [
-  {
-    width: "w-[30px]",
-    icon: "buy-color",
-    label: "Buy",
-    values: [
-      { label: "Restaurant", value: "restaurant" },
-      { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
-      { label: "Coffee & Tea", value: "coffee-tea" },
-      { label: "Dessert", value: "dessert" },
-    ],
-  },
-  {
-    width: "w-[30px]",
-    icon: "eat-color",
-    label: "Eat",
-    values: [
-      { label: "Restaurant", value: "restaurant" },
-      { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
-      { label: "Coffee & Tea", value: "coffee-tea" },
-      { label: "Dessert", value: "dessert" },
-    ],
-  },
-  {
-    width: "w-[70px]",
-    icon: "camera-color",
-    label: "See & Do",
-    values: [
-      { label: "Restaurant", value: "restaurant" },
-      { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
-      { label: "Coffee & Tea", value: "coffee-tea" },
-      { label: "Dessert", value: "dessert" },
-    ],
-  },
-  {
-    width: "w-[80px]",
-    icon: "car-color",
-    label: "Transport",
-    values: [
-      { label: "Restaurant", value: "restaurant" },
-      { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
-      { label: "Coffee & Tea", value: "coffee-tea" },
-      { label: "Dessert", value: "dessert" },
-    ],
-  },
-  {
-    width: "w-[30px]",
-    icon: "bed-color",
-    label: "Stay",
-    values: [
-      { label: "Restaurant", value: "restaurant" },
-      { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
-      { label: "Coffee & Tea", value: "coffee-tea" },
-      { label: "Dessert", value: "dessert" },
-    ],
-  },
 ];
 
 export interface HeaderProps {
@@ -98,70 +26,6 @@ const Header = (props: HeaderProps) => {
   const { id, onOpenHamMenu, isLoggedIn } = props;
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
   const router = useRouter();
-
-  const renderCategories = categories.map((cat) => {
-    const isSelected = currentCategory === cat.label;
-    const content = (
-      <React.Fragment>
-        {cat.values.map((value) => (
-          <div key={value.value}>{value.value}</div>
-        ))}
-      </React.Fragment>
-    );
-    return (
-      <Popover key={cat.label} content={content}>
-        <div
-          className={`${styles.category} ${isSelected && styles.selected}`}
-          onClick={() => setCurrentCategory(cat.label)}
-        >
-          <Icon icon={cat.icon} size={20} className={styles.icon} />
-          <div className={cat.width}>{cat.label}</div>
-        </div>
-      </Popover>
-    );
-  });
-
-  const content = (
-    <React.Fragment>
-      {contributePopOverList.map((item) => (
-        <div key={item.label} className={styles.popover_modal_item}>
-          <Icon icon={item.icon} size={20} />
-          {item.label}
-        </div>
-      ))}
-    </React.Fragment>
-  );
-
-  const UserInfor = () => {
-    return isLoggedIn ? (
-      <>
-        <Popover content={content}>
-          <Button size="small" text="Contribute" />
-        </Popover>
-        <Icon icon="noti-color" size={20} />
-        <Image
-          src={require("public/images/avatar.png")}
-          alt=""
-          width={40}
-          height={40}
-        />
-      </>
-    ) : (
-      <>
-        <Button
-          text="Sign up"
-          variant="outlined"
-          onClick={() => router.push("/signup")}
-          size="small"
-        />
-        <Button
-          text="Login"
-          onClick={() => router.push("/login")}
-          size="small"
-        />
-      </>
-    );
-  };
 
   return (
     <div id={id} className={styles.header}>
@@ -185,7 +49,7 @@ const Header = (props: HeaderProps) => {
           <div className={styles.right_col}>
             <Icon icon="business" size={20} />
             <div>Business</div>
-            <UserInfor />
+            <UserInfor isLoggedIn={isLoggedIn} />
           </div>
         </div>
       </div>
@@ -208,7 +72,10 @@ const Header = (props: HeaderProps) => {
             tabIndex={1}
             onBlur={() => setCurrentCategory(undefined)}
           >
-            {renderCategories}
+            <Categories
+              currentCategory={currentCategory}
+              onSetCurrentCategory={(e) => setCurrentCategory(e)}
+            />
           </div>
           <div className={styles.mobile}>
             <Icon className={styles.mobile_searchr} icon="search" size={25} />

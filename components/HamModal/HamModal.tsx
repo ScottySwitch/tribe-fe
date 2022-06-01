@@ -1,22 +1,11 @@
-import classNames from "classnames";
-import Button from "components/Button/Button";
-import Icon from "components/Icon/Icon";
-import Modal from "components/Modal/Modal";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import styles from "./HamModal.module.scss";
 
-const hamItems = [
-  { icon: "categories-color", label: "Categories" },
-  { icon: "categories-color", label: "Saved deals" },
-  { icon: "heart-color", label: "Favorited", borderBottom: true },
-  { icon: "comment-color", label: "Edit profile" },
-  { icon: "settings-color", label: "Settings", borderBottom: true },
-  { icon: "like-color-2", label: "Referral code" },
-  { icon: "business", label: "Tribes for Businesses" },
-  { icon: "support-color", label: "Support" },
-  { icon: "eng-flag", label: "Languages" },
-];
+import Button from "components/Button/Button";
+import HamMenu from "components/HamMenu/HamMenu";
+import Modal from "components/Modal/Modal";
+
+import styles from "./HamModal.module.scss";
 
 const HamModalHeader = ({
   isLoggedIn,
@@ -72,11 +61,6 @@ const HamModal = (props: HamModalProps) => {
     router.push("/signup");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    window.location.href = "/";
-  };
-
   return (
     <Modal
       visible={showHamModal}
@@ -90,24 +74,7 @@ const HamModal = (props: HamModalProps) => {
           gotoLogin={gotoLogin}
           gotoSignup={gotoSignup}
         />
-        {hamItems.map((item) => {
-          const itemClassName = classNames(styles.ham_modal_item, {
-            [styles.border_bottom]: item.borderBottom,
-          });
-          return (
-            <div key={item.label} className={itemClassName}>
-              <Icon icon={item.icon} size={20} />
-              <div>{item.label}</div>
-            </div>
-          );
-        })}
-        <div
-          className={classNames(styles.logout, { [styles.show]: isLoggedIn })}
-          onClick={handleLogout}
-        >
-          <Icon icon="logout" size={20} />
-          <div>Logout</div>
-        </div>
+        <HamMenu isLoggedIn={isLoggedIn} />
       </div>
     </Modal>
   );

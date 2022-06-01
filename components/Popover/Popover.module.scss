@@ -3,11 +3,20 @@
 .popover {
   position: relative;
   height: 100%;
+  
+  .children {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .content {
     position: absolute;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    min-width: 100px;
     background-color: white;
     box-shadow: $box-shadow;
     border-radius: $border-radius;
@@ -26,10 +35,11 @@
       padding: 8px;
       line-height: 1;
       border-radius: $border-radius;
-      min-width: 100px;
-      width: max-content;
+      min-width: max-content;
+      width: 100%;
       display: flex;
       gap: 10px;
+      align-items: center;
 
       &:hover {
         background-color: $primary-20;
@@ -56,6 +66,7 @@
 
     &.bottom-left {
       right: 0;
+      top: calc(100% + 10px);
     }
   }
 }

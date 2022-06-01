@@ -1,6 +1,6 @@
 import Icon from "components/Icon/Icon";
 import Popover from "components/Popover/Popover";
-import { contributePopOverList } from "contants";
+import { contributePopOverList } from "constant";
 import React, { useState } from "react";
 import styles from "./ContributeTabBar.module.scss";
 
@@ -9,21 +9,19 @@ export interface ContributeProps {
   visible: boolean;
 }
 
-
+const content = (
+  <React.Fragment>
+    {contributePopOverList.map((item) => (
+      <div key={item.label} className={styles.popover_modal_item}>
+        <Icon icon={item.icon} size={20} />
+        {item.label}
+      </div>
+    ))}
+  </React.Fragment>
+);
 
 const ContributeTabBar = (props: ContributeProps) => {
   const { id, visible } = props;
-
-  const content = (
-    <React.Fragment>
-      {contributePopOverList.map((item) => (
-        <div key={item.label} className={styles.popover_modal_item}>
-          <Icon icon={item.icon} size={20} />
-          {item.label}
-        </div>
-      ))}
-    </React.Fragment>
-  );
 
   if (!visible) {
     return null;
