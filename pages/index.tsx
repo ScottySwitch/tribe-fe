@@ -4,18 +4,21 @@ import Filter from "components/Filter/Filter";
 import InforCard from "components/InforCard/InforCard";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import { inforCardList } from "constant";
+import useTrans from "hooks/useTrans";
 import type { NextPage } from "next";
 import { useState } from "react";
 
 const Home: NextPage = () => {
   const [showFilter, setShowFilter] = useState(false);
+  const trans = useTrans();
+
   return (
     <div>
       <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
       <SectionLayout title="Exclusive deals">
         <Button
           size="small"
-          text="Filter"
+          text={trans.filter}
           variant="secondary"
           onClick={() => setShowFilter(true)}
           className="w-[50px] mb-5"

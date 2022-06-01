@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+
+module.exports = {
   reactStrictMode: true,
   images: {
     domains: ['picsum.photos'],
   },
-
+  i18n: {
+    locales: ['en', 'sg'],
+    defaultLocale: 'en',
+  },
 }
-
-module.exports = nextConfig

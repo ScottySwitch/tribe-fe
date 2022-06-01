@@ -9,11 +9,11 @@ import { locations } from "constant";
 import { Categories, UserInfor } from "./HeaderSubComponents";
 
 import styles from "./Header.module.scss";
+import useTrans from "hooks/useTrans";
 
 export const languages = [
   { label: <Icon icon="eng-flag" size={30} />, value: "en" },
-  { label: <Icon icon="indo-flag" size={30} />, value: "th" },
-  { label: <Icon icon="sing-flag" size={30} />, value: "vn" },
+  { label: <Icon icon="sing-flag" size={30} />, value: "sg" },
 ];
 
 export interface HeaderProps {
@@ -26,6 +26,17 @@ const Header = (props: HeaderProps) => {
   const { id, onOpenHamMenu, isLoggedIn } = props;
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
   const router = useRouter();
+  const { locale } = router;
+  const trans = useTrans();
+  const { pathname } = useRouter();
+
+  const changeLang = (lang: string) => {
+    router.push(pathname, pathname, { locale: lang });
+  };
+
+  const getDefaultLang = () => {
+    return languages.filter((item) => item.value === locale);
+  };
 
   return (
     <div id={id} className={styles.header}>
@@ -36,7 +47,7 @@ const Header = (props: HeaderProps) => {
             <Select
               className={styles.location}
               variant="no-outlined"
-              placeholder="Location"
+              placeholder={trans.location}
               options={locations}
             />
             <Select
@@ -44,6 +55,9 @@ const Header = (props: HeaderProps) => {
               options={languages}
               isSearchable={false}
               variant="no-outlined"
+              closeMenuOnSelect
+              onChange={(e) => changeLang(e.value)}
+              defaultValue={getDefaultLang()}
             />
           </div>
           <div className={styles.right_col}>

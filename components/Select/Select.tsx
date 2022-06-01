@@ -19,6 +19,7 @@ export interface SelectProps {
   placeholder?: string;
   isMulti?: boolean;
   isSearchable?: boolean;
+  closeMenuOnSelect?: boolean;
   onChange?: (value: any) => void;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
@@ -37,6 +38,7 @@ const Select = (props: SelectProps) => {
     onChange,
     isSearchable = true,
     defaultValue,
+    closeMenuOnSelect = false,
     variant = "outlined",
     size = "medium",
   } = props;
@@ -61,6 +63,7 @@ const Select = (props: SelectProps) => {
       border: "none",
       boxShadow: "none",
       fontSize: "14px",
+      width: "max-content",
       minHeight: "min-content",
     }),
     option: (styles, { isSelected }) => {
@@ -80,7 +83,17 @@ const Select = (props: SelectProps) => {
     },
     dropdownIndicator: (styles) => ({ ...styles, padding: 0 }),
     input: (styles) => ({ ...styles, padding: 0, margin: 0 }),
-    valueContainer: (styles) => ({ ...styles, padding: 0 }),
+    placeholder: (styles) => ({
+      ...styles,
+      padding: 0,
+      margin: 0,
+      width: "max-content",
+    }),
+    valueContainer: (styles) => ({
+      ...styles,
+      padding: 0,
+      width: "max-content",
+    }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
     indicatorsContainer: (styles) => ({ ...styles, alignItems: "flex-start" }),
   };
@@ -102,7 +115,7 @@ const Select = (props: SelectProps) => {
           placeholder={placeholder}
           isClearable={false}
           defaultValue={defaultValue}
-          closeMenuOnSelect={false}
+          closeMenuOnSelect={closeMenuOnSelect}
           isDisabled={disabled}
           styles={customStyles}
           isMulti={isMulti}
