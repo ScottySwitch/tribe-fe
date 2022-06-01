@@ -74,7 +74,7 @@ const HamModal = (props: HamModalProps) => {
           gotoLogin={gotoLogin}
           gotoSignup={gotoSignup}
         />
-        <HamMenu isLoggedIn={isLoggedIn} />
+        <HamMenu isLoggedIn={isLoggedIn} mobile />
       </div>
     </Modal>
   );
