@@ -1,0 +1,70 @@
+@import "styles/variables.scss";
+
+.tabs {
+  display: flex;
+  width: 100%;
+
+  .tab_label_container {
+    background-color: $bg-50;
+    padding: 20px 0;
+    height: max-content;
+
+    .tab_label {
+      display: flex;
+      align-items: center;
+      padding: 9px 20px 9px 0;
+      height: 72px;
+      font-weight: $fw-semi-bold;
+      font-size: $fs-md;
+      cursor: pointer;
+
+      .left_border {
+        margin-right: 20px;
+        height: 0;
+        width: 4px;
+        background-color: $primary-300;
+        border-radius: $border-radius;
+        transition: all 0.3s;
+      }
+
+      .tab_label_content {
+        height: 100%;
+      }
+
+      &:hover {
+        background-color: white;
+        .left_border {
+          height: 90%;
+        }
+      }
+
+      &.selected {
+        background-color: white;
+        .left_border {
+          height: 90%;
+        }
+      }
+    }
+  }
+
+  .panel {
+    padding: 24px;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .tabs {
+    .tab_label_container {
+      height: 480px;
+      .tab {
+        font-size: $fs-md;
+        font-weight: $fw-semi-bold;
+      }
+    }
+
+    .panel {
+      padding: 10px;
+    }
+  }
+}

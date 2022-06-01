@@ -1,65 +1,17 @@
 @import "styles/variables.scss";
 
-.tab_container {
-  background-color: $bg-50;
-  padding: 20px 0;
-  height: max-content;
-
-  .tab {
-    display: flex;
-    align-items: center;
-    padding: 9px 20px 9px 0;
-    height: 72px;
-    font-weight: $fw-semi-bold;
-    font-size: $fs-md;
-    cursor: pointer;
-
-    .left_border {
-      margin-right: 20px;
-      height: 0;
-      width: 4px;
-      background-color: $primary-300;
-      border-radius: $border-radius;
-      transition: all 0.3s;
-    }
-
-    .tab_content {
-      height: 100%;
-    }
-
-    &:hover {
-      background-color: white;
-      .left_border {
-        height: 90%;
-      }
-    }
-
-    &.selected {
-      background-color: white;
-      .left_border {
-        height: 90%;
-      }
-    }
-  }
-}
-
-.panel {
-  padding: 24px;
-  width: 100%;
-
-  .option_container {
-    margin-top: 10px;
-    box-sizing: border-box;
-    overflow: scroll;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    height: 290px;
-  }
-}
-
 .apply_btn {
   width: 60px;
+}
+
+.option_container {
+  margin-top: 10px;
+  box-sizing: border-box;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 290px;
 }
 
 .reset_btn {
@@ -73,19 +25,8 @@
 }
 
 @media screen and (max-width: $mobile) {
-  .tab_container {
-    height: 480px;
-    .tab {
-      font-size: $fs-md;
-      font-weight: $fw-semi-bold;
-    }
-  }
-
-  .panel {
-    padding: 10px;
-    .option_container {
-      padding: 0 10px;
-      height: 400px;
-    }
+  .option_container {
+    padding: 0 10px;
+    height: 400px;
   }
 }

@@ -1,4 +1,5 @@
-import classNames from "classnames";
+import { ReactElement, ReactNode, useState } from "react";
+
 import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
@@ -10,20 +11,9 @@ import Modal, {
 } from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Range from "components/Range/Range";
-import { setValues } from "framer-motion/types/render/utils/setters";
-import { ReactElement, useState } from "react";
+import Tabs from "components/Tabs/Tabs";
 import { Filters } from "./enums";
 import styles from "./Filter.module.scss";
-
-export interface FilterProps extends ModalProps {}
-
-const tabList = [
-  { label: "Sort", value: Filters.SORT },
-  { label: "Rating", value: Filters.RATING },
-  { label: "Price range", value: Filters.PRICE_RANGE },
-  { label: "Other", value: Filters.OTHER },
-  { label: "Location", value: Filters.LOCATION },
-];
 
 const sortList = [
   { label: "Price (Low to high)" },
@@ -95,24 +85,18 @@ const Location = () => (
   </div>
 );
 
+const tabList = [
+  { label: "Sort", value: Filters.SORT, content: <Sort /> },
+  { label: "Rating", value: Filters.RATING, content: <Rating /> },
+  { label: "Price range", value: Filters.PRICE_RANGE, content: <PriceRange /> },
+  { label: "Other", value: Filters.OTHER, content: <Other /> },
+  { label: "Location", value: Filters.LOCATION, content: <Location /> },
+];
+
+export interface FilterProps extends ModalProps {}
+
 const Filter = (props: FilterProps) => {
   const { visible, onClose } = props;
-  const [currentTab, setCurrentTab] = useState<string>(Filters.SORT);
-
-  const renderPanel = () => {
-    switch (currentTab) {
-      case Filters.SORT:
-        return <Sort />;
-      case Filters.RATING:
-        return <Rating />;
-      case Filters.PRICE_RANGE:
-        return <PriceRange />;
-      case Filters.OTHER:
-        return <Other />;
-      case Filters.LOCATION:
-        return <Location />;
-    }
-  };
 
   return (
     <Modal
@@ -122,24 +106,7 @@ const Filter = (props: FilterProps) => {
       width={700}
     >
       <ModalBody>
-        <div className={styles.tab_container}>
-          {tabList.map((tab) => {
-            const tabClassNames = classNames(styles.tab, {
-              [styles.selected]: currentTab === tab.value,
-            });
-            return (
-              <div
-                key={tab.label}
-                className={tabClassNames}
-                onClick={() => setCurrentTab(tab.value)}
-              >
-                <div className={styles.left_border} />
-                <div className={styles.tab_content}>{tab.label}</div>
-              </div>
-            );
-          })}
-        </div>
-        <div className={styles.panel}>{renderPanel()}</div>
+        <Tabs tabList={tabList} />
       </ModalBody>
       <ModalFooter className="flex justify-between">
         <div className={styles.reset_btn}>Reset all</div>
