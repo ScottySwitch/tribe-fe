@@ -76,6 +76,7 @@
           cursor: pointer;
           display: flex;
           align-items: center;
+          width: auto;
           gap: 4px;
 
           .icon {
@@ -89,7 +90,8 @@
           }
 
           &.selected {
-            font-weight: $fw-semi-bold;
+            // font-weight: $fw-semi-bold;
+            text-shadow: 1px 0px 0px black;
             .icon {
               opacity: 1;
             }

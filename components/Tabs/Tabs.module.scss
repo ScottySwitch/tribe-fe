@@ -20,29 +20,33 @@
       cursor: pointer;
 
       .left_border {
-        margin-right: 20px;
+        margin-right: 16px;
         height: 0;
-        width: 4px;
+        width: 3px;
         background-color: $primary-300;
         border-radius: $border-radius;
         transition: all 0.3s;
       }
 
       .tab_label_content {
+        display: flex;
+        gap: 6px;
         height: 100%;
       }
 
       &:hover {
         background-color: white;
         .left_border {
-          height: 90%;
+          height: 100%;
         }
       }
 
       &.selected {
         background-color: white;
+        background-color: $primary-20;
+
         .left_border {
-          height: 90%;
+          height: 100%;
         }
       }
     }

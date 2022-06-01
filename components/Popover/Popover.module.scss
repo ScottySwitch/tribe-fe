@@ -3,12 +3,14 @@
 .popover {
   position: relative;
   height: 100%;
-  
+
   .children {
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    box-sizing: border-box;
   }
 
   .content {

@@ -30,7 +30,6 @@ const Popover = (props: PopoverProps) => {
       <div
         onClick={() => setIsPoppedUp(!isPoppedUp)}
         className={styles.children}
-        style={{ height: "100%", display: "flex", alignItems: "center" }}
       >
         {children}
       </div>

@@ -1,32 +1,38 @@
 import classNames from "classnames";
+import Icon from "components/Icon/Icon";
 import { ReactNode, useState } from "react";
 import styles from "./Tabs.module.scss";
 
 const TabPane = (props: {
-  label: string;
+  icon?: string;
+  label: ReactNode | ReactNode[];
   value: string;
   currentTab: string;
   setCurrentTab: (e: string) => void;
 }) => {
-  const { label, value, currentTab, setCurrentTab } = props;
+  const { label, value, currentTab, icon, setCurrentTab } = props;
   const tabClassNames = classNames(styles.tab_label, {
     [styles.selected]: currentTab === value,
   });
   return (
     <div
-      key={label}
+      key={value}
       className={tabClassNames}
       onClick={() => setCurrentTab(value)}
     >
       <div className={styles.left_border} />
-      <div className={styles.tab_label_content}>{label}</div>
+      <div className={styles.tab_label_content}>
+        {icon && <Icon icon={icon} size={20} />}
+        {label}
+      </div>
     </div>
   );
 };
 
 const Tabs = (props: {
   tabList: {
-    label: string;
+    icon?: string;
+    label: ReactNode | ReactNode[];
     value: string;
     content?: ReactNode | ReactNode[];
   }[];
@@ -42,7 +48,8 @@ const Tabs = (props: {
         {tabList.map((tab) => {
           return (
             <TabPane
-              key={tab.label}
+              key={tab.value}
+              icon={tab.icon}
               label={tab.label}
               value={tab.value}
               currentTab={currentTab}

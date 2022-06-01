@@ -132,10 +132,10 @@ export const categories = [
     label: "Buy",
     values: [
       { label: "Restaurant", value: "restaurant" },
-      { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
       { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Bakeries", value: "bakeries" },
       { label: "Dessert", value: "dessert" },
+      { label: "Quick bites", value: "quick-bites" },
     ],
   },
   {
@@ -143,11 +143,11 @@ export const categories = [
     icon: "eat-color",
     label: "Eat",
     values: [
-      { label: "Restaurant", value: "restaurant" },
       { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
-      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Restaurant", value: "restaurant" },
       { label: "Dessert", value: "dessert" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Bakeries", value: "bakeries" },
     ],
   },
   {
@@ -155,10 +155,10 @@ export const categories = [
     icon: "camera-color",
     label: "See & Do",
     values: [
-      { label: "Restaurant", value: "restaurant" },
-      { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
       { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Restaurant", value: "restaurant" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Quick bites", value: "quick-bites" },
       { label: "Dessert", value: "dessert" },
     ],
   },
@@ -167,11 +167,11 @@ export const categories = [
     icon: "car-color",
     label: "Transport",
     values: [
-      { label: "Restaurant", value: "restaurant" },
-      { label: "Quick bites", value: "quick-bites" },
-      { label: "Bakeries", value: "bakeries" },
-      { label: "Coffee & Tea", value: "coffee-tea" },
       { label: "Dessert", value: "dessert" },
+      { label: "Bakeries", value: "bakeries" },
+      { label: "Quick bites", value: "quick-bites" },
+      { label: "Coffee & Tea", value: "coffee-tea" },
+      { label: "Restaurant", value: "restaurant" },
     ],
   },
   {

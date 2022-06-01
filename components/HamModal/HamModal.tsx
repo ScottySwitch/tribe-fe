@@ -8,6 +8,7 @@ import Modal from "components/Modal/Modal";
 import styles from "./HamModal.module.scss";
 import Tabs from "components/Tabs/Tabs";
 import { useState } from "react";
+import { categories } from "constant";
 
 const HamModalHeader = ({
   isLoggedIn,
@@ -71,7 +72,121 @@ const HamModal = (props: HamModalProps) => {
       icon: "buy-color",
       label: "Buy",
       value: "buy",
-      content: <div>as</div>,
+      content: (
+        <div className="flex gap-[20px] flex-wrap">
+          {categories[0].values.map((item) => (
+            <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
+              <div>
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fixed"
+                  width={50}
+                  height={50}
+                  style={{ borderRadius: "50%" }}
+                />
+              </div>
+              <div>{item.label}</div>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: "eat-color",
+      label: "Eat",
+      value: "eat",
+      content: (
+        <div className="flex gap-[20px] flex-wrap">
+          {categories[1].values.map((item) => (
+            <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
+              <div>
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fixed"
+                  width={50}
+                  height={50}
+                  style={{ borderRadius: "50%" }}
+                />
+              </div>
+              <div>{item.label}</div>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: "camera-color",
+      label: "See & Do",
+      value: "see-and-do",
+      content: (
+        <div className="flex gap-[20px] flex-wrap">
+          {categories[2].values.map((item) => (
+            <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
+              <div>
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fixed"
+                  width={50}
+                  height={50}
+                  style={{ borderRadius: "50%" }}
+                />
+              </div>
+              <div>{item.label}</div>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: "car-color",
+      label: "Transport",
+      value: "transport",
+      content: (
+        <div className="flex gap-[20px] flex-wrap">
+          {categories[3].values.map((item) => (
+            <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
+              <div>
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fixed"
+                  width={50}
+                  height={50}
+                  style={{ borderRadius: "50%" }}
+                />
+              </div>
+              <div>{item.label}</div>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: "bed-color",
+      label: "Stay",
+      value: "stay",
+      content: (
+        <div className="flex gap-[20px] flex-wrap">
+          {categories[4].values.map((item) => (
+            <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
+              <div>
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fixed"
+                  width={50}
+                  height={50}
+                  style={{ borderRadius: "50%" }}
+                />
+              </div>
+              <div>{item.label}</div>
+            </div>
+          ))}
+        </div>
+      ),
     },
   ];
 
