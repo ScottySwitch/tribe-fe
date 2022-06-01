@@ -19,11 +19,11 @@ export const languages = [
 export interface HeaderProps {
   isLoggedIn: boolean;
   id: string;
-  onOpenHamMenu: () => void;
+  onOpenHamModal: () => void;
 }
 
 const Header = (props: HeaderProps) => {
-  const { id, onOpenHamMenu, isLoggedIn } = props;
+  const { id, onOpenHamModal, isLoggedIn } = props;
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
   const router = useRouter();
   const { locale } = router;
@@ -93,7 +93,7 @@ const Header = (props: HeaderProps) => {
           </div>
           <div className={styles.mobile}>
             <Icon className={styles.mobile_searchr} icon="search" size={25} />
-            <div onClick={onOpenHamMenu}>
+            <div onClick={onOpenHamModal}>
               <Icon
                 className={styles.mobile_hamburger}
                 icon="ham-menu"

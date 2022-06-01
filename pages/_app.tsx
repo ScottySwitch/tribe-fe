@@ -73,7 +73,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Header
         id="header"
         isLoggedIn={isLoggedIn}
-        onOpenHamMenu={() => setShowHamModal(!showHamModal)}
+        onOpenHamModal={() => setShowHamModal(!showHamModal)}
       />
       <Component {...pageProps} />
       <AuthPopup

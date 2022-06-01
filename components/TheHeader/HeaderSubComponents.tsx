@@ -6,7 +6,7 @@ import { categories, contributePopOverList } from "constant";
 import Popover from "components/Popover/Popover";
 import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
-import HamMenu from "components/Menu/Menu";
+import Menu from "components/Menu/Menu";
 
 import styles from "./Header.module.scss";
 
@@ -67,7 +67,7 @@ export const UserInfor = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       </Popover>
       <Icon icon="noti-color" size={20} />
       <Popover
-        content={<HamMenu isLoggedIn={isLoggedIn} />}
+        content={<Menu isLoggedIn={isLoggedIn} />}
         position="bottom-left"
       >
         <Image
