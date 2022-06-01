@@ -71,14 +71,6 @@ export const ModalHeader = (props: {
   return <div className={headerClassName}>{children}</div>;
 };
 
-export const ModalBody = (props: {
-  children: ReactElement | ReactElement[];
-  className?: string;
-}) => {
-  const { children, className } = props;
-  return <div className={`${styles.body} ${className}`}>{children}</div>;
-};
-
 export const ModalFooter = (props: {
   children: ReactElement | ReactElement[];
   className?: string;

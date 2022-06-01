@@ -1,4 +1,3 @@
-
 export const inforCardList = [
   {
     imgUrl: "https://picsum.photos/200/300",
@@ -187,16 +186,4 @@ export const categories = [
       { label: "Dessert", value: "dessert" },
     ],
   },
-];
-
-export const menuItems = [
-  { icon: "categories-color", label: "Categories" },
-  { icon: "categories-color", label: "Saved deals" },
-  { icon: "heart-color", label: "Favorited", borderBottom: true },
-  { icon: "comment-color", label: "Edit profile" },
-  { icon: "settings-color", label: "Settings", borderBottom: true },
-  { icon: "like-color-2", label: "Referral code" },
-  { icon: "business", label: "Tribes for Businesses" },
-  { icon: "support-color", label: "Support" },
-  { icon: "eng-flag", label: "Languages" },
 ];

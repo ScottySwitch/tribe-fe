@@ -4,11 +4,7 @@ import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
-import Modal, {
-  ModalFooter,
-  ModalBody,
-  ModalProps,
-} from "components/Modal/Modal";
+import Modal, { ModalFooter, ModalProps } from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Range from "components/Range/Range";
 import Tabs from "components/Tabs/Tabs";
@@ -30,6 +26,10 @@ const otherList = [
   { label: "Mulism Owned" },
   { label: "Halal Ingredients used" },
   { label: "Vegetarian" },
+  { label: "Halal meals available on request" },
+  { label: "Halal meals available on request" },
+  { label: "Halal meals available on request" },
+  { label: "Halal meals available on request" },
   { label: "Halal meals available on request" },
   { label: "Vegetarian options available" },
 ];
@@ -100,18 +100,16 @@ const Filter = (props: FilterProps) => {
 
   return (
     <Modal
+      width="100%"
       visible={visible}
       onClose={onClose}
       title="Filter & Sort"
-      width={700}
     >
-      <ModalBody>
-        <Tabs tabList={tabList} />
-      </ModalBody>
-      <ModalFooter className="flex justify-between">
+      <Tabs tabList={tabList} />
+      <div className="flex justify-between p-[10px]">
         <div className={styles.reset_btn}>Reset all</div>
         <Button text="Apply" className={styles.apply_btn} />
-      </ModalFooter>
+      </div>
     </Modal>
   );
 };

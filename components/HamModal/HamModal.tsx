@@ -6,6 +6,8 @@ import Menu from "components/Menu/Menu";
 import Modal from "components/Modal/Modal";
 
 import styles from "./HamModal.module.scss";
+import Tabs from "components/Tabs/Tabs";
+import { useState } from "react";
 
 const HamModalHeader = ({
   isLoggedIn,
@@ -49,6 +51,9 @@ export interface HamModalProps {
 
 const HamModal = (props: HamModalProps) => {
   const { onSetShowHamModal, isLoggedIn, showHamModal } = props;
+
+  const [showCategoriesModal, setShowCategoriesModal] = useState(false);
+
   const router = useRouter();
 
   const gotoLogin = () => {
@@ -61,22 +66,47 @@ const HamModal = (props: HamModalProps) => {
     router.push("/signup");
   };
 
+  const categoriesTabs = [
+    {
+      icon: "buy-color",
+      label: "Buy",
+      value: "buy",
+      content: <div>as</div>,
+    },
+  ];
+
   return (
-    <Modal
-      visible={showHamModal}
-      mobileFullHeight
-      mobilePosition="right"
-      onClose={() => onSetShowHamModal(false)}
-    >
-      <div className={styles.ham_modal}>
-        <HamModalHeader
-          isLoggedIn={isLoggedIn}
-          gotoLogin={gotoLogin}
-          gotoSignup={gotoSignup}
-        />
-        <Menu isLoggedIn={isLoggedIn} mobile />
-      </div>
-    </Modal>
+    <>
+      <Modal
+        visible={showHamModal}
+        mobileFullHeight
+        mobilePosition="right"
+        onClose={() => onSetShowHamModal(false)}
+      >
+        <div className={styles.ham_modal}>
+          <HamModalHeader
+            isLoggedIn={isLoggedIn}
+            gotoLogin={gotoLogin}
+            gotoSignup={gotoSignup}
+          />
+          <Menu
+            isLoggedIn={isLoggedIn}
+            mobile
+            onShowCategoriesModal={() => setShowCategoriesModal(true)}
+          />
+        </div>
+      </Modal>
+      <Modal
+        visible={showCategoriesModal}
+        onClose={() => setShowCategoriesModal(false)}
+        title="Filter & Sort"
+        width="100%"
+        mobileFullHeight
+        mobilePosition="right"
+      >
+        <Tabs tabList={categoriesTabs} />
+      </Modal>
+    </>
   );
 };
 

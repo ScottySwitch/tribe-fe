@@ -25,7 +25,11 @@ const TabPane = (props: {
 };
 
 const Tabs = (props: {
-  tabList: { label: string; value: string; content: ReactNode }[];
+  tabList: {
+    label: string;
+    value: string;
+    content?: ReactNode | ReactNode[];
+  }[];
 }) => {
   const { tabList } = props;
   const [currentTab, setCurrentTab] = useState<string>(tabList[0].value);
