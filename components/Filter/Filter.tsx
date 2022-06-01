@@ -100,7 +100,7 @@ const Filter = (props: FilterProps) => {
 
   return (
     <Modal
-      width="100%"
+      width="700px"
       visible={visible}
       onClose={onClose}
       title="Filter & Sort"

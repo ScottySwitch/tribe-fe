@@ -11,7 +11,7 @@ interface MenuMenuProps {
 
 export const menuItems = [
   { icon: "categories-color", label: "Categories" },
-  { icon: "categories-color", label: "Saved deals" },
+  { icon: "deal", label: "Saved deals" },
   { icon: "heart-color", label: "Favorited", borderBottom: true },
   { icon: "comment-color", label: "Edit profile" },
   { icon: "settings-color", label: "Settings", borderBottom: true },

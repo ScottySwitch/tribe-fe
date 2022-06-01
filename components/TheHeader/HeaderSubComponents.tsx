@@ -60,6 +60,7 @@ export const UserInfor = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
     <>
       <Popover content={<ContributeContent />}>
         <Button
+          prefix={<Icon icon="plus" size={20} />}
           size="small"
           text="Contribute"
           className={styles.contribute_button}
