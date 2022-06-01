@@ -1,5 +1,6 @@
 import Icon from "components/Icon/Icon";
 import Popover from "components/Popover/Popover";
+import { contributePopOverList } from "contants";
 import React, { useState } from "react";
 import styles from "./ContributeTabBar.module.scss";
 
@@ -8,11 +9,7 @@ export interface ContributeProps {
   visible: boolean;
 }
 
-const contributePopOverList = [
-  { icon: "map-color", label: "Add new listing" },
-  { icon: "comment-color", label: "Add new review" },
-  { icon: "update-color", label: "Update listing" },
-];
+
 
 const ContributeTabBar = (props: ContributeProps) => {
   const { id, visible } = props;

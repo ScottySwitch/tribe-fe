@@ -12,7 +12,7 @@ export interface ModalProps {
   mobilePosition?: "center" | "bottom" | "top" | "left" | "right";
   backdrop?: boolean;
   mobileFullHeight?: boolean;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const Modal = (props: ModalProps) => {

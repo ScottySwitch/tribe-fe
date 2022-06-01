@@ -25,11 +25,8 @@
 }
 
 .ham_modal {
-  position: absolute;
-  top: 100px;
-  left: 0;
-  padding: 20px 30px;
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -37,9 +34,6 @@
   &_item {
     display: flex;
     gap: 10px;
-    &.red {
-      color: $primary-500;
-    }
 
     &.border_bottom {
       padding-bottom: 16px;
@@ -47,7 +41,32 @@
     }
   }
 
+  .logout {
+    color: $primary-500;
+    display: none;
+
+    &.show {
+      display: block;
+    }
+  }
+
+  .user_profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    .user_infor {
+      .name {
+        font-weight: $fw-bold;
+      }
+      .see_profile {
+        color: $bg-400;
+        font-size: $fs-sm;
+      }
+    }
+  }
+
   .button_container {
+    margin-top: 90px;
     display: flex;
     gap: 20px;
   }

@@ -110,3 +110,9 @@ export const interestingList = [
   { avatar: "https://picsum.photos/200/300", label: "Ice cream" },
   { avatar: "https://picsum.photos/200/300", label: "Shopping" },
 ];
+
+export const contributePopOverList = [
+  { icon: "map-color", label: "Add new listing" },
+  { icon: "comment-color", label: "Add new review" },
+  { icon: "update-color", label: "Update listing" },
+];

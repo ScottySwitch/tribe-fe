@@ -27,7 +27,12 @@ const Popover = (props: PopoverProps) => {
       tabIndex={1}
       onBlur={() => setIsPoppedUp(false)}
     >
-      <div onClick={() => setIsPoppedUp(!isPoppedUp)}>{children}</div>
+      <div
+        onClick={() => setIsPoppedUp(!isPoppedUp)}
+        style={{ height: "100%", display: "flex", alignItems: "center" }}
+      >
+        {children}
+      </div>
       <div className={contentClassName}>{content}</div>
     </div>
   );

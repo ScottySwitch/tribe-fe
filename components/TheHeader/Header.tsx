@@ -9,6 +9,7 @@ import Popover from "components/Popover/Popover";
 import Select from "components/Select/Select";
 
 import styles from "./Header.module.scss";
+import { contributePopOverList } from "contants";
 
 const locations = [
   { label: "Singapore", value: "singapore" },
@@ -87,20 +88,16 @@ const categories = [
   },
 ];
 
-const Header = (props: {
-  onOpenHamMenu: () => void;
-  isAuthPage?: boolean;
+export interface HeaderProps {
+  isLoggedIn: boolean;
   id: string;
-}) => {
-  const { id, onOpenHamMenu } = props;
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  onOpenHamMenu: () => void;
+}
+
+const Header = (props: HeaderProps) => {
+  const { id, onOpenHamMenu, isLoggedIn } = props;
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
   const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) setIsLoggedIn(true);
-  }, []);
 
   const renderCategories = categories.map((cat) => {
     const isSelected = currentCategory === cat.label;
@@ -124,6 +121,48 @@ const Header = (props: {
     );
   });
 
+  const content = (
+    <React.Fragment>
+      {contributePopOverList.map((item) => (
+        <div key={item.label} className={styles.popover_modal_item}>
+          <Icon icon={item.icon} size={20} />
+          {item.label}
+        </div>
+      ))}
+    </React.Fragment>
+  );
+
+  const UserInfor = () => {
+    return isLoggedIn ? (
+      <>
+        <Popover content={content}>
+          <Button size="small" text="Contribute" />
+        </Popover>
+        <Icon icon="noti-color" size={20} />
+        <Image
+          src={require("public/images/avatar.png")}
+          alt=""
+          width={40}
+          height={40}
+        />
+      </>
+    ) : (
+      <>
+        <Button
+          text="Sign up"
+          variant="outlined"
+          onClick={() => router.push("/signup")}
+          size="small"
+        />
+        <Button
+          text="Login"
+          onClick={() => router.push("/login")}
+          size="small"
+        />
+      </>
+    );
+  };
+
   return (
     <div id={id} className={styles.header}>
       <div className={styles.header_top}>
@@ -144,14 +183,9 @@ const Header = (props: {
             />
           </div>
           <div className={styles.right_col}>
-            <Icon icon="business" size={60} />
+            <Icon icon="business" size={20} />
             <div>Business</div>
-            <Button
-              text="Sign up"
-              variant="outlined"
-              onClick={() => router.push("/signup")}
-            />
-            <Button text="Login" onClick={() => router.push("/login")} />
+            <UserInfor />
           </div>
         </div>
       </div>

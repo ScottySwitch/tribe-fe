@@ -35,14 +35,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (screen.width < 501) {
       setIsMobile(true);
     }
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      setILoggedIn(true);
-      setShowAuthPopup(false);
-    } else {
-      setILoggedIn(false);
-      setShowAuthPopup(true);
-    }
   }, []);
 
   useEffect(() => {
@@ -65,11 +57,24 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [showHamModal, isMobile]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      setILoggedIn(true);
+      setShowAuthPopup(false);
+    } else {
+      setILoggedIn(false);
+      setShowAuthPopup(true);
+    }
+  }, []);
+
   return (
     <div className={styles.app}>
       <Header
         id="header"
-        isAuthPage={isAuthPage}
+        isLoggedIn={isLoggedIn}
         onOpenHamMenu={() => setShowHamModal(!showHamModal)}
       />
       <Component {...pageProps} />
@@ -78,6 +83,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         visible={isAuthPage && showAuthPopup && !isLoggedIn}
       />
       <HamModal
+        isLoggedIn={isLoggedIn}
         showHamModal={showHamModal}
         onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
       />
