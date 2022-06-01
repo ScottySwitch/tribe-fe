@@ -25,6 +25,7 @@
     width: fit-content;
     min-width: 300px;
     max-height: 0;
+    height: 610px;
     border-radius: $border-radius;
     overflow-y: hidden;
     box-sizing: border-box;
@@ -101,6 +102,9 @@
 
   .bottom {
     align-items: flex-end;
+    .container {
+      margin-bottom: 60px;
+    }
   }
 
   .center {
@@ -140,7 +144,7 @@
 
   .full_height {
     top: 60px;
-    
+
     .container {
       height: 100%;
       border-radius: 0;

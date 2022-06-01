@@ -1,15 +1,15 @@
 import classNames from "classnames";
 import Icon from "components/Icon/Icon";
-import { hamItems } from "constant";
+import { menuItems } from "constant";
 
-import styles from "./HamMenu.module.scss";
+import styles from "./Menu.module.scss";
 
-interface HamMenuProps {
+interface MenuMenuProps {
   isLoggedIn: boolean;
   mobile?: boolean;
 }
 
-const HamMenu = (props: HamMenuProps) => {
+const Menu = (props: MenuMenuProps) => {
   const { isLoggedIn, mobile } = props;
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -18,12 +18,12 @@ const HamMenu = (props: HamMenuProps) => {
 
   return (
     <>
-      {hamItems.map((item) => {
-        const hamItemClassName = classNames(styles.ham_menu_item, {
+      {menuItems.map((item) => {
+        const menuItemClassName = classNames(styles.menu_item, {
           [styles.border_bottom]: mobile && item.borderBottom,
         });
         return (
-          <div key={item.label} className={hamItemClassName}>
+          <div key={item.label} className={menuItemClassName}>
             <Icon icon={item.icon} size={20} />
             <div>{item.label}</div>
           </div>
@@ -39,4 +39,4 @@ const HamMenu = (props: HamMenuProps) => {
   );
 };
 
-export default HamMenu;
+export default Menu;

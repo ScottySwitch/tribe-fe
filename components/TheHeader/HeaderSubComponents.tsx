@@ -6,7 +6,7 @@ import { categories, contributePopOverList } from "constant";
 import Popover from "components/Popover/Popover";
 import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
-import HamMenu from "components/HamMenu/HamMenu";
+import HamMenu from "components/Menu/Menu";
 
 import styles from "./Header.module.scss";
 

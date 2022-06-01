@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import Button from "components/Button/Button";
-import HamMenu from "components/HamMenu/HamMenu";
+import HamMenu from "components/Menu/Menu";
 import Modal from "components/Modal/Modal";
 
 import styles from "./HamModal.module.scss";

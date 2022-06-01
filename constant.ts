@@ -189,7 +189,7 @@ export const categories = [
   },
 ];
 
-export const hamItems = [
+export const menuItems = [
   { icon: "categories-color", label: "Categories" },
   { icon: "categories-color", label: "Saved deals" },
   { icon: "heart-color", label: "Favorited", borderBottom: true },
