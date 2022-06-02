@@ -1,0 +1,26 @@
+@import "styles/variables.scss";
+
+.add_listing {
+  p {
+    color: $bg-500;
+    font-size: $fs-sm;
+    margin: 10px 0 0 0;
+  }
+
+  a {
+    color: $blue-500;
+    text-decoration: underline;
+    font-size: $fs-sm;
+    cursor: pointer;
+  }
+
+  .question {
+    font-size: $fs-md;
+    margin: 30px 0 16px 0;
+    font-weight: $fw-semi-bold;
+  }
+
+  .continue_button {
+    margin-top: 70px;
+  }
+}

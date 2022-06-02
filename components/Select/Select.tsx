@@ -1,6 +1,11 @@
 import classNames from "classnames";
-import { ReactNode, useState } from "react";
-import ReactSelect, { StylesConfig } from "react-select";
+import Icon from "components/Icon/Icon";
+import React, { ReactNode, useState } from "react";
+import ReactSelect, {
+  ControlProps,
+  components,
+  StylesConfig,
+} from "react-select";
 import styles from "./Select.module.scss";
 
 interface IOption {
@@ -14,12 +19,14 @@ export interface SelectProps {
   className?: string;
   defaultValue?: IOption[];
   options?: IOption[];
+  prefixIcon?: string;
   helperText?: string;
   disabled?: boolean;
   placeholder?: string;
   isMulti?: boolean;
   isSearchable?: boolean;
   closeMenuOnSelect?: boolean;
+  menuFooter?: ReactNode;
   onChange?: (value: any) => void;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
@@ -31,8 +38,9 @@ const Select = (props: SelectProps) => {
     className,
     helperText,
     id,
+    prefixIcon,
     disabled,
-    isMulti,
+    isMulti = false,
     options,
     placeholder,
     onChange,
@@ -41,6 +49,7 @@ const Select = (props: SelectProps) => {
     closeMenuOnSelect = false,
     variant = "outlined",
     size = "medium",
+    menuFooter,
   } = props;
 
   const [selected, setSelected] = useState<IOption[] | IOption | undefined>();
@@ -63,12 +72,17 @@ const Select = (props: SelectProps) => {
       border: "none",
       boxShadow: "none",
       fontSize: "14px",
-      width: "max-content",
+      width: "100%",
+      minWidth: "max-content",
       minHeight: "min-content",
     }),
     option: (styles, { isSelected }) => {
       return {
         ...styles,
+        width: "60vw",
+        padding: "10px 20px",
+        maxWidth: 400,
+        minWidth: 300,
         cursor: isSelected ? "default" : "pointer",
         ":active": {
           ...styles[":active"],
@@ -103,6 +117,38 @@ const Select = (props: SelectProps) => {
     setSelected(dropdownValues);
   };
 
+  const Control = ({ children, ...props }: ControlProps<any, false>) => {
+    // @ts-ignore
+    const { emoji, onEmojiClick } = props.selectProps;
+    const style = { cursor: "pointer" };
+
+    return (
+      <components.Control {...props}>
+        <Icon size={20} icon={prefixIcon || ""} style={{ marginRight: 10 }} />
+        {children}
+      </components.Control>
+    );
+  };
+
+  const Menu = (props: any) => {
+    return (
+      <React.Fragment>
+        <components.Menu {...props}>
+          {props.children}
+          {menuFooter}
+        </components.Menu>
+      </React.Fragment>
+    );
+  };
+
+  const Option = (props: any) => {
+    return (
+      <React.Fragment>
+        <components.Option {...props}>{props.children}</components.Option>
+      </React.Fragment>
+    );
+  };
+
   return (
     <div className={selectWrapperClassName}>
       <div className={styles.container}>
@@ -118,8 +164,10 @@ const Select = (props: SelectProps) => {
           closeMenuOnSelect={closeMenuOnSelect}
           isDisabled={disabled}
           styles={customStyles}
+          // @ts-ignore
           isMulti={isMulti}
           isSearchable={isSearchable}
+          components={{ Control, Menu, Option }}
         />
       </div>
       {helperText && <div>{helperText}</div>}

@@ -21,7 +21,7 @@ export const Categories = (props: {
         const isSelected = currentCategory === cat.label;
         const categoryContent = (
           <React.Fragment>
-            {cat.values.map((value) => (
+            {cat.options.map((value) => (
               <div key={value.value}>{value.value}</div>
             ))}
           </React.Fragment>

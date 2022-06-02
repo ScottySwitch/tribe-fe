@@ -1,3 +1,5 @@
+import { Categories } from "enums";
+
 export const inforCardList = [
   {
     imgUrl: "https://picsum.photos/200/300",
@@ -130,7 +132,8 @@ export const categories = [
     width: "w-[30px]",
     icon: "buy-color",
     label: "Buy",
-    values: [
+    value: Categories.BUY,
+    options: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Coffee & Tea", value: "coffee-tea" },
       { label: "Bakeries", value: "bakeries" },
@@ -142,7 +145,8 @@ export const categories = [
     width: "w-[30px]",
     icon: "eat-color",
     label: "Eat",
-    values: [
+    value: Categories.EAT,
+    options: [
       { label: "Quick bites", value: "quick-bites" },
       { label: "Restaurant", value: "restaurant" },
       { label: "Dessert", value: "dessert" },
@@ -154,7 +158,8 @@ export const categories = [
     width: "w-[70px]",
     icon: "camera-color",
     label: "See & Do",
-    values: [
+    value: Categories.SEE,
+    options: [
       { label: "Coffee & Tea", value: "coffee-tea" },
       { label: "Restaurant", value: "restaurant" },
       { label: "Bakeries", value: "bakeries" },
@@ -166,7 +171,8 @@ export const categories = [
     width: "w-[80px]",
     icon: "car-color",
     label: "Transport",
-    values: [
+    value: Categories.TRANSPORT,
+    options: [
       { label: "Dessert", value: "dessert" },
       { label: "Bakeries", value: "bakeries" },
       { label: "Quick bites", value: "quick-bites" },
@@ -178,12 +184,60 @@ export const categories = [
     width: "w-[30px]",
     icon: "bed-color",
     label: "Stay",
-    values: [
+    value: Categories.STAY,
+    options: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Quick bites", value: "quick-bites" },
       { label: "Bakeries", value: "bakeries" },
       { label: "Coffee & Tea", value: "coffee-tea" },
       { label: "Dessert", value: "dessert" },
     ],
+  },
+];
+
+export const listingSearchResult = [
+  {
+    label: "Minatoso",
+    name: "Minatoso",
+    value: "minatoso",
+    location: "Kyoto, Japan",
+    icon: "eat-color",
+    avatar: "https://picsum.photos/200/300",
+    reviewNumber: 12,
+    imageNumber: 10,
+    followers: 500,
+  },
+  {
+    label: "Mina mark",
+    name: "Mina mark",
+    value: "mina-mark",
+    location: "Mexico",
+    icon: "buy-color",
+    avatar: "https://picsum.photos/200/300",
+    reviewNumber: 12,
+    imageNumber: 10,
+    followers: 500,
+  },
+  {
+    label: "Mina Braise",
+    name: "Mina Braise",
+    value: "mina-braise",
+    location: "Dubai",
+    icon: "camera-color",
+    avatar: "https://picsum.photos/200/300",
+    reviewNumber: 12,
+    imageNumber: 10,
+    followers: 500,
+  },
+  {
+    label: "MinaBurihako",
+    name: "MinaBurihako",
+    value: "minaburihako",
+    location: "Lohore, Pakistan",
+    icon: "car-color",
+    avatar: "https://picsum.photos/200/300",
+    reviewNumber: 12,
+    imageNumber: 10,
+    followers: 500,
   },
 ];

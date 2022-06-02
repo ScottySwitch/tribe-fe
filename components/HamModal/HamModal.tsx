@@ -74,7 +74,7 @@ const HamModal = (props: HamModalProps) => {
       value: "buy",
       content: (
         <div className="flex gap-[20px] flex-wrap">
-          {categories[0].values.map((item) => (
+          {categories[0].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div>
                 <Image
@@ -98,7 +98,7 @@ const HamModal = (props: HamModalProps) => {
       value: "eat",
       content: (
         <div className="flex gap-[20px] flex-wrap">
-          {categories[1].values.map((item) => (
+          {categories[1].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div>
                 <Image
@@ -122,7 +122,7 @@ const HamModal = (props: HamModalProps) => {
       value: "see-and-do",
       content: (
         <div className="flex gap-[20px] flex-wrap">
-          {categories[2].values.map((item) => (
+          {categories[2].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div>
                 <Image
@@ -146,7 +146,7 @@ const HamModal = (props: HamModalProps) => {
       value: "transport",
       content: (
         <div className="flex gap-[20px] flex-wrap">
-          {categories[3].values.map((item) => (
+          {categories[3].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div>
                 <Image
@@ -170,7 +170,7 @@ const HamModal = (props: HamModalProps) => {
       value: "stay",
       content: (
         <div className="flex gap-[20px] flex-wrap">
-          {categories[4].values.map((item) => (
+          {categories[4].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div>
                 <Image

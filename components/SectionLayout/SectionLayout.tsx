@@ -6,7 +6,7 @@ import styles from "./SectionLayout.module.scss";
 export interface SectionLayoutProps {
   title?: string;
   className?: string;
-  children: ReactElement | ReactElement[];
+  children:any;
   backgroundColor?: boolean;
 }
 const SectionLayout = (props: SectionLayoutProps) => {

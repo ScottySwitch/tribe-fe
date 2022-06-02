@@ -8,6 +8,7 @@ export interface ButtonProps
     "size" | "prefix" | "className"
   > {
   text: string;
+  width?: string | number;
   className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
@@ -26,6 +27,7 @@ const Button = (props: ButtonProps) => {
     variant = "primary",
     size = "medium",
     disabled,
+    width = "100%",
     type = "button",
     ...rest
   } = props;
@@ -40,7 +42,13 @@ const Button = (props: ButtonProps) => {
   });
 
   return (
-    <button className={buttonClassName} id={id} disabled={disabled} {...rest}>
+    <button
+      className={buttonClassName}
+      id={id}
+      disabled={disabled}
+      {...rest}
+      style={{ width }}
+    >
       <div className={styles.container}>
         {prefix && <div>{prefix}</div>}
         {text}
