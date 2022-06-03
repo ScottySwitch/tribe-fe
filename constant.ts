@@ -241,3 +241,12 @@ export const listingSearchResult = [
     followers: 500,
   },
 ];
+
+export const roleList = [
+  { label: "Owner", value: "owner" },
+  { label: "Manager", value: "manager" },
+  { label: "Agency/ Consultant", value: "consultant" },
+  { label: "Accounting/ Finance", value: "finance" },
+  { label: "Guest service/ Front Office", value: "front-office" },
+  { label: "Marketing", value: "marketing" },
+];
