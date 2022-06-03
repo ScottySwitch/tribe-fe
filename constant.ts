@@ -114,9 +114,9 @@ export const interestingList = [
 ];
 
 export const contributePopOverList = [
-  { icon: "map-color", label: "Add new listing" },
-  { icon: "comment-color", label: "Add new review" },
-  { icon: "update-color", label: "Update listing" },
+  { icon: "map-color", label: "Add new listing", href: "/add-listing" },
+  { icon: "comment-color", label: "Add new review", href: "/add-review" },
+  { icon: "update-color", label: "Update listing", href: "/update-listing" },
 ];
 
 export const locations = [
@@ -197,6 +197,7 @@ export const categories = [
 
 export const listingSearchResult = [
   {
+    id: "a1762871287348",
     label: "Minatoso",
     name: "Minatoso",
     value: "minatoso",
@@ -208,6 +209,7 @@ export const listingSearchResult = [
     followers: 500,
   },
   {
+    id: "a8798278394",
     label: "Mina mark",
     name: "Mina mark",
     value: "mina-mark",
@@ -219,6 +221,7 @@ export const listingSearchResult = [
     followers: 500,
   },
   {
+    id: "ab78472bdh394",
     label: "Mina Braise",
     name: "Mina Braise",
     value: "mina-braise",
@@ -230,6 +233,7 @@ export const listingSearchResult = [
     followers: 500,
   },
   {
+    id: "v9vfv88472bdh",
     label: "MinaBurihako",
     name: "MinaBurihako",
     value: "minaburihako",

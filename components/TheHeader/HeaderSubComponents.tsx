@@ -42,16 +42,19 @@ export const Categories = (props: {
   );
 };
 
-export const ContributeContent = () => (
-  <React.Fragment>
-    {contributePopOverList.map((item) => (
-      <div key={item.label}>
-        <Icon icon={item.icon} size={20} />
-        {item.label}
-      </div>
-    ))}
-  </React.Fragment>
-);
+export const ContributeContent = () => {
+  const router = useRouter();
+  return (
+    <React.Fragment>
+      {contributePopOverList.map((item) => (
+        <div key={item.label} onClick={() => router.push(item.href)}>
+          <Icon icon={item.icon} size={20} />
+          {item.label}
+        </div>
+      ))}
+    </React.Fragment>
+  );
+};
 
 export const UserInfor = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const router = useRouter();

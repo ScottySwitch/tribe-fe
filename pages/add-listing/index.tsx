@@ -1,32 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import useTrans from "hooks/useTrans";
-import { categories, listingSearchResult, roleList } from "constant";
+import { roleList } from "constant";
 import Badge from "components/Badge/Badge";
 import Button from "components/Button/Button";
-import { Categories } from "enums";
+import Select from "components/Select/Select";
+
+import DatePicker from "components/DatePicker/DatePicker";
 
 import styles from "styles/AddListing.module.scss";
-import Select from "components/Select/Select";
-import Icon from "components/Icon/Icon";
-import Image from "next/image";
-
-import SearchListing, {
-  listingTypes,
-} from "components/AddListingComponents/SearchListing/SearchListing";
-import RelationshipToBusiness from "components/AddListingComponents/RelationshipToBusiness/RelationshipToBusiness";
-import ChooseCategory from "components/AddListingComponents/ChooseCategory/ChooseCategory";
-import DatePicker from "components/DatePicker/DatePicker";
+import SearchListing, { listingTypes } from "components/AddListingPageComponents/SearchListing/SearchListing";
+import RelationshipToBusiness from "components/AddListingPageComponents/RelationshipToBusiness/RelationshipToBusiness";
+import ChooseCategory from "components/AddListingPageComponents/ChooseCategory/ChooseCategory";
 
 const AddListing = () => {
   const trans = useTrans();
-  const [category, setCategory] = useState<string | undefined>(Categories.BUY);
-  const [relationship, setRelationship] = useState<string | undefined>("yes");
-  const [listing, setListing] = useState<listingTypes>("searching");
-  const [isCurrentlyOpen, setIsCurrentlyOpen] = useState<boolean>(true);
-  const [openDate, setOpenDate] = useState(new Date());
+  const [category, setCategory] = useState<string | undefined>();
+  const [relationship, setRelationship] = useState<string | undefined>();
+  const [listing, setListing] = useState<listingTypes>();
+  const [role, setRole] = useState<string | undefined>();
+  const [isOpen, setIsOpen] = useState<string | undefined>();
+  const [openDate, setOpenDate] = useState<Date | undefined>();
+
+  const Question = (props) => {
+    const { show, question, children } = props;
+    if (!show) {
+      return null;
+    }
+    return (
+      <div>
+        <div className={styles.question}>{question}</div>
+        <div>{children}</div>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.add_listing}>
@@ -39,58 +48,70 @@ const AddListing = () => {
         </p>
         <Link href="/add-listing/guide">View our listing guidelines</Link>
         <br />
-
-        <div className={styles.question}>
-          Firstly, tell us. Which category would you like to add?
-        </div>
-        <ChooseCategory
-          category={category}
-          setCategory={(e) => setCategory(e)}
-        />
-
-        <div className={styles.question}>
-          Are you the owner, employee, or official representative of this place?
-        </div>
-        <RelationshipToBusiness
-          relationship={relationship}
-          setRelationship={(e) => setRelationship(e)}
-        />
-
-        <div className={styles.question}>
-          Let’s find out if business is already listed in Tribes.
-        </div>
-        <SearchListing
-          listing={listing}
-          setListing={(e) => {
-            setListing(e);
-          }}
-        />
-
-        <div className={styles.question}>What is your role?</div>
-        <Select prefixIcon="search" options={roleList} onChange={setListing} />
-
-        <div className={styles.question}>Is this busines currently open?</div>
-        <div className="flex gap-2">
-          <Badge
-            onClick={() => setIsCurrentlyOpen(true)}
-            selected={isCurrentlyOpen}
-            text="Yes"
+        <Question
+          show
+          question="Firstly, tell us. Which category would you like to add?"
+        >
+          <ChooseCategory
+            category={category}
+            setCategory={(e) => setCategory(e)}
           />
-          <Badge
-            onClick={() => setIsCurrentlyOpen(false)}
-            selected={!isCurrentlyOpen}
-            text="No"
+        </Question>
+        <Question
+          show={!!category}
+          question="Are you the owner, employee, or official representative of this place?"
+        >
+          <RelationshipToBusiness
+            relationship={relationship}
+            setRelationship={(e) => setRelationship(e)}
           />
-        </div>
-
-        <div className={styles.question}>What is open date?</div>
-        <DatePicker />
-
+        </Question>
+        <Question
+          show={!!relationship}
+          question="Let’s find out if business is already listed in Tribes."
+        >
+          <SearchListing
+            listing={listing}
+            setListing={(e) => {
+              setListing(e);
+              setRole(undefined);
+              setIsOpen(undefined);
+              setOpenDate(undefined);
+            }}
+          />
+        </Question>
+        <Question show={listing === "no"} question="What is your role?">
+          <Select prefixIcon="search" options={roleList} onChange={setRole} />
+        </Question>
+        <Question show={role} question="Is this busines currently open?">
+          <div className="flex gap-2">
+            <Badge
+              onClick={() => setIsOpen("yes")}
+              selected={isOpen === "yes"}
+              text="Yes"
+            />
+            <Badge
+              onClick={() => setIsOpen("no")}
+              selected={isOpen === "no"}
+              text="No"
+            />
+          </div>
+        </Question>
+        <Question show={isOpen === "no"} question="What is open date?">
+          <DatePicker onChange={setOpenDate} value={openDate} />
+        </Question>
         <Button
           className={styles.continue_button}
           text="Continue"
           size="small"
-          disabled
+          disabled={
+            !category ||
+            !relationship ||
+            !listing ||
+            !role ||
+            !isOpen ||
+            !openDate
+          }
           width={270}
         />
       </SectionLayout>

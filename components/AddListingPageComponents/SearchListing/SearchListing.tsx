@@ -4,10 +4,11 @@ import Icon from "components/Icon/Icon";
 import Select from "components/Select/Select";
 import { listingSearchResult } from "constant";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import styles from "./SearchListing.module.scss";
 
-export type listingTypes = { [key: string]: string } | "no" | "searching";
+export type listingTypes = { [key: string]: string } | "no" | undefined;
 
 const ListingMenuFooter = ({ onClick }: { onClick?(): void }) => {
   return (
@@ -40,9 +41,10 @@ const SearchListing = ({
   setListing: (e: listingTypes) => void;
   listing: any;
 }) => {
-  let result = null;
+  const router = useRouter();
+  let result;
   switch (listing) {
-    case "searching":
+    case undefined:
       result = (
         <Select
           prefixIcon="search"
@@ -62,20 +64,27 @@ const SearchListing = ({
     case "no":
       result = (
         <div className="flex gap-2">
-          <Badge onClick={() => setListing("searching")} text="Yes" />
+          <Badge onClick={() => setListing(undefined)} text="Yes" />
           <Badge value="no" selected text="No" />
         </div>
       );
       break;
     default:
-      const { avatar, location, name, reviewNumber, imageNumber, followers } =
-        listing;
+      const {
+        avatar,
+        location,
+        name,
+        reviewNumber,
+        imageNumber,
+        followers,
+        id,
+      } = listing;
       result = (
         <div className={styles.add_listing_card}>
           <div className={styles.left_col}>
             <div className={styles.listing_details}>
               <div className={styles.listing_details_avatar}>
-                <Image src={avatar} layout="fill" alt="" />
+                {avatar && <Image src={avatar} layout="fill" alt="" />}
               </div>
               <div className={styles.listing_details_infor}>
                 <div className={styles.listing_details_infor_name}>{name}</div>
@@ -100,17 +109,21 @@ const SearchListing = ({
             </div>
           </div>
           <div className={styles.right_col}>
-            <Button text="Claim free listing" size="small" />
+            <Button
+              text="Claim free listing"
+              size="small"
+              onClick={() => router.push(`/add-listing/claim/${id}`)}
+            />
             <div className={styles.not_your_business}>Not your business?</div>
           </div>
-          <div className={styles.close} onClick={() => setListing("searching")}>
+          <div className={styles.close} onClick={() => setListing(undefined)}>
             &times;
           </div>
         </div>
       );
       break;
   }
-  return result
+  return result;
 };
 
 export default SearchListing;

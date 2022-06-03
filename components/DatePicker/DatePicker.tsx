@@ -2,13 +2,18 @@ import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const DatePicker = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+interface DatePickerProps {
+  value?: Date;
+  onChange: (e: Date) => void;
+}
+
+const DatePicker = (props: DatePickerProps) => {
+  const { value, onChange } = props;
   return (
     <ReactDatePicker
       dateFormat="dd/MM/yyyy"
-      selected={selectedDate}
-      onChange={(date: any) => setSelectedDate(date)}
+      selected={value}
+      onChange={onChange}
     />
   );
 };
