@@ -1,4 +1,5 @@
 import AddBuyInfor from "./AddBuyInfor";
+import AddEatInfor from "./AddEatInfor";
 import AddSeeAndDoInfor from "./AddSeeAndDoInfor";
 import AddStayInfor from "./AddStayInfor";
 import AddTransportInfor from "./AddTransportInfor";
@@ -13,11 +14,11 @@ interface AddListingPageThreeProps {
 const AddListingPageThree = (props: AddListingPageThreeProps) => {
   return (
     <div>
-      {/* <AddEatInfor /> */}
+      <AddEatInfor />
       {/* <AddTransportInfor /> */}
       {/* <AddStayInfor /> */}
       {/* <AddSeeAndDoInfor /> */}
-      <AddBuyInfor />
+      {/* <AddBuyInfor /> */}
     </div>
   );
 };

@@ -7,6 +7,7 @@ export interface ModalProps {
   visible?: boolean;
   transparent?: boolean;
   title?: string;
+  subTitle?: string;
   closable?: boolean;
   width?: string | number;
   mobilePosition?: "center" | "bottom" | "top" | "left" | "right";
@@ -26,6 +27,7 @@ const Modal = (props: ModalProps) => {
     mobilePosition = "bottom",
     mobileFullHeight,
     backdrop = true,
+    subTitle,
     onClose,
   } = props;
 
@@ -45,7 +47,10 @@ const Modal = (props: ModalProps) => {
       <div style={{ width }} className={styles.container}>
         {title && (
           <div className={styles.header}>
-            <div className={styles.title}>{title}</div>
+            <div>
+              <div className={styles.title}>{title}</div>
+              {subTitle && <div className={styles.sub_title}>{subTitle}</div>}
+            </div>
             {closable && (
               <div className={styles.close} onClick={onClose}>
                 &#x2715;

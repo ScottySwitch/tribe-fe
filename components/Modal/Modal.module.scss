@@ -44,6 +44,12 @@
         font-weight: $fw-bold;
       }
 
+      .sub_title {
+        color: $bg-500;
+        font-size: $fs-sm;
+        font-weight: $fw-light;
+      }
+
       .close {
         cursor: pointer;
       }
