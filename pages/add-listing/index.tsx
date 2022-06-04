@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "styles/AddListing.module.scss";
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(2);
+  const [pageNumber, setPageNumber] = useState(1);
   const [formData, setFormData] = useState<{ [key: string]: any }>({});
 
   return (
@@ -17,8 +17,13 @@ const AddListing = () => {
         }}
       />
       <AddListingPageTwo
+        data={formData}
         show={pageNumber === 2}
-        onPrevPage={() => setPageNumber(1)}
+        onPrevPage={(data) => {
+          console.log(data);
+          setFormData({ ...formData, data });
+          setPageNumber(1);
+        }}
         onNextPage={(data) => {
           setFormData({ ...formData, data });
           setPageNumber(3);

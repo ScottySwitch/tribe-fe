@@ -98,3 +98,15 @@
     cursor: pointer;
   }
 }
+
+@media screen and (max-width: $mobile) {
+  .add_listing_card {
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+    .left_col,
+    .right_col {
+      width: 100%;
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import styles from "./Question.module.scss";
 
 const Question = (props) => {
-  const { show, question, children } = props;
+  const { show = true, question, children } = props;
   if (!show) {
     return null;
   }

@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { ReactNode } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 import styles from "./Input.module.scss";
 
 export interface InputProps
@@ -8,6 +9,7 @@ export interface InputProps
     "size" | "prefix" | "className"
   > {
   label?: string;
+  register?: UseFormRegisterReturn;
   className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
@@ -26,8 +28,9 @@ const Input = (props: InputProps) => {
     helperText,
     size = "medium",
     id,
+    form,
     disabled,
-    type,
+    register,
     ...rest
   } = props;
 
@@ -45,7 +48,7 @@ const Input = (props: InputProps) => {
         {label && <label htmlFor={id}>{label}</label>}
         <div className={styles.content}>
           {prefix && <div>{prefix}</div>}
-          <input type={type} disabled={disabled} id={id} {...rest} />
+          <input disabled={disabled} id={id} {...register} {...rest} />
           {suffix && <div>{suffix}</div>}
         </div>
       </div>

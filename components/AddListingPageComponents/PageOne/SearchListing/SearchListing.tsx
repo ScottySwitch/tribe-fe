@@ -50,14 +50,7 @@ const SearchListing = ({
           prefixIcon="search"
           options={formatListingResultOption}
           onChange={setListing}
-          menuFooter={
-            <ListingMenuFooter
-              onClick={() => {
-                console.log("noooooooo");
-                setListing("no");
-              }}
-            />
-          }
+          menuFooter={<ListingMenuFooter onClick={() => setListing("no")} />}
         />
       );
       break;

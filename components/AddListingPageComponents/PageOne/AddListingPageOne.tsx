@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 import SectionLayout from "components/SectionLayout/SectionLayout";
@@ -36,6 +36,9 @@ const AddListingPageOne = (props: AddListingProps) => {
     return null;
   }
 
+  const isContinueBtnDisable =
+    !category || !relationship || !listing || !role || !isOpen || !openDate;
+
   return (
     <SectionLayout title={trans.addNewListing}>
       <p>
@@ -46,10 +49,7 @@ const AddListingPageOne = (props: AddListingProps) => {
       </p>
       <Link href="/add-listing/guide">View our listing guidelines</Link>
       <br />
-      <Question
-        show
-        question="Firstly, tell us. Which category would you like to add?"
-      >
+      <Question question="Firstly, tell us. Which category would you like to add?">
         <ChooseCategory
           category={category}
           setCategory={(e) => setCategory(e)}
@@ -81,7 +81,7 @@ const AddListingPageOne = (props: AddListingProps) => {
       <Question show={listing === "no"} question="What is your role?">
         <Select prefixIcon="search" options={roleList} onChange={setRole} />
       </Question>
-      <Question show={role} question="Is this busines currently open?">
+      <Question show={!!role} question="Is this busines currently open?">
         <div className="flex gap-2">
           <Badge
             onClick={() => setIsOpen("yes")}
@@ -104,14 +104,7 @@ const AddListingPageOne = (props: AddListingProps) => {
       <Button
         text="Continue"
         size="small"
-        disabled={
-          !category ||
-          !relationship ||
-          !listing ||
-          !role ||
-          !isOpen ||
-          !openDate
-        }
+        disabled={isContinueBtnDisable}
         width={270}
         onClick={() => {
           onNextPage({

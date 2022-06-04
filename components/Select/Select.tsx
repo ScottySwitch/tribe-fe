@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import Icon from "components/Icon/Icon";
 import React, { ReactNode, useState } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 import ReactSelect, {
   ControlProps,
   components,
@@ -17,7 +18,8 @@ export interface SelectProps {
   id?: string;
   label?: string;
   className?: string;
-  defaultValue?: IOption[];
+  defaultValue?: IOption[] | IOption;
+  value?: IOption[] | IOption | string;
   options?: IOption[];
   prefixIcon?: string;
   helperText?: string;
@@ -27,9 +29,11 @@ export interface SelectProps {
   isSearchable?: boolean;
   closeMenuOnSelect?: boolean;
   menuFooter?: ReactNode;
+  register?: UseFormRegisterReturn;
   onChange?: (value: any) => void;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
+  inputRef?: any;
 }
 
 const Select = (props: SelectProps) => {
@@ -42,6 +46,7 @@ const Select = (props: SelectProps) => {
     disabled,
     isMulti = false,
     options,
+    value,
     placeholder,
     onChange,
     isSearchable = true,
@@ -50,9 +55,12 @@ const Select = (props: SelectProps) => {
     variant = "outlined",
     size = "medium",
     menuFooter,
+    inputRef,
   } = props;
 
-  const [selected, setSelected] = useState<IOption[] | IOption | undefined>();
+  const [selected, setSelected] = useState<
+    IOption[] | IOption | string | undefined
+  >(value || defaultValue);
 
   const selectWrapperClassName = classNames(className, styles.select, {
     [styles.filled]: variant === "filled",
@@ -82,7 +90,7 @@ const Select = (props: SelectProps) => {
         width: "60vw",
         padding: "10px 20px",
         maxWidth: 400,
-        minWidth: 300,
+        minWidth: 280,
         cursor: isSelected ? "default" : "pointer",
         ":active": {
           ...styles[":active"],
@@ -155,12 +163,12 @@ const Select = (props: SelectProps) => {
         {label && <label htmlFor={id}>{label}</label>}
         <ReactSelect
           id={id}
+          inputRef={inputRef}
           options={options}
           value={selected}
           onChange={handleChange}
           placeholder={placeholder}
           isClearable={false}
-          defaultValue={defaultValue}
           closeMenuOnSelect={closeMenuOnSelect}
           isDisabled={disabled}
           styles={customStyles}
