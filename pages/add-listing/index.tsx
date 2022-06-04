@@ -1,10 +1,11 @@
-import AddListingPageOne from "components/AddListingPageComponents/PageOne/AddListingPageOne";
-import AddListingPageTwo from "components/AddListingPageComponents/PageTwo/AddListingPageTwo";
+import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne";
+import AddListingPageThree from "components/AddListingPages/PageThree/AddListingPageThree";
+import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPageTwo";
 import { useState } from "react";
 import styles from "styles/AddListing.module.scss";
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(3);
   const [formData, setFormData] = useState<{ [key: string]: any }>({});
 
   const handlePrevPage = (data) => {
@@ -24,6 +25,12 @@ const AddListing = () => {
       <AddListingPageTwo
         data={formData}
         show={pageNumber === 2}
+        onPrevPage={handlePrevPage}
+        onNextPage={handleNextPage}
+      />
+      <AddListingPageThree
+        data={formData}
+        show={pageNumber === 3}
         onPrevPage={handlePrevPage}
         onNextPage={handleNextPage}
       />

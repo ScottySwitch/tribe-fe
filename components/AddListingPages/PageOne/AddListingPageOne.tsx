@@ -12,9 +12,9 @@ import DatePicker from "components/DatePicker/DatePicker";
 
 import SearchListing, {
   listingTypes,
-} from "components/AddListingPageComponents/PageOne/SearchListing/SearchListing";
-import RelationshipToBusiness from "components/AddListingPageComponents/PageOne/RelationshipToBusiness/RelationshipToBusiness";
-import ChooseCategory from "components/AddListingPageComponents/PageOne/ChooseCategory/ChooseCategory";
+} from "components/AddListingPages/PageOne/SearchListing/SearchListing";
+import RelationshipToBusiness from "components/AddListingPages/PageOne/RelationshipToBusiness/RelationshipToBusiness";
+import ChooseCategory from "components/AddListingPages/PageOne/ChooseCategory/ChooseCategory";
 import Question from "components/Question/Question";
 
 interface AddListingProps {

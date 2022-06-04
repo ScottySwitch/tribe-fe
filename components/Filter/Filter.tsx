@@ -18,19 +18,15 @@ const sortList = [
   { label: "Recently added" },
 ];
 
-const otherList = [
+export const otherList = [
   { label: "Halal Certified" },
-  { label: "Halal Certified" },
-  { label: "Halal Certified" },
+  { label: "Kosher options available" },
+  { label: "Halal Ingredients Used" },
   { label: "Halal Certified" },
   { label: "Mulism Owned" },
-  { label: "Halal Ingredients used" },
+  { label: "Seafood options available " },
   { label: "Vegetarian" },
-  { label: "Halal meals available on request" },
-  { label: "Halal meals available on request" },
-  { label: "Halal meals available on request" },
-  { label: "Halal meals available on request" },
-  { label: "Halal meals available on request" },
+  { label: "Alcohol served in premise" },
   { label: "Vegetarian options available" },
 ];
 

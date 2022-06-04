@@ -1,7 +1,16 @@
 @import "styles/variables.scss";
 
-.question {
-  font-size: $fs-md;
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 30px 0 16px 0;
-  font-weight: $fw-semi-bold;
+  .question {
+    font-size: $fs-md;
+    font-weight: $fw-semi-bold;
+  }
+  .optional {
+    color: $bg-400;
+    font-size: $fs-md;
+  }
 }
