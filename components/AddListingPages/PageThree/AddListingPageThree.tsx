@@ -1,6 +1,7 @@
-import Button from "components/Button/Button";
-import { useState } from "react";
-import AddEatInfo from "./AddEatInfo";
+import AddBuyInfor from "./AddBuyInfor";
+import AddSeeAndDoInfor from "./AddSeeAndDoInfor";
+import AddStayInfor from "./AddStayInfor";
+import AddTransportInfor from "./AddTransportInfor";
 
 interface AddListingPageThreeProps {
   onPrevPage: (data: { [key: string]: any }) => void;
@@ -10,10 +11,13 @@ interface AddListingPageThreeProps {
 }
 
 const AddListingPageThree = (props: AddListingPageThreeProps) => {
-
   return (
     <div>
-      <AddEatInfo />
+      {/* <AddEatInfor /> */}
+      {/* <AddTransportInfor /> */}
+      {/* <AddStayInfor /> */}
+      {/* <AddSeeAndDoInfor /> */}
+      <AddBuyInfor />
     </div>
   );
 };

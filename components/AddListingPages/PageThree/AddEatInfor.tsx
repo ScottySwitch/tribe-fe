@@ -79,7 +79,7 @@ const additionalFeatures = [
   { label: "wudu facilities available/nearby" },
 ];
 
-const AddEatInfo = () => {
+const AddEatInfor = () => {
   const [isPrevPage, setIsPrevPage] = useState<boolean>(false);
 
   return (
@@ -197,4 +197,4 @@ const AddEatInfo = () => {
   );
 };
 
-export default AddEatInfo;
+export default AddEatInfor;

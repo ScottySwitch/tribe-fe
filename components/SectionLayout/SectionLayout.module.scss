@@ -11,10 +11,19 @@
     width: $content-width;
     max-width: $content-max-width;
 
-    .title {
-      font-size: $fs-xl;
-      font-weight: $fw-bold;
+    .title_container {
       margin-bottom: 30px;
+      .title {
+        font-size: $fs-xl;
+        font-weight: $fw-bold;
+      }
+
+      .sub_title {
+        margin-top: 8px;
+        font-weight: $fw-light;
+        font-size: $fs-sm;
+        color: $bg-500;
+      }
     }
 
     .content {
