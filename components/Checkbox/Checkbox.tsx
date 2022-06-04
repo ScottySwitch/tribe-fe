@@ -5,7 +5,7 @@ export interface CheckboxProps extends React.HTMLProps<HTMLInputElement> {
   label?: string;
   value?: string;
   name?: string;
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
 }
 
 const Checkbox = (props: CheckboxProps) => {
