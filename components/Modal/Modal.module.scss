@@ -55,9 +55,10 @@
       }
     }
 
-    .body {
+    .content {
       width: 100%;
-      margin: auto;
+      height: inherit;
+      overflow-y: scroll;
     }
   }
 }
@@ -101,9 +102,6 @@
 
   .bottom {
     align-items: flex-end;
-    .container {
-      margin-bottom: 60px;
-    }
   }
 
   .center {
@@ -121,7 +119,7 @@
 
   .right {
     justify-content: flex-end;
-    align-items: end;
+    align-items: flex-end;
 
     .container {
       position: absolute;
@@ -141,14 +139,12 @@
   }
 
   .full_height {
-    top: 60px;
-
     .container {
       height: 100%;
       border-radius: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
     }
   }

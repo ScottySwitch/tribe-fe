@@ -27,7 +27,7 @@ const Button = (props: ButtonProps) => {
     variant = "primary",
     size = "medium",
     disabled,
-    width = "100%",
+    width,
     type = "button",
     ...rest
   } = props;

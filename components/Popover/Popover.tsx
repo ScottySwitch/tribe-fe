@@ -33,7 +33,9 @@ const Popover = (props: PopoverProps) => {
       >
         {children}
       </div>
-      <div className={contentClassName}>{content}</div>
+      <div className={contentClassName} onClick={() => setIsPoppedUp(false)}>
+        {content}
+      </div>
     </div>
   );
 };

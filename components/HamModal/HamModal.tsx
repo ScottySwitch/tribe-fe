@@ -214,7 +214,7 @@ const HamModal = (props: HamModalProps) => {
       <Modal
         visible={showCategoriesModal}
         onClose={() => setShowCategoriesModal(false)}
-        title="Filter & Sort"
+        title="BEST categories"
         width="100%"
         mobileFullHeight
         mobilePosition="right"

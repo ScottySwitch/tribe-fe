@@ -34,10 +34,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   //handle logic hide header when scroll, not hide when in desktop || when opening ham modal || in unAuthPages
   useEffect(() => {
     var prevScrollpos = window.pageYOffset;
+    const header = document.getElementById("header") as any;
 
     const handleScroll = function () {
       var currentScrollPos = window.pageYOffset;
-      const header = document.getElementById("header") as any;
       if (prevScrollpos < currentScrollPos && !showHamModal && isAuthPage) {
         header.style.top = "-120px";
       } else {
@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       prevScrollpos = currentScrollPos;
     };
 
-    if (isMobile) {
+    if (header && isMobile) {
       window.addEventListener("scroll", handleScroll, { passive: true });
       return () => window.removeEventListener("scroll", handleScroll);
     }
@@ -70,11 +70,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <div className={styles.app}>
-      <Header
-        id="header"
-        isLoggedIn={isLoggedIn}
-        onOpenHamModal={() => setShowHamModal(!showHamModal)}
-      />
+      {!showHamModal && (
+        <Header
+          id="header"
+          isLoggedIn={isLoggedIn}
+          onOpenHamModal={() => setShowHamModal(!showHamModal)}
+        />
+      )}
       <Component {...pageProps} />
       <AuthPopup
         onClose={() => setShowAuthPopup(false)}
@@ -86,7 +88,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
       />
       <Footer visible={isAuthPage} />
-      <ContributeTabBar visible={isAuthPage && isMobile} />
+
+      <ContributeTabBar visible={!showHamModal && isAuthPage && isMobile} />
     </div>
   );
 }

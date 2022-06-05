@@ -21,7 +21,7 @@ export enum ProfileSteps {
 const StepOne = ({ setStep }: { setStep: Function }) => {
   const router = useRouter();
   return (
-    <React.Fragment>
+    <div>
       <ModalHeader alignTitle="center">
         <div>Almost there... set up your profile</div>
       </ModalHeader>
@@ -67,7 +67,7 @@ const StepOne = ({ setStep }: { setStep: Function }) => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 
@@ -75,7 +75,7 @@ const StepTwo = () => {
   const [interest, setInterest] = useState<string[]>([]);
   const router = useRouter();
   return (
-    <React.Fragment>
+    <div>
       <ModalHeader alignTitle="left">
         <div>
           <div>👋 &nbsp; Hello Anna Nhun,</div>
@@ -131,7 +131,7 @@ const StepTwo = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 
@@ -140,21 +140,13 @@ const SetupProfilePage = () => {
 
   return (
     <div className={styles.auth}>
-      <Modal
-        visible
-        backdrop={false}
-        width={580}
-        mobileFullHeight
-        mobilePosition="bottom"
-      >
-        <div className={styles.form_container}>
-          {step === ProfileSteps.STEP_ONE ? (
-            <StepOne setStep={() => setStep(ProfileSteps.STEP_TWO)} />
-          ) : (
-            <StepTwo />
-          )}
-        </div>
-      </Modal>
+      <div className={styles.form_container}>
+        {step === ProfileSteps.STEP_ONE ? (
+          <StepOne setStep={() => setStep(ProfileSteps.STEP_TWO)} />
+        ) : (
+          <StepTwo />
+        )}
+      </div>
     </div>
   );
 };
