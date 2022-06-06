@@ -1,21 +1,62 @@
 import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne";
 import AddListingPageThree from "components/AddListingPages/PageThree/AddListingPageThree";
 import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPageTwo";
+import { Categories } from "enums";
 import { useState } from "react";
 import styles from "styles/AddListing.module.scss";
 
+const defaultAddlistingForm: IAddListingForm = {
+  category: Categories.EAT,
+  relationship: "",
+  listing: "",
+  role: "",
+  isOpen: "",
+  openDate: "",
+  businessName: "",
+  description: "",
+  isOnline: "",
+  city: "",
+  country: "",
+  address: "",
+  additionalAddress: "",
+  contact: "",
+  email: "",
+  socialMedia: "",
+};
+export interface IAddListingForm {
+  category: string;
+  relationship: string;
+  listing: string;
+  role: string;
+  isOpen: string;
+  openDate: string;
+  businessName: string;
+  description: string;
+  isOnline: string;
+  city: string;
+  country: string;
+  address: string;
+  additionalAddress: string;
+  contact: string;
+  email: string;
+  socialMedia: string;
+}
+
 const AddListing = () => {
   const [pageNumber, setPageNumber] = useState(3);
-  const [formData, setFormData] = useState<{ [key: string]: any }>({});
+  const [formData, setFormData] = useState<IAddListingForm>(
+    defaultAddlistingForm
+  );
 
   const handlePrevPage = (data) => {
     console.log(data);
-    setFormData({ ...formData, data });
+    setFormData({ ...formData, ...data });
     setPageNumber(pageNumber - 1);
   };
 
   const handleNextPage = (data) => {
-    setFormData({ ...formData, data });
+    console.log(data);
+    setFormData({ ...formData, ...data });
     setPageNumber(pageNumber + 1);
   };
 

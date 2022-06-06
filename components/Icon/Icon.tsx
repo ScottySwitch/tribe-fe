@@ -21,7 +21,7 @@ const Icon: React.FC<IconProps> = (props) => {
       color={color}
       size={size}
       icon={icon}
-      style={style}
+      style={{ ...style, display: "block", boxSizing: "border-box" }}
     />
   );
 };

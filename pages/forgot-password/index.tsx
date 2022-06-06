@@ -24,44 +24,36 @@ const ForgotPasswordPage = () => {
 
   return (
     <div className={styles.auth}>
-      <Modal
-        visible
-        backdrop={false}
-        width={580}
-        mobileFullHeight
-        mobilePosition="bottom"
-      >
-        <div className={styles.form_container}>
-          <ModalHeader alignTitle="center">Forgot password</ModalHeader>
-          <div className={styles.tabs}>
-            {tabList.map((tab) => {
-              const tabClassNames = classNames(styles.tab, {
-                [styles.selected]: method === tab.value,
-              });
-              return (
-                <div
-                  key={tab.value}
-                  onClick={() => setMethod(tab.value)}
-                  className={tabClassNames}
-                >
-                  {tab.label}
-                </div>
-              );
-            })}
-          </div>
-          <div className={styles.body}>
-            {method === LoginMethod.PHONE_NUMBER ? (
-              <Input size="large" placeholder="Phone number" />
-            ) : (
-              <Input label="Email" placeholder="Your email" />
-            )}
-            <Button
-              text="Next"
-              onClick={() => router.push("/forgot-password/otp")}
-            />
-          </div>
+      <div className={styles.form_container}>
+        <ModalHeader alignTitle="center">Forgot password</ModalHeader>
+        <div className={styles.tabs}>
+          {tabList.map((tab) => {
+            const tabClassNames = classNames(styles.tab, {
+              [styles.selected]: method === tab.value,
+            });
+            return (
+              <div
+                key={tab.value}
+                onClick={() => setMethod(tab.value)}
+                className={tabClassNames}
+              >
+                {tab.label}
+              </div>
+            );
+          })}
         </div>
-      </Modal>
+        <div className={styles.body}>
+          {method === LoginMethod.PHONE_NUMBER ? (
+            <Input size="large" placeholder="Phone number" />
+          ) : (
+            <Input label="Email" placeholder="Your email" />
+          )}
+          <Button
+            text="Next"
+            onClick={() => router.push("/forgot-password/otp")}
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,3 +1,9 @@
+import Button from "components/Button/Button";
+import Modal from "components/Modal/Modal";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import { Categories } from "enums";
+import { IAddListingForm } from "pages/add-listing";
+import { useState } from "react";
 import AddBuyInfor from "./AddBuyInfor";
 import AddEatInfor from "./AddEatInfor";
 import AddSeeAndDoInfor from "./AddSeeAndDoInfor";
@@ -8,18 +14,32 @@ interface AddListingPageThreeProps {
   onPrevPage: (data: { [key: string]: any }) => void;
   onNextPage: (data: { [key: string]: any }) => void;
   show: boolean;
-  data: { [key: string]: string };
+  data: IAddListingForm;
 }
 
 const AddListingPageThree = (props: AddListingPageThreeProps) => {
+  const { data, show, onPrevPage, onNextPage } = props;
+
+  const AddInfor = () => {
+    switch (data.category) {
+      case Categories.EAT:
+        return <AddEatInfor data={data} />;
+      case Categories.STAY:
+        return <AddStayInfor />;
+      case Categories.SEE:
+        return <AddSeeAndDoInfor />;
+      case Categories.BUY:
+        return <AddBuyInfor />;
+      case Categories.TRANSPORT:
+        return <AddTransportInfor />;
+      default:
+        return null;
+    }
+  };
   return (
-    <div>
-      <AddEatInfor />
-      {/* <AddTransportInfor /> */}
-      {/* <AddStayInfor /> */}
-      {/* <AddSeeAndDoInfor /> */}
-      {/* <AddBuyInfor /> */}
-    </div>
+    <>
+      <AddInfor />
+    </>
   );
 };
 

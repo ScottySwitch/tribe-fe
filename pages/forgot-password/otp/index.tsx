@@ -10,34 +10,26 @@ const OtpPage = () => {
 
   return (
     <div className={styles.auth}>
-      <Modal
-        visible
-        backdrop={false}
-        width={580}
-        mobileFullHeight
-        mobilePosition="bottom"
-      >
-        <div className={styles.form_container}>
-          <ModalHeader alignTitle="center">Forgot password</ModalHeader>
-          <div className={styles.body}>
-            <div className={styles.instruction}>
-              <div>
-                An OTP have send to the number <strong>+84 0335 478 699</strong>
-              </div>
-              <div>Please check and enter your OTP</div>
+      <div className={styles.form_container}>
+        <ModalHeader alignTitle="center">Forgot password</ModalHeader>
+        <div className={styles.body}>
+          <div className={styles.instruction}>
+            <div>
+              An OTP have send to the number <strong>+84 0335 478 699</strong>
             </div>
-            <Input size="large" placeholder="Enter OTP" />
-            <div className="flex justify-between">
-              <div>00:39</div>
-              <div>Resend</div>
-            </div>
-            <Button
-              text="Next"
-              onClick={() => router.push("/forgot-password/reset")}
-            />
+            <div>Please check and enter your OTP</div>
           </div>
+          <Input size="large" placeholder="Enter OTP" />
+          <div className="flex justify-between">
+            <div>00:39</div>
+            <div>Resend</div>
+          </div>
+          <Button
+            text="Next"
+            onClick={() => router.push("/forgot-password/reset")}
+          />
         </div>
-      </Modal>
+      </div>
     </div>
   );
 };

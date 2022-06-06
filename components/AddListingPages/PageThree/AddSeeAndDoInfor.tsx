@@ -30,8 +30,6 @@ const tags = [
 ];
 
 const AddSeeAndDoInfor = () => {
-  const [isPrevPage, setIsPrevPage] = useState<boolean>(false);
-
   return (
     <SectionLayout
       title="Add a thing to do"
@@ -95,16 +93,6 @@ const AddSeeAndDoInfor = () => {
       <br />
       <br />
       <br />
-      <div className="flex gap-3 sm:gap-10  text-sm">
-        <button
-          className="underline w-max cursor-pointer flex items-end text-left"
-          type="submit"
-          onClick={() => setIsPrevPage(true)}
-        >
-          Go back
-        </button>
-        <Button text="Continue" size="small" width={270} type="submit" />
-      </div>
     </SectionLayout>
   );
 };

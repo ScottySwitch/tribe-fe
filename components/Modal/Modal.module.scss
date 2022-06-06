@@ -17,7 +17,7 @@
     z-index: 2;
 
     .container {
-      max-height: 1000px;
+      max-height: calc(100vh - 250px);
     }
   }
 
@@ -25,8 +25,8 @@
     width: fit-content;
     min-width: 300px;
     max-height: 0;
+    overflow-y: scroll;
     border-radius: $border-radius;
-    overflow-y: hidden;
     box-sizing: border-box;
     transition: all 0.5s ease-in-out;
     background-color: white;
@@ -59,6 +59,7 @@
       width: 100%;
       height: inherit;
       overflow-y: scroll;
+      overscroll-behavior: none;
     }
   }
 }
@@ -95,8 +96,15 @@
 
 @media screen and (max-width: $mobile) {
   .modal {
+    &.show {
+      .container {
+        margin-top: 0;
+        max-height: 1000px;
+      }
+    }
     .container {
       border-radius: $border-radius $border-radius 0 0;
+      margin-bottom: 60px;
     }
   }
 
@@ -139,6 +147,9 @@
   }
 
   .full_height {
+    &.show {
+      z-index: 4;
+    }
     .container {
       height: 100%;
       border-radius: 0;
@@ -146,6 +157,7 @@
       flex-direction: column;
       justify-content: flex-end;
       align-items: center;
+      margin-bottom: 0;
     }
   }
 } ;

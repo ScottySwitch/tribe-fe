@@ -61,8 +61,10 @@ const Header = (props: HeaderProps) => {
             />
           </div>
           <div className={styles.right_col}>
-            <Icon icon="business" size={20} />
-            <div>Business</div>
+            <div className="flex gap-2">
+              <Icon icon="business" size={20} />
+              Business
+            </div>
             <UserInfor isLoggedIn={isLoggedIn} />
           </div>
         </div>

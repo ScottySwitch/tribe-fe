@@ -9,12 +9,13 @@ import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Select from "components/Select/Select";
 import { roleList } from "constant";
+import { IAddListingForm } from "pages/add-listing";
 
 interface AddListingProps {
   onPrevPage: (data: { [key: string]: any }) => void;
   onNextPage: (data: { [key: string]: any }) => void;
   show: boolean;
-  data: { [key: string]: string };
+  data: IAddListingForm;
 }
 
 const AddListingPageTwo = (props: AddListingProps) => {
