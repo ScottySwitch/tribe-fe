@@ -6,7 +6,7 @@ import { useState } from "react";
 import styles from "styles/AddListing.module.scss";
 
 const defaultAddlistingForm: IAddListingForm = {
-  category: Categories.EAT,
+  category: "",
   relationship: "",
   listing: "",
   role: "",
@@ -43,7 +43,7 @@ export interface IAddListingForm {
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(3);
+  const [pageNumber, setPageNumber] = useState(1);
   const [formData, setFormData] = useState<IAddListingForm>(
     defaultAddlistingForm
   );

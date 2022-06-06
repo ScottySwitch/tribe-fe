@@ -30,13 +30,18 @@
     box-sizing: border-box;
     transition: all 0.5s ease-in-out;
     background-color: white;
+    overscroll-behavior: none;
     box-shadow: $box-shadow;
 
     .header {
+      position: sticky;
+      top: 0;
+      left: 0;
       display: flex;
       justify-content: space-between;
       padding: 15px 30px;
       align-items: center;
+      background-color: white;
 
       .title {
         color: $bg-700;

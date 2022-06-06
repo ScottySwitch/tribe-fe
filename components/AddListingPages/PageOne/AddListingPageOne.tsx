@@ -16,6 +16,7 @@ import SearchListing, {
 import RelationshipToBusiness from "components/AddListingPages/PageOne/RelationshipToBusiness/RelationshipToBusiness";
 import ChooseCategory from "components/AddListingPages/PageOne/ChooseCategory/ChooseCategory";
 import Question from "components/Question/Question";
+import { YesNo } from "enums";
 
 interface AddListingProps {
   onNextPage: (data: { [key: string]: any }) => void;
@@ -78,24 +79,24 @@ const AddListingPageOne = (props: AddListingProps) => {
           }}
         />
       </Question>
-      <Question show={listing === "no"} question="What is your role?">
+      <Question show={listing === YesNo.NO} question="What is your role?">
         <Select prefixIcon="search" options={roleList} onChange={setRole} />
       </Question>
       <Question show={!!role} question="Is this busines currently open?">
         <div className="flex gap-2">
           <Badge
-            onClick={() => setIsOpen("yes")}
-            selected={isOpen === "yes"}
-            text="Yes"
+            onClick={() => setIsOpen(YesNo.YES)}
+            selected={isOpen === YesNo.YES}
+            text={YesNo.YES}
           />
           <Badge
-            onClick={() => setIsOpen("no")}
-            selected={isOpen === "no"}
-            text="No"
+            onClick={() => setIsOpen(YesNo.NO)}
+            selected={isOpen === YesNo.NO}
+            text={YesNo.NO}
           />
         </div>
       </Question>
-      <Question show={isOpen === "no"} question="What is open date?">
+      <Question show={isOpen === YesNo.NO} question="What is open date?">
         <DatePicker onChange={setOpenDate} value={openDate} />
       </Question>
       <br />

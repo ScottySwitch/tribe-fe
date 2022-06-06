@@ -1,9 +1,5 @@
-import Button from "components/Button/Button";
-import Modal from "components/Modal/Modal";
-import SectionLayout from "components/SectionLayout/SectionLayout";
 import { Categories } from "enums";
 import { IAddListingForm } from "pages/add-listing";
-import { useState } from "react";
 import AddBuyInfor from "./AddBuyInfor";
 import AddEatInfor from "./AddEatInfor";
 import AddSeeAndDoInfor from "./AddSeeAndDoInfor";

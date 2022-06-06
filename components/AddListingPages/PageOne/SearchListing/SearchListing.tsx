@@ -3,12 +3,13 @@ import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import Select from "components/Select/Select";
 import { listingSearchResult } from "constant";
+import { YesNo } from "enums";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import styles from "./SearchListing.module.scss";
 
-export type listingTypes = { [key: string]: string } | "no" | undefined;
+export type listingTypes = { [key: string]: string } | YesNo.NO | undefined;
 
 const ListingMenuFooter = ({ onClick }: { onClick?(): void }) => {
   return (
@@ -50,11 +51,13 @@ const SearchListing = ({
           prefixIcon="search"
           options={formatListingResultOption}
           onChange={setListing}
-          menuFooter={<ListingMenuFooter onClick={() => setListing("no")} />}
+          menuFooter={
+            <ListingMenuFooter onClick={() => setListing(YesNo.NO)} />
+          }
         />
       );
       break;
-    case "no":
+    case YesNo.NO:
       result = (
         <div className="flex gap-2">
           <Badge onClick={() => setListing(undefined)} text="Yes" />

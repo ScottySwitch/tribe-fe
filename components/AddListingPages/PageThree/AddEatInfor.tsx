@@ -18,6 +18,7 @@ import {
   paymentMethods,
   placeGoodFor,
 } from "./constant";
+import get from "lodash/get";
 
 interface AddEatInforProps {
   data: { [key: string]: any };
@@ -161,8 +162,8 @@ const AddEatInfor = (props: AddEatInforProps) => {
         <Question question="Do you have photos or videos to share? " optional>
           <br /> <br /> <br />
         </Question>
-        <br /> <br /> <br />
         <Checkbox label="Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image" />
+        <br /> <br /> <br />
         <div className="flex items-end gap-3 sm:gap-10text-sm">
           <button
             className="underline w-max cursor-pointer flex items-end text-left"
@@ -223,14 +224,34 @@ const AddEatInfor = (props: AddEatInforProps) => {
       >
         <div className="px-[30px] gap-6 flex flex-col">
           {previewInfo.map((row) => (
-            <div key={row.question} className="flex">
+            <div key={row.question} className="flex gap-20">
               <div className="flex flex-wrap w-3/5">{row.question}</div>
-              <div className="">{data[row.value]}</div>
+              <div className="w-2/5">{get(data, row.value) || ""}</div>
             </div>
           ))}
+          <div className="flex justify-end px-[30px] py-3">
+            <Button
+              text="Cancel"
+              size="small"
+              type="submit"
+              variant="underlined"
+              width="fit-content"
+              onClick={() => setShowPreviewModal(false)}
+            >
+              Go back
+            </Button>
+            <Button
+              text="Continue"
+              size="small"
+              width={270}
+              type="submit"
+              onClick={() => setShowPreviewModal(true)}
+            />
+          </div>
         </div>
       </Modal>
     </>
+    
   );
 };
 
@@ -239,23 +260,27 @@ const previewInfo = [
   {
     question:
       "Are you affiliated with this place as an owner, employee, or official representative?",
-    value: "",
+    value: "relationship",
   },
-  { question: "Does this place already have a listing on Tribes?", value: "" },
-  { question: "What is your role at this business?", value: "" },
-  { question: "Is this place currently open?", value: "" },
-  { question: "Official place name", value: "" },
-  { question: "Description of your property:", value: "" },
-  { question: "City/Town, State/Province/Region", value: "" },
-  { question: "Country", value: "" },
-  { question: "Street address ", value: "" },
-  { question: "Additional address information", value: "" },
-  { question: "Social Media", value: "" },
+  {
+    question: "Does this place already have a listing on Tribes?",
+    value: "listing",
+  },
+  { question: "What is your role at this business?", value: "role.label" },
+  { question: "Is this place currently open?", value: "isOpen" },
+  { question: "Official place name", value: "businessName" },
+  { question: "Description of your property:", value: "description" },
+  { question: "City/Town, State/Province/Region", value: "city" },
+  { question: "Country", value: "country" },
+  { question: "Street address ", value: "address" },
+  { question: "Additional address information", value: "additionalAddress" },
+  { question: "Social Media", value: "socialMedia" },
   { question: "What is the category that best fits this place?", value: "" },
   { question: "What type of cuisine does this place serve?", value: "" },
   { question: "Open hours", value: "" },
   { question: "Select a currency", value: "" },
-  { question: "Select a currency", value: "" },
+  { question: "Max price", value: "" },
+  { question: "Min price", value: "" },
 ];
 
 export default AddEatInfor;

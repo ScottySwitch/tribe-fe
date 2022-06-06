@@ -67,3 +67,13 @@
   border: none;
   background-color: white;
 }
+
+.underlined {
+  color: $bg-500;
+  border: none;
+  background-color: white;
+  text-decoration: underline;
+  &:hover {
+    box-shadow: none;
+  }
+}
