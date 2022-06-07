@@ -27,6 +27,7 @@ const Modal = (props: ModalProps) => {
     mobilePosition = "bottom",
     mobileFullHeight,
     backdrop = true,
+    
     subTitle,
     onClose,
   } = props;

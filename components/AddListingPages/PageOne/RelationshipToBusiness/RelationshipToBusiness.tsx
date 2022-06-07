@@ -1,4 +1,5 @@
 import Badge from "components/Badge/Badge";
+import { YesNo } from "enums";
 
 interface RelationshipToBusinessProps {
   relationship?: string;
@@ -11,15 +12,15 @@ const RelationshipToBusiness = (props: RelationshipToBusinessProps) => {
     <div className="flex gap-2">
       <Badge
         onClick={(e) => setRelationship(e)}
-        value="yes"
-        selected={"yes" === relationship}
-        text="Yes"
+        value={YesNo.YES}
+        selected={YesNo.YES === relationship}
+        text={YesNo.YES}
       />
       <Badge
         onClick={(e) => setRelationship(e)}
-        value="no"
-        selected={"no" === relationship}
-        text="No"
+        value={YesNo.NO}
+        selected={YesNo.NO === relationship}
+        text={YesNo.NO}
       />
     </div>
   );

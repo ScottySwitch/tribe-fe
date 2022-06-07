@@ -1,11 +1,14 @@
 import Badge from "components/Badge/Badge";
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
+import ListingCard from "components/ListingCard/ListingCard";
+import Modal from "components/Modal/Modal";
 import Select from "components/Select/Select";
 import { listingSearchResult } from "constant";
 import { YesNo } from "enums";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
 
 import styles from "./SearchListing.module.scss";
 
@@ -35,18 +38,43 @@ const formatListingResultOption = listingSearchResult.map((item) => ({
   ),
 }));
 
+const RightColumn = (props: {
+  onShowUpcomingFeature: () => void;
+  listing: any;
+  isRelationship?: boolean;
+}) => {
+  const { listing, isRelationship, onShowUpcomingFeature } = props;
+  const router = useRouter();
+  return (
+    <>
+      <Button
+        text={isRelationship ? "Claim free listing" : "Improve this listing"}
+        size="small"
+        variant={isRelationship ? "primary" : "outlined"}
+        onClick={() =>
+          isRelationship
+            ? router.push(`/add-listing/claim/${listing.id}`)
+            : onShowUpcomingFeature()
+        }
+      />
+      <span>Not your business?</span>
+    </>
+  );
+};
+
 const SearchListing = ({
+  relationship,
   listing,
   setListing,
 }: {
   setListing: (e: listingTypes) => void;
   listing: any;
+  relationship?: string;
 }) => {
-  const router = useRouter();
-  let result;
+  const [showUpcomingFeature, setShowUpcomingFeature] = useState(false);
   switch (listing) {
     case undefined:
-      result = (
+      return (
         <Select
           prefixIcon="search"
           options={formatListingResultOption}
@@ -56,70 +84,58 @@ const SearchListing = ({
           }
         />
       );
-      break;
     case YesNo.NO:
-      result = (
+      return (
         <div className="flex gap-2">
           <Badge onClick={() => setListing(undefined)} text="Yes" />
           <Badge value="no" selected text="No" />
         </div>
       );
-      break;
     default:
-      const {
-        avatar,
-        location,
-        name,
-        reviewNumber,
-        imageNumber,
-        followers,
-        id,
-      } = listing;
-      result = (
-        <div className={styles.add_listing_card}>
-          <div className={styles.left_col}>
-            <div className={styles.listing_details}>
-              <div className={styles.listing_details_avatar}>
-                {avatar && <Image src={avatar} layout="fill" alt="" />}
+      return (
+        <React.Fragment>
+          <ListingCard
+            listing={listing}
+            onClose={() => setListing(undefined)}
+            rightColumn={
+              <RightColumn
+                onShowUpcomingFeature={() => setShowUpcomingFeature(true)}
+                listing={listing}
+                isRelationship={relationship === YesNo.YES}
+              />
+            }
+          />
+          <Modal
+            visible={showUpcomingFeature}
+            width={350}
+            mobilePosition="center"
+          >
+            <div className="p-5 flex flex-col items-center">
+              <Image
+                src={require("public/images/upcoming-feature.svg")}
+                width={100}
+                height={100}
+                alt=""
+              />
+              <div>
+                <strong>Upcoming feature</strong>
               </div>
-              <div className={styles.listing_details_infor}>
-                <div className={styles.listing_details_infor_name}>{name}</div>
-                <div className={styles.listing_details_infor_location}>
-                  {location}
-                </div>
-              </div>
+              <p style={{ textAlign: "center" }}>
+                We are still working on it to give you the best experience
+                possible.
+              </p>
+              <Button
+                className="mt-5"
+                text="Continue"
+                size="small"
+                width={270}
+                onClick={() => setShowUpcomingFeature(false)}
+              />
             </div>
-            <div className={styles.listing_number}>
-              <div>
-                <p>{reviewNumber}</p>
-                reviews
-              </div>
-              <div>
-                <p>{imageNumber}</p>
-                image
-              </div>
-              <div>
-                <p>{followers}</p>
-                followers
-              </div>
-            </div>
-          </div>
-          <div className={styles.right_col}>
-            <Button
-              text="Claim free listing"
-              size="small"
-              onClick={() => router.push(`/add-listing/claim/${id}`)}
-            />
-            <div className={styles.not_your_business}>Not your business?</div>
-          </div>
-          <div className={styles.close} onClick={() => setListing(undefined)}>
-            &times;
-          </div>
-        </div>
+          </Modal>
+        </React.Fragment>
       );
-      break;
   }
-  return result;
 };
 
 export default SearchListing;

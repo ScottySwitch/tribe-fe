@@ -67,7 +67,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
         <Question show question="Address">
           <Checkbox
             label="Online business with no address"
-            name="isOnline"
+            // name="isOnline"
             value={"on"}
             register={register("isOnline")}
           />

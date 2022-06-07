@@ -5,9 +5,11 @@ import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/A
 import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPageTwo";
 import Button from "components/Button/Button";
 import Modal from "components/Modal/Modal";
-import { Categories } from "enums";
+import { Categories, YesNo } from "enums";
 
 import styles from "styles/AddListing.module.scss";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 const defaultAddlistingForm: IAddListingForm = {
   category: "",
@@ -54,10 +56,10 @@ export interface IAddListingForm {
 
 const AddListing = () => {
   const [pageNumber, setPageNumber] = useState(1);
-  const [formData, setFormData] = useState<IAddListingForm>(
-    defaultAddlistingForm
-  );
+  const [formData, setFormData] = useState(defaultAddlistingForm);
   const [showSubmitResult, setShowSubmitResult] = useState(false);
+
+  const router = useRouter();
 
   const handlePrevPage = () => {
     setPageNumber(pageNumber - 1);
@@ -73,7 +75,12 @@ const AddListing = () => {
 
   const handleSubmitFormData = (data) => {
     console.log("data", data);
-    setShowSubmitResult(true);
+    const random = Math.floor(Math.random() * 10000);
+    if (formData.relationship === YesNo.NO) {
+      setShowSubmitResult(true);
+    } else {
+      router.push(`/add-listing/claim/${random}`);
+    }
   };
 
   return (
@@ -90,6 +97,7 @@ const AddListing = () => {
         onNextPage={handleNextPage}
         onUpdateFormData={handleUpdateFormData}
       />
+      {/* page three */}
       <React.Fragment>
         <AddEatInfor
           data={formData}
@@ -99,21 +107,24 @@ const AddListing = () => {
           onUpdateFormData={handleUpdateFormData}
         />
       </React.Fragment>
-      <Modal
-        visible={showSubmitResult}
-        width={500}
-        onClose={() => setShowSubmitResult(false)}
-      >
-        <div className="p-5 flex flex-col items-center gap-5">
+      <Modal visible={showSubmitResult} width={350} mobilePosition="center">
+        <div className="p-5 flex flex-col items-center">
+          <Image
+            src={require("public/images/success-submit-listing.svg")}
+            width={100}
+            height={100}
+            alt=""
+          />
           <div>
             <strong>Thank you</strong>
           </div>
           <p>Thank you for helping to improve this listing!</p>
           <Button
+            className="mt-5"
             text="Continue"
             size="small"
             width={270}
-            onClick={() => setShowSubmitResult(false)}
+            onClick={() => router.push("/")}
           />
         </div>
       </Modal>

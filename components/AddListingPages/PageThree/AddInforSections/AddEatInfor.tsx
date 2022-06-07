@@ -120,7 +120,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                 <Checkbox
                   key={item.label}
                   label={item.label}
-                  name="tags"
+                  // name="tags"
                   value={item.label}
                   className="w-full sm:w-1/2"
                   register={register("tags")}
@@ -173,7 +173,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                 <Checkbox
                   key={item.label}
                   label={item.label}
-                  name="placeGoodFor"
+                  // name="placeGoodFor"
                   value={item.label}
                   className="w-full sm:w-1/2"
                   register={register("placeGoodFor")}
@@ -202,7 +202,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               {atmosphere.map((item) => (
                 <Checkbox
                   key={item.label}
-                  name="atmosphere"
+                  // name="atmosphere"
                   value={item.label}
                   label={item.label}
                   className="w-full sm:w-1/2"
@@ -219,7 +219,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               {paymentMethods.map((item) => (
                 <Checkbox
                   key={item.label}
-                  name="payment"
+                  // name="payment"
                   label={item.label}
                   value={item.label}
                   className="w-full sm:w-1/2"
@@ -236,7 +236,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               {additionalFeatures.map((item) => (
                 <Checkbox
                   key={item.label}
-                  name="additionalServices"
+                  // name="additionalServices"
                   label={item.label}
                   value={item.label}
                   className="w-full sm:w-1/2"
@@ -249,7 +249,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             <br /> <br /> <br />
           </Question>
           <Checkbox
-            name="agreePolicies"
+            // name="agreePolicies"
             value="on"
             register={register("agreePolicies")}
             label="Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
@@ -280,12 +280,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
           <br />
           <div className="flex flex-wrap justify-between gap-4">
             {cuisineModalList.map((opt) => (
-              <Checkbox
-                name=""
-                key={opt.label}
-                label={opt.label}
-                className="w-[23%]"
-              />
+              <Checkbox key={opt.label} label={opt.label} className="w-[23%]" />
             ))}
           </div>
         </div>

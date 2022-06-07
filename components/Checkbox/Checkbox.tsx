@@ -1,8 +1,9 @@
+import { ReactNode } from "react";
 import { useForm, UseFormRegisterReturn } from "react-hook-form";
 import styles from "./Checkbox.module.scss";
 
 export interface CheckboxProps extends React.HTMLProps<HTMLInputElement> {
-  label?: string;
+  label?: any;
   className?: string;
   register?: UseFormRegisterReturn;
 }
