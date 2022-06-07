@@ -19,12 +19,13 @@ import Question from "components/Question/Question";
 import { YesNo } from "enums";
 
 interface AddListingProps {
-  onNextPage: (data: { [key: string]: any }) => void;
+  onUpdateFormData: (data: { [key: string]: any }) => void;
+  onNextPage: () => void;
   show: boolean;
 }
 
 const AddListingPageOne = (props: AddListingProps) => {
-  const { show, onNextPage } = props;
+  const { show, onUpdateFormData, onNextPage } = props;
   const trans = useTrans();
   const [category, setCategory] = useState<string | undefined>();
   const [relationship, setRelationship] = useState<string | undefined>();
@@ -108,7 +109,7 @@ const AddListingPageOne = (props: AddListingProps) => {
         disabled={isContinueBtnDisable}
         width={270}
         onClick={() => {
-          onNextPage({
+          onUpdateFormData({
             category,
             relationship,
             listing,
@@ -116,6 +117,7 @@ const AddListingPageOne = (props: AddListingProps) => {
             isOpen,
             openDate,
           });
+          onNextPage();
         }}
       />
     </SectionLayout>

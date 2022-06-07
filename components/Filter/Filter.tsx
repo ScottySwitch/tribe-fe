@@ -22,7 +22,6 @@ export const otherList = [
   { label: "Halal Certified" },
   { label: "Kosher options available" },
   { label: "Halal Ingredients Used" },
-  { label: "Halal Certified" },
   { label: "Mulism Owned" },
   { label: "Seafood options available " },
   { label: "Vegetarian" },

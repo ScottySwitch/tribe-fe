@@ -1,21 +1,21 @@
+import { Item } from "framer-motion/types/components/Reorder/Item";
 import { UseFormRegisterReturn } from "react-hook-form";
 import styles from "./Radio.module.scss";
 
-export interface RadioProps {
+export interface RadioProps extends React.HTMLProps<HTMLInputElement> {
   label?: string;
   id?: string;
-  name?: string;
   className?: string;
-  register?: UseFormRegisterReturn;
+  register: UseFormRegisterReturn;
 }
 
 const Radio = (props: RadioProps) => {
-  const { label, id, name, className, register } = props;
+  const { label, id, className, register, ...rest } = props;
 
   return (
     <label className={`${styles.container} ${className}`} htmlFor={id || label}>
       {label}
-      <input type="radio" id={id || label} name={name} {...register} />
+      <input type="radio" id={id || label} {...register} {...rest} />
       <span className={styles.checkmark} />
     </label>
   );

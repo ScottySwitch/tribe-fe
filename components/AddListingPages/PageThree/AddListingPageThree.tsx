@@ -1,33 +1,74 @@
 import { Categories } from "enums";
 import { IAddListingForm } from "pages/add-listing";
-import AddBuyInfor from "./AddBuyInfor";
-import AddEatInfor from "./AddEatInfor";
-import AddSeeAndDoInfor from "./AddSeeAndDoInfor";
-import AddStayInfor from "./AddStayInfor";
-import AddTransportInfor from "./AddTransportInfor";
+import { useForm } from "react-hook-form";
+import AddBuyInfor from "./AddInforSections/AddBuyInfor";
+import AddEatInfor from "./AddInforSections/AddEatInfor";
+import AddSeeAndDoInfor from "./AddInforSections/AddSeeAndDoInfor";
+import AddStayInfor from "./AddInforSections/AddStayInfor";
+import AddTransportInfor from "./AddInforSections/AddTransportInfor";
 
 interface AddListingPageThreeProps {
-  onPrevPage: (data: { [key: string]: any }) => void;
-  onNextPage: (data: { [key: string]: any }) => void;
+  onPrevPage: () => void;
+  onNextPage: () => void;
+  onUpdateFormData: (data: { [key: string]: any }) => void;
   show: boolean;
   data: IAddListingForm;
 }
 
 const AddListingPageThree = (props: AddListingPageThreeProps) => {
-  const { data, show, onPrevPage, onNextPage } = props;
+  const { data, show, onPrevPage, onNextPage, onUpdateFormData } = props;
+
+  if (!show) {
+    return null;
+  }
 
   const AddInfor = () => {
     switch (data.category) {
       case Categories.EAT:
-        return <AddEatInfor data={data} />;
-      case Categories.STAY:
-        return <AddStayInfor />;
-      case Categories.SEE:
-        return <AddSeeAndDoInfor />;
-      case Categories.BUY:
-        return <AddBuyInfor />;
-      case Categories.TRANSPORT:
-        return <AddTransportInfor />;
+        return (
+          <AddEatInfor
+            data={data}
+            onPrevPage={onPrevPage}
+            onNextPage={onNextPage}
+            onUpdateFormData={onUpdateFormData}
+          />
+        );
+      // case Categories.STAY:
+      //   return (
+      //     <AddStayInfor
+      //       data={data}
+      //       onUpdateForm={onUpdateForm}
+      //       onPrevPage={onPrevPage}
+      //       onNextPage={onNextPage}
+      //     />
+      //   );
+      // case Categories.SEE:
+      //   return (
+      //     <AddSeeAndDoInfor
+      //       data={data}
+      //       onUpdateForm={onUpdateForm}
+      //       onPrevPage={onPrevPage}
+      //       onNextPage={onNextPage}
+      //     />
+      //   );
+      // case Categories.BUY:
+      //   return (
+      //     <AddBuyInfor
+      //       data={data}
+      //       onUpdateForm={onUpdateForm}
+      //       onPrevPage={onPrevPage}
+      //       onNextPage={onNextPage}
+      //     />
+      //   );
+      // case Categories.TRANSPORT:
+      //   return (
+      //     <AddTransportInfor
+      //       data={data}
+      //       onUpdateForm={onUpdateForm}
+      //       onPrevPage={onPrevPage}
+      //       onNextPage={onNextPage}
+      //     />
+      //   );
       default:
         return null;
     }

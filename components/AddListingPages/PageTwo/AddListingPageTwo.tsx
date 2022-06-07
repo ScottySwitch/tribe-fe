@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import SectionLayout from "components/SectionLayout/SectionLayout";
@@ -12,17 +12,17 @@ import { roleList } from "constant";
 import { IAddListingForm } from "pages/add-listing";
 
 interface AddListingProps {
-  onPrevPage: (data: { [key: string]: any }) => void;
-  onNextPage: (data: { [key: string]: any }) => void;
+  onPrevPage: () => void;
+  onNextPage: () => void;
+  onUpdateFormData: (data: { [key: string]: any }) => void;
   show: boolean;
   data: IAddListingForm;
 }
 
 const AddListingPageTwo = (props: AddListingProps) => {
-  const { data, show, onNextPage, onPrevPage } = props;
-  const [isPrevPage, setIsPrevPage] = useState<boolean>(false);
+  const { data, show, onUpdateFormData, onNextPage, onPrevPage } = props;
 
-  const { register, handleSubmit, setValue, getValues } = useForm({
+  const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
       businessName: data.businessName,
       description: data.description,
@@ -41,9 +41,9 @@ const AddListingPageTwo = (props: AddListingProps) => {
     return null;
   }
 
-  const onSubmit = (data) => {
-    console.log(data);
-    isPrevPage ? onPrevPage(data) : onNextPage(data);
+  const onSubmit = (form) => {
+    onUpdateFormData(form);
+    onNextPage();
   };
 
   return (
@@ -67,6 +67,8 @@ const AddListingPageTwo = (props: AddListingProps) => {
         <Question show question="Address">
           <Checkbox
             label="Online business with no address"
+            name="isOnline"
+            value={"on"}
             register={register("isOnline")}
           />
           <br />
@@ -132,8 +134,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
         <div className="flex gap-3 sm:gap-10  text-sm">
           <button
             className="underline w-max cursor-pointer flex items-end text-left"
-            type="submit"
-            onClick={() => setIsPrevPage(true)}
+            onClick={onPrevPage}
           >
             Go back
           </button>
