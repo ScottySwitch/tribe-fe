@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Icon from "components/Icon/Icon";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import styles from "./Upload.module.scss";
 
 export interface UploadProps {
@@ -10,6 +10,7 @@ export interface UploadProps {
   accept: string;
   fileList: any[];
   className?: string;
+  centerIcon?: ReactNode;
   type?: "avatar" | "cover" | "upload";
 }
 
@@ -20,6 +21,7 @@ const Upload = (props: any) => {
     onChange,
     onDelete,
     className,
+    centerIcon = <Icon icon="camera" size={40} />,
     multiple,
     accept = "image/*",
     fileList = [],
@@ -46,9 +48,7 @@ const Upload = (props: any) => {
 
   const Input = () => (
     <React.Fragment>
-      <div className={styles.add_icon}>
-        <Icon icon="camera" size={40} />
-      </div>
+      <div className={styles.add_icon}>{centerIcon}</div>
       <input
         type="file"
         name={name}

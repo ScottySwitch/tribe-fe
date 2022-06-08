@@ -6,6 +6,7 @@ import Question from "components/Question/Question";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TierTable from "components/TierTable/TierTable";
 import { listingSearchResult } from "constant";
+import { Tiers } from "enums";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ const ClaimListing = () => {
   const [listing, setListing] = useState<{ [key: string]: any }>({});
   const [claimStep, setClaimStep] = useState(ClaimStep.CLAIM_FREE_LISTING);
   const { handleSubmit, register } = useForm();
+  const router = useRouter();
 
   useEffect(() => {
     const getListingData = () => {
@@ -45,6 +47,17 @@ const ClaimListing = () => {
     setClaimStep(ClaimStep.CHOOSE_TIER);
   };
 
+  const handleDirectToVerification = (tier: Tiers) => {
+    router.push({
+      pathname: "/biz/verify",
+      query: {
+        isPaidUser: !(tier === Tiers.FREE),
+        tier: tier,
+      },
+    });
+    console.log("asdjaskdjn");
+  };
+
   return (
     <React.Fragment>
       <SectionLayout
@@ -54,16 +67,8 @@ const ClaimListing = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-5 sm:w-3/4 w-full">
             <ListingCard listing={listing} />
-            <Input
-              placeholder="First name"
-              size="large"
-              register={register("firstName")}
-            />
-            <Input
-              label="Last name"
-              placeholder="First name"
-              register={register("lastName")}
-            />
+            <Input placeholder="First name" size="large" register={register("firstName")} />
+            <Input label="Last name" placeholder="First name" register={register("lastName")} />
             <Input
               label="Last name"
               placeholder="Role of business"
@@ -79,10 +84,7 @@ const ClaimListing = () => {
                 label="I certify that I am an authorized representative or affiliate of this establishment and have the authority to register as a business representative. The information I have entered into this form is neither false nor fraudulent. I also understand that Tripadvisor may disclose my name and affiliation to other verified representatives of this establishment."
               />
               <br />
-              <Checkbox
-                register={register("agreePolicies")}
-                label={agreePolicies}
-              />
+              <Checkbox register={register("agreePolicies")} label={agreePolicies} />
             </Question>
             <Button type="submit" text="Continue" size="small" width={280} />
           </div>
@@ -93,7 +95,7 @@ const ClaimListing = () => {
         subTitle="Choose the tier suitable for your business. You can change tier anytime."
         show={claimStep === ClaimStep.CHOOSE_TIER}
       >
-        <TierTable />
+        <TierTable onDirectToVerification={handleDirectToVerification} />
       </SectionLayout>
     </React.Fragment>
   );

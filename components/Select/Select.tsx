@@ -2,11 +2,7 @@ import classNames from "classnames";
 import Icon from "components/Icon/Icon";
 import React, { ReactNode, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
-import ReactSelect, {
-  ControlProps,
-  components,
-  StylesConfig,
-} from "react-select";
+import ReactSelect, { ControlProps, components, StylesConfig } from "react-select";
 import styles from "./Select.module.scss";
 
 interface IOption {
@@ -58,9 +54,9 @@ const Select = (props: SelectProps) => {
     inputRef,
   } = props;
 
-  const [selected, setSelected] = useState<
-    IOption[] | IOption | string | undefined
-  >(value || defaultValue);
+  const [selected, setSelected] = useState<IOption[] | IOption | string | undefined>(
+    value || defaultValue
+  );
 
   const selectWrapperClassName = classNames(className, styles.select, {
     [styles.filled]: variant === "filled",
@@ -74,6 +70,7 @@ const Select = (props: SelectProps) => {
   const primary20 = "#FEF1F2";
 
   const customStyles: StylesConfig = {
+    container: (styles) => ({ ...styles, width: "100%" }),
     control: (styles) => ({
       ...styles,
       cursor: "pointer",
@@ -83,6 +80,7 @@ const Select = (props: SelectProps) => {
       width: "100%",
       minWidth: "max-content",
       minHeight: "min-content",
+      backgroundColor: "transparent",
     }),
     option: (styles, { isSelected }) => {
       return {

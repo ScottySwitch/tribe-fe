@@ -2,6 +2,7 @@ import classNames from "classnames";
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import Switch from "components/Switch/Switch";
+import { Tiers } from "enums";
 import { Item } from "framer-motion/types/components/Reorder/Item";
 import Image from "next/image";
 import Link from "next/link";
@@ -58,7 +59,7 @@ const tableData = [
   },
   {
     feature: "Analytics",
-    free: "Basic",
+    free: Tiers.BASIC,
     basic: "Advance",
     premium: null,
   },
@@ -92,27 +93,29 @@ const tiers = [
   {
     name: "Free Tier",
     price: "SGD 0",
-    demo: "free",
-    value: "free",
+    demo: Tiers.FREE,
+    value: Tiers.FREE,
     description:
       "With simple features to help you get the ball rolling. Suitable for small business.",
-    button: (
-      <Button variant="outlined" text="Select" width="70%" size="small" />
-    ),
+    button: <Button variant="outlined" text="Select" width="70%" size="small" />,
   },
   {
     name: "Basic Tier",
     price: "SGD 150",
-    demo: "basic",
+    demo: Tiers.BASIC,
     description:
       "With advance features to help you promote your business. Suitable for medium and large business.",
-    value: "basic",
+    value: Tiers.BASIC,
     recommended: true,
     button: <Button text="Select" width="70%" size="small" />,
   },
 ];
 
-const DesktopTierTable = () => {
+const DesktopTierTable = ({
+  onDirectToVerification,
+}: {
+  onDirectToVerification(tier: Tiers): void;
+}) => {
   return (
     <table>
       <colgroup>
@@ -134,8 +137,17 @@ const DesktopTierTable = () => {
               {tier.price}
               <span> per quarter</span>
             </div>
-            <Link href={"/"}>View Demo page</Link>
-            {tier.button}
+            <div>
+              <Link href={"/"}>View Demo page</Link>
+            </div>
+            <br />
+            <Button
+              variant={tier.value === Tiers.FREE ? "outlined" : "primary"}
+              text="Select"
+              width="70%"
+              size="small"
+              onClick={() => onDirectToVerification(tier.value)}
+            />
           </th>
         ))}
         <th>
@@ -157,7 +169,11 @@ const DesktopTierTable = () => {
   );
 };
 
-const MobileTierTable = () => {
+const MobileTierTable = ({
+  onDirectToVerification,
+}: {
+  onDirectToVerification(tier: Tiers): void;
+}) => {
   const [tierList, setTierList] = useState<string[]>([]);
   return (
     <div className={styles.tier_mobile}>
@@ -182,9 +198,7 @@ const MobileTierTable = () => {
                 <div>
                   {tier.price} <span>per quarter</span>
                 </div>
-                <a onClick={() => setTierList([...tierList, tier.name])}>
-                  View detail
-                </a>
+                <a onClick={() => setTierList([...tierList, tier.name])}>View detail</a>
               </div>
             </div>
             {tierList.includes(tier.name) && (
@@ -211,7 +225,15 @@ const MobileTierTable = () => {
                 })}
               </div>
             )}
-            <div className={styles.button_container}>{tier.button}</div>
+            <div className={styles.button_container}>
+              <Button
+                variant={tier.value === Tiers.FREE ? "outlined" : "primary"}
+                text="Select"
+                width="70%"
+                size="small"
+                onClick={() => onDirectToVerification(tier.value)}
+              />
+            </div>
           </div>
         </div>
       ))}
@@ -219,11 +241,11 @@ const MobileTierTable = () => {
   );
 };
 
-const TierTable = () => {
+const TierTable = ({ onDirectToVerification }: { onDirectToVerification(tier: Tiers): void }) => {
   return (
     <div className={styles.tier}>
-      <DesktopTierTable />
-      <MobileTierTable />
+      <DesktopTierTable onDirectToVerification={onDirectToVerification} />
+      <MobileTierTable onDirectToVerification={onDirectToVerification} />
     </div>
   );
 };

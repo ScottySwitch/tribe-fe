@@ -110,7 +110,7 @@ const AddListing = () => {
       <Modal visible={showSubmitResult} width={350} mobilePosition="center">
         <div className="p-5 flex flex-col items-center">
           <Image
-            src={require("public/images/success-submit-listing.svg")}
+            src={require("public/images/success-submit.svg")}
             width={100}
             height={100}
             alt=""

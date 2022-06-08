@@ -4,16 +4,14 @@ import { UseFormRegisterReturn } from "react-hook-form";
 import styles from "./Input.module.scss";
 
 export interface InputProps
-  extends Omit<
-    React.HTMLProps<HTMLInputElement>,
-    "size" | "prefix" | "className"
-  > {
+  extends Omit<React.HTMLProps<HTMLInputElement>, "size" | "prefix" | "className"> {
   label?: string;
   register?: UseFormRegisterReturn;
   className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
   helperText?: string;
+  width?: string | number;
   variant?: "filled" | "outlined";
   size?: "small" | "medium" | "large";
 }
@@ -28,6 +26,7 @@ const Input = (props: InputProps) => {
     helperText,
     size = "medium",
     id,
+    width,
     form,
     disabled,
     register,
@@ -43,7 +42,7 @@ const Input = (props: InputProps) => {
   });
 
   return (
-    <div className={inputWrapperClassName}>
+    <div className={inputWrapperClassName} style={{ width }}>
       <div className={styles.container}>
         {label && <label htmlFor={id}>{label}</label>}
         <div className={styles.content}>

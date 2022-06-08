@@ -23,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     "/forgot-password/reset",
     "/signup/otp",
     "/signup/setup-profile",
+    "/biz/verify",
   ];
   const isAuthPage = !notAuthPages.includes(pathname);
 

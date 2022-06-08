@@ -2,18 +2,24 @@
 
 .upload {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
+  border: 1px solid lightgray;
+  border-radius: $border-radius;
+  background-color: white;
 
   .image,
   .input {
-    width: 140px;
-    height: 100px;
+    min-width: 110px;
+    min-height: 100px;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    border-radius: 8px;
-    border: 1px solid lightgray;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: $border-radius;
     gap: 10px;
     position: relative;
     background-color: white;
@@ -57,6 +63,9 @@
 }
 
 .avatar {
+  border: none;
+  border-radius: unset;
+  background-color: transparent;
   .image,
   .input {
     width: 110px;
@@ -67,6 +76,8 @@
 }
 
 .cover {
+  overflow: hidden;
+
   .image,
   .input {
     width: 100%;

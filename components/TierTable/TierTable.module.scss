@@ -11,7 +11,7 @@
 
   a {
     color: #3faeff;
-    font-size: $fs-xs;
+    font-size: $fs-md;
     font-weight: $fw-light;
     text-decoration: underline;
     cursor: pointer;
@@ -40,10 +40,12 @@
 
   &_price {
     margin-bottom: 10px;
+    font-size: $fs-lg;
+
     span {
       font-weight: $fw-light;
       color: $bg-400;
-      font-size: $fs-xs;
+      font-size: $fs-md;
     }
   }
 
