@@ -1,0 +1,60 @@
+@import "styles/variables.scss";
+
+.tier {
+  width: 100%;
+
+  a {
+    color: #3faeff;
+    font-size: $fs-xs;
+    font-weight: $fw-light;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  td,
+  th {
+    padding: 16px 30px;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid $bg-100;
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  td {
+    color: $bg-700;
+    font-size: $fs-md;
+  }
+
+  &_name {
+    color: $bg-500;
+    font-size: $fs-md;
+  }
+
+  &_price {
+    margin-bottom: 10px;
+    span {
+      font-weight: $fw-light;
+      color: $bg-400;
+      font-size: $fs-xs;
+    }
+  }
+
+  &_payment {
+    font-size: $fs-md;
+    font-weight: normal;
+    height: 100%;
+    display: flex;
+    gap: 20px;
+    border-bottom: none !important;
+    border-right: none !important;
+  }
+
+  &_feature {
+    color: $bg-700;
+    font-size: $fs-md;
+    font-weight: $fw-bold;
+    height: 100%;
+  }
+}

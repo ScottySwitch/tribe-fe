@@ -9,6 +9,7 @@ export interface SectionLayoutProps {
   contentClassName?: string;
   children: any;
   subTitle?: string;
+  show?: boolean;
   backgroundColor?: boolean;
 }
 const SectionLayout = (props: SectionLayoutProps) => {
@@ -16,6 +17,7 @@ const SectionLayout = (props: SectionLayoutProps) => {
     title,
     className,
     subTitle,
+    show = true,
     contentClassName,
     backgroundColor,
     children,
@@ -24,6 +26,9 @@ const SectionLayout = (props: SectionLayoutProps) => {
   const sectionlayoutClassName = classNames(styles.section_layout, className, {
     [styles.colored_background]: backgroundColor,
   });
+  if (!show) {
+    return null;
+  }
   return (
     <div className={sectionlayoutClassName}>
       <div className={styles.container}>
