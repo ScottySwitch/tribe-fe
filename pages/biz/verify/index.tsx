@@ -19,6 +19,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [showResultModal, setShowResultModal] = useState(false);
   const router = useRouter();
 
@@ -39,6 +40,14 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   const handleDirectToStorePage = () => {
     router.push("/biz/home/edit");
+  };
+
+  const handleSubmitAddIdCard = () => {
+    setVerifyStep(VerifySteps.ADD_PAYMENT);
+  };
+
+  const handleFinishVerifying = () => {
+    setShowResultModal(true);
   };
 
   return (
@@ -111,14 +120,45 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <div className="flex justify-center gap-5 w-full">
-            <Button
-              width="30%"
-              variant="no-outlined"
-              text="Skip"
-              onClick={handleConfirmOTP}
-              disabled={!otp}
-            />
-            <Button width="80%" text="Next" onClick={handleConfirmOTP} disabled={!otp} />
+            <Button width="30%" variant="no-outlined" text="Skip" />
+            <Button width="80%" text="Next" onClick={handleSubmitAddIdCard} />
+          </div>
+        </div>
+      )}
+      {verifyStep === VerifySteps.ADD_PAYMENT && (
+        <div className={styles.form}>
+          <div className={styles.header}>Payment</div>
+          <p>Cancel anytime. Auto renewal.</p>
+          <div className={styles.field_group}>
+            <div className={styles.price_container}>
+              <div className={styles.amount}>Amount</div>
+              <div className={styles.price}>
+                SGD 150 <p>per quarter</p>
+              </div>
+            </div>
+          </div>
+          <div className={styles.field_group}>
+            <label>Payment method</label>
+            <div className={styles.payment_container}>
+              <div
+                className={`${styles.payment} ${paymentMethod === "xendit" ? styles.selected : ""}`}
+                onClick={() => setPaymentMethod("xendit")}
+              >
+                <Image src={require("public/images/xendit.svg")} width="60px" alt="" />
+                Xendit
+              </div>
+              <div
+                className={`${styles.payment} ${paymentMethod === "stripe" ? styles.selected : ""}`}
+                onClick={() => setPaymentMethod("stripe")}
+              >
+                <Image src={require("public/images/stripe.svg")} width="60px" alt="" />
+                Stripe
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center gap-5 w-full">
+            <Button width="30%" variant="no-outlined" text="Change tier" />
+            <Button width="80%" text="Next" onClick={handleFinishVerifying} />
           </div>
         </div>
       )}
