@@ -1,6 +1,11 @@
+import classNames from "classnames";
 import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
 import Switch from "components/Switch/Switch";
+import { Item } from "framer-motion/types/components/Reorder/Item";
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import styles from "./TierTable.module.scss";
 
 const ProvidedFeature = () => (
@@ -19,67 +24,67 @@ const tableData = [
     feature: "Uploading of photos on banner",
     free: "Maximum 3",
     basic: "Unlimited",
-    premium: "",
+    premium: null,
   },
   {
     feature: "Add/Edit Basic Info",
     free: <ProvidedFeature />,
     basic: <ProvidedFeature />,
-    premium: "",
+    premium: null,
   },
   {
     feature: "Customer can follow store",
     free: <ProvidedFeature />,
     basic: <ProvidedFeature />,
-    premium: "",
+    premium: null,
   },
   {
     feature: "Verified badge",
-    free: "",
+    free: null,
     basic: <ProvidedFeature />,
-    premium: "",
+    premium: null,
   },
   {
     feature: "Add/Edit Premium Info",
-    free: "",
+    free: null,
     basic: <ProvidedFeature />,
-    premium: "",
+    premium: null,
   },
   {
     feature: "Reply to review",
     free: <ProvidedFeature />,
     basic: <ProvidedFeature />,
-    premium: "",
+    premium: null,
   },
   {
     feature: "Analytics",
     free: "Basic",
     basic: "Advance",
-    premium: "",
+    premium: null,
   },
   {
     feature: "Uploading products",
-    free: "",
+    free: null,
     basic: "Unlimited",
-    premium: "",
+    premium: null,
   },
   {
     feature: "Uploading menu",
-    free: "",
+    free: null,
     basic: "Unlimited",
-    premium: "",
+    premium: null,
   },
   {
     feature: "Create deals for customer",
-    free: "",
+    free: null,
     basic: <ProvidedFeature />,
-    premium: "",
+    premium: null,
   },
   {
     feature: "Connect with customer through chat system",
-    free: "",
+    free: null,
     basic: <ProvidedFeature />,
-    premium: "",
+    premium: null,
   },
 ];
 
@@ -89,28 +94,27 @@ const tiers = [
     price: "SGD 0",
     demo: "free",
     value: "free",
+    description:
+      "With simple features to help you get the ball rolling. Suitable for small business.",
     button: (
-      <Button
-        variant="outlined"
-        className="mt-3"
-        text="Select"
-        width="70%"
-        size="small"
-      />
+      <Button variant="outlined" text="Select" width="70%" size="small" />
     ),
   },
   {
     name: "Basic Tier",
     price: "SGD 150",
     demo: "basic",
+    description:
+      "With advance features to help you promote your business. Suitable for medium and large business.",
     value: "basic",
-    button: <Button className="mt-3" text="Select" width="70%" size="small" />,
+    recommended: true,
+    button: <Button text="Select" width="70%" size="small" />,
   },
 ];
 
-const TierTable = () => {
+const DesktopTierTable = () => {
   return (
-    <table className={styles.tier}>
+    <table>
       <colgroup>
         <col width="34%" />
         <col width="23%" />
@@ -150,6 +154,77 @@ const TierTable = () => {
         </tr>
       ))}
     </table>
+  );
+};
+
+const MobileTierTable = () => {
+  const [tierList, setTierList] = useState<string[]>([]);
+  return (
+    <div className={styles.tier_mobile}>
+      <Switch /> Pay yearly
+      {tiers.map((tier) => (
+        <div key={tier.name} className="relative mt-10">
+          {tier.recommended && (
+            <div className={styles.recommended}>
+              <Image
+                src={require("public/images/recommended.svg")}
+                alt=""
+                layout="fixed"
+                height={37}
+              />
+            </div>
+          )}
+          <div className={styles.tier_mobile_card}>
+            <div className={styles.body}>
+              <div className={styles.name}>{tier.name}</div>
+              <span>{tier.description}</span>
+              <div className={styles.price}>
+                <div>
+                  {tier.price} <span>per quarter</span>
+                </div>
+                <a onClick={() => setTierList([...tierList, tier.name])}>
+                  View detail
+                </a>
+              </div>
+            </div>
+            {tierList.includes(tier.name) && (
+              <div className={styles.features}>
+                {tableData.map((feat) => {
+                  const notProvided = !feat[tier.value];
+                  const featureClassName = classNames(styles.feature, {
+                    [styles.no_provided]: notProvided,
+                  });
+                  return (
+                    <div key={feat.feature} className={featureClassName}>
+                      <Image
+                        src={require(notProvided
+                          ? "public/images/x-mark.svg"
+                          : "public/images/check-mark.svg")}
+                        alt=""
+                        layout="fixed"
+                        width={14}
+                        height={14}
+                      />
+                      {feat.feature}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            <div className={styles.button_container}>{tier.button}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const TierTable = () => {
+  return (
+    <div className={styles.tier}>
+      <DesktopTierTable />
+      <MobileTierTable />
+    </div>
   );
 };
 

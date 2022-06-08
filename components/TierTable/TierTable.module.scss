@@ -1,7 +1,13 @@
 @import "styles/variables.scss";
 
 .tier {
-  width: 100%;
+  table {
+    width: 100%;
+  }
+
+  &_mobile {
+    display: none;
+  }
 
   a {
     color: #3faeff;
@@ -56,5 +62,90 @@
     font-size: $fs-md;
     font-weight: $fw-bold;
     height: 100%;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .tier {
+    table {
+      display: none;
+    }
+
+    &_mobile {
+      display: block;
+      span {
+        width: fit-content;
+      }
+      .recommended {
+        position: absolute;
+        top: -26px;
+        right: 10px;
+        height: 26px;
+        overflow: hidden;
+      }
+
+      &_card {
+        z-index: 2;
+        background-color: $bg-50;
+        border-radius: $border-radius;
+
+        .body {
+          padding: 20px;
+
+          .name {
+            color: $bg-700;
+            font-size: $fs-md;
+            font-weight: $fw-bold;
+            height: 100%;
+          }
+
+          span {
+            font-weight: $fw-light;
+            color: $bg-400;
+            font-size: $fs-xs;
+          }
+        }
+
+        .features {
+          position: relative;
+          border-top: 1px solid $bg-100;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          color: $bg-600;
+          font-size: $fs-sm;
+          color: $bg-600;
+
+          .feature {
+            color: $bg-600;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            &.no_provided {
+              text-decoration: line-through;
+              color: $bg-400;
+            }
+          }
+        }
+
+        .price {
+          font-weight: $fw-bold;
+          color: $bg-700;
+          font-size: $fs-lg;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 20px;
+        }
+
+        .button_container {
+          display: flex;
+          justify-content: center;
+          padding: 20px;
+          border-top: 1px solid $bg-100;
+        }
+      }
+    }
   }
 }
