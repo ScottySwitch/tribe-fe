@@ -14,7 +14,7 @@
   z-index: -1;
 
   &.show {
-    z-index: 2;
+    z-index: 4;
 
     .container {
       max-height: calc(100vh - 250px);

@@ -68,6 +68,13 @@
   background-color: white;
 }
 
+.secondary_no_outlined {
+  color: $bg-700;
+  border: none;
+  font-weight: $fw-light;
+  background-color: white;
+}
+
 .underlined {
   color: $bg-500;
   border: none;

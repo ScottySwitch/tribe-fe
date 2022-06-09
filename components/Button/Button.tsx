@@ -3,16 +3,19 @@ import { ReactNode } from "react";
 import styles from "./Button.module.scss";
 
 export interface ButtonProps
-  extends Omit<
-    React.HTMLProps<HTMLButtonElement>,
-    "size" | "prefix" | "className"
-  > {
+  extends Omit<React.HTMLProps<HTMLButtonElement>, "size" | "prefix" | "className"> {
   text: string;
   width?: string | number;
   className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
-  variant?: "primary" | "secondary" | "outlined" | "no-outlined" | "underlined";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "outlined"
+    | "no-outlined"
+    | "secondary-no-outlined"
+    | "underlined";
   size?: "small" | "medium" | "large";
   type?: "button" | "submit" | "reset";
 }
@@ -38,18 +41,13 @@ const Button = (props: ButtonProps) => {
     [styles.underlined]: variant === "underlined",
     [styles.secondary]: variant === "secondary",
     [styles.no_outlined]: variant === "no-outlined",
+    [styles.secondary_no_outlined]: variant === "secondary-no-outlined",
     [styles.large]: size === "large",
     [styles.small]: size === "small",
   });
 
   return (
-    <button
-      className={buttonClassName}
-      id={id}
-      disabled={disabled}
-      {...rest}
-      style={{ width }}
-    >
+    <button className={buttonClassName} id={id} disabled={disabled} {...rest} style={{ width }}>
       <div className={styles.container}>
         {prefix && <div>{prefix}</div>}
         {text}

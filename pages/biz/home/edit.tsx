@@ -1,10 +1,15 @@
 import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import EditAction from "components/ListingHomePage/EditAction/EditAction";
+import ListingInforCard from "components/ListingHomePage/ListingInforCard/ListingInforCard";
+import Modal from "components/Modal/Modal";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import Upload from "components/Upload/Upload";
 import Image from "next/image";
 import Link from "next/link";
+import { ChangeEvent, FormEventHandler, useState } from "react";
 
 import styles from "styles/ListingHomepage.module.scss";
 
@@ -24,6 +29,11 @@ const checklist = [
 ];
 
 const EditListingHomepage = () => {
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+  const [description, setDescription] = useState({ prev: "", new: "" });
+  const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" });
+  const [action, setAction] = useState({ label: "", value: "" });
+
   return (
     <SectionLayout className={styles.listing_homepage}>
       <Upload className={styles.banner} centerIcon={<CenterIcon />} />
@@ -32,34 +42,32 @@ const EditListingHomepage = () => {
         Evertop Hainanese Boneless Chicken
       </div>
       <div className={styles.body}>
-        <div className={styles.right_col}></div>
-        <div className={styles.left_col}>
-          <div className={styles.listing_infor}>
-            <div className={styles.avatar}>
-              <Image src={require("public/logo.svg")} layout="fill" alt="" />
+        <div className={styles.right_col}>
+          <div className={styles.reviews_followers_container}>
+            <div className={styles.reviews}>
+              <Image
+                src={require("public/images/no-review-star.svg")}
+                width={80}
+                height={40}
+                alt=""
+              />
+              <p>(0 review)</p>
             </div>
-            <div className={styles.detail}>
-              <div className={styles.name}>Evertop Hainanese Boneless Chicken</div>
-              <div className={styles.contact}>
-                <div className={styles.contact_left}>
-                  <Icon icon="map" size={20} />
-                  50 Bussorah St, Singapore 199466
-                </div>
-                <div className={styles.contact_right}>
-                  <Icon icon="call" size={20} />
-                  06-6777-9529
-                </div>
-                <div className={styles.contact_left}>
-                  <Icon icon="tags-color" size={20} />
-                  <a>Add price range</a>
-                </div>
-                <div className={styles.contact_right}>
-                  <Icon icon="web-color" size={20} />
-                  <a>Add social media</a>
-                </div>
-              </div>
+            <div className={styles.followers}>
+              <div className="h-[40px] flex items-center">0</div>
+              <p>followers</p>
             </div>
           </div>
+          <EditAction
+            action={action}
+            onApplyAction={(action, value) => setAction({ label: action, value: value })}
+          />
+        </div>
+        <div className={styles.left_col}>
+          <ListingInforCard
+            priceRange={priceRange}
+            onSetPriceRange={(values) => setPriceRange(values)}
+          />
           <div className={styles.break} />
           <div className={styles.onboard_checklist}>
             <div className={styles.onboard_checklist_header}>
@@ -83,8 +91,9 @@ const EditListingHomepage = () => {
           <div className={styles.break} />
           <div className="flex justify-between items-center">
             <div className={styles.heading}>Details</div>
-            <Link href="/">Add description</Link>
+            <a onClick={() => setShowDescriptionModal(true)}>Add description</a>
           </div>
+          <p style={{ textAlign: "left", marginTop: 10 }}>{description.new}</p>
           <div className={styles.break} />
           <div className="flex justify-between">
             <div className="flex items-center gap-1">
@@ -164,6 +173,32 @@ const EditListingHomepage = () => {
           </div>
         </div>
       </div>
+      <Modal
+        title="Details"
+        visible={showDescriptionModal}
+        width={500}
+        onClose={() => {
+          setDescription({ ...description, new: description.prev });
+          setShowDescriptionModal(false);
+        }}
+      >
+        <div className="px-[30px] py-5">
+          <Input
+            placeholder="Description of property (optional)"
+            value={description.new}
+            onChange={(e: any) => setDescription({ ...description, new: e.target.value })}
+          />
+          <br />
+          <Button
+            text="Submit"
+            size="small"
+            onClick={() => {
+              setDescription({ ...description, prev: description.new });
+              setShowDescriptionModal(false);
+            }}
+          />
+        </div>
+      </Modal>
     </SectionLayout>
   );
 };

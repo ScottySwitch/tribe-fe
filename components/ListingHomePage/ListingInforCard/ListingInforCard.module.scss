@@ -1,0 +1,45 @@
+@import "styles/variables.scss";
+
+.listing_infor {
+  display: flex;
+  gap: 20px;
+  .avatar {
+    position: relative;
+    height: 80px;
+    width: 80px;
+    display: block;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid $bg-50;
+  }
+
+  .detail {
+    width: calc(100% - 80px);
+    .name {
+      font-weight: $fw-bold;
+    }
+
+    .contact {
+      color: $bg-500;
+      font-size: $fs-sm;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4%;
+      row-gap: 8px;
+      margin-top: 8px;
+
+      &_left {
+        width: 58%;
+        display: flex;
+        gap: 6px;
+      }
+
+      &_right {
+        display: flex;
+        gap: 6px;
+        width: 38%;
+        text-align: left;
+      }
+    }
+  }
+}
