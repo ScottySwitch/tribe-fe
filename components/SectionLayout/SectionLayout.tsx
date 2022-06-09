@@ -32,13 +32,13 @@ const SectionLayout = (props: SectionLayoutProps) => {
   return (
     <div className={sectionlayoutClassName}>
       <div className={styles.container}>
-        <div className={styles.title_container}>
-          {title && <div className={styles.title}>{title}</div>}
-          {subTitle && <div className={styles.sub_title}>{subTitle}</div>}
-        </div>
-        <div className={`${styles.content} ${contentClassName}`}>
-          {children}
-        </div>
+        {title && (
+          <div className={styles.title_container}>
+            <div className={styles.title}>{title}</div>
+            {subTitle && <div className={styles.sub_title}>{subTitle}</div>}
+          </div>
+        )}
+        <div className={`${styles.content} ${contentClassName}`}>{children}</div>
       </div>
     </div>
   );

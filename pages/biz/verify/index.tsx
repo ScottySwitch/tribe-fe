@@ -42,7 +42,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     router.push("/biz/home/edit");
   };
 
-  const handleSubmitAddIdCard = () => {
+  const handleAddIdCard = () => {
     setVerifyStep(VerifySteps.ADD_PAYMENT);
   };
 
@@ -121,7 +121,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           </div>
           <div className="flex justify-center gap-5 w-full">
             <Button width="30%" variant="no-outlined" text="Skip" />
-            <Button width="80%" text="Next" onClick={handleSubmitAddIdCard} />
+            <Button width="80%" text="Next" onClick={handleAddIdCard} />
           </div>
         </div>
       )}

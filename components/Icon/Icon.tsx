@@ -12,7 +12,7 @@ export interface IconProps {
 }
 
 const Icon: React.FC<IconProps> = (props) => {
-  const { style, color, size = 28, icon = "", className = "" } = props;
+  const { style, color, size = 20, icon = "", className = "" } = props;
 
   return (
     <IcomoonReact
