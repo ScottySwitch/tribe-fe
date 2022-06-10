@@ -88,7 +88,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         showHamModal={showHamModal}
         onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
       />
-      <Footer visible={isAuthPage} />
+      <Footer visible={isAuthPage} backgroundColor={pathname !== "/biz/information"} />
 
       <ContributeTabBar visible={!showHamModal && isAuthPage && isMobile} />
     </div>

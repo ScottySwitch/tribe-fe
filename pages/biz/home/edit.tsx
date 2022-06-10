@@ -13,7 +13,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import Upload from "components/Upload/Upload";
 import { Categories, ListingHomePageScreens } from "enums";
 
-import styles from "styles/ListingHomepage.module.scss";
+import styles from "styles/BizHomepage.module.scss";
 import Input from "components/Input/Input";
 import Button from "components/Button/Button";
 

@@ -1,5 +1,7 @@
 import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
 import InforCard from "components/InforCard/InforCard";
+import Input from "components/Input/Input";
 import { eatTabList, productTabList, serviceTabList } from "constant";
 import { Categories, ListingHomePageScreens, ListingTabs } from "enums";
 import Image from "next/image";
@@ -21,6 +23,9 @@ const ItemCards = ({ itemList }) =>
         overflowY: "scroll",
       }}
     >
+      <div className="w-full flex justify-center">
+        <Input placeholder="search" width="100%" prefix={<Icon icon="search" />} />
+      </div>
       {itemList.map((item) => (
         <InforCard
           key={item.id}

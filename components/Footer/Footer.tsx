@@ -74,22 +74,18 @@ const navList = [
   },
 ];
 
-const Footer = (props: { visible: boolean }) => {
-  const { visible } = props;
+const Footer = (props: { backgroundColor?: boolean; visible: boolean }) => {
+  const { visible, backgroundColor = true } = props;
   if (!visible) return null;
   return (
-    <SectionLayout backgroundColor>
+    <SectionLayout backgroundColor={backgroundColor}>
       <div className={styles.footer}>
         <div className={styles.left_col}>
           <div>
             <Image src={require("public/logo.svg")} alt="logo" />
           </div>
           <div>
-            <Image
-              src={require("public/icons/socials.svg")}
-              alt=""
-              width={100}
-            />
+            <Image src={require("public/icons/socials.svg")} alt="" width={100} />
           </div>
         </div>
         <div className={styles.right_col}>
