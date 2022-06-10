@@ -1,15 +1,44 @@
 import Button from "components/Button/Button";
+import InforCard from "components/InforCard/InforCard";
 import { eatTabList, productTabList, serviceTabList } from "constant";
 import { Categories, ListingHomePageScreens, ListingTabs } from "enums";
 import Image from "next/image";
 import { useState } from "react";
 import Heading from "../Heading/Heading";
 
+const ItemCards = ({ itemList }) =>
+  Array.isArray(itemList) ? (
+    <div
+      style={{
+        backgroundColor: "#F6F6F6",
+        borderRadius: "8px",
+        padding: "16px",
+        marginTop: 20,
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 20,
+        maxHeight: 700,
+        overflowY: "scroll",
+      }}
+    >
+      {itemList.map((item) => (
+        <InforCard
+          key={item.id}
+          imgUrl={item.imgUrl || "https://picsum.photos/200/300"}
+          title={item.name}
+          price={item.price}
+          description={item.description}
+        />
+      ))}
+    </div>
+  ) : null;
+
 const RenderTabs = (props: {
+  itemList: any[];
   category: Categories;
   onSetScreen: (e: ListingHomePageScreens) => void;
 }) => {
-  const { category, onSetScreen } = props;
+  const { itemList, category, onSetScreen } = props;
 
   const finalTabs =
     category === Categories.EAT
@@ -27,7 +56,6 @@ const RenderTabs = (props: {
   );
 
   let tabContent;
-
   switch (selectedTab) {
     case ListingTabs.SERVICE:
       tabContent = (
@@ -45,19 +73,22 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.PRODUCT:
-      tabContent = (
-        <div className="flex flex-col items-center justify-center">
-          <Image src={require("public/images/no-product.svg")} width={100} alt="" />
-          <p>There are no products yet</p>
-          <Button
-            text="Add Product now"
-            size="small"
-            width={300}
-            className="my-5"
-            onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
-          />
-        </div>
-      );
+      tabContent =
+        Array.isArray(itemList) && itemList.length ? (
+          <ItemCards itemList={itemList} />
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            <Image src={require("public/images/no-product.svg")} width={100} alt="" />
+            <p>There are no products yet</p>
+            <Button
+              text="Add Product now"
+              size="small"
+              width={300}
+              className="my-5"
+              onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
+            />
+          </div>
+        );
       break;
 
     case ListingTabs.DISH:

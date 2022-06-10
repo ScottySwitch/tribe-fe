@@ -4,8 +4,9 @@
   position: relative;
   border-radius: $border-radius;
   background-color: white;
-  width: 220px;
-  height: 314px;
+  width: 200px;
+  height: auto;
+  box-shadow: $box-shadow;
   cursor: pointer;
 
   &:hover {
@@ -22,7 +23,8 @@
   .cover {
     border-radius: $border-radius $border-radius 0 0;
     height: 124px;
-    width: 220px;
+    width: 100%;
+    position: relative;
     box-sizing: border-box;
     overflow: hidden;
 
@@ -33,9 +35,7 @@
   }
 
   .details {
-    border: 1px solid $bg-100;
     border-top: 1px solid transparent;
-    border-radius: 0 0 $border-radius $border-radius;
     padding: 10px;
     font-size: $fs-sm;
 
@@ -85,6 +85,12 @@
       border-top: 1px solid $bg-100;
     }
 
+    .description {
+      color: $bg-400;
+      font-size: $fs-sm;
+      font-weight: $fw-light;
+    }
+
     .price {
       display: flex;
       align-items: center;
@@ -116,10 +122,8 @@
 @media screen and (max-width: $tablet) {
   .infor_card {
     width: 200px;
-    height: 270px;
 
     .cover {
-      width: 200px;
       height: 118px;
     }
 
@@ -146,11 +150,9 @@
 
 @media screen and (max-width: $mobile) {
   .infor_card {
-    width: 168px;
-    height: 247px;
+    width: 160px;
 
     .cover {
-      width: 168px;
       height: 95px;
     }
 

@@ -50,27 +50,27 @@ const getIndex = (id, list) => {
 };
 
 const EditListingHomepage = () => {
-  const [category, setCategory] = useState(Categories.SEE);
+  const [category, setCategory] = useState(Categories.BUY);
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
   const [description, setDescription] = useState<string>("");
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" });
   const [action, setAction] = useState({ label: "", value: "" });
-  const [newItems, setNewItems] = useState([{ id: randomId() }]);
+  const [itemList, setItemList] = useState<{ [key: string]: any }[]>([]);
 
   const handleAddItem = () => {
-    setNewItems([...newItems, { id: randomId() }]);
+    setItemList([...itemList, { id: randomId() }]);
   };
 
   const handleRemoveItem = (id: number) => {
-    const newArray = [...newItems].filter((item) => item.id !== id);
-    setNewItems(newArray);
+    const newArray = [...itemList].filter((item) => item.id !== id);
+    setItemList(newArray);
   };
 
   const handleChangeItem = (id: number, type: string, value: string | number | string[]) => {
-    const index = getIndex(id, newItems);
-    const newArray = [...newItems];
+    const index = getIndex(id, itemList);
+    const newArray = [...itemList];
     newArray[index][type] = value;
-    setNewItems(newArray);
+    setItemList(newArray);
   };
 
   const CancelButton = () => (
@@ -143,7 +143,11 @@ const EditListingHomepage = () => {
             </div>
             <div className={styles.break} />
             <div>
-              <RenderTabs category={category} onSetScreen={(e) => setScreen(e)} />
+              <RenderTabs
+                category={category}
+                itemList={itemList}
+                onSetScreen={(e) => setScreen(e)}
+              />
             </div>
             <div className={styles.break} />
             <div>
@@ -163,8 +167,8 @@ const EditListingHomepage = () => {
         title={getAddItemsFields(category).title}
       >
         <div className=" w-full sm:w-3/4 lg:w-1/2">
-          {Array.isArray(newItems) && newItems.length ? (
-            newItems.map((item) => (
+          {Array.isArray(itemList) && itemList.length ? (
+            itemList.map((item) => (
               <div key={item.id} className={styles.add_items_container}>
                 <div className={styles.break} />
                 <div className={styles.header}>
@@ -208,10 +212,7 @@ const EditListingHomepage = () => {
           </div>
         </div>
       </SectionLayout>
-      <SectionLayout
-        show={screen === ListingHomePageScreens.ADD_MENU}
-        title={getAddItemsFields(category).title}
-      >
+      <SectionLayout show={screen === ListingHomePageScreens.ADD_MENU} title="Add a menu">
         <div className=" w-full sm:w-3/4 lg:w-1/2">
           <Upload className={styles.upload} centerIcon={<Icon icon="plus" size={20} />} />
           <div className={styles.break} />

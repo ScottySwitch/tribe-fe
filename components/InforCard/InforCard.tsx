@@ -12,6 +12,8 @@ export interface InforCardProps {
   isVerified?: boolean;
   rateNumber?: number;
   followerNumber?: number;
+  description?: string;
+  width?: string | number;
 }
 
 const InforCard = (props: InforCardProps) => {
@@ -19,56 +21,59 @@ const InforCard = (props: InforCardProps) => {
     imgUrl,
     title,
     rate,
+    description,
     rateNumber,
     followerNumber,
     categories,
     tags,
     price,
     isVerified,
+    width,
   } = props;
   return (
-    <div className={styles.infor_card}>
+    <div className={styles.infor_card} style={{ width }}>
       {isVerified && (
         <div className={styles.verified}>
           <Icon icon="verified-tag" style={{ height: "30px", width: "70px" }} />
         </div>
       )}
       <div className={styles.cover}>
-        <Image
-          src={imgUrl}
-          alt=""
-          layout="responsive"
-          width="100%"
-          height="100%"
-        />
+        {imgUrl && <Image src={imgUrl} alt="" layout="responsive" width="100%" height="100%" />}
       </div>
       <div className={styles.details}>
         <div className={styles.title}>{title}</div>
-        <div className={styles.reviews}>
-          <Icon icon="red-star" size={14} />
-          <div className={styles.rate}>{rate}</div>
-          <div>({rateNumber})</div>
-          <Icon icon="dot" size={10} className={styles.dot} />
-          <div>{followerNumber} followers</div>
-        </div>
-        <div className={styles.categories}>
-          {categories?.map((cate) => (
-            <div key={cate} className={styles.category}>
-              {cate}
-            </div>
-          ))}
-        </div>
+        {rate && (
+          <div className={styles.reviews}>
+            <Icon icon="red-star" size={14} />
+            <div className={styles.rate}>{rate}</div>
+            <div>({rateNumber})</div>
+            <Icon icon="dot" size={10} className={styles.dot} />
+            <div>{followerNumber} followers</div>
+          </div>
+        )}
+        {description && <div className={styles.description}>{description}</div>}
+        {Array.isArray(categories) && (
+          <div className={styles.categories}>
+            {categories.map((cate) => (
+              <div key={cate} className={styles.category}>
+                {cate}
+              </div>
+            ))}
+          </div>
+        )}
         <div className={styles.break} />
         <div className={styles.price}>
           From <span>{price}</span>
         </div>
-        <div className={styles.tags}>
-          {tags?.map((tag) => (
-            <div key={tag} className={styles.tag}>
-              {tag}
-            </div>
-          ))}
-        </div>
+        {Array.isArray(tags) && (
+          <div className={styles.tags}>
+            {tags.map((tag) => (
+              <div key={tag} className={styles.tag}>
+                {tag}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
