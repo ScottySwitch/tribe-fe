@@ -1,0 +1,24 @@
+@import "styles/variables.scss";
+
+.heading {
+  font-weight: $fw-bold;
+  display: flex;
+  align-items: center;
+
+  &::before {
+    content: "";
+    display: block;
+    height: 23px;
+    width: 3px;
+    margin-right: 6px;
+    background-color: $primary-300;
+    border-radius: $border-radius;
+  }
+
+  &.un_selected {
+    color: $bg-200;
+    &::before {
+      background-color: $bg-200;
+    }
+  }
+}

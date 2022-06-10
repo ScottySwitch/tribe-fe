@@ -1,4 +1,20 @@
-import { Categories } from "enums";
+import { Categories, ListingTabs } from "enums";
+
+export const eatTabList = [
+  { text: "Dishes", value: ListingTabs.DISH },
+  { text: "Menus", value: ListingTabs.MENU },
+  { text: "Deals", value: ListingTabs.DEAL },
+];
+
+export const productTabList = [
+  { text: "Products", value: ListingTabs.PRODUCT },
+  { text: "Deals", value: ListingTabs.DEAL },
+];
+
+export const serviceTabList = [
+  { text: "Services", value: ListingTabs.SERVICE },
+  { text: "Deals", value: ListingTabs.DEAL },
+];
 
 export const inforCardList = [
   {

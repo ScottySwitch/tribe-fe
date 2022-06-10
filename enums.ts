@@ -24,3 +24,18 @@ export enum Tiers {
   BASIC = "basic",
   PREMIUM = "premium",
 }
+
+export enum ListingTabs {
+  SERVICE = "service",
+  PRODUCT = "product",
+  DISH = "dish",
+  MENU = "menu",
+  DEAL = "deal",
+}
+
+export enum ListingHomePageScreens {
+  HOME = "home",
+  ADD_ITEMS = "add-items",
+  ADD_MENU = "add-menu",
+  ADD_DEAL = "add-deal",
+}
