@@ -40,8 +40,9 @@
       display: flex;
       justify-content: space-between;
       padding: 15px 30px;
-      align-items: center;
+      align-items: flex-start;
       background-color: white;
+      gap: 20px;
 
       .title {
         color: $bg-700;
@@ -119,6 +120,14 @@
 
   .center {
     align-items: center;
+    .container {
+      border-radius: $border-radius;
+      width: 90% !important;
+
+      .header {
+        padding: 10px 10px 0 10px;
+      }
+    }
   }
 
   .top {

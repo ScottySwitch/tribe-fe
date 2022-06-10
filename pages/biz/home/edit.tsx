@@ -41,33 +41,18 @@ const EditListingHomepage = () => {
         Home <Icon icon="carret-right" size={14} color="#7F859F" />
         Evertop Hainanese Boneless Chicken
       </div>
+      <ListingInforCard
+        priceRange={priceRange}
+        onSetPriceRange={(values) => setPriceRange(values)}
+      />
       <div className={styles.body}>
         <div className={styles.right_col}>
-          <div className={styles.reviews_followers_container}>
-            <div className={styles.reviews}>
-              <Image
-                src={require("public/images/no-review-star.svg")}
-                width={80}
-                height={40}
-                alt=""
-              />
-              <p>(0 review)</p>
-            </div>
-            <div className={styles.followers}>
-              <div className="h-[40px] flex items-center">0</div>
-              <p>followers</p>
-            </div>
-          </div>
           <EditAction
             action={action}
             onApplyAction={(action, value) => setAction({ label: action, value: value })}
           />
         </div>
         <div className={styles.left_col}>
-          <ListingInforCard
-            priceRange={priceRange}
-            onSetPriceRange={(values) => setPriceRange(values)}
-          />
           <div className={styles.break} />
           <div className={styles.onboard_checklist}>
             <div className={styles.onboard_checklist_header}>
@@ -142,31 +127,31 @@ const EditListingHomepage = () => {
           <div className={styles.break} />
           <div className="">
             <div className={styles.heading}>Links</div>
-            <div className="flex gap-10 mt-5">
-              <div>
-                <div className="flex gap-3">
+            <div className={styles.social_link_container}>
+              <div className={styles.social_link}>
+                <div className={styles.social_link_title}>
                   <Icon icon="email-color" /> Email
                 </div>
-                <div className="flex items-center h-[50px]">
+                <div className="flex items-center">
                   <a>restaurant@gmail.com</a>
                 </div>
               </div>
-              <div>
-                <div className="flex gap-3">
+              <div className={styles.social_link}>
+                <div className={styles.social_link_title}>
+                  <Icon icon="web-color" /> Website
+                </div>
+                <div className="flex items-center">
+                  <a>www.website.com</a>
+                </div>
+              </div>
+              <div className={styles.social_link}>
+                <div className={styles.social_link_title}>
                   <Icon icon="socials-color" /> Socials
                 </div>
-                <div className="flex gap-5 mt-[10px]">
+                <div className="flex gap-5">
                   <Icon icon="google-logo" size={20} className={styles.icon} />
                   <Icon icon="facebook-color" size={20} className={styles.icon} />
                   <Icon icon="instagram-color" size={20} className={styles.icon} />
-                </div>
-              </div>
-              <div>
-                <div className="flex gap-3">
-                  <Icon icon="web-color" /> Website
-                </div>
-                <div className="flex items-center h-[50px]">
-                  <a>www.website.com</a>
                 </div>
               </div>
             </div>
@@ -177,12 +162,13 @@ const EditListingHomepage = () => {
         title="Details"
         visible={showDescriptionModal}
         width={500}
+        mobilePosition="center"
         onClose={() => {
           setDescription({ ...description, new: description.prev });
           setShowDescriptionModal(false);
         }}
       >
-        <div className="px-[30px] py-5">
+        <div className="px-[10px] sm:px-[30px] py-5">
           <Input
             placeholder="Description of property (optional)"
             value={description.new}

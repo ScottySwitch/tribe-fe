@@ -138,6 +138,7 @@ const EditAction = (props: EditActionProps) => {
       <Modal
         title="Edit action button"
         visible={showEditActionModal}
+        mobileFullHeight
         width={600}
         onClose={() => {
           setShowEditActionModal(false);
@@ -168,6 +169,7 @@ const EditAction = (props: EditActionProps) => {
           title={action.label}
           visible={action.showModalState}
           width={400}
+          mobilePosition="center"
           onClose={action.close}
         >
           <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">

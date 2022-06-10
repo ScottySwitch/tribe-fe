@@ -67,3 +67,9 @@
     }
   }
 }
+
+@media screen and (max-width: $mobile) {
+  .action_modal {
+    width: 100%;
+  }
+}
