@@ -39,3 +39,15 @@ export enum ListingHomePageScreens {
   ADD_MENU = "add-menu",
   ADD_DEAL = "add-deal",
 }
+
+export enum InformationList {
+  BUSINESS_INFORMATION = "Business information",
+  BUSINESS_DETAIL = "Business  detail",
+  PHOTOS_VIDEOS = "Photos/videos",
+  PRODUCT_LISTING = "Products listing",
+  MANAGE_DEALS = "Manage deals",
+  ANALYTICS = "Analytics",
+  CHANGE_ACCOUNT_TIER = "Change account tier",
+  VERIFICATION = "Verification",
+  LOGOUT = "Log out",
+}

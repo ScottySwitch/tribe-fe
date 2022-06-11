@@ -1,9 +1,21 @@
-import { Categories, ListingTabs } from "enums";
+import { Categories, InformationList, ListingTabs } from "enums";
 
 export const eatTabList = [
   { text: "Dishes", value: ListingTabs.DISH },
   { text: "Menus", value: ListingTabs.MENU },
   { text: "Deals", value: ListingTabs.DEAL },
+];
+
+export const informationList = [
+  { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
+  { label: InformationList.BUSINESS_DETAIL, icon: "business" },
+  { label: InformationList.PHOTOS_VIDEOS, icon: "play" },
+  { label: InformationList.PRODUCT_LISTING, icon: "buy-color", paid: true },
+  { label: InformationList.MANAGE_DEALS, icon: "deal", paid: true },
+  { label: InformationList.ANALYTICS, icon: "chart", paid: true },
+  { label: InformationList.CHANGE_ACCOUNT_TIER, icon: "reward-color" },
+  { label: InformationList.VERIFICATION, icon: "like-color-2" },
+  { label: InformationList.LOGOUT, icon: "log-out1" },
 ];
 
 export const productTabList = [

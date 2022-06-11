@@ -1,10 +1,21 @@
 import classNames from "classnames";
+import Icon from "components/Icon/Icon";
 import styles from "./Heading.module.scss";
 
-const Heading = (props) => {
-  const { text, onClick, className, selected = true } = props;
+interface HeadingProps {
+  text?: string;
+  icon?: string;
+  onClick?: () => void;
+  className?: string;
+  selected?: boolean;
+  type?: "default" | "tab";
+}
+
+const Heading = (props: HeadingProps) => {
+  const { text, icon, onClick, className, selected = true, type = "default" } = props;
   const headingCLassName = classNames(styles.heading, className, {
     [styles.un_selected]: selected === false,
+    [styles.tab]: type === "tab",
   });
   return (
     <div
@@ -12,6 +23,7 @@ const Heading = (props) => {
       className={headingCLassName}
       onClick={onClick}
     >
+      {selected && <Icon icon={icon || ""} />}
       {text}
     </div>
   );

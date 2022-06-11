@@ -1,16 +1,16 @@
-import classNames from "classnames";
-import React, { ReactElement } from "react";
+import classNames from "classnames"
+import React, { ReactElement } from "react"
 
-import styles from "./SectionLayout.module.scss";
+import styles from "./SectionLayout.module.scss"
 
 export interface SectionLayoutProps {
-  title?: string;
-  className?: string;
-  contentClassName?: string;
-  children: any;
-  subTitle?: string;
-  show?: boolean;
-  backgroundColor?: boolean;
+  title?: string
+  className?: string
+  childrenClassName?: string
+  children: any
+  subTitle?: string
+  show?: boolean
+  backgroundColor?: boolean
 }
 const SectionLayout = (props: SectionLayoutProps) => {
   const {
@@ -18,16 +18,18 @@ const SectionLayout = (props: SectionLayoutProps) => {
     className,
     subTitle,
     show = true,
-    contentClassName,
+    childrenClassName,
     backgroundColor,
     children,
-  } = props;
+  } = props
 
   const sectionlayoutClassName = classNames(styles.section_layout, className, {
     [styles.colored_background]: backgroundColor,
-  });
+  })
+
+  const childrenClassNames = classNames(styles.children, childrenClassName)
   if (!show) {
-    return null;
+    return null
   }
   return (
     <div className={sectionlayoutClassName}>
@@ -38,9 +40,9 @@ const SectionLayout = (props: SectionLayoutProps) => {
             {subTitle && <div className={styles.sub_title}>{subTitle}</div>}
           </div>
         )}
-        <div className={`${styles.content} ${contentClassName}`}>{children}</div>
+        <div className={childrenClassNames}>{children}</div>
       </div>
     </div>
-  );
-};
-export default SectionLayout;
+  )
+}
+export default SectionLayout
