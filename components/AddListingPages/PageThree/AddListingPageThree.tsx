@@ -1,25 +1,26 @@
-import { Categories } from "enums";
-import { IAddListingForm } from "pages/add-listing";
-import { useForm } from "react-hook-form";
-import AddBuyInfor from "./AddInforSections/AddBuyInfor";
-import AddEatInfor from "./AddInforSections/AddEatInfor";
-import AddSeeAndDoInfor from "./AddInforSections/AddSeeAndDoInfor";
-import AddStayInfor from "./AddInforSections/AddStayInfor";
-import AddTransportInfor from "./AddInforSections/AddTransportInfor";
+import { Categories } from "enums"
+import { IAddListingForm } from "pages/add-listing"
+import { useForm } from "react-hook-form"
+import AddBuyInfor from "./AddInforSections/AddBuyInfor"
+import AddEatInfor from "./AddInforSections/AddEatInfor"
+import AddSeeAndDoInfor from "./AddInforSections/AddSeeAndDoInfor"
+import AddStayInfor from "./AddInforSections/AddStayInfor"
+import AddTransportInfor from "./AddInforSections/AddTransportInfor"
 
 interface AddListingPageThreeProps {
-  onPrevPage: () => void;
-  onNextPage: () => void;
-  onUpdateFormData: (data: { [key: string]: any }) => void;
-  show: boolean;
-  data: IAddListingForm;
+  onPrevPage: () => void
+  onNextPage: () => void
+  onUpdateFormData: (data: { [key: string]: any }) => void
+  onSubmitFormData: (data: { [key: string]: any }) => void
+  show: boolean
+  data: IAddListingForm
 }
 
 const AddListingPageThree = (props: AddListingPageThreeProps) => {
-  const { data, show, onPrevPage, onNextPage, onUpdateFormData } = props;
+  const { data, show, onPrevPage, onNextPage, onUpdateFormData, onSubmitFormData } = props
 
   if (!show) {
-    return null;
+    return null
   }
 
   const AddInfor = () => {
@@ -29,10 +30,10 @@ const AddListingPageThree = (props: AddListingPageThreeProps) => {
           <AddEatInfor
             data={data}
             onPrevPage={onPrevPage}
-            onNextPage={onNextPage}
             onUpdateFormData={onUpdateFormData}
+            onSubmitFormData={onSubmitFormData}
           />
-        );
+        )
       // case Categories.STAY:
       //   return (
       //     <AddStayInfor
@@ -70,14 +71,14 @@ const AddListingPageThree = (props: AddListingPageThreeProps) => {
       //     />
       //   );
       default:
-        return null;
+        return null
     }
-  };
+  }
   return (
     <>
       <AddInfor />
     </>
-  );
-};
+  )
+}
 
-export default AddListingPageThree;
+export default AddListingPageThree
