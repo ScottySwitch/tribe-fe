@@ -1,5 +1,6 @@
 import { InformationList } from "enums"
 import BusinessInformation from "../TabContent/BusinessInformation"
+import ProductListing from "../TabContent/ProductListing"
 import styles from "./TabContent.module.scss"
 
 interface TabContentContainerProps {
@@ -15,6 +16,8 @@ const TabContent = ({ selectedTab, submitFormValue, formValue }: any) => {
       return <BusinessInformation formValue={formValue} submitFormValue={submitFormValue} />
     case InformationList.BUSINESS_DETAIL:
       return <div>detail</div>
+    case InformationList.PRODUCT_LISTING:
+      return <ProductListing formValue={formValue} submitFormValue={submitFormValue} />
     case InformationList.PHOTOS_VIDEOS:
       return <div>photo</div>
     case InformationList.MANAGE_DEALS:

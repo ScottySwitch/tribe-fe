@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
 
-import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne";
-import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor";
-import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPageTwo";
-import Button from "components/Button/Button";
-import Modal from "components/Modal/Modal";
-import { Categories, YesNo } from "enums";
+import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne"
+import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor"
+import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPageTwo"
+import Button from "components/Button/Button"
+import Modal from "components/Modal/Modal"
+import { Categories, YesNo } from "enums"
 
-import styles from "styles/AddListing.module.scss";
-import Image from "next/image";
-import { useRouter } from "next/router";
+import styles from "styles/AddListing.module.scss"
+import Image from "next/image"
+import { useRouter } from "next/router"
 
 const defaultAddlistingForm: IAddListingForm = {
   category: "",
@@ -31,57 +31,57 @@ const defaultAddlistingForm: IAddListingForm = {
   currency: "",
   minPrice: "",
   maxPrice: "",
-};
+}
 export interface IAddListingForm {
-  category: string;
-  relationship: string;
-  listing: string;
-  role: string;
-  isOpen: string;
-  openDate: string;
-  businessName: string;
-  description: string;
-  isOnline: string;
-  city: string;
-  country: string;
-  address: string;
-  additionalAddress: string;
-  contact: string;
-  email: string;
-  socialMedia: string;
-  currency: string;
-  minPrice: string;
-  maxPrice: string;
+  category: string
+  relationship: string
+  listing: string
+  role: string
+  isOpen: string
+  openDate: string
+  businessName: string
+  description: string
+  isOnline: string
+  city: string
+  country: string
+  address: string
+  additionalAddress: string
+  contact: string
+  email: string
+  socialMedia: string
+  currency: string
+  minPrice: string
+  maxPrice: string
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(1);
-  const [formData, setFormData] = useState(defaultAddlistingForm);
-  const [showSubmitResult, setShowSubmitResult] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1)
+  const [formData, setFormData] = useState(defaultAddlistingForm)
+  const [showSubmitResult, setShowSubmitResult] = useState(false)
 
-  const router = useRouter();
+  const router = useRouter()
 
   const handlePrevPage = () => {
-    setPageNumber(pageNumber - 1);
-  };
+    setPageNumber(pageNumber - 1)
+  }
 
   const handleNextPage = () => {
-    setPageNumber(pageNumber + 1);
-  };
+    setPageNumber(pageNumber + 1)
+  }
 
   const handleUpdateFormData = (data) => {
-    setFormData({ ...formData, ...data });
-  };
-
+    setFormData({ ...formData, ...data })
+  }
   const handleSubmitFormData = (data) => {
-    console.log("data", data);
-    const random = Math.floor(Math.random() * 10000);
+    ///do CRUD things here
+    console.log("data", data)
+    const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
-      setShowSubmitResult(true);
+      setShowSubmitResult(true)
     } else {
-      router.push(`/add-listing/claim/${random}`);
+      router.push(`/add-listing/claim/${random}`)
     }
-  };
+  }
 
   return (
     <div className={styles.add_listing}>
@@ -104,7 +104,6 @@ const AddListing = () => {
           show={pageNumber === 3 && formData.category === Categories.EAT}
           onPrevPage={handlePrevPage}
           onSubmitFormData={handleSubmitFormData}
-          onUpdateFormData={handleUpdateFormData}
         />
       </React.Fragment>
       <Modal visible={showSubmitResult} width={350} mobilePosition="center">
@@ -129,7 +128,7 @@ const AddListing = () => {
         </div>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default AddListing;
+export default AddListing

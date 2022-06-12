@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import get from "lodash/get";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react"
+import get from "lodash/get"
+import { useForm } from "react-hook-form"
 
-import Badge from "components/Badge/Badge";
-import Button from "components/Button/Button";
-import Checkbox from "components/Checkbox/Checkbox";
-import { otherList } from "components/Filter/Filter";
-import Input from "components/Input/Input";
-import Modal from "components/Modal/Modal";
-import Question from "components/Question/Question";
-import Radio from "components/Radio/Radio";
-import SectionLayout from "components/SectionLayout/SectionLayout";
-import { categories } from "constant";
+import Badge from "components/Badge/Badge"
+import Button from "components/Button/Button"
+import Checkbox from "components/Checkbox/Checkbox"
+import { otherList } from "components/Filter/Filter"
+import Input from "components/Input/Input"
+import Modal from "components/Modal/Modal"
+import Question from "components/Question/Question"
+import Radio from "components/Radio/Radio"
+import SectionLayout from "components/SectionLayout/SectionLayout"
+import { categories } from "constant"
 import {
   additionalFeatures,
   atmosphere,
@@ -20,20 +20,19 @@ import {
   parkingNearby,
   paymentMethods,
   placeGoodFor,
-} from "../constant";
+} from "../constant"
 
 interface AddEatInforProps {
-  data: { [key: string]: any };
-  show?: boolean;
-  onPrevPage: () => void;
-  onSubmitFormData: (data: { [key: string]: any }) => void;
-  onUpdateFormData: (data: { [key: string]: any }) => void;
+  data: { [key: string]: any }
+  show?: boolean
+  onPrevPage: () => void
+  onSubmitFormData: (data: { [key: string]: any }) => void
 }
 
 const AddEatInfor = (props: AddEatInforProps) => {
-  const { data, show, onPrevPage, onSubmitFormData, onUpdateFormData } = props;
-  const [cuisineVisible, setCuisineVisible] = useState(false);
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const { data, show, onPrevPage, onSubmitFormData } = props
+  const [cuisineVisible, setCuisineVisible] = useState(false)
+  const [showPreviewModal, setShowPreviewModal] = useState(false)
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -51,23 +50,21 @@ const AddEatInfor = (props: AddEatInforProps) => {
       currency: data.currency,
       openHours: data.openHours,
     },
-  });
+  })
 
-  const [categoryKind, setCategoryKind] = useState<string | undefined>(
-    getValues("categoryKind")
-  );
+  const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
 
   const onSubmit = () => {
-    setShowPreviewModal(true);
-  };
+    setShowPreviewModal(true)
+  }
 
   const handleSubmitFormData = () => {
-    setShowPreviewModal(false);
-    onSubmitFormData({ ...data, ...getValues() });
-  };
+    setShowPreviewModal(false)
+    onSubmitFormData({ ...data, ...getValues() })
+  }
 
   if (!show) {
-    return null;
+    return null
   }
 
   return (
@@ -86,8 +83,8 @@ const AddEatInfor = (props: AddEatInforProps) => {
                   text={opt.label}
                   selected={categoryKind === opt.label}
                   onClick={() => {
-                    setValue("categoryKind", opt.label);
-                    setCategoryKind(opt.label);
+                    setValue("categoryKind", opt.label)
+                    setCategoryKind(opt.label)
                   }}
                 />
               ))}
@@ -95,10 +92,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             <br />
             <Input placeholder="Please tell us the listing type" />
           </Question>
-          <Question
-            question="What type of cuisine does this place serve?"
-            optional
-          >
+          <Question question="What type of cuisine does this place serve?" optional>
             <Button
               text="Edit cruisines"
               width="fit-content"
@@ -107,12 +101,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             />
           </Question>
           <Question question="What are the opening hours? " optional>
-            <Button
-              text="Add open hour"
-              width="fit-content"
-              size="small"
-              variant="secondary"
-            />
+            <Button text="Add open hour" width="fit-content" size="small" variant="secondary" />
           </Question>
           <Question question="What tags best describe this place? " optional>
             <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
@@ -128,14 +117,8 @@ const AddEatInfor = (props: AddEatInforProps) => {
               ))}
             </div>
           </Question>
-          <Question
-            question="What’s the general price range of a meal? "
-            optional
-          >
-            <Input
-              placeholder="Select a currency"
-              register={register("currency")}
-            />
+          <Question question="What’s the general price range of a meal? " optional>
+            <Input placeholder="Select a currency" register={register("currency")} />
             <br />
             <div className="flex gap-10">
               <Input
@@ -150,10 +133,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               />
             </div>
           </Question>
-          <Question
-            question="What kind of meals does this place serve?"
-            optional
-          >
+          <Question question="What kind of meals does this place serve?" optional>
             <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
               {mealOptions.map((item) => (
                 <Radio
@@ -194,10 +174,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               ))}
             </div>
           </Question>
-          <Question
-            question="What best describe this place’s atmosphere? "
-            optional
-          >
+          <Question question="What best describe this place’s atmosphere? " optional>
             <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
               {atmosphere.map((item) => (
                 <Checkbox
@@ -211,10 +188,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               ))}
             </div>
           </Question>
-          <Question
-            question="What type of payment method is available?"
-            optional
-          >
+          <Question question="What type of payment method is available?" optional>
             <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
               {paymentMethods.map((item) => (
                 <Checkbox
@@ -228,10 +202,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               ))}
             </div>
           </Question>
-          <Question
-            question="Any additional features/ services that are available? "
-            optional
-          >
+          <Question question="Any additional features/ services that are available? " optional>
             <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
               {additionalFeatures.map((item) => (
                 <Checkbox
@@ -256,12 +227,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
           />
           <br /> <br /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
-            <Button
-              text="Go back"
-              variant="underlined"
-              width="fit-content"
-              onClick={onPrevPage}
-            />
+            <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
             <Button text="Continue" size="small" width={270} type="submit" />
           </div>
         </form>
@@ -273,10 +239,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
         visible={cuisineVisible}
         onClose={() => setCuisineVisible(false)}
       >
-        <div
-          className="px-[30px] pb-10"
-          style={{ border: "1px solid #E2E4E9" }}
-        >
+        <div className="px-[30px] pb-10" style={{ border: "1px solid #E2E4E9" }}>
           <br />
           <div className="flex flex-wrap justify-between gap-4">
             {cuisineModalList.map((opt) => (
@@ -311,9 +274,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
           {previewInfo.map((row) => (
             <div key={row.question} className="flex gap-20">
               <div className="flex flex-wrap w-3/5">{row.question}</div>
-              <div className="w-2/5">
-                {get({ ...data, ...getValues() }, row.value) || ""}
-              </div>
+              <div className="w-2/5">{get({ ...data, ...getValues() }, row.value) || ""}</div>
             </div>
           ))}
           <div className="flex justify-end px-[30px] py-3">
@@ -324,18 +285,13 @@ const AddEatInfor = (props: AddEatInforProps) => {
               width="fit-content"
               onClick={() => setShowPreviewModal(false)}
             />
-            <Button
-              text="Continue"
-              size="small"
-              width={270}
-              onClick={handleSubmitFormData}
-            />
+            <Button text="Continue" size="small" width={270} onClick={handleSubmitFormData} />
           </div>
         </div>
       </Modal>
     </>
-  );
-};
+  )
+}
 
 const previewInfo = [
   { question: "What kind of place is this?", value: "" },
@@ -363,6 +319,6 @@ const previewInfo = [
   { question: "Select a currency", value: "currency" },
   { question: "Max price", value: "maxPrice" },
   { question: "Min price", value: "minPrice" },
-];
+]
 
-export default AddEatInfor;
+export default AddEatInfor

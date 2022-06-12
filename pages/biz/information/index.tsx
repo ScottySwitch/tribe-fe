@@ -8,11 +8,40 @@ import { useState } from "react"
 import styles from "styles/BizInformation.module.scss"
 
 const defaultFormValue = {
+  name: "Evertop Hainanese Boneless Chicken",
+  description:
+    "The first restaurant proprietor is believed to have been one A. Boulanger, a soup vendor, who opened his business in Paris in 1765. The sign above his door advertised restoratives, or restaurants, referring to the soups and broths available within.",
   address: "50 Bussorah St, Singapore 199466",
   phone: "+84 823996913",
+  productList: [
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+  ],
 }
 const BizInformation = () => {
-  const [tier, setTier] = useState<Tiers>(Tiers.FREE)
+  const [tier, setTier] = useState<Tiers>(Tiers.BASIC)
   const [formValue, setFormValue] = useState(defaultFormValue)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 

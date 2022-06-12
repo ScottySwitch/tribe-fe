@@ -4,6 +4,7 @@ import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
+import Upload from "components/Upload/Upload"
 import styles from "./TabContent.module.scss"
 
 interface BusinessInformationProps {
@@ -14,8 +15,17 @@ interface BusinessInformationProps {
 const BusinessInformation = (props: BusinessInformationProps) => {
   const { formValue = {}, submitFormValue } = props
   return (
-    <SectionLayout title="Business information">
+    <SectionLayout
+      title="Business information"
+      className={styles.information}
+      containerClassName="w-full"
+    >
       <Break />
+      <div>
+        <Upload type="avatar" className="justify-start" />
+      </div>
+      <div className={styles.name}>{formValue.name}</div>
+      <p>{formValue.description}</p>
       <Question question="Address" childrenClassName="flex gap-3">
         <Icon icon="map" />
         {formValue.address}

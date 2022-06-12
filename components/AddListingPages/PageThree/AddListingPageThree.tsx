@@ -17,7 +17,7 @@ interface AddListingPageThreeProps {
 }
 
 const AddListingPageThree = (props: AddListingPageThreeProps) => {
-  const { data, show, onPrevPage, onNextPage, onUpdateFormData, onSubmitFormData } = props
+  const { data, show, onPrevPage, onSubmitFormData } = props
 
   if (!show) {
     return null
@@ -27,12 +27,7 @@ const AddListingPageThree = (props: AddListingPageThreeProps) => {
     switch (data.category) {
       case Categories.EAT:
         return (
-          <AddEatInfor
-            data={data}
-            onPrevPage={onPrevPage}
-            onUpdateFormData={onUpdateFormData}
-            onSubmitFormData={onSubmitFormData}
-          />
+          <AddEatInfor data={data} onPrevPage={onPrevPage} onSubmitFormData={onSubmitFormData} />
         )
       // case Categories.STAY:
       //   return (
