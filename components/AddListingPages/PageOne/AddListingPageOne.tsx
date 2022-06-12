@@ -1,61 +1,61 @@
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react"
+import Link from "next/link"
 
-import SectionLayout from "components/SectionLayout/SectionLayout";
-import useTrans from "hooks/useTrans";
-import { roleList } from "constant";
-import Badge from "components/Badge/Badge";
-import Button from "components/Button/Button";
-import Select from "components/Select/Select";
+import SectionLayout from "components/SectionLayout/SectionLayout"
+import useTrans from "hooks/useTrans"
+import { roleList } from "constant"
+import Badge from "components/Badge/Badge"
+import Button from "components/Button/Button"
+import Select from "components/Select/Select"
 
-import DatePicker from "components/DatePicker/DatePicker";
+import DatePicker from "components/DatePicker/DatePicker"
 
 import SearchListing, {
   listingTypes,
-} from "components/AddListingPages/PageOne/SearchListing/SearchListing";
-import RelationshipToBusiness from "components/AddListingPages/PageOne/RelationshipToBusiness/RelationshipToBusiness";
-import ChooseCategory from "components/AddListingPages/PageOne/ChooseCategory/ChooseCategory";
-import Question from "components/Question/Question";
-import { YesNo } from "enums";
+} from "components/AddListingPages/PageOne/SearchListing/SearchListing"
+import RelationshipToBusiness from "components/AddListingPages/PageOne/RelationshipToBusiness/RelationshipToBusiness"
+import ChooseCategory from "components/AddListingPages/PageOne/ChooseCategory/ChooseCategory"
+import Question from "components/Question/Question"
+import { YesNo } from "enums"
 
 interface AddListingProps {
-  onUpdateFormData: (data: { [key: string]: any }) => void;
-  onNextPage: () => void;
-  show: boolean;
+  onUpdateFormData: (data: { [key: string]: any }) => void
+  onNextPage: () => void
+  show: boolean
 }
 
 const AddListingPageOne = (props: AddListingProps) => {
-  const { show, onUpdateFormData, onNextPage } = props;
-  const trans = useTrans();
-  const [category, setCategory] = useState<string | undefined>();
-  const [relationship, setRelationship] = useState<string | undefined>();
-  const [listing, setListing] = useState<listingTypes>();
-  const [role, setRole] = useState<string | undefined>();
-  const [isOpen, setIsOpen] = useState<string | undefined>();
-  const [openDate, setOpenDate] = useState<Date | undefined>();
+  const { show, onUpdateFormData, onNextPage } = props
+  const trans = useTrans()
+  const [category, setCategory] = useState<string | undefined>()
+  const [relationship, setRelationship] = useState<string | undefined>()
+  const [listing, setListing] = useState<listingTypes>()
+  const [role, setRole] = useState<string | undefined>()
+  const [isOpen, setIsOpen] = useState<string | undefined>()
+  const [openDate, setOpenDate] = useState<Date | undefined>()
 
   if (!show) {
-    return null;
+    return null
   }
 
-  const isContinueBtnDisable =
-    !category || !relationship || !listing || !role || !isOpen || !openDate;
+  const isContinueBtnEnable =
+    category &&
+    relationship &&
+    listing &&
+    role &&
+    ((isOpen === YesNo.NO && openDate) || isOpen === YesNo.YES)
 
   return (
     <SectionLayout title={trans.addNewListing}>
       <p>
-        Thank you for sharing with us a new place to list on Tribes. We thrive
-        better as a community and your contribution will help enrich the
-        experience of Tribes members! To get started, please share more about
-        the place.
+        Thank you for sharing with us a new place to list on Tribes. We thrive better as a community
+        and your contribution will help enrich the experience of Tribes members! To get started,
+        please share more about the place.
       </p>
       <Link href="/add-listing/guide">View our listing guidelines</Link>
       <br />
       <Question question="Firstly, tell us. Which category would you like to add?">
-        <ChooseCategory
-          category={category}
-          setCategory={(e) => setCategory(e)}
-        />
+        <ChooseCategory category={category} setCategory={(e) => setCategory(e)} />
       </Question>
       <Question
         show={!!category}
@@ -74,10 +74,10 @@ const AddListingPageOne = (props: AddListingProps) => {
           relationship={relationship}
           listing={listing}
           setListing={(e) => {
-            setListing(e);
-            setRole(undefined);
-            setIsOpen(undefined);
-            setOpenDate(undefined);
+            setListing(e)
+            setRole(undefined)
+            setIsOpen(undefined)
+            setOpenDate(undefined)
           }}
         />
       </Question>
@@ -107,7 +107,7 @@ const AddListingPageOne = (props: AddListingProps) => {
       <Button
         text="Continue"
         size="small"
-        disabled={isContinueBtnDisable}
+        disabled={!isContinueBtnEnable}
         width={270}
         onClick={() => {
           onUpdateFormData({
@@ -117,12 +117,12 @@ const AddListingPageOne = (props: AddListingProps) => {
             role,
             isOpen,
             openDate,
-          });
-          onNextPage();
+          })
+          onNextPage()
         }}
       />
     </SectionLayout>
-  );
-};
+  )
+}
 
-export default AddListingPageOne;
+export default AddListingPageOne
