@@ -37,7 +37,7 @@ export enum ListingHomePageScreens {
   HOME = "home",
   ADD_ITEMS = "add-items",
   ADD_MENU = "add-menu",
-  ADD_DEAL = "add-deal",
+  ADD_DEALS = "add-deals",
 }
 
 export enum InformationList {

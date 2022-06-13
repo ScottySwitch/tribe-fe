@@ -67,7 +67,7 @@ const EditAction = (props: EditActionProps) => {
       apply: () => {},
     },
     {
-      icon: "eat-color",
+      icon: "fork-spoon-color",
       label: "Start order",
       subLabel: "Choose where people can order your food.",
       showModalState: showStartOrder,
@@ -88,7 +88,7 @@ const EditAction = (props: EditActionProps) => {
       apply: () => {},
     },
     {
-      icon: "question",
+      icon: "info-circle-color",
       label: "Learn more",
       subLabel: "Choose a website where people can learn more about what you do",
       showModalState: showLearnMore,
@@ -98,7 +98,7 @@ const EditAction = (props: EditActionProps) => {
       apply: () => {},
     },
     {
-      icon: "play",
+      icon: "video-octagon-color",
       label: "Watch video",
       subLabel: "Choose a website where people can find and watch your video",
       showModalState: showWatchVideo,

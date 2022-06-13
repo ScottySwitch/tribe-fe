@@ -19,6 +19,8 @@
   .tips_button {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
+    
     .tips {
       background-color: $blue-50;
       border-radius: $border-radius;
@@ -27,11 +29,39 @@
   }
 
   .product_container {
-    padding: 10px 20px;
+    padding: 10px;
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
     max-height: 100vh;
     overflow: scroll;
+  }
+}
+
+.manage_deals {
+  padding: 30px;
+
+  .tips_button {
+    gap: 20px;
+    display: flex;
+    justify-content: space-between;
+
+    .tips {
+      background-color: $blue-50;
+      border-radius: $border-radius;
+      padding: 10px 20px;
+    }
+  }
+
+  .name {
+    font-weight: $fw-bold;
+  }
+
+  .description {
+    color: $bg-400;
+  }
+
+  .clicks {
+    font-weight: $fw-bold;
   }
 }

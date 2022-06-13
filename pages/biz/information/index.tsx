@@ -39,6 +39,26 @@ const defaultFormValue = {
       price: "$ 37.35",
     },
   ],
+  activeDeals: [
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+  ],
 }
 const BizInformation = () => {
   const [tier, setTier] = useState<Tiers>(Tiers.BASIC)

@@ -11,10 +11,13 @@
     border-radius: $border-radius;
     box-shadow: $box-shadow;
     overflow: hidden;
+    height: fit-content;
+    width: 70%;
   }
 
   .left_col {
-    width: 30%;
+    width: 25%;
+    min-width: 200px;
     position: sticky;
     top: 120px;
     left: 0;
@@ -46,10 +49,5 @@
       flex-direction: column;
       gap: 30px;
     }
-  }
-
-  .right_col {
-    width: 65%;
-    height: fit-content;
   }
 }

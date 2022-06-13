@@ -99,7 +99,7 @@ const AddListingPageOne = (props: AddListingProps) => {
         </div>
       </Question>
       <Question show={isOpen === YesNo.NO} question="What is open date?">
-        <DatePicker onChange={setOpenDate} value={openDate} />
+        <DatePicker onChange={setOpenDate} value={openDate} prefixIcon />
       </Question>
       <br />
       <br />

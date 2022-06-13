@@ -1,0 +1,9 @@
+@import "styles/variables.scss";
+
+.upload {
+  border: 2px dashed $bg-100;
+  border-radius: $border-radius;
+  width: 100px;
+  height: 100px;
+  margin-top: 10px;
+}

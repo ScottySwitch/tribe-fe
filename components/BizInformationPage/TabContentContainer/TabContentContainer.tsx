@@ -1,5 +1,6 @@
 import { InformationList } from "enums"
 import BusinessInformation from "../TabContent/BusinessInformation"
+import ManageDeals from "../TabContent/ManageDeals"
 import ProductListing from "../TabContent/ProductListing"
 import styles from "./TabContent.module.scss"
 
@@ -21,7 +22,7 @@ const TabContent = ({ selectedTab, submitFormValue, formValue }: any) => {
     case InformationList.PHOTOS_VIDEOS:
       return <div>photo</div>
     case InformationList.MANAGE_DEALS:
-      return <div>deal</div>
+      return <ManageDeals formValue={formValue} submitFormValue={submitFormValue} />
     case InformationList.ANALYTICS:
       return <div>analytics</div>
     case InformationList.CHANGE_ACCOUNT_TIER:

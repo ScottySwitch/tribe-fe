@@ -1,43 +1,30 @@
-import classNames from "classnames";
-import { ReactElement, useState } from "react";
-import styles from "./Popover.module.scss";
+import classNames from "classnames"
+import { ReactElement, useState } from "react"
+import styles from "./Popover.module.scss"
 
 interface PopoverProps {
-  children: ReactElement;
-  content?: ReactElement;
-  position?:
-    | "top"
-    | "bottom"
-    | "top-right"
-    | "top-left"
-    | "bottom-right"
-    | "bottom-left";
+  children: ReactElement
+  content?: ReactElement
+  position?: "top" | "bottom" | "top-right" | "top-left" | "bottom-right" | "bottom-left"
 }
 
 const Popover = (props: PopoverProps) => {
-  const { children, content, position = "bottom-right" } = props;
-  const [isPoppedUp, setIsPoppedUp] = useState(false);
+  const { children, content, position = "bottom-right" } = props
+  const [isPoppedUp, setIsPoppedUp] = useState(false)
 
-  const contentClassName = classNames(styles.content, styles[position], {
+  const contentClassName = classNames(styles.content_container, styles[position], {
     [styles.show]: isPoppedUp,
-  });
+  })
   return (
-    <div
-      className={styles.popover}
-      tabIndex={1}
-      onBlur={() => setIsPoppedUp(false)}
-    >
-      <div
-        onClick={() => setIsPoppedUp(!isPoppedUp)}
-        className={styles.children}
-      >
+    <div className={styles.popover} tabIndex={1} onBlur={() => setIsPoppedUp(false)}>
+      <div onClick={() => setIsPoppedUp(!isPoppedUp)} className={styles.children}>
         {children}
       </div>
       <div className={contentClassName} onClick={() => setIsPoppedUp(false)}>
-        {content}
+        <div className={styles.content}>{content}</div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Popover;
+export default Popover

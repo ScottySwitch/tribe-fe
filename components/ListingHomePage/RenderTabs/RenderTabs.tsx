@@ -1,15 +1,15 @@
-import Button from "components/Button/Button";
-import Icon from "components/Icon/Icon";
-import InforCard from "components/InforCard/InforCard";
-import Input from "components/Input/Input";
-import { eatTabList, productTabList, serviceTabList } from "constant";
-import { Categories, ListingHomePageScreens, ListingTabs } from "enums";
-import Image from "next/image";
-import { useState } from "react";
-import Heading from "../Heading/Heading";
+import Button from "components/Button/Button"
+import Icon from "components/Icon/Icon"
+import InforCard from "components/InforCard/InforCard"
+import Input from "components/Input/Input"
+import { eatTabList, productTabList, serviceTabList } from "constant"
+import { Categories, ListingHomePageScreens, ListingTabs } from "enums"
+import Image from "next/image"
+import { useState } from "react"
+import Heading from "../Heading/Heading"
 
-const ItemCards = ({ itemList }) =>
-  Array.isArray(itemList) ? (
+const Cards = ({ list }) =>
+  Array.isArray(list) ? (
     <div
       style={{
         backgroundColor: "#F6F6F6",
@@ -26,31 +26,32 @@ const ItemCards = ({ itemList }) =>
       <div className="w-full flex justify-center">
         <Input placeholder="search" width="100%" prefix={<Icon icon="search" />} />
       </div>
-      {itemList.map((item) => (
+      {list.map((item) => (
         <InforCard
           key={item.id}
           imgUrl={item.imgUrl || "https://picsum.photos/200/300"}
           title={item.name}
           price={item.price}
-          description={item.description}
+          description={item.description || item.information}
         />
       ))}
     </div>
-  ) : null;
+  ) : null
 
 const RenderTabs = (props: {
-  itemList: any[];
-  category: Categories;
-  onSetScreen: (e: ListingHomePageScreens) => void;
+  itemList: any[]
+  dealList: any[]
+  category: Categories
+  onSetScreen: (e: ListingHomePageScreens) => void
 }) => {
-  const { itemList, category, onSetScreen } = props;
+  const { itemList, dealList, category, onSetScreen } = props
 
   const finalTabs =
     category === Categories.EAT
       ? eatTabList
       : category === Categories.BUY
       ? productTabList
-      : serviceTabList;
+      : serviceTabList
 
   const [selectedTab, setSelectedTab] = useState<ListingTabs>(
     category === Categories.BUY
@@ -58,9 +59,9 @@ const RenderTabs = (props: {
       : category === Categories.EAT
       ? ListingTabs.DISH
       : ListingTabs.SERVICE
-  );
+  )
 
-  let tabContent;
+  let tabContent
   switch (selectedTab) {
     case ListingTabs.SERVICE:
       tabContent = (
@@ -75,12 +76,12 @@ const RenderTabs = (props: {
             onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
           />
         </div>
-      );
-      break;
+      )
+      break
     case ListingTabs.PRODUCT:
       tabContent =
         Array.isArray(itemList) && itemList.length ? (
-          <ItemCards itemList={itemList} />
+          <Cards list={itemList} />
         ) : (
           <div className="flex flex-col items-center justify-center">
             <Image src={require("public/images/no-product.svg")} width={100} alt="" />
@@ -93,8 +94,8 @@ const RenderTabs = (props: {
               onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
             />
           </div>
-        );
-      break;
+        )
+      break
 
     case ListingTabs.DISH:
       tabContent = (
@@ -109,8 +110,8 @@ const RenderTabs = (props: {
             onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
           />
         </div>
-      );
-      break;
+      )
+      break
 
     case ListingTabs.MENU:
       tabContent = (
@@ -125,26 +126,30 @@ const RenderTabs = (props: {
             onClick={() => onSetScreen(ListingHomePageScreens.ADD_MENU)}
           />
         </div>
-      );
-      break;
+      )
+      break
     case ListingTabs.DEAL:
-      tabContent = (
-        <div className="flex flex-col items-center justify-center">
-          <Image src={require("public/images/no-product.svg")} width={100} alt="" />
-          <p>There are no deal yet</p>
-          <Button
-            text="Add Deal now"
-            size="small"
-            width={300}
-            className="my-5"
-            onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEAL)}
-          />
-        </div>
-      );
-      break;
+      tabContent =
+        Array.isArray(dealList) && dealList.length ? (
+          <Cards list={dealList} />
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            <Image src={require("public/images/no-product.svg")} width={100} alt="" />
+            <p>There are no deals yet</p>
+            <Button
+              text="Add deals now"
+              size="small"
+              width={300}
+              className="my-5"
+              onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEALS)}
+            />
+          </div>
+        )
+      break
+      break
 
     default:
-      return null;
+      return null
   }
 
   return (
@@ -161,6 +166,6 @@ const RenderTabs = (props: {
       </div>
       {tabContent}
     </div>
-  );
-};
-export default RenderTabs;
+  )
+}
+export default RenderTabs

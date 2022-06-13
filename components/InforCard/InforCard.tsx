@@ -1,19 +1,20 @@
-import Icon from "components/Icon/Icon";
-import Image from "next/image";
-import styles from "./InforCard.module.scss";
+import Break from "components/Break/Break"
+import Icon from "components/Icon/Icon"
+import Image from "next/image"
+import styles from "./InforCard.module.scss"
 
 export interface InforCardProps {
-  imgUrl: string;
-  title?: string;
-  rate?: number;
-  categories?: string[];
-  tags?: string[];
-  price?: string | number;
-  isVerified?: boolean;
-  rateNumber?: number;
-  followerNumber?: number;
-  description?: string;
-  width?: string | number;
+  imgUrl: string
+  title?: string
+  rate?: number
+  categories?: string[]
+  tags?: string[]
+  price?: string | number
+  isVerified?: boolean
+  rateNumber?: number
+  followerNumber?: number
+  description?: string
+  width?: string | number
 }
 
 const InforCard = (props: InforCardProps) => {
@@ -29,7 +30,7 @@ const InforCard = (props: InforCardProps) => {
     price,
     isVerified,
     width,
-  } = props;
+  } = props
   return (
     <div className={styles.infor_card} style={{ width }}>
       {isVerified && (
@@ -61,10 +62,12 @@ const InforCard = (props: InforCardProps) => {
             ))}
           </div>
         )}
-        <div className={styles.break} />
-        <div className={styles.price}>
-          From <span>{price}</span>
-        </div>
+        {(price || tags) && <Break />}
+        {price && (
+          <div className={styles.price}>
+            From <span>{price}</span>
+          </div>
+        )}
         {Array.isArray(tags) && (
           <div className={styles.tags}>
             {tags.map((tag) => (
@@ -76,7 +79,7 @@ const InforCard = (props: InforCardProps) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default InforCard;
+export default InforCard
