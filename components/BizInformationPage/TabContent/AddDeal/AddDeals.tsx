@@ -5,13 +5,14 @@ import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Upload from "components/Upload/Upload"
 import { ListingHomePageScreens } from "enums"
+import React from "react"
 import { getIndex, randomId } from "utils"
 
 import styles from "./AddDeal.module.scss"
 
 interface AddDealsProps {
   dealList: { [key: string]: any }[]
-  onSetScreen: (e: ListingHomePageScreens) => void
+  onSetScreen?: (e: ListingHomePageScreens) => void
   onSetDealList: (e: any) => void
 }
 
@@ -51,11 +52,11 @@ const AddDeals = (props: AddDealsProps) => {
       text="Cancel"
       width={50}
       size="small"
-      onClick={() => onSetScreen(ListingHomePageScreens.HOME)}
+      onClick={() => onSetScreen?.(ListingHomePageScreens.HOME)}
     />
   )
   return (
-    <div className=" w-full sm:w-3/4 lg:w-1/2">
+    <React.Fragment>
       <Break />
       {Array.isArray(dealList) && dealList.length ? (
         dealList.map((deal) => (
@@ -77,6 +78,7 @@ const AddDeals = (props: AddDealsProps) => {
               onChange={(e: any) => handleChangeDeal(deal.id, "information", e.target.value)}
             />
             <DatePicker
+              value={new Date()}
               onChange={(e: any) => handleChangeDeal(deal.id, "validUntil", e)}
               suffixIcon
               label="Valid until"
@@ -98,10 +100,10 @@ const AddDeals = (props: AddDealsProps) => {
           text="Confirm"
           width={280}
           size="small"
-          onClick={() => onSetScreen(ListingHomePageScreens.HOME)}
+          onClick={() => onSetScreen?.(ListingHomePageScreens.HOME)}
         />
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 

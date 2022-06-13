@@ -26,7 +26,7 @@ const DatePicker = (props: DatePickerProps) => {
     <div className={datepickerClassNames}>
       {label && <label>{label}</label>}
       <div className={styles.input_field}>
-        {prefixIcon && <Icon icon="calendar-2" />}
+        {prefixIcon && <Icon icon="calendar-2" color="#7F859F" />}
         <ReactDatePicker
           className={styles.date_picker}
           dateFormat="dd/MM/yyyy"
@@ -35,7 +35,7 @@ const DatePicker = (props: DatePickerProps) => {
           showPopperArrow={false}
           calendarClassName={styles.calendar}
         />
-        {suffixIcon && <Icon icon="calendar-2" />}
+        {suffixIcon && <Icon icon="calendar-2" color="#7F859F" />}
       </div>
     </div>
   )

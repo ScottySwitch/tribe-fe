@@ -137,7 +137,11 @@ const EditListingHomepage = () => {
       <SectionLayout show={screen === ListingHomePageScreens.ADD_MENU} title="Add a menu">
         <AddMenu onSetScreen={(screen) => setScreen(screen)} />
       </SectionLayout>
-      <SectionLayout show={screen === ListingHomePageScreens.ADD_DEALS} title="Add deals">
+      <SectionLayout
+        show={screen === ListingHomePageScreens.ADD_DEALS}
+        title="Add deals"
+        childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
+      >
         <AddDeals
           onSetDealList={(dealList) => setDealList(dealList)}
           onSetScreen={(screen) => setScreen(screen)}
