@@ -10,6 +10,10 @@ import { Categories, YesNo } from "enums"
 import styles from "styles/AddListing.module.scss"
 import Image from "next/image"
 import { useRouter } from "next/router"
+import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/AddBuyInfor"
+import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
+import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor"
+import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor"
 
 const defaultAddlistingForm: IAddListingForm = {
   category: "",
@@ -98,14 +102,38 @@ const AddListing = () => {
         onUpdateFormData={handleUpdateFormData}
       />
       {/* page three */}
-      <React.Fragment>
+      <div className="page-three">
         <AddEatInfor
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.EAT}
           onPrevPage={handlePrevPage}
           onSubmitFormData={handleSubmitFormData}
         />
-      </React.Fragment>
+        <AddBuyInfor
+          data={formData}
+          show={pageNumber === 3 && formData.category === Categories.BUY}
+          onPrevPage={handlePrevPage}
+          onSubmitFormData={handleSubmitFormData}
+        />
+        <AddSeeAndDoInfor
+          data={formData}
+          show={pageNumber === 3 && formData.category === Categories.SEE}
+          onPrevPage={handlePrevPage}
+          onSubmitFormData={handleSubmitFormData}
+        />
+        <AddStayInfor
+          data={formData}
+          show={pageNumber === 3 && formData.category === Categories.STAY}
+          onPrevPage={handlePrevPage}
+          onSubmitFormData={handleSubmitFormData}
+        />
+        <AddTransportInfor
+          data={formData}
+          show={pageNumber === 3 && formData.category === Categories.TRANSPORT}
+          onPrevPage={handlePrevPage}
+          onSubmitFormData={handleSubmitFormData}
+        />
+      </div>
       <Modal visible={showSubmitResult} width={350} mobilePosition="center">
         <div className="p-5 flex flex-col items-center">
           <Image
