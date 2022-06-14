@@ -1,15 +1,13 @@
 import { useForm } from "react-hook-form"
-import get from "lodash/get"
 import { useState } from "react"
 
 import Badge from "components/Badge/Badge"
 import Button from "components/Button/Button"
-import Radio from "components/Radio/Radio"
 import Input from "components/Input/Input"
 import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Checkbox from "components/Checkbox/Checkbox"
-import Modal from "components/Modal/Modal"
+import Break from "components/Break/Break"
 
 const associatedCategories = [
   { label: "Holiday homes & apartment rentals" },
@@ -57,11 +55,11 @@ interface AddStayInforProps {
   data: { [key: string]: any }
   show?: boolean
   onPrevPage: () => void
-  onSubmitFormData: (data: { [key: string]: any }) => void
+  onPreview: (data: { [key: string]: any }) => void
 }
 
 const AddStayInfor = (props: AddStayInforProps) => {
-  const { data, show, onPrevPage, onSubmitFormData } = props
+  const { data, show, onPrevPage, onPreview } = props
   const [cuisineVisible, setCuisineVisible] = useState(false)
   const [showPreviewModal, setShowPreviewModal] = useState(false)
 
@@ -69,29 +67,21 @@ const AddStayInfor = (props: AddStayInforProps) => {
     defaultValues: {
       categoryKind: data.categoryKind,
       tags: data.tags,
+      currency: data.currency,
       minPrice: data.minPrice,
       maxPrice: data.maxPrice,
-      mealsKind: data.mealsKind,
-      placeGoodFor: data.placeGoodFor,
-      parking: data.parking,
-      atmosphere: data.atmosphere,
-      payment: data.payment,
-      additionalServices: data.additionalServices,
+      foodOptions: data.foodOptions,
+      paryerFacilities: data.paryerFacilities,
+      foodOptionsRamadan: data.foodOptionsRamadan,
+      nonHalalActivities: data.nonHalalActivities,
       agreePolicies: data.agreePolicies,
-      currency: data.currency,
-      openHours: data.openHours,
     },
   })
 
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
 
-  const onSubmit = () => {
-    setShowPreviewModal(true)
-  }
-
-  const handleSubmitFormData = () => {
-    setShowPreviewModal(false)
-    onSubmitFormData({ ...data, ...getValues() })
+  const onSubmit = (data) => {
+    onPreview(data)
   }
 
   if (!show) {
@@ -103,124 +93,142 @@ const AddStayInfor = (props: AddStayInforProps) => {
         title="Add a place to stay"
         subTitle="After you complete this form, you'll be able to make changes before submitting."
       >
-        <Question question="What is the category best associated with this accommodation?">
-          <div className="flex flex-wrap gap-2">
-            {associatedCategories.map((opt) => (
-              <Badge key={opt.label} text={opt.label} />
-            ))}
-          </div>
-          <p>A hotel, motel, or bed and breakfast.</p>
-        </Question>
-
-        <Question
-          question="What type of property best describe this accommodation?"
-          instruction="Select 5 max"
-          optional
-        >
-          <div className="flex flex-wrap gap-2">
-            {areas.map((opt) => (
-              <Badge key={opt.label} text={opt.label} />
-            ))}
-          </div>
-          <br />
-          <Button text="Edit Property" width="fit-content" size="small" />
-        </Question>
-
-        <Question question="What are the opening hours?" optional>
-          <Button text="Add open hour" width="fit-content" size="small" variant="secondary" />
-        </Question>
-
-        <Question question="What tags best describe this place? " optional>
-          <div className="flex flex-col gap-y-5">
-            {accommodation.map((item) => (
-              <Checkbox key={item.label} label={item.label} className="w-1/2" />
-            ))}
-          </div>
-        </Question>
-
-        <Question question="What’s the average price range of this service?" optional>
-          <Input placeholder="Select a currency" />
-          <br />
-          <div className="flex gap-10">
-            <Input placeholder="Minimum price (optional)" />
-            <Input placeholder="Maximum Price (optional)" />
-          </div>
-        </Question>
-
-        <Question question="What are the Halal food options available?" optional>
-          <div className="flex flex-col gap-3">
-            {foodOptions.map((item) => (
-              <Radio key={item.label} label={item.label} />
-            ))}
-          </div>
-        </Question>
-
-        <Question question="What are the prayer facilities available?" optional>
-          <div className="flex flex-col gap-y-5">
-            {prayerFacilities.map((item) => (
-              <Radio key={item.label} label={item.label} />
-            ))}
-          </div>
-        </Question>
-
-        <Question
-          question="What are the Halal food options available?"
-          instruction="Services during Ramadan: "
-          optional
-        >
-          <div className="flex flex-col gap-y-5">
-            {prayerFacilities.map((item) => (
-              <Radio key={item.label} label={item.label} />
-            ))}
-          </div>
-        </Question>
-
-        <Question question="What are the non-Halal activities in the hotel?" optional>
-          <div className="flex flex-col gap-y-5">
-            {nonHalalActivities.map((item) => (
-              <Radio key={item.label} label={item.label} />
-            ))}
-          </div>
-        </Question>
-
-        <Question
-          question="Do you have photos or videos to share?"
-          instruction="Add images/ videos ( up to 3 )"
-          optional
-        ></Question>
-
-        <br />
-        <br />
-        <br />
-        <Radio label="Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image" />
-      </SectionLayout>
-      <Modal
-        visible={showPreviewModal}
-        title="Does everything look correct?"
-        subTitle="Please review this information before submiting!"
-        width={780}
-        mobileFullHeight
-        onClose={() => setShowPreviewModal(false)}
-      >
-        <div className="px-[30px] gap-6 flex flex-col">
-          {previewInfo.map((row) => (
-            <div key={row.question} className="flex gap-20">
-              <div className="flex flex-wrap w-3/5">{row.question}</div>
-              <div className="w-2/5">{get({ ...data, ...getValues() }, row.value) || ""}</div>
+        <Break />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Question question="What is the category best associated with this accommodation?">
+            <div className="flex flex-wrap gap-2">
+              {associatedCategories.map((opt) => (
+                <Badge
+                  key={opt.label}
+                  text={opt.label}
+                  selected={categoryKind === opt.label}
+                  onClick={() => {
+                    setValue("categoryKind", opt.label)
+                    setCategoryKind(opt.label)
+                  }}
+                />
+              ))}
             </div>
-          ))}
-          <div className="flex justify-end px-[30px] py-3">
-            <Button
-              text="Cancel"
-              size="small"
-              variant="underlined"
-              width="fit-content"
-              onClick={() => setShowPreviewModal(false)}
-            />
-            <Button text="Continue" size="small" width={270} onClick={handleSubmitFormData} />
+            <p>A hotel, motel, or bed and breakfast.</p>
+          </Question>
+          <Question
+            question="What type of property best describe this accommodation?"
+            instruction="Select 5 max"
+            optional
+          >
+            <div className="flex flex-wrap gap-2">
+              {areas.map((opt) => (
+                <Badge key={opt.label} text={opt.label} />
+              ))}
+            </div>
+            <br />
+            <Button text="Edit Property" width="fit-content" size="small" />
+          </Question>
+          <Question question="What are the opening hours?" optional>
+            <Button text="Add open hour" width="fit-content" size="small" variant="secondary" />
+          </Question>
+          <Question question="What tags best describe this place? " optional>
+            <div className="flex flex-col gap-y-5">
+              {accommodation.map((item) => (
+                <Checkbox
+                  key={item.label}
+                  label={item.label}
+                  className="w-1/2"
+                  value={item.label}
+                  register={register("tags")}
+                />
+              ))}
+            </div>
+          </Question>
+          <Question question="What’s the average price range of this service?" optional>
+            <Input placeholder="Select a currency" register={register("currency")} />
+            <br />
+            <div className="flex gap-10">
+              <Input
+                placeholder="Minimum price (optional)"
+                className="w-full sm:w-1/2"
+                register={register("minPrice")}
+              />
+              <Input
+                placeholder="Maximum Price (optional)"
+                className="w-full sm:w-1/2"
+                register={register("maxPrice")}
+              />
+            </div>
+          </Question>
+          <Question question="What are the Halal food options available?" optional>
+            <div className="flex flex-col gap-3">
+              {foodOptions.map((item) => (
+                <Checkbox
+                  key={item.label}
+                  label={item.label}
+                  value={item.label}
+                  className="w-full sm:w-1/2"
+                  register={register("foodOptions")}
+                />
+              ))}
+            </div>
+          </Question>
+          <Question question="What are the prayer facilities available?" optional>
+            <div className="flex flex-col gap-y-5">
+              {prayerFacilities.map((item) => (
+                <Checkbox
+                  key={item.label}
+                  label={item.label}
+                  value={item.label}
+                  className="w-full sm:w-1/2"
+                  register={register("paryerFacilities")}
+                />
+              ))}
+            </div>
+          </Question>
+          <Question
+            question="What are the Halal food options available?"
+            instruction="Services during Ramadan: "
+            optional
+          >
+            <div className="flex flex-col gap-y-5">
+              {prayerFacilities.map((item) => (
+                <Checkbox
+                  key={item.label}
+                  label={item.label}
+                  value={item.label}
+                  className="w-full sm:w-1/2"
+                  register={register("foodOptionsRamadan")}
+                />
+              ))}
+            </div>
+          </Question>
+          <Question question="What are the non-Halal activities in the hotel?" optional>
+            <div className="flex flex-col gap-y-5">
+              {nonHalalActivities.map((item) => (
+                <Checkbox
+                  key={item.label}
+                  label={item.label}
+                  value={item.label}
+                  className="w-full sm:w-1/2"
+                  register={register("nonHalalActivities")}
+                />
+              ))}
+            </div>
+          </Question>
+          <Question
+            question="Do you have photos or videos to share?"
+            instruction="Add images/ videos ( up to 3 )"
+            optional
+          ></Question>
+          <br /> <Break /> <br />
+          <Checkbox
+            register={register("agreePolicies")}
+            label="Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+          />
+          <br /> <br /> <br />
+          <div className="flex items-end gap-3 sm:gap-10text-sm">
+            <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
+            <Button text="Continue" size="small" width={270} type="submit" />
           </div>
-        </div>
-      </Modal>
+        </form>
+      </SectionLayout>
     </>
   )
 }

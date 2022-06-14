@@ -3,7 +3,7 @@ export enum Categories {
   EAT = "eat",
   STAY = "stay",
   TRANSPORT = "transport",
-  SEE = "see",
+  SEE_AND_DO = "see-and-do",
   OTHER = "other",
 }
 

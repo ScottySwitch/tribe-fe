@@ -21,18 +21,20 @@ import {
   paymentMethods,
   placeGoodFor,
 } from "../constant"
+import Break from "components/Break/Break"
+import Upload from "components/Upload/Upload"
+import Icon from "components/Icon/Icon"
 
 interface AddEatInforProps {
   data: { [key: string]: any }
   show?: boolean
   onPrevPage: () => void
-  onSubmitFormData: (data: { [key: string]: any }) => void
+  onPreview: (data: { [key: string]: any }) => void
 }
 
 const AddEatInfor = (props: AddEatInforProps) => {
-  const { data, show, onPrevPage, onSubmitFormData } = props
+  const { data, show, onPrevPage, onPreview } = props
   const [cuisineVisible, setCuisineVisible] = useState(false)
-  const [showPreviewModal, setShowPreviewModal] = useState(false)
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -54,13 +56,8 @@ const AddEatInfor = (props: AddEatInforProps) => {
 
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
 
-  const onSubmit = () => {
-    setShowPreviewModal(true)
-  }
-
-  const handleSubmitFormData = () => {
-    setShowPreviewModal(false)
-    onSubmitFormData({ ...data, ...getValues() })
+  const onSubmit = (data) => {
+    onPreview(data)
   }
 
   if (!show) {
@@ -74,6 +71,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
         subTitle="After you complete this form, you will be able to make changes before
           submitting."
       >
+        <Break />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question question="What is the category best associated with this place?">
             <div className="flex flex-wrap gap-2">
@@ -136,7 +134,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
           <Question question="What kind of meals does this place serve?" optional>
             <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
               {mealOptions.map((item) => (
-                <Radio
+                <Checkbox
                   key={item.label}
                   label={item.label}
                   value={item.label}
@@ -217,15 +215,14 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="Do you have photos or videos to share? " optional>
-            <br /> <br /> <br />
+            <Upload type="media" centerIcon={<Icon icon="plus" size={20} />} />
           </Question>
+          <br /> <br /> <br />
           <Checkbox
-            // name="agreePolicies"
-            value="on"
             register={register("agreePolicies")}
             label="Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
           />
-          <br /> <br /> <br />
+          <br /> <Break /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
             <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
             <Button text="Continue" size="small" width={270} type="submit" />
@@ -260,33 +257,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
             width={270}
             onClick={() => setCuisineVisible(true)}
           />
-        </div>
-      </Modal>
-      <Modal
-        visible={showPreviewModal}
-        title="Does everything look correct?"
-        subTitle="Please review this information before submiting!"
-        width={780}
-        mobileFullHeight
-        onClose={() => setShowPreviewModal(false)}
-      >
-        <div className="px-[30px] gap-6 flex flex-col">
-          {previewInfo.map((row) => (
-            <div key={row.question} className="flex gap-20">
-              <div className="flex flex-wrap w-3/5">{row.question}</div>
-              <div className="w-2/5">{get({ ...data, ...getValues() }, row.value) || ""}</div>
-            </div>
-          ))}
-          <div className="flex justify-end px-[30px] py-3">
-            <Button
-              text="Cancel"
-              size="small"
-              variant="underlined"
-              width="fit-content"
-              onClick={() => setShowPreviewModal(false)}
-            />
-            <Button text="Continue" size="small" width={270} onClick={handleSubmitFormData} />
-          </div>
         </div>
       </Modal>
     </>

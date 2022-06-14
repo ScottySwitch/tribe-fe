@@ -9,6 +9,7 @@ import { Categories, YesNo } from "enums"
 
 import styles from "styles/AddListing.module.scss"
 import Image from "next/image"
+import get from "lodash/get"
 import { useRouter } from "next/router"
 import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/AddBuyInfor"
 import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
@@ -35,9 +36,25 @@ const defaultAddlistingForm: IAddListingForm = {
   currency: "",
   minPrice: "",
   maxPrice: "",
+  categoryKind: "",
+  agreePolicies: "",
+  openHours: "",
+
+  tags: [""],
+  mealsKind: [""],
+  placeGoodFor: [""],
+  parking: [""],
+  atmosphere: [""],
+  payment: [""],
+  additionalServices: [""],
+  foodOptions: [""],
+  paryerFacilities: [""],
+  foodOptionsRamadan: [""],
+  nonHalalActivities: [""],
 }
 export interface IAddListingForm {
   category: string
+  categoryKind: string
   relationship: string
   listing: string
   role: string
@@ -56,14 +73,35 @@ export interface IAddListingForm {
   currency: string
   minPrice: string
   maxPrice: string
+
+  foodOptions?: any[]
+  paryerFacilities?: any[]
+  foodOptionsRamadan?: any[]
+  nonHalalActivities?: any[]
+
+  tags?: any[]
+  mealsKind?: any[]
+  openHours?: {}
+  payment?: any[]
+  additionalServices?: any[]
+  media?: any[]
+  agreePolicies: string
+  placeGoodFor?: any[]
+  atmosphere?: any[]
+  parking?: any[]
 }
 
 const AddListing = () => {
   const [pageNumber, setPageNumber] = useState(1)
   const [formData, setFormData] = useState(defaultAddlistingForm)
+  const [showPreviewModal, setShowPreviewModal] = useState(false)
   const [showSubmitResult, setShowSubmitResult] = useState(false)
 
   const router = useRouter()
+
+  useEffect(() => {
+    //call api
+  }, [])
 
   const handlePrevPage = () => {
     setPageNumber(pageNumber - 1)
@@ -76,6 +114,7 @@ const AddListing = () => {
   const handleUpdateFormData = (data) => {
     setFormData({ ...formData, ...data })
   }
+
   const handleSubmitFormData = (data) => {
     ///do CRUD things here
     console.log("data", data)
@@ -85,6 +124,11 @@ const AddListing = () => {
     } else {
       router.push(`/add-listing/claim/${random}`)
     }
+  }
+
+  const handlePreview = (data) => {
+    setFormData({ ...formData, ...data })
+    setShowPreviewModal(true)
   }
 
   return (
@@ -107,33 +151,62 @@ const AddListing = () => {
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.EAT}
           onPrevPage={handlePrevPage}
-          onSubmitFormData={handleSubmitFormData}
+          onPreview={handlePreview}
         />
         <AddBuyInfor
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.BUY}
           onPrevPage={handlePrevPage}
-          onSubmitFormData={handleSubmitFormData}
+          onPreview={handlePreview}
         />
         <AddSeeAndDoInfor
           data={formData}
-          show={pageNumber === 3 && formData.category === Categories.SEE}
+          show={pageNumber === 3 && formData.category === Categories.SEE_AND_DO}
           onPrevPage={handlePrevPage}
-          onSubmitFormData={handleSubmitFormData}
+          onPreview={handlePreview}
         />
         <AddStayInfor
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.STAY}
           onPrevPage={handlePrevPage}
-          onSubmitFormData={handleSubmitFormData}
+          onPreview={handlePreview}
         />
         <AddTransportInfor
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.TRANSPORT}
           onPrevPage={handlePrevPage}
-          onSubmitFormData={handleSubmitFormData}
+          onPreview={handlePreview}
         />
       </div>
+      <Modal
+        visible={showPreviewModal}
+        title="Does everything look correct?"
+        subTitle="Please review this information before submiting!"
+        width={780}
+        mobileFullHeight
+        onClose={() => setShowPreviewModal(false)}
+      >
+        <div className="px-[30px] gap-6 flex flex-col">
+          {previewInfo.map((row) => (
+            <div key={row.question} className="flex gap-20">
+              <div className="flex flex-wrap w-3/5">{row.question}</div>
+              {get(formData, row.value) && (
+                <div className="w-2/5">{get(formData, row.value) || ""}</div>
+              )}
+            </div>
+          ))}
+          <div className="flex justify-end px-[30px] py-3">
+            <Button
+              text="Cancel"
+              size="small"
+              variant="underlined"
+              width="fit-content"
+              onClick={() => setShowPreviewModal(false)}
+            />
+            <Button text="Continue" size="small" width={270} onClick={handleSubmitFormData} />
+          </div>
+        </div>
+      </Modal>
       <Modal visible={showSubmitResult} width={350} mobilePosition="center">
         <div className="p-5 flex flex-col items-center">
           <Image
@@ -158,5 +231,33 @@ const AddListing = () => {
     </div>
   )
 }
+
+const previewInfo = [
+  { question: "What kind of place is this?", value: "categoryKind" },
+  {
+    question:
+      "Are you affiliated with this place as an owner, employee, or official representative?",
+    value: "relationship",
+  },
+  {
+    question: "Does this place already have a listing on Tribes?",
+    value: "listing",
+  },
+  { question: "What is your role at this business?", value: "role.label" },
+  { question: "Is this place currently open?", value: "isOpen" },
+  { question: "Official place name", value: "businessName" },
+  { question: "Description of your property:", value: "description" },
+  { question: "City/Town, State/Province/Region", value: "city" },
+  { question: "Country", value: "country" },
+  { question: "Street address ", value: "address" },
+  { question: "Additional address information", value: "additionalAddress" },
+  { question: "Social Media", value: "socialMedia" },
+  { question: "What is the category that best fits this place?", value: "" },
+  { question: "What type of cuisine does this place serve?", value: "" },
+  { question: "Open hours", value: "openHours" },
+  { question: "Select a currency", value: "currency" },
+  { question: "Max price", value: "maxPrice" },
+  { question: "Min price", value: "minPrice" },
+]
 
 export default AddListing

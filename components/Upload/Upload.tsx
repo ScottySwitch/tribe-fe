@@ -1,17 +1,17 @@
-import classNames from "classnames";
-import Icon from "components/Icon/Icon";
-import Image from "next/image";
-import React, { ReactNode, useState } from "react";
-import styles from "./Upload.module.scss";
+import classNames from "classnames"
+import Icon from "components/Icon/Icon"
+import Image from "next/image"
+import React, { ReactNode, useState } from "react"
+import styles from "./Upload.module.scss"
 
 export interface UploadProps {
-  name: string;
-  onChange?: (event: string[]) => void;
-  accept: string;
-  fileList: any[];
-  className?: string;
-  centerIcon?: ReactNode;
-  type?: "avatar" | "cover" | "upload";
+  name: string
+  onChange?: (event: string[]) => void
+  accept: string
+  fileList: any[]
+  className?: string
+  centerIcon?: ReactNode
+  type?: "avatar" | "cover" | "upload" | "media"
 }
 
 const Upload = (props: any) => {
@@ -26,25 +26,26 @@ const Upload = (props: any) => {
     accept = "image/*",
     fileList = [],
     type = "upload",
-  } = props;
+  } = props
 
-  const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : [];
-  const initFileList = multiple ? fileList : lastItemArray;
+  const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : []
+  const initFileList = multiple ? fileList : lastItemArray
 
-  const [srcList, setSrcList] = useState<string[]>(initFileList);
+  const [srcList, setSrcList] = useState<string[]>(initFileList)
 
   const handleChange = (event: any) => {
-    const src = URL.createObjectURL(event.target.files[0]);
-    const newFileList = multiple ? [...srcList, src] : [src];
-    setSrcList(newFileList);
-  };
+    const src = URL.createObjectURL(event.target.files[0])
+    const newFileList = multiple ? [...srcList, src] : [src]
+    setSrcList(newFileList)
+  }
 
-  const showInput = (!multiple && !srcList?.length) || multiple;
+  const showInput = (!multiple && !srcList?.length) || multiple
 
   const containerClassName = classNames(styles.upload, className, {
     [styles.avatar]: type === "avatar",
     [styles.cover]: type === "cover",
-  });
+    [styles.media]: type === "media",
+  })
 
   const Input = () => (
     <React.Fragment>
@@ -58,7 +59,7 @@ const Upload = (props: any) => {
         multiple={multiple}
       />
     </React.Fragment>
-  );
+  )
 
   return (
     <div className={containerClassName}>
@@ -77,7 +78,7 @@ const Upload = (props: any) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Upload;
+export default Upload
