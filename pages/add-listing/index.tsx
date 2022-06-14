@@ -41,7 +41,7 @@ const defaultAddlistingForm: IAddListingForm = {
   categoryKind: "",
   agreePolicies: "",
   openingHours: [
-    { name: "Monday", twentyFourHours: true, openingHours: [] },
+    { name: "Monday", twentyFourHours: false, openingHours: [] },
     { name: "Tuesday", twentyFourHours: false, openingHours: [] },
     {
       name: "Wednesday",
@@ -114,7 +114,7 @@ export interface IAddListingForm {
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(3)
+  const [pageNumber, setPageNumber] = useState(1)
   const [formData, setFormData] = useState(defaultAddlistingForm)
   const [showPreviewModal, setShowPreviewModal] = useState(false)
   const [showSubmitResult, setShowSubmitResult] = useState(false)

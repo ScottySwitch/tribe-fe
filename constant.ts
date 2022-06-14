@@ -186,7 +186,7 @@ export const categories = [
     width: "w-[70px]",
     icon: "camera-color",
     label: "See & Do",
-    value: Categories.SEE,
+    value: Categories.SEE_AND_DO,
     options: [
       { label: "Coffee & Tea", value: "coffee-tea" },
       { label: "Restaurant", value: "restaurant" },

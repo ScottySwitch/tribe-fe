@@ -1,14 +1,15 @@
-import Link from "next/link";
-import { MouseEventHandler, useState } from "react";
-import classNames from "classnames";
+import Link from "next/link"
+import { MouseEventHandler, useState } from "react"
+import classNames from "classnames"
 
-import Button from "components/Button/Button";
-import Checkbox from "components/Checkbox/Checkbox";
-import Icon from "components/Icon/Icon";
-import Input from "components/Input/Input";
-import Modal, { ModalHeader } from "components/Modal/Modal";
+import Button from "components/Button/Button"
+import Checkbox from "components/Checkbox/Checkbox"
+import Icon from "components/Icon/Icon"
+import Input from "components/Input/Input"
+import Modal, { ModalHeader } from "components/Modal/Modal"
 
-import styles from "styles/Auth.module.scss";
+import styles from "styles/Auth.module.scss"
+import { useRouter } from "next/router"
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -16,27 +17,28 @@ export enum LoginMethod {
 }
 
 const PasswordEye = (props: { onClick: MouseEventHandler<HTMLDivElement> }) => {
-  const { onClick } = props;
+  const { onClick } = props
   return (
     <div style={{ cursor: "pointer" }} onClick={onClick}>
       <Icon icon="eye" size={20} color="#A4A8B7" />
     </div>
-  );
-};
+  )
+}
 
 const tabList = [
   { label: "Phone number", value: LoginMethod.PHONE_NUMBER },
   { label: "Email", value: LoginMethod.EMAIL },
-];
+]
 
 const LoginPage = () => {
-  const [method, setMethod] = useState(LoginMethod.EMAIL);
-  const [showPassword, setShowPassword] = useState(false);
-
+  const [method, setMethod] = useState(LoginMethod.EMAIL)
+  const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter()
+  
   const handleLogin = () => {
-    localStorage.setItem("access_token", "something");
-    window.location.href = "/";
-  };
+    localStorage.setItem("access_token", "something")
+    window.location.href = "/"
+  }
 
   return (
     <div className={styles.auth}>
@@ -46,16 +48,12 @@ const LoginPage = () => {
           {tabList.map((tab) => {
             const tabClassNames = classNames(styles.tab, {
               [styles.selected]: method === tab.value,
-            });
+            })
             return (
-              <div
-                key={tab.value}
-                onClick={() => setMethod(tab.value)}
-                className={tabClassNames}
-              >
+              <div key={tab.value} onClick={() => setMethod(tab.value)} className={tabClassNames}>
                 {tab.label}
               </div>
-            );
+            )
           })}
         </div>
         <div className={styles.body}>
@@ -68,13 +66,15 @@ const LoginPage = () => {
             size="large"
             placeholder="Password"
             type={showPassword ? "default" : "password"}
-            suffix={
-              <PasswordEye onClick={() => setShowPassword(!showPassword)} />
-            }
+            suffix={<PasswordEye onClick={() => setShowPassword(!showPassword)} />}
           />
           <div className={styles.actions}>
-            <Checkbox label="Remember me" />
-            <Link href="/forgot-password">Forgot password?</Link>
+            <div style={{ width: "150px" }}>
+              <Checkbox label="Remember me" />
+            </div>
+            <Link href="/forgot-password" passHref>
+              Forgot password?
+            </Link>
           </div>
           <div className={styles.break}>
             <span>Or log in with</span>
@@ -82,7 +82,6 @@ const LoginPage = () => {
           <div className={styles.socials}>
             <Icon icon="google-logo" size={20} className={styles.icon} />
             <Icon icon="facebook-color" size={20} className={styles.icon} />
-            <Icon icon="instagram-color" size={20} className={styles.icon} />
           </div>
           <Button text="Log in" onClick={handleLogin} />
           <div className={styles.sign_up}>
@@ -92,13 +91,13 @@ const LoginPage = () => {
             </span>
           </div>
         </div>
-        <div className={styles.footer}>
+        <div className={styles.footer} onClick={() => router.push("/add-listing/claim-free")}>
           <Icon icon="business" size={20} />
-          <div>Login / Sign up for Business</div>
+          <div>Grow your business with Tribes now! </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

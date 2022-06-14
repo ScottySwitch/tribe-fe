@@ -1,31 +1,32 @@
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import Image from "next/image";
-import classNames from "classnames";
+import { useRouter } from "next/router"
+import React, { FormEvent, useState } from "react"
+import Image from "next/image"
+import classNames from "classnames"
 
-import Upload from "components/Upload/Upload";
-import Button from "components/Button/Button";
-import Input from "components/Input/Input";
-import Modal, { ModalHeader } from "components/Modal/Modal";
-import Radio from "components/Radio/Radio";
-import Select from "components/Select/Select";
-import { interestingList } from "constant";
+import Upload from "components/Upload/Upload"
+import Button from "components/Button/Button"
+import Input from "components/Input/Input"
+import Modal, { ModalHeader } from "components/Modal/Modal"
+import Radio from "components/Radio/Radio"
+import Select from "components/Select/Select"
+import { interestingList } from "constant"
 
-import styles from "styles/Auth.module.scss";
+import styles from "styles/Auth.module.scss"
+import DatePicker from "components/DatePicker/DatePicker"
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
   STEP_TWO = "step_two",
 }
 
-const StepOne = ({ setStep }: { setStep: Function }) => {
-  const router = useRouter();
+const StepOne = ({ onNextStep }: { onNextStep: (e: FormEvent<HTMLFormElement>) => void }) => {
+  const router = useRouter()
   return (
     <div>
       <ModalHeader alignTitle="center">
         <div>Almost there... set up your profile</div>
       </ModalHeader>
-      <div className={styles.body}>
+      <form className={styles.body} onSubmit={onNextStep}>
         <div className={styles.profile_imgs}>
           <Upload
             type="cover"
@@ -48,32 +49,26 @@ const StepOne = ({ setStep }: { setStep: Function }) => {
             <Radio label="Others" name="gender" />
           </div>
         </div>
-        <Input placeholder="Birthday" />
+        <DatePicker placeholder="Birthday" name="birthday" />
         <Select placeholder="Education level" />
         <Select placeholder="Industry" />
         <div className={styles.actions}>
-          <div
-            className={styles.skip}
-            onClick={() => router.push("/signup/setup-profile")}
-          >
+          <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
             Skip
           </div>
-          <Button
-            className="w-1/2"
-            text="Next"
-            onClick={() => {
-              setStep(ProfileSteps.STEP_TWO);
-            }}
-          />
+          <Button className="w-1/2" text="Next" type="submit" />
         </div>
-      </div>
+      </form>
     </div>
-  );
-};
+  )
+}
 
-const StepTwo = () => {
-  const [interest, setInterest] = useState<string[]>([]);
-  const router = useRouter();
+const StepTwo = ({ onSubmit }: any) => {
+  const [interest, setInterest] = useState<string[]>([])
+  const router = useRouter()
+  const handleSubmit = () => {
+    onSubmit(interest)
+  }
   return (
     <div>
       <ModalHeader alignTitle="left">
@@ -84,8 +79,8 @@ const StepTwo = () => {
       </ModalHeader>
       <div className={styles.body}>
         <p>
-          We would love to recommend categories and content especially for you!
-          You can choose more than 1.
+          We would love to recommend categories and content especially for you! You can choose more
+          than 1.
         </p>
         <p>
           Selected: {interest?.length} / {interestingList.length}
@@ -94,7 +89,7 @@ const StepTwo = () => {
           {interestingList.map((item: any) => {
             const itemClass = classNames(styles.interesting_item, {
               [styles.selected]: interest.includes(item.label),
-            });
+            })
             return (
               <div
                 key={item.value}
@@ -102,53 +97,52 @@ const StepTwo = () => {
                 onClick={() => setInterest([...interest, item.label])}
               >
                 <div className={styles.avatar}>
-                  <Image
-                    src={item.avatar}
-                    alt=""
-                    layout="fixed"
-                    width={50}
-                    height={50}
-                  />
+                  <Image src={item.avatar} alt="" layout="fixed" width={50} height={50} />
                 </div>
                 <div>{item.label}</div>
               </div>
-            );
+            )
           })}
         </div>
         <div className={styles.actions}>
-          <div
-            className={styles.skip}
-            onClick={() => router.push("/signup/setup-profile")}
-          >
+          <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
             Skip
           </div>
-          <Button
-            className="w-1/2"
-            text="Next"
-            onClick={() => {
-              router.push("/");
-            }}
-          />
+          <Button className="w-1/2" text="Next" onClick={handleSubmit} />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const SetupProfilePage = () => {
-  const [step, setStep] = useState(ProfileSteps.STEP_ONE);
+  const [step, setStep] = useState(ProfileSteps.STEP_ONE)
+  const [formData, setFormData] = useState({})
+
+  const router = useRouter()
+
+  const handleNextStep = (data) => {
+    setFormData({ ...formData, ...data })
+    console.log({ ...formData, ...data })
+    setStep(ProfileSteps.STEP_TWO)
+  }
+
+  const handleSubmit = (form) => {
+    console.log({ ...formData, ...form })
+    router.push("/login")
+  }
 
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
         {step === ProfileSteps.STEP_ONE ? (
-          <StepOne setStep={() => setStep(ProfileSteps.STEP_TWO)} />
+          <StepOne onNextStep={handleNextStep} />
         ) : (
-          <StepTwo />
+          <StepTwo onSubmit={handleSubmit} />
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SetupProfilePage;
+export default SetupProfilePage

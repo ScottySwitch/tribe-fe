@@ -1,39 +1,61 @@
-import Link from "next/link";
-import { MouseEventHandler, useState } from "react";
-import classNames from "classnames";
+import Link from "next/link"
+import { MouseEventHandler, useState } from "react"
+import classNames from "classnames"
 
-import Button from "components/Button/Button";
-import Checkbox from "components/Checkbox/Checkbox";
-import Icon from "components/Icon/Icon";
-import Input from "components/Input/Input";
-import Modal, { ModalHeader } from "components/Modal/Modal";
+import Button from "components/Button/Button"
+import Checkbox from "components/Checkbox/Checkbox"
+import Icon from "components/Icon/Icon"
+import Input from "components/Input/Input"
+import Modal, { ModalHeader } from "components/Modal/Modal"
 
-import styles from "styles/Auth.module.scss";
-import { useRouter } from "next/router";
+import styles from "styles/Auth.module.scss"
+import { useRouter } from "next/router"
 
 export enum LoginMethod {
-  PHONE_NUMBER = "phone-number",
+  PHONE = "phone",
   EMAIL = "email",
 }
 
 const PasswordEye = (props: { onClick: MouseEventHandler<HTMLDivElement> }) => {
-  const { onClick } = props;
+  const { onClick } = props
   return (
     <div style={{ cursor: "pointer" }} onClick={onClick}>
       <Icon icon="eye" size={20} color="#A4A8B7" />
     </div>
-  );
-};
+  )
+}
 
 const tabList = [
-  { label: "Phone number", value: LoginMethod.PHONE_NUMBER },
+  { label: "Phone number", value: LoginMethod.PHONE },
   { label: "Email address", value: LoginMethod.EMAIL },
-];
+]
 
 const SignupPage = () => {
-  const [method, setMethod] = useState(LoginMethod.EMAIL);
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
+  const [method, setMethod] = useState(LoginMethod.EMAIL)
+  const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter()
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault()
+    const otpReceiver =
+      method === LoginMethod.EMAIL ? event.target.email.value : event.target.phone.value
+    const formData = {
+      method: method,
+      [method]: otpReceiver,
+      receive_promotions: event.target.receive_promotions.value,
+      agree_policies: event.target.agree_policies.value,
+    }
+    console.log(formData)
+    //do submit things
+    router.push({
+      pathname: "/signup/otp",
+      //help otp page detect method and otp receiver
+      query: {
+        method: method,
+        otpReceiver: otpReceiver,
+      },
+    })
+  }
 
   return (
     <div className={styles.auth}>
@@ -43,57 +65,54 @@ const SignupPage = () => {
           {tabList.map((tab) => {
             const tabClassNames = classNames(styles.tab, {
               [styles.selected]: method === tab.value,
-            });
+            })
             return (
-              <div
-                key={tab.value}
-                onClick={() => setMethod(tab.value)}
-                className={tabClassNames}
-              >
+              <div key={tab.value} onClick={() => setMethod(tab.value)} className={tabClassNames}>
                 {tab.label}
               </div>
-            );
+            )
           })}
         </div>
-        <div className={styles.body}>
-          {method === LoginMethod.PHONE_NUMBER ? (
-            <Input size="large" placeholder="Phone number" />
+        <form onSubmit={handleSubmit} className={styles.body}>
+          {method === LoginMethod.PHONE ? (
+            <Input size="large" placeholder="Phone number" name="phone" />
           ) : (
-            <Input label="Email" placeholder="Your email" />
+            <Input label="Email" placeholder="Your email" name="email" />
           )}
           <Input
             size="large"
             placeholder="Password"
             type={showPassword ? "default" : "password"}
-            suffix={
-              <PasswordEye onClick={() => setShowPassword(!showPassword)} />
-            }
+            suffix={<PasswordEye onClick={() => setShowPassword(!showPassword)} />}
+            name="password"
           />
-          <Checkbox label="I have read and agree to the T&C of Tribes" />
-          <Checkbox label="I would like to recieve offers, promotion and other informations" />
+          <Checkbox label="I have read and agree to the T&C of Tribes" name="agree_policies" />
+          <Checkbox
+            label="I would like to recieve offers, promotion and other informations"
+            name="receive_promotions"
+          />
           <div className={styles.break}>
             <span>Or log in with</span>
           </div>
           <div className={styles.socials}>
             <Icon icon="google-logo" size={20} className={styles.icon} />
             <Icon icon="facebook-color" size={20} className={styles.icon} />
-            <Icon icon="instagram-color" size={20} className={styles.icon} />
           </div>
-          <Button text="Sign up" onClick={() => router.push("/signup/otp")} />
+          <Button text="Sign up" type="submit" />
           <div className={styles.sign_up}>
             Already have account?
             <span>
               <Link href="/login"> Log in now</Link>
             </span>
           </div>
-        </div>
-        <div className={styles.footer}>
+        </form>
+        <div className={styles.footer} onClick={() => router.push("/add-listing/claim-free")}>
           <Icon icon="business" size={20} />
-          <div>Login / Sign up for Business</div>
+          <div>Grow your business with Tribes now! </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignupPage;
+export default SignupPage
