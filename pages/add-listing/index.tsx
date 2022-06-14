@@ -15,6 +15,8 @@ import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/A
 import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
 import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor"
 import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor"
+import { categories } from "constant"
+import { IOpeningHours } from "components/OpeningHours/OpeningHours"
 
 const defaultAddlistingForm: IAddListingForm = {
   category: "",
@@ -38,7 +40,27 @@ const defaultAddlistingForm: IAddListingForm = {
   maxPrice: "",
   categoryKind: "",
   agreePolicies: "",
-  openHours: "",
+  openingHours: [
+    { name: "Monday", twentyFourHours: true, openingHours: [] },
+    { name: "Tuesday", twentyFourHours: false, openingHours: [] },
+    {
+      name: "Wednesday",
+      twentyFourHours: false,
+      openingHours: [],
+    },
+    {
+      name: "Thursday",
+      twentyFourHours: false,
+      openingHours: [],
+    },
+    { name: "Friday", twentyFourHours: false, openingHours: [] },
+    {
+      name: "Saturday",
+      twentyFourHours: true,
+      openingHours: [],
+    },
+    { name: "Sunday", twentyFourHours: false, openingHours: [] },
+  ],
 
   tags: [""],
   mealsKind: [""],
@@ -81,7 +103,7 @@ export interface IAddListingForm {
 
   tags?: any[]
   mealsKind?: any[]
-  openHours?: {}
+  openingHours?: IOpeningHours
   payment?: any[]
   additionalServices?: any[]
   media?: any[]
@@ -92,7 +114,7 @@ export interface IAddListingForm {
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(1)
+  const [pageNumber, setPageNumber] = useState(3)
   const [formData, setFormData] = useState(defaultAddlistingForm)
   const [showPreviewModal, setShowPreviewModal] = useState(false)
   const [showSubmitResult, setShowSubmitResult] = useState(false)
@@ -147,15 +169,15 @@ const AddListing = () => {
       />
       {/* page three */}
       <div className="page-three">
-        <AddEatInfor
-          data={formData}
-          show={pageNumber === 3 && formData.category === Categories.EAT}
-          onPrevPage={handlePrevPage}
-          onPreview={handlePreview}
-        />
         <AddBuyInfor
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.BUY}
+          onPrevPage={handlePrevPage}
+          onPreview={handlePreview}
+        />
+        <AddEatInfor
+          data={formData}
+          show={pageNumber === 3 && formData.category === Categories.EAT}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />

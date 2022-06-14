@@ -8,6 +8,8 @@ import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Checkbox from "components/Checkbox/Checkbox"
 import Break from "components/Break/Break"
+import Modal from "components/Modal/Modal"
+import OpeningHours from "components/OpeningHours/OpeningHours"
 
 const associatedCategories = [
   { label: "Holiday homes & apartment rentals" },
@@ -61,7 +63,7 @@ interface AddStayInforProps {
 const AddStayInfor = (props: AddStayInforProps) => {
   const { data, show, onPrevPage, onPreview } = props
   const [cuisineVisible, setCuisineVisible] = useState(false)
-  const [showPreviewModal, setShowPreviewModal] = useState(false)
+  const [showOpeningHoursModal, setShowOpeningHoursModal] = useState(false)
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -75,6 +77,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
       foodOptionsRamadan: data.foodOptionsRamadan,
       nonHalalActivities: data.nonHalalActivities,
       agreePolicies: data.agreePolicies,
+      openingHours: data.openingHours,
     },
   })
 
@@ -125,7 +128,13 @@ const AddStayInfor = (props: AddStayInforProps) => {
             <Button text="Edit Property" width="fit-content" size="small" />
           </Question>
           <Question question="What are the opening hours?" optional>
-            <Button text="Add open hour" width="fit-content" size="small" variant="secondary" />
+            <Button
+              text="Add opening hours"
+              width="fit-content"
+              size="small"
+              variant="secondary"
+              onClick={() => setShowOpeningHoursModal(true)}
+            />
           </Question>
           <Question question="What tags best describe this place? " optional>
             <div className="flex flex-col gap-y-5">
@@ -141,19 +150,21 @@ const AddStayInfor = (props: AddStayInforProps) => {
             </div>
           </Question>
           <Question question="What’s the average price range of this service?" optional>
-            <Input placeholder="Select a currency" register={register("currency")} />
-            <br />
-            <div className="flex gap-10">
-              <Input
-                placeholder="Minimum price (optional)"
-                className="w-full sm:w-1/2"
-                register={register("minPrice")}
-              />
-              <Input
-                placeholder="Maximum Price (optional)"
-                className="w-full sm:w-1/2"
-                register={register("maxPrice")}
-              />
+            <div className="w-full lg:w-1/2">
+              <Input placeholder="Select a currency" register={register("currency")} />
+              <br />
+              <div className="flex gap-5">
+                <Input
+                  placeholder="Minimum Price"
+                  className="w-full sm:w-1/2"
+                  register={register("minPrice")}
+                />
+                <Input
+                  placeholder="Maximum Price"
+                  className="w-full sm:w-1/2"
+                  register={register("maxPrice")}
+                />
+              </div>
             </div>
           </Question>
           <Question question="What are the Halal food options available?" optional>
@@ -229,35 +240,25 @@ const AddStayInfor = (props: AddStayInforProps) => {
           </div>
         </form>
       </SectionLayout>
+      <Modal
+        visible={showOpeningHoursModal}
+        title="Add opening hours"
+        width={780}
+        mobileFullHeight
+        onClose={() => setShowOpeningHoursModal(false)}
+      >
+        <OpeningHours
+          data={getValues("openingHours")}
+          onCancel={() => setShowOpeningHoursModal(false)}
+          onSubmit={(openingHours) => {
+            setShowOpeningHoursModal(false)
+            console.log(openingHours)
+            setValue("openingHours", openingHours)
+          }}
+        />
+      </Modal>
     </>
   )
 }
 
-const previewInfo = [
-  { question: "What kind of place is this?", value: "" },
-  {
-    question:
-      "Are you affiliated with this place as an owner, employee, or official representative?",
-    value: "relationship",
-  },
-  {
-    question: "Does this place already have a listing on Tribes?",
-    value: "listing",
-  },
-  { question: "What is your role at this business?", value: "role.label" },
-  { question: "Is this place currently open?", value: "isOpen" },
-  { question: "Official place name", value: "businessName" },
-  { question: "Description of your property:", value: "description" },
-  { question: "City/Town, State/Province/Region", value: "city" },
-  { question: "Country", value: "country" },
-  { question: "Street address ", value: "address" },
-  { question: "Additional address information", value: "additionalAddress" },
-  { question: "Social Media", value: "socialMedia" },
-  { question: "What is the category that best fits this place?", value: "" },
-  { question: "What type of cuisine does this place serve?", value: "" },
-  { question: "Open hours", value: "openHours" },
-  { question: "Select a currency", value: "currency" },
-  { question: "Max price", value: "maxPrice" },
-  { question: "Min price", value: "minPrice" },
-]
 export default AddStayInfor

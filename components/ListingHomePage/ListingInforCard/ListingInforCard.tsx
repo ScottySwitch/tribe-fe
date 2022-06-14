@@ -1,20 +1,20 @@
-import classNames from "classnames";
-import Button from "components/Button/Button";
-import Icon from "components/Icon/Icon";
-import Input from "components/Input/Input";
-import Modal from "components/Modal/Modal";
-import Image from "next/image";
-import { useState } from "react";
-import styles from "./ListingInforCard.module.scss";
+import classNames from "classnames"
+import Button from "components/Button/Button"
+import Icon from "components/Icon/Icon"
+import Input from "components/Input/Input"
+import Modal from "components/Modal/Modal"
+import Image from "next/image"
+import { useState } from "react"
+import styles from "./ListingInforCard.module.scss"
 
 interface ListingInforCardProps {
-  priceRange: { min: string; max: string; currency: string };
-  onSetPriceRange: (value: { min: string; max: string; currency: string }) => void;
+  priceRange: { min: string; max: string; currency: string }
+  onSetPriceRange: (value: { min: string; max: string; currency: string }) => void
 }
 
 const ReviewsFollowers = (props: { className?: string }) => {
-  const { className } = props;
-  const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className);
+  const { className } = props
+  const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
   return (
     <div className={reviewsFollowersClassName}>
       <div className={styles.reviews}>
@@ -26,13 +26,13 @@ const ReviewsFollowers = (props: { className?: string }) => {
         <p>followers</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const ListingInforCard = (props: ListingInforCardProps) => {
-  const { priceRange, onSetPriceRange } = props;
-  const [showPriceRangeModal, setShowPriceRangeModal] = useState(false);
-  const [newPriceRange, setNewPriceRange] = useState({ min: "", max: "", currency: "" });
+  const { priceRange, onSetPriceRange } = props
+  const [showPriceRangeModal, setShowPriceRangeModal] = useState(false)
+  const [newPriceRange, setNewPriceRange] = useState({ min: "", max: "", currency: "" })
   return (
     <div className={styles.listing_infor_card}>
       <div className={styles.listing_infor_container}>
@@ -80,8 +80,8 @@ const ListingInforCard = (props: ListingInforCardProps) => {
         mobilePosition="center"
         width={600}
         onClose={() => {
-          setNewPriceRange(priceRange);
-          setShowPriceRangeModal(false);
+          setNewPriceRange(priceRange)
+          setShowPriceRangeModal(false)
         }}
       >
         <div className="px-[30px] py-5">
@@ -98,7 +98,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
           <div className="flex gap-5 w-full mt-3">
             <Input
               width="50%"
-              placeholder="Minimum price (optional)"
+              placeholder="Minimum Price"
               value={newPriceRange.min}
               onChange={(e: any) =>
                 setNewPriceRange({
@@ -109,7 +109,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             />
             <Input
               width="50%"
-              placeholder="Maximum price (optional)"
+              placeholder="Maximum Price"
               value={newPriceRange.max}
               onChange={(e: any) =>
                 setNewPriceRange({
@@ -124,14 +124,14 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             text="Submit"
             size="small"
             onClick={() => {
-              onSetPriceRange(newPriceRange);
-              setShowPriceRangeModal(false);
+              onSetPriceRange(newPriceRange)
+              setShowPriceRangeModal(false)
             }}
           />
         </div>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default ListingInforCard;
+export default ListingInforCard
