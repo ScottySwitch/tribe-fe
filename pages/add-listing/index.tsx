@@ -5,7 +5,7 @@ import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/A
 import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPageTwo"
 import Button from "components/Button/Button"
 import Modal from "components/Modal/Modal"
-import { Categories, YesNo } from "enums"
+import { Categories, ClaimStep, YesNo } from "enums"
 
 import styles from "styles/AddListing.module.scss"
 import Image from "next/image"
@@ -41,7 +41,7 @@ const defaultAddlistingForm: IAddListingForm = {
   categoryKind: "",
   agreePolicies: "",
   openingHours: [
-    { name: "Monday", twentyFourHours: false, openingHours: [] },
+    { name: "Monday", twentyFourHours: true, openingHours: [] },
     { name: "Tuesday", twentyFourHours: false, openingHours: [] },
     {
       name: "Wednesday",
@@ -144,7 +144,7 @@ const AddListing = () => {
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true)
     } else {
-      router.push(`/add-listing/claim/${random}`)
+      router.push({ pathname: `/add-listing/claim/${random}`, query: { firstStep: ClaimStep.CHOOSE_TIER } })
     }
   }
 

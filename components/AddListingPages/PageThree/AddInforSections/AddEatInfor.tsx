@@ -25,6 +25,7 @@ import Break from "components/Break/Break"
 import Upload from "components/Upload/Upload"
 import Icon from "components/Icon/Icon"
 import OpeningHours from "components/OpeningHours/OpeningHours"
+import { YesNo } from "enums"
 
 interface AddEatInforProps {
   data: { [key: string]: any }
@@ -230,7 +231,11 @@ const AddEatInfor = (props: AddEatInforProps) => {
           <br /> <br /> <br />
           <Checkbox
             register={register("agreePolicies")}
-            label="Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+            label={
+              data.relationship === YesNo.NO
+                ? "I certify that this is a genuine attraction  "
+                : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+            }
           />
           <br /> <Break /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">

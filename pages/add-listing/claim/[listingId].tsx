@@ -1,51 +1,53 @@
-import Button from "components/Button/Button";
-import Checkbox from "components/Checkbox/Checkbox";
-import Input from "components/Input/Input";
-import ListingCard from "components/ListingCard/ListingCard";
-import Question from "components/Question/Question";
-import SectionLayout from "components/SectionLayout/SectionLayout";
-import TierTable from "components/TierTable/TierTable";
-import { listingSearchResult } from "constant";
-import { Tiers } from "enums";
-import Link from "next/link";
-import Router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import Button from "components/Button/Button"
+import Checkbox from "components/Checkbox/Checkbox"
+import Input from "components/Input/Input"
+import ListingCard from "components/ListingCard/ListingCard"
+import Question from "components/Question/Question"
+import SectionLayout from "components/SectionLayout/SectionLayout"
+import Select from "components/Select/Select"
+import TierTable from "components/TierTable/TierTable"
+import { listingSearchResult, roleList } from "constant"
+import { ClaimStep, Tiers } from "enums"
+import Link from "next/link"
+import Router, { useRouter } from "next/router"
+import React, { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 
-const defaultListing = listingSearchResult[0];
+const defaultListing = listingSearchResult[0]
 
-enum ClaimStep {
-  CLAIM_FREE_LISTING = "claim_free_listing",
-  CHOOSE_TIER = "choose_tierr",
-}
-
-const ClaimListing = () => {
-  const { query } = useRouter();
-  const [listing, setListing] = useState<{ [key: string]: any }>({});
-  const [claimStep, setClaimStep] = useState(ClaimStep.CLAIM_FREE_LISTING);
-  const { handleSubmit, register } = useForm();
-  const router = useRouter();
+const ClaimListing = (context) => {
+  const { firstStep } = context
+  const [listing, setListing] = useState<{ [key: string]: any }>({})
+  const [claimStep, setClaimStep] = useState(firstStep)
+  const { handleSubmit, setValue, getValues, register } = useForm()
+  const router = useRouter()
 
   useEffect(() => {
     const getListingData = () => {
       // fetchingApi
-      setListing(defaultListing);
-    };
-    getListingData();
-  }, []);
+      setListing(defaultListing)
+    }
+    getListingData()
+  }, [])
 
   const agreePolicies = (
     <div>
-      I have read and accept Tribes <Link href="/terms">Terms of Use</Link> and{" "}
-      <Link href="/policies">Privacy Policy.</Link>
+      I have read and accept Tribes{" "}
+      <span style={{ color: "#3faeff" }}>
+        <Link href="/terms">Terms of Use</Link>
+      </span>{" "}
+      and{" "}
+      <span style={{ color: "#3faeff" }}>
+        <Link href="/policies">Privacy Policy.</Link>
+      </span>
     </div>
-  );
+  )
 
   const onSubmit = (form) => {
     //do submit things
-    console.log(form);
-    setClaimStep(ClaimStep.CHOOSE_TIER);
-  };
+    console.log(form)
+    setClaimStep(ClaimStep.CHOOSE_TIER)
+  }
 
   const handleDirectToVerification = (tier: Tiers) => {
     router.push({
@@ -54,9 +56,9 @@ const ClaimListing = () => {
         isPaidUser: !(tier === Tiers.FREE),
         tier: tier,
       },
-    });
-    console.log("asdjaskdjn");
-  };
+    })
+    console.log("asdjaskdjn")
+  }
 
   return (
     <React.Fragment>
@@ -67,12 +69,12 @@ const ClaimListing = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-5 sm:w-3/4 w-full">
             <ListingCard listing={listing} />
-            <Input placeholder="First name" size="large" register={register("firstName")} />
-            <Input label="Last name" placeholder="First name" register={register("lastName")} />
-            <Input
+            <Select
               label="Last name"
               placeholder="Role of business"
-              register={register("businessRole")}
+              value={getValues("role")}
+              options={roleList}
+              onChange={(e) => setValue("role", e)}
             />
             <Checkbox
               register={register("getNotified")}
@@ -98,6 +100,12 @@ const ClaimListing = () => {
         <TierTable onDirectToVerification={handleDirectToVerification} />
       </SectionLayout>
     </React.Fragment>
-  );
-};
-export default ClaimListing;
+  )
+}
+
+export async function getServerSideProps(context) {
+  // Pass data to the page via props
+  return { props: { firstStep: context.query.firstStep || ClaimStep.CHOOSE_TIER } }
+}
+
+export default ClaimListing

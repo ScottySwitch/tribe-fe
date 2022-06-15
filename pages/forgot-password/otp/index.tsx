@@ -34,7 +34,9 @@ const OtpPage = (context) => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  return { props: { method: context.query.method, otpReceiver: context.query.otpReceiver } }
+  return {
+    props: { method: context.query.method || "", otpReceiver: context.query.otpReceiver || "" },
+  }
 }
 
 export default OtpPage

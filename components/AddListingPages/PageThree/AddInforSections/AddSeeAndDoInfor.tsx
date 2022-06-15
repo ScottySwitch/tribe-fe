@@ -11,6 +11,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import Modal from "components/Modal/Modal"
 import Break from "components/Break/Break"
 import OpeningHours from "components/OpeningHours/OpeningHours"
+import { YesNo } from "enums"
 
 const associatedCategories = [
   { label: "Attractions & tickets" },
@@ -148,7 +149,11 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
           <br /> <Break /> <br />
           <Checkbox
             register={register("agreePolicies")}
-            label="Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+            label={
+              data.relationship === YesNo.NO
+                ? "I certify that this is a genuine attraction  "
+                : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+            }
           />
           <br /> <br /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">

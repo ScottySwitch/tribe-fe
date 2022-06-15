@@ -2,11 +2,23 @@
 
 .select {
   width: 100%;
+
   label {
     display: block;
     font-size: $fs-sm;
     font-weight: $fw-light;
     color: $bg-400;
+  }
+
+  &.label {
+    .container {
+      height: fit-content;
+      padding: $p-sm;
+
+      .content {
+        height: min-content;
+      }
+    }
   }
 
   .container {
@@ -15,7 +27,8 @@
     border-radius: $border-radius;
     padding: $p-md;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
 
     & > div > div:nth-of-type(2) {

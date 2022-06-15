@@ -16,7 +16,7 @@ import SearchListing, {
 import RelationshipToBusiness from "components/AddListingPages/PageOne/RelationshipToBusiness/RelationshipToBusiness"
 import ChooseCategory from "components/AddListingPages/PageOne/ChooseCategory/ChooseCategory"
 import Question from "components/Question/Question"
-import { YesNo } from "enums"
+import { Categories, YesNo } from "enums"
 
 interface AddListingProps {
   onUpdateFormData: (data: { [key: string]: any }) => void
@@ -27,11 +27,11 @@ interface AddListingProps {
 const AddListingPageOne = (props: AddListingProps) => {
   const { show, onUpdateFormData, onNextPage } = props
   const trans = useTrans()
-  const [category, setCategory] = useState<string | undefined>()
-  const [relationship, setRelationship] = useState<string | undefined>()
+  const [category, setCategory] = useState<Categories | undefined>()
+  const [relationship, setRelationship] = useState<YesNo | undefined>()
   const [listing, setListing] = useState<listingTypes>()
   const [role, setRole] = useState<string | undefined>()
-  const [isOpen, setIsOpen] = useState<string | undefined>()
+  const [isOpen, setIsOpen] = useState<YesNo | undefined>()
   const [openDate, setOpenDate] = useState<Date | undefined>()
 
   if (!show) {
@@ -39,11 +39,12 @@ const AddListingPageOne = (props: AddListingProps) => {
   }
 
   const isContinueBtnEnable =
-    category &&
-    relationship &&
-    listing &&
-    role &&
-    ((isOpen === YesNo.NO && openDate) || isOpen === YesNo.YES)
+    (category &&
+      relationship &&
+      listing &&
+      role &&
+      ((isOpen === YesNo.NO && openDate) || isOpen === YesNo.YES)) ||
+    (category && relationship === YesNo.NO && listing)
 
   return (
     <SectionLayout title={trans.addNewListing}>
@@ -81,7 +82,10 @@ const AddListingPageOne = (props: AddListingProps) => {
           }}
         />
       </Question>
-      <Question show={listing === YesNo.NO} question="What is your role?">
+      <Question
+        show={relationship === YesNo.YES && listing === YesNo.NO}
+        question="What is your role?"
+      >
         <Select prefixIcon="search" options={roleList} onChange={setRole} />
       </Question>
       <Question show={!!role} question="Is this busines currently open?">

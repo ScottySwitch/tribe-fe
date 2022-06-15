@@ -64,6 +64,7 @@ const Select = (props: SelectProps) => {
     [styles.disabled]: disabled,
     [styles.large]: size === "large",
     [styles.small]: size === "small",
+    [styles.label]: label,
   })
 
   const primary500 = "#E60112"

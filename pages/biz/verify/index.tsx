@@ -1,54 +1,57 @@
-import Button from "components/Button/Button";
-import Icon from "components/Icon/Icon";
-import Input from "components/Input/Input";
-import Modal from "components/Modal/Modal";
-import Select from "components/Select/Select";
-import Upload from "components/Upload/Upload";
-import { Tiers, VerifySteps } from "enums";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useState } from "react";
-import styles from "styles/BizUserVerify.module.scss";
+import Button from "components/Button/Button"
+import Icon from "components/Icon/Icon"
+import Input from "components/Input/Input"
+import Modal from "components/Modal/Modal"
+import Select from "components/Select/Select"
+import Upload from "components/Upload/Upload"
+import { loginInfoItem } from "constant"
+import { Tiers, UsersTypes, VerifySteps } from "enums"
+import Image from "next/image"
+import { useRouter } from "next/router"
+import { ChangeEvent, FormEvent, useState } from "react"
+import styles from "styles/BizUserVerify.module.scss"
 
 interface BizUserVerifyProps {
-  tier: string;
+  tier: string
 }
 
 const BizUserVerify = (props: BizUserVerifyProps) => {
-  const { tier } = props;
-  const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [otp, setOtp] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [showResultModal, setShowResultModal] = useState(false);
-  const router = useRouter();
+  const { tier } = props
+  const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP)
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [otp, setOtp] = useState("")
+  const [paymentMethod, setPaymentMethod] = useState("")
+  const [showResultModal, setShowResultModal] = useState(false)
+  const router = useRouter()
 
   const handleRequestOTP = () => {
     //send OPT
-    console.log(phoneNumber);
-    setVerifyStep(VerifySteps.CONFIRM_OTP);
-  };
+    console.log(phoneNumber)
+    setVerifyStep(VerifySteps.CONFIRM_OTP)
+  }
 
   const handleConfirmOTP = () => {
     //submit otp to check
     if (tier === Tiers.FREE) {
-      setShowResultModal(true);
+      setShowResultModal(true)
     } else {
-      setVerifyStep(VerifySteps.ADD_ID_CARD);
+      setVerifyStep(VerifySteps.ADD_ID_CARD)
     }
-  };
+  }
 
   const handleDirectToStorePage = () => {
-    router.push("/biz/home/edit");
-  };
+    const localLoginInfo = { tier: tier, token: "asd", type: UsersTypes.BIZ_USER }
+    localStorage.setItem(loginInfoItem, JSON.stringify(localLoginInfo))
+    window.location.href = "/biz/home/edit"
+  }
 
   const handleAddIdCard = () => {
-    setVerifyStep(VerifySteps.ADD_PAYMENT);
-  };
+    setVerifyStep(VerifySteps.ADD_PAYMENT)
+  }
 
   const handleFinishVerifying = () => {
-    setShowResultModal(true);
-  };
+    setShowResultModal(true)
+  }
 
   return (
     <div className={styles.biz_verify}>
@@ -68,7 +71,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         <div className={styles.form}>
           <div className={styles.header}>Confirm number</div>
           <p>
-            An OTP has been sent to the number +84 0335 478 699 Please enter the OTP to complete the
+            An OTP has been sent to the number {phoneNumber} Please enter the OTP to complete the
             registration.
           </p>
           <Input
@@ -184,12 +187,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         </div>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  return { props: { tier: context.query.tier || Tiers.FREE } };
+  return { props: { tier: context.query.tier || Tiers.FREE } }
 }
 
-export default BizUserVerify;
+export default BizUserVerify

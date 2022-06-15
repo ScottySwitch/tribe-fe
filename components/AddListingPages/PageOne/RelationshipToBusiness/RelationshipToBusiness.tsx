@@ -1,29 +1,27 @@
-import Badge from "components/Badge/Badge";
-import { YesNo } from "enums";
+import Badge from "components/Badge/Badge"
+import { YesNo } from "enums"
 
 interface RelationshipToBusinessProps {
-  relationship?: string;
-  setRelationship(e?: string): void;
+  relationship?: YesNo
+  setRelationship(e?: YesNo): void
 }
 
 const RelationshipToBusiness = (props: RelationshipToBusinessProps) => {
-  const { relationship, setRelationship } = props;
+  const { relationship, setRelationship } = props
   return (
     <div className="flex gap-2">
       <Badge
-        onClick={(e) => setRelationship(e)}
-        value={YesNo.YES}
+        onClick={() => setRelationship(YesNo.YES)}
         selected={YesNo.YES === relationship}
         text={YesNo.YES}
       />
       <Badge
-        onClick={(e) => setRelationship(e)}
-        value={YesNo.NO}
+        onClick={() => setRelationship(YesNo.NO)}
         selected={YesNo.NO === relationship}
         text={YesNo.NO}
       />
     </div>
-  );
-};
+  )
+}
 
-export default RelationshipToBusiness;
+export default RelationshipToBusiness

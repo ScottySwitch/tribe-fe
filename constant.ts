@@ -1,5 +1,7 @@
 import { Categories, InformationList, ListingTabs } from "enums"
 
+export const loginInfoItem = "login_info"
+
 export const eatTabList = [
   { text: "Dishes", value: ListingTabs.DISH },
   { text: "Menus", value: ListingTabs.MENU },
@@ -145,6 +147,13 @@ export const contributePopOverList = [
   { icon: "map-color", label: "Add new listing", href: "/add-listing" },
   { icon: "comment-color", label: "Add new review", href: "/add-review" },
   { icon: "update-color", label: "Update listing", href: "/update-listing" },
+]
+
+export const switchAccountList = [
+  { name: "Evertop Hainanese Boneless Chicken" },
+  { name: "The Cheese Merchant" },
+  { name: "The Cheese Merchant" },
+  { name: "The Cheese Merchant" },
 ]
 
 export const locations = [

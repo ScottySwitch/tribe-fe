@@ -51,3 +51,13 @@ export enum InformationList {
   VERIFICATION = "Verification",
   LOGOUT = "Log out",
 }
+
+export enum ClaimStep {
+  CLAIM_FREE_LISTING = "claim_free_listing",
+  CHOOSE_TIER = "choose_tierr",
+}
+
+export enum UsersTypes {
+  NORMAL_USER = "normal_user",
+  BIZ_USER = "biz_user",
+}

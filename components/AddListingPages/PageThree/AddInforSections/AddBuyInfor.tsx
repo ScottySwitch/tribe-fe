@@ -15,6 +15,7 @@ import Icon from "components/Icon/Icon"
 import Heading from "components/ListingHomePage/Heading/Heading"
 import OpeningHours from "components/OpeningHours/OpeningHours"
 import { setValues } from "framer-motion/types/render/utils/setters"
+import { YesNo } from "enums"
 
 const associatedCategories = [
   { label: "Electronic Devices" },
@@ -177,9 +178,13 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           </Question>
           <br /> <Break /> <br />
           <Checkbox
-            className="w-full sm:w-1/2"
+            className="w-full"
             register={register("agreePolicies")}
-            label="Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+            label={
+              data.relationship === YesNo.NO
+                ? "I certify that this is a genuine attraction  "
+                : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+            }
           />
           <br /> <br /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">

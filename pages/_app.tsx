@@ -11,6 +11,10 @@ import HamModal from "components/HamModal/HamModal"
 import styles from "styles/App.module.scss"
 import "../styles/globals.css"
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar"
+import { loginInfoItem } from "constant"
+import { Tiers, UsersTypes } from "enums"
+
+export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers }
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -27,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   ]
   const isAuthPage = !notAuthPages.includes(pathname)
 
-  const [isLoggedIn, setILoggedIn] = useState(false)
+  const [loginInfor, setLoginInfo] = useState<ILoginInfor>({})
   const [showAuthPopup, setShowAuthPopup] = useState(false)
   const [showHamModal, setShowHamModal] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -58,13 +62,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (screen.width < 501) {
       setIsMobile(true)
     }
-
-    const token = localStorage.getItem("access_token")
-    if (token) {
-      setILoggedIn(true)
+    const stringyLoginInfo = localStorage.getItem(loginInfoItem)
+    const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {}
+    if (localLoginInfo.token) {
+      setLoginInfo(localLoginInfo)
       setShowAuthPopup(false)
     } else {
-      setILoggedIn(false)
+      setLoginInfo({})
       setShowAuthPopup(true)
     }
   }, [])
@@ -73,16 +77,16 @@ function MyApp({ Component, pageProps }: AppProps) {
     <div className={styles.app}>
       <Header
         id="header"
-        isLoggedIn={isLoggedIn}
+        loginInfor={loginInfor}
         onOpenHamModal={() => setShowHamModal(!showHamModal)}
       />
       <Component {...pageProps} />
       <AuthPopup
         onClose={() => setShowAuthPopup(false)}
-        visible={isAuthPage && showAuthPopup && !isLoggedIn}
+        visible={isAuthPage && showAuthPopup && !loginInfor.token}
       />
       <HamModal
-        isLoggedIn={isLoggedIn}
+        loginInfor={loginInfor}
         showHamModal={showHamModal}
         onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
       />

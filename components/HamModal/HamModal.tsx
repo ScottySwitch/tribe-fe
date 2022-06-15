@@ -1,25 +1,26 @@
-import Image from "next/image";
-import { useRouter } from "next/router";
+import Image from "next/image"
+import { useRouter } from "next/router"
 
-import Button from "components/Button/Button";
-import Menu from "components/Menu/Menu";
-import Modal from "components/Modal/Modal";
+import Button from "components/Button/Button"
+import Menu from "components/Menu/Menu"
+import Modal from "components/Modal/Modal"
 
-import styles from "./HamModal.module.scss";
-import Tabs from "components/Tabs/Tabs";
-import { useState } from "react";
-import { categories } from "constant";
+import styles from "./HamModal.module.scss"
+import Tabs from "components/Tabs/Tabs"
+import { useState } from "react"
+import { categories } from "constant"
+import { ILoginInfor } from "pages/_app"
 
 const HamModalHeader = ({
-  isLoggedIn,
+  loginInfor,
   gotoLogin,
   gotoSignup,
 }: {
-  isLoggedIn: boolean;
-  gotoLogin: () => void;
-  gotoSignup: () => void;
+  loginInfor: ILoginInfor
+  gotoLogin: () => void
+  gotoSignup: () => void
 }) => {
-  return isLoggedIn ? (
+  return !!loginInfor.token ? (
     <div className={styles.user_profile}>
       <Image
         src={require("public/images/avatar.png")}
@@ -41,31 +42,31 @@ const HamModalHeader = ({
         <Button text="Login" onClick={gotoLogin} />
       </div>
     </>
-  );
-};
+  )
+}
 
 export interface HamModalProps {
-  isLoggedIn: boolean;
-  showHamModal: boolean;
-  onSetShowHamModal: (e: boolean) => void;
+  loginInfor: ILoginInfor
+  showHamModal: boolean
+  onSetShowHamModal: (e: boolean) => void
 }
 
 const HamModal = (props: HamModalProps) => {
-  const { onSetShowHamModal, isLoggedIn, showHamModal } = props;
+  const { onSetShowHamModal, loginInfor, showHamModal } = props
 
-  const [showCategoriesModal, setShowCategoriesModal] = useState(false);
+  const [showCategoriesModal, setShowCategoriesModal] = useState(false)
 
-  const router = useRouter();
+  const router = useRouter()
 
   const gotoLogin = () => {
-    onSetShowHamModal(false);
-    router.push("/login");
-  };
+    onSetShowHamModal(false)
+    router.push("/login")
+  }
 
   const gotoSignup = () => {
-    onSetShowHamModal(false);
-    router.push("/signup");
-  };
+    onSetShowHamModal(false)
+    router.push("/signup")
+  }
 
   const categoriesTabs = [
     {
@@ -188,7 +189,7 @@ const HamModal = (props: HamModalProps) => {
         </div>
       ),
     },
-  ];
+  ]
 
   return (
     <>
@@ -199,13 +200,9 @@ const HamModal = (props: HamModalProps) => {
         onClose={() => onSetShowHamModal(false)}
       >
         <div className={styles.ham_modal}>
-          <HamModalHeader
-            isLoggedIn={isLoggedIn}
-            gotoLogin={gotoLogin}
-            gotoSignup={gotoSignup}
-          />
+          <HamModalHeader loginInfor={loginInfor} gotoLogin={gotoLogin} gotoSignup={gotoSignup} />
           <Menu
-            isLoggedIn={isLoggedIn}
+            loginInfor={loginInfor}
             mobile
             onShowCategoriesModal={() => setShowCategoriesModal(true)}
           />
@@ -222,7 +219,7 @@ const HamModal = (props: HamModalProps) => {
         <Tabs tabList={categoriesTabs} />
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default HamModal;
+export default HamModal

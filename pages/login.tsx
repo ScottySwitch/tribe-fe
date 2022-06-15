@@ -10,6 +10,8 @@ import Modal, { ModalHeader } from "components/Modal/Modal"
 
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
+import { loginInfoItem } from "constant"
+import { UsersTypes } from "enums"
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -34,9 +36,12 @@ const LoginPage = () => {
   const [method, setMethod] = useState(LoginMethod.EMAIL)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
-  
+
   const handleLogin = () => {
-    localStorage.setItem("access_token", "something")
+    localStorage.setItem(
+      loginInfoItem,
+      JSON.stringify({ token: "sometoken", type: UsersTypes.NORMAL_USER })
+    )
     window.location.href = "/"
   }
 

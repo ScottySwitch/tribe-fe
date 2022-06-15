@@ -1,13 +1,13 @@
-import classNames from "classnames";
-import Button from "components/Button/Button";
-import Icon from "components/Icon/Icon";
-import Switch from "components/Switch/Switch";
-import { Tiers } from "enums";
-import { Item } from "framer-motion/types/components/Reorder/Item";
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import styles from "./TierTable.module.scss";
+import classNames from "classnames"
+import Button from "components/Button/Button"
+import Icon from "components/Icon/Icon"
+import Switch from "components/Switch/Switch"
+import { Tiers } from "enums"
+import { Item } from "framer-motion/types/components/Reorder/Item"
+import Image from "next/image"
+import Link from "next/link"
+import { useState } from "react"
+import styles from "./TierTable.module.scss"
 
 const ProvidedFeature = () => (
   <div
@@ -18,7 +18,7 @@ const ProvidedFeature = () => (
       height: 20,
     }}
   />
-);
+)
 
 const tableData = [
   {
@@ -87,7 +87,7 @@ const tableData = [
     basic: <ProvidedFeature />,
     premium: null,
   },
-];
+]
 
 const tiers = [
   {
@@ -109,12 +109,12 @@ const tiers = [
     recommended: true,
     button: <Button text="Select" width="70%" size="small" />,
   },
-];
+]
 
 const DesktopTierTable = ({
   onDirectToVerification,
 }: {
-  onDirectToVerification(tier: Tiers): void;
+  onDirectToVerification(tier: Tiers): void
 }) => {
   return (
     <table>
@@ -125,56 +125,60 @@ const DesktopTierTable = ({
         <col width="20%" />
       </colgroup>
       <thead>
-        <th className={styles.tier_payment}>
-          <span>Pay quarterly</span>
-          <Switch />
-          <span>Pay yearly</span>
-        </th>
-        {tiers.map((tier) => (
-          <th key={tier.name}>
-            <div className={styles.tier_name}>{tier.name}</div>
-            <div className={styles.tier_price}>
-              {tier.price}
-              <span> per quarter</span>
-            </div>
-            <div>
-              <Link href={"/"}>View Demo page</Link>
-            </div>
-            <br />
-            <Button
-              variant={tier.value === Tiers.FREE ? "outlined" : "primary"}
-              text="Select"
-              width="70%"
-              size="small"
-              onClick={() => onDirectToVerification(tier.value)}
-            />
+        <tr>
+          <th className={styles.tier_payment}>
+            <span>Pay quarterly</span>
+            <Switch />
+            <span>Pay yearly</span>
           </th>
-        ))}
-        <th>
-          <div className={styles.tier_name}>Premium Tier</div>
-          <div className={styles.tier_price}>
-            <span>Comming soon</span>
-          </div>
-        </th>
-      </thead>
-      {tableData.map((row) => (
-        <tr key={row.feature}>
-          <td className={styles.tier_feature}>{row.feature}</td>
-          <td>{row.free}</td>
-          <td>{row.basic}</td>
-          <td>{row.premium}</td>
+          {tiers.map((tier) => (
+            <th key={tier.name}>
+              <div className={styles.tier_name}>{tier.name}</div>
+              <div className={styles.tier_price}>
+                {tier.price}
+                <span> per quarter</span>
+              </div>
+              <div>
+                <Link href={"/"}>View Demo page</Link>
+              </div>
+              <br />
+              <Button
+                variant={tier.value === Tiers.FREE ? "outlined" : "primary"}
+                text="Select"
+                width="70%"
+                size="small"
+                onClick={() => onDirectToVerification(tier.value)}
+              />
+            </th>
+          ))}
+          <th>
+            <div className={styles.tier_name}>Premium Tier</div>
+            <div className={styles.tier_price}>
+              <span>Comming soon</span>
+            </div>
+          </th>
         </tr>
-      ))}
+      </thead>
+      <tbody>
+        {tableData.map((row) => (
+          <tr key={row.feature}>
+            <td className={styles.tier_feature}>{row.feature}</td>
+            <td>{row.free}</td>
+            <td>{row.basic}</td>
+            <td>{row.premium}</td>
+          </tr>
+        ))}
+      </tbody>
     </table>
-  );
-};
+  )
+}
 
 const MobileTierTable = ({
   onDirectToVerification,
 }: {
-  onDirectToVerification(tier: Tiers): void;
+  onDirectToVerification(tier: Tiers): void
 }) => {
-  const [tierList, setTierList] = useState<string[]>([]);
+  const [tierList, setTierList] = useState<string[]>([])
   return (
     <div className={styles.tier_mobile}>
       <Switch /> Pay yearly
@@ -204,10 +208,10 @@ const MobileTierTable = ({
             {tierList.includes(tier.name) && (
               <div className={styles.features}>
                 {tableData.map((feat) => {
-                  const notProvided = !feat[tier.value];
+                  const notProvided = !feat[tier.value]
                   const featureClassName = classNames(styles.feature, {
                     [styles.no_provided]: notProvided,
-                  });
+                  })
                   return (
                     <div key={feat.feature} className={featureClassName}>
                       <Image
@@ -221,7 +225,7 @@ const MobileTierTable = ({
                       />
                       {feat.feature}
                     </div>
-                  );
+                  )
                 })}
               </div>
             )}
@@ -238,8 +242,8 @@ const MobileTierTable = ({
         </div>
       ))}
     </div>
-  );
-};
+  )
+}
 
 const TierTable = ({ onDirectToVerification }: { onDirectToVerification(tier: Tiers): void }) => {
   return (
@@ -247,7 +251,7 @@ const TierTable = ({ onDirectToVerification }: { onDirectToVerification(tier: Ti
       <DesktopTierTable onDirectToVerification={onDirectToVerification} />
       <MobileTierTable onDirectToVerification={onDirectToVerification} />
     </div>
-  );
-};
+  )
+}
 
-export default TierTable;
+export default TierTable
