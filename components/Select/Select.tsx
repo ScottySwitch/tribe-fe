@@ -1,35 +1,35 @@
-import classNames from "classnames";
-import Icon from "components/Icon/Icon";
-import React, { ReactNode, useState } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
-import ReactSelect, { ControlProps, components, StylesConfig } from "react-select";
-import styles from "./Select.module.scss";
+import classNames from "classnames"
+import Icon from "components/Icon/Icon"
+import React, { ReactNode, useState } from "react"
+import { UseFormRegisterReturn } from "react-hook-form"
+import ReactSelect, { ControlProps, components, StylesConfig } from "react-select"
+import styles from "./Select.module.scss"
 
 interface IOption {
-  label: string | ReactNode;
-  value: string | number;
+  label: string | ReactNode
+  value: string | number
 }
 
 export interface SelectProps {
-  id?: string;
-  label?: string;
-  className?: string;
-  defaultValue?: IOption[] | IOption;
-  value?: IOption[] | IOption | string;
-  options?: IOption[];
-  prefixIcon?: string;
-  helperText?: string;
-  disabled?: boolean;
-  placeholder?: string;
-  isMulti?: boolean;
-  isSearchable?: boolean;
-  closeMenuOnSelect?: boolean;
-  menuFooter?: ReactNode;
-  register?: UseFormRegisterReturn;
-  onChange?: (value: any) => void;
-  variant?: "filled" | "outlined" | "no-outlined";
-  size?: "small" | "medium" | "large";
-  inputRef?: any;
+  id?: string
+  label?: string
+  className?: string
+  defaultValue?: IOption[] | IOption
+  value?: IOption[] | IOption | string
+  options?: IOption[]
+  prefixIcon?: string
+  helperText?: string
+  disabled?: boolean
+  placeholder?: string
+  isMulti?: boolean
+  isSearchable?: boolean
+  closeMenuOnSelect?: boolean
+  menuFooter?: ReactNode
+  register?: UseFormRegisterReturn
+  onChange?: (value: any) => void
+  variant?: "filled" | "outlined" | "no-outlined"
+  size?: "small" | "medium" | "large"
+  inputRef?: any
 }
 
 const Select = (props: SelectProps) => {
@@ -52,11 +52,11 @@ const Select = (props: SelectProps) => {
     size = "medium",
     menuFooter,
     inputRef,
-  } = props;
+  } = props
 
   const [selected, setSelected] = useState<IOption[] | IOption | string | undefined>(
     value || defaultValue
-  );
+  )
 
   const selectWrapperClassName = classNames(className, styles.select, {
     [styles.filled]: variant === "filled",
@@ -64,10 +64,10 @@ const Select = (props: SelectProps) => {
     [styles.disabled]: disabled,
     [styles.large]: size === "large",
     [styles.small]: size === "small",
-  });
+  })
 
-  const primary500 = "#E60112";
-  const primary20 = "#FEF1F2";
+  const primary500 = "#E60112"
+  const primary20 = "#FEF1F2"
 
   const customStyles: StylesConfig = {
     container: (styles) => ({ ...styles, width: "100%" }),
@@ -81,6 +81,7 @@ const Select = (props: SelectProps) => {
       minWidth: "max-content",
       minHeight: "min-content",
       backgroundColor: "transparent",
+      fontWeight: 300,
     }),
     option: (styles, { isSelected }) => {
       return {
@@ -99,15 +100,16 @@ const Select = (props: SelectProps) => {
           backgroundColor: isSelected ? primary500 : primary20,
         },
         backgroundColor: isSelected ? primary500 : "white",
-      };
+      }
     },
     dropdownIndicator: (styles) => ({ ...styles, padding: 0 }),
-    input: (styles) => ({ ...styles, padding: 0, margin: 0 }),
+    input: (styles) => ({ ...styles, padding: 0, margin: 0, fontWeight: 300 }),
     placeholder: (styles) => ({
       ...styles,
       padding: 0,
       margin: 0,
       width: "max-content",
+      fontWeight: 300,
     }),
     valueContainer: (styles) => ({
       ...styles,
@@ -116,25 +118,25 @@ const Select = (props: SelectProps) => {
     }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
     indicatorsContainer: (styles) => ({ ...styles, alignItems: "flex-start" }),
-  };
+  }
 
   const handleChange = (dropdownValues: any) => {
-    onChange?.(dropdownValues);
-    setSelected(dropdownValues);
-  };
+    onChange?.(dropdownValues)
+    setSelected(dropdownValues)
+  }
 
   const Control = ({ children, ...props }: ControlProps<any, false>) => {
     // @ts-ignore
-    const { emoji, onEmojiClick } = props.selectProps;
-    const style = { cursor: "pointer" };
+    const { emoji, onEmojiClick } = props.selectProps
+    const style = { cursor: "pointer" }
 
     return (
       <components.Control {...props}>
         <Icon size={20} icon={prefixIcon || ""} style={{ marginRight: 10 }} />
         {children}
       </components.Control>
-    );
-  };
+    )
+  }
 
   const Menu = (props: any) => {
     return (
@@ -144,16 +146,16 @@ const Select = (props: SelectProps) => {
           {menuFooter}
         </components.Menu>
       </React.Fragment>
-    );
-  };
+    )
+  }
 
   const Option = (props: any) => {
     return (
       <React.Fragment>
         <components.Option {...props}>{props.children}</components.Option>
       </React.Fragment>
-    );
-  };
+    )
+  }
 
   return (
     <div className={selectWrapperClassName}>
@@ -178,7 +180,7 @@ const Select = (props: SelectProps) => {
       </div>
       {helperText && <div>{helperText}</div>}
     </div>
-  );
-};
+  )
+}
 
-export default Select;
+export default Select

@@ -9,24 +9,42 @@ import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import Radio from "components/Radio/Radio"
 import Select from "components/Select/Select"
-import { interestingList } from "constant"
+import { countryList, educationLevels, industryList, interestingList } from "constant"
 
 import styles from "styles/Auth.module.scss"
 import DatePicker from "components/DatePicker/DatePicker"
+import { useForm } from "react-hook-form"
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
   STEP_TWO = "step_two",
 }
 
-const StepOne = ({ onNextStep }: { onNextStep: (e: FormEvent<HTMLFormElement>) => void }) => {
+const StepOne = ({
+  formData,
+  onNextStep,
+}: {
+  formData: any
+  onNextStep: (e: FormEvent<HTMLFormElement>) => void
+}) => {
   const router = useRouter()
+  const { setValue, getValues, register, handleSubmit } = useForm({
+    defaultValues: {
+      name: formData.name,
+      country: formData.country,
+      education: formData.education,
+      gender: formData.gender,
+      birthday: formData.birthday,
+      industry: formData.industry,
+    },
+  })
+  const onSubmit = (data) => onNextStep(data)
   return (
     <div>
       <ModalHeader alignTitle="center">
         <div>Almost there... set up your profile</div>
       </ModalHeader>
-      <form className={styles.body} onSubmit={onNextStep}>
+      <form className={styles.body} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.profile_imgs}>
           <Upload
             type="cover"
@@ -39,23 +57,42 @@ const StepOne = ({ onNextStep }: { onNextStep: (e: FormEvent<HTMLFormElement>) =
             className={styles.avatar}
           />
         </div>
-        <Input placeholder="Your name" label="Name" />
-        <Select placeholder="Your country" />
+        <Input placeholder="Your name" label="Name" register={register("name")} />
+        <Select
+          placeholder="Your country"
+          options={countryList}
+          value={getValues("country")}
+          onChange={(e) => setValue("country", e)}
+        />
         <div>
           Gender
           <div className="flex gap-[30px] mt-2">
-            <Radio label="Male" name="gender" />
-            <Radio label="Female" name="gender" />
-            <Radio label="Others" name="gender" />
+            <Radio label="Male" value="male" register={register("gender")} />
+            <Radio label="Female" value="female" register={register("gender")} />
+            <Radio label="Others" value="others" register={register("gender")} />
           </div>
         </div>
-        <DatePicker placeholder="Birthday" name="birthday" />
-        <Select placeholder="Education level" />
-        <Select placeholder="Industry" />
-        <div className={styles.actions}>
-          <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
+        <DatePicker
+          placeholder="Birthday"
+          onChange={(e) => setValue("birthday", e)}
+          value={getValues("birthday")}
+        />
+        <Select
+          placeholder="Education level"
+          options={educationLevels}
+          value={getValues("education")}
+          onChange={(e) => setValue("education", e)}
+        />
+        <Select
+          placeholder="Industry"
+          options={industryList}
+          value={getValues("industry")}
+          onChange={(e) => setValue("industry", e)}
+        />
+        <div className="flex justify-end">
+          {/* <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
             Skip
-          </div>
+          </div> */}
           <Button className="w-1/2" text="Next" type="submit" />
         </div>
       </form>
@@ -63,9 +100,8 @@ const StepOne = ({ onNextStep }: { onNextStep: (e: FormEvent<HTMLFormElement>) =
   )
 }
 
-const StepTwo = ({ onSubmit }: any) => {
+const StepTwo = ({ onBackStep, onSubmit }: any) => {
   const [interest, setInterest] = useState<string[]>([])
-  const router = useRouter()
   const handleSubmit = () => {
     onSubmit(interest)
   }
@@ -105,9 +141,7 @@ const StepTwo = ({ onSubmit }: any) => {
           })}
         </div>
         <div className={styles.actions}>
-          <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
-            Skip
-          </div>
+          <Button variant="secondary-no-outlined" text="Back" onClick={onBackStep} width={50} />
           <Button className="w-1/2" text="Next" onClick={handleSubmit} />
         </div>
       </div>
@@ -132,13 +166,17 @@ const SetupProfilePage = () => {
     router.push("/login")
   }
 
+  const handleBackStep = () => {
+    setStep(ProfileSteps.STEP_ONE)
+  }
+
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
         {step === ProfileSteps.STEP_ONE ? (
-          <StepOne onNextStep={handleNextStep} />
+          <StepOne onNextStep={handleNextStep} formData={formData} />
         ) : (
-          <StepTwo onSubmit={handleSubmit} />
+          <StepTwo onSubmit={handleSubmit} onBackStep={handleBackStep} />
         )}
       </div>
     </div>

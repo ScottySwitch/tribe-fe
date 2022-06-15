@@ -19,12 +19,14 @@ interface DatePickerProps {
 
 const DatePicker = (props: DatePickerProps) => {
   const { value, prefixIcon, suffixIcon, placeholder, size, label, onChange } = props
+  const [localValue, setLocalValue] = useState(value)
   const datepickerClassNames = classNames(styles.date_picker_container, {
     [styles.small]: size === "small",
     [styles.large]: size === "large",
     [styles.label]: label,
   })
   const handleChange = (e) => {
+    setLocalValue(e)
     onChange?.(e)
   }
   return (
@@ -35,7 +37,7 @@ const DatePicker = (props: DatePickerProps) => {
         <ReactDatePicker
           className={styles.date_picker}
           dateFormat="dd/MM/yyyy"
-          selected={value}
+          selected={localValue}
           onChange={handleChange}
           showPopperArrow={false}
           calendarClassName={styles.calendar}
