@@ -4,12 +4,13 @@ import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
 import Select from "components/Select/Select"
 import Upload from "components/Upload/Upload"
-import { loginInfoItem } from "constant"
+import { loginInforItem } from "constant"
 import { Tiers, UsersTypes, VerifySteps } from "enums"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { ChangeEvent, FormEvent, useState } from "react"
 import styles from "styles/BizUserVerify.module.scss"
+import { randomId } from "utils"
 
 interface BizUserVerifyProps {
   tier: string
@@ -41,8 +42,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   const handleDirectToStorePage = () => {
     const localLoginInfo = { tier: tier, token: "asd", type: UsersTypes.BIZ_USER }
-    localStorage.setItem(loginInfoItem, JSON.stringify(localLoginInfo))
-    window.location.href = "/biz/home/edit"
+    localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
+    window.location.href = `/biz/home/edit/${randomId()}`
   }
 
   const handleAddIdCard = () => {

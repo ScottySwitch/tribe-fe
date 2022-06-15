@@ -1,5 +1,6 @@
 import classNames from "classnames"
 import Icon from "components/Icon/Icon"
+import { loginInforItem } from "constant"
 import { ILoginInfor } from "pages/_app"
 
 import styles from "./Menu.module.scss"
@@ -25,7 +26,7 @@ export const menuItems = [
 const Menu = (props: MenuMenuProps) => {
   const { loginInfor = {}, mobile, onShowCategoriesModal } = props
   const handleLogout = () => {
-    localStorage.removeItem("access_token")
+    localStorage.removeItem(loginInforItem)
     window.location.href = "/"
   }
 

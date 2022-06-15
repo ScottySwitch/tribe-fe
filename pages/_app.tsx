@@ -11,7 +11,7 @@ import HamModal from "components/HamModal/HamModal"
 import styles from "styles/App.module.scss"
 import "../styles/globals.css"
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar"
-import { loginInfoItem } from "constant"
+import { loginInforItem } from "constant"
 import { Tiers, UsersTypes } from "enums"
 
 export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers }
@@ -62,7 +62,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (screen.width < 501) {
       setIsMobile(true)
     }
-    const stringyLoginInfo = localStorage.getItem(loginInfoItem)
+    const stringyLoginInfo = localStorage.getItem(loginInforItem)
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {}
     if (localLoginInfo.token) {
       setLoginInfo(localLoginInfo)
@@ -71,7 +71,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       setLoginInfo({})
       setShowAuthPopup(true)
     }
-  }, [])
+  }, [router])
 
   return (
     <div className={styles.app}>

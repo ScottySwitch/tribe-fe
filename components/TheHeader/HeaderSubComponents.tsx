@@ -2,7 +2,7 @@ import React from "react"
 import Image from "next/image"
 import { useRouter } from "next/router"
 
-import { categories, contributePopOverList, loginInfoItem, switchAccountList } from "constant"
+import { categories, contributePopOverList, loginInforItem, switchAccountList } from "constant"
 import Popover from "components/Popover/Popover"
 import Icon from "components/Icon/Icon"
 import Button from "components/Button/Button"
@@ -12,6 +12,7 @@ import styles from "./Header.module.scss"
 import { ILoginInfor } from "pages/_app"
 import { UsersTypes } from "enums"
 import Break from "components/Break/Break"
+import { randomId } from "utils"
 
 export const Categories = (props: {
   currentCategory?: string
@@ -59,13 +60,9 @@ export const ContributeContent = () => {
   )
 }
 
-export const SwitchAccountsContent = () => {
+export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
   const router = useRouter()
-  const handleSwitchNormalUser = () => {
-    const localLoginInfo = { token: "asd", type: UsersTypes.NORMAL_USER }
-    localStorage.setItem(loginInfoItem, JSON.stringify(localLoginInfo))
-    window.location.href = "/"
-  }
+
   return (
     <React.Fragment>
       {switchAccountList.map((item) => (
@@ -80,7 +77,7 @@ export const SwitchAccountsContent = () => {
           {item.name}
         </div>
       ))}
-      <div className="cursor-pointer flex">
+      <div className="cursor-pointer flex" onClick={onSwitchToNormalUser}>
         <Image
           src={require("public/images/avatar.png")}
           alt=""
@@ -88,7 +85,7 @@ export const SwitchAccountsContent = () => {
           height={30}
           onClick={() => router.push("/biz/information")}
         />
-        <div onClick={handleSwitchNormalUser}>
+        <div>
           <strong>Anna Nhung</strong>
           <p className="text-xs">User account</p>
         </div>
@@ -100,16 +97,23 @@ export const SwitchAccountsContent = () => {
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter()
 
-  const handleSwitchBizUser = () => {
+  const handleSwitchToBizUser = () => {
     const localLoginInfo = { token: "asd", type: UsersTypes.BIZ_USER }
-    localStorage.setItem(loginInfoItem, JSON.stringify(localLoginInfo))
-    window.location.href = "/biz/home/edit"
+    localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
+    const id = randomId()
+    router.push(`/biz/home/${id}/edit`)
+  }
+
+  const handleSwitchToNormalUser = () => {
+    const localLoginInfo = { token: "asd", type: UsersTypes.NORMAL_USER }
+    localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
+    router.pathname === "/" ? router.reload() : router.push("/")
   }
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {
     return (
       <>
-        <div className="flex gap-2 cursor-pointer" onClick={handleSwitchBizUser}>
+        <div className="flex gap-2 cursor-pointer" onClick={handleSwitchToBizUser}>
           <Icon icon="business" size={20} />
           Business
         </div>
@@ -131,7 +135,10 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   if (!!loginInfor.token && loginInfor.type === UsersTypes.BIZ_USER) {
     return (
       <>
-        <Popover content={<SwitchAccountsContent />} position="bottom-left">
+        <Popover
+          content={<SwitchAccountsContent onSwitchToNormalUser={handleSwitchToNormalUser} />}
+          position="bottom-left"
+        >
           <div className="flex gap-2">
             <Icon icon="user-color" size={20} />
             Switch accounts

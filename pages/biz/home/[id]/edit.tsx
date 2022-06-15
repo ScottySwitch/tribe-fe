@@ -45,7 +45,7 @@ const getAddItemsFields = (category) => {
   }
 }
 
-const EditListingHomepage = () => {
+const EditListingHomepage = (context) => {
   const [category, setCategory] = useState(Categories.EAT)
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME)
   const [description, setDescription] = useState<string>("")
@@ -150,6 +150,13 @@ const EditListingHomepage = () => {
       </SectionLayout>
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  // Pass data to the page via props
+  return {
+    props: {},
+  }
 }
 
 export default EditListingHomepage

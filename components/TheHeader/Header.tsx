@@ -12,8 +12,22 @@ import styles from "./Header.module.scss"
 import useTrans from "hooks/useTrans"
 
 export const languages = [
-  { label: <Icon icon="eng-flag" size={30} />, value: "en" },
-  { label: <Icon icon="sing-flag" size={30} />, value: "sg" },
+  {
+    label: (
+      <div className="flex gap-2 items-center">
+        <Icon icon="eng-flag" size={30} /> English
+      </div>
+    ),
+    value: "en",
+  },
+  {
+    label: (
+      <div className="flex gap-2 items-center">
+        <Icon icon="sing-flag" size={30} /> Singapore
+      </div>
+    ),
+    value: "sg",
+  },
 ]
 
 export interface HeaderProps {
@@ -31,7 +45,7 @@ const Header = (props: HeaderProps) => {
   const { pathname } = useRouter()
 
   const changeLang = (lang: string) => {
-    router.push(pathname, pathname, { locale: lang })
+    router.isReady && router.push(pathname, pathname, { locale: lang })
   }
 
   const getDefaultLang = () => {
@@ -49,12 +63,14 @@ const Header = (props: HeaderProps) => {
               variant="no-outlined"
               placeholder={trans.location}
               options={locations}
+              menuWidth={150}
             />
             <Select
               className={styles.language}
               options={languages}
               isSearchable={false}
               variant="no-outlined"
+              menuWidth={150}
               closeMenuOnSelect
               onChange={(e) => changeLang(e.value)}
               defaultValue={getDefaultLang()}

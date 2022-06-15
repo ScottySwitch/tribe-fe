@@ -10,7 +10,7 @@ import Modal, { ModalHeader } from "components/Modal/Modal"
 
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
-import { loginInfoItem } from "constant"
+import { loginInforItem } from "constant"
 import { UsersTypes } from "enums"
 
 export enum LoginMethod {
@@ -39,7 +39,7 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     localStorage.setItem(
-      loginInfoItem,
+      loginInforItem,
       JSON.stringify({ token: "sometoken", type: UsersTypes.NORMAL_USER })
     )
     window.location.href = "/"

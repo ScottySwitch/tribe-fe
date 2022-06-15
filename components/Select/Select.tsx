@@ -26,6 +26,7 @@ export interface SelectProps {
   closeMenuOnSelect?: boolean
   menuFooter?: ReactNode
   register?: UseFormRegisterReturn
+  menuWidth?: string | number
   onChange?: (value: any) => void
   variant?: "filled" | "outlined" | "no-outlined"
   size?: "small" | "medium" | "large"
@@ -49,6 +50,7 @@ const Select = (props: SelectProps) => {
     defaultValue,
     closeMenuOnSelect = false,
     variant = "outlined",
+    menuWidth,
     size = "medium",
     menuFooter,
     inputRef,
@@ -87,10 +89,10 @@ const Select = (props: SelectProps) => {
     option: (styles, { isSelected }) => {
       return {
         ...styles,
-        width: "60vw",
+        width: menuWidth || "60vw",
         padding: "10px 20px",
         maxWidth: 400,
-        minWidth: 280,
+        minWidth: 150,
         cursor: isSelected ? "default" : "pointer",
         ":active": {
           ...styles[":active"],
@@ -118,7 +120,7 @@ const Select = (props: SelectProps) => {
       width: "max-content",
     }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
-    indicatorsContainer: (styles) => ({ ...styles, alignItems: "flex-start" }),
+    indicatorsContainer: (styles) => ({ ...styles, alignItems: "center" }),
   }
 
   const handleChange = (dropdownValues: any) => {
