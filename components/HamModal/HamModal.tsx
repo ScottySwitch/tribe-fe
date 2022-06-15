@@ -1,15 +1,15 @@
+import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/router"
 
 import Button from "components/Button/Button"
 import Menu from "components/Menu/Menu"
 import Modal from "components/Modal/Modal"
-
-import styles from "./HamModal.module.scss"
 import Tabs from "components/Tabs/Tabs"
-import { useState } from "react"
 import { categories } from "constant"
 import { ILoginInfor } from "pages/_app"
+
+import styles from "./HamModal.module.scss"
 
 const HamModalHeader = ({
   loginInfor,
@@ -77,15 +77,8 @@ const HamModal = (props: HamModalProps) => {
         <div className="flex gap-[20px] flex-wrap">
           {categories[0].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
-              <div>
-                <Image
-                  src={"https://picsum.photos/200/300"}
-                  alt=""
-                  layout="fixed"
-                  width={50}
-                  height={50}
-                  style={{ borderRadius: "50%" }}
-                />
+              <div className={styles.category_item_icon}>
+                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
               </div>
               <div>{item.label}</div>
             </div>
@@ -101,15 +94,8 @@ const HamModal = (props: HamModalProps) => {
         <div className="flex gap-[20px] flex-wrap">
           {categories[1].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
-              <div>
-                <Image
-                  src={"https://picsum.photos/200/300"}
-                  alt=""
-                  layout="fixed"
-                  width={50}
-                  height={50}
-                  style={{ borderRadius: "50%" }}
-                />
+              <div className={styles.category_item_icon}>
+                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
               </div>
               <div>{item.label}</div>
             </div>
@@ -125,15 +111,8 @@ const HamModal = (props: HamModalProps) => {
         <div className="flex gap-[20px] flex-wrap">
           {categories[2].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
-              <div>
-                <Image
-                  src={"https://picsum.photos/200/300"}
-                  alt=""
-                  layout="fixed"
-                  width={50}
-                  height={50}
-                  style={{ borderRadius: "50%" }}
-                />
+              <div className={styles.category_item_icon}>
+                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
               </div>
               <div>{item.label}</div>
             </div>
@@ -149,15 +128,8 @@ const HamModal = (props: HamModalProps) => {
         <div className="flex gap-[20px] flex-wrap">
           {categories[3].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
-              <div>
-                <Image
-                  src={"https://picsum.photos/200/300"}
-                  alt=""
-                  layout="fixed"
-                  width={50}
-                  height={50}
-                  style={{ borderRadius: "50%" }}
-                />
+              <div className={styles.category_item_icon}>
+                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
               </div>
               <div>{item.label}</div>
             </div>
@@ -173,15 +145,8 @@ const HamModal = (props: HamModalProps) => {
         <div className="flex gap-[20px] flex-wrap">
           {categories[4].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
-              <div>
-                <Image
-                  src={"https://picsum.photos/200/300"}
-                  alt=""
-                  layout="fixed"
-                  width={50}
-                  height={50}
-                  style={{ borderRadius: "50%" }}
-                />
+              <div className={styles.category_item_icon}>
+                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
               </div>
               <div>{item.label}</div>
             </div>

@@ -117,7 +117,7 @@ const SearchListing = ({
               <div>
                 <strong>Upcoming feature</strong>
               </div>
-              <p style={{ textAlign: "center" }}>
+              <p className="text-center">
                 We are still working on it to give you the best experience possible.
               </p>
               <Button

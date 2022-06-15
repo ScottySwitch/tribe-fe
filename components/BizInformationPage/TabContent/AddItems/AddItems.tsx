@@ -64,7 +64,7 @@ const AddItems = (props: AddItemsProps) => {
           <div key={item.id} className={styles.add_items_container}>
             <div className={styles.break} />
             <div className={styles.header}>
-              <p style={{ textAlign: "left" }}>Add images</p>
+              <p className="text-left">Add images</p>
               <div className={styles.close} onClick={() => handleRemoveItem(item.id)}>
                 <Icon icon="cancel" />
               </div>

@@ -1,19 +1,19 @@
-import { useState } from "react";
+import { useState } from "react"
 
-import Button from "components/Button/Button";
-import Input from "components/Input/Input";
-import Modal from "components/Modal/Modal";
-import Heading from "../Heading/Heading";
+import Button from "components/Button/Button"
+import Input from "components/Input/Input"
+import Modal from "components/Modal/Modal"
+import Heading from "../Heading/Heading"
 
 interface DetailsProps {
-  description: string;
-  onSetDescription: (description: string) => void;
+  description: string
+  onSetDescription: (description: string) => void
 }
 
 const Details = (props: DetailsProps) => {
-  const { description, onSetDescription } = props;
-  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
-  const [localDescription, setLocalDescription] = useState(description);
+  const { description, onSetDescription } = props
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false)
+  const [localDescription, setLocalDescription] = useState(description)
 
   return (
     <div>
@@ -21,15 +21,15 @@ const Details = (props: DetailsProps) => {
         <Heading text="Details" />
         <a onClick={() => setShowDescriptionModal(true)}>Add description</a>
       </div>
-      <p style={{ textAlign: "left", marginTop: 10 }}>{description}</p>
+      <p className="text-left mt-[10px]">{description}</p>
       <Modal
         title="Details"
         visible={showDescriptionModal}
         width={500}
         mobilePosition="center"
         onClose={() => {
-          setLocalDescription(description);
-          setShowDescriptionModal(false);
+          setLocalDescription(description)
+          setShowDescriptionModal(false)
         }}
       >
         <div className="px-[10px] sm:px-[30px] py-5">
@@ -43,14 +43,14 @@ const Details = (props: DetailsProps) => {
             text="Submit"
             size="small"
             onClick={() => {
-              onSetDescription(localDescription);
-              setShowDescriptionModal(false);
+              onSetDescription(localDescription)
+              setShowDescriptionModal(false)
             }}
           />
         </div>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default Details;
+export default Details

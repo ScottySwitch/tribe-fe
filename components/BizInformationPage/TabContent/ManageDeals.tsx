@@ -8,6 +8,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import Table, { IColumn } from "components/Table/Table"
 import React, { useState } from "react"
 import AddDeals from "./AddDeal/AddDeals"
+
 import styles from "./TabContent.module.scss"
 
 interface ManageDealsProps {
@@ -58,7 +59,7 @@ const ManageDeals = (props: ManageDealsProps) => {
     const content = (
       <React.Fragment>
         <div onClick={() => console.log(item.name)}>Edit deal</div>
-        <div style={{ color: "#E60112" }} onClick={() => console.log(item.name)}>
+        <div className={styles.delete_action} onClick={() => console.log(item.name)}>
           Delete deal
         </div>
       </React.Fragment>

@@ -7,18 +7,10 @@ import { Item } from "framer-motion/types/components/Reorder/Item"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+
 import styles from "./TierTable.module.scss"
 
-const ProvidedFeature = () => (
-  <div
-    style={{
-      backgroundColor: "#3FAEFF",
-      borderRadius: "50%",
-      width: 20,
-      height: 20,
-    }}
-  />
-)
+const ProvidedFeature = () => <div className={styles.feature} />
 
 const tableData = [
   {

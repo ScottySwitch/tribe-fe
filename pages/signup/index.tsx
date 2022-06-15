@@ -19,7 +19,7 @@ export enum LoginMethod {
 const PasswordEye = (props: { onClick: MouseEventHandler<HTMLDivElement> }) => {
   const { onClick } = props
   return (
-    <div style={{ cursor: "pointer" }} onClick={onClick}>
+    <div className="cursor-pointer" onClick={onClick}>
       <Icon icon="eye" size={20} color="#A4A8B7" />
     </div>
   )

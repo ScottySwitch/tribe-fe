@@ -67,6 +67,13 @@
   }
 }
 
+.feature {
+  background-color: #3faeff;
+  border-radius: 50%;
+  width: 20;
+  height: 20;
+}
+
 @media screen and (max-width: $mobile) {
   .tier {
     table {

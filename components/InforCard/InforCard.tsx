@@ -35,7 +35,7 @@ const InforCard = (props: InforCardProps) => {
     <div className={styles.infor_card} style={{ width }}>
       {isVerified && (
         <div className={styles.verified}>
-          <Icon icon="verified-tag" style={{ height: "30px", width: "70px" }} />
+          <Icon icon="verified-tag" className={styles.verified_icon} />
         </div>
       )}
       <div className={styles.cover}>

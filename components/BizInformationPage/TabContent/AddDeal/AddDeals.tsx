@@ -63,7 +63,7 @@ const AddDeals = (props: AddDealsProps) => {
           <div key={deal.id} className={styles.add_deals_container}>
             <div className={styles.break} />
             <div className={styles.header}>
-              <p style={{ textAlign: "left" }}>Add images</p>
+              <p className="text-left">Add images</p>
               <div className={styles.close} onClick={() => handleRemoveDeal(deal.id)}>
                 <Icon icon="cancel" />
               </div>

@@ -1,5 +1,13 @@
 @import "styles/variables.scss";
 
+.category_item_icon {
+  position: relative;
+  height: 50px;
+  width: 50px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
 .banner {
   position: absolute;
   top: 0;

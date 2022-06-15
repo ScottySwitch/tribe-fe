@@ -68,7 +68,7 @@ const Header = (props: HeaderProps) => {
       <div className={styles.header_bottom}>
         <div className={styles.content}>
           <Image
-            style={{ cursor: "pointer" }}
+            className="cursor-pointer"
             src={require("public/logo.svg")}
             alt="logo"
             onClick={() => router.push("/")}

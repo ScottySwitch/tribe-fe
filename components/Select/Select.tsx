@@ -133,7 +133,7 @@ const Select = (props: SelectProps) => {
 
     return (
       <components.Control {...props}>
-        <Icon size={20} icon={prefixIcon || ""} style={{ marginRight: 10 }} />
+        <Icon size={20} icon={prefixIcon || ""} className="mr-[10px]" />
         {children}
       </components.Control>
     )
