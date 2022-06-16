@@ -47,6 +47,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
       minPrice: data.minPrice,
       maxPrice: data.maxPrice,
       mealsKind: data.mealsKind,
+      images: data.images,
       placeGoodFor: data.placeGoodFor,
       parking: data.parking,
       atmosphere: data.atmosphere,
@@ -237,7 +238,14 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="Do you have photos or videos to share? " optional>
-            <Upload type="media" centerIcon={<Icon icon="plus" size={20} />} />
+            <Upload
+              multiple={true}
+              accept="images"
+              fileList={getValues("images")}
+              type="media"
+              centerIcon={<Icon icon="plus" />}
+              onChange={(urls) => setValue("images", [...getValues("images"), ...urls])}
+            />
           </Question>
           <br /> <br /> <br />
           <Checkbox

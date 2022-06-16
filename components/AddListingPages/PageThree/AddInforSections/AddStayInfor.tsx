@@ -42,6 +42,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
       tags: data.tags,
       currency: data.currency,
       minPrice: data.minPrice,
+      images: data.images,
       maxPrice: data.maxPrice,
       foodOptions: data.foodOptions,
       paryerFacilities: data.paryerFacilities,
@@ -204,7 +205,14 @@ const AddStayInfor = (props: AddStayInforProps) => {
             instruction="Add images/ videos ( up to 3 )"
             optional
           >
-            <Upload type="media" centerIcon={<Icon icon="plus" />} />
+            <Upload
+              multiple={true}
+              accept="images"
+              fileList={getValues("images")}
+              type="media"
+              centerIcon={<Icon icon="plus" />}
+              onChange={(urls) => setValue("images", [...getValues("images"), ...urls])}
+            />
           </Question>
           <br /> <Break /> <br />
           <Checkbox

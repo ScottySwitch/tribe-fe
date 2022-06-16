@@ -16,6 +16,8 @@ import { transportAreas, transportAssociatedCategories } from "../constant"
 import TagsSelection from "components/TagsSelection/TagsSelection"
 import { IOption } from "type"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
+import Upload from "components/Upload/Upload"
+import Icon from "components/Icon/Icon"
 
 interface AddTransportInforProps {
   subCateList: IOption[]
@@ -34,6 +36,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
       tags: data.tags,
       currency: data.currency,
       minPrice: data.minPrice,
+      images: data.images,
       maxPrice: data.maxPrice,
       agreePolicies: data.agreePolicies,
       openHours: data.openHours,
@@ -116,6 +119,20 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
                 />
               </div>
             </div>
+          </Question>
+          <Question
+            question="Do you have photos or videos to share?"
+            sub_title="Add images/ videos ( up to 3 )"
+            optional
+          >
+            <Upload
+              multiple={true}
+              accept="images"
+              fileList={getValues("images")}
+              type="media"
+              centerIcon={<Icon icon="plus" />}
+              onChange={(urls) => setValue("images", [...getValues("images"), ...urls])}
+            />
           </Question>
           <br /> <Break /> <br />
           <Checkbox

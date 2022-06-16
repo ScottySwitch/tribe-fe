@@ -37,6 +37,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       tags: data.tags,
       currency: data.currency,
       minPrice: data.minPrice,
+      images: data.images,
       maxPrice: data.maxPrice,
       agreePolicies: data.agreePolicies,
       openHours: data.openHours,
@@ -144,7 +145,14 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             sub_title="Add images/ videos ( up to 3 )"
             optional
           >
-            <Upload type="media" centerIcon={<Icon icon="plus" />} />
+            <Upload
+              multiple={true}
+              accept="images"
+              fileList={getValues("images")}
+              type="media"
+              centerIcon={<Icon icon="plus" />}
+              onChange={(urls) => setValue("images", [...getValues("images"), ...urls])}
+            />
           </Question>
           <br /> <Break /> <br />
           <Checkbox

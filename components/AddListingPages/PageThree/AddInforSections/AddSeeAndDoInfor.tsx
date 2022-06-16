@@ -34,6 +34,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
     defaultValues: {
       categoryKind: data.categoryKind,
       tags: data.tags,
+      images: data.images,
       currency: data.currency,
       minPrice: data.minPrice,
       maxPrice: data.maxPrice,
@@ -137,7 +138,14 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
             sub_title="Add images/ videos ( up to 3 )"
             optional
           >
-            <Upload type="media" centerIcon={<Icon icon="plus" />} />
+            <Upload
+              multiple={true}
+              accept="images"
+              fileList={getValues("images")}
+              type="media"
+              centerIcon={<Icon icon="plus" />}
+              onChange={(urls) => setValue("images", [...getValues("images"), ...urls])}
+            />
           </Question>
           <br /> <Break /> <br />
           <Checkbox

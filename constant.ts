@@ -12,7 +12,7 @@ export const fakeSubCateList = [
 ]
 
 export const defaultAddlistingForm: IAddListingForm = {
-  category: "",
+  category: Categories.TRANSPORT,
   relationship: "",
   listing: "",
   role: "",
@@ -33,6 +33,7 @@ export const defaultAddlistingForm: IAddListingForm = {
   maxPrice: "",
   categoryKind: "",
   agreePolicies: "",
+  images: [],
   openHours: [
     { name: "Monday", twentyFourHours: false, openHours: [] },
     { name: "Tuesday", twentyFourHours: false, openHours: [] },
