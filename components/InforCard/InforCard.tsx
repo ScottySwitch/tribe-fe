@@ -19,7 +19,7 @@ export interface InforCardProps {
 
 const InforCard = (props: InforCardProps) => {
   const {
-    imgUrl,
+    imgUrl = "https://picsum.photos/200/300",
     title,
     rate,
     description,

@@ -12,7 +12,7 @@ export const fakeSubCateList = [
 ]
 
 export const defaultAddlistingForm: IAddListingForm = {
-  category: Categories.TRANSPORT,
+  category: "",
   relationship: "",
   listing: "",
   role: "",

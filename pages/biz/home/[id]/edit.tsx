@@ -128,7 +128,10 @@ const EditListingHomepage = (context) => {
         title={getAddItemsFields(category).title}
       >
         <AddItems
-          onSetItemList={(list) => setItemList(list)}
+          onSetItemList={(list) => {
+            console.log(list)
+            setItemList(list)
+          }}
           onSetScreen={(screen) => setScreen(screen)}
           itemList={itemList}
           placeholders={getAddItemsFields(category).placeholder}

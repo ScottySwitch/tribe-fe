@@ -28,8 +28,6 @@ const Upload = (props: UploadProps) => {
     type = "upload",
   } = props
 
-  console.log("fileList", fileList)
-
   const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : []
   const initFileList = multiple ? fileList : lastItemArray
 

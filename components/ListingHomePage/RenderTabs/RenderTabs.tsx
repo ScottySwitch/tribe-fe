@@ -8,28 +8,18 @@ import Image from "next/image"
 import { useState } from "react"
 import Heading from "../Heading/Heading"
 
+import styles from "./RenderTabs.module.scss"
+
 const Cards = ({ list }) =>
   Array.isArray(list) ? (
-    <div
-      style={{
-        backgroundColor: "#F6F6F6",
-        borderRadius: "8px",
-        padding: "16px",
-        marginTop: 20,
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 20,
-        maxHeight: 700,
-        overflowY: "scroll",
-      }}
-    >
+    <div className={styles.items_container}>
       <div className="w-full flex justify-center">
         <Input placeholder="search" width="100%" prefix={<Icon icon="search" />} />
       </div>
       {list.map((item) => (
         <InforCard
           key={item.id}
-          imgUrl={item.imgUrl || "https://picsum.photos/200/300"}
+          imgUrl={item.imgUrl}
           title={item.name}
           price={item.price}
           description={item.description || item.information}
@@ -98,19 +88,22 @@ const RenderTabs = (props: {
       break
 
     case ListingTabs.DISH:
-      tabContent = (
-        <div className="flex flex-col items-center justify-center">
-          <Image src={require("public/images/no-dish.svg")} width={100} alt="" />
-          <p>There are no dish yet</p>
-          <Button
-            text="Add Dish now"
-            size="small"
-            width={300}
-            className="my-5"
-            onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
-          />
-        </div>
-      )
+      tabContent =
+        Array.isArray(itemList) && itemList.length ? (
+          <Cards list={itemList} />
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            <Image src={require("public/images/no-dish.svg")} width={100} alt="" />
+            <p>There are no dish yet</p>
+            <Button
+              text="Add Dish now"
+              size="small"
+              width={300}
+              className="my-5"
+              onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
+            />
+          </div>
+        )
       break
 
     case ListingTabs.MENU:
@@ -145,7 +138,6 @@ const RenderTabs = (props: {
             />
           </div>
         )
-      break
       break
 
     default:

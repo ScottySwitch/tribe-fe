@@ -69,7 +69,11 @@ const AddItems = (props: AddItemsProps) => {
                 <Icon icon="cancel" />
               </div>
             </div>
-            <Upload className={styles.upload} centerIcon={<Icon icon="plus" size={20} />} />
+            <Upload
+              type="media"
+              centerIcon={<Icon icon="plus" size={20} />}
+              onChange={(e) => handleChangeItem(item.id, "imgUrl", e[0])}
+            />
             <Input
               placeholder={placeholders[0]}
               onChange={(e: any) => handleChangeItem(item.id, "name", e.target.value)}
