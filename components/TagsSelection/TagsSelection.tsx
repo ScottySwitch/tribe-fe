@@ -4,10 +4,9 @@ import Button from "components/Button/Button"
 import Checkbox from "components/Checkbox/Checkbox"
 import { Categories } from "enums"
 import React, { useState } from "react"
+import { IOption } from "type"
 
 import styles from "./TagsSelection.module.scss"
-
-type IOption = { label: string; value: string }
 
 interface TagsSelectionProps {
   className?: string

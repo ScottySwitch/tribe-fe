@@ -15,7 +15,6 @@ import { categories } from "constant"
 import {
   additionalFeatures,
   atmosphere,
-  cuisineModalList,
   mealOptions,
   parkingNearby,
   paymentMethods,
@@ -24,10 +23,14 @@ import {
 import Break from "components/Break/Break"
 import Upload from "components/Upload/Upload"
 import Icon from "components/Icon/Icon"
-import OpeningHours from "components/OpeningHours/OpeningHours"
+import OpenHours from "components/OpenHours/OpenHours"
 import { YesNo } from "enums"
+import { IOption } from "type"
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
+import TagsSelection from "components/TagsSelection/TagsSelection"
 
 interface AddEatInforProps {
+  subCateList: IOption[]
   data: { [key: string]: any }
   show?: boolean
   onPrevPage: () => void
@@ -35,9 +38,7 @@ interface AddEatInforProps {
 }
 
 const AddEatInfor = (props: AddEatInforProps) => {
-  const { data, show, onPrevPage, onPreview } = props
-  const [cuisineVisible, setCuisineVisible] = useState(false)
-  const [showOpeningHoursModal, setShowOpeningHoursModal] = useState(false)
+  const { data, subCateList, show, onPrevPage, onPreview } = props
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -53,10 +54,12 @@ const AddEatInfor = (props: AddEatInforProps) => {
       additionalServices: data.additionalServices,
       agreePolicies: data.agreePolicies,
       currency: data.currency,
-      openingHours: data.openingHours,
+      openHours: data.openHours,
     },
   })
 
+  const [showTagsModal, setShowTagsModal] = useState(false)
+  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
 
   const onSubmit = (data) => {
@@ -93,21 +96,29 @@ const AddEatInfor = (props: AddEatInforProps) => {
             <br />
             <Input placeholder="Please tell us the listing type" />
           </Question>
-          <Question question="What type of cuisine does this place serve?" optional>
+          <Question
+            question="What type of cuisine does this place serve?"
+            instruction="Select 5 max"
+            optional
+          >
+            <PreviewValue valueKey="tags" value={getValues("tags")} />
+            <br />
             <Button
               text="Edit cruisines"
               width="fit-content"
               size="small"
-              onClick={() => setCuisineVisible(true)}
+              onClick={() => setShowTagsModal(true)}
             />
           </Question>
           <Question question="What are the opening hours? " optional>
+            <PreviewValue valueKey="openHours" value={getValues("openHours")} />
+            <br />
             <Button
               text="Add opening hours"
               width="fit-content"
               size="small"
               variant="secondary"
-              onClick={() => setShowOpeningHoursModal(true)}
+              onClick={() => setShowOpenHoursModal(true)}
             />
           </Question>
           <Question question="What tags best describe this place? " optional>
@@ -245,49 +256,37 @@ const AddEatInfor = (props: AddEatInforProps) => {
         </form>
       </SectionLayout>
       <Modal
-        title="Add cuisine"
-        width={800}
+        visible={showTagsModal}
+        title="Add product"
         subTitle="Select max 5"
-        visible={cuisineVisible}
-        onClose={() => setCuisineVisible(false)}
+        width={780}
+        mobileFullHeight
+        onClose={() => setShowTagsModal(false)}
       >
-        <div className="px-[30px] pb-10" style={{ border: "1px solid #E2E4E9" }}>
-          <br />
-          <div className="flex flex-wrap justify-between gap-4">
-            {cuisineModalList.map((opt) => (
-              <Checkbox key={opt.label} label={opt.label} className="w-[23%]" />
-            ))}
-          </div>
-        </div>
-        <div className="flex items-center px-[30px] py-[20px] justify-end gap-12">
-          <button
-            className="underline w-max cursor-pointer flex items-end text-left"
-            onClick={() => setCuisineVisible(false)}
-          >
-            Cancel
-          </button>
-          <Button
-            text="Continue"
-            size="small"
-            width={270}
-            onClick={() => setCuisineVisible(true)}
-          />
-        </div>
+        <TagsSelection
+          options={subCateList}
+          selectedList={getValues("tags")}
+          onCancel={() => setShowTagsModal(false)}
+          onSubmit={(list) => {
+            setValue("tags", list)
+            setShowTagsModal(false)
+          }}
+        />
       </Modal>
       <Modal
         visible={showOpeningHoursModal}
         title="Add opening hours"
         width={780}
         mobileFullHeight
-        onClose={() => setShowOpeningHoursModal(false)}
+        onClose={() => setShowOpenHoursModal(false)}
       >
-        <OpeningHours
-          data={getValues("openingHours")}
-          onCancel={() => setShowOpeningHoursModal(false)}
-          onSubmit={(openingHours) => {
-            setShowOpeningHoursModal(false)
-            console.log(openingHours)
-            setValue("openingHours", openingHours)
+        <OpenHours
+          data={getValues("openHours")}
+          onCancel={() => setShowOpenHoursModal(false)}
+          onSubmit={(openHours) => {
+            setShowOpenHoursModal(false)
+            console.log(openHours)
+            setValue("openHours", openHours)
           }}
         />
       </Modal>

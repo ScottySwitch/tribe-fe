@@ -14,13 +14,3 @@
     cursor: pointer;
   }
 }
-
-.preview {
-  &_value {
-    font-weight: $fw-light;
-
-    &:not(:last-child)::after {
-      content: ",";
-    }
-  }
-}

@@ -12,48 +12,15 @@ import Modal from "components/Modal/Modal"
 import Break from "components/Break/Break"
 import Upload from "components/Upload/Upload"
 import Icon from "components/Icon/Icon"
-import OpeningHours from "components/OpeningHours/OpeningHours"
+import OpenHours from "components/OpenHours/OpenHours"
 import { YesNo } from "enums"
 import TagsSelection from "components/TagsSelection/TagsSelection"
-
-const associatedCategories = [
-  { label: "Electronic Devices" },
-  { label: "Electronic Accessories" },
-  { label: "TV & Home Appliances" },
-  { label: "Health & Beauty" },
-  { label: "Babies & Toys" },
-  { label: "Groceries" },
-  { label: "Home & Lifestyle" },
-  { label: "Women's Fashion" },
-  { label: "Men's Fashion" },
-  { label: "Watches & Bags" },
-  { label: "Sports & Lifestyle" },
-  { label: "Automotive & Motorcycle" },
-  { label: "Pets" },
-]
-
-const productBrands = [{ label: "Laptops & Notebooks" }, { label: "2-in-1s" }]
-
-const tags = [
-  { label: "Family Friendly" },
-  { label: "Pet Friendly" },
-  { label: "Child Friendly" },
-  { label: "Disability Friendly" },
-]
-
-const productTypes = [
-  { label: "Mobiles" },
-  { label: "Tablets" },
-  { label: "Action/Video Cameras" },
-  { label: "Security Cameras" },
-  { label: "Laptops" },
-  { label: "Digital Cameras" },
-  { label: "Desktops Computers" },
-  { label: "Gadgets & Drones" },
-  { label: "Gaming Consoles" },
-]
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
+import { associatedCategories, productTypes, tags } from "../constant"
+import { IOption } from "type"
 
 interface AddBuyInforProps {
+  subCateList: IOption[]
   data: { [key: string]: any }
   show?: boolean
   onPrevPage: () => void
@@ -61,7 +28,7 @@ interface AddBuyInforProps {
 }
 
 const AddBuyInfor = (props: AddBuyInforProps) => {
-  const { data, show, onPrevPage, onPreview } = props
+  const { data, show, subCateList, onPrevPage, onPreview } = props
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -72,12 +39,12 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       minPrice: data.minPrice,
       maxPrice: data.maxPrice,
       agreePolicies: data.agreePolicies,
-      openingHours: data.openingHours,
+      openHours: data.openHours,
     },
   })
 
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
-  const [showOpeningHoursModal, setShowOpeningHoursModal] = useState(false)
+  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
   const [showTagsModal, setShowTagsModal] = useState(false)
 
   const onSubmit = (data) => {
@@ -129,11 +96,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             instruction="Select 5 max"
             optional
           >
-            <div className="flex flex-wrap gap-2">
-              {productBrands.map((opt) => (
-                <Badge key={opt.label} text={opt.label} />
-              ))}
-            </div>
+            <PreviewValue valueKey="tags" value={getValues("tags")} />
             <br />
             <Button
               text="Edit product"
@@ -143,12 +106,14 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             />
           </Question>
           <Question question="What are the opening hours?" optional>
+            <PreviewValue valueKey="openHours" value={getValues("openHours")} />
+            <br />
             <Button
               text="Add opening hours"
               width="fit-content"
               size="small"
               variant="secondary"
-              onClick={() => setShowOpeningHoursModal(true)}
+              onClick={() => setShowOpenHoursModal(true)}
             />
           </Question>
           <Question question="What tags best describe this place? " optional>
@@ -203,33 +168,28 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
         title="Add opening hours"
         width={780}
         mobileFullHeight
-        onClose={() => setShowOpeningHoursModal(false)}
+        onClose={() => setShowOpenHoursModal(false)}
       >
-        <OpeningHours
-          data={getValues("openingHours")}
-          onCancel={() => setShowOpeningHoursModal(false)}
-          onSubmit={(openingHours) => {
-            setShowOpeningHoursModal(false)
-            console.log(openingHours)
-            setValue("openingHours", openingHours)
+        <OpenHours
+          data={getValues("openHours")}
+          onCancel={() => setShowOpenHoursModal(false)}
+          onSubmit={(openHours) => {
+            setShowOpenHoursModal(false)
+            console.log(openHours)
+            setValue("openHours", openHours)
           }}
         />
       </Modal>
       <Modal
         visible={showTagsModal}
         title="Add product"
+        subTitle="Select max 5"
         width={780}
         mobileFullHeight
         onClose={() => setShowTagsModal(false)}
       >
         <TagsSelection
-          options={[
-            { label: "Sample", value: "Sample" },
-            { label: "Sample 1", value: "Sample 1" },
-            { label: "Sample 2", value: "Sample 2" },
-            { label: "Sample 3", value: "Sample 3" },
-            { label: "Sample 4", value: "Sample 4" },
-          ]}
+          options={subCateList}
           selectedList={getValues("tags")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {

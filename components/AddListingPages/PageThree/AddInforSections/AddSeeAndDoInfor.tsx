@@ -10,29 +10,17 @@ import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Modal from "components/Modal/Modal"
 import Break from "components/Break/Break"
-import OpeningHours from "components/OpeningHours/OpeningHours"
+import OpenHours from "components/OpenHours/OpenHours"
 import { YesNo } from "enums"
-
-const associatedCategories = [
-  { label: "Attractions & tickets" },
-  { label: "Tours & must-sees" },
-  { label: "Outdoors & sports" },
-  { label: "Events & movies" },
-  { label: "Water sports & activities" },
-  { label: "Relaxation" },
-  { label: "Fun & culture" },
-]
-
-const describes = [{ label: "Theme & water parks" }, { label: "Attraction passes" }]
-
-const tags = [
-  { label: "Family Friendly" },
-  { label: "Pet Friendly" },
-  { label: "Child Friendly" },
-  { label: "Disability Friendly" },
-]
+import TagsSelection from "components/TagsSelection/TagsSelection"
+import { IOption } from "type"
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
+import { seeDoAssociatedCategories, seeDoTags } from "../constant"
+import Upload from "components/Upload/Upload"
+import Icon from "components/Icon/Icon"
 
 interface AddSeeAndDoInforProps {
+  subCateList: IOption[]
   data: { [key: string]: any }
   show?: boolean
   onPrevPage: () => void
@@ -40,9 +28,7 @@ interface AddSeeAndDoInforProps {
 }
 
 const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
-  const { data, show, onPrevPage, onPreview } = props
-  const [cuisineVisible, setCuisineVisible] = useState(false)
-  const [showOpeningHoursModal, setShowOpeningHoursModal] = useState(false)
+  const { data, show, subCateList, onPrevPage, onPreview } = props
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -52,13 +38,15 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
       minPrice: data.minPrice,
       maxPrice: data.maxPrice,
       agreePolicies: data.agreePolicies,
-      openingHours: data.openingHours,
+      openHours: data.openHours,
     },
   })
 
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
+  const [showTagsModal, setShowTagsModal] = useState(false)
+  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
 
-  const onSubmit = () => {
+  const onSubmit = (data) => {
     onPreview(data)
   }
 
@@ -75,7 +63,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question question="What is the category best associated with this service?">
             <div className="flex flex-wrap gap-2">
-              {associatedCategories.map((opt) => (
+              {seeDoAssociatedCategories.map((opt) => (
                 <Badge
                   key={opt.label}
                   text={opt.label}
@@ -93,26 +81,29 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
             instruction="Select 5 max"
             optional
           >
-            <div className="flex flex-wrap gap-2">
-              {describes.map((opt) => (
-                <Badge key={opt.label} text={opt.label} />
-              ))}
-            </div>
+            <PreviewValue valueKey="tags" value={getValues("tags")} />
             <br />
-            <Button text="Edit property" width="fit-content" size="small" />
+            <Button
+              text="Edit property"
+              width="fit-content"
+              size="small"
+              onClick={() => setShowTagsModal(true)}
+            />
           </Question>
           <Question question="What are the opening hours?" optional>
+            <PreviewValue valueKey="openHours" value={getValues("openHours")} />
+            <br />
             <Button
               text="Add opening hours"
               width="fit-content"
               size="small"
               variant="secondary"
-              onClick={() => setShowOpeningHoursModal(true)}
+              onClick={() => setShowOpenHoursModal(true)}
             />
           </Question>
           <Question question="What tags best describe this place? " optional>
             <div className="flex flex-wrap gap-y-5">
-              {tags.map((item) => (
+              {seeDoTags.map((item) => (
                 <Checkbox
                   key={item.label}
                   label={item.label}
@@ -145,7 +136,9 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
             question="Do you have photos or videos to share?"
             sub_title="Add images/ videos ( up to 3 )"
             optional
-          ></Question>
+          >
+            <Upload type="media" centerIcon={<Icon icon="plus" />} />
+          </Question>
           <br /> <Break /> <br />
           <Checkbox
             register={register("agreePolicies")}
@@ -163,19 +156,37 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
         </form>
       </SectionLayout>
       <Modal
+        visible={showTagsModal}
+        title="Add product"
+        subTitle="Select max 5"
+        width={780}
+        mobileFullHeight
+        onClose={() => setShowTagsModal(false)}
+      >
+        <TagsSelection
+          options={subCateList}
+          selectedList={getValues("tags")}
+          onCancel={() => setShowTagsModal(false)}
+          onSubmit={(list) => {
+            setValue("tags", list)
+            setShowTagsModal(false)
+          }}
+        />
+      </Modal>
+      <Modal
         visible={showOpeningHoursModal}
         title="Add opening hours"
         width={780}
         mobileFullHeight
-        onClose={() => setShowOpeningHoursModal(false)}
+        onClose={() => setShowOpenHoursModal(false)}
       >
-        <OpeningHours
-          data={getValues("openingHours")}
-          onCancel={() => setShowOpeningHoursModal(false)}
-          onSubmit={(openingHours) => {
-            setShowOpeningHoursModal(false)
-            console.log(openingHours)
-            setValue("openingHours", openingHours)
+        <OpenHours
+          data={getValues("openHours")}
+          onCancel={() => setShowOpenHoursModal(false)}
+          onSubmit={(openHours) => {
+            setShowOpenHoursModal(false)
+            console.log(openHours)
+            setValue("openHours", openHours)
           }}
         />
       </Modal>

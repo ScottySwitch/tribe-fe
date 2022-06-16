@@ -13,66 +13,11 @@ import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/A
 import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
 import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor"
 import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor"
-import { IOpeningHours } from "components/OpeningHours/OpeningHours"
+import { IOpeningHours } from "components/OpenHours/OpenHours"
 
 import styles from "styles/AddListing.module.scss"
-
-const defaultAddlistingForm: IAddListingForm = {
-  category: "buy",
-  relationship: "",
-  listing: "",
-  role: "",
-  isOpen: "",
-  openDate: "",
-  businessName: "",
-  description: "",
-  isOnline: "",
-  city: "",
-  country: "",
-  address: "",
-  additionalAddress: "",
-  contact: "",
-  email: "",
-  socialMedia: "",
-  currency: "",
-  minPrice: "",
-  maxPrice: "",
-  categoryKind: "",
-  agreePolicies: "",
-  openingHours: [
-    { name: "Monday", twentyFourHours: true, openingHours: [] },
-    { name: "Tuesday", twentyFourHours: false, openingHours: [] },
-    {
-      name: "Wednesday",
-      twentyFourHours: false,
-      openingHours: [],
-    },
-    {
-      name: "Thursday",
-      twentyFourHours: false,
-      openingHours: [],
-    },
-    { name: "Friday", twentyFourHours: false, openingHours: [] },
-    {
-      name: "Saturday",
-      twentyFourHours: true,
-      openingHours: [],
-    },
-    { name: "Sunday", twentyFourHours: false, openingHours: [] },
-  ],
-
-  tags: [],
-  mealsKind: [""],
-  placeGoodFor: [""],
-  parking: [""],
-  atmosphere: [""],
-  payment: [""],
-  additionalServices: [""],
-  foodOptions: [""],
-  paryerFacilities: [""],
-  foodOptionsRamadan: [""],
-  nonHalalActivities: [""],
-}
+import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant"
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 export interface IAddListingForm {
   category: string
   categoryKind: string
@@ -102,7 +47,7 @@ export interface IAddListingForm {
 
   tags?: any[]
   mealsKind?: any[]
-  openingHours?: IOpeningHours
+  openHours?: IOpeningHours
   payment?: any[]
   additionalServices?: any[]
   media?: any[]
@@ -113,7 +58,7 @@ export interface IAddListingForm {
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(3)
+  const [pageNumber, setPageNumber] = useState(1)
   const [formData, setFormData] = useState(defaultAddlistingForm)
   const [showPreviewModal, setShowPreviewModal] = useState(false)
   const [showSubmitResult, setShowSubmitResult] = useState(false)
@@ -136,9 +81,9 @@ const AddListing = () => {
     setFormData({ ...formData, ...data })
   }
 
-  const handleSubmitFormData = (data) => {
+  const handleSubmitFormData = () => {
     ///do CRUD things here
-    console.log("data", data)
+    console.log("data", formData)
     const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true)
@@ -153,27 +98,6 @@ const AddListing = () => {
   const handlePreview = (data) => {
     setFormData({ ...formData, ...data })
     setShowPreviewModal(true)
-  }
-
-  const renderPreviewValue = (key, value) => {
-    if (key === "openingHours") {
-      return "null"
-    }
-    if (key === "tags") {
-      return (
-        <div className="flex gap-1">
-          {Array.isArray(value) &&
-            value.map((item) => (
-              <div className={styles.preview_value} key={item.value}>
-                {item.label}
-              </div>
-            ))}
-        </div>
-      )
-    }
-    if (typeof value === "string") {
-      return value
-    }
   }
 
   return (
@@ -193,30 +117,35 @@ const AddListing = () => {
       {/* page three */}
       <div className="page-three">
         <AddBuyInfor
+          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.BUY}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddEatInfor
+          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.EAT}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddSeeAndDoInfor
+          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.SEE_AND_DO}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddStayInfor
+          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.STAY}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddTransportInfor
+          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.TRANSPORT}
           onPrevPage={handlePrevPage}
@@ -232,12 +161,17 @@ const AddListing = () => {
         onClose={() => setShowPreviewModal(false)}
       >
         <div className="px-[30px] gap-6 flex flex-col">
-          {previewInfo.map((row) => (
-            <div key={row.question} className="flex gap-20">
-              <div className="flex flex-wrap w-3/5">{row.question}</div>
-              <div className="w-2/5">{renderPreviewValue(row.key, get(formData, row.key))}</div>
-            </div>
-          ))}
+          {previewInfo.map((row) => {
+            console.log("aaa", row.valueKey)
+            return (
+              <div key={row.question} className="flex gap-20">
+                <div className="flex flex-wrap w-3/5">{row.question}</div>
+                <div className="w-2/5">
+                  <PreviewValue valueKey={row.valueKey} value={get(formData, row.valueKey)} />
+                </div>
+              </div>
+            )
+          })}
           <div className="flex justify-end px-[30px] py-3">
             <Button
               text="Cancel"
@@ -274,33 +208,5 @@ const AddListing = () => {
     </div>
   )
 }
-
-const previewInfo = [
-  { question: "What kind of place is this?", key: "categoryKind" },
-  {
-    question:
-      "Are you affiliated with this place as an owner, employee, or official representative?",
-    key: "relationship",
-  },
-  {
-    question: "Does this place already have a listing on Tribes?",
-    key: "listing",
-  },
-  { question: "What is your role at this business?", key: "role.label" },
-  { question: "Is this place currently open?", key: "isOpen" },
-  { question: "Official place name", key: "businessName" },
-  { question: "Description of your property:", key: "description" },
-  { question: "City/Town, State/Province/Region", key: "city" },
-  { question: "Country", key: "country" },
-  { question: "Street address ", key: "address" },
-  { question: "Additional address information", key: "additionalAddress" },
-  { question: "Social Media", key: "socialMedia" },
-  { question: "What is the category that best fits this place?", key: "tags" },
-  { question: "What type of cuisine does this place serve?", key: "" },
-  { question: "Open hours", key: "openingHours" },
-  { question: "Select a currency", key: "currency" },
-  { question: "Max price", key: "maxPrice" },
-  { question: "Min price", key: "minPrice" },
-]
 
 export default AddListing

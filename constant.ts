@@ -1,6 +1,100 @@
 import { Categories, InformationList, ListingTabs } from "enums"
+import { IAddListingForm } from "pages/add-listing"
 
 export const loginInforItem = "login_infor"
+
+export const fakeSubCateList = [
+  { label: "Subcate", value: "Subcate" },
+  { label: "Subcate 1", value: "Subcate 1" },
+  { label: "Subcate 2", value: "Subcate 2" },
+  { label: "Subcate 3", value: "Subcate 3" },
+  { label: "Subcate 4", value: "Subcate 4" },
+]
+
+export const defaultAddlistingForm: IAddListingForm = {
+  category: "",
+  relationship: "",
+  listing: "",
+  role: "",
+  isOpen: "",
+  openDate: "",
+  businessName: "",
+  description: "",
+  isOnline: "",
+  city: "",
+  country: "",
+  address: "",
+  additionalAddress: "",
+  contact: "",
+  email: "",
+  socialMedia: "",
+  currency: "",
+  minPrice: "",
+  maxPrice: "",
+  categoryKind: "",
+  agreePolicies: "",
+  openHours: [
+    { name: "Monday", twentyFourHours: false, openHours: [] },
+    { name: "Tuesday", twentyFourHours: false, openHours: [] },
+    {
+      name: "Wednesday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    {
+      name: "Thursday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    { name: "Friday", twentyFourHours: false, openHours: [] },
+    {
+      name: "Saturday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    { name: "Sunday", twentyFourHours: false, openHours: [] },
+  ],
+
+  tags: [],
+  mealsKind: [""],
+  placeGoodFor: [""],
+  parking: [""],
+  atmosphere: [""],
+  payment: [""],
+  additionalServices: [""],
+  foodOptions: [""],
+  paryerFacilities: [""],
+  foodOptionsRamadan: [""],
+  nonHalalActivities: [""],
+}
+
+export const previewInfo = [
+  { question: "What kind of place is this?", valueKey: "category" },
+  {
+    question:
+      "Are you affiliated with this place as an owner, employee, or official representative?",
+    valueKey: "relationship",
+  },
+  {
+    question: "Does this place already have a listing on Tribes?",
+    valueKey: "listing",
+  },
+  { question: "What is your role at this business?", valueKey: "role.label" },
+  { question: "Is this place currently open?", valueKey: "isOpen" },
+  { question: "Official place name", valueKey: "businessName" },
+  { question: "Description of your property:", valueKey: "description" },
+  { question: "City/Town, State/Province/Region", valueKey: "city" },
+  { question: "Country", valueKey: "country" },
+  { question: "Street address ", valueKey: "address" },
+  { question: "Additional address information", valueKey: "additionalAddress" },
+  { question: "Social Media", valueKey: "socialMedia" },
+  { question: "What is the category that best fits this place?", valueKey: "categoryKind" },
+  { question: "What type of cuisine does this place serve?", valueKey: "tags" },
+  { question: "Open hours", valueKey: "openHours" },
+  { question: "Select a currency", valueKey: "currency" },
+  { question: "Max price", valueKey: "maxPrice" },
+  { question: "Min price", valueKey: "minPrice" },
+]
 
 export const eatTabList = [
   { text: "Dishes", value: ListingTabs.DISH },

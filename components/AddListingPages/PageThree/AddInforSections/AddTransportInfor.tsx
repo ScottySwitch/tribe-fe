@@ -10,22 +10,15 @@ import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Modal from "components/Modal/Modal"
 import Break from "components/Break/Break"
-import OpeningHours from "components/OpeningHours/OpeningHours"
+import OpenHours from "components/OpenHours/OpenHours"
 import { YesNo } from "enums"
-
-const associatedCategories = [
-  { label: "Trains" },
-  { label: "Car rentals" },
-  { label: "Buses and ferries" },
-  { label: "Private transport" },
-  { label: "Public transport" },
-  { label: "Scooter and motorbike rentals" },
-  { label: "Airport transfer" },
-]
-
-const areas = [{ label: "Private airport transfer" }, { label: "Airport trains & buses" }]
+import { transportAreas, transportAssociatedCategories } from "../constant"
+import TagsSelection from "components/TagsSelection/TagsSelection"
+import { IOption } from "type"
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 
 interface AddTransportInforProps {
+  subCateList: IOption[]
   data: { [key: string]: any }
   show?: boolean
   onPrevPage: () => void
@@ -33,8 +26,7 @@ interface AddTransportInforProps {
 }
 
 const AddTransportInfor = (props: AddTransportInforProps) => {
-  const { data, show, onPrevPage, onPreview } = props
-  const [showOpeningHoursModal, setShowOpeningHoursModal] = useState(false)
+  const { data, subCateList, show, onPrevPage, onPreview } = props
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -44,11 +36,13 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
       minPrice: data.minPrice,
       maxPrice: data.maxPrice,
       agreePolicies: data.agreePolicies,
-      openingHours: data.openingHours,
+      openHours: data.openHours,
     },
   })
 
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
+  const [showTagsModal, setShowTagsModal] = useState(false)
+  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
 
   const onSubmit = (data) => {
     onPreview(data)
@@ -67,7 +61,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question question="What is the category best associated with this service?">
             <div className="flex flex-wrap gap-2">
-              {associatedCategories.map((opt) => (
+              {transportAssociatedCategories.map((opt) => (
                 <Badge
                   key={opt.label}
                   text={opt.label}
@@ -85,21 +79,24 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
             instruction="Select 5 max"
             optional
           >
-            <div className="flex flex-wrap gap-2">
-              {areas.map((opt) => (
-                <Badge key={opt.label} text={opt.label} />
-              ))}
-            </div>
+            <PreviewValue valueKey="tags" value={getValues("tags")} />
             <br />
-            <Button text="Edit cruisines" width="fit-content" size="small" />
+            <Button
+              text="Edit cruisines"
+              width="fit-content"
+              size="small"
+              onClick={() => setShowTagsModal(true)}
+            />
           </Question>
           <Question question="What are the opening hours?" optional>
+            <PreviewValue valueKey="openHours" value={getValues("openHours")} />
+            <br />
             <Button
               text="Add opening hours"
               width="fit-content"
               size="small"
               variant="secondary"
-              onClick={() => setShowOpeningHoursModal(true)}
+              onClick={() => setShowOpenHoursModal(true)}
             />
           </Question>
           <Question question="What’s the average price range of this service?" optional>
@@ -137,19 +134,38 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
         </form>
       </SectionLayout>
       <Modal
-        visible={showOpeningHoursModal}
-        title="Add opening hours"
+        visible={showTagsModal}
+        title="Add product"
+        subTitle="Select max 5"
         width={780}
         mobileFullHeight
-        onClose={() => setShowOpeningHoursModal(false)}
+        onClose={() => setShowTagsModal(false)}
       >
-        <OpeningHours
-          data={getValues("openingHours")}
-          onCancel={() => setShowOpeningHoursModal(false)}
-          onSubmit={(openingHours) => {
-            setShowOpeningHoursModal(false)
-            console.log(openingHours)
-            setValue("openingHours", openingHours)
+        <TagsSelection
+          options={subCateList}
+          selectedList={getValues("tags")}
+          onCancel={() => setShowTagsModal(false)}
+          onSubmit={(list) => {
+            setValue("tags", list)
+            setShowTagsModal(false)
+          }}
+        />
+      </Modal>
+      <Modal
+        visible={showOpeningHoursModal}
+        title="Add opening hours"
+        subTitle="Select max 5"
+        width={780}
+        mobileFullHeight
+        onClose={() => setShowOpenHoursModal(false)}
+      >
+        <OpenHours
+          data={getValues("openHours")}
+          onCancel={() => setShowOpenHoursModal(false)}
+          onSubmit={(openHours) => {
+            setShowOpenHoursModal(false)
+            console.log(openHours)
+            setValue("openHours", openHours)
           }}
         />
       </Modal>

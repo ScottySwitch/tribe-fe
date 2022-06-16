@@ -1,10 +1,10 @@
 export enum Categories {
-  BUY = "buy",
-  EAT = "eat",
-  STAY = "stay",
-  TRANSPORT = "transport",
-  SEE_AND_DO = "see-and-do",
-  OTHER = "other",
+  BUY = "Buy",
+  EAT = "Eat",
+  STAY = "Stay",
+  TRANSPORT = "Transport",
+  SEE_AND_DO = "See and Do",
+  OTHER = "Other",
 }
 
 export enum YesNo {

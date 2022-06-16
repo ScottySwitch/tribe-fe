@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [showHamModal, setShowHamModal] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  //handle logic hide header when scroll, not hide when in desktop || when opening ham modal || in unAuthPages
+  //handle logic hide header when scroll, not hide when in desktop || when setShowOpenHoursModal ham modal || in unAuthPages
   useEffect(() => {
     var prevScrollpos = window.pageYOffset
     const header = document.getElementById("header") as any
