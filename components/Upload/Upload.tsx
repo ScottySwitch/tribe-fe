@@ -8,8 +8,8 @@ import styles from "./Upload.module.scss"
 export interface UploadProps {
   name?: string
   onChange?: (event: string[]) => void
-  accept: string
-  fileList: any[]
+  accept?: string
+  fileList?: any[]
   className?: string
   multiple?: boolean
   centerIcon?: ReactNode
@@ -53,7 +53,7 @@ const Upload = (props: UploadProps) => {
       })
       .then((res) => {
         if (res.data.urls && Array.isArray(res.data.urls) && res.data.urls.length > 0) {
-          alert('Upload successfully!')
+          alert("Upload successfully!")
           onChange?.([...fileList, ...res.data.urls])
         }
       })
