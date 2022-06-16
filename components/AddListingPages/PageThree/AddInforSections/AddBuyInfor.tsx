@@ -12,10 +12,9 @@ import Modal from "components/Modal/Modal"
 import Break from "components/Break/Break"
 import Upload from "components/Upload/Upload"
 import Icon from "components/Icon/Icon"
-import Heading from "components/ListingHomePage/Heading/Heading"
 import OpeningHours from "components/OpeningHours/OpeningHours"
-import { setValues } from "framer-motion/types/render/utils/setters"
 import { YesNo } from "enums"
+import TagsSelection from "components/TagsSelection/TagsSelection"
 
 const associatedCategories = [
   { label: "Electronic Devices" },
@@ -79,6 +78,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
 
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
   const [showOpeningHoursModal, setShowOpeningHoursModal] = useState(false)
+  const [showTagsModal, setShowTagsModal] = useState(false)
 
   const onSubmit = (data) => {
     onPreview(data)
@@ -135,7 +135,12 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
               ))}
             </div>
             <br />
-            <Button text="Edit product" width="fit-content" size="small" />
+            <Button
+              text="Edit product"
+              width="fit-content"
+              size="small"
+              onClick={() => setShowTagsModal(true)}
+            />
           </Question>
           <Question question="What are the opening hours?" optional>
             <Button
@@ -207,6 +212,29 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             setShowOpeningHoursModal(false)
             console.log(openingHours)
             setValue("openingHours", openingHours)
+          }}
+        />
+      </Modal>
+      <Modal
+        visible={showTagsModal}
+        title="Add product"
+        width={780}
+        mobileFullHeight
+        onClose={() => setShowTagsModal(false)}
+      >
+        <TagsSelection
+          options={[
+            { label: "Sample", value: "Sample" },
+            { label: "Sample 1", value: "Sample 1" },
+            { label: "Sample 2", value: "Sample 2" },
+            { label: "Sample 3", value: "Sample 3" },
+            { label: "Sample 4", value: "Sample 4" },
+          ]}
+          selectedList={getValues("tags")}
+          onCancel={() => setShowTagsModal(false)}
+          onSubmit={(list) => {
+            setValue("tags", list)
+            setShowTagsModal(false)
           }}
         />
       </Modal>

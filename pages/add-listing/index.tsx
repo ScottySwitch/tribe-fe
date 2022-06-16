@@ -1,3 +1,6 @@
+import Image from "next/image"
+import get from "lodash/get"
+import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 
 import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne"
@@ -6,20 +9,16 @@ import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPage
 import Button from "components/Button/Button"
 import Modal from "components/Modal/Modal"
 import { Categories, ClaimStep, YesNo } from "enums"
-
-import styles from "styles/AddListing.module.scss"
-import Image from "next/image"
-import get from "lodash/get"
-import { useRouter } from "next/router"
 import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/AddBuyInfor"
 import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
 import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor"
 import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor"
-import { categories } from "constant"
 import { IOpeningHours } from "components/OpeningHours/OpeningHours"
 
+import styles from "styles/AddListing.module.scss"
+
 const defaultAddlistingForm: IAddListingForm = {
-  category: "",
+  category: "buy",
   relationship: "",
   listing: "",
   role: "",
@@ -62,7 +61,7 @@ const defaultAddlistingForm: IAddListingForm = {
     { name: "Sunday", twentyFourHours: false, openingHours: [] },
   ],
 
-  tags: [""],
+  tags: [],
   mealsKind: [""],
   placeGoodFor: [""],
   parking: [""],
@@ -114,7 +113,7 @@ export interface IAddListingForm {
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(1)
+  const [pageNumber, setPageNumber] = useState(3)
   const [formData, setFormData] = useState(defaultAddlistingForm)
   const [showPreviewModal, setShowPreviewModal] = useState(false)
   const [showSubmitResult, setShowSubmitResult] = useState(false)
@@ -144,13 +143,37 @@ const AddListing = () => {
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true)
     } else {
-      router.push({ pathname: `/add-listing/claim/${random}`, query: { firstStep: ClaimStep.CHOOSE_TIER } })
+      router.push({
+        pathname: `/add-listing/claim/${random}`,
+        query: { firstStep: ClaimStep.CHOOSE_TIER },
+      })
     }
   }
 
   const handlePreview = (data) => {
     setFormData({ ...formData, ...data })
     setShowPreviewModal(true)
+  }
+
+  const renderPreviewValue = (key, value) => {
+    if (key === "openingHours") {
+      return "null"
+    }
+    if (key === "tags") {
+      return (
+        <div className="flex gap-1">
+          {Array.isArray(value) &&
+            value.map((item) => (
+              <div className={styles.preview_value} key={item.value}>
+                {item.label}
+              </div>
+            ))}
+        </div>
+      )
+    }
+    if (typeof value === "string") {
+      return value
+    }
   }
 
   return (
@@ -212,9 +235,7 @@ const AddListing = () => {
           {previewInfo.map((row) => (
             <div key={row.question} className="flex gap-20">
               <div className="flex flex-wrap w-3/5">{row.question}</div>
-              {get(formData, row.value) && (
-                <div className="w-2/5">{get(formData, row.value) || ""}</div>
-              )}
+              <div className="w-2/5">{renderPreviewValue(row.key, get(formData, row.key))}</div>
             </div>
           ))}
           <div className="flex justify-end px-[30px] py-3">
@@ -255,31 +276,31 @@ const AddListing = () => {
 }
 
 const previewInfo = [
-  { question: "What kind of place is this?", value: "categoryKind" },
+  { question: "What kind of place is this?", key: "categoryKind" },
   {
     question:
       "Are you affiliated with this place as an owner, employee, or official representative?",
-    value: "relationship",
+    key: "relationship",
   },
   {
     question: "Does this place already have a listing on Tribes?",
-    value: "listing",
+    key: "listing",
   },
-  { question: "What is your role at this business?", value: "role.label" },
-  { question: "Is this place currently open?", value: "isOpen" },
-  { question: "Official place name", value: "businessName" },
-  { question: "Description of your property:", value: "description" },
-  { question: "City/Town, State/Province/Region", value: "city" },
-  { question: "Country", value: "country" },
-  { question: "Street address ", value: "address" },
-  { question: "Additional address information", value: "additionalAddress" },
-  { question: "Social Media", value: "socialMedia" },
-  { question: "What is the category that best fits this place?", value: "" },
-  { question: "What type of cuisine does this place serve?", value: "" },
-  { question: "Open hours", value: "openHours" },
-  { question: "Select a currency", value: "currency" },
-  { question: "Max price", value: "maxPrice" },
-  { question: "Min price", value: "minPrice" },
+  { question: "What is your role at this business?", key: "role.label" },
+  { question: "Is this place currently open?", key: "isOpen" },
+  { question: "Official place name", key: "businessName" },
+  { question: "Description of your property:", key: "description" },
+  { question: "City/Town, State/Province/Region", key: "city" },
+  { question: "Country", key: "country" },
+  { question: "Street address ", key: "address" },
+  { question: "Additional address information", key: "additionalAddress" },
+  { question: "Social Media", key: "socialMedia" },
+  { question: "What is the category that best fits this place?", key: "tags" },
+  { question: "What type of cuisine does this place serve?", key: "" },
+  { question: "Open hours", key: "openingHours" },
+  { question: "Select a currency", key: "currency" },
+  { question: "Max price", key: "maxPrice" },
+  { question: "Min price", key: "minPrice" },
 ]
 
 export default AddListing

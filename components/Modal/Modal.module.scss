@@ -25,13 +25,19 @@
     width: fit-content;
     min-width: 300px;
     max-height: 0;
-    overflow-y: scroll;
+    overflow: auto;
     border-radius: $border-radius;
     box-sizing: border-box;
     transition: all 0.5s ease-in-out;
     background-color: white;
     overscroll-behavior: none;
     box-shadow: $box-shadow;
+
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .header {
       position: sticky;
@@ -66,6 +72,12 @@
       height: 100%;
       overflow-y: scroll;
       overscroll-behavior: none;
+
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 }
