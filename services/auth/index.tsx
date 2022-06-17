@@ -1,5 +1,11 @@
 import Api from "../";
-import {AuthEmailPayload, VerifyOTPPayload} from "../../types/auth";
+import {
+  AuthEmailPayload, 
+  VerifyOTPPayload,
+  AuthForgetPassword,
+  VerifyOTPPayloadForgetPassword,
+  ResetPassword
+} from "../../types/auth";
 import {UsersTypes} from "../../enums";
 
 const signUpByEmail = async (params: AuthEmailPayload) => {
@@ -63,6 +69,31 @@ const getMe = async () => {
   localStorage.setItem("user_id", me.data.id)
 }
 
+const forgetPasswordByEmail = async (params: AuthForgetPassword) => {
+  const url = `/api/auth/forgot-password`;
+  return await Api.post(url, {
+    email: params.email,
+  });
+}
+
+const otpEmailConfirmForgetPassword = async (params: VerifyOTPPayloadForgetPassword) => {
+  const url = `/api/otp-email-forgetpassword`;
+  return await Api.post(url, {
+    otp: params.otp,
+    userId: params.userId
+  });
+}
+
+const resetPassword = async (params: ResetPassword) => {
+  const url = `/api/auth/reset-password`;
+  return await Api.post(url, {
+    password: params.password,
+    passwordConfirmation: params.passwordConfirm,
+    userId: params.userId
+  });
+}
+
+
 export default {
   signUpByEmail,
   otpEmailGenerate,
@@ -70,5 +101,8 @@ export default {
   otpPhoneGenerate,
   otpPhoneConfirm,
   loginByEmail,
-  getMe
+  getMe,
+  otpEmailConfirmForgetPassword,
+  forgetPasswordByEmail,
+  resetPassword
 }

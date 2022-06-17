@@ -1,3 +1,21 @@
+export interface VerifyOTPPayload {
+  otp: string
+}
+
+export interface VerifyOTPPayloadForgetPassword {
+  otp: string
+  userId: string | null
+}
+
+export interface AuthForgetPassword {
+  email: string
+}
+
+export interface ResetPassword {
+  password: string
+  passwordConfirm: string
+  userId: string | null
+}
 export interface AuthEmailPayload {
   email: string,
   password: string

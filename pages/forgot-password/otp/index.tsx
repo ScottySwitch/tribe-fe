@@ -2,12 +2,39 @@ import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import { useRouter } from "next/router"
+import { useState } from "react";
 
-import styles from "styles/Auth.module.scss"
+import styles from "styles/Auth.module.scss";
+
+import AuthApi from "../../../services/auth";
 
 const OtpPage = (context) => {
   const { method, otpReceiver } = context
   const router = useRouter()
+  const [valueOTP, setValueOTP] = useState<any>('');
+
+  const verifyOtp = async () => {
+    let result: any = null;
+    try {
+      result = await AuthApi.otpEmailConfirmForgetPassword({
+        otp: valueOTP,
+        userId: localStorage.getItem('user_id')
+      });
+    } catch (err) {
+      // TODO: notify error (missing template)
+      console.log(err);
+      return false;
+    }
+    let { success } = result.data;
+    if (success) {
+      await router.push("/forgot-password/reset")
+    } else {
+      setValueOTP('')
+      // TODO: notify error (missing template)
+      alert('Wrong OTP');
+    }
+}
+
 
   return (
     <div className={styles.auth}>
@@ -20,12 +47,16 @@ const OtpPage = (context) => {
             </div>
             <div>Please check and enter your OTP</div>
           </div>
-          <Input size="large" placeholder="Enter OTP" />
+          <Input 
+            size="large" 
+            placeholder="Enter OTP" 
+            onChange={(e: any) => setValueOTP(e.target.value)}
+          />
           <div className="flex justify-between">
             <div>00:39</div>
             <div>Resend</div>
           </div>
-          <Button text="Next" onClick={() => router.push("/forgot-password/reset")} />
+          <Button text="Next" onClick={() => verifyOtp()} />
         </div>
       </div>
     </div>
