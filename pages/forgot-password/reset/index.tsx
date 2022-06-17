@@ -72,13 +72,14 @@ const ResetPasswordPage = (props: ResetPasswordProps) => {
         if (result.data.ok) {
           setStatus('success');
         } else {
+          alert(result.error.message)
           setStatus('failed');
         }
-      } catch (err) {
+      } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err);
-        return false;
         setStatus('failed');
+        return false;
       }
     }
   }
