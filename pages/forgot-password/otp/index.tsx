@@ -8,6 +8,7 @@ import styles from "styles/Auth.module.scss"
 const OtpPage = (context) => {
   const { method, otpReceiver } = context
   const router = useRouter()
+  const [valueOTP, setValueOTP] = useState<any>('');
 
   const verifyOtp = async () => {
     let result: any = null;
