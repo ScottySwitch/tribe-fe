@@ -127,7 +127,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
             </div>
           </Question>
           <Question question="What’s the average price range of this service?" optional>
-            <div className="w-full lg:w-1/2">
+            <div className="w-3/5">
               <Input placeholder="Select a currency" register={register("currency")} />
               <br />
               <div className="flex gap-5">

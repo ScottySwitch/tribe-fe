@@ -132,7 +132,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             />
           </Question>
           <Question question="What tags best describe this place? " optional>
-            <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
+            <div className="flex flex-wrap gap-y-5 w-3/5">
               {otherList.map((item) => (
                 <Checkbox
                   key={item.label}
@@ -146,7 +146,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="What’s the general price range of a meal?" optional>
-            <div className="w-full lg:w-1/2">
+            <div className="w-3/5">
               <Input placeholder="Select a currency" register={register("currency")} />
               <br />
               <div className="flex gap-10">
@@ -164,7 +164,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="What kind of meals does this place serve?" optional>
-            <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
+            <div className="flex flex-wrap gap-y-5 w-3/5">
               {mealOptions.map((item) => (
                 <Checkbox
                   key={item.label}
@@ -178,7 +178,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="What is this place good for? " optional>
-            <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
+            <div className="flex flex-wrap gap-y-5 w-3/5">
               {placeGoodFor.map((item) => (
                 <Checkbox
                   key={item.label}
@@ -205,7 +205,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="What best describe this place’s atmosphere? " optional>
-            <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
+            <div className="flex flex-wrap gap-y-5 w-3/5">
               {atmosphere.map((item) => (
                 <Checkbox
                   key={item.label}
@@ -219,7 +219,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="What type of payment method is available?" optional>
-            <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
+            <div className="flex flex-wrap gap-y-5 w-3/5">
               {paymentMethods.map((item) => (
                 <Checkbox
                   key={item.label}
@@ -233,7 +233,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="Any additional features/ services that are available? " optional>
-            <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
+            <div className="flex flex-wrap gap-y-5 w-3/5">
               {additionalFeatures.map((item) => (
                 <Checkbox
                   key={item.label}

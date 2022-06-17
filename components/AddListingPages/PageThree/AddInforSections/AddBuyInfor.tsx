@@ -80,7 +80,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             </div>
           </Question>
           <Question question="What is this place good for? " optional>
-            <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
+            <div className="flex flex-wrap gap-y-5 w-3/5">
               {productTypes.map((item) => (
                 <Checkbox
                   key={item.label}
@@ -118,7 +118,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             />
           </Question>
           <Question question="What tags best describe this place? " optional>
-            <div className="flex flex-wrap gap-y-5 w-full lg:w-1/2">
+            <div className="flex flex-wrap gap-y-5 w-3/5">
               {tags.map((item) => (
                 <Checkbox
                   key={item.label}
@@ -131,7 +131,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             </div>
           </Question>
           <Question question="What’s the average price range of this service?" optional>
-            <div className="w-full lg:w-1/2">
+            <div className="w-3/5">
               <Input placeholder="Select a currency" register={register("currency")} />
               <br />
               <div className="flex gap-5">

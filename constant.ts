@@ -124,7 +124,7 @@ export const fakeAddlistingForm: IAddListingForm = {
 }
 
 export const defaultAddlistingForm: IAddListingForm = {
-  category: "",
+  category: "Buy",
   relationship: "",
   listing: "",
   role: "",
