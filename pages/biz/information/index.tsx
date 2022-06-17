@@ -4,7 +4,7 @@ import BusinessInformation from "components/BizInformationPage/TabContentCompone
 import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals"
 import ProductListing from "components/BizInformationPage/TabContentComponents/ProductListing"
 import Icon from "components/Icon/Icon"
-import Heading from "components/ListingHomePage/Heading/Heading"
+import Heading from "components/Heading/Heading"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import { bizInformationDefaultFormValue, informationList } from "constant"
 import { InformationList, Tiers } from "enums"
