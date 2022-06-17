@@ -5,6 +5,8 @@ import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 
+import AuthApi from "../../services/auth";
+
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
 
@@ -22,7 +24,7 @@ const ForgotPasswordPage = () => {
   const [method, setMethod] = useState(LoginMethod.EMAIL)
   const router = useRouter()
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault()
     const otpReceiver =
       method === LoginMethod.EMAIL ? event.target.email.value : event.target.phone.value
@@ -31,7 +33,24 @@ const ForgotPasswordPage = () => {
       [method]: otpReceiver,
     }
     console.log(formData)
-    //do submit things
+    let check = false;
+    if ( method === LoginMethod.EMAIL ) {
+      try {
+        console.log('forget password');
+        console.log('Email: ', formData.email);
+        const result = await AuthApi.forgetPasswordByEmail({
+          email: formData.email,
+        });
+        console.log('result: ', result);
+        if (result.data.ok) {
+          check = true;
+          localStorage.setItem("idUser", result.data.id);
+        }
+      } catch (error: any) {
+        console.log(error.response.data.error);
+      }
+    }
+
     router.push({
       pathname: "/forgot-password/otp",
       //help otp page detect method and otp receiver
