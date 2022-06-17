@@ -2,8 +2,9 @@ import Break from "components/Break/Break"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import { Categories } from "enums"
 import { IAddListingForm } from "pages/add-listing"
+import BusinessDetailBuy from "./BusinessDetailCategories/BusinessDetailBuy"
 import BusinessDetailEat from "./BusinessDetailCategories/BusinessDetailEat"
-import styles from "./TabContent.module.scss"
+import BusinessDetailSeeAndDo from "./BusinessDetailCategories/BusinessDetailSeeAndDo"
 
 interface BusinessDetailProps {
   category?: string
@@ -18,13 +19,13 @@ const BusinessDetail = (props: BusinessDetailProps) => {
     let detail
     switch (category) {
       case Categories.BUY:
-        detail = <div>Buy</div>
+        detail = <BusinessDetailBuy formData={formData} submitFormData={submitFormData} />
         break
       case Categories.EAT:
         detail = <BusinessDetailEat formData={formData} submitFormData={submitFormData} />
         break
       case Categories.SEE_AND_DO:
-        detail = <div>See</div>
+        detail = <BusinessDetailSeeAndDo formData={formData} submitFormData={submitFormData} />
         break
       case Categories.TRANSPORT:
         detail = <div>Transport</div>
