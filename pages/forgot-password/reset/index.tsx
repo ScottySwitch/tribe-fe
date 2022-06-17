@@ -46,6 +46,31 @@ const ResetPasswordPage = () => {
     );
   };
 
+  const onSubmit = async (data) => {
+    console.log(data);
+    if ( data.newPasswordValue === data.confirmPasswordValue ) {
+      let result: any = null;
+      try {
+        result = await AuthApi.resetPassword({
+          password: data.newPasswordValue,
+          passwordConfirm: data.confirmPasswordValue,
+          idUser: localStorage.getItem("idUser")
+        })
+        console.log(result);
+        if (result.data.ok) {
+          setStatus('success');
+        } else {
+          setStatus('failed');
+        }
+      } catch (err) {
+        // TODO: notify error (missing template)
+        console.log(err);
+        return false;
+        setStatus('failed');
+      }
+    }
+  }
+
   const InProgress = () => {
     return (
       <div className={styles.form_container}>
