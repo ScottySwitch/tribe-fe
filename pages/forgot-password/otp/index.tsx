@@ -2,8 +2,11 @@ import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import { useRouter } from "next/router"
+import { useState } from "react";
 
-import styles from "styles/Auth.module.scss"
+import styles from "styles/Auth.module.scss";
+
+import AuthApi from "../../../services/auth";
 
 const OtpPage = (context) => {
   const { method, otpReceiver } = context
