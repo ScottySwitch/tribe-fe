@@ -68,7 +68,7 @@ const AddDeals = (props: AddDealsProps) => {
                 <Icon icon="cancel" />
               </div>
             </div>
-            <Upload className={styles.upload} centerIcon={<Icon icon="plus" size={20} />} />
+            <Upload type="media" centerIcon={<Icon icon="plus" size={20} />} />
             <Input
               placeholder="Deal name"
               onChange={(e: any) => handleChangeDeal(deal.id, "name", e.target.value)}

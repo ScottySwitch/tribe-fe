@@ -11,6 +11,60 @@ export const fakeSubCateList = [
   { label: "Subcate 4", value: "Subcate 4" },
 ]
 
+export const bizInformationDefaultFormValue = {
+  name: "Evertop Hainanese Boneless Chicken",
+  description:
+    "The first restaurant proprietor is believed to have been one A. Boulanger, a soup vendor, who opened his business in Paris in 1765. The sign above his door advertised restoratives, or restaurants, referring to the soups and broths available within.",
+  address: "50 Bussorah St, Singapore 199466",
+  phone: "+84 823996913",
+  productList: [
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+  ],
+  activeDeals: [
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+  ],
+}
+
 export const defaultAddlistingForm: IAddListingForm = {
   category: "",
   relationship: "",

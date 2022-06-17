@@ -14,9 +14,9 @@ import Upload from "components/Upload/Upload"
 import { Categories, ListingHomePageScreens } from "enums"
 
 import styles from "styles/BizHomepage.module.scss"
-import AddItems from "components/BizInformationPage/TabContent/AddItems/AddItems"
-import AddMenu from "components/BizInformationPage/TabContent/AddMenu/AddMenu"
-import AddDeals from "components/BizInformationPage/TabContent/AddDeal/AddDeals"
+import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems"
+import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu"
+import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
