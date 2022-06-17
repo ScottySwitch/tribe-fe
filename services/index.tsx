@@ -21,7 +21,7 @@ Api.interceptors.response.use(
   },
   function (err) {
     const status = err?.response?.status;
-    if (status === 401 || status === 403) {
+    if (status === 401) {
       localStorage.removeItem("token");
       // window.location.href = "/sign-in"; // TODO
     }

@@ -16,3 +16,11 @@ export interface ResetPassword {
   passwordConfirm: string
   idUser: string | null
 }
+export interface AuthEmailPayload {
+  email: string,
+  password: string
+}
+
+export interface VerifyOTPPayload {
+  otp: string
+}

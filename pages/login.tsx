@@ -12,6 +12,7 @@ import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
 import { loginInforItem } from "constant"
 import { UsersTypes } from "enums"
+import AuthApi from "../services/auth";
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -36,12 +37,35 @@ const LoginPage = () => {
   const [method, setMethod] = useState(LoginMethod.EMAIL)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+  const [valueEmail, setValueEmail] = useState('');
+  const [valuePassword, setValuePassword] = useState('');
 
-  const handleLogin = () => {
-    localStorage.setItem(
-      loginInforItem,
-      JSON.stringify({ token: "sometoken", type: UsersTypes.NORMAL_USER })
-    )
+  const handleLogin = async () => {
+    // localStorage.setItem(
+    //   loginInforItem,
+    //   JSON.stringify({ token: "sometoken", type: UsersTypes.NORMAL_USER })
+    // )
+    // Email
+    if (method === LoginMethod.EMAIL) {
+      let result: any = null;
+      try {
+        result = await AuthApi.loginByEmail({
+          email: valueEmail,
+          password: valuePassword
+        });
+      } catch (err: any) {
+        // TODO: notify error (missing template)
+        console.log(err.response.data.error);
+        return false;
+      }
+
+      if (result.data) {
+        let { jwt } = result.data;
+        localStorage.setItem("token", jwt)
+        await AuthApi.getMe();
+      }
+    }
+
     window.location.href = "/"
   }
 
@@ -65,13 +89,16 @@ const LoginPage = () => {
           {method === LoginMethod.PHONE_NUMBER ? (
             <Input size="large" placeholder="Phone number" />
           ) : (
-            <Input label="Email" placeholder="Your email" />
+            <Input label="Email" placeholder="Your email"
+                   onChange={(e: any) => setValueEmail(e.target.value)}
+            />
           )}
           <Input
             size="large"
             placeholder="Password"
             type={showPassword ? "default" : "password"}
             suffix={<PasswordEye onClick={() => setShowPassword(!showPassword)} />}
+            onChange={(e: any) => setValuePassword(e.target.value)}
           />
           <div className={styles.actions}>
             <div className="w-[150px]">

@@ -17,6 +17,7 @@ import RelationshipToBusiness from "components/AddListingPages/PageOne/Relations
 import ChooseCategory from "components/AddListingPages/PageOne/ChooseCategory/ChooseCategory"
 import Question from "components/Question/Question"
 import { Categories, YesNo } from "enums"
+import BizListingApi from "../../../services/biz-listing";
 
 interface AddListingProps {
   onUpdateFormData: (data: { [key: string]: any }) => void
@@ -30,9 +31,21 @@ const AddListingPageOne = (props: AddListingProps) => {
   const [category, setCategory] = useState<Categories | undefined>()
   const [relationship, setRelationship] = useState<YesNo | undefined>()
   const [listing, setListing] = useState<listingTypes>()
+  const [bizListing, setBizListing] = useState([])
   const [role, setRole] = useState<string | undefined>()
   const [isOpen, setIsOpen] = useState<YesNo | undefined>()
   const [openDate, setOpenDate] = useState<Date | undefined>()
+
+  useEffect(() => {
+    const getBizListingsByCategoryId = async (categoryId) => {
+      const data = await BizListingApi.getBizListingsByCategoryId(categoryId)
+      setBizListing(data.data.data);
+    }
+
+    if (category && relationship === 'Yes') {
+      getBizListingsByCategoryId(category).catch(console.error)
+    }
+  }, [category, relationship])
 
   if (!show) {
     return null
@@ -74,6 +87,7 @@ const AddListingPageOne = (props: AddListingProps) => {
         <SearchListing
           relationship={relationship}
           listing={listing}
+          bizListing={bizListing}
           setListing={(e) => {
             setListing(e)
             setRole(undefined)
