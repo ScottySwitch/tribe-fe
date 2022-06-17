@@ -51,14 +51,16 @@ const ForgotPasswordPage = () => {
       }
     }
 
-    router.push({
-      pathname: "/forgot-password/otp",
-      //help otp page detect method and otp receiver
-      query: {
-        method: method,
-        otpReceiver: otpReceiver,
-      },
-    })
+    if ( check == true ) {
+      router.push({
+        pathname: "/forgot-password/otp",
+        //help otp page detect method and otp receiver
+        query: {
+          method: method,
+          otpReceiver: otpReceiver,
+        },
+      })
+    }
   }
 
   return (
