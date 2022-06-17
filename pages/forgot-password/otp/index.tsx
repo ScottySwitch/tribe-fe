@@ -9,6 +9,29 @@ const OtpPage = (context) => {
   const { method, otpReceiver } = context
   const router = useRouter()
 
+  const verifyOtp = async () => {
+    let result: any = null;
+    try {
+      result = await AuthApi.otpEmailConfirmForgetPassword({
+        otp: valueOTP,
+        idUser: localStorage.getItem('idUser')
+      });
+    } catch (err) {
+      // TODO: notify error (missing template)
+      console.log(err);
+      return false;
+    }
+    let { success } = result.data;
+    if (success) {
+      await router.push("/forgot-password/reset")
+    } else {
+      setValueOTP('')
+      // TODO: notify error (missing template)
+      alert('Wrong OTP');
+    }
+}
+
+
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
