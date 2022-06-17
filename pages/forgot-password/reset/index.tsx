@@ -77,14 +77,28 @@ const ResetPasswordPage = () => {
 
   const InProgress = () => {
     return (
-      <div className={styles.form_container}>
-        <ModalHeader alignTitle="center">Reset password</ModalHeader>
-        <div className={styles.body}>
-          <Input size="large" placeholder="New password" />
-          <Input size="large" placeholder="Confirm password" />
-          <Button text="Next" onClick={() => setStatus("success")} />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.form_container}>
+          <ModalHeader alignTitle="center">Reset password</ModalHeader>
+          <div className={styles.body}>
+            <Input 
+              size="large" 
+              placeholder="New password" 
+              register={register("newPasswordValue")}
+            />
+            <Input 
+              size="large" 
+              placeholder="Confirm password"
+              register={register("confirmPasswordValue")}
+            />
+            <Button 
+              type="submit"
+              text="Next" 
+              // onClick={() => setStatus("success")} 
+            />
+          </div>
         </div>
-      </div>
+      </form>
     );
   };
 
