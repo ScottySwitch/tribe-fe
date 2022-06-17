@@ -23,20 +23,41 @@ const ListingMenuFooter = ({ onClick }: { onClick?(): void }) => {
   )
 }
 
-const formatListingResultOption = listingSearchResult.map((item) => ({
-  ...item,
-  label: (
-    <div className="flex gap-2">
-      <div>
-        <Icon icon={item.icon} size={20} />
-      </div>
-      <div>
-        <div>{item.label}</div>
-        <div style={{ fontSize: 12, color: "#3C4467" }}>{item.location}</div>
-      </div>
-    </div>
-  ),
-}))
+// const formatListingResultOption = listingSearchResult.map((item) => ({
+//   ...item,
+//   label: (
+//     <div className="flex gap-2">
+//       <div>
+//         <Icon icon={item.icon} size={20} />
+//       </div>
+//       <div>
+//         <div>{item.label}</div>
+//         <div style={{ fontSize: 12, color: "#3C4467" }}>{item.location}</div>
+//       </div>
+//     </div>
+//   ),
+// }))
+
+const formatListingResultOption = (bizListing: []) => {
+  const result = []
+  bizListing.map((item: any) => (
+    result.push({
+      ...item,
+      // @ts-ignore
+      label: (
+        <div className="flex gap-2">
+          <div>
+            {/*<Icon icon={item.icon} size={20} />*/}
+          </div>
+          <div>
+            <div>{item.attributes.name}</div>
+            <div style={{ fontSize: 12, color: "#3C4467" }}>{item.attributes.address}</div>
+          </div>
+        </div>
+      ),
+    })));
+  return result;
+};
 
 const RightColumn = (props: {
   onShowUpcomingFeature: () => void
@@ -68,19 +89,22 @@ const RightColumn = (props: {
 const SearchListing = ({
   relationship,
   listing,
+  bizListing,
   setListing,
 }: {
   setListing: (e: listingTypes) => void
   listing: any
+  bizListing: any
   relationship?: string
 }) => {
+  console.log('listing', listing);
   const [showUpcomingFeature, setShowUpcomingFeature] = useState(false)
   switch (listing) {
     case undefined:
       return (
         <Select
           prefixIcon="search"
-          options={formatListingResultOption}
+          options={formatListingResultOption(bizListing)}
           onChange={setListing}
           menuFooter={<ListingMenuFooter onClick={() => setListing(YesNo.NO)} />}
         />

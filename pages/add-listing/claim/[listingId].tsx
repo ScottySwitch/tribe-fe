@@ -12,6 +12,7 @@ import Link from "next/link"
 import Router, { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import BizListingApi from "../../../services/biz-listing"
 
 const defaultListing = listingSearchResult[0]
 
@@ -21,14 +22,17 @@ const ClaimListing = (context) => {
   const [claimStep, setClaimStep] = useState(firstStep)
   const { handleSubmit, setValue, getValues, register } = useForm()
   const router = useRouter()
+  const { query: {listingId} } = useRouter()
 
   useEffect(() => {
-    const getListingData = () => {
-      // fetchingApi
-      setListing(defaultListing)
+    const getListingData = async (listingId) => {
+      const data = await BizListingApi.getBizListingById(listingId);
+      setListing(data.data.data);
+    };
+    if (listingId) {
+      getListingData(listingId);
     }
-    getListingData()
-  }, [])
+  }, [listingId])
 
   const agreePolicies = (
     <div>
@@ -43,9 +47,12 @@ const ClaimListing = (context) => {
     </div>
   )
 
-  const onSubmit = (form) => {
-    //do submit things
+  const onSubmit = async (form) => {
     console.log(form)
+    await BizListingApi.createListingRole({
+      bizListingId: listingId,
+      name: form.role.value
+    })
     setClaimStep(ClaimStep.CHOOSE_TIER)
   }
 

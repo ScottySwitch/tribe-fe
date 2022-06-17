@@ -10,8 +10,18 @@ interface ListingCardProps {
 }
 const ListingCard = (props: ListingCardProps) => {
   const { listing, rightColumn, onClose } = props;
-  const { avatar, location, name, reviewNumber, imageNumber, followers, id } =
-    listing;
+  let avatar = null;
+  let imageNumber = 0;
+  if (listing.attributes?.images !== null) {
+    avatar = listing.attributes?.images[0];
+    imageNumber = listing.attributes?.images.length;
+  }
+  const reviewNumber = listing.attributes?.reviews?.data.length;
+  const followers = listing.attributes?.user_listing_follows?.data.length;
+  const location = listing.attributes?.location;
+  const name = listing.attributes?.name;
+  // const { avatar, location, name, reviewNumber, imageNumber, followers, id } =
+  //   listing;
 
   return (
     <div className={styles.add_listing_card}>

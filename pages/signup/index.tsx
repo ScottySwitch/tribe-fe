@@ -10,6 +10,7 @@ import Modal, { ModalHeader } from "components/Modal/Modal"
 
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
+import AuthApi from "../../services/auth"
 
 export enum LoginMethod {
   PHONE = "phone",
@@ -35,7 +36,9 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
-  const handleSubmit = (event: any) => {
+  const [valuePassword, setValuePassword] = useState('');
+
+  const handleSubmit = async (event: any) => {
     event.preventDefault()
     const otpReceiver =
       method === LoginMethod.EMAIL ? event.target.email.value : event.target.phone.value
@@ -46,15 +49,31 @@ const SignupPage = () => {
       agree_policies: event.target.agree_policies.value,
     }
     console.log(formData)
-    //do submit things
-    router.push({
-      pathname: "/signup/otp",
-      //help otp page detect method and otp receiver
-      query: {
-        method: method,
-        otpReceiver: otpReceiver,
-      },
-    })
+    if (method === LoginMethod.EMAIL) {
+      try {
+        const result = await AuthApi.signUpByEmail({
+          email: formData.email,
+          password: valuePassword
+        });
+        const {jwt} = result.data;
+        if (jwt) {
+          localStorage.setItem("token", jwt)
+          // OTP flow
+          await AuthApi.otpEmailGenerate();
+          router.push({
+            pathname: "/signup/otp",
+            //help otp page detect method and otp receiver
+            query: {
+              method: method,
+              otpReceiver: otpReceiver,
+            },
+          })
+        }
+      } catch (err: any) {
+        // TODO: notify error (missing template)
+        console.log(err.response.data.error);
+      }
+    }
   }
 
   return (
@@ -85,6 +104,7 @@ const SignupPage = () => {
             type={showPassword ? "default" : "password"}
             suffix={<PasswordEye onClick={() => setShowPassword(!showPassword)} />}
             name="password"
+            onChange={(e: any) => setValuePassword(e.target.value)}
           />
           <Checkbox label="I have read and agree to the T&C of Tribes" name="agree_policies" />
           <Checkbox

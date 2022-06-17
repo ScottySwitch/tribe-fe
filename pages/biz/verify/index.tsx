@@ -11,6 +11,7 @@ import { useRouter } from "next/router"
 import { ChangeEvent, FormEvent, useState } from "react"
 import styles from "styles/BizUserVerify.module.scss"
 import { randomId } from "utils"
+import AuthApi from '../../../services/auth'
 
 interface BizUserVerifyProps {
   tier: string
@@ -25,16 +26,22 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [showResultModal, setShowResultModal] = useState(false)
   const router = useRouter()
 
-  const handleRequestOTP = () => {
+  const handleRequestOTP = async () => {
     //send OPT
+    await AuthApi.otpPhoneGenerate(phoneNumber);
     console.log(phoneNumber)
     setVerifyStep(VerifySteps.CONFIRM_OTP)
   }
 
-  const handleConfirmOTP = () => {
+  const handleConfirmOTP = async () => {
     //submit otp to check
     if (tier === Tiers.FREE) {
-      setShowResultModal(true)
+      const result = await AuthApi.otpPhoneConfirm({otp});
+      if (result.data.success) {
+        setShowResultModal(true);
+      } else {
+        alert('Wrong OTP')
+      }
     } else {
       setVerifyStep(VerifySteps.ADD_ID_CARD)
     }
