@@ -1,5 +1,6 @@
 import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/AddBuyInfor"
 import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor"
+import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import Badge from "components/Badge/Badge"
 import Break from "components/Break/Break"
@@ -17,7 +18,7 @@ interface BusinessDetailProps {
 
 const BusinessDetailSeeAndDo = (props: BusinessDetailProps) => {
   const { formData, submitFormData } = props
-  const { categoryKind, tags, openHours, minPrice, maxPrice, currency } = formData
+  const { categoryKind, tags, describePlace, openHours, minPrice, maxPrice, currency } = formData
 
   const [isEdit, setIsEdit] = useState(false)
   return (
@@ -41,6 +42,11 @@ const BusinessDetailSeeAndDo = (props: BusinessDetailProps) => {
         <Question question="What are the opening hours?" optional>
           <PreviewValue valueKey="openHours" value={openHours} />
         </Question>
+        <Question question="What tags best describe this place?" optional>
+          {describePlace?.map((item) => (
+            <Badge key={item} text={item} />
+          ))}
+        </Question>
         <Question question="What’s the average price range of a meal?">
           {`${currency}${minPrice} - ${currency}${maxPrice}`}
         </Question>
@@ -54,7 +60,7 @@ const BusinessDetailSeeAndDo = (props: BusinessDetailProps) => {
           />
         </div>
       </SectionLayout>
-      <AddBuyInfor
+      <AddSeeAndDoInfor
         subCateList={fakeSubCateList}
         data={formData}
         show={isEdit}

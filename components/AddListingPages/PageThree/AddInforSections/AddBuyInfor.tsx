@@ -16,7 +16,7 @@ import OpenHours from "components/OpenHours/OpenHours"
 import { YesNo } from "enums"
 import TagsSelection from "components/TagsSelection/TagsSelection"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
-import { associatedCategories, buyAssociatedCategories, productTypes, tags } from "../constant"
+import { buyAssociatedCategories, productTypes, decribePlaceList } from "../constant"
 import { IOption } from "type"
 import { IAddListingForm } from "pages/add-listing"
 
@@ -125,9 +125,9 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
               onClick={() => setShowOpenHoursModal(true)}
             />
           </Question>
-          <Question question="What tags best describe this place? " optional>
+          <Question question="What tags best describe this place?" optional>
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {tags.map((item) => (
+              {decribePlaceList.map((item) => (
                 <Checkbox
                   key={item.label}
                   label={item.label}

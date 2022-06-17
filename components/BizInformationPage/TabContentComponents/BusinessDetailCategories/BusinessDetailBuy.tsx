@@ -17,7 +17,7 @@ interface BusinessDetailProps {
 
 const BusinessDetailBuy = (props: BusinessDetailProps) => {
   const { formData, submitFormData } = props
-  const { categoryKind, tags, openHours, minPrice, maxPrice, currency } = formData
+  const { categoryKind, tags, describePlace, openHours, minPrice, maxPrice, currency } = formData
 
   const [isEdit, setIsEdit] = useState(false)
   return (
@@ -40,6 +40,14 @@ const BusinessDetailBuy = (props: BusinessDetailProps) => {
         </Question>
         <Question question="What are the opening hours?" optional>
           <PreviewValue valueKey="openHours" value={openHours} />
+        </Question>
+        <Question
+          question="What tags best describe this place?"
+          childrenClassName="flex flex-wrap gap-3"
+        >
+          {tags?.map((item) => (
+            <Badge key={item} text={item} />
+          ))}
         </Question>
         <Question question="What’s the average price range of a meal?">
           {`${currency}${minPrice} - ${currency}${maxPrice}`}

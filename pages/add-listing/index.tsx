@@ -40,6 +40,8 @@ export interface IAddListingForm {
   minPrice: string
   maxPrice: string
 
+  describePlace?: any[]
+
   foodOptions?: any[]
   paryerFacilities?: any[]
   foodOptionsRamadan?: any[]

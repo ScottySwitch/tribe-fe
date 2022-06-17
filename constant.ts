@@ -43,6 +43,7 @@ export const bizInformationDefaultFormData = {
       price: "$ 37.35",
     },
   ],
+  describePlace: [""],
   activeDeals: [
     {
       name: "Deal name",
