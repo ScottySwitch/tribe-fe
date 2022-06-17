@@ -12,9 +12,12 @@ import styles from "styles/Auth.module.scss";
 import AuthApi from "../../../services/auth";
 
 const ResetPasswordPage = () => {
+  const { data, onPreview } = props
   const [status, setStatus] = useState<string>("in-progress");
   const router = useRouter();
 
+  const { register, handleSubmit, setValue, getValues } = useForm({
+  })
   const Success = () => {
     return (
       <div className={styles.form_container}>
