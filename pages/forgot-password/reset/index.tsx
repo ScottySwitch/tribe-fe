@@ -11,7 +11,12 @@ import styles from "styles/Auth.module.scss";
 
 import AuthApi from "../../../services/auth";
 
-const ResetPasswordPage = () => {
+interface ResetPasswordProps {
+  data: { [key: string]: any }
+  onPreview: (data: { [key: string]: any }) => void
+}
+
+const ResetPasswordPage = (props: ResetPasswordProps) => {
   const { data, onPreview } = props
   const [status, setStatus] = useState<string>("in-progress");
   const router = useRouter();
