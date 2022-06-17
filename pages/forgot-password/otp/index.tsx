@@ -47,12 +47,16 @@ const OtpPage = (context) => {
             </div>
             <div>Please check and enter your OTP</div>
           </div>
-          <Input size="large" placeholder="Enter OTP" />
+          <Input 
+            size="large" 
+            placeholder="Enter OTP" 
+            onChange={(e: any) => setValueOTP(e.target.value)}
+          />
           <div className="flex justify-between">
             <div>00:39</div>
             <div>Resend</div>
           </div>
-          <Button text="Next" onClick={() => router.push("/forgot-password/reset")} />
+          <Button text="Next" onClick={() => verifyOtp()} />
         </div>
       </div>
     </div>
