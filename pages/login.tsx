@@ -38,6 +38,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
   const [valueEmail, setValueEmail] = useState('');
+  const [valuePhoneNumber, setValuePhoneNumber] = useState('');
   const [valuePassword, setValuePassword] = useState('');
 
   const handleLogin = async () => {
@@ -51,6 +52,25 @@ const LoginPage = () => {
       try {
         result = await AuthApi.loginByEmail({
           email: valueEmail,
+          password: valuePassword
+        });
+      } catch (err: any) {
+        // TODO: notify error (missing template)
+        console.log(err.response.data.error);
+        return false;
+      }
+
+      if (result.data) {
+        let { jwt } = result.data;
+        localStorage.setItem("token", jwt)
+        await AuthApi.getMe();
+      }
+    }
+    else {
+      let result: any = null;
+      try {
+        result = await AuthApi.loginByPhone({
+          phone_number: valuePhoneNumber,
           password: valuePassword
         });
       } catch (err: any) {
@@ -87,7 +107,9 @@ const LoginPage = () => {
         </div>
         <div className={styles.body}>
           {method === LoginMethod.PHONE_NUMBER ? (
-            <Input size="large" placeholder="Phone number" />
+            <Input size="large" placeholder="Phone number" 
+              onChange={(e: any) => setValuePhoneNumber(e.target.value)}  
+          />
           ) : (
             <Input label="Email" placeholder="Your email"
                    onChange={(e: any) => setValueEmail(e.target.value)}

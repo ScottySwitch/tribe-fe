@@ -16,22 +16,44 @@ const OtpPage = (context) => {
 
   const verifyOtp = async () => {
     let result: any = null;
-    try {
-      result = await AuthApi.otpEmailConfirm({
-        otp: valueOtp,
-      });
-    } catch (err) {
-      // TODO: notify error (missing template)
-      console.log(err);
-      return false;
+    if (method == 'email') {
+      try {
+        result = await AuthApi.otpEmailConfirm({
+          otp: valueOtp,
+        });
+      } catch (err) {
+        // TODO: notify error (missing template)
+        console.log(err);
+        return false;
+      }
+      let { success } = result.data;
+      if (success) {
+        await router.push("/signup/setup-profile")
+      } else {
+        setValueOtp('')
+        // TODO: notify error (missing template)
+        alert('Wrong OTP');
+      }
     }
-    let { success } = result.data;
-    if (success) {
-      await router.push("/signup/setup-profile")
-    } else {
-      setValueOtp('')
-      // TODO: notify error (missing template)
-      alert('Wrong OTP');
+    else {
+      try {
+        result = await AuthApi.otpPhoneConfirm({
+          otp: valueOtp,
+        });
+      } catch (err) {
+        // TODO: notify error (missing template)
+        console.log(err);
+        return false;
+      }
+      let { success } = result.data;
+      console.log(result);
+      if (success) {
+        await router.push("/signup/setup-profile")
+      } else {
+        setValueOtp('')
+        // TODO: notify error (missing template)
+        alert('Wrong OTP');
+      }
     }
   }
   return (

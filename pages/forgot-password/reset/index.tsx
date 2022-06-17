@@ -125,4 +125,10 @@ const ResetPasswordPage = (props: ResetPasswordProps) => {
   return <div className={styles.auth}>{renderStauts()}</div>;
 };
 
+export async function getServerSideProps(context) {
+  // Pass data to the page via props
+  return {
+    props: { method: context.query.method || "", otpReceiver: context.query.otpReceiver || "" },
+  }
+}
 export default ResetPasswordPage;
