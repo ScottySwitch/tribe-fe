@@ -31,8 +31,6 @@ import TagsSelection from "components/TagsSelection/TagsSelection"
 import { IAddListingForm } from "pages/add-listing"
 
 interface AddEatInforProps {
-  title?: string
-  subTitle?: string
   isEdit?: boolean
   subCateList: IOption[]
   data: IAddListingForm
@@ -43,7 +41,7 @@ interface AddEatInforProps {
 }
 
 const AddEatInfor = (props: AddEatInforProps) => {
-  const { data, title, subTitle, isEdit, subCateList, show, onPrevPage, onPreview, onEdit } = props
+  const { data, isEdit, subCateList, show, onPrevPage, onPreview, onEdit } = props
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {

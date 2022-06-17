@@ -68,7 +68,7 @@ export const additionalFeatures = [
   { label: "wudu facilities available/nearby" },
 ]
 
-export const stayAssociatedCategories = [
+export const buyAssociatedCategories = [
   { label: "Electronic Devices" },
   { label: "Electronic Accessories" },
   { label: "TV & Home Appliances" },
