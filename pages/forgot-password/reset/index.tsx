@@ -5,7 +5,11 @@ import Image from "next/image";
 import { Router, useRouter } from "next/router";
 import { useState } from "react";
 
+import { useForm } from "react-hook-form"
+
 import styles from "styles/Auth.module.scss";
+
+import AuthApi from "../../../services/auth";
 
 const ResetPasswordPage = () => {
   const [status, setStatus] = useState<string>("in-progress");
