@@ -1,6 +1,8 @@
 import Badge from "components/Badge/Badge"
 import { categories } from "constant"
 import { Categories } from "enums"
+import {useEffect, useState} from "react";
+import CategoryApi from '../../../../services/category/index';
 
 interface ChooseCategoryProps {
   category?: Categories
@@ -30,17 +32,29 @@ const SubTitle = ({category}) => {
 }
 
 const ChooseCategory = (props: ChooseCategoryProps) => {
-  const { category, setCategory } = props
+  const { category, setCategory } = props;
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const data = await CategoryApi.getCategories();
+      setCategories(data.data.data);
+    }
+
+    getCategories().catch(console.error);
+  }, [])
+
   return (
     <>
       <div className="flex flex-wrap gap-2">
-        {categories.map((cate) => (
+        {categories.map((cate: any) => (
           <Badge
-            key={cate.value}
-            onClick={() => setCategory?.(cate.value)}
-            selected={cate.value === category}
+            key={cate.id}
+            onClick={() => setCategory?.(cate.id)}
+            value={cate.id}
+            selected={cate.id === category}
           >
-            {cate.label}
+            {cate.attributes.name}
           </Badge>
         ))}
       </div>

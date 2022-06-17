@@ -5,12 +5,35 @@ import Modal, { ModalHeader } from "components/Modal/Modal"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import styles from "styles/Auth.module.scss"
+import styles from "styles/Auth.module.scss";
+import {useState} from "react";
+import AuthApi from "../../../services/auth";
 
 const OtpPage = (context) => {
   const { method, otpReceiver } = context
   const router = useRouter()
+  const [valueOtp, setValueOtp] = useState('');
 
+  const verifyOtp = async () => {
+    let result: any = null;
+    try {
+      result = await AuthApi.otpEmailConfirm({
+        otp: valueOtp,
+      });
+    } catch (err) {
+      // TODO: notify error (missing template)
+      console.log(err);
+      return false;
+    }
+    let { success } = result.data;
+    if (success) {
+      await router.push("/signup/setup-profile")
+    } else {
+      setValueOtp('')
+      // TODO: notify error (missing template)
+      alert('Wrong OTP');
+    }
+  }
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
@@ -22,12 +45,17 @@ const OtpPage = (context) => {
             </div>
             <div>Please check and enter your OTP</div>
           </div>
-          <Input size="large" placeholder="Enter OTP" />
+          <Input size="large" placeholder="Enter OTP" value={valueOtp}
+                 onChange={(e: any) => setValueOtp(e.target.value)}
+          />
           <div className="flex justify-between">
             <div>00:39</div>
             <div>Resend</div>
           </div>
-          <Button text="Sign up" onClick={() => router.push("/signup/setup-profile")} />
+          <Button
+            text="Sign up"
+            onClick={() => verifyOtp()}
+          />
           <div className={styles.sign_up}>
             Already have account?
             <span>

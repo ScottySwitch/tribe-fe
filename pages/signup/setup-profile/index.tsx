@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import React, { FormEvent, useState } from "react"
+import React, {FormEvent, useCallback, useState} from "react"
 import Image from "next/image"
 import classNames from "classnames"
 
@@ -14,6 +14,7 @@ import { countryList, educationLevels, industryList, interestingList } from "con
 import styles from "styles/Auth.module.scss"
 import DatePicker from "components/DatePicker/DatePicker"
 import { useForm } from "react-hook-form"
+import UserApi from "../../../services/user"
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
@@ -28,6 +29,8 @@ const StepOne = ({
   onNextStep: (e: FormEvent<HTMLFormElement>) => void
 }) => {
   const router = useRouter()
+  const [uploadAvatar, setUploadAvatar] = useState('');
+
   const { setValue, getValues, register, handleSubmit } = useForm({
     defaultValues: {
       name: formData.name,
@@ -38,7 +41,29 @@ const StepOne = ({
       industry: formData.industry,
     },
   })
-  const onSubmit = (data) => onNextStep(data)
+
+  const handleUploadAvatar = useCallback((srcAvatar) => {
+    setUploadAvatar(srcAvatar[1]);
+  }, []);
+
+  const onSubmit = async (data) => {
+    console.log('data', data);
+    try {
+      const userId = parseInt(localStorage.getItem('user_id') || '0');
+      await UserApi.updateUser(userId, {
+        first_name: data.name,
+        gender: data.gender,
+        birthday: data.birthday,
+        country: data.country?.value || null,
+        avatar: uploadAvatar
+      })
+    } catch (err) {
+      // TODO: notify error (missing template)
+      console.log(err);
+      return false;
+    }
+    onNextStep(data)
+  }
   return (
     <div>
       <ModalHeader alignTitle="center">
@@ -55,6 +80,7 @@ const StepOne = ({
             fileList={["https://picsum.photos/200"]}
             type="avatar"
             className={styles.avatar}
+            onChange={handleUploadAvatar}
           />
         </div>
         <Input placeholder="Your name" label="Name" register={register("name")} />
