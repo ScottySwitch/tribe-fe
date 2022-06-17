@@ -15,7 +15,7 @@ import { loginInforItem } from "constant"
 import { Tiers, UsersTypes } from "enums"
 import AuthApi from '../services/auth'
 
-export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers }
+export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers; avatar?: string }
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()

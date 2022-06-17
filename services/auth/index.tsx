@@ -57,7 +57,7 @@ const getMe = async () => {
   } else {
     me.data.avatar = me.data.avatar
   }
-  me.data.type = UsersTypes.BIZ_USER // TODO: confirm this logic
+  me.data.type = UsersTypes.NORMAL_USER // TODO: confirm this logic
   me.data.token = localStorage.getItem('token');
   localStorage.setItem("user", JSON.stringify(me.data))
   localStorage.setItem("user_id", me.data.id)

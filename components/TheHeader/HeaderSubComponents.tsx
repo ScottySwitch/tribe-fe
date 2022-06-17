@@ -127,7 +127,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
         </Popover>
         <Icon icon="noti-color" size={20} />
         <Popover content={<Menu loginInfor={loginInfor} />} position="bottom-left">
-          <Image src={require("public/images/avatar.png")} alt="" width={40} height={40} />
+          <Image src={loginInfor.avatar || require("public/images/avatar.png")} alt="" width={40} height={40} />
         </Popover>
       </>
     )
@@ -145,7 +145,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           </div>
         </Popover>
         <Image
-          src={require("public/images/page-avatar.png")}
+          src={loginInfor.avatar || require("public/images/page-avatar.png")}
           alt=""
           width={40}
           height={40}

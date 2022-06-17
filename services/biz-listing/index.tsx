@@ -22,11 +22,6 @@ const getBizListingsByCategoryId = async (categoryId: number) => {
         "fields": [
           "id"
         ]
-      },
-      "images": {
-        "fields": [
-          "url"
-        ]
       }
     }
   }, {
@@ -48,11 +43,6 @@ const getBizListingById = async (bizListingId: any) => {
       "reviews": {
         "fields": [
           "id"
-        ]
-      },
-      "images": {
-        "fields": [
-          "url"
         ]
       }
     }
