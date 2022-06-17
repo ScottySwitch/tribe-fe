@@ -41,7 +41,7 @@ const BizInformation = () => {
       case InformationList.BUSINESS_DETAIL:
         return (
           <BusinessDetail
-            category={Categories.EAT}
+            category={Categories.SEE_AND_DO}
             // formData={formData}
             formData={fakeAddlistingForm}
             submitFormData={submitFormData}

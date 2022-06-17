@@ -14,27 +14,30 @@ import { YesNo } from "enums"
 import {
   accommodation,
   areas,
+  associatedCategories,
   foodOptions,
   nonHalalActivities,
   prayerFacilities,
-  stayAssociatedCategories,
 } from "../constant"
 import TagsSelection from "components/TagsSelection/TagsSelection"
 import { IOption } from "type"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import Upload from "components/Upload/Upload"
+import { IAddListingForm } from "pages/add-listing"
 import Icon from "components/Icon/Icon"
 
 interface AddStayInforProps {
+  isEdit?: boolean
   subCateList: IOption[]
   data: { [key: string]: any }
   show?: boolean
-  onPrevPage: () => void
-  onPreview: (data: { [key: string]: any }) => void
+  onPrevPage?: () => void
+  onPreview?: (data: { [key: string]: any }) => void
+  onEdit?: (data: IAddListingForm) => void
 }
 
 const AddStayInfor = (props: AddStayInforProps) => {
-  const { data, show, subCateList, onPrevPage, onPreview } = props
+  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } = props
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -58,7 +61,8 @@ const AddStayInfor = (props: AddStayInforProps) => {
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
 
   const onSubmit = (data) => {
-    onPreview(data)
+    onPreview?.(data)
+    onEdit?.(data)
   }
 
   if (!show) {
@@ -67,14 +71,18 @@ const AddStayInfor = (props: AddStayInforProps) => {
   return (
     <>
       <SectionLayout
-        title="Add a place to stay"
-        subTitle="After you complete this form, you'll be able to make changes before submitting."
+        title={isEdit ? "Business Detail" : "Add a place to stay"}
+        subTitle={
+          isEdit
+            ? undefined
+            : "After you complete this form, you'll be able to make changes before submitting."
+        }
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question question="What is the category best associated with this accommodation?">
             <div className="flex flex-wrap gap-2">
-              {stayAssociatedCategories.map((opt) => (
+              {associatedCategories.map((opt) => (
                 <Badge
                   key={opt.label}
                   text={opt.label}
@@ -200,30 +208,28 @@ const AddStayInfor = (props: AddStayInforProps) => {
               ))}
             </div>
           </Question>
-          <Question
-            question="Do you have photos or videos to share?"
-            instruction="Add images/ videos ( up to 3 )"
-            optional
-          >
+          <Question question="Do you have photos or videos to share? " show={!isEdit} optional>
             <Upload
               multiple={true}
               accept="images"
               fileList={getValues("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) => setValue("images", [...getValues("images"), ...urls])}
+              onChange={(urls) => setValue("images", [...(getValues("images") || []), ...urls])}
+            />
+          </Question>
+          <Question show={!isEdit}>
+            <br /> <br /> <br />
+            <Checkbox
+              register={register("agreePolicies")}
+              label={
+                data.relationship === YesNo.NO
+                  ? "I certify that this is a genuine attraction  "
+                  : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+              }
             />
           </Question>
           <br /> <Break /> <br />
-          <Checkbox
-            register={register("agreePolicies")}
-            label={
-              data.relationship === YesNo.NO
-                ? "I certify that this is a genuine attraction  "
-                : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
-            }
-          />
-          <br /> <br /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
             <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
             <Button text="Continue" size="small" width={270} type="submit" />
@@ -249,7 +255,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
       </Modal>
       <Modal
         visible={showTagsModal}
-        title="Add product"
+        title="Add property"
         subTitle="Select max 5"
         width={780}
         mobileFullHeight

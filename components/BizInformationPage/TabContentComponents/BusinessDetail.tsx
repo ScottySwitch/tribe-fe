@@ -5,6 +5,8 @@ import { IAddListingForm } from "pages/add-listing"
 import BusinessDetailBuy from "./BusinessDetailCategories/BusinessDetailBuy"
 import BusinessDetailEat from "./BusinessDetailCategories/BusinessDetailEat"
 import BusinessDetailSeeAndDo from "./BusinessDetailCategories/BusinessDetailSeeAndDo"
+import BusinessDetailTransport from "./BusinessDetailCategories/BusinessDetailTransport"
+import BusinessDetailStay from "./BusinessDetailCategories/BusinessDetailStay"
 
 interface BusinessDetailProps {
   category?: string
@@ -28,10 +30,10 @@ const BusinessDetail = (props: BusinessDetailProps) => {
         detail = <BusinessDetailSeeAndDo formData={formData} submitFormData={submitFormData} />
         break
       case Categories.TRANSPORT:
-        detail = <div>Transport</div>
+        detail = <BusinessDetailTransport formData={formData} submitFormData={submitFormData} />
         break
       case Categories.STAY:
-        detail = <div>Stay</div>
+        detail = <BusinessDetailStay formData={formData} submitFormData={submitFormData} />
         break
       default:
         detail = <div></div>
