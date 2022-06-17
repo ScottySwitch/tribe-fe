@@ -8,12 +8,12 @@ import Upload from "components/Upload/Upload"
 import styles from "./TabContent.module.scss"
 
 interface BusinessInformationProps {
-  submitFormValue?: (form: { [key: string]: any }) => void
-  formValue?: { [key: string]: any }
+  submitFormData?: (form: { [key: string]: any }) => void
+  formData?: { [key: string]: any }
 }
 
 const BusinessInformation = (props: BusinessInformationProps) => {
-  const { formValue = {}, submitFormValue } = props
+  const { formData = {}, submitFormData } = props
   return (
     <SectionLayout
       title="Business information"
@@ -24,15 +24,15 @@ const BusinessInformation = (props: BusinessInformationProps) => {
       <div>
         <Upload type="avatar" className="justify-start" />
       </div>
-      <div className={styles.name}>{formValue.name}</div>
-      <p>{formValue.description}</p>
+      <div className={styles.name}>{formData.name}</div>
+      <p>{formData.description}</p>
       <Question question="Address" childrenClassName="flex gap-3">
         <Icon icon="map" />
-        {formValue.address}
+        {formData.address}
       </Question>
       <Question question="Official contact" childrenClassName="flex gap-3">
         <Icon icon="map" />
-        {formValue.phone}
+        {formData.phone}
       </Question>
       <Question question="Social media" childrenClassName="flex flex-col gap-3">
         <Input

@@ -6,17 +6,24 @@ import ProductListing from "components/BizInformationPage/TabContentComponents/P
 import Icon from "components/Icon/Icon"
 import Heading from "components/Heading/Heading"
 import SectionLayout from "components/SectionLayout/SectionLayout"
-import { bizInformationDefaultFormValue, informationList } from "constant"
-import { InformationList, Tiers } from "enums"
+import {
+  bizInformationDefaultFormData,
+  defaultAddlistingForm,
+  fakeAddlistingForm,
+  informationList,
+} from "constant"
+import { Categories, InformationList, Tiers } from "enums"
 
 import styles from "styles/BizInformation.module.scss"
+import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail"
+import { IAddListingForm } from "pages/add-listing"
 
 const BizInformation = () => {
   const [tier, setTier] = useState<Tiers>(Tiers.BASIC)
-  const [formValue, setFormValue] = useState(bizInformationDefaultFormValue)
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
-  const submitFormValue = (e) => {
+  const submitFormData = (e) => {
     console.log(e)
   }
 
@@ -30,15 +37,22 @@ const BizInformation = () => {
   const tabContent = () => {
     switch (selectedTab) {
       case InformationList.BUSINESS_INFORMATION:
-        return <BusinessInformation formValue={formValue} submitFormValue={submitFormValue} />
+        return <BusinessInformation formData={formData} submitFormData={submitFormData} />
       case InformationList.BUSINESS_DETAIL:
-        return <div>detail</div>
+        return (
+          <BusinessDetail
+            category={Categories.EAT}
+            // formData={formData}
+            formData={fakeAddlistingForm}
+            submitFormData={submitFormData}
+          />
+        )
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing formValue={formValue} submitFormValue={submitFormValue} />
+        return <ProductListing formData={formData} submitFormData={submitFormData} />
       case InformationList.PHOTOS_VIDEOS:
         return <div>photo</div>
       case InformationList.MANAGE_DEALS:
-        return <ManageDeals formValue={formValue} submitFormValue={submitFormValue} />
+        return <ManageDeals formData={formData} submitFormData={submitFormData} />
       case InformationList.ANALYTICS:
         return <div>analytics</div>
       case InformationList.CHANGE_ACCOUNT_TIER:

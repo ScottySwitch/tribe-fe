@@ -28,17 +28,22 @@ import { YesNo } from "enums"
 import { IOption } from "type"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import TagsSelection from "components/TagsSelection/TagsSelection"
+import { IAddListingForm } from "pages/add-listing"
 
 interface AddEatInforProps {
+  title?: string
+  subTitle?: string
+  isEdit?: boolean
   subCateList: IOption[]
-  data: { [key: string]: any }
+  data: IAddListingForm
   show?: boolean
-  onPrevPage: () => void
-  onPreview: (data: { [key: string]: any }) => void
+  onPrevPage?: () => void
+  onPreview?: (data: IAddListingForm) => void
+  onEdit?: (data: IAddListingForm) => void
 }
 
 const AddEatInfor = (props: AddEatInforProps) => {
-  const { data, subCateList, show, onPrevPage, onPreview } = props
+  const { data, title, subTitle, isEdit, subCateList, show, onPrevPage, onPreview, onEdit } = props
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -64,7 +69,8 @@ const AddEatInfor = (props: AddEatInforProps) => {
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
 
   const onSubmit = (data) => {
-    onPreview(data)
+    onPreview?.(data)
+    onEdit?.(data)
   }
 
   if (!show) {
@@ -74,9 +80,12 @@ const AddEatInfor = (props: AddEatInforProps) => {
   return (
     <>
       <SectionLayout
-        title="Add a restaurant"
-        subTitle="After you complete this form, you will be able to make changes before
-          submitting."
+        title={isEdit ? "Business Detail" : "Add a restaurant"}
+        subTitle={
+          isEdit
+            ? undefined
+            : "After you complete this form, you will be able to make changes before submitting."
+        }
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -237,25 +246,27 @@ const AddEatInfor = (props: AddEatInforProps) => {
               ))}
             </div>
           </Question>
-          <Question question="Do you have photos or videos to share? " optional>
+          <Question question="Do you have photos or videos to share? " show={!isEdit} optional>
             <Upload
               multiple={true}
               accept="images"
               fileList={getValues("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) => setValue("images", [...getValues("images"), ...urls])}
+              onChange={(urls) => setValue("images", [...(getValues("images") || []), ...urls])}
             />
           </Question>
-          <br /> <br /> <br />
-          <Checkbox
-            register={register("agreePolicies")}
-            label={
-              data.relationship === YesNo.NO
-                ? "I certify that this is a genuine attraction  "
-                : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
-            }
-          />
+          <Question show={!isEdit}>
+            <br /> <br /> <br />
+            <Checkbox
+              register={register("agreePolicies")}
+              label={
+                data.relationship === YesNo.NO
+                  ? "I certify that this is a genuine attraction  "
+                  : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+              }
+            />
+          </Question>
           <br /> <Break /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
             <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
@@ -289,7 +300,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
         onClose={() => setShowOpenHoursModal(false)}
       >
         <OpenHours
-          data={getValues("openHours")}
+          data={getValues("openHours") || []}
           onCancel={() => setShowOpenHoursModal(false)}
           onSubmit={(openHours) => {
             setShowOpenHoursModal(false)

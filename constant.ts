@@ -11,7 +11,7 @@ export const fakeSubCateList = [
   { label: "Subcate 4", value: "Subcate 4" },
 ]
 
-export const bizInformationDefaultFormValue = {
+export const bizInformationDefaultFormData = {
   name: "Evertop Hainanese Boneless Chicken",
   description:
     "The first restaurant proprietor is believed to have been one A. Boulanger, a soup vendor, who opened his business in Paris in 1765. The sign above his door advertised restoratives, or restaurants, referring to the soups and broths available within.",
@@ -63,6 +63,64 @@ export const bizInformationDefaultFormValue = {
       clicks: "123",
     },
   ],
+}
+
+export const fakeAddlistingForm: IAddListingForm = {
+  category: "Restaurant",
+  relationship: "",
+  listing: "",
+  role: "",
+  isOpen: "",
+  openDate: "",
+  businessName: "",
+  description: "",
+  isOnline: "",
+  city: "",
+  country: "",
+  address: "",
+  additionalAddress: "",
+  contact: "",
+  email: "",
+  socialMedia: "",
+  currency: "$",
+  minPrice: "10",
+  maxPrice: "100",
+  categoryKind: "Restaurant",
+  agreePolicies: "",
+  images: [],
+  openHours: [
+    { name: "Monday", twentyFourHours: false, openHours: [] },
+    { name: "Tuesday", twentyFourHours: false, openHours: [] },
+    {
+      name: "Wednesday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    {
+      name: "Thursday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    { name: "Friday", twentyFourHours: false, openHours: [] },
+    {
+      name: "Saturday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    { name: "Sunday", twentyFourHours: false, openHours: [] },
+  ],
+
+  tags: ["Italian", "Chinese"],
+  mealsKind: ["Breakfast", "Drinks"],
+  placeGoodFor: ["Kids", "Bar Scence"],
+  parking: ["Street parking"],
+  atmosphere: ["Beach", "Al Fresco"],
+  payment: ["Cash only"],
+  additionalServices: ["Takeouts", "Prayer facility available/nearby"],
+  foodOptions: [""],
+  paryerFacilities: [""],
+  foodOptionsRamadan: [""],
+  nonHalalActivities: [""],
 }
 
 export const defaultAddlistingForm: IAddListingForm = {
