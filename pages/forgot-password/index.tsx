@@ -44,7 +44,7 @@ const ForgotPasswordPage = () => {
         console.log('result: ', result);
         if (result.data.ok) {
           check = true;
-          localStorage.setItem("idUser", result.data.id);
+          localStorage.setItem("user_id", result.data.id);
         }
       } catch (error: any) {
         console.log(error.response.data.error);

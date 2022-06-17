@@ -80,7 +80,7 @@ const otpEmailConfirmForgetPassword = async (params: VerifyOTPPayloadForgetPassw
   const url = `/api/otp-email-forgetpassword`;
   return await Api.post(url, {
     otp: params.otp,
-    idUser: params.idUser
+    userId: params.userId
   });
 }
 
@@ -89,7 +89,7 @@ const resetPassword = async (params: ResetPassword) => {
   return await Api.post(url, {
     password: params.password,
     passwordConfirmation: params.passwordConfirm,
-    idUser: params.idUser
+    userId: params.userId
   });
 }
 

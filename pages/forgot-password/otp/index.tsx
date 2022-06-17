@@ -18,7 +18,7 @@ const OtpPage = (context) => {
     try {
       result = await AuthApi.otpEmailConfirmForgetPassword({
         otp: valueOTP,
-        idUser: localStorage.getItem('idUser')
+        userId: localStorage.getItem('user_id')
       });
     } catch (err) {
       // TODO: notify error (missing template)

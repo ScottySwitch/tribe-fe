@@ -4,7 +4,7 @@ export interface VerifyOTPPayload {
 
 export interface VerifyOTPPayloadForgetPassword {
   otp: string
-  idUser: string | null
+  userId: string | null
 }
 
 export interface AuthForgetPassword {
@@ -14,7 +14,7 @@ export interface AuthForgetPassword {
 export interface ResetPassword {
   password: string
   passwordConfirm: string
-  idUser: string | null
+  userId: string | null
 }
 export interface AuthEmailPayload {
   email: string,
