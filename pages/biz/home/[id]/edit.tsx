@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import React, { useState } from "react"
+import React, {useCallback, useEffect, useState} from "react"
 
 import Icon from "components/Icon/Icon"
 import Details from "components/ListingHomePage/Details/Details"
@@ -17,6 +17,8 @@ import styles from "styles/BizHomepage.module.scss"
 import AddItems from "components/BizInformationPage/TabContent/AddItems/AddItems"
 import AddMenu from "components/BizInformationPage/TabContent/AddMenu/AddMenu"
 import AddDeals from "components/BizInformationPage/TabContent/AddDeal/AddDeals"
+import BizListingApi from "../../../../services/biz-listing";
+import {useRouter} from "next/router";
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -27,12 +29,12 @@ const CenterIcon = () => (
 
 const getAddItemsFields = (category) => {
   switch (category) {
-    case Categories.BUY:
+    case 1: // Buy
       return {
         title: "Add products",
         placeholder: ["Product", "describe your product (optional)", "Create products"],
       }
-    case Categories.EAT:
+    case 2: // Eat
       return {
         title: "Add dishes",
         placeholder: ["Dish", "describe your dish (optional)", "Create dishes"],
@@ -53,18 +55,66 @@ const EditListingHomepage = (context) => {
   const [action, setAction] = useState({ label: "", value: "" })
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
+  const [bizListing, setBizListing] = useState<any>({})
+  const [bizListingId, setBizListingId] = useState<any>({})
+
+  const { query: {id: listingSlug} } = useRouter()
+  useEffect(() => {
+    const getListingData = async (listingSlug) => {
+      const data = await BizListingApi.getBizListingBySlug(listingSlug);
+      if (data.data.data.length > 0) {
+        const listing = data.data.data[0];
+        setBizListing(listing);
+        setBizListingId(listing.id)
+        setCategory(listing.attributes.categories.data[0].id) // Get the first category
+        setDescription(listing.attributes.description)
+        setPriceRange(listing.attributes.price_range)
+      }
+      console.log('bizListing', bizListing)
+    };
+    if (listingSlug) {
+      getListingData(listingSlug);
+    }
+  }, [listingSlug])
+
+  const handleUploadImages = useCallback((srcImages) => {
+    // TODO: check function upload multiple images
+    console.log('srcImages', srcImages)
+    const result = BizListingApi.updateBizListing(bizListingId, {
+      images: srcImages
+    })
+    console.log('handleUploadImages', result)
+  }, [bizListingId])
+
+  const handleSetPriceRange = async (priceRange) => {
+    console.log('priceRange', priceRange)
+    const result = BizListingApi.updateBizListing(bizListingId, {
+      price_range: priceRange
+    })
+  }
+
+  const handleSetDescription = async (description) => {
+    setDescription(description)
+    await BizListingApi.updateBizListing(bizListing.id, {
+      description: description
+    })
+  }
 
   return (
+    bizListing.attributes &&
     <div className={styles.listing_homepage}>
       <SectionLayout show={screen === ListingHomePageScreens.HOME}>
-        <Upload className={styles.banner} centerIcon={<CenterIcon />} />
+        <Upload className={styles.banner} centerIcon={<CenterIcon />} multiple={true}
+          onChange={handleUploadImages}
+        />
         <div className={styles.breadcrumbs}>
           Home <Icon icon="carret-right" size={14} color="#7F859F" />
-          Evertop Hainanese Boneless Chicken
+          {bizListing.attributes.name}
         </div>
         <ListingInforCard
+          bizListing={bizListing.attributes}
           priceRange={priceRange}
-          onSetPriceRange={(values) => setPriceRange(values)}
+          onSetPriceRange={(values) => handleSetPriceRange(values)}
         />
         <div className={styles.body}>
           <div className={styles.right_col}>
@@ -77,7 +127,7 @@ const EditListingHomepage = (context) => {
             <div className={styles.break} />
             <OnboardChecklist />
             <div className={styles.break} />
-            <Details description={description} onSetDescription={(e) => setDescription(e)} />
+            <Details description={description} onSetDescription={(e) => handleSetDescription(e)} />
             <div className={styles.break} />
             <div className="flex justify-between">
               <div className="flex items-center gap-1">
