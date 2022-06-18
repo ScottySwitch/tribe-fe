@@ -25,7 +25,7 @@ const signUpByPhone = async (params: AuthPhonePayload) => {
   const url = `/api/auth/local/register`;
   return await Api.post(url, {
     username: params.phone_number,
-    email: 'nguyenthanhdat13203@gmail.com',
+    email: params.email,
     password: params.password,
     phone_number: params.phone_number
   });

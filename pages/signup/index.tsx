@@ -76,7 +76,12 @@ const SignupPage = () => {
     }
     else {
       try {
+        const date = new Date().getTime();
+        const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 2);
+        const emailFake = date + '_' + randomString + '@tribes.com';
+        console.log(emailFake);
         const result = await AuthApi.signUpByPhone({
+          email: emailFake,
           phone_number: formData.phone,
           password: valuePassword
         });
