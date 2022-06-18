@@ -35,11 +35,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   useEffect(() => {
     const sessionId = router.query.sessionId;
-    console.log(router.query);
     if (sessionId) {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
-      setPaymentMethod('stripe')
-      handleFinishVerifying()
+      handleFinishVerifying('method_2')
     }
   }, [])
 
@@ -197,17 +195,20 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     }
   }
 
-  const handleFinishVerifying = async () => {
+  const handleFinishVerifying = async (paymentMethodValue: string) => {
     let price = localStorage.getItem('pay_price');
-    let paymentMethodValue = 'method_1';
-    if ( paymentMethod == 'stripe' ) {
-      paymentMethodValue = 'method_2'
+    let transaction_id;
+    if (router.query.sessionId) {
+      transaction_id = router.query.sessionId
+    }
+    else {
+      transaction_id = ''
     }
     if ( price != null ) {
       const result = BizInvoinceApi.createBizInvoice({
         value: parseInt(price),
         paymentMethod: paymentMethodValue,
-        transaction_id: ''
+        transaction_id: transaction_id
       })
     }
     setShowResultModal(true)
@@ -371,7 +372,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 width="80%" 
                 type="button" 
                 text="Next" 
-                onClick={handleFinishVerifying} 
+                onClick={() => handleFinishVerifying('method_1')} 
               />
             }
           </div>
