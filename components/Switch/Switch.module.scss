@@ -29,12 +29,21 @@
     content: "";
     height: 22px;
     width: 22px;
-    right: 0;
     bottom: 0;
     background-color: $bg-700;
     -webkit-transition: 0.4s;
     transition: 0.4s;
   }
+}
+
+.switch.active .slider::before {
+  right: 0;
+  left: unset;
+}
+
+.switch.none_active .slider::before{
+  left: 0;
+  right: unset;
 }
 
 .slider.round {

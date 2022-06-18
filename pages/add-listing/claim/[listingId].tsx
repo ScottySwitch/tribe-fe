@@ -22,7 +22,8 @@ const ClaimListing = (context) => {
   const [claimStep, setClaimStep] = useState(firstStep)
   const { handleSubmit, setValue, getValues, register } = useForm()
   const router = useRouter()
-  const { query: {listingId} } = useRouter()
+  const { query: {listingId} } = useRouter();
+  
 
   useEffect(() => {
     const getListingData = async (listingId) => {
@@ -31,6 +32,7 @@ const ClaimListing = (context) => {
     };
     if (listingId) {
       getListingData(listingId);
+      
     }
   }, [listingId])
 

@@ -13,6 +13,7 @@ import styles from "styles/BizUserVerify.module.scss"
 import { randomId } from "utils"
 import AuthApi from '../../../services/auth'
 import UserApi from "../../../services/user"
+import BizInvoinceApi from "../../../services/biz-invoice"
 
 interface BizUserVerifyProps {
   tier: string
@@ -25,7 +26,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [otp, setOtp] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("")
   const [showResultModal, setShowResultModal] = useState(false)
+  const [frontImageIdentity, setFrontImageIdentity] = useState<string>('');
+  const [backImageIdentity, setBackImageIdentity] = useState<string>('');
   const router = useRouter()
+  let baseURL = process.env.NEXT_PUBLIC_API_URL;
+
   console.log(tier);
 
   useEffect(() => {
@@ -33,18 +38,15 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     console.log(router.query);
     if (sessionId) {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
-      setShowResultModal(true);
+      setPaymentMethod('stripe')
+      handleFinishVerifying()
     }
   }, [])
 
   const handleSubmit = () => {
     const ssProduct = document.getElementById("SS_ProductCheckout");
     console.log(ssProduct);
-    if (ssProduct) {
-      ssProduct.addEventListener("click", () => {
-        SS_ProductCheckout();
-      });
-    }
+    SS_ProductCheckout();
   
     // for storing product payment order in strapi
     const params = new URLSearchParams(document.location.search);
@@ -177,40 +179,68 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     window.location.href = `/biz/home/edit/${randomId()}`
   }
 
-  const handleAddIdCard = () => {
-    setVerifyStep(VerifySteps.ADD_PAYMENT)
+  const handleAddIdCard = async () => {
+    if (frontImageIdentity != '' && backImageIdentity != '' ) {
+      setVerifyStep(VerifySteps.ADD_PAYMENT)
+      const userId = localStorage.getItem('user_id');
+      if (userId) {
+        const result = UserApi.updateUser(parseInt(userId), {
+          front_papers_identity: frontImageIdentity
+        })
+        const resultTwo = UserApi.updateUser(parseInt(userId), {
+          back_papers_identity: backImageIdentity
+        })
+      }
+    }
+    else {
+      alert('Image is required');
+    }
   }
 
-  const handleFinishVerifying = () => {
+  const handleFinishVerifying = async () => {
+    let price = localStorage.getItem('pay_price');
+    let paymentMethodValue = 'method_1';
+    if ( paymentMethod == 'stripe' ) {
+      paymentMethodValue = 'method_2'
+    }
+    if ( price != null ) {
+      const result = BizInvoinceApi.createBizInvoice({
+        value: parseInt(price),
+        paymentMethod: paymentMethodValue,
+        transaction_id: ''
+      })
+    }
     setShowResultModal(true)
   }
 
   const handleUploadFrontImagesIdentity = useCallback((srcImages) => {
+    setFrontImageIdentity(srcImages)
     console.log('srcImages', srcImages)
-    if (srcImages) {
-      const userId = localStorage.getItem('user_id');
-      console.log(userId);
-      if (userId) {
-        const result = UserApi.updateUser(parseInt(userId), {
-          front_papers_identity: srcImages
-        })
-        console.log(result);
-      }
-    }
+    // if (srcImages) {
+    //   const userId = localStorage.getItem('user_id');
+    //   console.log(userId);
+    //   if (userId) {
+    //     const result = UserApi.updateUser(parseInt(userId), {
+    //       front_papers_identity: srcImages
+    //     })
+    //     console.log(result);
+    //   }
+    // }
   }, [])
 
   const handleUploadBackImagesIdentity = useCallback((srcImages) => {
+    setBackImageIdentity(srcImages)
     console.log('srcImages', srcImages)
-    if (srcImages) {
-      const userId = localStorage.getItem('user_id');
-      console.log(userId);
-      if (userId) {
-        const result = UserApi.updateUser(parseInt(userId), {
-          back_papers_identity: srcImages
-        })
-        console.log(result);
-      }
-    }
+    // if (srcImages) {
+    //   const userId = localStorage.getItem('user_id');
+    //   console.log(userId);
+    //   if (userId) {
+    //     const result = UserApi.updateUser(parseInt(userId), {
+    //       back_papers_identity: srcImages
+    //     })
+    //     console.log(result);
+    //   }
+    // }
   }, [])
 
   return (
@@ -285,7 +315,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <div className="flex justify-center gap-5 w-full">
-            <Button width="30%" variant="no-outlined" text="Skip" />
+            <Button width="30%" variant="no-outlined" text="Skip" onClick={() => setVerifyStep(VerifySteps.ADD_PAYMENT)}/>
             <Button width="80%" text="Next" onClick={handleAddIdCard} />
           </div>
         </div>
@@ -298,7 +328,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             <div className={styles.price_container}>
               <div className={styles.amount}>Amount</div>
               <div className={styles.price}>
-                SGD 150 <p>per quarter</p>
+                SGD {localStorage.getItem('pay_price')} <p>per quarter</p>
               </div>
             </div>
           </div>
@@ -323,9 +353,27 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           </div>
           <div className="flex justify-center gap-5 w-full">
             <Button width="30%" variant="no-outlined" text="Change tier" />
-            <button 
+            {/* <button 
               onClick={handleSubmit}
-              className="css style" type="button" id="SS_ProductCheckout" data-id="1" data-url="http://localhost:1337"> Subscribe </button>
+              className="css style" type="button" id="SS_ProductCheckout" data-id="1" data-url="http://localhost:1337"> Subscribe </button> */}
+            {paymentMethod == 'stripe' ? 
+              <Button 
+                width="80%" 
+                className="css style" 
+                type="button" 
+                id="SS_ProductCheckout" data-id={localStorage.getItem('pay_price') == '600' ? 2 : 1} 
+                data-url={baseURL}
+                text="Next" 
+                onClick={handleSubmit} 
+              />
+              :
+              <Button 
+                width="80%" 
+                type="button" 
+                text="Next" 
+                onClick={handleFinishVerifying} 
+              />
+            }
           </div>
         </div>
       )}

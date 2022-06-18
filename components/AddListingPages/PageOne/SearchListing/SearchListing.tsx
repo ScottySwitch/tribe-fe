@@ -98,6 +98,9 @@ const SearchListing = ({
   relationship?: string
 }) => {
   console.log('listing', listing);
+  if(listing) {
+    localStorage.setItem('biz_listing', listing.attributes.name)
+  }
   const [showUpcomingFeature, setShowUpcomingFeature] = useState(false)
   switch (listing) {
     case undefined:

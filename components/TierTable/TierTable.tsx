@@ -105,12 +105,24 @@ const tiers = [
 
 const DesktopTierTable = ({
   onDirectToVerification,
+  setActiveSwitch,
+  activeSwitch
 }: {
-  onDirectToVerification(tier: Tiers): void
+  onDirectToVerification(tier: Tiers): void,
+  setActiveSwitch(value: boolean): void,
+  activeSwitch: boolean
 }) => {
-
   const handleChangePayPrice = () => {
+    setActiveSwitch(!activeSwitch);
+    if (localStorage.getItem('pay_price') == '600') {
+    localStorage.setItem('pay_price', '150') 
+    }
+    else {
+      localStorage.setItem('pay_price', '600') 
+    }
     console.log(localStorage.getItem('pay_price'));
+    console.log(activeSwitch);
+    
   }
 
   return (
@@ -125,9 +137,7 @@ const DesktopTierTable = ({
         <tr>
           <th className={styles.tier_payment}>
             <span>Pay quarterly</span>
-            <div onClick={handleChangePayPrice}>
-              <Switch />
-            </div>
+              <Switch activeSwitch={activeSwitch} onClick={handleChangePayPrice}/>
             <span>Pay yearly</span>
           </th>
           {tiers.map((tier) => (
@@ -174,13 +184,29 @@ const DesktopTierTable = ({
 
 const MobileTierTable = ({
   onDirectToVerification,
+  setActiveSwitch,
+  activeSwitch
 }: {
-  onDirectToVerification(tier: Tiers): void
+  onDirectToVerification(tier: Tiers): void,
+  setActiveSwitch(value: boolean): void,
+  activeSwitch: boolean
 }) => {
+  const handleChangePayPrice = () => {
+    setActiveSwitch(!activeSwitch);
+    if (localStorage.getItem('pay_price') == '600') {
+    localStorage.setItem('pay_price', '150') 
+    }
+    else {
+      localStorage.setItem('pay_price', '600') 
+    }
+    console.log(localStorage.getItem('pay_price'));
+    console.log(activeSwitch);
+  }
   const [tierList, setTierList] = useState<string[]>([])
   return (
+    
     <div className={styles.tier_mobile}>
-      <Switch /> Pay yearly
+      <Switch activeSwitch={activeSwitch} onClick={handleChangePayPrice}/> Pay yearly
       {tiers.map((tier) => (
         <div key={tier.name} className="relative mt-10">
           {tier.recommended && (
@@ -245,10 +271,12 @@ const MobileTierTable = ({
 }
 
 const TierTable = ({ onDirectToVerification }: { onDirectToVerification(tier: Tiers): void }) => {
+  const [activeSwitch, setActiveSwitch] = useState<boolean>(true); 
+  
   return (
     <div className={styles.tier}>
-      <DesktopTierTable onDirectToVerification={onDirectToVerification} />
-      <MobileTierTable onDirectToVerification={onDirectToVerification} />
+      <DesktopTierTable onDirectToVerification={onDirectToVerification} activeSwitch={activeSwitch} setActiveSwitch={setActiveSwitch}/>
+      <MobileTierTable onDirectToVerification={onDirectToVerification} activeSwitch={activeSwitch} setActiveSwitch={setActiveSwitch}/>
     </div>
   )
 }
