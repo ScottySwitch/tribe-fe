@@ -8,10 +8,11 @@ import { loginInforItem } from "constant"
 import { Tiers, UsersTypes, VerifySteps } from "enums"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useState, useCallback } from "react"
 import styles from "styles/BizUserVerify.module.scss"
 import { randomId } from "utils"
 import AuthApi from '../../../services/auth'
+import UserApi from "../../../services/user"
 
 interface BizUserVerifyProps {
   tier: string
@@ -26,6 +27,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [showResultModal, setShowResultModal] = useState(false)
   const router = useRouter()
 
+  console.log(tier);
+  
   const handleRequestOTP = async () => {
     //send OPT
     await AuthApi.otpPhoneGenerate(phoneNumber);
@@ -43,7 +46,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         alert('Wrong OTP')
       }
     } else {
-      setVerifyStep(VerifySteps.ADD_ID_CARD)
+      const result = await AuthApi.otpPhoneConfirm({otp});
+      if (result.data.success) {
+        setVerifyStep(VerifySteps.ADD_ID_CARD)
+      } else {
+        alert('Wrong OTP')
+      }
     }
   }
 
@@ -60,6 +68,30 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleFinishVerifying = () => {
     setShowResultModal(true)
   }
+
+  const handleUploadFrontImagesIdentity = useCallback((srcImages) => {
+    console.log('srcImages', srcImages)
+    const userId = localStorage.getItem('user_id');
+    console.log(userId);
+    if (userId) {
+      const result = UserApi.updateUser(parseInt(userId), {
+        front_papers_identity: srcImages
+      })
+      console.log(result);
+    }
+  }, [])
+
+  const handleUploadBackImagesIdentity = useCallback((srcImages) => {
+    console.log('srcImages', srcImages)
+    const userId = localStorage.getItem('user_id');
+    console.log(userId);
+    if (userId) {
+      const result = UserApi.updateUser(parseInt(userId), {
+        back_papers_identity: srcImages
+      })
+      console.log(result);
+    }
+  }, [])
 
   return (
     <div className={styles.biz_verify}>
@@ -111,6 +143,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             <label>Upload ID card or driver liciense photos</label>
             <div className="w-full flex justify-between gap-5">
               <Upload
+                onChange={handleUploadFrontImagesIdentity}
                 className={styles.upload_id}
                 centerIcon={
                   <div className="flex gap-1 items-center flex-col">
@@ -120,6 +153,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 }
               />
               <Upload
+                onChange={handleUploadBackImagesIdentity}
                 className={styles.upload_id}
                 centerIcon={
                   <div className="flex gap-1 items-center flex-col">
