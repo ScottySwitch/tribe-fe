@@ -33,6 +33,8 @@
     background-color: $bg-700;
     -webkit-transition: 0.4s;
     transition: 0.4s;
+    left: 0;
+    right: unset;
   }
 }
 
@@ -41,10 +43,6 @@
   left: unset;
 }
 
-.switch.none_active .slider::before{
-  left: 0;
-  right: unset;
-}
 
 .slider.round {
   border-radius: 22px;

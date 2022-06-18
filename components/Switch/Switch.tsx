@@ -2,14 +2,14 @@ import styles from "./Switch.module.scss";
 
 interface SwitchProps {
   onClick?: () => void;
-  activeSwitch?: boolean;
+  isActive?:boolean;
 }
 
 const Switch = (props: SwitchProps) => {
-  const {onClick, activeSwitch} = props
+  const {onClick, isActive} = props
 
   return (
-    <label className={`${styles.switch} ${activeSwitch == true ? styles.active : styles.none_active}`} onClick={onClick}>
+    <label className={`${styles.switch} ${isActive === true && styles.active }`} onClick={onClick}>
       {/* <input type="checkbox" /> */}
       <span className={`${styles.slider} ${styles.round}`} />
     </label>

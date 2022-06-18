@@ -35,7 +35,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   useEffect(() => {
     const sessionId = router.query.sessionId;
-    if (sessionId) {
+    if (sessionId && localStorage.getItem('isVeriFy') != 'true') {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
       handleFinishVerifying('method_2')
     }
@@ -175,6 +175,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     const localLoginInfo = { tier: tier, token: "asd", type: UsersTypes.BIZ_USER }
     localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
     window.location.href = `/biz/home/edit/${randomId()}`
+    localStorage.setItem('isVeriFy', 'false');
   }
 
   const handleAddIdCard = async () => {
@@ -211,37 +212,18 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         transaction_id: transaction_id
       })
     }
+    localStorage.setItem('isVeriFy', 'true');
     setShowResultModal(true)
   }
 
   const handleUploadFrontImagesIdentity = useCallback((srcImages) => {
     setFrontImageIdentity(srcImages)
     console.log('srcImages', srcImages)
-    // if (srcImages) {
-    //   const userId = localStorage.getItem('user_id');
-    //   console.log(userId);
-    //   if (userId) {
-    //     const result = UserApi.updateUser(parseInt(userId), {
-    //       front_papers_identity: srcImages
-    //     })
-    //     console.log(result);
-    //   }
-    // }
   }, [])
 
   const handleUploadBackImagesIdentity = useCallback((srcImages) => {
     setBackImageIdentity(srcImages)
     console.log('srcImages', srcImages)
-    // if (srcImages) {
-    //   const userId = localStorage.getItem('user_id');
-    //   console.log(userId);
-    //   if (userId) {
-    //     const result = UserApi.updateUser(parseInt(userId), {
-    //       back_papers_identity: srcImages
-    //     })
-    //     console.log(result);
-    //   }
-    // }
   }, [])
 
   return (
