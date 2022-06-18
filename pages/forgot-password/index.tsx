@@ -50,6 +50,22 @@ const ForgotPasswordPage = () => {
         console.log(error.response.data.error);
       }
     }
+    else {
+      try {
+        console.log('forget password');
+        console.log('Phone: ', formData.phone);
+        const result = await AuthApi.forgetPasswordByPhone({
+          phone_number: formData.phone,
+        });
+        console.log('result: ', result);
+        if (result.data.ok) {
+          check = true;
+          localStorage.setItem("user_id", result.data.id);
+        }
+      } catch (error: any) {
+        console.log(error.response.data.error);
+      }
+    }
 
     if ( check == true ) {
       router.push({
