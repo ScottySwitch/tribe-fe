@@ -26,7 +26,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [paymentMethod, setPaymentMethod] = useState("")
   const [showResultModal, setShowResultModal] = useState(false)
   const router = useRouter()
-
   console.log(tier);
   
   const handleRequestOTP = async () => {
@@ -71,25 +70,29 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   const handleUploadFrontImagesIdentity = useCallback((srcImages) => {
     console.log('srcImages', srcImages)
-    const userId = localStorage.getItem('user_id');
-    console.log(userId);
-    if (userId) {
-      const result = UserApi.updateUser(parseInt(userId), {
-        front_papers_identity: srcImages
-      })
-      console.log(result);
+    if (srcImages) {
+      const userId = localStorage.getItem('user_id');
+      console.log(userId);
+      if (userId) {
+        const result = UserApi.updateUser(parseInt(userId), {
+          front_papers_identity: srcImages
+        })
+        console.log(result);
+      }
     }
   }, [])
 
   const handleUploadBackImagesIdentity = useCallback((srcImages) => {
     console.log('srcImages', srcImages)
-    const userId = localStorage.getItem('user_id');
-    console.log(userId);
-    if (userId) {
-      const result = UserApi.updateUser(parseInt(userId), {
-        back_papers_identity: srcImages
-      })
-      console.log(result);
+    if (srcImages) {
+      const userId = localStorage.getItem('user_id');
+      console.log(userId);
+      if (userId) {
+        const result = UserApi.updateUser(parseInt(userId), {
+          back_papers_identity: srcImages
+        })
+        console.log(result);
+      }
     }
   }, [])
 
