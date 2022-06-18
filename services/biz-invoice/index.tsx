@@ -11,7 +11,7 @@ const createBizInvoice = async (params: any) => {
         value: params.value,
         payment_method: params.paymentMethod,
         transaction_id: params.transaction_id,
-        // biz_listing: localStorage.getItem('biz_listing')
+        biz_listing: localStorage.getItem('biz_id')
     }
   });
 }
