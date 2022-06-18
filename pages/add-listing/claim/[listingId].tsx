@@ -6,7 +6,7 @@ import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Select from "components/Select/Select"
 import TierTable from "components/TierTable/TierTable"
-import { listingSearchResult, roleList } from "constant"
+import { listingSearchResult, loginInforItem, roleList } from "constant"
 import { ClaimStep, Tiers } from "enums"
 import Link from "next/link"
 import Router, { useRouter } from "next/router"
@@ -54,6 +54,7 @@ const ClaimListing = (context) => {
       name: form.role.value
     })
     setClaimStep(ClaimStep.CHOOSE_TIER)
+    localStorage.setItem('pay_price', '600')
   }
 
   const handleDirectToVerification = (tier: Tiers) => {

@@ -108,6 +108,11 @@ const DesktopTierTable = ({
 }: {
   onDirectToVerification(tier: Tiers): void
 }) => {
+
+  const handleChangePayPrice = () => {
+    console.log(localStorage.getItem('pay_price'));
+  }
+
   return (
     <table>
       <colgroup>
@@ -120,7 +125,9 @@ const DesktopTierTable = ({
         <tr>
           <th className={styles.tier_payment}>
             <span>Pay quarterly</span>
-            <Switch />
+            <div onClick={handleChangePayPrice}>
+              <Switch />
+            </div>
             <span>Pay yearly</span>
           </th>
           {tiers.map((tier) => (
