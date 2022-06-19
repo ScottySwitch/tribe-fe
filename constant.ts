@@ -2,6 +2,8 @@ import { Categories, InformationList, ListingTabs } from "enums"
 import { IAddListingForm } from "pages/add-listing"
 
 export const loginInforItem = "login_infor"
+export const user = "user"
+export const userId = "user_id"
 
 export const fakeSubCateList = [
   { label: "Subcate", value: "Subcate" },

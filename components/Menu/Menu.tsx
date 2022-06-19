@@ -27,6 +27,8 @@ const Menu = (props: MenuMenuProps) => {
   const { loginInfor = {}, mobile, onShowCategoriesModal } = props
   const handleLogout = () => {
     localStorage.removeItem(loginInforItem)
+    localStorage.removeItem(user)
+    localStorage.removeItem(userId)
     window.location.href = "/"
   }
 
