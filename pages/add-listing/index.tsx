@@ -105,7 +105,7 @@ const AddListing = () => {
         twitter: formData.socialMedia
       },
       phone_number: formData.contact,
-      email: formData.email,
+      email: formData.email === "" ? null : formData.email,
       tags: formData.tags,
       price_range: {
         currency: formData.currency,
