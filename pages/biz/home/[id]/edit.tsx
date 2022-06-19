@@ -13,10 +13,10 @@ import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Upload from "components/Upload/Upload"
 import { Categories, ListingHomePageScreens } from "enums"
-import AddItems from "components/BizInformationPage/TabContent/AddItems/AddItems"
-import AddMenu from "components/BizInformationPage/TabContent/AddMenu/AddMenu"
-import AddDeals from "components/BizInformationPage/TabContent/AddDeal/AddDeals"
 import BizListingApi from "../../../../services/biz-listing"
+import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu"
+import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems"
+import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
 
 import styles from "styles/BizHomepage.module.scss"
 
