@@ -133,8 +133,10 @@ const EditListingHomepage = (context) => {
       phone_number: phoneNumber,
       is_verified: false,
       logo: logo
-    }).then((response) => console.log(response))
-    window.location.reload()
+    }).then((response) => {
+      console.log(response);
+      window.location.reload();
+    })
   }
 
   return (
