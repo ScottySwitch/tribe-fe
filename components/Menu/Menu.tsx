@@ -1,6 +1,6 @@
 import classNames from "classnames"
 import Icon from "components/Icon/Icon"
-import { loginInforItem } from "constant"
+import { loginInforItem, user, userId } from "constant"
 import { ILoginInfor } from "pages/_app"
 
 import styles from "./Menu.module.scss"
