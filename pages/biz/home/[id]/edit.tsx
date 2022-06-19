@@ -186,7 +186,7 @@ const EditListingHomepage = (context) => {
                   <Icon icon="like-color" />
                   Facilities
                 </div>
-                <Link href="/">Add facilities</Link>
+                <Link href="#">Add facilities</Link>
               </div>
               <div className={styles.break} />
               <div className="flex justify-between">
@@ -194,7 +194,7 @@ const EditListingHomepage = (context) => {
                   <Icon icon="tags-color" />
                   Tags
                 </div>
-                <Link href="/">Add tags</Link>
+                <Link href="#">Add tags</Link>
               </div>
               <div className={styles.break} />
               <div className="flex justify-between">
