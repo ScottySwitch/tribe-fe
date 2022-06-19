@@ -8,10 +8,12 @@ import { loginInforItem } from "constant"
 import { Tiers, UsersTypes, VerifySteps } from "enums"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useState, useCallback, useEffect } from "react"
 import styles from "styles/BizUserVerify.module.scss"
 import { randomId } from "utils"
-import AuthApi from '../../../services/auth'
+import AuthApi from "../../../services/auth"
+import UserApi from "../../../services/user"
+import BizInvoinceApi from "../../../services/biz-invoice"
 
 interface BizUserVerifyProps {
   tier: string
@@ -24,11 +26,127 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [otp, setOtp] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("")
   const [showResultModal, setShowResultModal] = useState(false)
+  const [frontImageIdentity, setFrontImageIdentity] = useState<string>("")
+  const [backImageIdentity, setBackImageIdentity] = useState<string>("")
   const router = useRouter()
+  let baseURL = process.env.NEXT_PUBLIC_API_URL
+
+  console.log(tier)
+
+  useEffect(() => {
+    const sessionId = router.query.sessionId
+    if (sessionId && localStorage.getItem("isVeriFy") != "true") {
+      setVerifyStep(VerifySteps.ADD_PAYMENT)
+      handleFinishVerifying("method_2")
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleSubmit = () => {
+    const ssProduct = document.getElementById("SS_ProductCheckout")
+    console.log(ssProduct)
+    SS_ProductCheckout()
+
+    // for storing product payment order in strapi
+    const params = new URLSearchParams(document.location.search)
+    const checkoutSessionId = params.get("sessionId")
+    if (checkoutSessionId) {
+      SS_GetProductPaymentDetails(checkoutSessionId)
+    }
+  }
+
+  function SS_ProductCheckout() {
+    const strapiStripe = document.querySelector("#SS_ProductCheckout") as HTMLElement
+    const productId = strapiStripe?.dataset.id
+
+    const baseUrl = strapiStripe?.dataset.url || ""
+    localStorage.setItem("strapiStripeUrl", baseUrl)
+    const getProductApi = baseUrl + "/strapi-stripe/getProduct/" + productId
+    const checkoutSessionUrl = baseUrl + "/strapi-stripe/createCheckoutSession/"
+
+    fetch(getProductApi, {
+      method: "get",
+      // mode: "cors",
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        fetch(checkoutSessionUrl, {
+          method: "post",
+          body: JSON.stringify({
+            stripePriceId: response.stripePriceId,
+            stripePlanId: response.stripePlanId,
+            isSubscription: response.isSubscription,
+            productId: response.id,
+            productName: response.title,
+          }),
+          // mode: "cors",
+          headers: new Headers({
+            "Content-Type": "application/json",
+          }),
+        })
+          .then((response) => response.json())
+          .then((response) => {
+            if (response.id) {
+              window.location.replace(response.url)
+            }
+          })
+      })
+  }
+
+  //  storing product payment order in strapi logic
+
+  function SS_GetProductPaymentDetails(checkoutSessionId) {
+    const baseUrl = localStorage.getItem("strapiStripeUrl")
+    const retrieveCheckoutSessionUrl =
+      baseUrl + "/strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId
+    fetch(retrieveCheckoutSessionUrl, {
+      method: "get",
+      mode: "cors",
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.payment_status === "paid") {
+          if (
+            window.performance
+              .getEntriesByType("navigation")
+              .map((nav: any) => nav.type)
+              .includes("reload")
+          ) {
+            console.info("website reloded")
+          } else {
+            // store payment in strapi
+            const stripePaymentUrl = baseUrl + "/strapi-stripe/stripePayment"
+            fetch(stripePaymentUrl, {
+              method: "post",
+              body: JSON.stringify({
+                txnDate: new Date(),
+                transactionId: response.id,
+                isTxnSuccessful: true,
+                txnMessage: response,
+                txnAmount: response.amount_total / 100,
+                customerName: response.customer_details.name,
+                customerEmail: response.customer_details.email,
+                stripeProduct: response.metadata.productId,
+              }),
+              mode: "cors",
+              headers: new Headers({
+                "Content-Type": "application/json",
+              }),
+            })
+          }
+        }
+      })
+  }
 
   const handleRequestOTP = async () => {
     //send OPT
-    await AuthApi.otpPhoneGenerate(phoneNumber);
+    await AuthApi.otpPhoneGenerate(phoneNumber)
     console.log(phoneNumber)
     setVerifyStep(VerifySteps.CONFIRM_OTP)
   }
@@ -36,14 +154,19 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleConfirmOTP = async () => {
     //submit otp to check
     if (tier === Tiers.FREE) {
-      const result = await AuthApi.otpPhoneConfirm({otp});
+      const result = await AuthApi.otpPhoneConfirm({ otp })
       if (result.data.success) {
-        setShowResultModal(true);
+        setShowResultModal(true)
       } else {
-        alert('Wrong OTP')
+        alert("Wrong OTP")
       }
     } else {
-      setVerifyStep(VerifySteps.ADD_ID_CARD)
+      const result = await AuthApi.otpPhoneConfirm({ otp })
+      if (result.data.success) {
+        setVerifyStep(VerifySteps.ADD_ID_CARD)
+      } else {
+        alert("Wrong OTP")
+      }
     }
   }
 
@@ -51,15 +174,54 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     const localLoginInfo = { tier: tier, token: "asd", type: UsersTypes.BIZ_USER }
     localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
     window.location.href = `/biz/home/edit/${randomId()}`
+    localStorage.setItem("isVeriFy", "false")
   }
 
-  const handleAddIdCard = () => {
-    setVerifyStep(VerifySteps.ADD_PAYMENT)
+  const handleAddIdCard = async () => {
+    if (frontImageIdentity != "" && backImageIdentity != "") {
+      setVerifyStep(VerifySteps.ADD_PAYMENT)
+      const userId = localStorage.getItem("user_id")
+      if (userId) {
+        const result = UserApi.updateUser(parseInt(userId), {
+          front_papers_identity: frontImageIdentity,
+        })
+        const resultTwo = UserApi.updateUser(parseInt(userId), {
+          back_papers_identity: backImageIdentity,
+        })
+      }
+    } else {
+      alert("Image is required")
+    }
   }
 
-  const handleFinishVerifying = () => {
+  const handleFinishVerifying = async (paymentMethodValue: string) => {
+    let price = localStorage.getItem("pay_price")
+    let transaction_id
+    if (router.query.sessionId) {
+      transaction_id = router.query.sessionId
+    } else {
+      transaction_id = ""
+    }
+    if (price != null) {
+      const result = BizInvoinceApi.createBizInvoice({
+        value: parseInt(price),
+        paymentMethod: paymentMethodValue,
+        transaction_id: transaction_id,
+      })
+    }
+    localStorage.setItem("isVeriFy", "true")
     setShowResultModal(true)
   }
+
+  const handleUploadFrontImagesIdentity = useCallback((srcImages) => {
+    setFrontImageIdentity(srcImages)
+    console.log("srcImages", srcImages)
+  }, [])
+
+  const handleUploadBackImagesIdentity = useCallback((srcImages) => {
+    setBackImageIdentity(srcImages)
+    console.log("srcImages", srcImages)
+  }, [])
 
   return (
     <div className={styles.biz_verify}>
@@ -111,6 +273,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             <label>Upload ID card or driver liciense photos</label>
             <div className="w-full flex justify-between gap-5">
               <Upload
+                onChange={handleUploadFrontImagesIdentity}
                 className={styles.upload_id}
                 centerIcon={
                   <div className="flex gap-1 items-center flex-col">
@@ -120,6 +283,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 }
               />
               <Upload
+                onChange={handleUploadBackImagesIdentity}
                 className={styles.upload_id}
                 centerIcon={
                   <div className="flex gap-1 items-center flex-col">
@@ -131,7 +295,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <div className="flex justify-center gap-5 w-full">
-            <Button width="30%" variant="no-outlined" text="Skip" />
+            <Button
+              width="30%"
+              variant="no-outlined"
+              text="Skip"
+              onClick={() => setVerifyStep(VerifySteps.ADD_PAYMENT)}
+            />
             <Button width="80%" text="Next" onClick={handleAddIdCard} />
           </div>
         </div>
@@ -144,7 +313,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             <div className={styles.price_container}>
               <div className={styles.amount}>Amount</div>
               <div className={styles.price}>
-                SGD 150 <p>per quarter</p>
+                SGD {localStorage.getItem("pay_price")} <p>per quarter</p>
               </div>
             </div>
           </div>
@@ -169,7 +338,28 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           </div>
           <div className="flex justify-center gap-5 w-full">
             <Button width="30%" variant="no-outlined" text="Change tier" />
-            <Button width="80%" text="Next" onClick={handleFinishVerifying} />
+            {/* <button 
+              onClick={handleSubmit}
+              className="css style" type="button" id="SS_ProductCheckout" data-id="1" data-url="http://localhost:1337"> Subscribe </button> */}
+            {paymentMethod == "stripe" ? (
+              <Button
+                width="80%"
+                className="css style"
+                type="button"
+                id="SS_ProductCheckout"
+                data-id={localStorage.getItem("pay_price") == "600" ? 2 : 1}
+                data-url={baseURL}
+                text="Next"
+                onClick={handleSubmit}
+              />
+            ) : (
+              <Button
+                width="80%"
+                type="button"
+                text="Next"
+                onClick={() => handleFinishVerifying("method_1")}
+              />
+            )}
           </div>
         </div>
       )}
