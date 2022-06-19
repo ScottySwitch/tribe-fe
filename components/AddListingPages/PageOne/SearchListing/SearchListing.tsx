@@ -100,6 +100,7 @@ const SearchListing = ({
   console.log('listing', listing);
   if(listing) {
     localStorage.setItem('biz_id', listing.id)
+    localStorage.setItem('biz_slug', listing.attributes.slug)
   }
   const [showUpcomingFeature, setShowUpcomingFeature] = useState(false)
   switch (listing) {
