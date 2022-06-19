@@ -33,26 +33,29 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   console.log(tier)
 
+
   useEffect(() => {
     const sessionId = router.query.sessionId
     if (sessionId && localStorage.getItem("isVeriFy") != "true") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
-      handleFinishVerifying("method_2")
+      handleFinishVerifying('method_2')
+      // for storing product payment order in strapi
+      const checkoutSessionId = sessionId;
+      console.log(checkoutSessionId);
+      if (checkoutSessionId) {
+        SS_GetProductPaymentDetails(checkoutSessionId);
+      }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    
+    //  storing product payment order in strapi logic
+    
   }, [])
 
   const handleSubmit = () => {
-    const ssProduct = document.getElementById("SS_ProductCheckout")
-    console.log(ssProduct)
-    SS_ProductCheckout()
-
-    // for storing product payment order in strapi
-    const params = new URLSearchParams(document.location.search)
-    const checkoutSessionId = params.get("sessionId")
-    if (checkoutSessionId) {
-      SS_GetProductPaymentDetails(checkoutSessionId)
-    }
+    const ssProduct = document.getElementById("SS_ProductCheckout");
+    console.log(ssProduct);
+    SS_ProductCheckout();
   }
 
   function SS_ProductCheckout() {
@@ -95,8 +98,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           })
       })
   }
-
-  //  storing product payment order in strapi logic
 
   function SS_GetProductPaymentDetails(checkoutSessionId) {
     const baseUrl = localStorage.getItem("strapiStripeUrl")
@@ -143,6 +144,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         }
       })
   }
+
+  
 
   const handleRequestOTP = async () => {
     //send OPT
