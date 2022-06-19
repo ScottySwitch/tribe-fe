@@ -107,7 +107,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
             register={register("contact")}
             label="Phone number ( optional )"
             placeholder="335 657 8878"
-            prefix="+84"
+            prefix="+65"
           />
           <br />
           <Input
