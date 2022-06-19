@@ -51,7 +51,7 @@ const Upload = (props: UploadProps) => {
       })
       .then((res) => {
         if (res.data.urls && Array.isArray(res.data.urls) && res.data.urls.length > 0) {
-          alert("Upload successfully!")
+          // alert("Upload successfully!")
           onChange?.([...fileList, ...res.data.urls])
         }
       })

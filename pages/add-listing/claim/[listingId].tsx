@@ -6,7 +6,7 @@ import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Select from "components/Select/Select"
 import TierTable from "components/TierTable/TierTable"
-import { listingSearchResult, roleList } from "constant"
+import { listingSearchResult, loginInforItem, roleList } from "constant"
 import { ClaimStep, Tiers } from "enums"
 import Link from "next/link"
 import Router, { useRouter } from "next/router"
@@ -22,7 +22,8 @@ const ClaimListing = (context) => {
   const [claimStep, setClaimStep] = useState(firstStep)
   const { handleSubmit, setValue, getValues, register } = useForm()
   const router = useRouter()
-  const { query: {listingId} } = useRouter()
+  const { query: {listingId} } = useRouter();
+  
 
   useEffect(() => {
     const getListingData = async (listingId) => {
@@ -31,6 +32,7 @@ const ClaimListing = (context) => {
     };
     if (listingId) {
       getListingData(listingId);
+      
     }
   }, [listingId])
 
@@ -54,6 +56,7 @@ const ClaimListing = (context) => {
       name: form.role.value
     })
     setClaimStep(ClaimStep.CHOOSE_TIER)
+    localStorage.setItem('pay_price', '600')
   }
 
   const handleDirectToVerification = (tier: Tiers) => {

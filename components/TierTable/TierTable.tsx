@@ -105,9 +105,26 @@ const tiers = [
 
 const DesktopTierTable = ({
   onDirectToVerification,
+  setIsActive,
+  isActive
 }: {
-  onDirectToVerification(tier: Tiers): void
+  onDirectToVerification(tier: Tiers): void,
+  setIsActive(value: boolean): void,
+  isActive: boolean
 }) => {
+  const handleChangePayPrice = () => {
+    setIsActive(!isActive);
+    if (localStorage.getItem('pay_price') == '600') {
+    localStorage.setItem('pay_price', '150') 
+    }
+    else {
+      localStorage.setItem('pay_price', '600') 
+    }
+    console.log(localStorage.getItem('pay_price'));
+    console.log(isActive);
+    
+  }
+
   return (
     <table>
       <colgroup>
@@ -120,7 +137,7 @@ const DesktopTierTable = ({
         <tr>
           <th className={styles.tier_payment}>
             <span>Pay quarterly</span>
-            <Switch />
+              <Switch isActive={isActive} onClick={handleChangePayPrice}/>
             <span>Pay yearly</span>
           </th>
           {tiers.map((tier) => (
@@ -167,13 +184,29 @@ const DesktopTierTable = ({
 
 const MobileTierTable = ({
   onDirectToVerification,
+  setIsActive,
+  isActive
 }: {
-  onDirectToVerification(tier: Tiers): void
+  onDirectToVerification(tier: Tiers): void,
+  setIsActive(value: boolean): void,
+  isActive: boolean
 }) => {
+  const handleChangePayPrice = () => {
+    setIsActive(!isActive);
+    if (localStorage.getItem('pay_price') == '600') {
+    localStorage.setItem('pay_price', '150') 
+    }
+    else {
+      localStorage.setItem('pay_price', '600') 
+    }
+    console.log(localStorage.getItem('pay_price'));
+    console.log(isActive);
+  }
   const [tierList, setTierList] = useState<string[]>([])
   return (
+    
     <div className={styles.tier_mobile}>
-      <Switch /> Pay yearly
+      <Switch isActive={isActive} onClick={handleChangePayPrice}/> Pay yearly
       {tiers.map((tier) => (
         <div key={tier.name} className="relative mt-10">
           {tier.recommended && (
@@ -238,10 +271,12 @@ const MobileTierTable = ({
 }
 
 const TierTable = ({ onDirectToVerification }: { onDirectToVerification(tier: Tiers): void }) => {
+  const [isActive, setIsActive] = useState<boolean>(true); 
+  
   return (
     <div className={styles.tier}>
-      <DesktopTierTable onDirectToVerification={onDirectToVerification} />
-      <MobileTierTable onDirectToVerification={onDirectToVerification} />
+      <DesktopTierTable onDirectToVerification={onDirectToVerification} isActive={isActive} setIsActive={setIsActive}/>
+      <MobileTierTable onDirectToVerification={onDirectToVerification} isActive={isActive} setIsActive={setIsActive}/>
     </div>
   )
 }
