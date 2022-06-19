@@ -1,71 +1,36 @@
-import TabContentContainer from "components/BizInformationPage/TabContentContainer/TabContentContainer"
-import Icon from "components/Icon/Icon"
-import Heading from "components/ListingHomePage/Heading/Heading"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import { informationList } from "constant"
-import { Tiers } from "enums"
 import { useState } from "react"
-import styles from "styles/BizInformation.module.scss"
 
-const defaultFormValue = {
-  name: "Evertop Hainanese Boneless Chicken",
-  description:
-    "The first restaurant proprietor is believed to have been one A. Boulanger, a soup vendor, who opened his business in Paris in 1765. The sign above his door advertised restoratives, or restaurants, referring to the soups and broths available within.",
-  address: "50 Bussorah St, Singapore 199466",
-  phone: "+84 823996913",
-  productList: [
-    {
-      imgUrl: "https://picsum.photos/200/300",
-      name: "Evertop Hainanese Boneless Chicken...",
-      description: "A product description is a form of marketing copy used...",
-      price: "$ 37.35",
-    },
-    {
-      imgUrl: "https://picsum.photos/200/300",
-      name: "Evertop Hainanese Boneless Chicken...",
-      description: "A product description is a form of marketing copy used...",
-      price: "$ 37.35",
-    },
-    {
-      imgUrl: "https://picsum.photos/200/300",
-      name: "Evertop Hainanese Boneless Chicken...",
-      description: "A product description is a form of marketing copy used...",
-      price: "$ 37.35",
-    },
-    {
-      imgUrl: "https://picsum.photos/200/300",
-      name: "Evertop Hainanese Boneless Chicken...",
-      description: "A product description is a form of marketing copy used...",
-      price: "$ 37.35",
-    },
-  ],
-  activeDeals: [
-    {
-      name: "Deal name",
-      description: "10% off Set Meals only",
-      date: "April 17, 2022 - April 17, 2022",
-      clicks: "123",
-    },
-    {
-      name: "Deal name",
-      description: "10% off Set Meals only",
-      date: "April 17, 2022 - April 17, 2022",
-      clicks: "123",
-    },
-    {
-      name: "Deal name",
-      description: "10% off Set Meals only",
-      date: "April 17, 2022 - April 17, 2022",
-      clicks: "123",
-    },
-  ],
-}
+import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation"
+import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals"
+import ProductListing from "components/BizInformationPage/TabContentComponents/ProductListing"
+import Icon from "components/Icon/Icon"
+import Heading from "components/Heading/Heading"
+import SectionLayout from "components/SectionLayout/SectionLayout"
+import {
+  bizInformationDefaultFormData,
+  defaultAddlistingForm,
+  fakeAddlistingForm,
+  informationList,
+} from "constant"
+import { Categories, InformationList, Tiers } from "enums"
+
+import styles from "styles/BizInformation.module.scss"
+import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail"
+import { IAddListingForm } from "pages/add-listing"
+import TierTable from "components/TierTable/TierTable"
+
 const BizInformation = () => {
   const [tier, setTier] = useState<Tiers>(Tiers.BASIC)
-  const [formValue, setFormValue] = useState(defaultFormValue)
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
-  const submitFormValue = (e) => {
+  const submitFormData = (e) => {
+    console.log(e)
+  }
+  const handleUpdateBusinessInformation = (e) => {
+    console.log(e)
+  }
+  const handleUpdateProductList = (e) => {
     console.log(e)
   }
 
@@ -74,6 +39,48 @@ const BizInformation = () => {
       return
     }
     setSelectedTab(tab.label)
+  }
+
+  const handleChangeTier = (isPayQuarterly: boolean) => {
+    console.log("isPayQuarterly", isPayQuarterly)
+  }
+
+  const tabContent = () => {
+    switch (selectedTab) {
+      case InformationList.BUSINESS_INFORMATION:
+        return (
+          <BusinessInformation
+            formData={formData}
+            submitFormData={handleUpdateBusinessInformation}
+          />
+        )
+      case InformationList.BUSINESS_DETAIL:
+        return (
+          <BusinessDetail
+            category={Categories.SEE_AND_DO}
+            formData={formData}
+            submitFormData={submitFormData}
+          />
+        )
+      case InformationList.PRODUCT_LISTING:
+        return <ProductListing formData={formData} submitFormData={handleUpdateProductList} />
+      case InformationList.PHOTOS_VIDEOS:
+        return <div>photo</div>
+      case InformationList.MANAGE_DEALS:
+        return <ManageDeals formData={formData} submitFormData={submitFormData} />
+      case InformationList.ANALYTICS:
+        return <div>analytics</div>
+      case InformationList.CHANGE_ACCOUNT_TIER:
+        return (
+          <TierTable isPayQuarterly={formData.isActive} onSetIsPayQuarterly={handleChangeTier} />
+        )
+      case InformationList.VERIFICATION:
+        return <div>verify</div>
+      case InformationList.LOGOUT:
+        return <div>logout</div>
+      default:
+        return <div />
+    }
   }
 
   return (
@@ -99,13 +106,7 @@ const BizInformation = () => {
             ))}
           </div>
         </div>
-        <div className={styles.right_col}>
-          <TabContentContainer
-            formValue={formValue}
-            selectedTab={selectedTab}
-            submitFormValue={submitFormValue}
-          />
-        </div>
+        <div className={styles.right_col}>{tabContent()}</div>
       </div>
     </SectionLayout>
   )

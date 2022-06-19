@@ -105,9 +105,24 @@ const tiers = [
 
 const DesktopTierTable = ({
   onDirectToVerification,
+  setIsActive,
+  isActive,
 }: {
-  onDirectToVerification(tier: Tiers): void
+  onDirectToVerification?(tier: Tiers): void
+  setIsActive(value: boolean): void
+  isActive: boolean
 }) => {
+  const handleChangePayPrice = () => {
+    setIsActive(!isActive)
+    if (localStorage.getItem("pay_price") == "600") {
+      localStorage.setItem("pay_price", "150")
+    } else {
+      localStorage.setItem("pay_price", "600")
+    }
+    console.log(localStorage.getItem("pay_price"))
+    console.log(isActive)
+  }
+
   return (
     <table>
       <colgroup>
@@ -120,7 +135,7 @@ const DesktopTierTable = ({
         <tr>
           <th className={styles.tier_payment}>
             <span>Pay quarterly</span>
-            <Switch />
+            <Switch isActive={isActive} onClick={handleChangePayPrice} />
             <span>Pay yearly</span>
           </th>
           {tiers.map((tier) => (
@@ -139,7 +154,7 @@ const DesktopTierTable = ({
                 text="Select"
                 width="70%"
                 size="small"
-                onClick={() => onDirectToVerification(tier.value)}
+                onClick={() => onDirectToVerification?.(tier.value)}
               />
             </th>
           ))}
@@ -167,13 +182,27 @@ const DesktopTierTable = ({
 
 const MobileTierTable = ({
   onDirectToVerification,
+  setIsActive,
+  isActive,
 }: {
-  onDirectToVerification(tier: Tiers): void
+  onDirectToVerification?(tier: Tiers): void
+  setIsActive(value: boolean): void
+  isActive: boolean
 }) => {
+  const handleChangePayPrice = () => {
+    setIsActive(!isActive)
+    if (localStorage.getItem("pay_price") == "600") {
+      localStorage.setItem("pay_price", "150")
+    } else {
+      localStorage.setItem("pay_price", "600")
+    }
+    console.log(localStorage.getItem("pay_price"))
+    console.log(isActive)
+  }
   const [tierList, setTierList] = useState<string[]>([])
   return (
     <div className={styles.tier_mobile}>
-      <Switch /> Pay yearly
+      <Switch isActive={isActive} onClick={handleChangePayPrice} /> Pay yearly
       {tiers.map((tier) => (
         <div key={tier.name} className="relative mt-10">
           {tier.recommended && (
@@ -227,7 +256,7 @@ const MobileTierTable = ({
                 text="Select"
                 width="70%"
                 size="small"
-                onClick={() => onDirectToVerification(tier.value)}
+                onClick={() => onDirectToVerification?.(tier.value)}
               />
             </div>
           </div>
@@ -237,11 +266,27 @@ const MobileTierTable = ({
   )
 }
 
-const TierTable = ({ onDirectToVerification }: { onDirectToVerification(tier: Tiers): void }) => {
+const TierTable = ({
+  isPayQuarterly,
+  onSetIsPayQuarterly,
+  onDirectToVerification,
+}: {
+  isPayQuarterly: boolean
+  onSetIsPayQuarterly: (e: any) => void
+  onDirectToVerification?(tier: Tiers): void
+}) => {
   return (
     <div className={styles.tier}>
-      <DesktopTierTable onDirectToVerification={onDirectToVerification} />
-      <MobileTierTable onDirectToVerification={onDirectToVerification} />
+      <DesktopTierTable
+        onDirectToVerification={onDirectToVerification}
+        isActive={isPayQuarterly}
+        setIsActive={onSetIsPayQuarterly}
+      />
+      <MobileTierTable
+        onDirectToVerification={onDirectToVerification}
+        isActive={isPayQuarterly}
+        setIsActive={onSetIsPayQuarterly}
+      />
     </div>
   )
 }

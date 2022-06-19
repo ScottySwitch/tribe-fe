@@ -1,29 +1,30 @@
-import Button from "components/Button/Button";
-import Icon from "components/Icon/Icon";
-import Input from "components/Input/Input";
-import Modal from "components/Modal/Modal";
-import { Item } from "framer-motion/types/components/Reorder/Item";
-import React, { useState } from "react";
-import styles from "./EditAction.module.scss";
+import Button from "components/Button/Button"
+import Icon from "components/Icon/Icon"
+import Input from "components/Input/Input"
+import Modal from "components/Modal/Modal"
+import { Item } from "framer-motion/types/components/Reorder/Item"
+import React, { useState } from "react"
+import styles from "./EditAction.module.scss"
 
 interface EditActionProps {
-  action: { label: string; value: string };
-  onApplyAction: (action: string, value: string) => void;
+  action: { label: string; value: string }
+  onApplyAction: (action: string, value: string) => void
+  onPublishPage: () => void
 }
 
 const EditAction = (props: EditActionProps) => {
-  const { action, onApplyAction } = props;
+  const { action, onPublishPage, onApplyAction } = props
 
-  const [showEditActionModal, setShowEditActionModal] = useState(false);
-  const [showBuyNow, setShowBuyNow] = useState(false);
-  const [showContactUs, setShowContactUs] = useState(false);
-  const [showGiftCard, setShowGiftCard] = useState(false);
-  const [showBookNow, setShowBookNow] = useState(false);
-  const [showStartOrder, setShowStartOrder] = useState(false);
-  const [showWhatsApp, setShowWhatsApp] = useState(false);
-  const [showLearnMore, setShowLearnMore] = useState(false);
-  const [showWatchVideo, setShowWatchVideo] = useState(false);
-  const [showShopOnWebsite, setShowShopOnWebWebsite] = useState(false);
+  const [showEditActionModal, setShowEditActionModal] = useState(false)
+  const [showBuyNow, setShowBuyNow] = useState(false)
+  const [showContactUs, setShowContactUs] = useState(false)
+  const [showGiftCard, setShowGiftCard] = useState(false)
+  const [showBookNow, setShowBookNow] = useState(false)
+  const [showStartOrder, setShowStartOrder] = useState(false)
+  const [showWhatsApp, setShowWhatsApp] = useState(false)
+  const [showLearnMore, setShowLearnMore] = useState(false)
+  const [showWatchVideo, setShowWatchVideo] = useState(false)
+  const [showShopOnWebsite, setShowShopOnWebWebsite] = useState(false)
 
   const actionList = [
     {
@@ -117,23 +118,23 @@ const EditAction = (props: EditActionProps) => {
       close: () => setShowShopOnWebWebsite(false),
       apply: () => {},
     },
-  ];
+  ]
 
   const handleApply = (action: string) => {
-    const input: any = document.getElementById(action);
-    console.log(action, input.value);
-    onApplyAction(action, input.value);
-  };
+    const input: any = document.getElementById(action)
+    console.log(action, input.value)
+    onApplyAction(action, input.value)
+  }
 
   return (
     <React.Fragment>
       <div className={styles.action_modal}>
         <Button
-          text={action.label || "Edit action button"}
+          text={action?.label || "Edit action button"}
           size="small"
           onClick={() => setShowEditActionModal(true)}
         />
-        <Button variant="outlined" text="Publish page" size="small" />
+        <Button variant="outlined" text="Publish page" size="small" onClick={onPublishPage} />
       </div>
       <Modal
         title="Edit action button"
@@ -141,7 +142,7 @@ const EditAction = (props: EditActionProps) => {
         mobileFullHeight
         width={600}
         onClose={() => {
-          setShowEditActionModal(false);
+          setShowEditActionModal(false)
         }}
       >
         <div className={styles.content}>
@@ -182,16 +183,16 @@ const EditAction = (props: EditActionProps) => {
               text="Apply"
               width="100%"
               onClick={() => {
-                action.close();
-                setShowEditActionModal(false);
-                handleApply(action.label);
+                action.close()
+                setShowEditActionModal(false)
+                handleApply(action.label)
               }}
             />
           </div>
         </Modal>
       ))}
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EditAction;
+export default EditAction

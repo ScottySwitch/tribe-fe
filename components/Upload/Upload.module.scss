@@ -103,3 +103,16 @@
     border: 2px dashed $bg-100;
   }
 }
+
+.small_avatar {
+  border: none;
+  border-radius: unset;
+  background-color: transparent;
+  .image,
+  .input {
+    width: 800px;
+    height: 80px;
+    border: 4px solid white;
+    border-radius: 50%;
+  }
+}

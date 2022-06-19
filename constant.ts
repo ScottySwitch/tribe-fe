@@ -2,6 +2,9 @@ import { Categories, InformationList, ListingTabs } from "enums"
 import { IAddListingForm } from "pages/add-listing"
 
 export const loginInforItem = "login_infor"
+export const user = "user"
+export const userId = "user_id"
+export const token = "token"
 
 export const fakeSubCateList = [
   { label: "Subcate", value: "Subcate" },
@@ -11,8 +14,121 @@ export const fakeSubCateList = [
   { label: "Subcate 4", value: "Subcate 4" },
 ]
 
+export const bizInformationDefaultFormData = {
+  name: "Evertop Hainanese Boneless Chicken",
+  description:
+    "The first restaurant proprietor is believed to have been one A. Boulanger, a soup vendor, who opened his business in Paris in 1765. The sign above his door advertised restoratives, or restaurants, referring to the soups and broths available within.",
+  address: "50 Bussorah St, Singapore 199466",
+  phone: "+84 823996913",
+  productList: [
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
+  ],
+  describePlace: [""],
+  activeDeals: [
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+    {
+      name: "Deal name",
+      description: "10% off Set Meals only",
+      date: "April 17, 2022 - April 17, 2022",
+      clicks: "123",
+    },
+  ],
+}
+
+export const fakeAddlistingForm: IAddListingForm = {
+  category: 1,
+  relationship: "",
+  listing: "",
+  role: "",
+  isOpen: "",
+  openDate: "",
+  businessName: "",
+  description: "",
+  isOnline: "",
+  city: "",
+  country: "",
+  address: "",
+  additionalAddress: "",
+  contact: "",
+  email: "",
+  socialMedia: "",
+  currency: "$",
+  minPrice: "10",
+  maxPrice: "100",
+  categoryKind: "Restaurant",
+  agreePolicies: "",
+  images: [],
+  openHours: [
+    { name: "Monday", twentyFourHours: false, openHours: [] },
+    { name: "Tuesday", twentyFourHours: false, openHours: [] },
+    {
+      name: "Wednesday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    {
+      name: "Thursday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    { name: "Friday", twentyFourHours: false, openHours: [] },
+    {
+      name: "Saturday",
+      twentyFourHours: false,
+      openHours: [],
+    },
+    { name: "Sunday", twentyFourHours: false, openHours: [] },
+  ],
+
+  tags: ["Italian", "Chinese"],
+  mealsKind: ["Breakfast", "Drinks"],
+  placeGoodFor: ["Kids", "Bar Scence"],
+  parking: ["Street Parking"],
+  atmosphere: ["Beach", "Al Fresco"],
+  payment: ["Cash Only"],
+  additionalServices: ["Takeout", "prayer facility available/nearby"],
+  foodOptions: [""],
+  paryerFacilities: [""],
+  foodOptionsRamadan: [""],
+  nonHalalActivities: [""],
+}
+
 export const defaultAddlistingForm: IAddListingForm = {
-  category: "",
+  category: 1,
   relationship: "",
   listing: "",
   role: "",

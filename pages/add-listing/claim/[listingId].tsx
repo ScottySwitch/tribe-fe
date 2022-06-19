@@ -6,7 +6,7 @@ import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Select from "components/Select/Select"
 import TierTable from "components/TierTable/TierTable"
-import { listingSearchResult, roleList } from "constant"
+import { listingSearchResult, loginInforItem, roleList } from "constant"
 import { ClaimStep, Tiers } from "enums"
 import Link from "next/link"
 import Router, { useRouter } from "next/router"
@@ -22,15 +22,18 @@ const ClaimListing = (context) => {
   const [claimStep, setClaimStep] = useState(firstStep)
   const { handleSubmit, setValue, getValues, register } = useForm()
   const router = useRouter()
-  const { query: {listingId} } = useRouter()
+  const {
+    query: { listingId },
+  } = useRouter()
 
   useEffect(() => {
     const getListingData = async (listingId) => {
-      const data = await BizListingApi.getBizListingById(listingId);
-      setListing(data.data.data);
-    };
+      const data = await BizListingApi.getBizListingById(listingId)
+      setListing(data.data.data)
+    }
     if (listingId) {
-      getListingData(listingId);
+      localStorage.setItem("biz_id", listingId.toString())
+      getListingData(listingId)
     }
   }, [listingId])
 
@@ -51,9 +54,10 @@ const ClaimListing = (context) => {
     console.log(form)
     await BizListingApi.createListingRole({
       bizListingId: listingId,
-      name: form.role.value
+      name: form.role.value,
     })
     setClaimStep(ClaimStep.CHOOSE_TIER)
+    localStorage.setItem("pay_price", "600")
   }
 
   const handleDirectToVerification = (tier: Tiers) => {
@@ -104,7 +108,11 @@ const ClaimListing = (context) => {
         subTitle="Choose the tier suitable for your business. You can change tier anytime."
         show={claimStep === ClaimStep.CHOOSE_TIER}
       >
-        <TierTable onDirectToVerification={handleDirectToVerification} />
+        <TierTable
+          isPayQuarterly={false}
+          onSetIsPayQuarterly={() => null}
+          onDirectToVerification={handleDirectToVerification}
+        />
       </SectionLayout>
     </React.Fragment>
   )

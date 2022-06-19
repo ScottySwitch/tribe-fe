@@ -1,5 +1,4 @@
 import Api from "../index";
-import {AuthEmailPayload} from "../../types/auth";
 
 const qs = require('qs');
 
@@ -65,8 +64,39 @@ const createListingRole = async (params: any) => {
   });
 }
 
+const getBizListingBySlug = async (bizListingSlug: any) => {
+  const query = qs.stringify({
+    "filters": {
+      "slug": bizListingSlug
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true
+  });
+
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
+const updateBizListing = async (bizListingId: number, params: any) => {
+  const url = `/api/biz-listings/${bizListingId}`;
+  return await Api.put(url, {
+    data: params
+  });
+}
+
+const createBizListing = async (params: any) => {
+  const url = `/api/biz-listings/`;
+  return await Api.post(url, {
+    data: params
+  });
+}
+
 export default {
   getBizListingsByCategoryId,
   getBizListingById,
-  createListingRole
+  createListingRole,
+  getBizListingBySlug,
+  updateBizListing,
+  createBizListing
 }

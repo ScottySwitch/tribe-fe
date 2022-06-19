@@ -5,12 +5,12 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import styles from "./TabContent.module.scss"
 
 interface ProductListingProps {
-  submitFormValue?: (form: { [key: string]: any }) => void
-  formValue?: { [key: string]: any }
+  submitFormData?: (form: { [key: string]: any }) => void
+  formData?: { [key: string]: any }
 }
 
 const ProductListing = (props: ProductListingProps) => {
-  const { formValue = {}, submitFormValue } = props
+  const { formData = {}, submitFormData } = props
 
   return (
     <SectionLayout
@@ -26,7 +26,7 @@ const ProductListing = (props: ProductListingProps) => {
       </div>
       <Break />
       <div className={styles.product_container}>
-        {formValue.productList.map((item) => (
+        {formData.productList.map((item) => (
           <InforCard
             key={item.id}
             imgUrl={item.imgUrl || "https://picsum.photos/200/300"}

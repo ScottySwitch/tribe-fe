@@ -13,7 +13,7 @@ import "../styles/globals.css"
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar"
 import { loginInforItem } from "constant"
 import { Tiers, UsersTypes } from "enums"
-import AuthApi from '../services/auth'
+import AuthApi from "../services/auth"
 
 export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers; avatar?: string }
 
@@ -61,16 +61,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const getMe = async () => {
-      await AuthApi.getMe();
+      await AuthApi.getMe()
     }
-    if (localStorage.getItem('token')) {
-      getMe().catch((e) => console.log(e));
+    if (localStorage.getItem("token")) {
+      getMe().catch((e) => console.log(e))
     }
 
     if (screen.width < 501) {
       setIsMobile(true)
     }
-    const stringyLoginInfo = localStorage.getItem('user')
+    const stringyLoginInfo = localStorage.getItem("user")
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {}
     if (localLoginInfo.token) {
       setLoginInfo(localLoginInfo)

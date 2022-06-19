@@ -6,7 +6,7 @@ import { eatTabList, productTabList, serviceTabList } from "constant"
 import { Categories, ListingHomePageScreens, ListingTabs } from "enums"
 import Image from "next/image"
 import { useState } from "react"
-import Heading from "../Heading/Heading"
+import Heading from "../../Heading/Heading"
 
 import styles from "./RenderTabs.module.scss"
 

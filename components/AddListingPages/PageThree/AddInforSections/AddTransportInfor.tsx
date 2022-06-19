@@ -18,17 +18,20 @@ import { IOption } from "type"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import Upload from "components/Upload/Upload"
 import Icon from "components/Icon/Icon"
+import { IAddListingForm } from "pages/add-listing"
 
 interface AddTransportInforProps {
+  isEdit?: boolean
   subCateList: IOption[]
   data: { [key: string]: any }
   show?: boolean
-  onPrevPage: () => void
-  onPreview: (data: { [key: string]: any }) => void
+  onPrevPage?: () => void
+  onPreview?: (data: { [key: string]: any }) => void
+  onEdit?: (data: IAddListingForm) => void
 }
 
 const AddTransportInfor = (props: AddTransportInforProps) => {
-  const { data, subCateList, show, onPrevPage, onPreview } = props
+  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } = props
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -48,7 +51,8 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
 
   const onSubmit = (data) => {
-    onPreview(data)
+    onPreview?.(data)
+    onEdit?.(data)
   }
 
   if (!show) {
@@ -57,8 +61,12 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
   return (
     <>
       <SectionLayout
-        title="Add a mean of transport"
-        subTitle="After you complete this form, you will be able to make changes before submitting."
+        title={isEdit ? "Business Detail" : "Add a mean of transport"}
+        subTitle={
+          isEdit
+            ? undefined
+            : "After you complete this form, you will be able to make changes before submitting."
+        }
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -85,7 +93,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
             <PreviewValue valueKey="tags" value={getValues("tags")} />
             <br />
             <Button
-              text="Edit cruisines"
+              text="Edit service"
               width="fit-content"
               size="small"
               onClick={() => setShowTagsModal(true)}
@@ -103,7 +111,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
             />
           </Question>
           <Question question="What’s the average price range of this service?" optional>
-            <div className="w-full lg:w-1/2">
+            <div className="w-3/5">
               <Input placeholder="Select a currency" register={register("currency")} />
               <br />
               <div className="flex gap-5">
@@ -120,30 +128,28 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
               </div>
             </div>
           </Question>
-          <Question
-            question="Do you have photos or videos to share?"
-            sub_title="Add images/ videos ( up to 3 )"
-            optional
-          >
+          <Question question="Do you have photos or videos to share? " show={!isEdit} optional>
             <Upload
               multiple={true}
               accept="images"
               fileList={getValues("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) => setValue("images", [...getValues("images"), ...urls])}
+              onChange={(urls) => setValue("images", [...(getValues("images") || []), ...urls])}
+            />
+          </Question>
+          <Question show={!isEdit}>
+            <br /> <br /> <br />
+            <Checkbox
+              register={register("agreePolicies")}
+              label={
+                data.relationship === YesNo.NO
+                  ? "I certify that this is a genuine attraction  "
+                  : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
+              }
             />
           </Question>
           <br /> <Break /> <br />
-          <Checkbox
-            register={register("agreePolicies")}
-            label={
-              data.relationship === YesNo.NO
-                ? "I certify that this is a genuine attraction  "
-                : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
-            }
-          />
-          <br /> <br /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
             <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
             <Button text="Continue" size="small" width={270} type="submit" />
@@ -152,7 +158,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
       </SectionLayout>
       <Modal
         visible={showTagsModal}
-        title="Add product"
+        title="Add service"
         subTitle="Select max 5"
         width={780}
         mobileFullHeight
