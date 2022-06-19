@@ -90,7 +90,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
               <Icon icon="web-color" size={20} />
               {newSocialInfo ? (
                 <div className="flex gap-5">
-                    <a target="_blank" href={newSocialInfo} onClick={() => setShowSocialInfoModal(true)}>{newSocialInfo}</a>                  <div>
+                    <a target="_blank" rel="noreferrer" href={newSocialInfo} onClick={() => setShowSocialInfoModal(true)}>{newSocialInfo}</a>                  <div>
                     <a onClick={() => setShowSocialInfoModal(true)}>Edit</a>
                   </div>
                 </div>

@@ -31,7 +31,7 @@ const ClaimListing = (context) => {
       setListing(data.data.data);
     };
     if (listingId) {
-      localStorage.setItem('biz_id', listingId);
+      localStorage.setItem('biz_id', listingId.toString());
       getListingData(listingId);
 
     }
@@ -61,7 +61,7 @@ const ClaimListing = (context) => {
   }
 
   const handleDirectToVerification = (tier: Tiers) => {
-    
+
     router.push({
       pathname: "/biz/verify",
       query: {
