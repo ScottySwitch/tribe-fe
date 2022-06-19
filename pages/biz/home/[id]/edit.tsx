@@ -52,11 +52,14 @@ const EditListingHomepage = (context) => {
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME)
   const [description, setDescription] = useState<string>("")
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
+  const [socialInfo, setSocialInfo] = useState<any>("");
   const [action, setAction] = useState({ label: "", value: "" })
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
-  const [listingImages, setListingImages] = useState<string[]>([])
+  // const [listingImages, setListingImages] = useState<string[]>([])
+  const [listingImages, setListingImages] = useState<any>([])
+  const [isPaid, setIsPaid] = useState<boolean>(false);
 
   const {
     query: { id: listingSlug },
@@ -68,10 +71,14 @@ const EditListingHomepage = (context) => {
       if (data.data.data.length > 0) {
         const listing = data.data.data[0]
         console.log(listing)
+        setListingImages(listing.attributes.images)
         setBizListing(listing)
         setCategory(listing.attributes.categories.data[0].id) // Get the first category
         setDescription(listing.attributes.description)
         setPriceRange(listing.attributes.price_range)
+        if ( listing.attributes.biz_invoices.data.length > 0 ) {
+          setIsPaid(true);
+        }
       }
     }
     if (listingSlug) {
@@ -82,6 +89,7 @@ const EditListingHomepage = (context) => {
   // TODO: check function upload multiple images
   const handleChangeImages = (srcImages) => setListingImages(srcImages)
   const handleSetPriceRange = (priceRange) => setPriceRange(priceRange)
+  const handleSetSocialInfo = (socialInfo) => setSocialInfo(socialInfo)
   const handleSetDescription = async (description) => setDescription(description)
   const handleSetAction = (action: string, value: string) =>
     setAction({ label: action, value: value })
@@ -97,6 +105,7 @@ const EditListingHomepage = (context) => {
       item_list: itemList,
       deal_list: dealList,
       images: listingImages,
+      // social_info: socialInfo,
     }).then((response) => console.log(response))
   }
 
@@ -109,6 +118,9 @@ const EditListingHomepage = (context) => {
             centerIcon={<CenterIcon />}
             multiple={true}
             onChange={handleChangeImages}
+            isBanner={true}
+            isPaid={isPaid}
+            fileList={listingImages != null ? listingImages : []}
           />
           <div className={styles.breadcrumbs}>
             Home <Icon icon="carret-right" size={14} color="#7F859F" />
@@ -117,7 +129,9 @@ const EditListingHomepage = (context) => {
           <ListingInforCard
             bizListing={bizListing.attributes}
             priceRange={priceRange}
+            socialInfo={socialInfo}
             onSetPriceRange={handleSetPriceRange}
+            onSetSocialInfo={handleSetSocialInfo}
           />
           <div className={styles.body}>
             <div className={styles.right_col}>
