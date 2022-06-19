@@ -59,7 +59,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     min: string
     max: string
     currency: string
-  }>(priceRange)
+  }>(priceRange || {})
   const [newPhoneNumber, setNewPhoneNumber] = useState<string | number>(phoneNumber)
   const [newSocialInfo, setNewSocialInfo] = useState<string>(socialInfo)
 

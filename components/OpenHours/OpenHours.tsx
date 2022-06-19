@@ -8,7 +8,7 @@ import React, { useState } from "react"
 import { randomId } from "utils"
 import styles from "./OpenHours.module.scss"
 
-export interface IOpeningHour {
+export interface IOpenHour {
   id: string | number
   from?: string
   to?: string
@@ -17,12 +17,12 @@ export interface IOpeningHour {
 export interface IOpenDay {
   name: string
   twentyFourHours: boolean
-  openHours: IOpeningHour[]
+  openHours: IOpenHour[]
 }
 
-export type IOpeningHours = IOpenDay[]
+export type IOpenHours = IOpenDay[]
 
-const defaultOpenDays: IOpeningHours = [
+const defaultOpenDays: IOpenHours = [
   { name: "Monday", twentyFourHours: false, openHours: [] },
   { name: "Tuesday", twentyFourHours: false, openHours: [] },
   {
@@ -44,10 +44,10 @@ const defaultOpenDays: IOpeningHours = [
   { name: "Sunday", twentyFourHours: false, openHours: [] },
 ]
 
-interface OpeningHoursProps {
-  data: IOpeningHours
+export interface OpeningHoursProps {
+  data: IOpenHours
   onCancel?: () => void
-  onSubmit: (openHours: IOpeningHours) => void
+  onSubmit: (openHours: IOpenHours) => void
 }
 
 const getIndex = (value, list) => {
@@ -58,7 +58,9 @@ const getIndex = (value, list) => {
 
 const OpenHours = (props: OpeningHoursProps) => {
   const { data, onSubmit, onCancel } = props
-  const [openHours, setOpeningHours] = useState(data || defaultOpenDays)
+  const [openHours, setOpeningHours] = useState(
+    Array.isArray(data) && data.length > 0 ? data : defaultOpenDays
+  )
 
   const handleCheckAllDay = (dayName: string, value: boolean) => {
     const index = getIndex(dayName, defaultOpenDays)
