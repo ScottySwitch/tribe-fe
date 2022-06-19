@@ -130,7 +130,7 @@ const EditAction = (props: EditActionProps) => {
     <React.Fragment>
       <div className={styles.action_modal}>
         <Button
-          text={action.label || "Edit action button"}
+          text={action?.label || "Edit action button"}
           size="small"
           onClick={() => setShowEditActionModal(true)}
         />

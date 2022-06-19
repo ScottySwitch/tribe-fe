@@ -3,16 +3,22 @@ import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
+import Upload from "components/Upload/Upload"
 import Image from "next/image"
 import {useEffect, useState} from "react"
+import { Value } from "sass"
 import styles from "./ListingInforCard.module.scss"
 
 interface ListingInforCardProps {
   bizListing: any,
   priceRange: { min: string; max: string; currency: string },
   socialInfo: any,
+  phoneNumber: any,
+  logo: any,
+  handleChangeLogo: (srcImages: any) => void
   onSetPriceRange: (value: { min: string; max: string; currency: string }) => void
-  onSetSocialInfo: (value: any) => void;
+  onSetSocialInfo: (value: any) => void
+  onSetPhoneNumber: (value: any) => void
 }
 
 const ReviewsFollowers = (props: { className?: string, bizListing: any }) => {
@@ -40,25 +46,47 @@ const ReviewsFollowers = (props: { className?: string, bizListing: any }) => {
 const ListingInforCard = (props: ListingInforCardProps) => {
   const { priceRange, onSetPriceRange } = props
   const {socialInfo, onSetSocialInfo} = props
+  const {phoneNumber, onSetPhoneNumber} = props
   const { bizListing } = props
+  const {logo, handleChangeLogo} = props
   const [showPriceRangeModal, setShowPriceRangeModal] = useState(false)
   const [newPriceRange, setNewPriceRange] = useState({ min: "", max: "", currency: "" })
   const [newSocialInfo, setNewSocialInfo] = useState<any>()
   const [showSocialInfoModal, setShowSocialInfoModal] = useState(false)
+  const [newPhoneNumber, setNewPhoneNumber] = useState<any>('');
+  const [showPhoneNumberModal, setPhoneNumberModal] = useState<boolean>(false);
+
+  const CenterIcon = () => (
+    <div className="flex flex-col justify-center items-center gap-1">
+      <Icon icon="camera-color" size={40} />
+    </div>
+  )
 
   useEffect(() => {
     if (priceRange) {
       setNewPriceRange(priceRange)
+    }
+    if (socialInfo) {
       setNewSocialInfo(socialInfo)
     }
-  }, [priceRange])
+    if (phoneNumber) {
+      setNewPhoneNumber(phoneNumber)
+    }
+  }, [priceRange, socialInfo, phoneNumber])
 
   return (
     <div className={styles.listing_infor_card}>
       <div className={styles.listing_infor_container}>
         <div className="flex justify-between items-center">
-          <div className={styles.avatar}>
-            <Image src={require("public/logo.svg")} layout="fill" alt="" />
+          <div className={styles.box_avatar}>
+            {/* <Image src={require("public/logo.svg")} layout="fill" alt="" /> */}
+            <Upload
+              type="avatar"
+              className={styles.small_avatar}
+              centerIcon={<CenterIcon />}
+              fileList={logo}
+              onChange={handleChangeLogo}
+            />
           </div>
           {bizListing && <ReviewsFollowers className={styles.reviews_followers_mobile} bizListing={bizListing} />}
         </div>
@@ -71,7 +99,17 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             </div>
             <div className={styles.contact_right}>
               <Icon icon="call" size={20} />
-              {bizListing.phone_number}
+              {phoneNumber ? (
+                <div className="flex gap-5">
+                    <a target="_blank" href={phoneNumber} onClick={() => setPhoneNumberModal(true)}>
+                      {phoneNumber}
+                    </a><div>
+                    <a onClick={() => setPhoneNumberModal(true)}>Edit</a>
+                  </div>
+                </div>
+              ) : (
+                  <a onClick={() => setPhoneNumberModal(true)}>Add phone number</a>
+                )}
             </div>
             <div className={styles.contact_left}>
               <Icon icon="tags-color" size={20} />
@@ -181,6 +219,33 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             onClick={() => {
               onSetSocialInfo(newSocialInfo)
               setShowSocialInfoModal(false)
+            }}
+          />
+        </div>
+      </Modal>
+      <Modal
+        title="Phone Number"
+        visible={showPhoneNumberModal}
+        mobilePosition="center"
+        width={600}
+        onClose={() => {
+          setNewPhoneNumber(phoneNumber)
+          setPhoneNumberModal(false)
+        }}
+      >
+        <div className="px-[30px] py-5">
+          <Input
+            placeholder="Type Social Info"
+            value={newPhoneNumber}
+            onChange={(e: any) => setNewPhoneNumber(e.target.value)}
+          />
+          <br />
+          <Button
+            text="Submit"
+            size="small"
+            onClick={() => {
+              onSetPhoneNumber(newPhoneNumber)
+              setPhoneNumberModal(false)
             }}
           />
         </div>
