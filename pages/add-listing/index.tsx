@@ -131,12 +131,13 @@ const AddListing = () => {
     const result = await BizListingApi.createBizListing(dataSend)
     console.log('result', result);
 
-    const random = Math.floor(Math.random() * 10000)
+    // const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true)
     } else {
+      const listingId = result.data?.data?.id
       router.push({
-        pathname: `/add-listing/claim/${random}`,
+        pathname: `/add-listing/claim/${listingId}`,
         query: { firstStep: ClaimStep.CHOOSE_TIER },
       })
     }
