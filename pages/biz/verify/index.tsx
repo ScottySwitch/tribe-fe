@@ -243,7 +243,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           <Input
             placeholder="your phone number"
             width="100%"
-            prefix="+84"
+            prefix="+65"
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
           />
           <Button text="Receive OTP" onClick={handleRequestOTP} />
