@@ -85,10 +85,18 @@ const updateBizListing = async (bizListingId: number, params: any) => {
   });
 }
 
+const createBizListing = async (params: any) => {
+  const url = `/api/biz-listings/`;
+  return await Api.post(url, {
+    data: params
+  });
+}
+
 export default {
   getBizListingsByCategoryId,
   getBizListingById,
   createListingRole,
   getBizListingBySlug,
-  updateBizListing
+  updateBizListing,
+  createBizListing
 }
