@@ -17,6 +17,7 @@ import { Categories, InformationList, Tiers } from "enums"
 import styles from "styles/BizInformation.module.scss"
 import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail"
 import { IAddListingForm } from "pages/add-listing"
+import TierTable from "components/TierTable/TierTable"
 
 const BizInformation = () => {
   const [tier, setTier] = useState<Tiers>(Tiers.BASIC)
@@ -24,6 +25,12 @@ const BizInformation = () => {
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
   const submitFormData = (e) => {
+    console.log(e)
+  }
+  const handleUpdateBusinessInformation = (e) => {
+    console.log(e)
+  }
+  const handleUpdateProductList = (e) => {
     console.log(e)
   }
 
@@ -34,21 +41,29 @@ const BizInformation = () => {
     setSelectedTab(tab.label)
   }
 
+  const handleChangeTier = (isPayQuarterly: boolean) => {
+    console.log("isPayQuarterly", isPayQuarterly)
+  }
+
   const tabContent = () => {
     switch (selectedTab) {
       case InformationList.BUSINESS_INFORMATION:
-        return <BusinessInformation formData={formData} submitFormData={submitFormData} />
+        return (
+          <BusinessInformation
+            formData={formData}
+            submitFormData={handleUpdateBusinessInformation}
+          />
+        )
       case InformationList.BUSINESS_DETAIL:
         return (
           <BusinessDetail
             category={Categories.SEE_AND_DO}
-            // formData={formData}
-            formData={fakeAddlistingForm}
+            formData={formData}
             submitFormData={submitFormData}
           />
         )
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing formData={formData} submitFormData={submitFormData} />
+        return <ProductListing formData={formData} submitFormData={handleUpdateProductList} />
       case InformationList.PHOTOS_VIDEOS:
         return <div>photo</div>
       case InformationList.MANAGE_DEALS:
@@ -56,7 +71,9 @@ const BizInformation = () => {
       case InformationList.ANALYTICS:
         return <div>analytics</div>
       case InformationList.CHANGE_ACCOUNT_TIER:
-        return <div>tier</div>
+        return (
+          <TierTable isPayQuarterly={formData.isActive} onSetIsPayQuarterly={handleChangeTier} />
+        )
       case InformationList.VERIFICATION:
         return <div>verify</div>
       case InformationList.LOGOUT:
