@@ -5,74 +5,73 @@ import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
 import Upload from "components/Upload/Upload"
 import Image from "next/image"
-import {useEffect, useState} from "react"
-import { Value } from "sass"
+import { useEffect, useState } from "react"
 import styles from "./ListingInforCard.module.scss"
 
 interface ListingInforCardProps {
-  bizListing: any,
-  priceRange: { min: string; max: string; currency: string },
-  socialInfo: any,
-  phoneNumber: any,
-  logo: any,
-  handleChangeLogo: (srcImages: any) => void
+  bizListing: { [key: string]: any }
+  priceRange: { min: string; max: string; currency: string }
+  socialInfo: string
+  phoneNumber: string
+  logo: any
+  handleChangeLogo: (srcImages: string[]) => void
   onSetPriceRange: (value: { min: string; max: string; currency: string }) => void
-  onSetSocialInfo: (value: any) => void
-  onSetPhoneNumber: (value: any) => void
+  onSetSocialInfo: (value: string) => void
+  onSetPhoneNumber: (value: string | number) => void
 }
 
-const ReviewsFollowers = (props: { className?: string, bizListing: any }) => {
-  const { className } = props
-  const { bizListing } = props
+const ReviewsFollowers = (props: { className?: string; bizListing: any }) => {
+  const { className, bizListing } = props
   const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
 
-  const bizListingReviewCount = bizListing.reviews.data.length;
-  const bizListingFollowerCount = bizListing.user_listing_follows.data.length;
+  const bizListingReviewCount = bizListing.reviews.data.length
+  const bizListingFollowerCount = bizListing.user_listing_follows.data.length
   return (
     <div className={reviewsFollowersClassName}>
       <div className={styles.reviews}>
         {/*// TODO: currently review star is image*/}
         <Image src={require("public/images/no-review-star.svg")} width={80} height={40} alt="" />
-        <p>({bizListingReviewCount} review{bizListingReviewCount > 1 ? 's' : ''})</p>
+        <p>
+          ({bizListingReviewCount} review{bizListingReviewCount > 1 ? "s" : ""})
+        </p>
       </div>
       <div className={styles.followers}>
         <div className="h-[40px] flex items-center">{bizListingFollowerCount}</div>
-        <p>follower{bizListingFollowerCount > 1 ? 's': ''}</p>
+        <p>follower{bizListingFollowerCount > 1 ? "s" : ""}</p>
       </div>
     </div>
   )
 }
 
 const ListingInforCard = (props: ListingInforCardProps) => {
-  const { priceRange, onSetPriceRange } = props
-  const {socialInfo, onSetSocialInfo} = props
-  const {phoneNumber, onSetPhoneNumber} = props
-  const { bizListing } = props
-  const {logo, handleChangeLogo} = props
+  const {
+    bizListing,
+    priceRange,
+    phoneNumber,
+    socialInfo,
+    logo,
+    handleChangeLogo,
+    onSetSocialInfo,
+    onSetPhoneNumber,
+    onSetPriceRange,
+  } = props
+  const [newPriceRange, setNewPriceRange] = useState<{
+    min: string
+    max: string
+    currency: string
+  }>(priceRange)
+  const [newPhoneNumber, setNewPhoneNumber] = useState<string | number>(phoneNumber)
+  const [newSocialInfo, setNewSocialInfo] = useState<string>(socialInfo)
+
   const [showPriceRangeModal, setShowPriceRangeModal] = useState(false)
-  const [newPriceRange, setNewPriceRange] = useState({ min: "", max: "", currency: "" })
-  const [newSocialInfo, setNewSocialInfo] = useState<any>()
   const [showSocialInfoModal, setShowSocialInfoModal] = useState(false)
-  const [newPhoneNumber, setNewPhoneNumber] = useState<any>('');
-  const [showPhoneNumberModal, setPhoneNumberModal] = useState<boolean>(false);
+  const [showPhoneNumberModal, setPhoneNumberModal] = useState(false)
 
   const CenterIcon = () => (
     <div className="flex flex-col justify-center items-center gap-1">
       <Icon icon="camera-color" size={40} />
     </div>
   )
-
-  useEffect(() => {
-    if (priceRange) {
-      setNewPriceRange(priceRange)
-    }
-    if (socialInfo) {
-      setNewSocialInfo(socialInfo)
-    }
-    if (phoneNumber) {
-      setNewPhoneNumber(phoneNumber)
-    }
-  }, [priceRange, socialInfo, phoneNumber])
 
   return (
     <div className={styles.listing_infor_card}>
@@ -88,7 +87,9 @@ const ListingInforCard = (props: ListingInforCardProps) => {
               onChange={handleChangeLogo}
             />
           </div>
-          {bizListing && <ReviewsFollowers className={styles.reviews_followers_mobile} bizListing={bizListing} />}
+          {bizListing && (
+            <ReviewsFollowers className={styles.reviews_followers_mobile} bizListing={bizListing} />
+          )}
         </div>
         <div className={styles.detail}>
           <div className={styles.name}>{bizListing.name}</div>
@@ -101,15 +102,21 @@ const ListingInforCard = (props: ListingInforCardProps) => {
               <Icon icon="call" size={20} />
               {phoneNumber ? (
                 <div className="flex gap-5">
-                    <a target="_blank" href={phoneNumber} onClick={() => setPhoneNumberModal(true)}>
-                      {phoneNumber}
-                    </a><div>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={phoneNumber}
+                    onClick={() => setPhoneNumberModal(true)}
+                  >
+                    {phoneNumber}
+                  </a>
+                  <div>
                     <a onClick={() => setPhoneNumberModal(true)}>Edit</a>
                   </div>
                 </div>
               ) : (
-                  <a onClick={() => setPhoneNumberModal(true)}>Add phone number</a>
-                )}
+                <a onClick={() => setPhoneNumberModal(true)}>Add phone number</a>
+              )}
             </div>
             <div className={styles.contact_left}>
               <Icon icon="tags-color" size={20} />
@@ -128,18 +135,28 @@ const ListingInforCard = (props: ListingInforCardProps) => {
               <Icon icon="web-color" size={20} />
               {newSocialInfo ? (
                 <div className="flex gap-5">
-                    <a target="_blank" rel="noreferrer" href={newSocialInfo} onClick={() => setShowSocialInfoModal(true)}>{newSocialInfo}</a>                  <div>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={newSocialInfo}
+                    onClick={() => setShowSocialInfoModal(true)}
+                  >
+                    {newSocialInfo}
+                  </a>{" "}
+                  <div>
                     <a onClick={() => setShowSocialInfoModal(true)}>Edit</a>
                   </div>
                 </div>
               ) : (
-                  <a onClick={() => setShowSocialInfoModal(true)}>Add social media</a>
-                )}
+                <a onClick={() => setShowSocialInfoModal(true)}>Add social media</a>
+              )}
             </div>
           </div>
         </div>
       </div>
-      {bizListing && <ReviewsFollowers className={styles.reviews_followers_desktop} bizListing={bizListing} />}
+      {bizListing && (
+        <ReviewsFollowers className={styles.reviews_followers_desktop} bizListing={bizListing} />
+      )}
       <Modal
         title="What’s the general price range of a meal?"
         visible={showPriceRangeModal}
