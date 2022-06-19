@@ -1,5 +1,13 @@
 import Api from "../";
-import {AuthEmailPayload, VerifyOTPPayload} from "../../types/auth";
+import {
+  AuthEmailPayload, 
+  VerifyOTPPayload,
+  AuthForgetPassword,
+  VerifyOTPPayloadForgetPassword,
+  ResetPassword,
+  AuthPhonePayload,
+  AuthForgetPasswordByPhone
+} from "../../types/auth";
 import {UsersTypes} from "../../enums";
 
 const signUpByEmail = async (params: AuthEmailPayload) => {
@@ -9,6 +17,17 @@ const signUpByEmail = async (params: AuthEmailPayload) => {
     username: params.email,
     email: params.email,
     password: params.password,
+  });
+}
+
+const signUpByPhone = async (params: AuthPhonePayload) => {
+  localStorage.removeItem("token");
+  const url = `/api/auth/local/register`;
+  return await Api.post(url, {
+    username: params.phone_number,
+    email: params.email,
+    password: params.password,
+    phone_number: params.phone_number
   });
 }
 
@@ -45,6 +64,15 @@ const loginByEmail = async (params: AuthEmailPayload) => {
   });
 }
 
+const loginByPhone = async (params: AuthPhonePayload) => {
+  localStorage.removeItem("token");
+  const url = `/api/auth/local`;
+  return await Api.post(url, {
+    identifier: params.phone_number,
+    password: params.password,
+  });
+}
+
 const getMe = async () => {
   const url = `/api/users/me`;
   const me = await Api.get(url);
@@ -63,6 +91,38 @@ const getMe = async () => {
   localStorage.setItem("user_id", me.data.id)
 }
 
+const forgetPasswordByEmail = async (params: AuthForgetPassword) => {
+  const url = `/api/auth/forgot-password`;
+  return await Api.post(url, {
+    email: params.email,
+  });
+}
+
+const forgetPasswordByPhone = async (params: AuthForgetPasswordByPhone) => {
+  const url = `/api/auth/forgot-password-by-phone`;
+  return await Api.post(url, {
+    phone_number: params.phone_number,
+  });
+}
+
+const otpEmailConfirmForgetPassword = async (params: VerifyOTPPayloadForgetPassword) => {
+  const url = `/api/otp-email-forgetpassword`;
+  return await Api.post(url, {
+    otp: params.otp,
+    userId: params.userId
+  });
+}
+
+const resetPassword = async (params: ResetPassword) => {
+  const url = `/api/auth/reset-password`;
+  return await Api.post(url, {
+    password: params.password,
+    passwordConfirmation: params.passwordConfirm,
+    userId: params.userId
+  });
+}
+
+
 export default {
   signUpByEmail,
   otpEmailGenerate,
@@ -70,5 +130,11 @@ export default {
   otpPhoneGenerate,
   otpPhoneConfirm,
   loginByEmail,
-  getMe
+  getMe,
+  otpEmailConfirmForgetPassword,
+  forgetPasswordByEmail,
+  forgetPasswordByPhone,
+  resetPassword,
+  signUpByPhone,
+  loginByPhone
 }

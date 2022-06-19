@@ -74,6 +74,36 @@ const SignupPage = () => {
         console.log(err.response.data.error);
       }
     }
+    else {
+      try {
+        const date = new Date().getTime();
+        const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 2);
+        const emailFake = date + '_' + randomString + '@tribes.com';
+        console.log(emailFake);
+        const result = await AuthApi.signUpByPhone({
+          email: emailFake,
+          phone_number: formData.phone,
+          password: valuePassword
+        });
+        const {jwt} = result.data;
+        if (jwt) {
+          localStorage.setItem("token", jwt)
+          // OTP flow
+          await AuthApi.otpPhoneGenerate(formData.phone);
+          router.push({
+            pathname: "/signup/otp",
+            //help otp page detect method and otp receiver
+            query: {
+              method: method,
+              otpReceiver: otpReceiver,
+            },
+          })
+        }
+      } catch (err: any) {
+        // TODO: notify error (missing template)
+        console.log(err.response.data.error);
+      }
+    }
   }
 
   return (

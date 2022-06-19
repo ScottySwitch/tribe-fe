@@ -29,13 +29,20 @@
     content: "";
     height: 22px;
     width: 22px;
-    right: 0;
     bottom: 0;
     background-color: $bg-700;
     -webkit-transition: 0.4s;
     transition: 0.4s;
+    left: 0;
+    right: unset;
   }
 }
+
+.switch.active .slider::before {
+  right: 0;
+  left: unset;
+}
+
 
 .slider.round {
   border-radius: 22px;
