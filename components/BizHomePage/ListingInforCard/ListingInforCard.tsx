@@ -4,26 +4,32 @@ import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
 import Image from "next/image"
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import styles from "./ListingInforCard.module.scss"
 
 interface ListingInforCardProps {
+  bizListing: any,
   priceRange: { min: string; max: string; currency: string }
   onSetPriceRange: (value: { min: string; max: string; currency: string }) => void
 }
 
-const ReviewsFollowers = (props: { className?: string }) => {
+const ReviewsFollowers = (props: { className?: string, bizListing: any }) => {
   const { className } = props
+  const { bizListing } = props
   const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
+
+  const bizListingReviewCount = bizListing.reviews.data.length;
+  const bizListingFollowerCount = bizListing.user_listing_follows.data.length;
   return (
     <div className={reviewsFollowersClassName}>
       <div className={styles.reviews}>
+        {/*// TODO: currently review star is image*/}
         <Image src={require("public/images/no-review-star.svg")} width={80} height={40} alt="" />
-        <p>(0 review)</p>
+        <p>({bizListingReviewCount} review{bizListingReviewCount > 1 ? 's' : ''})</p>
       </div>
       <div className={styles.followers}>
-        <div className="h-[40px] flex items-center">0</div>
-        <p>followers</p>
+        <div className="h-[40px] flex items-center">{bizListingFollowerCount}</div>
+        <p>follower{bizListingFollowerCount > 1 ? 's': ''}</p>
       </div>
     </div>
   )
@@ -31,8 +37,16 @@ const ReviewsFollowers = (props: { className?: string }) => {
 
 const ListingInforCard = (props: ListingInforCardProps) => {
   const { priceRange, onSetPriceRange } = props
+  const { bizListing } = props
   const [showPriceRangeModal, setShowPriceRangeModal] = useState(false)
   const [newPriceRange, setNewPriceRange] = useState({ min: "", max: "", currency: "" })
+
+  useEffect(() => {
+    if (priceRange) {
+      setNewPriceRange(priceRange)
+    }
+  }, [priceRange])
+
   return (
     <div className={styles.listing_infor_card}>
       <div className={styles.listing_infor_container}>
@@ -40,18 +54,18 @@ const ListingInforCard = (props: ListingInforCardProps) => {
           <div className={styles.avatar}>
             <Image src={require("public/logo.svg")} layout="fill" alt="" />
           </div>
-          <ReviewsFollowers className={styles.reviews_followers_mobile} />
+          {bizListing && <ReviewsFollowers className={styles.reviews_followers_mobile} bizListing={bizListing} />}
         </div>
         <div className={styles.detail}>
-          <div className={styles.name}>Evertop Hainanese Boneless Chicken</div>
+          <div className={styles.name}>{bizListing.name}</div>
           <div className={styles.contact}>
             <div className={styles.contact_left}>
               <Icon icon="map" size={20} />
-              50 Bussorah St, Singapore 199466
+              {bizListing.address}
             </div>
             <div className={styles.contact_right}>
               <Icon icon="call" size={20} />
-              06-6777-9529
+              {bizListing.phone_number}
             </div>
             <div className={styles.contact_left}>
               <Icon icon="tags-color" size={20} />
@@ -73,7 +87,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
           </div>
         </div>
       </div>
-      <ReviewsFollowers className={styles.reviews_followers_desktop} />
+      {bizListing && <ReviewsFollowers className={styles.reviews_followers_desktop} bizListing={bizListing} />}
       <Modal
         title="What’s the general price range of a meal?"
         visible={showPriceRangeModal}
