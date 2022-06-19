@@ -56,7 +56,6 @@ const EditListingHomepage = (context) => {
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
-  const [bizListingId, setBizListingId] = useState<any>({})
 
   const { query: {id: listingSlug} } = useRouter()
   useEffect(() => {
@@ -65,7 +64,6 @@ const EditListingHomepage = (context) => {
       if (data.data.data.length > 0) {
         const listing = data.data.data[0];
         setBizListing(listing);
-        setBizListingId(listing.id)
         setCategory(listing.attributes.categories.data[0].id) // Get the first category
         setDescription(listing.attributes.description)
         setPriceRange(listing.attributes.price_range)
@@ -79,16 +77,15 @@ const EditListingHomepage = (context) => {
 
   const handleUploadImages = useCallback((srcImages) => {
     // TODO: check function upload multiple images
-    console.log('srcImages', srcImages)
-    const result = BizListingApi.updateBizListing(bizListingId, {
+    const result = BizListingApi.updateBizListing(bizListing.id, {
       images: srcImages
     })
     console.log('handleUploadImages', result)
-  }, [bizListingId])
+  }, [bizListing])
 
   const handleSetPriceRange = async (priceRange) => {
     console.log('priceRange', priceRange)
-    const result = BizListingApi.updateBizListing(bizListingId, {
+    const result = BizListingApi.updateBizListing(bizListing.id, {
       price_range: priceRange
     })
   }
