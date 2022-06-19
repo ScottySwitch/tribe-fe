@@ -39,7 +39,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     const sessionId = router.query.sessionId
     if (sessionId && localStorage.getItem("isVeriFy") != "true") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
-      handleFinishVerifying('method_2')
+      handleFinishVerifying('stripe')
       // for storing product payment order in strapi
       const checkoutSessionId = sessionId;
       console.log(checkoutSessionId);
@@ -369,7 +369,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 width="80%"
                 type="button"
                 text="Next"
-                onClick={() => handleFinishVerifying("method_1")}
+                onClick={() => handleFinishVerifying("xendit")}
               />
             )}
           </div>
