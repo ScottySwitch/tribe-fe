@@ -9,8 +9,10 @@ import styles from "./ListingInforCard.module.scss"
 
 interface ListingInforCardProps {
   bizListing: any,
-  priceRange: { min: string; max: string; currency: string }
+  priceRange: { min: string; max: string; currency: string },
+  socialInfo: any,
   onSetPriceRange: (value: { min: string; max: string; currency: string }) => void
+  onSetSocialInfo: (value: any) => void;
 }
 
 const ReviewsFollowers = (props: { className?: string, bizListing: any }) => {
@@ -37,13 +39,17 @@ const ReviewsFollowers = (props: { className?: string, bizListing: any }) => {
 
 const ListingInforCard = (props: ListingInforCardProps) => {
   const { priceRange, onSetPriceRange } = props
+  const {socialInfo, onSetSocialInfo} = props
   const { bizListing } = props
   const [showPriceRangeModal, setShowPriceRangeModal] = useState(false)
   const [newPriceRange, setNewPriceRange] = useState({ min: "", max: "", currency: "" })
+  const [newSocialInfo, setNewSocialInfo] = useState<any>()
+  const [showSocialInfoModal, setShowSocialInfoModal] = useState(false)
 
   useEffect(() => {
     if (priceRange) {
       setNewPriceRange(priceRange)
+      setNewSocialInfo(socialInfo)
     }
   }, [priceRange])
 
@@ -69,9 +75,9 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             </div>
             <div className={styles.contact_left}>
               <Icon icon="tags-color" size={20} />
-              {newPriceRange.currency && newPriceRange.min && newPriceRange.max ? (
+              {newPriceRange?.currency && newPriceRange.min && newPriceRange.max ? (
                 <div className="flex gap-5">
-                  <div>{`${newPriceRange.min} ${newPriceRange.currency} - ${newPriceRange.currency} ${newPriceRange.max}`}</div>
+                  <div>{`${newPriceRange.min} ${newPriceRange?.currency} - ${newPriceRange.max}  ${newPriceRange?.currency}`}</div>
                   <div>
                     <a onClick={() => setShowPriceRangeModal(true)}>Edit</a>
                   </div>
@@ -82,7 +88,15 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             </div>
             <div className={styles.contact_right}>
               <Icon icon="web-color" size={20} />
-              <a>Add social media</a>
+              {newSocialInfo ? (
+                <div className="flex gap-5">
+                    <a target="_blank" href={newSocialInfo} onClick={() => setShowSocialInfoModal(true)}>{newSocialInfo}</a>                  <div>
+                    <a onClick={() => setShowSocialInfoModal(true)}>Edit</a>
+                  </div>
+                </div>
+              ) : (
+                  <a onClick={() => setShowSocialInfoModal(true)}>Add social media</a>
+                )}
             </div>
           </div>
         </div>
@@ -101,7 +115,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
         <div className="px-[30px] py-5">
           <Input
             placeholder="Select a currency"
-            value={newPriceRange.currency}
+            value={newPriceRange?.currency}
             onChange={(e: any) =>
               setNewPriceRange({
                 ...newPriceRange,
@@ -140,6 +154,33 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             onClick={() => {
               onSetPriceRange(newPriceRange)
               setShowPriceRangeModal(false)
+            }}
+          />
+        </div>
+      </Modal>
+      <Modal
+        title="Social Info"
+        visible={showSocialInfoModal}
+        mobilePosition="center"
+        width={600}
+        onClose={() => {
+          setNewSocialInfo(socialInfo)
+          setShowSocialInfoModal(false)
+        }}
+      >
+        <div className="px-[30px] py-5">
+          <Input
+            placeholder="Type Social Info"
+            value={newSocialInfo}
+            onChange={(e: any) => setNewSocialInfo(e.target.value)}
+          />
+          <br />
+          <Button
+            text="Submit"
+            size="small"
+            onClick={() => {
+              onSetSocialInfo(newSocialInfo)
+              setShowSocialInfoModal(false)
             }}
           />
         </div>
