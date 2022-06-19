@@ -181,7 +181,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleDirectToStorePage = () => {
     const localLoginInfo = { tier: tier, token: "asd", type: UsersTypes.BIZ_USER }
     localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
-    window.location.href = `/biz/home/edit/${randomId()}`
+    window.location.href = `/biz/home/${localStorage.getItem('biz_slug')}/edit/`
     localStorage.setItem("isVeriFy", "false")
   }
 

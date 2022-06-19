@@ -53,12 +53,14 @@ const EditListingHomepage = (context) => {
   const [description, setDescription] = useState<string>("")
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
   const [socialInfo, setSocialInfo] = useState<any>("");
+  const [phoneNumber, setPhoneNumber] = useState<any>("");
   const [action, setAction] = useState({ label: "", value: "" })
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
   // const [listingImages, setListingImages] = useState<string[]>([])
   const [listingImages, setListingImages] = useState<any>([])
+  const [logo, setLogo] = useState<any>([])
   const [isPaid, setIsPaid] = useState<boolean>(false);
 
   const {
@@ -71,13 +73,32 @@ const EditListingHomepage = (context) => {
       if (data.data.data.length > 0) {
         const listing = data.data.data[0]
         console.log(listing)
+        setAction(listing.attributes.action)
         setListingImages(listing.attributes.images)
         setBizListing(listing)
         setCategory(listing.attributes.categories.data[0].id) // Get the first category
         setDescription(listing.attributes.description)
         setPriceRange(listing.attributes.price_range)
+        setSocialInfo(listing.attributes.social_info)
+        // setPhoneNumber(listing.attributes.phone_number)
+        setLogo(listing.attributes.logo)
         if ( listing.attributes.biz_invoices.data.length > 0 ) {
           setIsPaid(true);
+        }
+        if (listing.attributes.biz_invoices.data.length > 0 ) {
+          setPhoneNumber(listing.attributes.phone_number)
+        }
+        else {
+          let defaultPhone = '';
+          for (let index = 0; index < listing.attributes.phone_number.length; index++) {
+            if ( index < 6 && index > 2) {
+              defaultPhone = defaultPhone + 'X'
+            }
+            else {
+              defaultPhone = defaultPhone + listing.attributes.phone_number[index]
+            }
+          }
+          setPhoneNumber(defaultPhone)
         }
       }
     }
@@ -88,8 +109,10 @@ const EditListingHomepage = (context) => {
 
   // TODO: check function upload multiple images
   const handleChangeImages = (srcImages) => setListingImages(srcImages)
+  const handleChangeLogo = (srcImages) => setLogo(srcImages)
   const handleSetPriceRange = (priceRange) => setPriceRange(priceRange)
   const handleSetSocialInfo = (socialInfo) => setSocialInfo(socialInfo)
+  const handleSetPhoneNumber = (phoneNumber) => setPhoneNumber(phoneNumber)
   const handleSetDescription = async (description) => setDescription(description)
   const handleSetAction = (action: string, value: string) =>
     setAction({ label: action, value: value })
@@ -98,6 +121,7 @@ const EditListingHomepage = (context) => {
   const handleSetScreen = (screen: ListingHomePageScreens) => setScreen(screen)
 
   const handleSubmit = async () => {
+    console.log(action);
     BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
@@ -105,8 +129,14 @@ const EditListingHomepage = (context) => {
       item_list: itemList,
       deal_list: dealList,
       images: listingImages,
-      // social_info: socialInfo,
-    }).then((response) => console.log(response))
+      social_info: socialInfo,
+      phone_number: phoneNumber,
+      is_verified: false,
+      logo: logo
+    }).then((response) => {
+      console.log(response);
+      window.location.reload();
+    })
   }
 
   return (
@@ -127,11 +157,15 @@ const EditListingHomepage = (context) => {
             {bizListing.attributes.name}
           </div>
           <ListingInforCard
+            logo={logo}
+            handleChangeLogo={handleChangeLogo}
             bizListing={bizListing.attributes}
             priceRange={priceRange}
             socialInfo={socialInfo}
+            phoneNumber={phoneNumber}
             onSetPriceRange={handleSetPriceRange}
             onSetSocialInfo={handleSetSocialInfo}
+            onSetPhoneNumber={handleSetPhoneNumber}
           />
           <div className={styles.body}>
             <div className={styles.right_col}>
@@ -152,7 +186,7 @@ const EditListingHomepage = (context) => {
                   <Icon icon="like-color" />
                   Facilities
                 </div>
-                <Link href="/">Add facilities</Link>
+                <Link href="#">Add facilities</Link>
               </div>
               <div className={styles.break} />
               <div className="flex justify-between">
@@ -160,7 +194,7 @@ const EditListingHomepage = (context) => {
                   <Icon icon="tags-color" />
                   Tags
                 </div>
-                <Link href="/">Add tags</Link>
+                <Link href="#">Add tags</Link>
               </div>
               <div className={styles.break} />
               <div className="flex justify-between">
