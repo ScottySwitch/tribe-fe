@@ -23,7 +23,7 @@ const ClaimListing = (context) => {
   const { handleSubmit, setValue, getValues, register } = useForm()
   const router = useRouter()
   const { query: {listingId} } = useRouter();
-  
+
 
   useEffect(() => {
     const getListingData = async (listingId) => {
@@ -31,8 +31,9 @@ const ClaimListing = (context) => {
       setListing(data.data.data);
     };
     if (listingId) {
+      localStorage.setItem('biz_id', listingId.toString());
       getListingData(listingId);
-      
+
     }
   }, [listingId])
 
@@ -60,6 +61,7 @@ const ClaimListing = (context) => {
   }
 
   const handleDirectToVerification = (tier: Tiers) => {
+
     router.push({
       pathname: "/biz/verify",
       query: {

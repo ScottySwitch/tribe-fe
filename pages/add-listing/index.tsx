@@ -18,8 +18,9 @@ import { IOpeningHours } from "components/OpenHours/OpenHours"
 import styles from "styles/AddListing.module.scss"
 import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
+import BizListingApi from "../../services/biz-listing";
 export interface IAddListingForm {
-  category: string
+  category: number
   categoryKind: string
   relationship: string
   listing: string
@@ -61,7 +62,7 @@ export interface IAddListingForm {
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(3)
+  const [pageNumber, setPageNumber] = useState(1)
   const [formData, setFormData] = useState(defaultAddlistingForm)
   const [showPreviewModal, setShowPreviewModal] = useState(false)
   const [showSubmitResult, setShowSubmitResult] = useState(false)
@@ -81,18 +82,62 @@ const AddListing = () => {
   }
 
   const handleUpdateFormData = (data) => {
+    console.log('handleUpdateFormData', data)
     setFormData({ ...formData, ...data })
   }
 
-  const handleSubmitFormData = () => {
+  const handleSubmitFormData = async () => {
     ///do CRUD things here
     console.log("data", formData)
-    const random = Math.floor(Math.random() * 10000)
+
+    let address = 'Online Business';
+    if (!formData.isOnline) {
+      address = formData.additionalAddress + ' - ' + formData.address + ' - ' + formData.city + ' - ' + formData.country
+    }
+    const dataSend = {
+      user: localStorage.getItem("user_id"),
+      is_verified: false,
+      categories: [formData.category],
+      name: formData.businessName,
+      description: formData.description,
+      address,
+      social_info: {
+        twitter: formData.socialMedia
+      },
+      phone_number: formData.contact,
+      email: formData.email === "" ? null : formData.email,
+      tags: formData.tags,
+      price_range: {
+        currency: formData.currency,
+        min: formData.minPrice,
+        max: formData.maxPrice
+      },
+      images: formData.images,
+      open_hours: formData.openHours,
+      category_kind: formData.categoryKind,
+      facilities_data: {
+        additionalServices: formData.additionalServices,
+        atmosphere: formData.atmosphere,
+        foodOptions: formData.foodOptions,
+        foodOptionsRamadan: formData.foodOptionsRamadan,
+        mealsKind: formData.mealsKind,
+        nonHalalActivities: formData.nonHalalActivities,
+        parking: formData.parking,
+        paryerFacilities: formData.paryerFacilities,
+        payment: formData.payment,
+        placeGoodFor: formData.placeGoodFor
+      }
+    }
+    const result = await BizListingApi.createBizListing(dataSend)
+    console.log('result', result);
+
+    // const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true)
     } else {
+      const listingId = result.data?.data?.id
       router.push({
-        pathname: `/add-listing/claim/${random}`,
+        pathname: `/add-listing/claim/${listingId}`,
         query: { firstStep: ClaimStep.CHOOSE_TIER },
       })
     }
@@ -122,35 +167,35 @@ const AddListing = () => {
         <AddBuyInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === Categories.BUY}
+          show={pageNumber === 3 && formData.category === 1}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddEatInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === Categories.EAT}
+          show={pageNumber === 3 && formData.category === 2}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddSeeAndDoInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === Categories.SEE_AND_DO}
+          show={pageNumber === 3 && formData.category === 3}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddStayInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === Categories.STAY}
+          show={pageNumber === 3 && formData.category === 4}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddTransportInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === Categories.TRANSPORT}
+          show={pageNumber === 3 && formData.category === 5}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />

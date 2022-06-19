@@ -1,9 +1,9 @@
 export enum Categories {
-  BUY = "Buy",
-  EAT = "Eat",
-  STAY = "Stay",
-  TRANSPORT = "Transport",
-  SEE_AND_DO = "See and Do",
+  BUY = 1,
+  EAT = 2,
+  STAY = 5,
+  TRANSPORT = 4,
+  SEE_AND_DO = 2,
   OTHER = "Other",
 }
 

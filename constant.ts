@@ -2,6 +2,9 @@ import { Categories, InformationList, ListingTabs } from "enums"
 import { IAddListingForm } from "pages/add-listing"
 
 export const loginInforItem = "login_infor"
+export const user = "user"
+export const userId = "user_id"
+export const token = "token"
 
 export const fakeSubCateList = [
   { label: "Subcate", value: "Subcate" },
@@ -67,7 +70,7 @@ export const bizInformationDefaultFormData = {
 }
 
 export const fakeAddlistingForm: IAddListingForm = {
-  category: "Restaurant",
+  category: 1,
   relationship: "",
   listing: "",
   role: "",
@@ -125,7 +128,7 @@ export const fakeAddlistingForm: IAddListingForm = {
 }
 
 export const defaultAddlistingForm: IAddListingForm = {
-  category: "Buy",
+  category: 1,
   relationship: "",
   listing: "",
   role: "",

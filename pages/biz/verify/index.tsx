@@ -14,6 +14,7 @@ import { randomId } from "utils"
 import AuthApi from "../../../services/auth"
 import UserApi from "../../../services/user"
 import BizInvoinceApi from "../../../services/biz-invoice"
+import ClaimListingApi from "../../../services/claim-listing"
 
 interface BizUserVerifyProps {
   tier: string
@@ -38,7 +39,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     const sessionId = router.query.sessionId
     if (sessionId && localStorage.getItem("isVeriFy") != "true") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
-      handleFinishVerifying('method_2')
+      handleFinishVerifying('stripe')
       // for storing product payment order in strapi
       const checkoutSessionId = sessionId;
       console.log(checkoutSessionId);
@@ -159,6 +160,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     if (tier === Tiers.FREE) {
       const result = await AuthApi.otpPhoneConfirm({ otp })
       if (result.data.success) {
+        const result1 = ClaimListingApi.createClaimListing({
+          paymentMethod: 'free',
+          transaction_id: '',
+        })
         setShowResultModal(true)
       } else {
         alert("Wrong OTP")
@@ -208,6 +213,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     if (price != null) {
       const result = BizInvoinceApi.createBizInvoice({
         value: parseInt(price),
+        paymentMethod: paymentMethodValue,
+        transaction_id: transaction_id,
+      })
+      const result1 = ClaimListingApi.createClaimListing({
         paymentMethod: paymentMethodValue,
         transaction_id: transaction_id,
       })
@@ -360,7 +369,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 width="80%"
                 type="button"
                 text="Next"
-                onClick={() => handleFinishVerifying("method_1")}
+                onClick={() => handleFinishVerifying("xendit")}
               />
             )}
           </div>
