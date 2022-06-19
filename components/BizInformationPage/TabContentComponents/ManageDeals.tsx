@@ -12,12 +12,12 @@ import AddDeals from "./AddDeal/AddDeals"
 import styles from "./TabContent.module.scss"
 
 interface ManageDealsProps {
-  submitFormValue?: (form: { [key: string]: any }[]) => void
-  formValue?: { [key: string]: any }
+  submitFormData?: (form: { [key: string]: any }[]) => void
+  formData?: { [key: string]: any }
 }
 
 const ManageDeals = (props: ManageDealsProps) => {
-  const { formValue = {}, submitFormValue } = props
+  const { formData = {}, submitFormData } = props
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([{}])
   const [isEdit, setIsEdit] = useState(false)
 
@@ -90,18 +90,18 @@ const ManageDeals = (props: ManageDealsProps) => {
         </div>
         <Question
           question={`Active deals (${
-            Array.isArray(formValue.activeDeals) ? formValue.activeDeals.length : 0
+            Array.isArray(formData.activeDeals) ? formData.activeDeals.length : 0
           })`}
         >
-          <Table columns={columns} data={formValue.activeDeals} />
+          <Table columns={columns} data={formData.activeDeals} />
         </Question>
 
         <Question
           question={`Past deals (${
-            Array.isArray(formValue.pastDeals) ? formValue.pastDeals.length : 0
+            Array.isArray(formData.pastDeals) ? formData.pastDeals.length : 0
           })`}
         >
-          <Table columns={columns} data={formValue.pastDeals} />
+          <Table columns={columns} data={formData.pastDeals} />
         </Question>
       </SectionLayout>
       <SectionLayout show={isEdit} title="Add deals">

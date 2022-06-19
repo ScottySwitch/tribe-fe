@@ -3,7 +3,7 @@ import { useState } from "react"
 import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
-import Heading from "../Heading/Heading"
+import Heading from "../../Heading/Heading"
 
 interface DetailsProps {
   description: string

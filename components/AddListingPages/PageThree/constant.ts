@@ -20,6 +20,13 @@ export const placeGoodFor = [
   { label: "Special Occations" },
 ]
 
+export const decribePlaceList = [
+  { label: "Family Friendly" },
+  { label: "Pet Friendly" },
+  { label: "Child Friendly" },
+  { label: "Disability Friendly" },
+]
+
 export const parkingNearby = [
   { label: "Street Parking" },
   { label: "Valet Parking" },
@@ -68,7 +75,7 @@ export const additionalFeatures = [
   { label: "wudu facilities available/nearby" },
 ]
 
-export const stayAssociatedCategories = [
+export const buyAssociatedCategories = [
   { label: "Electronic Devices" },
   { label: "Electronic Accessories" },
   { label: "TV & Home Appliances" },
@@ -82,13 +89,6 @@ export const stayAssociatedCategories = [
   { label: "Sports & Lifestyle" },
   { label: "Automotive & Motorcycle" },
   { label: "Pets" },
-]
-
-export const tags = [
-  { label: "Family Friendly" },
-  { label: "Pet Friendly" },
-  { label: "Child Friendly" },
-  { label: "Disability Friendly" },
 ]
 
 export const productTypes = [
