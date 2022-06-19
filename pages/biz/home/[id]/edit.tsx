@@ -105,7 +105,7 @@ const EditListingHomepage = (context) => {
       item_list: itemList,
       deal_list: dealList,
       images: listingImages,
-      social_info: socialInfo,
+      // social_info: socialInfo,
     }).then((response) => console.log(response))
   }
 

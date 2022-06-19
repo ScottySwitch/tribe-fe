@@ -60,6 +60,7 @@ const ClaimListing = (context) => {
   }
 
   const handleDirectToVerification = (tier: Tiers) => {
+    
     router.push({
       pathname: "/biz/verify",
       query: {
