@@ -67,7 +67,7 @@ export const bizInformationDefaultFormData = {
 }
 
 export const fakeAddlistingForm: IAddListingForm = {
-  category: "Restaurant",
+  category: 1,
   relationship: "",
   listing: "",
   role: "",
