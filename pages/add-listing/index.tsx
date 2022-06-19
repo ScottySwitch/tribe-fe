@@ -13,12 +13,12 @@ import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/A
 import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
 import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor"
 import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor"
-import { IOpeningHours } from "components/OpenHours/OpenHours"
+import { IOpenHours } from "components/OpenHours/OpenHours"
 
 import styles from "styles/AddListing.module.scss"
 import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
-import BizListingApi from "../../services/biz-listing";
+import BizListingApi from "../../services/biz-listing"
 export interface IAddListingForm {
   category: number
   categoryKind: string
@@ -51,7 +51,7 @@ export interface IAddListingForm {
   images?: string[]
   tags?: any[]
   mealsKind?: any[]
-  openHours?: IOpeningHours
+  openHours?: IOpenHours
   payment?: any[]
   additionalServices?: any[]
   media?: any[]
@@ -82,7 +82,7 @@ const AddListing = () => {
   }
 
   const handleUpdateFormData = (data) => {
-    console.log('handleUpdateFormData', data)
+    console.log("handleUpdateFormData", data)
     setFormData({ ...formData, ...data })
   }
 
@@ -90,9 +90,16 @@ const AddListing = () => {
     ///do CRUD things here
     console.log("data", formData)
 
-    let address = 'Online Business';
+    let address = "Online Business"
     if (!formData.isOnline) {
-      address = formData.additionalAddress + ' - ' + formData.address + ' - ' + formData.city + ' - ' + formData.country
+      address =
+        formData.additionalAddress +
+        " - " +
+        formData.address +
+        " - " +
+        formData.city +
+        " - " +
+        formData.country
     }
     const dataSend = {
       user: localStorage.getItem("user_id"),
@@ -102,7 +109,7 @@ const AddListing = () => {
       description: formData.description,
       address,
       social_info: {
-        twitter: formData.socialMedia
+        twitter: formData.socialMedia,
       },
       phone_number: formData.contact,
       email: formData.email === "" ? null : formData.email,
@@ -110,7 +117,7 @@ const AddListing = () => {
       price_range: {
         currency: formData.currency,
         min: formData.minPrice,
-        max: formData.maxPrice
+        max: formData.maxPrice,
       },
       images: formData.images,
       open_hours: formData.openHours,
@@ -125,11 +132,11 @@ const AddListing = () => {
         parking: formData.parking,
         paryerFacilities: formData.paryerFacilities,
         payment: formData.payment,
-        placeGoodFor: formData.placeGoodFor
-      }
+        placeGoodFor: formData.placeGoodFor,
+      },
     }
     const result = await BizListingApi.createBizListing(dataSend)
-    console.log('result', result);
+    console.log("result", result)
 
     // const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
