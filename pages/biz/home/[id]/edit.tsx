@@ -19,6 +19,10 @@ import AddItems from "components/BizInformationPage/TabContentComponents/AddItem
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
 
 import styles from "styles/BizHomepage.module.scss"
+import Facilities from "components/BizHomePage/Facilities/Facilities"
+import { IOption } from "type"
+import Tags from "components/BizHomePage/Tags/Tags"
+import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -51,9 +55,12 @@ const EditListingHomepage = (context) => {
   const [category, setCategory] = useState(Categories.EAT)
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME)
   const [description, setDescription] = useState<string>("")
+  const [facilities, setFacilities] = useState<IOption[]>([])
+  const [tags, setTags] = useState<IOption[]>([])
+  const [openHours, setOpenHours] = useState([])
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
-  const [socialInfo, setSocialInfo] = useState<any>("");
-  const [phoneNumber, setPhoneNumber] = useState<any>("");
+  const [socialInfo, setSocialInfo] = useState<any>("")
+  const [phoneNumber, setPhoneNumber] = useState<any>("")
   const [action, setAction] = useState({ label: "", value: "" })
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
@@ -61,7 +68,7 @@ const EditListingHomepage = (context) => {
   // const [listingImages, setListingImages] = useState<string[]>([])
   const [listingImages, setListingImages] = useState<any>([])
   const [logo, setLogo] = useState<any>([])
-  const [isPaid, setIsPaid] = useState<boolean>(false);
+  const [isPaid, setIsPaid] = useState<boolean>(false)
 
   const {
     query: { id: listingSlug },
@@ -78,23 +85,24 @@ const EditListingHomepage = (context) => {
         setBizListing(listing)
         setCategory(listing.attributes.categories.data[0].id) // Get the first category
         setDescription(listing.attributes.description)
+        setFacilities(listing.attributes.facilities.data || [])
+        setTags(listing.attributes.tags || [])
+        // setOpenHours(listing.attributes.open_hours)
         setPriceRange(listing.attributes.price_range)
         setSocialInfo(listing.attributes.social_info)
         // setPhoneNumber(listing.attributes.phone_number)
         setLogo(listing.attributes.logo)
-        if ( listing.attributes.biz_invoices.data.length > 0 ) {
-          setIsPaid(true);
+        if (listing.attributes.biz_invoices.data.length > 0) {
+          setIsPaid(true)
         }
-        if (listing.attributes.biz_invoices.data.length > 0 ) {
+        if (listing.attributes.biz_invoices.data.length > 0) {
           setPhoneNumber(listing.attributes.phone_number)
-        }
-        else {
-          let defaultPhone = '';
+        } else {
+          let defaultPhone = ""
           for (let index = 0; index < listing.attributes.phone_number.length; index++) {
-            if ( index < 6 && index > 2) {
-              defaultPhone = defaultPhone + 'X'
-            }
-            else {
+            if (index < 6 && index > 2) {
+              defaultPhone = defaultPhone + "X"
+            } else {
               defaultPhone = defaultPhone + listing.attributes.phone_number[index]
             }
           }
@@ -113,7 +121,10 @@ const EditListingHomepage = (context) => {
   const handleSetPriceRange = (priceRange) => setPriceRange(priceRange)
   const handleSetSocialInfo = (socialInfo) => setSocialInfo(socialInfo)
   const handleSetPhoneNumber = (phoneNumber) => setPhoneNumber(phoneNumber)
-  const handleSetDescription = async (description) => setDescription(description)
+  const handleSetDescription = (description) => setDescription(description)
+  const handleSetFacilities = (facilities) => setFacilities(facilities)
+  const handleSetTags = (tags) => setTags(tags)
+  const handleSetOpenHours = (openHours) => setOpenHours(openHours)
   const handleSetAction = (action: string, value: string) =>
     setAction({ label: action, value: value })
   const handleSetItemList = (list: { [key: string]: string }[]) => setItemList(list)
@@ -121,7 +132,7 @@ const EditListingHomepage = (context) => {
   const handleSetScreen = (screen: ListingHomePageScreens) => setScreen(screen)
 
   const handleSubmit = async () => {
-    console.log(action);
+    console.log(action)
     BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
@@ -131,11 +142,14 @@ const EditListingHomepage = (context) => {
       images: listingImages,
       social_info: socialInfo,
       phone_number: phoneNumber,
+      facilities: facilities,
+      open_hours: openHours,
+      tags: tags,
       is_verified: false,
-      logo: logo
+      logo: logo,
     }).then((response) => {
-      console.log(response);
-      window.location.reload();
+      console.log(response)
+      window.location.reload()
     })
   }
 
@@ -181,28 +195,15 @@ const EditListingHomepage = (context) => {
               <div className={styles.break} />
               <Details description={description} onSetDescription={handleSetDescription} />
               <div className={styles.break} />
-              <div className="flex justify-between">
-                <div className="flex items-center gap-1">
-                  <Icon icon="like-color" />
-                  Facilities
-                </div>
-                <Link href="#">Add facilities</Link>
-              </div>
+              <Facilities
+                facilities={facilities}
+                onSetFacilities={handleSetFacilities}
+                facilityOptions={[]}
+              />
               <div className={styles.break} />
-              <div className="flex justify-between">
-                <div className="flex items-center gap-1">
-                  <Icon icon="tags-color" />
-                  Tags
-                </div>
-                <Link href="#">Add tags</Link>
-              </div>
+              <Tags tags={tags} onSetTags={handleSetTags} tagOptions={[]} />
               <div className={styles.break} />
-              <div className="flex justify-between">
-                <div className="flex items-center gap-1">
-                  <Icon icon="clock" />
-                  Opening hours
-                </div>
-              </div>
+              <HomeOpenHours openHours={openHours} onSetOpenHours={handleSetOpenHours} />
               <div className={styles.break} />
               <div>
                 <RenderTabs
