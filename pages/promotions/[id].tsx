@@ -132,6 +132,7 @@ const Promotions = () => {
               width={1185}
               height={225}
               layout="responsive"
+              className="rounded-lg"
             />
           ))}
         </CarouselBanner>
