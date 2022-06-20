@@ -4,11 +4,13 @@ import Image from "next/image"
 import styles from "./InforCard.module.scss"
 
 export interface InforCardProps {
+  className?: string
   imgUrl: string
   title?: string
   rate?: number
   categories?: string[]
   tags?: string[]
+  iconTag?: boolean
   price?: string | number
   isVerified?: boolean
   rateNumber?: number
@@ -19,6 +21,7 @@ export interface InforCardProps {
 
 const InforCard = (props: InforCardProps) => {
   const {
+    className,
     imgUrl = "https://picsum.photos/200/300",
     title,
     rate,
@@ -27,12 +30,13 @@ const InforCard = (props: InforCardProps) => {
     followerNumber,
     categories,
     tags,
+    iconTag = false,
     price,
     isVerified,
     width,
   } = props
   return (
-    <div className={styles.infor_card} style={{ width }}>
+    <div className={`${styles.infor_card} ${className}`} style={{ width }}>
       {isVerified && (
         <div className={styles.verified}>
           <Icon icon="verified-tag" className={styles.verified_icon} />
@@ -71,7 +75,8 @@ const InforCard = (props: InforCardProps) => {
         {Array.isArray(tags) && (
           <div className={styles.tags}>
             {tags.map((tag) => (
-              <div key={tag} className={styles.tag}>
+              <div key={tag} className={`${styles.tag} flex items-center`}>
+                { (iconTag && tag === "Hot deals") && <Icon icon="hot-deal" className="mr-2" /> }
                 {tag}
               </div>
             ))}
