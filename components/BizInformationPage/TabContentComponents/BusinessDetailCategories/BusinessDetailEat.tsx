@@ -34,7 +34,7 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
   const [isEdit, setIsEdit] = useState(false)
   return (
     <React.Fragment>
-      <SectionLayout title="Business detail" show={!isEdit}>
+      <SectionLayout title="Business detail" show={!isEdit} containerClassName="w-full px-[30px]">
         <Break />
         <Question question="What category best describes this place?" childrenClassName="flex">
           <Badge>{categoryKind}</Badge>

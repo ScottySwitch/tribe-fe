@@ -225,7 +225,6 @@ export const informationList = [
   { label: InformationList.ANALYTICS, icon: "chart", paid: true },
   { label: InformationList.CHANGE_ACCOUNT_TIER, icon: "reward-color" },
   { label: InformationList.VERIFICATION, icon: "like-color-2" },
-  { label: InformationList.LOGOUT, icon: "log-out1" },
 ]
 
 export const productTabList = [

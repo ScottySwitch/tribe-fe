@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation"
 import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals"
@@ -11,22 +11,43 @@ import {
   defaultAddlistingForm,
   fakeAddlistingForm,
   informationList,
+  loginInforItem,
+  user,
+  userId,
+  token,
 } from "constant"
 import { Categories, InformationList, Tiers } from "enums"
 
 import styles from "styles/BizInformation.module.scss"
 import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail"
 import { IAddListingForm } from "pages/add-listing"
+<<<<<<< Updated upstream
+=======
+import TierTable from "components/TierTable/TierTable"
+import Verification from "components/BizInformationPage/TabContentComponents/Verification"
+>>>>>>> Stashed changes
 
 const BizInformation = () => {
   const [tier, setTier] = useState<Tiers>(Tiers.BASIC)
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
-  const submitFormData = (e) => {
+  const handleUpdateDeals = (e) => {
     console.log(e)
   }
+<<<<<<< Updated upstream
 
+=======
+  const handleUpdateBusinessInformation = (e) => {
+    console.log(e)
+  }
+  const handleUpdateBusinessDetail = (e) => {
+    console.log(e)
+  }
+  const handleUpdateProductList = (e) => {
+    console.log(e)
+  }
+>>>>>>> Stashed changes
   const handleSelectTab = (tab) => {
     if (tier === Tiers.FREE && tab.paid) {
       return
@@ -42,9 +63,14 @@ const BizInformation = () => {
         return (
           <BusinessDetail
             category={Categories.SEE_AND_DO}
+<<<<<<< Updated upstream
             // formData={formData}
             formData={fakeAddlistingForm}
             submitFormData={submitFormData}
+=======
+            formData={formData}
+            submitFormData={handleUpdateBusinessDetail}
+>>>>>>> Stashed changes
           />
         )
       case InformationList.PRODUCT_LISTING:
@@ -52,18 +78,24 @@ const BizInformation = () => {
       case InformationList.PHOTOS_VIDEOS:
         return <div>photo</div>
       case InformationList.MANAGE_DEALS:
-        return <ManageDeals formData={formData} submitFormData={submitFormData} />
+        return <ManageDeals formData={formData} submitFormData={handleUpdateDeals} />
       case InformationList.ANALYTICS:
         return <div>analytics</div>
       case InformationList.CHANGE_ACCOUNT_TIER:
         return <div>tier</div>
       case InformationList.VERIFICATION:
-        return <div>verify</div>
-      case InformationList.LOGOUT:
-        return <div>logout</div>
+        return <Verification formData={formData} submitFormData={handleUpdateDeals} />
       default:
         return <div />
     }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem(loginInforItem)
+    localStorage.removeItem(user)
+    localStorage.removeItem(userId)
+    localStorage.removeItem(token)
+    window.location.href = "/"
   }
 
   return (
@@ -76,17 +108,23 @@ const BizInformation = () => {
           </div>
           <div className={styles.left_col_bottom}>
             {informationList.map((item) => (
-              <div className="flex gap-3 justify-between" key={item.label}>
+              <div
+                className="flex gap-3 justify-between"
+                key={item.label}
+                onClick={() => handleSelectTab(item)}
+              >
                 <Heading
                   icon={item.icon}
                   type="tab"
                   text={item.label}
                   selected={selectedTab === item.label}
-                  onClick={() => handleSelectTab(item)}
                 />
                 {tier === Tiers.FREE && item.paid && <Icon icon="red-star" />}
               </div>
             ))}
+            <div className="flex gap-3 justify-between" onClick={handleLogout}>
+              <Heading icon="logout" type="tab" text="Log out" selected={false} />
+            </div>
           </div>
         </div>
         <div className={styles.right_col}>{tabContent()}</div>

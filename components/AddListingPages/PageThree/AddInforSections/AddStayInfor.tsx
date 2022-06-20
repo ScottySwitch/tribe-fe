@@ -77,6 +77,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
             ? undefined
             : "After you complete this form, you'll be able to make changes before submitting."
         }
+        containerClassName={isEdit ? "w-full px-[30px]" : ""}
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>

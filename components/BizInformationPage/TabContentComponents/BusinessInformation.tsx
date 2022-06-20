@@ -5,6 +5,7 @@ import Input from "components/Input/Input"
 import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Upload from "components/Upload/Upload"
+
 import styles from "./TabContent.module.scss"
 
 interface BusinessInformationProps {
