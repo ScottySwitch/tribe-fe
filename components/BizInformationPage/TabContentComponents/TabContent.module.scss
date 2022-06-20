@@ -78,4 +78,10 @@
 
 .verification {
   padding: 30px;
+  .change_link {
+    color: $blue-500;
+    text-decoration: underline;
+    font-size: $fs-normal;
+    font-weight: $fw-light;
+  }
 }

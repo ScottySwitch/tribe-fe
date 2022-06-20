@@ -14,6 +14,7 @@ import { randomId } from "utils"
 import AuthApi from "../../../services/auth"
 import UserApi from "../../../services/user"
 import BizInvoinceApi from "../../../services/biz-invoice"
+import ClaimListingApi from "../../../services/claim-listing"
 
 interface BizUserVerifyProps {
   tier: string
@@ -38,7 +39,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     const sessionId = router.query.sessionId
     if (sessionId && localStorage.getItem("isVeriFy") != "true") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
-      handleFinishVerifying('method_2')
+      handleFinishVerifying('stripe')
       // for storing product payment order in strapi
       const checkoutSessionId = sessionId;
       console.log(checkoutSessionId);
@@ -159,6 +160,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     if (tier === Tiers.FREE) {
       const result = await AuthApi.otpPhoneConfirm({ otp })
       if (result.data.success) {
+        const result1 = ClaimListingApi.createClaimListing({
+          paymentMethod: 'free',
+          transaction_id: '',
+        })
         setShowResultModal(true)
       } else {
         alert("Wrong OTP")
@@ -176,7 +181,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleDirectToStorePage = () => {
     const localLoginInfo = { tier: tier, token: "asd", type: UsersTypes.BIZ_USER }
     localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
-    window.location.href = `/biz/home/edit/${randomId()}`
+    window.location.href = `/biz/home/${localStorage.getItem('biz_slug')}/edit/`
     localStorage.setItem("isVeriFy", "false")
   }
 
@@ -211,6 +216,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         paymentMethod: paymentMethodValue,
         transaction_id: transaction_id,
       })
+      const result1 = ClaimListingApi.createClaimListing({
+        paymentMethod: paymentMethodValue,
+        transaction_id: transaction_id,
+      })
     }
     localStorage.setItem("isVeriFy", "true")
     setShowResultModal(true)
@@ -234,7 +243,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           <Input
             placeholder="your phone number"
             width="100%"
-            prefix="+84"
+            prefix="+65"
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
           />
           <Button text="Receive OTP" onClick={handleRequestOTP} />
@@ -360,7 +369,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 width="80%"
                 type="button"
                 text="Next"
-                onClick={() => handleFinishVerifying("method_1")}
+                onClick={() => handleFinishVerifying("xendit")}
               />
             )}
           </div>

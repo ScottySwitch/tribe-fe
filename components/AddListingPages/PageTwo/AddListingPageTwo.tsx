@@ -21,6 +21,7 @@ interface AddListingProps {
 
 const AddListingPageTwo = (props: AddListingProps) => {
   const { data, show, onUpdateFormData, onNextPage, onPrevPage } = props;
+  const [isOnlineLocation, setIsOnlineLocation] = useState(false)
 
   const { register, handleSubmit, getValues } = useForm({
     defaultValues: {
@@ -70,38 +71,43 @@ const AddListingPageTwo = (props: AddListingProps) => {
             // name="isOnline"
             value={"on"}
             register={register("isOnline")}
+            onChange={() => setIsOnlineLocation(!isOnlineLocation)}
           />
           <br />
-          <Input
-            register={register("city")}
-            label="City/Town, State/Province/Region"
-            placeholder="50 Bussorah St, Singapore 199466"
-          />
-          <br />
-          <Input
-            register={register("country")}
-            label="Country (optional)"
-            placeholder="Singapore"
-          />
-          <br />
-          <Input
-            register={register("address")}
-            label="Street address"
-            placeholder="50 Bussorah St, Singapore 199466"
-          />
-          <br />
-          <Input
-            register={register("additionalAddress")}
-            size="large"
-            placeholder="Additional address information (optional)"
-          />
+          { !isOnlineLocation && (
+            <>
+              <Input
+                register={register("city")}
+                label="City/Town, State/Province/Region"
+                placeholder="50 Bussorah St, Singapore 199466"
+              />
+              <br />
+              <Input
+                register={register("country")}
+                label="Country (optional)"
+                placeholder="Singapore"
+              />
+              <br />
+              <Input
+                register={register("address")}
+                label="Street address"
+                placeholder="50 Bussorah St, Singapore 199466"
+              />
+              <br />
+              <Input
+                register={register("additionalAddress")}
+                size="large"
+                placeholder="Additional address information (optional)"
+              />
+            </>
+          )}
         </Question>
         <Question show question="Contact">
           <Input
             register={register("contact")}
             label="Phone number ( optional )"
             placeholder="335 657 8878"
-            prefix="+84"
+            prefix="+65"
           />
           <br />
           <Input

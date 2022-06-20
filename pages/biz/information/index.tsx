@@ -21,11 +21,8 @@ import { Categories, InformationList, Tiers } from "enums"
 import styles from "styles/BizInformation.module.scss"
 import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail"
 import { IAddListingForm } from "pages/add-listing"
-<<<<<<< Updated upstream
-=======
 import TierTable from "components/TierTable/TierTable"
 import Verification from "components/BizInformationPage/TabContentComponents/Verification"
->>>>>>> Stashed changes
 
 const BizInformation = () => {
   const [tier, setTier] = useState<Tiers>(Tiers.BASIC)
@@ -35,9 +32,6 @@ const BizInformation = () => {
   const handleUpdateDeals = (e) => {
     console.log(e)
   }
-<<<<<<< Updated upstream
-
-=======
   const handleUpdateBusinessInformation = (e) => {
     console.log(e)
   }
@@ -47,7 +41,6 @@ const BizInformation = () => {
   const handleUpdateProductList = (e) => {
     console.log(e)
   }
->>>>>>> Stashed changes
   const handleSelectTab = (tab) => {
     if (tier === Tiers.FREE && tab.paid) {
       return
@@ -63,14 +56,8 @@ const BizInformation = () => {
         return (
           <BusinessDetail
             category={Categories.SEE_AND_DO}
-<<<<<<< Updated upstream
-            // formData={formData}
-            formData={fakeAddlistingForm}
-            submitFormData={submitFormData}
-=======
             formData={formData}
             submitFormData={handleUpdateBusinessDetail}
->>>>>>> Stashed changes
           />
         )
       case InformationList.PRODUCT_LISTING:

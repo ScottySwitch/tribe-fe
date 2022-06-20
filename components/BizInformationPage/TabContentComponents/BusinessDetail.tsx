@@ -9,7 +9,7 @@ import BusinessDetailTransport from "./BusinessDetailCategories/BusinessDetailTr
 import BusinessDetailStay from "./BusinessDetailCategories/BusinessDetailStay"
 
 interface BusinessDetailProps {
-  category?: string
+  category?: any
   formData: IAddListingForm
   submitFormData?: (form: IAddListingForm) => void
 }

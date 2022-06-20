@@ -20,10 +20,10 @@ const Verification = (props: VerificationProps) => {
     >
       <Break />
       <Input label="Verify Personal phone number" value="*********992" size="large" width={300} />
-      <div className={styles.change_link} />
+      <div className={styles.change_link}>Change phone number</div>
       <br />
       <Input label="Verify Personal phone number" value="*********992" size="large" width={300} />
-      <div className={styles.change_link} />
+      <div className={styles.change_link}>Resend ID Card</div>
     </SectionLayout>
   )
 }
