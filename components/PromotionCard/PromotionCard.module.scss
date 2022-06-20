@@ -1,0 +1,128 @@
+@use "styles/variables.scss" as *;
+
+.promotion {
+  &_card {
+    display: flex;
+    background-color: $bg-0;
+    border-radius: 8px;
+    min-height: 145px;
+    padding: $p-md;
+    width: 100%;
+    
+    &:not(:last-of-type) {
+      margin-bottom: 32px;
+    }
+  }
+
+  &_avatar {
+    position: relative;
+    min-width: 130px;
+    max-width: 130px;
+    height: 130px;
+    margin-right: 24px;
+  }
+
+  &_image {
+    border-radius: 8px;
+  }
+  
+  &_favourite {
+    padding: 4px;
+    position: absolute;
+    top: 13px;
+    right: 10px;
+    z-index: 10;
+    background-color: $bg-0;
+    border-radius: 50%;
+  }
+
+  &_info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &_cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      a {
+        color: $blue-500;
+        text-decoration: underline;
+        font-size: $fs-sm;
+        font-weight: $fw-semi-bold;
+      }
+    }
+  }
+
+  &_title {
+    color: #000000;
+    font-size: $fs-md;
+    font-weight: $fw-semi-bold;
+    margin-bottom: 8px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  &_date {
+    color: $bg-400;
+    font-size: $fs-sm;
+    font-weight: $fw-light;
+    margin-bottom: 20px;
+  }
+
+  &_cta {
+    &_primary {
+      background-color: $primary-50 !important;
+      color: $primary-500 !important;
+      min-width: 64px !important;
+    }
+    &_secondary {
+      background-color: $bg-50 !important;
+      color: $bg-400 !important;
+      min-width: 64px !important;
+    }
+  }
+
+  @media screen and (max-width: $mobile) {
+    &_card {
+      margin-bottom: 16px;
+      min-height: 123px;
+
+      &:not(:last-of-type) {
+        margin-bottom: 16px;
+      }
+    }
+    &_avatar {
+      min-width: 80px;
+      max-width: 80px;
+      height: 80px;
+      margin-right: 12px;
+    }
+    &_title {
+      font-size: $fs-sm;
+    }
+    &_date {
+      font-size: $fs-xs;
+      margin-bottom: 10px;
+    }
+    &_info {
+      &_cta {
+        a {
+          font-size: $fs-xs;
+        }
+      }
+    }
+    &_cta {
+      &_primary, &_secondary {
+        height: 32px;
+        font-size: $fs-sm;
+      }
+    }
+  }
+}

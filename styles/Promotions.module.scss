@@ -1,0 +1,16 @@
+@use "./variables.scss" as *;
+
+.section_layout {
+  &_background_color {
+    background-color: $primary-20;
+  }
+}
+.scrolling_box_custom {
+  width: calc(100% + 25px);
+}
+
+@media screen and (max-width: $mobile) {
+  .scrolling_box_custom {
+    width: 100%;
+  }
+}
