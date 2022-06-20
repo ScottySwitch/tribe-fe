@@ -122,6 +122,29 @@ const resetPassword = async (params: ResetPassword) => {
   });
 }
 
+const loginFacebookCallback = async (accessToken: any) => {
+  localStorage.removeItem('token');
+  const url = `/api/auth/facebook/callback?access_token=${accessToken}`;
+  let user = await Api.get(url);
+  if (user.data) {
+    let { jwt } = user.data;
+    localStorage.setItem("token", jwt)
+    await getMe();
+  }
+  return user.data
+}
+
+const loginGoogleCallback = async (accessToken: any) => {
+  localStorage.removeItem('token');
+  const url = `/api/auth/google/callback?access_token=${accessToken}`;
+  let user = await Api.get(url);
+  if (user.data) {
+    let { jwt } = user.data;
+    localStorage.setItem("token", jwt)
+    await getMe();
+  }
+  return user.data
+}
 
 export default {
   signUpByEmail,
@@ -136,5 +159,7 @@ export default {
   forgetPasswordByPhone,
   resetPassword,
   signUpByPhone,
-  loginByPhone
+  loginByPhone,
+  loginFacebookCallback,
+  loginGoogleCallback
 }
