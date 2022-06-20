@@ -23,9 +23,10 @@ import BusinessDetail from "components/BizInformationPage/TabContentComponents/B
 import { IAddListingForm } from "pages/add-listing"
 import TierTable from "components/TierTable/TierTable"
 import Verification from "components/BizInformationPage/TabContentComponents/Verification"
+import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos"
 
 const BizInformation = () => {
-  const [tier, setTier] = useState<Tiers>(Tiers.BASIC)
+  const [isPaid, setIsPaid] = useState(false)
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
@@ -45,7 +46,7 @@ const BizInformation = () => {
     console.log(e)
   }
   const handleSelectTab = (tab) => {
-    if (tier === Tiers.FREE && tab.paid) {
+    if (!isPaid && tab.paid) {
       return
     }
     setSelectedTab(tab.label)
@@ -56,6 +57,7 @@ const BizInformation = () => {
       case InformationList.BUSINESS_INFORMATION:
         return (
           <BusinessInformation
+            isPaid={isPaid}
             formData={formData}
             submitFormData={handleUpdateBusinessInformation}
           />
@@ -63,6 +65,7 @@ const BizInformation = () => {
       case InformationList.BUSINESS_DETAIL:
         return (
           <BusinessDetail
+            isPaid={isPaid}
             category={formData.category}
             formData={formData}
             submitFormData={handleUpdateBusinessDetail}
@@ -71,20 +74,32 @@ const BizInformation = () => {
       case InformationList.PRODUCT_LISTING:
         return <ProductListing formData={formData} submitFormData={handleUpdateProductList} />
       case InformationList.PHOTOS_VIDEOS:
-        return <div>photo</div>
+        return (
+          <PhotosVideos
+            isPaid={isPaid}
+            formData={formData}
+            submitFormData={handleUpdateProductList}
+          />
+        )
       case InformationList.MANAGE_DEALS:
-        return <ManageDeals formData={formData} submitFormData={handleUpdateDeals} />
+        return (
+          <ManageDeals isPaid={isPaid} formData={formData} submitFormData={handleUpdateDeals} />
+        )
       case InformationList.ANALYTICS:
         return <div>analytics</div>
       case InformationList.CHANGE_ACCOUNT_TIER:
         return (
           <TierTable
+            isPaid={isPaid}
             isPayQuarterly={formData.isPayQuarterly}
             onSetIsPayQuarterly={handleUpdatePaymentSet}
           />
         )
       case InformationList.VERIFICATION:
-        return <Verification formData={formData} submitFormData={handleUpdateDeals} />
+        return (
+          <Verification isPaid={isPaid} formData={formData} submitFormData={handleUpdateDeals} />
+        )
+
       default:
         return <div />
     }
@@ -119,7 +134,7 @@ const BizInformation = () => {
                   text={item.label}
                   selected={selectedTab === item.label}
                 />
-                {tier === Tiers.FREE && item.paid && <Icon icon="red-star" />}
+                {!isPaid && item.paid && <Icon icon="star-2" color="#653fff" />}
               </div>
             ))}
             <div className="flex gap-3 justify-between" onClick={handleLogout}>

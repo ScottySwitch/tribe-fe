@@ -45,6 +45,12 @@ export const bizInformationDefaultFormData = {
       description: "A product description is a form of marketing copy used...",
       price: "$ 37.35",
     },
+    {
+      imgUrl: "https://picsum.photos/200/300",
+      name: "Evertop Hainanese Boneless Chicken...",
+      description: "A product description is a form of marketing copy used...",
+      price: "$ 37.35",
+    },
   ],
   describePlace: [],
   activeDeals: [

@@ -64,7 +64,7 @@ const ClaimListing = (context) => {
     router.push({
       pathname: "/biz/verify",
       query: {
-        isPaidUser: !(tier === Tiers.FREE),
+        isPaid: !(tier === Tiers.FREE),
         tier: tier,
       },
     })

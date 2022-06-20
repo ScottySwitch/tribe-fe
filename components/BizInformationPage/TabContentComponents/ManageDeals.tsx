@@ -12,6 +12,7 @@ import AddDeals from "./AddDeal/AddDeals"
 import styles from "./TabContent.module.scss"
 
 interface ManageDealsProps {
+  isPaid: boolean
   submitFormData?: (form: { [key: string]: any }[]) => void
   formData?: { [key: string]: any }
 }

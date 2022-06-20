@@ -10,6 +10,7 @@ import BusinessDetailStay from "./BusinessDetailCategories/BusinessDetailStay"
 
 interface BusinessDetailProps {
   category?: any
+  isPaid: boolean
   formData: IAddListingForm
   submitFormData?: (form: IAddListingForm) => void
 }

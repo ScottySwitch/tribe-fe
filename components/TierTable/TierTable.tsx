@@ -51,7 +51,7 @@ const tableData = [
   },
   {
     feature: "Analytics",
-    free: Tiers.BASIC,
+    free: "Basic",
     basic: "Advance",
     premium: null,
   },
@@ -267,10 +267,12 @@ const MobileTierTable = ({
 }
 
 const TierTable = ({
+  isPaid,
   isPayQuarterly,
   onSetIsPayQuarterly,
   onDirectToVerification,
 }: {
+  isPaid: boolean
   isPayQuarterly: boolean
   onSetIsPayQuarterly: (e: any) => void
   onDirectToVerification?(tier: Tiers): void

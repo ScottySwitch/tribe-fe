@@ -6,13 +6,14 @@ import React from "react"
 import styles from "./TabContent.module.scss"
 
 interface VerificationProps {
+  isPaid: boolean
   submitFormData?: (form: { [key: string]: any }[]) => void
   formData?: { [key: string]: any }
 }
 
 const Verification = (props: VerificationProps) => {
-  const { formData = {}, submitFormData } = props
-  const { isPaidUser = true, idVerificationStatus = "processing" } = formData
+  const { isPaid, formData = {}, submitFormData } = props
+  const { idVerificationStatus = "processing" } = formData
   const idCardStatusIcon = () => {
     let icon
     switch (idVerificationStatus) {
@@ -47,7 +48,7 @@ const Verification = (props: VerificationProps) => {
         suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
       />
       <div className={styles.change_link}>Change phone number</div>
-      {isPaidUser && (
+      {isPaid && (
         <React.Fragment>
           <br />
           <Input

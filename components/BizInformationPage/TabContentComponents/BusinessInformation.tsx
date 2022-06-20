@@ -9,6 +9,7 @@ import Upload from "components/Upload/Upload"
 import styles from "./TabContent.module.scss"
 
 interface BusinessInformationProps {
+  isPaid: boolean
   submitFormData?: (form: { [key: string]: any }) => void
   formData?: { [key: string]: any }
 }

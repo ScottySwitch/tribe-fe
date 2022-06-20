@@ -28,8 +28,17 @@
 }
 
 .tab {
+  .icon {
+    max-width: 100px;
+    transition: 0.5s all;
+  }
+
   &.un_selected {
     font-weight: $fw-light;
+
+    .icon {
+      max-width: 0;
+    }
     &::before {
       height: 0;
     }
