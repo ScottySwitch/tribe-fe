@@ -20,7 +20,7 @@ import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import BizListingApi from "../../services/biz-listing"
 export interface IAddListingForm {
-  category: number
+  category: Categories
   categoryKind: string
   relationship: string
   listing: string
@@ -174,35 +174,35 @@ const AddListing = () => {
         <AddBuyInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === 1}
+          show={pageNumber === 3 && formData.category === Categories.EAT}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddEatInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === 2}
+          show={pageNumber === 3 && formData.category === Categories.EAT}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddSeeAndDoInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === 3}
+          show={pageNumber === 3 && formData.category === Categories.SEE_AND_DO}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddStayInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === 4}
+          show={pageNumber === 3 && formData.category === Categories.STAY}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddTransportInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === 5}
+          show={pageNumber === 3 && formData.category === Categories.TRANSPORT}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />

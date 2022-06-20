@@ -43,7 +43,7 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           question="What is the category best associated with this service?"
           childrenClassName="flex"
         >
-          <Badge>{categoryKind}</Badge>
+          {categoryKind && <Badge>{categoryKind}</Badge>}
         </Question>
         <Question
           question="What areas best associated with this service?"
@@ -65,7 +65,7 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           ))}
         </Question>
         <Question question="What’s the average price range of a meal?">
-          {`${currency}${minPrice} - ${currency}${maxPrice}`}
+          {currency && minPrice && maxPrice && `${currency}${minPrice} - ${currency}${maxPrice}`}
         </Question>
         <Question
           question="What are the Halal food options available?"

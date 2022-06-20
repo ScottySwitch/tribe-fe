@@ -41,6 +41,9 @@ const BizInformation = () => {
   const handleUpdateProductList = (e) => {
     console.log(e)
   }
+  const handleUpdatePaymentSet = (e) => {
+    console.log(e)
+  }
   const handleSelectTab = (tab) => {
     if (tier === Tiers.FREE && tab.paid) {
       return
@@ -51,17 +54,22 @@ const BizInformation = () => {
   const tabContent = () => {
     switch (selectedTab) {
       case InformationList.BUSINESS_INFORMATION:
-        return <BusinessInformation formData={formData} submitFormData={submitFormData} />
+        return (
+          <BusinessInformation
+            formData={formData}
+            submitFormData={handleUpdateBusinessInformation}
+          />
+        )
       case InformationList.BUSINESS_DETAIL:
         return (
           <BusinessDetail
-            category={Categories.SEE_AND_DO}
+            category={formData.category}
             formData={formData}
             submitFormData={handleUpdateBusinessDetail}
           />
         )
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing formData={formData} submitFormData={submitFormData} />
+        return <ProductListing formData={formData} submitFormData={handleUpdateProductList} />
       case InformationList.PHOTOS_VIDEOS:
         return <div>photo</div>
       case InformationList.MANAGE_DEALS:
@@ -69,7 +77,12 @@ const BizInformation = () => {
       case InformationList.ANALYTICS:
         return <div>analytics</div>
       case InformationList.CHANGE_ACCOUNT_TIER:
-        return <div>tier</div>
+        return (
+          <TierTable
+            isPayQuarterly={formData.isPayQuarterly}
+            onSetIsPayQuarterly={handleUpdatePaymentSet}
+          />
+        )
       case InformationList.VERIFICATION:
         return <Verification formData={formData} submitFormData={handleUpdateDeals} />
       default:

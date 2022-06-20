@@ -81,7 +81,9 @@
   .change_link {
     color: $blue-500;
     text-decoration: underline;
-    font-size: $fs-normal;
+    font-size: $fs-sm;
     font-weight: $fw-light;
+    margin-top: 10px;
+    cursor: pointer;
   }
 }

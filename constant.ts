@@ -46,7 +46,7 @@ export const bizInformationDefaultFormData = {
       price: "$ 37.35",
     },
   ],
-  describePlace: [""],
+  describePlace: [],
   activeDeals: [
     {
       name: "Deal name",
@@ -222,7 +222,7 @@ export const eatTabList = [
 export const informationList = [
   { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
   { label: InformationList.BUSINESS_DETAIL, icon: "business" },
-  { label: InformationList.PHOTOS_VIDEOS, icon: "play" },
+  { label: InformationList.PHOTOS_VIDEOS, icon: "camera-color" },
   { label: InformationList.PRODUCT_LISTING, icon: "buy-color", paid: true },
   { label: InformationList.MANAGE_DEALS, icon: "deal", paid: true },
   { label: InformationList.ANALYTICS, icon: "chart", paid: true },

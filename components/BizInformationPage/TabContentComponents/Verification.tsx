@@ -1,6 +1,8 @@
 import Break from "components/Break/Break"
+import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import SectionLayout from "components/SectionLayout/SectionLayout"
+import React from "react"
 import styles from "./TabContent.module.scss"
 
 interface VerificationProps {
@@ -9,8 +11,26 @@ interface VerificationProps {
 }
 
 const Verification = (props: VerificationProps) => {
-  const { formData, submitFormData } = props
-  const isPaidUser = true
+  const { formData = {}, submitFormData } = props
+  const { isPaidUser = true, idVerificationStatus = "processing" } = formData
+  const idCardStatusIcon = () => {
+    let icon
+    switch (idVerificationStatus) {
+      case "verified":
+        icon = "verified-tag"
+        break
+      case "processing":
+        icon = "processing-tag"
+        break
+      case "unverified":
+        icon = "unverified-tag"
+        break
+      default:
+        icon = ""
+        break
+    }
+    return icon
+  }
   return (
     <SectionLayout
       title="Verification"
@@ -19,11 +39,27 @@ const Verification = (props: VerificationProps) => {
       containerClassName="w-full"
     >
       <Break />
-      <Input label="Verify Personal phone number" value="*********992" size="large" width={300} />
+      <Input
+        label="Verify Personal phone number"
+        value="*********992"
+        size="large"
+        width={300}
+        suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
+      />
       <div className={styles.change_link}>Change phone number</div>
-      <br />
-      <Input label="Verify Personal phone number" value="*********992" size="large" width={300} />
-      <div className={styles.change_link}>Resend ID Card</div>
+      {isPaidUser && (
+        <React.Fragment>
+          <br />
+          <Input
+            label="Verify Personal phone number"
+            value="ID Card"
+            size="large"
+            width={300}
+            suffix={<Icon icon={idCardStatusIcon()} style={{ width: 70 }} />}
+          />
+          <div className={styles.change_link}>Resend ID Card</div>
+        </React.Fragment>
+      )}
     </SectionLayout>
   )
 }

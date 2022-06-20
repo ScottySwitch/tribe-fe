@@ -34,7 +34,7 @@ const Facilities = (props: FacilitiesProps) => {
           facilities.map((item) => (
             <div key={item.value} className="mt-3 flex items-center w-full md:w-1/2 lg:w-1/3 pr-1">
               <>
-                <Icon icon="dot" /> {item.label}
+                <Icon icon="checked-circle" /> {item.label}
               </>
             </div>
           ))}

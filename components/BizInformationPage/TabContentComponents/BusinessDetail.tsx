@@ -15,7 +15,7 @@ interface BusinessDetailProps {
 }
 
 const BusinessDetail = (props: BusinessDetailProps) => {
-  const { category, formData, submitFormData } = props
+  const { category = Categories.SEE_AND_DO, formData, submitFormData } = props
 
   const renderBusinessDetail = () => {
     let detail
