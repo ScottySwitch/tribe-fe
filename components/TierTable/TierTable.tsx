@@ -272,7 +272,7 @@ const TierTable = ({
   onSetIsPayQuarterly,
   onDirectToVerification,
 }: {
-  isPaid: boolean
+  isPaid?: boolean
   isPayQuarterly: boolean
   onSetIsPayQuarterly: (e: any) => void
   onDirectToVerification?(tier: Tiers): void
