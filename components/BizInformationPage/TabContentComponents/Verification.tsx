@@ -2,18 +2,19 @@ import Break from "components/Break/Break"
 import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import SectionLayout from "components/SectionLayout/SectionLayout"
-import React from "react"
+import { bizInformationDefaultFormData } from "constant"
+import React, { useState } from "react"
 import styles from "./TabContent.module.scss"
 
 interface VerificationProps {
   isPaid: boolean
-  submitFormData?: (form: { [key: string]: any }[]) => void
-  formData?: { [key: string]: any }
 }
 
 const Verification = (props: VerificationProps) => {
-  const { isPaid, formData = {}, submitFormData } = props
+  const { isPaid } = props
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const { idVerificationStatus = "processing" } = formData
+  
   const idCardStatusIcon = () => {
     let icon
     switch (idVerificationStatus) {

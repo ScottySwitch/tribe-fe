@@ -7,20 +7,23 @@ import BusinessDetailEat from "./BusinessDetailCategories/BusinessDetailEat"
 import BusinessDetailSeeAndDo from "./BusinessDetailCategories/BusinessDetailSeeAndDo"
 import BusinessDetailTransport from "./BusinessDetailCategories/BusinessDetailTransport"
 import BusinessDetailStay from "./BusinessDetailCategories/BusinessDetailStay"
+import { useState } from "react"
+import { bizInformationDefaultFormData } from "constant"
 
 interface BusinessDetailProps {
-  category?: any
   isPaid: boolean
-  formData: IAddListingForm
-  submitFormData?: (form: IAddListingForm) => void
 }
 
 const BusinessDetail = (props: BusinessDetailProps) => {
-  const { category = Categories.SEE_AND_DO, formData, submitFormData } = props
+  const { isPaid } = props
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
+  const submitFormData = (values) => {
+    console.log(values)
+  }
 
   const renderBusinessDetail = () => {
     let detail
-    switch (category) {
+    switch (formData.category) {
       case Categories.BUY:
         detail = <BusinessDetailBuy formData={formData} submitFormData={submitFormData} />
         break

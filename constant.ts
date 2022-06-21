@@ -15,6 +15,7 @@ export const fakeSubCateList = [
 ]
 
 export const bizInformationDefaultFormData = {
+  category: Categories.BUY,
   name: "Evertop Hainanese Boneless Chicken",
   description:
     "The first restaurant proprietor is believed to have been one A. Boulanger, a soup vendor, who opened his business in Paris in 1765. The sign above his door advertised restoratives, or restaurants, referring to the soups and broths available within.",
@@ -22,31 +23,36 @@ export const bizInformationDefaultFormData = {
   phone: "+84 823996913",
   productList: [
     {
-      imgUrl: "https://picsum.photos/200/300",
+      id: 123,
+      images: ["https://picsum.photos/200/300"],
       name: "Evertop Hainanese Boneless Chicken...",
       description: "A product description is a form of marketing copy used...",
       price: "$ 37.35",
     },
     {
-      imgUrl: "https://picsum.photos/200/300",
+      id: 1234,
+      images: ["https://picsum.photos/200/300"],
       name: "Evertop Hainanese Boneless Chicken...",
       description: "A product description is a form of marketing copy used...",
       price: "$ 37.35",
     },
     {
-      imgUrl: "https://picsum.photos/200/300",
+      id: 124,
+      images: ["https://picsum.photos/200/300"],
       name: "Evertop Hainanese Boneless Chicken...",
       description: "A product description is a form of marketing copy used...",
       price: "$ 37.35",
     },
     {
-      imgUrl: "https://picsum.photos/200/300",
+      id: 14,
+      images: ["https://picsum.photos/200/300"],
       name: "Evertop Hainanese Boneless Chicken...",
       description: "A product description is a form of marketing copy used...",
       price: "$ 37.35",
     },
     {
-      imgUrl: "https://picsum.photos/200/300",
+      id: 453,
+      images: ["https://picsum.photos/200/300"],
       name: "Evertop Hainanese Boneless Chicken...",
       description: "A product description is a form of marketing copy used...",
       price: "$ 37.35",
@@ -998,3 +1004,23 @@ export const formattedAreaCodes = phoneAreaCodes.map((item) => ({
   label: `${item.label}  ${item.value}`,
   value: item.value,
 }))
+
+export const getAddItemsFields = (category, isEdit?: boolean) => {
+  switch (category) {
+    case Categories.BUY: // Buy
+      return {
+        title: isEdit ? "Edit product" : "Add products",
+        placeholder: ["Product", "describe your product (optional)", "Create products"],
+      }
+    case Categories.EAT: // Eat
+      return {
+        title: isEdit ? "Edit dish" : "Add dishes",
+        placeholder: ["Dish", "describe your dish (optional)", "Create dishes"],
+      }
+    default:
+      return {
+        title: isEdit ? "Edit service" : "Add services",
+        placeholder: ["Service", "describe your service (optional)", "Create services"],
+      }
+  }
+}

@@ -29,7 +29,7 @@ const Upload = (props: UploadProps) => {
     disabled,
     accept = "image/*",
     fileList = [],
-    type = "upload",
+    type = "media",
     isPaid,
   } = props
   console.log(fileList)
@@ -104,15 +104,17 @@ const Upload = (props: UploadProps) => {
           <Input />
         </div>
       ) : (
-        <div className={styles.upgrade_now}>
-          <div className={styles.tips}>
-            <Icon icon="Group-966" color="#653fff" /> Tips
+        type !== "avatar" && (
+          <div className={styles.upgrade_now}>
+            <div className={styles.tips}>
+              <Icon icon="Group-966" color="#653fff" /> Tips
+            </div>
+            <div className={styles.upgrade}>
+              Upgrade to Basic Tier to upload more photos and video
+            </div>
+            <a>Upgrade now</a>
           </div>
-          <div className={styles.upgrade}>
-            Upgrade to Basic Tier to upload more photos and video
-          </div>
-          <a>Upgrade now</a>
-        </div>
+        )
       )}
     </div>
   )

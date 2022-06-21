@@ -1,43 +1,128 @@
 import Break from "components/Break/Break"
 import Button from "components/Button/Button"
+import Icon from "components/Icon/Icon"
 import InforCard from "components/InforCard/InforCard"
+import Popover from "components/Popover/Popover"
 import SectionLayout from "components/SectionLayout/SectionLayout"
+import { bizInformationDefaultFormData, getAddItemsFields } from "constant"
+import React, { useState } from "react"
+import { randomId } from "utils"
+import AddItems from "./AddItems/AddItems"
 import styles from "./TabContent.module.scss"
 
 interface ProductListingProps {
-  submitFormData?: (form: { [key: string]: any }) => void
-  formData?: { [key: string]: any }
+  isPaid: boolean
+}
+
+enum ProductListingScreens {
+  LIST = "list",
+  ADD = "add",
+  EDIT = "edit",
 }
 
 const ProductListing = (props: ProductListingProps) => {
-  const { formData = {}, submitFormData } = props
+  const { isPaid } = props
+  const [formData, setFormData] = useState(bizInformationDefaultFormData)
+  const [selectedItem, setSelectedItem] = useState<any[]>([])
+  const [screen, setScreen] = useState<ProductListingScreens>(ProductListingScreens.LIST)
+  const { productList = [] } = formData
+
+  const submitProduct = (e) => {
+    console.log(e)
+  }
+
+  const handleDelete = (e) => {
+    console.log(e)
+  }
+
+  const PopoverContent = ({ item }) => (
+    <React.Fragment>
+      <div
+        onClick={() => {
+          setSelectedItem([item])
+          setScreen(ProductListingScreens.EDIT)
+        }}
+      >
+        Edit
+      </div>
+      <div className={styles.delete_action} onClick={() => handleDelete(item.name)}>
+        Delete
+      </div>
+    </React.Fragment>
+  )
 
   return (
-    <SectionLayout
-      title="Product listing"
-      className={styles.product_listing}
-      containerClassName="w-full"
-    >
-      <div className={styles.tips_button}>
-        <div className={styles.tips}>
-          <strong>Tips:</strong> Click the pin icon to put 5 products on the top.
+    <React.Fragment>
+      <SectionLayout
+        title="Product listing"
+        className={styles.product_listing}
+        containerClassName="w-full"
+        show={screen === ProductListingScreens.LIST}
+      >
+        <div className={styles.tips_button}>
+          <div className={styles.tips}>
+            <strong>Tips:</strong> Click the pin icon to put 5 products on the top.
+          </div>
+          <div className="flex gap-2">
+            {!isPaid && productList.length > 2 && (
+              <Button
+                prefix={<Icon icon="star-2" color="#653fff" />}
+                variant="secondary"
+                text="Update to use full feature"
+                width="fit-content"
+                onClick={() => null}
+              />
+            )}
+            <Button
+              disabled={!isPaid && Array.isArray(productList) && productList.length > 2}
+              text="Add new"
+              width={200}
+              onClick={() => {
+                setSelectedItem([{}])
+                setScreen(ProductListingScreens.ADD)
+              }}
+            />
+          </div>
         </div>
-        <Button text="Edit products" width={200} />
-      </div>
-      <Break />
-      <div className={styles.product_container}>
-        {formData.productList.map((item) => (
-          <InforCard
-            key={item.id}
-            imgUrl={item.imgUrl || "https://picsum.photos/200/300"}
-            title={item.name}
-            price={item.price}
-            description={item.description}
-          />
-        ))}
-      </div>
-      <Break />
-    </SectionLayout>
+        <Break />
+        <div className={styles.product_container}>
+          {productList.map((item) => {
+            return (
+              <div key={item.id} className={styles.info_card_container}>
+                <InforCard
+                  imgUrl={item.images[0] || "https://picsum.photos/200/300"}
+                  title={item.name}
+                  price={item.price}
+                  description={item.description}
+                />
+                <div className={styles.toolbar}>
+                  <Popover content={<PopoverContent item={item} />}>
+                    <Icon icon="toolbar" color="white" />
+                  </Popover>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        <Break />
+      </SectionLayout>
+      <SectionLayout
+        show={screen !== ProductListingScreens.LIST}
+        title={getAddItemsFields(formData.category, screen === ProductListingScreens.EDIT).title}
+      >
+        <AddItems
+          isPaid={isPaid}
+          isMultiple={false}
+          itemList={selectedItem}
+          onSubmit={(e) => {
+            setScreen(ProductListingScreens.LIST)
+            submitProduct(e)
+          }}
+          onCancel={() => setScreen(ProductListingScreens.LIST)}
+          placeholders={getAddItemsFields(formData.category).placeholder}
+        />
+      </SectionLayout>
+    </React.Fragment>
   )
 }
 

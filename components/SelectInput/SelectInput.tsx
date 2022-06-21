@@ -70,19 +70,6 @@ const SelectInput = (props: SelectInputProps) => {
     onChange?.({ ...localValue, [type]: e })
   }
 
-  const Select = () => (
-    <SelectField
-      isSearchable={isSearchable}
-      selectWidth={selectWidth}
-      menuWidth={menuWidth}
-      options={options}
-      placeholder={selectPlaceholder}
-      shouldControlShowValue={shouldControlShowValue}
-      onChange={(e) => handleChange("select", e)}
-      defaultValue={selectDefaultValue}
-    />
-  )
-
   return (
     <div className={selectInputWrapperClassName} style={{ width }}>
       <div className={styles.container}>

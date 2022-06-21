@@ -30,73 +30,28 @@ const BizInformation = () => {
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
-  const handleUpdateDeals = (e) => {
-    console.log(e)
-  }
-  const handleUpdateBusinessInformation = (e) => {
-    console.log(e)
-  }
-  const handleUpdateBusinessDetail = (e) => {
-    console.log(e)
-  }
-  const handleUpdateProductList = (e) => {
-    console.log(e)
-  }
-  const handleUpdatePaymentSet = (e) => {
-    console.log(e)
-  }
-  const handleUpdateShowSocialMedia = (e) => {
-    console.log(e)
-  }
-
   const tabContent = () => {
     switch (selectedTab) {
       case InformationList.BUSINESS_INFORMATION:
-        return (
-          <BusinessInformation
-            isPaid={isPaid}
-            formData={formData}
-            updateShowSocialMedia={handleUpdateShowSocialMedia}
-            submitFormData={handleUpdateBusinessInformation}
-          />
-        )
+        return <BusinessInformation isPaid={isPaid} />
       case InformationList.BUSINESS_DETAIL:
-        return (
-          <BusinessDetail
-            isPaid={isPaid}
-            category={formData.category}
-            formData={formData}
-            submitFormData={handleUpdateBusinessDetail}
-          />
-        )
+        return <BusinessDetail isPaid={isPaid} />
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing formData={formData} submitFormData={handleUpdateProductList} />
+        return <ProductListing isPaid={isPaid} />
       case InformationList.PHOTOS_VIDEOS:
-        return (
-          <PhotosVideos
-            isPaid={isPaid}
-            formData={formData}
-            submitFormData={handleUpdateProductList}
-          />
-        )
+        return <PhotosVideos isPaid={isPaid} />
       case InformationList.MANAGE_DEALS:
-        return (
-          <ManageDeals isPaid={isPaid} formData={formData} submitFormData={handleUpdateDeals} />
-        )
+        return <ManageDeals isPaid={isPaid} />
       case InformationList.ANALYTICS:
-        return <div>analytics</div>
+        return (
+          <SectionLayout title="Analytics" className="px-[30px]" containerClassName="w-full">
+            <div />
+          </SectionLayout>
+        )
       case InformationList.CHANGE_ACCOUNT_TIER:
-        return (
-          <TierTable
-            isPaid={isPaid}
-            isPayQuarterly={formData.isPayQuarterly}
-            onSetIsPayQuarterly={handleUpdatePaymentSet}
-          />
-        )
+        return <TierTable isPaid={isPaid} />
       case InformationList.VERIFICATION:
-        return (
-          <Verification isPaid={isPaid} formData={formData} submitFormData={handleUpdateDeals} />
-        )
+        return <Verification isPaid={isPaid} />
 
       default:
         return <div />

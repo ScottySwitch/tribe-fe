@@ -6,6 +6,7 @@ import Popover from "components/Popover/Popover"
 import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Table, { IColumn } from "components/Table/Table"
+import { bizInformationDefaultFormData } from "constant"
 import React, { useState } from "react"
 import AddDeals from "./AddDeal/AddDeals"
 
@@ -13,13 +14,11 @@ import styles from "./TabContent.module.scss"
 
 interface ManageDealsProps {
   isPaid: boolean
-  submitFormData?: (form: { [key: string]: any }[]) => void
-  formData?: { [key: string]: any }
 }
 
 const ManageDeals = (props: ManageDealsProps) => {
-  const { formData = {}, submitFormData } = props
-  const [dealList, setDealList] = useState<{ [key: string]: any }[]>([{}])
+  const { isPaid } = props
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [isEdit, setIsEdit] = useState(false)
 
   const columns: IColumn[] = [
@@ -106,11 +105,7 @@ const ManageDeals = (props: ManageDealsProps) => {
         </Question>
       </SectionLayout>
       <SectionLayout show={isEdit} title="Add deals">
-        <AddDeals
-          onSetDealList={(dealList) => setDealList(dealList)}
-          dealList={dealList}
-          onSetScreen={() => setIsEdit(false)}
-        />
+        <AddDeals dealList={formData} onCancel={() => null} onSubmit={() => null} />
       </SectionLayout>
     </React.Fragment>
   )

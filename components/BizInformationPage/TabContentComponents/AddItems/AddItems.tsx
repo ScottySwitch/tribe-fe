@@ -10,29 +10,32 @@ import { getIndex, randomId } from "utils"
 import styles from "./AddItems.module.scss"
 
 interface AddItemsProps {
-  itemList: { [key: string]: any }[]
+  isPaid?: boolean
+  isMultiple?: boolean
+  itemList?: { [key: string]: any }[]
   placeholders: string[]
-  onSetItemList: (list: { [key: string]: any }[]) => void
-  onSetScreen: (e: ListingHomePageScreens) => void
+  onSubmit: (list: { [key: string]: any }[]) => void
+  onCancel: () => void
 }
 
 const AddItems = (props: AddItemsProps) => {
-  const { itemList, placeholders, onSetItemList, onSetScreen } = props
+  const { itemList = [], isPaid, isMultiple = true, placeholders, onCancel, onSubmit } = props
+  const [localItemList, setLocalItemList] = useState(itemList || [])
 
   const handleRemoveItem = (id: number) => {
-    const newArray = [...itemList].filter((item) => item.id !== id)
-    onSetItemList(newArray)
+    const newArray = [...localItemList].filter((item) => item.id !== id)
+    setLocalItemList(newArray)
   }
 
   const handleChangeItem = (id: number, type: string, value: string | number | string[]) => {
-    const index = getIndex(id, itemList)
-    const newArray = [...itemList]
+    const index = getIndex(id, localItemList)
+    const newArray = [...localItemList]
     newArray[index][type] = value
-    onSetItemList(newArray)
+    setLocalItemList(newArray)
   }
 
   const handleAddItem = () => {
-    onSetItemList([...itemList, { id: randomId() }])
+    setLocalItemList([...localItemList, { id: randomId() }])
   }
 
   const AddItemButton = () => (
@@ -52,50 +55,59 @@ const AddItems = (props: AddItemsProps) => {
       text="Cancel"
       width={50}
       size="small"
-      onClick={() => onSetScreen(ListingHomePageScreens.HOME)}
+      onClick={() => {
+        setLocalItemList(itemList)
+        onCancel()
+      }}
     />
   )
 
   return (
-    <div className=" w-full sm:w-3/4 lg:w-1/2">
+    <div>
       <Break />
-      {Array.isArray(itemList) && itemList.length ? (
-        itemList.map((item) => (
-          <div key={item.id} className={styles.add_items_container}>
-            <div className={styles.break} />
-            <div className={styles.header}>
-              <p className="text-left">Add images</p>
-              <div className={styles.close} onClick={() => handleRemoveItem(item.id)}>
-                <Icon icon="cancel" />
+      {Array.isArray(itemList) && itemList.length
+        ? itemList.map((item) => (
+            <div key={item.id} className={styles.add_items_container}>
+              <div className={styles.break} />
+              <div className={styles.header}>
+                <p className="text-left">Add images</p>
+                {isMultiple && (
+                  <div className={styles.close} onClick={() => handleRemoveItem(item.id)}>
+                    <Icon icon="cancel" />
+                  </div>
+                )}
               </div>
+              <Upload
+                isPaid={isPaid}
+                multiple
+                fileList={item.images}
+                centerIcon={<Icon icon="plus" size={20} />}
+                onChange={(e) => handleChangeItem(item.id, "imgUrl", e[0])}
+              />
+              <Input
+                value={item.name}
+                placeholder={placeholders[0]}
+                onChange={(e: any) => handleChangeItem(item.id, "name", e.target.value)}
+              />
+              <Input
+                value={item.description}
+                placeholder={placeholders[1]}
+                onChange={(e: any) => handleChangeItem(item.id, "description", e.target.value)}
+              />
+              <Input
+                value={item.price}
+                placeholder="Price"
+                onChange={(e: any) => handleChangeItem(item.id, "price", e.target.value)}
+              />
+              <Input
+                value={item.tags}
+                placeholder="Tags"
+                onChange={(e: any) => handleChangeItem(item.id, "tags", e.target.value)}
+              />
+              {isMultiple && <AddItemButton />}
             </div>
-            <Upload
-              type="media"
-              centerIcon={<Icon icon="plus" size={20} />}
-              onChange={(e) => handleChangeItem(item.id, "imgUrl", e[0])}
-            />
-            <Input
-              placeholder={placeholders[0]}
-              onChange={(e: any) => handleChangeItem(item.id, "name", e.target.value)}
-            />
-            <Input
-              placeholder={placeholders[1]}
-              onChange={(e: any) => handleChangeItem(item.id, "description", e.target.value)}
-            />
-            <Input
-              placeholder="Price"
-              onChange={(e: any) => handleChangeItem(item.id, "price", e.target.value)}
-            />
-            <Input
-              placeholder="Tags"
-              onChange={(e: any) => handleChangeItem(item.id, "tags", e.target.value)}
-            />
-            <AddItemButton />
-          </div>
-        ))
-      ) : (
-        <AddItemButton />
-      )}
+          ))
+        : isMultiple && <AddItemButton />}
       <Break />
       <div className="flex gap-5">
         <CancelButton />
@@ -103,7 +115,7 @@ const AddItems = (props: AddItemsProps) => {
           text={placeholders[2]}
           width={280}
           size="small"
-          onClick={() => onSetScreen(ListingHomePageScreens.HOME)}
+          onClick={() => onSubmit(localItemList)}
         />
       </div>
     </div>
