@@ -11,6 +11,8 @@ import Modal, { ModalHeader } from "components/Modal/Modal"
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
 import AuthApi from "../../services/auth"
+import SelectInput from "components/SelectInput/SelectInput"
+import { phoneAreaCodes } from "constant"
 
 export enum LoginMethod {
   PHONE = "phone",
@@ -26,22 +28,27 @@ const PasswordEye = (props: { onClick: MouseEventHandler<HTMLDivElement> }) => {
   )
 }
 
+const formattedAreaCodes = phoneAreaCodes.map((item) => ({
+  label: `${item.label}  ${item.value}`,
+  value: item.value,
+}))
+
 const tabList = [
   { label: "Phone number", value: LoginMethod.PHONE },
   { label: "Email address", value: LoginMethod.EMAIL },
 ]
 
 const SignupPage = () => {
-  const [method, setMethod] = useState(LoginMethod.EMAIL)
+  const [method, setMethod] = useState(LoginMethod.PHONE)
   const [showPassword, setShowPassword] = useState(false)
+  const [phoneNumber, setPhoneNumber] = useState("")
   const router = useRouter()
 
-  const [valuePassword, setValuePassword] = useState('');
+  const [valuePassword, setValuePassword] = useState("")
 
   const handleSubmit = async (event: any) => {
     event.preventDefault()
-    const otpReceiver =
-      method === LoginMethod.EMAIL ? event.target.email.value : event.target.phone.value
+    const otpReceiver = method === LoginMethod.EMAIL ? event.target.email.value : phoneNumber
     const formData = {
       method: method,
       [method]: otpReceiver,
@@ -53,13 +60,13 @@ const SignupPage = () => {
       try {
         const result = await AuthApi.signUpByEmail({
           email: formData.email,
-          password: valuePassword
-        });
-        const {jwt} = result.data;
+          password: valuePassword,
+        })
+        const { jwt } = result.data
         if (jwt) {
           localStorage.setItem("token", jwt)
           // OTP flow
-          await AuthApi.otpEmailGenerate();
+          await AuthApi.otpEmailGenerate()
           router.push({
             pathname: "/signup/otp",
             //help otp page detect method and otp receiver
@@ -71,25 +78,27 @@ const SignupPage = () => {
         }
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(err.response.data.error);
+        console.log(err.response.data.error)
       }
-    }
-    else {
+    } else {
       try {
-        const date = new Date().getTime();
-        const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 2);
-        const emailFake = date + '_' + randomString + '@tribes.com';
-        console.log(emailFake);
+        const date = new Date().getTime()
+        const randomString = Math.random()
+          .toString(36)
+          .replace(/[^a-z]+/g, "")
+          .substr(0, 2)
+        const emailFake = date + "_" + randomString + "@tribes.com"
+        console.log(emailFake)
         const result = await AuthApi.signUpByPhone({
           email: emailFake,
           phone_number: formData.phone,
-          password: valuePassword
-        });
-        const {jwt} = result.data;
+          password: valuePassword,
+        })
+        const { jwt } = result.data
         if (jwt) {
           localStorage.setItem("token", jwt)
           // OTP flow
-          await AuthApi.otpPhoneGenerate(formData.phone);
+          await AuthApi.otpPhoneGenerate(formData.phone)
           router.push({
             pathname: "/signup/otp",
             //help otp page detect method and otp receiver
@@ -101,7 +110,7 @@ const SignupPage = () => {
         }
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(err.response.data.error);
+        console.log(err.response.data.error)
       }
     }
   }
@@ -124,7 +133,15 @@ const SignupPage = () => {
         </div>
         <form onSubmit={handleSubmit} className={styles.body}>
           {method === LoginMethod.PHONE ? (
-            <Input size="large" placeholder="Phone number" name="phone" />
+            <SelectInput
+              label="Phone number"
+              size="large"
+              placeholder="Phone number"
+              selectPlaceholder="Area code"
+              options={formattedAreaCodes}
+              shouldControlShowValue
+              onChange={(e) => setPhoneNumber(`${e.select.value}${e.input}`)}
+            />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />
           )}
