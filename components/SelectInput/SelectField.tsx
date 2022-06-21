@@ -51,9 +51,8 @@ const SelectField = (props: SelectProps) => {
   const customStyles: StylesConfig = {
     container: (styles) => ({
       ...styles,
-      paddingRight: 10,
       width: selectWidth,
-      borderRight: "1px solid #C6C8D2",
+      boxSizing: "border-box",
     }),
     control: (styles) => ({
       ...styles,

@@ -8,13 +8,12 @@ import Heading from "components/Heading/Heading"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import {
   bizInformationDefaultFormData,
-  defaultAddlistingForm,
-  fakeAddlistingForm,
-  informationList,
   loginInforItem,
   user,
   userId,
   token,
+  paidInformationList,
+  freeInformationList,
 } from "constant"
 import { Categories, InformationList, Tiers } from "enums"
 
@@ -27,6 +26,8 @@ import PhotosVideos from "components/BizInformationPage/TabContentComponents/Pho
 
 const BizInformation = () => {
   const [isPaid, setIsPaid] = useState(false)
+  const informationList = isPaid ? paidInformationList : freeInformationList
+
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
@@ -44,12 +45,6 @@ const BizInformation = () => {
   }
   const handleUpdatePaymentSet = (e) => {
     console.log(e)
-  }
-  const handleSelectTab = (tab) => {
-    if (!isPaid && tab.paid) {
-      return
-    }
-    setSelectedTab(tab.label)
   }
 
   const tabContent = () => {
@@ -126,7 +121,7 @@ const BizInformation = () => {
               <div
                 className="flex gap-3 justify-between"
                 key={item.label}
-                onClick={() => handleSelectTab(item)}
+                onClick={() => setSelectedTab(item.label)}
               >
                 <Heading
                   icon={item.icon}
@@ -134,7 +129,7 @@ const BizInformation = () => {
                   text={item.label}
                   selected={selectedTab === item.label}
                 />
-                {!isPaid && item.paid && <Icon icon="star-2" color="#653fff" />}
+                {item.star && <Icon icon="star-2" color="#653fff" />}
               </div>
             ))}
             <div className="flex gap-3 justify-between" onClick={handleLogout}>

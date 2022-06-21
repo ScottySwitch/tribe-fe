@@ -135,7 +135,6 @@ const SignupPage = () => {
           {method === LoginMethod.PHONE ? (
             <SelectInput
               label="Phone number"
-              size="large"
               placeholder="Phone number"
               selectPlaceholder="Area code"
               options={formattedAreaCodes}

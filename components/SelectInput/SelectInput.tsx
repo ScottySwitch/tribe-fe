@@ -21,6 +21,7 @@ export interface SelectInputProps
   shouldControlShowValue?: boolean
   selectWidth?: string | number
   isSearchable?: boolean
+  selectPosition?: "prefix" | "suffix"
   variant?: "filled" | "outlined"
   size?: "small" | "medium" | "large"
   onChange?: ({ select, input }: { select: IOption; input: string }) => void
@@ -38,6 +39,7 @@ const SelectInput = (props: SelectInputProps) => {
     id,
     width,
     form,
+    selectPosition = "prefix",
     disabled,
     register,
     menuWidth,
@@ -51,6 +53,7 @@ const SelectInput = (props: SelectInputProps) => {
   } = props
 
   const selectInputWrapperClassName = classNames(className, styles.select_input, {
+    [styles.select_suffix]: selectPosition === "suffix",
     [styles.filled]: variant === "filled",
     [styles.disabled]: disabled,
     [styles.large]: size === "large",
@@ -65,27 +68,32 @@ const SelectInput = (props: SelectInputProps) => {
     onChange?.({ ...localValue, [type]: e })
   }
 
+  const Select = () => (
+    <SelectField
+      isSearchable={isSearchable}
+      selectWidth={selectWidth}
+      menuWidth={menuWidth}
+      options={options}
+      placeholder={selectPlaceholder}
+      shouldControlShowValue={shouldControlShowValue}
+      onChange={(e) => handleChange("select", e)}
+    />
+  )
+
   return (
     <div className={selectInputWrapperClassName} style={{ width }}>
       <div className={styles.container}>
         {label && <label htmlFor={id}>{label}</label>}
         <div className={styles.content}>
           {prefix && <div>{prefix}</div>}
-          <SelectField
-            isSearchable={isSearchable}
-            selectWidth={selectWidth}
-            menuWidth={menuWidth}
-            options={options}
-            placeholder={selectPlaceholder}
-            shouldControlShowValue={shouldControlShowValue}
-            onChange={(e) => handleChange("select", e)}
-          />
+          {selectPosition === "prefix" && <Select />}
           <input
             disabled={disabled}
             id={id}
             onChange={(e) => handleChange("input", e.target.value)}
             {...rest}
           />
+          {selectPosition === "suffix" && <Select />}
           {suffix && <div>{suffix}</div>}
         </div>
       </div>

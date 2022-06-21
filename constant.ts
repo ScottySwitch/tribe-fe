@@ -225,14 +225,24 @@ export const eatTabList = [
   { text: "Deals", value: ListingTabs.DEAL },
 ]
 
-export const informationList = [
+export const paidInformationList = [
   { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
   { label: InformationList.BUSINESS_DETAIL, icon: "business" },
   { label: InformationList.PHOTOS_VIDEOS, icon: "camera-color" },
-  { label: InformationList.PRODUCT_LISTING, icon: "buy-color", paid: true },
-  { label: InformationList.MANAGE_DEALS, icon: "deal", paid: true },
-  { label: InformationList.ANALYTICS, icon: "chart", paid: true },
+  { label: InformationList.PRODUCT_LISTING, icon: "buy-color", star: true },
+  { label: InformationList.MANAGE_DEALS, icon: "deal", star: true },
+  { label: InformationList.ANALYTICS, icon: "chart", star: true },
   { label: InformationList.CHANGE_ACCOUNT_TIER, icon: "reward-color" },
+  { label: InformationList.VERIFICATION, icon: "like-color-2" },
+]
+
+export const freeInformationList = [
+  { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
+  { label: InformationList.BUSINESS_DETAIL, icon: "business" },
+  { label: InformationList.PHOTOS_VIDEOS, icon: "camera-color" },
+  { label: InformationList.PRODUCT_LISTING, icon: "buy-color" },
+  { label: InformationList.ANALYTICS, icon: "chart" },
+  { label: InformationList.CHANGE_ACCOUNT_TIER, icon: "reward-color", star: true },
   { label: InformationList.VERIFICATION, icon: "like-color-2" },
 ]
 
