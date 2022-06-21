@@ -24,13 +24,13 @@ const BusinessDetailTransport = (props: BusinessDetailProps) => {
   const [isEdit, setIsEdit] = useState(false)
   return (
     <React.Fragment>
-      <SectionLayout title="Business detail" show={!isEdit}>
+      <SectionLayout title="Business detail" show={!isEdit} containerClassName="w-full px-[30px]">
         <Break />
         <Question
           question="What is the category best associated with this service?"
           childrenClassName="flex"
         >
-          <Badge>{categoryKind}</Badge>
+          {categoryKind && <Badge>{categoryKind}</Badge>}
         </Question>
         <Question
           question="What areas best associated with this service?"
@@ -44,7 +44,7 @@ const BusinessDetailTransport = (props: BusinessDetailProps) => {
           <PreviewValue valueKey="openHours" value={openHours} />
         </Question>
         <Question question="What’s the average price range of a meal?">
-          {`${currency}${minPrice} - ${currency}${maxPrice}`}
+          {currency && minPrice && maxPrice && `${currency}${minPrice} - ${currency}${maxPrice}`}
         </Question>
         <Break />
         <div>

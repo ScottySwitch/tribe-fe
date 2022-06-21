@@ -20,7 +20,7 @@ const Heading = (props: HeadingProps) => {
   })
   return (
     <div className={headingCLassName} onClick={onClick}>
-      {selected && <Icon icon={icon || ""} />}
+      <Icon icon={icon || ""} className={styles.icon} />
       {text}
     </div>
   )

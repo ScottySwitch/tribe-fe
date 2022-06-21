@@ -84,6 +84,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             ? undefined
             : "After you complete this form, you will be able to make changes before submitting."
         }
+        containerClassName={isEdit ? "w-full px-[30px]" : ""}
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>

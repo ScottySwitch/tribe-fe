@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation"
 import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals"
@@ -8,41 +8,45 @@ import Heading from "components/Heading/Heading"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import {
   bizInformationDefaultFormData,
-  defaultAddlistingForm,
-  fakeAddlistingForm,
-  informationList,
+  loginInforItem,
+  user,
+  userId,
+  token,
+  paidInformationList,
+  freeInformationList,
 } from "constant"
 import { Categories, InformationList, Tiers } from "enums"
 
 import styles from "styles/BizInformation.module.scss"
 import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail"
-import { IAddListingForm } from "pages/add-listing"
 import TierTable from "components/TierTable/TierTable"
+import Verification from "components/BizInformationPage/TabContentComponents/Verification"
+import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos"
 
 const BizInformation = () => {
-  const [tier, setTier] = useState<Tiers>(Tiers.BASIC)
+  const [isPaid, setIsPaid] = useState(true)
+  const informationList = isPaid ? paidInformationList : freeInformationList
+
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
-  const submitFormData = (e) => {
+  const handleUpdateDeals = (e) => {
     console.log(e)
   }
   const handleUpdateBusinessInformation = (e) => {
     console.log(e)
   }
+  const handleUpdateBusinessDetail = (e) => {
+    console.log(e)
+  }
   const handleUpdateProductList = (e) => {
     console.log(e)
   }
-
-  const handleSelectTab = (tab) => {
-    if (tier === Tiers.FREE && tab.paid) {
-      return
-    }
-    setSelectedTab(tab.label)
+  const handleUpdatePaymentSet = (e) => {
+    console.log(e)
   }
-
-  const handleChangeTier = (isPayQuarterly: boolean) => {
-    console.log("isPayQuarterly", isPayQuarterly)
+  const handleUpdateShowSocialMedia = (e) => {
+    console.log(e)
   }
 
   const tabContent = () => {
@@ -50,37 +54,61 @@ const BizInformation = () => {
       case InformationList.BUSINESS_INFORMATION:
         return (
           <BusinessInformation
+            isPaid={isPaid}
             formData={formData}
+            updateShowSocialMedia={handleUpdateShowSocialMedia}
             submitFormData={handleUpdateBusinessInformation}
           />
         )
       case InformationList.BUSINESS_DETAIL:
         return (
           <BusinessDetail
-            category={Categories.SEE_AND_DO}
+            isPaid={isPaid}
+            category={formData.category}
             formData={formData}
-            submitFormData={submitFormData}
+            submitFormData={handleUpdateBusinessDetail}
           />
         )
       case InformationList.PRODUCT_LISTING:
         return <ProductListing formData={formData} submitFormData={handleUpdateProductList} />
       case InformationList.PHOTOS_VIDEOS:
-        return <div>photo</div>
+        return (
+          <PhotosVideos
+            isPaid={isPaid}
+            formData={formData}
+            submitFormData={handleUpdateProductList}
+          />
+        )
       case InformationList.MANAGE_DEALS:
-        return <ManageDeals formData={formData} submitFormData={submitFormData} />
+        return (
+          <ManageDeals isPaid={isPaid} formData={formData} submitFormData={handleUpdateDeals} />
+        )
       case InformationList.ANALYTICS:
         return <div>analytics</div>
       case InformationList.CHANGE_ACCOUNT_TIER:
         return (
-          <TierTable isPayQuarterly={formData.isActive} onSetIsPayQuarterly={handleChangeTier} />
+          <TierTable
+            isPaid={isPaid}
+            isPayQuarterly={formData.isPayQuarterly}
+            onSetIsPayQuarterly={handleUpdatePaymentSet}
+          />
         )
       case InformationList.VERIFICATION:
-        return <div>verify</div>
-      case InformationList.LOGOUT:
-        return <div>logout</div>
+        return (
+          <Verification isPaid={isPaid} formData={formData} submitFormData={handleUpdateDeals} />
+        )
+
       default:
         return <div />
     }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem(loginInforItem)
+    localStorage.removeItem(user)
+    localStorage.removeItem(userId)
+    localStorage.removeItem(token)
+    window.location.href = "/"
   }
 
   return (
@@ -93,17 +121,23 @@ const BizInformation = () => {
           </div>
           <div className={styles.left_col_bottom}>
             {informationList.map((item) => (
-              <div className="flex gap-3 justify-between" key={item.label}>
+              <div
+                className="flex gap-3 justify-between"
+                key={item.label}
+                onClick={() => setSelectedTab(item.label)}
+              >
                 <Heading
                   icon={item.icon}
                   type="tab"
                   text={item.label}
                   selected={selectedTab === item.label}
-                  onClick={() => handleSelectTab(item)}
                 />
-                {tier === Tiers.FREE && item.paid && <Icon icon="red-star" />}
+                {item.star && <Icon icon="star-2" color="#653fff" />}
               </div>
             ))}
+            <div className="flex gap-3 justify-between" onClick={handleLogout}>
+              <Heading icon="logout" type="tab" text="Log out" selected={false} />
+            </div>
           </div>
         </div>
         <div className={styles.right_col}>{tabContent()}</div>

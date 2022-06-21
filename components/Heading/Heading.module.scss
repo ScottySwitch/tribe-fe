@@ -6,6 +6,7 @@
   align-items: center;
   gap: 4px;
   transition: all 0.5s;
+  cursor: pointer;
 
   &::before {
     content: "";
@@ -27,12 +28,28 @@
 }
 
 .tab {
-  &::before {
+  .icon {
+    max-width: 100px;
+    transition: 0.5s all;
   }
+
   &.un_selected {
     font-weight: $fw-light;
+
+    .icon {
+      max-width: 0;
+    }
     &::before {
       height: 0;
+    }
+  }
+
+  &:hover {
+    font-weight: $fw-bold;
+    color: $bg-700;
+    &::before {
+      height: 23px;
+      background-color: $primary-300;
     }
   }
 }

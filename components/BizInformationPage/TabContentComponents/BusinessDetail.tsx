@@ -10,12 +10,13 @@ import BusinessDetailStay from "./BusinessDetailCategories/BusinessDetailStay"
 
 interface BusinessDetailProps {
   category?: any
+  isPaid: boolean
   formData: IAddListingForm
   submitFormData?: (form: IAddListingForm) => void
 }
 
 const BusinessDetail = (props: BusinessDetailProps) => {
-  const { category, formData, submitFormData } = props
+  const { category = Categories.SEE_AND_DO, formData, submitFormData } = props
 
   const renderBusinessDetail = () => {
     let detail

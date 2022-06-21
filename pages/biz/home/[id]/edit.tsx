@@ -162,9 +162,9 @@ const EditListingHomepage = (context) => {
             centerIcon={<CenterIcon />}
             multiple={true}
             onChange={handleChangeImages}
-            isBanner={true}
-            isPaid={isPaid}
-            fileList={listingImages != null ? listingImages : []}
+            type="banner"
+            isPaid
+            fileList={listingImages}
           />
           <div className={styles.breadcrumbs}>
             Home <Icon icon="carret-right" size={14} color="#7F859F" />
