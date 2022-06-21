@@ -81,7 +81,7 @@ const dummyBanner = [
   "https://picsum.photos/1185/255/"
 ]
 
-const Promotions = () => {
+const PromotionsPage = () => {
   return (
     <div className={styles.wrapper_promotions}>
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}>
@@ -324,4 +324,4 @@ const Promotions = () => {
   )
 }
 
-export default Promotions
+export default PromotionsPage
