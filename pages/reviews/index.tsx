@@ -1,8 +1,12 @@
 import { randomId } from "utils"
+import { useState } from "react"
+import Image from "next/image"
+import SectionLayout from "components/SectionLayout/SectionLayout"
+import ReviewSearchBox from "components/ReviewsPage/ReviewSearchBox/ReviewSearchBox"
 import ReviewCard from "components/ReviewsPage/ReviewCard/ReviewCard"
 import TopSearches from "components/ReviewsPage/TopSearches/TopSearches"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import Image from "next/image"
+import ModalReviewSuccess from "components/ReviewsPage/ModalReviewSuccess/ModalReviewSuccess"
+import ModalReviewFail from "components/ReviewsPage/ModalReviewFail/ModalReviewFail"
 import styles from "styles/Reviews.module.scss"
 
 const dummyReviews = [
@@ -11,7 +15,7 @@ const dummyReviews = [
     title: "Evertop Hainanese Boneless Chicken",
     imgUrl: "https://picsum.photos/300/600",
     isVerified: true,
-    rateNumber: 3,
+    rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466"
   },
   {
@@ -19,7 +23,7 @@ const dummyReviews = [
     title: "Evertop Hainanese Boneless Chicken",
     imgUrl: "https://picsum.photos/300/600",
     isVerified: true,
-    rateNumber: 3,
+    rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466"
   },
   {
@@ -27,7 +31,7 @@ const dummyReviews = [
     title: "Evertop Hainanese Boneless Chicken",
     imgUrl: "https://picsum.photos/300/600",
     isVerified: true,
-    rateNumber: 3,
+    rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466"
   },
   {
@@ -35,7 +39,7 @@ const dummyReviews = [
     title: "Evertop Hainanese Boneless Chicken",
     imgUrl: "https://picsum.photos/300/600",
     isVerified: true,
-    rateNumber: 3,
+    rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466"
   },
   {
@@ -43,7 +47,7 @@ const dummyReviews = [
     title: "Evertop Hainanese Boneless Chicken",
     imgUrl: "https://picsum.photos/300/600",
     isVerified: true,
-    rateNumber: 3,
+    rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466"
   }
 ]
@@ -56,9 +60,25 @@ const dummyKeywords = [
 ]
 
 const ReviewsPage = () => {
+  const [isModalSuccess, setIsModalSuccess] = useState<boolean>(false)
+  const [isModalFail, setIsModalFail] = useState<boolean>(false)
+
+  const handleCloseModal = () => {
+    setIsModalSuccess(false)
+    setIsModalFail(false)
+    if (isModalSuccess) {
+      
+    }
+  }
+  
+  const handleSubmit = () => {
+    setIsModalSuccess(true)
+    // setIsModalFail(true)
+  }
+
   return (
-    <div className="wrapper-reviews">
-      <div>
+    <div className={`${styles.review}`}>
+      <div className="relative pb-6 bg-white">
         <Image
           src="https://picsum.photos/1440"
           width="100%"
@@ -66,6 +86,9 @@ const ReviewsPage = () => {
           layout="responsive"
           alt=""
         />
+        <SectionLayout className={styles.section_review_search_box} childrenClassName="h-full" containerClassName="h-full">
+          <ReviewSearchBox />
+        </SectionLayout>
       </div>
 
       <SectionLayout childrenClassName={styles.section_children_reviews}>
@@ -82,12 +105,13 @@ const ReviewsPage = () => {
                   isVerified={review.isVerified}
                   rateNumber={review.rateNumber}
                   location={review.location}
+                  onSubmit={handleSubmit}
                 />
               ))
             }
           </div>
         </div>
-        <div className={styles.advertisement}>
+        <div className={`${styles.advertisement} mt-8`}>
           <Image
             src="https://picsum.photos/300/600"
             height={600}
@@ -100,6 +124,9 @@ const ReviewsPage = () => {
       <SectionLayout>
         <TopSearches keywords={dummyKeywords}/>
       </SectionLayout>
+
+      <ModalReviewSuccess visible={isModalSuccess} onClose={handleCloseModal} />
+      <ModalReviewFail visible={isModalFail} onClose={handleCloseModal} />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Input from "components/Input/Input"
 import Icon from "components/Icon/Icon"
 import Image from "next/image"
@@ -7,6 +7,7 @@ import Select from "components/Select/Select"
 import Checkbox from "components/Checkbox/Checkbox"
 import Button from "components/Button/Button"
 import styles from "./ReviewCard.module.scss"
+import Rate from "components/Rate/Rate"
 import Link from "next/link"
 
 const dummyDate = [
@@ -17,7 +18,15 @@ const dummyDate = [
   {label: "December 2021", value: "December 2021"},
 ]
 
-const ReviewForm = (props) => {
+export const rateType = {
+  1: "Very poor",
+  2: "Poor",
+  3: "OK",
+  4: "Good",
+  5: "Very good",
+}
+
+export const ReviewForm = (props) => {
   const {onSubmit} = props
 
   return (
@@ -57,7 +66,17 @@ const ReviewForm = (props) => {
   )
 }
 
-const ReviewCard = (props: any) => {
+interface IReviewCardProps {
+  id: string | number
+  title: string
+  imgUrl: string
+  isVerified: boolean
+  rateNumber: number
+  location?: string
+  onSubmit?: () => void
+}
+
+const ReviewCard = (props: IReviewCardProps) => {
   const {
     id,
     title,
@@ -65,15 +84,24 @@ const ReviewCard = (props: any) => {
     isVerified,
     rateNumber,
     location,
+    onSubmit
   } = props
 
   const [expanded, setExpanded] = useState<boolean>(false)
-  const [ratingType, setRatingType] = useState<string>("Very good")
-  
-  const handleSubmit = () => {
-    console.log("handleSubmit");
-    
+  const [rating, setRating] = useState<number>()
+  const [ratingType, setRatingType] = useState<string>("")
+  const [ratingReadonly, setRatingReadonly] = useState<boolean>(true)
+
+  const handleReview = () => {
+    setExpanded(!expanded)
+    setRatingReadonly(false)
   }
+
+  const handleCickRating = (value: number) => {
+    setRating(value)
+    setRatingType(rateType[value])
+  }
+  
   return (
     <div className={styles.review_card}>
       <div className={styles.featured_image}>
@@ -99,20 +127,21 @@ const ReviewCard = (props: any) => {
         </h4>
         <div className={styles.location}>{location}</div>
         <div className={styles.cta_group}>
-          <div className="flex">
-            <Icon icon="red-star" color="#E60112" className="mr-2"/>
-            <Icon icon="red-star" color="#E60112" className="mr-2"/>
-            <Icon icon="star" color="#E60112" className="mr-2"/>
-            <Icon icon="star" color="#E60112" className="mr-2"/>
-            <Icon icon="star" color="#E60112" className="mr-2"/>
+          <div>
+            <Rate
+              readonly={ratingReadonly}
+              initialRating={rating}
+              placeholderRating={rateNumber}
+              onClick={handleCickRating}
+            />
           </div>
           {
             expanded
             ? (<div className={styles.cta_click}>{ratingType}</div>)
-            : (<div className={styles.cta_click} onClick={() => setExpanded(!expanded)}>Click to rate</div>)
+            : (<div className={`${styles.cta_click} cursor-pointer`} onClick={handleReview}>Click to rate</div>)
           }
         </div>
-        { expanded && <ReviewForm onSubmit={handleSubmit} /> }
+        { expanded && <ReviewForm onSubmit={onSubmit} /> }
       </div>
     </div>
   )

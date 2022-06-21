@@ -41,30 +41,31 @@
       margin-bottom: 18px;
     }
 
-    .cta {
-      &_group {
-        display: flex;
-        margin-bottom: 15px;
-      }
-      &_click {
-        color: $primary-500;
-        font-size: $fs-md;
-        font-weight: $fw-semi-bold;
-        margin-left: 23px;
-        cursor: pointer;
-      }
-    }
-
-    .form {
-      &_group {
-        margin-bottom: 32px;
-      }
-      &_label {
-        font-size: $fs-sm;
-        color: $bg-400;
-        font-weight: $fw-semi-bold;
-      }
-    }
   }
-
 }
+
+/* Start Style ReviewForm Component*/
+.cta {
+  &_group {
+    display: flex;
+    margin-bottom: 15px;
+  }
+  &_click {
+    color: $primary-500;
+    font-size: $fs-md;
+    font-weight: $fw-semi-bold;
+    margin-left: 23px;
+  }
+}
+
+.form {
+  &_group {
+    margin-bottom: 32px;
+  }
+  &_label {
+    font-size: $fs-sm;
+    color: $bg-400;
+    font-weight: $fw-semi-bold;
+  }
+}
+/* End Style ReviewForm Component*/
