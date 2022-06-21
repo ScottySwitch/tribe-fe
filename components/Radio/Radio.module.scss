@@ -4,7 +4,6 @@
   display: block;
   position: relative;
   padding-left: 35px;
-  margin-bottom: 12px;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -12,6 +11,10 @@
   user-select: none;
   font-size: $fs-md;
   font-weight: $fw-light;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   input {
     position: absolute;

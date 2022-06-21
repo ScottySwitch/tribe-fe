@@ -89,3 +89,11 @@
     cursor: pointer;
   }
 }
+
+.upgrade_now {
+  color: $blue-500;
+  text-decoration: underline;
+  font-weight: $fw-normal;
+  font-size: $fs-md;
+  cursor: pointer;
+}

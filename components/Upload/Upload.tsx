@@ -11,6 +11,7 @@ export interface UploadProps {
   accept?: string
   fileList?: any[]
   className?: string
+  disabled?: boolean
   multiple?: boolean
   centerIcon?: ReactNode
   type?: "avatar" | "cover" | "upload" | "media" | "banner"
@@ -25,6 +26,7 @@ const Upload = (props: UploadProps) => {
     className,
     centerIcon = <Icon icon="camera" size={40} />,
     multiple,
+    disabled,
     accept = "image/*",
     fileList = [],
     type = "upload",
@@ -75,7 +77,14 @@ const Upload = (props: UploadProps) => {
   const Input = () => (
     <React.Fragment>
       <div className={styles.add_icon}>{centerIcon}</div>
-      <input type="file" name={name} onChange={handleChange} accept={accept} multiple={multiple} />
+      <input
+        disabled={disabled}
+        type="file"
+        name={name}
+        onChange={handleChange}
+        accept={accept}
+        multiple={multiple}
+      />
     </React.Fragment>
   )
 

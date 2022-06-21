@@ -34,7 +34,7 @@ const SelectField = (props: SelectProps) => {
     onChange,
     defaultValue,
     closeMenuOnSelect = false,
-    menuWidth,
+    menuWidth = "fit-content",
     selectWidth = "fit-content",
     shouldControlShowValue,
     isSearchable = true,
@@ -76,7 +76,6 @@ const SelectField = (props: SelectProps) => {
         width: "fit-content",
         padding: "10px 20px",
         maxWidth: 400,
-        minWidth: 150,
         cursor: isSelected ? "default" : "pointer",
         ":active": {
           ...styles[":active"],

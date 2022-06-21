@@ -993,3 +993,8 @@ export const phoneAreaCodes = [
   { label: "Zambia", value: "+260" },
   { label: "Zimbabwe", value: "+263" },
 ]
+
+export const formattedAreaCodes = phoneAreaCodes.map((item) => ({
+  label: `${item.label}  ${item.value}`,
+  value: item.value,
+}))

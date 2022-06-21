@@ -19,13 +19,12 @@ import { Categories, InformationList, Tiers } from "enums"
 
 import styles from "styles/BizInformation.module.scss"
 import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail"
-import { IAddListingForm } from "pages/add-listing"
 import TierTable from "components/TierTable/TierTable"
 import Verification from "components/BizInformationPage/TabContentComponents/Verification"
 import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos"
 
 const BizInformation = () => {
-  const [isPaid, setIsPaid] = useState(false)
+  const [isPaid, setIsPaid] = useState(true)
   const informationList = isPaid ? paidInformationList : freeInformationList
 
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
@@ -46,6 +45,9 @@ const BizInformation = () => {
   const handleUpdatePaymentSet = (e) => {
     console.log(e)
   }
+  const handleUpdateShowSocialMedia = (e) => {
+    console.log(e)
+  }
 
   const tabContent = () => {
     switch (selectedTab) {
@@ -54,6 +56,7 @@ const BizInformation = () => {
           <BusinessInformation
             isPaid={isPaid}
             formData={formData}
+            updateShowSocialMedia={handleUpdateShowSocialMedia}
             submitFormData={handleUpdateBusinessInformation}
           />
         )

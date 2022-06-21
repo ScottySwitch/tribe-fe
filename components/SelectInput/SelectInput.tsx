@@ -21,6 +21,7 @@ export interface SelectInputProps
   shouldControlShowValue?: boolean
   selectWidth?: string | number
   isSearchable?: boolean
+  selectDefaultValue?: { label: any; value: any }
   selectPosition?: "prefix" | "suffix"
   variant?: "filled" | "outlined"
   size?: "small" | "medium" | "large"
@@ -46,6 +47,7 @@ const SelectInput = (props: SelectInputProps) => {
     options = [],
     selectPlaceholder,
     isSearchable,
+    selectDefaultValue,
     selectWidth,
     shouldControlShowValue,
     onChange,
@@ -77,6 +79,7 @@ const SelectInput = (props: SelectInputProps) => {
       placeholder={selectPlaceholder}
       shouldControlShowValue={shouldControlShowValue}
       onChange={(e) => handleChange("select", e)}
+      defaultValue={selectDefaultValue}
     />
   )
 

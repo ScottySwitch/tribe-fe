@@ -12,7 +12,7 @@ import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
 import AuthApi from "../../services/auth"
 import SelectInput from "components/SelectInput/SelectInput"
-import { phoneAreaCodes } from "constant"
+import { formattedAreaCodes, phoneAreaCodes } from "constant"
 
 export enum LoginMethod {
   PHONE = "phone",
@@ -27,11 +27,6 @@ const PasswordEye = (props: { onClick: MouseEventHandler<HTMLDivElement> }) => {
     </div>
   )
 }
-
-const formattedAreaCodes = phoneAreaCodes.map((item) => ({
-  label: `${item.label}  ${item.value}`,
-  value: item.value,
-}))
 
 const tabList = [
   { label: "Phone number", value: LoginMethod.PHONE },
