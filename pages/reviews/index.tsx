@@ -5,8 +5,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import ReviewSearchBox from "components/ReviewsPage/ReviewSearchBox/ReviewSearchBox"
 import ReviewCard from "components/ReviewsPage/ReviewCard/ReviewCard"
 import TopSearches from "components/ReviewsPage/TopSearches/TopSearches"
-import ModalReviewSuccess from "components/ReviewsPage/ModalReviewSuccess/ModalReviewSuccess"
-import ModalReviewFail from "components/ReviewsPage/ModalReviewFail/ModalReviewFail"
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal"
 import styles from "styles/Reviews.module.scss"
 
 const dummyReviews = [
@@ -60,20 +59,16 @@ const dummyKeywords = [
 ]
 
 const ReviewsPage = () => {
-  const [isModalSuccess, setIsModalSuccess] = useState<boolean>(false)
-  const [isModalFail, setIsModalFail] = useState<boolean>(false)
+  const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false)
+  const [isSuccess, setIsSuccess] = useState<boolean>(false)
 
   const handleCloseModal = () => {
-    setIsModalSuccess(false)
-    setIsModalFail(false)
-    if (isModalSuccess) {
-      
-    }
+    setIsShowResultModal(false)
   }
   
   const handleSubmit = () => {
-    setIsModalSuccess(true)
-    // setIsModalFail(true)
+    setIsSuccess(true)
+    setIsShowResultModal(true)
   }
 
   return (
@@ -131,8 +126,11 @@ const ReviewsPage = () => {
         <TopSearches keywords={dummyKeywords}/>
       </SectionLayout>
 
-      <ModalReviewSuccess visible={isModalSuccess} onClose={handleCloseModal} />
-      <ModalReviewFail visible={isModalFail} onClose={handleCloseModal} />
+      <ResultModal
+        visible={isShowResultModal}
+        isSuccess={isSuccess}
+        onClose={handleCloseModal}
+      />
     </div>
   )
 }

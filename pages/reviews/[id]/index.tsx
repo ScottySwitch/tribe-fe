@@ -2,15 +2,14 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { rateType, ReviewForm } from "components/ReviewsPage/ReviewCard/ReviewCard"
 import classNames from "classnames"
-import ModalReviewSuccess from "components/ReviewsPage/ModalReviewSuccess/ModalReviewSuccess"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Icon from "components/Icon/Icon"
 import TopSearches from "components/ReviewsPage/TopSearches/TopSearches"
 import Image from "next/image"
 import Rate from "components/Rate/Rate"
 import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal"
 import styles from "styles/Reviews.module.scss"
-import ModalReviewFail from "components/ReviewsPage/ModalReviewFail/ModalReviewFail"
 
 const dummyKeywords = [
   "Fast Food", "Desserts", "Desserts", "Desserts", "Desserts", "Desserts", "Desserts",
@@ -26,8 +25,8 @@ const AddReviewPage = () => {
   const [rating, setRating] = useState<number>()
   const [ratingType, setRatingType] = useState<string>("")
   const [isRecent, setIsRecent] = useState<boolean>(true)
-  const [isModalSuccess, setIsModalSuccess] = useState<boolean>(false)
-  const [isModalFail, setIsModalFail] = useState<boolean>(false)
+  const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false)
+  const [isSuccess, setIsSuccess] = useState<boolean>(false)
   
   const dividerVerticalClassName = classNames({
     [styles.divider_vertical]: isRecent
@@ -39,16 +38,12 @@ const AddReviewPage = () => {
   }
 
   const handleCloseModal = () => {
-    setIsModalSuccess(false)
-    setIsModalFail(false)
-    if (isModalSuccess) {
-      
-    }
+    setIsShowResultModal(false)
   }
   
   const handleSubmit = () => {
-    setIsModalSuccess(true)
-    // setIsModalFail(true)
+    setIsSuccess(false)
+    setIsShowResultModal(true)
   }
 
   return (
@@ -116,8 +111,11 @@ const AddReviewPage = () => {
         <TopSearches keywords={dummyKeywords}/>
       </SectionLayout>
       
-      <ModalReviewSuccess visible={isModalSuccess} onClose={handleCloseModal} />
-      <ModalReviewFail visible={isModalFail} onClose={handleCloseModal} />
+      <ResultModal 
+        visible={isShowResultModal}
+        isSuccess={isSuccess}
+        onClose={handleCloseModal}
+      />
     </div>
   )
 }
