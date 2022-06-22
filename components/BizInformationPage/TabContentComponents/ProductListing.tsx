@@ -25,13 +25,17 @@ const ProductListing = (props: ProductListingProps) => {
   const [formData, setFormData] = useState(bizInformationDefaultFormData)
   const [selectedItem, setSelectedItem] = useState<any[]>([])
   const [screen, setScreen] = useState<ProductListingScreens>(ProductListingScreens.LIST)
-  const { productList = [] } = formData
+  const { productList = [], category } = formData
 
   const submitProduct = (e) => {
     console.log(e)
   }
 
   const handleDelete = (e) => {
+    console.log(e)
+  }
+
+  const handlePinToTop = (e) => {
     console.log(e)
   }
 
@@ -86,7 +90,7 @@ const ProductListing = (props: ProductListingProps) => {
         </div>
         <Break />
         <div className={styles.product_container}>
-          {productList.map((item) => {
+          {productList.map((item, index) => {
             return (
               <div key={item.id} className={styles.info_card_container}>
                 <InforCard
@@ -100,6 +104,9 @@ const ProductListing = (props: ProductListingProps) => {
                     <Icon icon="toolbar" color="white" />
                   </Popover>
                 </div>
+                <div className={styles.pin} onClick={() => handlePinToTop(item)}>
+                  <Icon icon="pin" color={index < 6 ? undefined : "white"} />
+                </div>
               </div>
             )
           })}
@@ -108,17 +115,17 @@ const ProductListing = (props: ProductListingProps) => {
       </SectionLayout>
       <SectionLayout
         show={screen !== ProductListingScreens.LIST}
-        title={getAddItemsFields(formData.category, screen === ProductListingScreens.EDIT).title}
+        title={screen === ProductListingScreens.EDIT ? "Edit product" : "Add deal"}
       >
         <AddItems
           isPaid={isPaid}
           itemList={selectedItem}
+          placeholders={getAddItemsFields(category).placeholder}
+          onCancel={() => setScreen(ProductListingScreens.LIST)}
           onSubmit={(e) => {
             setScreen(ProductListingScreens.LIST)
             submitProduct(e)
           }}
-          onCancel={() => setScreen(ProductListingScreens.LIST)}
-          placeholders={getAddItemsFields(formData.category).placeholder}
         />
       </SectionLayout>
     </React.Fragment>

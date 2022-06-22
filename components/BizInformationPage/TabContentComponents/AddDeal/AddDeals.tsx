@@ -11,6 +11,7 @@ import { getIndex, randomId } from "utils"
 import styles from "./AddDeal.module.scss"
 
 interface AddDealsProps {
+  isPaid?: boolean
   multiple?: boolean
   dealList: { [key: string]: any }[]
   onCancel: () => void
@@ -18,7 +19,7 @@ interface AddDealsProps {
 }
 
 const AddDeals = (props: AddDealsProps) => {
-  const { dealList, multiple, onCancel, onSubmit } = props
+  const { dealList, isPaid, multiple, onCancel, onSubmit } = props
   const [localDealList, setLocalDeaList] = useState(dealList || [])
 
   const handleRemoveDeal = (id: number) => {
@@ -75,12 +76,14 @@ const AddDeals = (props: AddDealsProps) => {
                   </div>
                 )}
               </div>
-              <Upload type="media" centerIcon={<Icon icon="plus" size={20} />} />
+              <Upload multiple isPaid={isPaid} centerIcon={<Icon icon="plus" size={20} />} />
               <Input
+                value={deal.name}
                 placeholder="Deal name"
                 onChange={(e: any) => handleChangeDeal(deal.id, "name", e.target.value)}
               />
               <Input
+                value={deal.information}
                 placeholder="Deal information"
                 onChange={(e: any) => handleChangeDeal(deal.id, "information", e.target.value)}
               />
