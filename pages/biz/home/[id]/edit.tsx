@@ -17,6 +17,7 @@ import BizListingApi from "../../../../services/biz-listing"
 import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu"
 import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems"
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
+import TagApi from "services/tag";
 
 import styles from "styles/BizHomepage.module.scss"
 import Facilities from "components/BizHomePage/Facilities/Facilities"
@@ -38,6 +39,7 @@ const EditListingHomepage = (context) => {
   const [description, setDescription] = useState<string>("")
   const [facilities, setFacilities] = useState<IOption[]>([])
   const [tags, setTags] = useState<IOption[]>([])
+  const [tagOptions, setTagOptions] = useState<IOption[]>([])
   const [openHours, setOpenHours] = useState([])
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
   const [socialInfo, setSocialInfo] = useState<any>("")
@@ -58,6 +60,7 @@ const EditListingHomepage = (context) => {
   } = useRouter()
 
   useEffect(() => {
+    getTags()
     const getListingData = async (listingSlug) => {
       const data = await BizListingApi.getBizListingBySlug(listingSlug)
       if (data.data.data.length > 0) {
@@ -69,12 +72,23 @@ const EditListingHomepage = (context) => {
         setCategory(listing.attributes.categories.data[0].id) // Get the first category
         setDescription(listing.attributes.description)
         setFacilities(listing.attributes.facilities.data || [])
-        setTags(listing.attributes.tags || [])
+        // setTags(listing.attributes.tags.data || [])
         // setOpenHours(listing.attributes.open_hours)
         setPriceRange(listing.attributes.price_range)
         setSocialInfo(listing.attributes.social_info)
-        // setPhoneNumber(listing.attributes.phone_number)
         setLogo(listing.attributes.logo)
+        if(listing.attributes.tags.data.length > 0) {
+          console.log(listing.attributes.tags);
+          let arrayTags: IOption[] = [];
+          listing.attributes.tags.data.map((item: any) => {
+              arrayTags.push({
+                label: item.attributes.label, 
+                value: item.attributes.value, 
+                id: item.id
+              })
+          })
+          setTags(arrayTags)
+        }
         if (listing.attributes.biz_invoices.data.length > 0) {
           setIsPaid(true)
         }
@@ -98,6 +112,22 @@ const EditListingHomepage = (context) => {
     }
   }, [listingSlug])
 
+  const getTags = async () => {
+    const data = await TagApi.getTags()
+    let arrayTags : IOption[] = [];
+    if (data.data.data && data.data.data.length > 0) {
+      data.data.data.map((item: any, index: number) => {
+        arrayTags.push({
+          label: item.attributes.label,
+          value: item.attributes.value,
+          id: item.id
+        })
+      })
+      // console.log(arrayTags);
+      setTagOptions(arrayTags);
+    }
+  }
+
   // TODO: check function upload multiple images
   const handleChangeImages = (srcImages) => setListingImages(srcImages)
   const handleChangeLogo = (srcImages) => setLogo(srcImages)
@@ -106,7 +136,10 @@ const EditListingHomepage = (context) => {
   const handleSetPhoneNumber = (phoneNumber) => setPhoneNumber(phoneNumber)
   const handleSetDescription = (description) => setDescription(description)
   const handleSetFacilities = (facilities) => setFacilities(facilities)
-  const handleSetTags = (tags) => setTags(tags)
+  const handleSetTags = (tags) => {
+    // console.log('tags',tags);
+    setTags(tags)
+  }
   const handleSetOpenHours = (openHours) => setOpenHours(openHours)
   const handleSetAction = (action: string, value: string) =>
     setAction({ label: action, value: value })
@@ -125,7 +158,7 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
-    console.log(action)
+    console.log(tags.map((item) => item.id));
     BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
@@ -137,7 +170,7 @@ const EditListingHomepage = (context) => {
       phone_number: phoneNumber,
       facilities: facilities,
       open_hours: openHours,
-      tags: tags,
+      tags: tags.map((item) => item.id),
       is_verified: false,
       logo: logo,
     }).then((response) => {
@@ -193,7 +226,7 @@ const EditListingHomepage = (context) => {
                 facilityOptions={[]}
               />
               <div className={styles.break} />
-              <Tags tags={tags} onSetTags={handleSetTags} tagOptions={[]} />
+              <Tags tags={tags} onSetTags={handleSetTags} tagOptions={tagOptions} />
               <div className={styles.break} />
               <HomeOpenHours openHours={openHours} onSetOpenHours={handleSetOpenHours} />
               <div className={styles.break} />

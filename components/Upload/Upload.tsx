@@ -32,7 +32,7 @@ const Upload = (props: UploadProps) => {
     type = "media",
     isPaid,
   } = props
-  console.log(fileList)
+  // console.log(fileList)
   const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : []
   const initFileList = multiple ? fileList : lastItemArray
 
@@ -40,7 +40,7 @@ const Upload = (props: UploadProps) => {
 
   const handleChange = (event: any) => {
     // console.log(isBanner, srcList, isPaid);
-    console.log(srcList)
+    // console.log(srcList)
     const file = event.target.files[0]
     const src = URL.createObjectURL(file)
     const newFileList = multiple ? [...srcList, src] : [src]
