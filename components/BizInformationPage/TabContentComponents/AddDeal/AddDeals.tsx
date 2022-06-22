@@ -18,7 +18,7 @@ interface AddDealsProps {
 }
 
 const AddDeals = (props: AddDealsProps) => {
-  const { dealList, isMultiple, onCancel, onSubmit } = props
+  const { dealList, isMultiple = true, onCancel, onSubmit } = props
   const [localDealList, setLocalDeaList] = useState(dealList || [])
 
   const handleRemoveDeal = (id: number) => {
@@ -63,7 +63,7 @@ const AddDeals = (props: AddDealsProps) => {
   return (
     <React.Fragment>
       <Break />
-      {Array.isArray(dealList) && dealList.length
+      {Array.isArray(localDealList) && localDealList.length
         ? localDealList.map((deal) => (
             <div key={deal.id} className={styles.add_deals_container}>
               <div className={styles.break} />

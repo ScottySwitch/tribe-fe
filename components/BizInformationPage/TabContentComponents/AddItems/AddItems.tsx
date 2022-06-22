@@ -35,6 +35,7 @@ const AddItems = (props: AddItemsProps) => {
   }
 
   const handleAddItem = () => {
+    console.log("asjndkjansd")
     setLocalItemList([...localItemList, { id: randomId() }])
   }
 
@@ -65,8 +66,8 @@ const AddItems = (props: AddItemsProps) => {
   return (
     <div>
       <Break />
-      {Array.isArray(itemList) && itemList.length
-        ? itemList.map((item) => (
+      {Array.isArray(localItemList) && localItemList.length
+        ? localItemList.map((item) => (
             <div key={item.id} className={styles.add_items_container}>
               <div className={styles.break} />
               <div className={styles.header}>
