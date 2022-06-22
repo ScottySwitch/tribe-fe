@@ -31,6 +31,7 @@ export interface SelectProps {
   variant?: "filled" | "outlined" | "no-outlined"
   size?: "small" | "medium" | "large"
   inputRef?: any
+  shouldControlShowValue?: boolean
 }
 
 const Select = (props: SelectProps) => {
@@ -44,6 +45,7 @@ const Select = (props: SelectProps) => {
     isMulti = false,
     options,
     value,
+    shouldControlShowValue,
     placeholder,
     onChange,
     isSearchable = true,
@@ -156,6 +158,12 @@ const Select = (props: SelectProps) => {
     )
   }
 
+  const SingleValue = (props) => (
+    <components.SingleValue {...props}>
+      {shouldControlShowValue ? props.data.value : props.data.label}
+    </components.SingleValue>
+  )
+
   return (
     <div className={selectWrapperClassName}>
       <div className={styles.container}>
@@ -174,7 +182,7 @@ const Select = (props: SelectProps) => {
           // @ts-ignore
           isMulti={isMulti}
           isSearchable={isSearchable}
-          components={{ Control, Menu, Option }}
+          components={{ Control, Menu, Option, SingleValue }}
         />
       </div>
       {helperText && <div>{helperText}</div>}

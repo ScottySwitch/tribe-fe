@@ -12,7 +12,7 @@ import Link from "next/link"
 import Router, { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import BizListingApi from "../../../services/biz-listing"
+import BizListingApi from "../../services/biz-listing"
 
 const defaultListing = listingSearchResult[0]
 

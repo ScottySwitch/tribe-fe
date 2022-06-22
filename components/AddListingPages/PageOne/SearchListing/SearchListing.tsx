@@ -2,6 +2,7 @@ import Badge from "components/Badge/Badge"
 import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
 import ListingCard from "components/ListingCard/ListingCard"
+import ListingSearch from "components/ListingSearch/ListingSearch"
 import Modal from "components/Modal/Modal"
 import Select from "components/Select/Select"
 import { listingSearchResult } from "constant"
@@ -14,57 +15,13 @@ import styles from "./SearchListing.module.scss"
 
 export type listingTypes = { [key: string]: string } | YesNo.NO | undefined
 
-const ListingMenuFooter = ({ onClick }: { onClick?(): void }) => {
-  return (
-    <div className={styles.add_listing_search_footer} onClick={onClick}>
-      <div>Cannot find the listing?</div>
-      <p>List it now</p>
-    </div>
-  )
-}
-
-// const formatListingResultOption = listingSearchResult.map((item) => ({
-//   ...item,
-//   label: (
-//     <div className="flex gap-2">
-//       <div>
-//         <Icon icon={item.icon} size={20} />
-//       </div>
-//       <div>
-//         <div>{item.label}</div>
-//         <div style={{ fontSize: 12, color: "#3C4467" }}>{item.location}</div>
-//       </div>
-//     </div>
-//   ),
-// }))
-
-const formatListingResultOption = (bizListing: []) => {
-  const result = []
-  bizListing.map((item: any) => (
-    result.push({
-      ...item,
-      // @ts-ignore
-      label: (
-        <div className="flex gap-2">
-          <div>
-            {/*<Icon icon={item.icon} size={20} />*/}
-          </div>
-          <div>
-            <div>{item.attributes.name}</div>
-            <div style={{ fontSize: 12, color: "#3C4467" }}>{item.attributes.address}</div>
-          </div>
-        </div>
-      ),
-    })));
-  return result;
-};
-
 const RightColumn = (props: {
   onShowUpcomingFeature: () => void
   listing: any
   isRelationship?: boolean
 }) => {
   const { listing, isRelationship, onShowUpcomingFeature } = props
+  console.log("sssssss", listing)
   const router = useRouter()
   return (
     <>
@@ -75,7 +32,7 @@ const RightColumn = (props: {
         onClick={() =>
           isRelationship
             ? router.push({
-                pathname: `/add-listing/claim/${listing.id}`,
+                pathname: `/claim/${listing.attributes.id}`,
                 query: { firstStep: ClaimStep.CLAIM_FREE_LISTING },
               })
             : onShowUpcomingFeature()
@@ -97,22 +54,15 @@ const SearchListing = ({
   bizListing: any
   relationship?: string
 }) => {
-  console.log('listing', listing);
-  if(listing) {
-    localStorage.setItem('biz_id', listing.id)
-    localStorage.setItem('biz_slug', listing.attributes.slug)
+  console.log("listing", listing)
+  if (listing) {
+    localStorage.setItem("biz_id", listing.id)
+    localStorage.setItem("biz_slug", listing.attributes.slug)
   }
   const [showUpcomingFeature, setShowUpcomingFeature] = useState(false)
   switch (listing) {
     case undefined:
-      return (
-        <Select
-          prefixIcon="search"
-          options={formatListingResultOption(bizListing)}
-          onChange={setListing}
-          menuFooter={<ListingMenuFooter onClick={() => setListing(YesNo.NO)} />}
-        />
-      )
+      return <ListingSearch listingOptions={listingSearchResult} onChange={setListing} />
     case YesNo.NO:
       return (
         <div className="flex gap-2">

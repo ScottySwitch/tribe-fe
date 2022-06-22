@@ -85,7 +85,7 @@ const OtpPage = (context) => {
             </span>
           </div>
         </div>
-        <div className={styles.footer} onClick={() => router.push("/add-listing/claim-free")}>
+        <div className={styles.footer} onClick={() => router.push("/claim")}>
           <Icon icon="business" size={20} />
           <div>Grow your business with Tribes now! </div>
         </div>

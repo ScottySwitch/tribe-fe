@@ -4,12 +4,12 @@ import { rateType, ReviewForm } from "components/ReviewsPage/ReviewCard/ReviewCa
 import classNames from "classnames"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Icon from "components/Icon/Icon"
-import TopSearches from "components/ReviewsPage/TopSearches/TopSearches"
 import Image from "next/image"
 import Rate from "components/Rate/Rate"
 import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal"
 import styles from "styles/Reviews.module.scss"
+import TopSearches from "components/TopSearches/TopSearches"
 
 const dummyKeywords = [
   "Fast Food", "Desserts", "Desserts", "Desserts", "Desserts", "Desserts", "Desserts",
