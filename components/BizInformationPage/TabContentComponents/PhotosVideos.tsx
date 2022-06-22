@@ -3,16 +3,17 @@ import Button from "components/Button/Button"
 import InforCard from "components/InforCard/InforCard"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Upload from "components/Upload/Upload"
+import { bizInformationDefaultFormData } from "constant"
+import { useState } from "react"
 import styles from "./TabContent.module.scss"
 
 interface PhotosVideosProps {
   isPaid: boolean
-  submitFormData?: (form: { [key: string]: any }) => void
-  formData?: { [key: string]: any }
 }
 
 const PhotosVideos = (props: PhotosVideosProps) => {
-  const { isPaid, formData = {}, submitFormData } = props
+  const { isPaid } = props
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
 
   return (
     <SectionLayout

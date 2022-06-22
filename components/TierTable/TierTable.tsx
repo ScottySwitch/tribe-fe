@@ -109,11 +109,11 @@ const DesktopTierTable = ({
   isActive,
 }: {
   onDirectToVerification?(tier: Tiers): void
-  setIsActive(value: boolean): void
-  isActive: boolean
+  setIsActive?: (value: boolean) => void
+  isActive?: boolean
 }) => {
   const handleChangePayPrice = () => {
-    setIsActive(!isActive)
+    setIsActive?.(!isActive)
     if (localStorage.getItem("pay_price") == "600") {
       localStorage.setItem("pay_price", "150")
     } else {
@@ -186,11 +186,11 @@ const MobileTierTable = ({
   isActive,
 }: {
   onDirectToVerification?(tier: Tiers): void
-  setIsActive(value: boolean): void
-  isActive: boolean
+  setIsActive?: (value: boolean) => void
+  isActive?: boolean
 }) => {
   const handleChangePayPrice = () => {
-    setIsActive(!isActive)
+    setIsActive?.(!isActive)
     if (localStorage.getItem("pay_price") == "600") {
       localStorage.setItem("pay_price", "150")
     } else {
@@ -273,8 +273,8 @@ const TierTable = ({
   onDirectToVerification,
 }: {
   isPaid?: boolean
-  isPayQuarterly: boolean
-  onSetIsPayQuarterly: (e: any) => void
+  isPayQuarterly?: boolean
+  onSetIsPayQuarterly?: (e: any) => void
   onDirectToVerification?(tier: Tiers): void
 }) => {
   return (

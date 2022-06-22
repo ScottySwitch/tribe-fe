@@ -6,21 +6,29 @@ import Popover from "components/Popover/Popover"
 import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Table, { IColumn } from "components/Table/Table"
+import { bizInformationDefaultFormData } from "constant"
 import React, { useState } from "react"
 import AddDeals from "./AddDeal/AddDeals"
 
 import styles from "./TabContent.module.scss"
 
-interface ManageDealsProps {
-  isPaid: boolean
-  submitFormData?: (form: { [key: string]: any }[]) => void
-  formData?: { [key: string]: any }
+enum ManageDealsScreens {
+  LIST = "list",
+  ADD = "add",
+  EDIT = "edit",
 }
 
-const ManageDeals = (props: ManageDealsProps) => {
-  const { formData = {}, submitFormData } = props
-  const [dealList, setDealList] = useState<{ [key: string]: any }[]>([{}])
-  const [isEdit, setIsEdit] = useState(false)
+const ManageDeals = () => {
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
+  const [selectedDeal, setSelectedDeal] = useState<any[]>([])
+  const [screen, setScreen] = useState<ManageDealsScreens>(ManageDealsScreens.LIST)
+  const { activeDeals, pastDeals } = formData
+
+  const submitDeal = (e) => console.log(e)
+
+  const handleDelete = (e) => {
+    console.log(e)
+  }
 
   const columns: IColumn[] = [
     {
@@ -29,7 +37,7 @@ const ManageDeals = (props: ManageDealsProps) => {
       render: (item: any) => (
         <div>
           <div className={styles.name}>{item.name}</div>
-          <div className={styles.description}>{item.description}</div>
+          <div className={styles.deal_information}>{item.information}</div>
         </div>
       ),
       width: "35%",
@@ -59,8 +67,15 @@ const ManageDeals = (props: ManageDealsProps) => {
     const { item } = props
     const content = (
       <React.Fragment>
-        <div onClick={() => console.log(item.name)}>Edit deal</div>
-        <div className={styles.delete_action} onClick={() => console.log(item.name)}>
+        <div
+          onClick={() => {
+            setSelectedDeal([item])
+            setScreen(ManageDealsScreens.EDIT)
+          }}
+        >
+          Edit deal
+        </div>
+        <div className={styles.delete_action} onClick={() => handleDelete(item)}>
           Delete deal
         </div>
       </React.Fragment>
@@ -81,35 +96,43 @@ const ManageDeals = (props: ManageDealsProps) => {
         title="Manage deals"
         className={styles.manage_deals}
         containerClassName="w-full"
-        show={!isEdit}
+        show={screen === ManageDealsScreens.LIST}
       >
         <div className={styles.tips_button}>
           <div className={styles.tips}>
             <strong>Tips:</strong> Click the pin icon to put 5 products on the top.
           </div>
-          <Button text="Create deal" width={200} onClick={() => setIsEdit(true)} />
+          <Button
+            text="Create deal"
+            width={200}
+            onClick={() => {
+              setSelectedDeal([{}])
+              setScreen(ManageDealsScreens.ADD)
+            }}
+          />
         </div>
         <Question
-          question={`Active deals (${
-            Array.isArray(formData.activeDeals) ? formData.activeDeals.length : 0
-          })`}
+          question={`Active deals (${Array.isArray(activeDeals) ? activeDeals.length : 0})`}
         >
-          <Table columns={columns} data={formData.activeDeals} />
+          <Table columns={columns} data={activeDeals} />
         </Question>
 
-        <Question
-          question={`Past deals (${
-            Array.isArray(formData.pastDeals) ? formData.pastDeals.length : 0
-          })`}
-        >
-          <Table columns={columns} data={formData.pastDeals} />
+        <Question question={`Past deals (${Array.isArray(pastDeals) ? pastDeals.length : 0})`}>
+          <Table columns={columns} data={pastDeals} />
         </Question>
       </SectionLayout>
-      <SectionLayout show={isEdit} title="Add deals">
+      <SectionLayout
+        show={screen !== ManageDealsScreens.LIST}
+        title={screen === ManageDealsScreens.EDIT ? "Edit deal" : "Add deal"}
+      >
         <AddDeals
-          onSetDealList={(dealList) => setDealList(dealList)}
-          dealList={dealList}
-          onSetScreen={() => setIsEdit(false)}
+          isPaid={true}
+          dealList={selectedDeal}
+          onCancel={() => setScreen(ManageDealsScreens.LIST)}
+          onSubmit={(e) => {
+            setScreen(ManageDealsScreens.LIST)
+            submitDeal(e)
+          }}
         />
       </SectionLayout>
     </React.Fragment>

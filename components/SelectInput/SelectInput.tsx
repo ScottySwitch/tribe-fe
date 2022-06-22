@@ -70,33 +70,28 @@ const SelectInput = (props: SelectInputProps) => {
     onChange?.({ ...localValue, [type]: e })
   }
 
-  const Select = () => (
-    <SelectField
-      isSearchable={isSearchable}
-      selectWidth={selectWidth}
-      menuWidth={menuWidth}
-      options={options}
-      placeholder={selectPlaceholder}
-      shouldControlShowValue={shouldControlShowValue}
-      onChange={(e) => handleChange("select", e)}
-      defaultValue={selectDefaultValue}
-    />
-  )
-
   return (
     <div className={selectInputWrapperClassName} style={{ width }}>
       <div className={styles.container}>
         {label && <label htmlFor={id}>{label}</label>}
         <div className={styles.content}>
           {prefix && <div>{prefix}</div>}
-          {selectPosition === "prefix" && <Select />}
-          <input
-            disabled={disabled}
-            id={id}
-            onChange={(e) => handleChange("input", e.target.value)}
-            {...rest}
+          {selectPosition === "suffix" && (
+            <input id={id} onChange={(e) => handleChange("input", e.target.value)} {...rest} />
+          )}
+          <SelectField
+            isSearchable={isSearchable}
+            selectWidth={selectWidth}
+            menuWidth={menuWidth}
+            options={options}
+            placeholder={selectPlaceholder}
+            shouldControlShowValue={shouldControlShowValue}
+            onChange={(e) => handleChange("select", e)}
+            defaultValue={selectDefaultValue}
           />
-          {selectPosition === "suffix" && <Select />}
+          {selectPosition === "prefix" && (
+            <input id={id} onChange={(e) => handleChange("input", e.target.value)} {...rest} />
+          )}
           {suffix && <div>{suffix}</div>}
         </div>
       </div>

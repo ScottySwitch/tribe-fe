@@ -7,7 +7,7 @@ import Radio from "components/Radio/Radio"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import SelectInput from "components/SelectInput/SelectInput"
 import Upload from "components/Upload/Upload"
-import { formattedAreaCodes } from "constant"
+import { bizInformationDefaultFormData, formattedAreaCodes } from "constant"
 import Link from "next/link"
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -22,14 +22,12 @@ export const socialMedias = [
 
 interface BusinessInformationProps {
   isPaid: boolean
-  submitFormData?: (form: { [key: string]: any }) => void
-  updateShowSocialMedia: (page: { type: string; value: string }) => void
-  formData?: { [key: string]: any }
 }
 
 const BusinessInformation = (props: BusinessInformationProps) => {
-  const { isPaid, formData = {}, submitFormData, updateShowSocialMedia } = props
+  const { isPaid } = props
   const [isEdit, setIsEdit] = useState(false)
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -43,6 +41,9 @@ const BusinessInformation = (props: BusinessInformationProps) => {
       phone: formData.phone,
       email: formData.email,
       socialMedia: formData.socialMedia,
+      twitter: formData.twitter,
+      facebook: formData.facebook,
+      instagram: formData.instagram,
     },
   })
 
@@ -51,8 +52,12 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   }
 
   const onSubmit = (data) => {
-    submitFormData?.(data)
+    console.log(data)
     setIsEdit(false)
+  }
+
+  const updateShowSocialMedia = ({ type, value }) => {
+    return
   }
 
   const SocialRadio = ({ type, value }) =>
@@ -171,13 +176,20 @@ const BusinessInformation = (props: BusinessInformationProps) => {
           </Question>
           <Question show question="Social media" childrenClassName="flex flex-col gap-3">
             <UpgradeNow />
-            <SelectInput
-              label="Social media"
-              placeholder="Your media url"
-              selectPlaceholder="Media"
-              selectDefaultValue={socialMedias[0]}
-              options={socialMedias}
-              onChange={(e) => setValue("phone", `${e.select.value}${e.input}`)}
+            <Input
+              prefix={<Icon icon="twitter-logo" />}
+              placeholder="https://www.twitter.com/YourTwitter"
+              register={register("twitter")}
+            />
+            <Input
+              prefix={<Icon icon="facebook-color" />}
+              placeholder="https://www.facebook.com/YourFacebook"
+              register={register("facebook")}
+            />
+            <Input
+              prefix={<Icon icon="instagram-outlined" />}
+              placeholder="https://www.instagram.com/YourInstagram"
+              register={register("instagram")}
             />
           </Question>
           <Break />

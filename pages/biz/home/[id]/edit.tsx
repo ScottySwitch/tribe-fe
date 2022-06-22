@@ -23,6 +23,7 @@ import Facilities from "components/BizHomePage/Facilities/Facilities"
 import { IOption } from "type"
 import Tags from "components/BizHomePage/Tags/Tags"
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
+import { getAddItemsFields } from "constant"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -30,26 +31,6 @@ const CenterIcon = () => (
     <p>Add photos/ videos</p>
   </div>
 )
-
-const getAddItemsFields = (category) => {
-  switch (category) {
-    case 1: // Buy
-      return {
-        title: "Add products",
-        placeholder: ["Product", "describe your product (optional)", "Create products"],
-      }
-    case 2: // Eat
-      return {
-        title: "Add dishes",
-        placeholder: ["Dish", "describe your dish (optional)", "Create dishes"],
-      }
-    default:
-      return {
-        title: "Add services",
-        placeholder: ["Service", "describe your service (optional)", "Create services"],
-      }
-  }
-}
 
 const EditListingHomepage = (context) => {
   const [category, setCategory] = useState(Categories.EAT)
@@ -63,11 +44,13 @@ const EditListingHomepage = (context) => {
   const [phoneNumber, setPhoneNumber] = useState<any>("")
   const [action, setAction] = useState({ label: "", value: "" })
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
+  const [menu, setMenu] = useState<string[]>()
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
   // const [listingImages, setListingImages] = useState<string[]>([])
   const [listingImages, setListingImages] = useState<any>([])
   const [logo, setLogo] = useState<any>([])
+
   const [isPaid, setIsPaid] = useState<boolean>(false)
 
   const {
@@ -127,9 +110,19 @@ const EditListingHomepage = (context) => {
   const handleSetOpenHours = (openHours) => setOpenHours(openHours)
   const handleSetAction = (action: string, value: string) =>
     setAction({ label: action, value: value })
-  const handleSetItemList = (list: { [key: string]: string }[]) => setItemList(list)
-  const handleSetDealList = (dealList: { [key: string]: string }[]) => setDealList(dealList)
-  const handleSetScreen = (screen: ListingHomePageScreens) => setScreen(screen)
+  const handleSetItemList = (list: { [key: string]: string }[]) => {
+    setItemList(list)
+    setScreen(ListingHomePageScreens.HOME)
+  }
+  const handleSetDealList = (dealList: { [key: string]: string }[]) => {
+    setDealList(dealList)
+    setScreen(ListingHomePageScreens.HOME)
+  }
+  const handleSetMenu = (menu) => {
+    setMenu(menu)
+    setScreen(ListingHomePageScreens.HOME)
+  }
+  const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
     console.log(action)
@@ -160,7 +153,6 @@ const EditListingHomepage = (context) => {
           <Upload
             className={styles.banner}
             centerIcon={<CenterIcon />}
-            multiple={true}
             onChange={handleChangeImages}
             type="banner"
             isPaid
@@ -231,14 +223,15 @@ const EditListingHomepage = (context) => {
           title={getAddItemsFields(category).title}
         >
           <AddItems
-            onSetItemList={handleSetItemList}
-            onSetScreen={handleSetScreen}
+            multiple
+            onSubmit={handleSetItemList}
+            onCancel={handleCancel}
             itemList={itemList}
             placeholders={getAddItemsFields(category).placeholder}
           />
         </SectionLayout>
         <SectionLayout show={screen === ListingHomePageScreens.ADD_MENU} title="Add a menu">
-          <AddMenu onSetScreen={handleSetScreen} />
+          <AddMenu menu={menu} onCancel={handleCancel} onSubmit={handleSetMenu} />
         </SectionLayout>
         <SectionLayout
           show={screen === ListingHomePageScreens.ADD_DEALS}
@@ -246,8 +239,9 @@ const EditListingHomepage = (context) => {
           childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
         >
           <AddDeals
-            onSetDealList={handleSetDealList}
-            onSetScreen={handleSetScreen}
+            multiple
+            onCancel={handleCancel}
+            onSubmit={handleSetDealList}
             dealList={dealList}
           />
         </SectionLayout>
