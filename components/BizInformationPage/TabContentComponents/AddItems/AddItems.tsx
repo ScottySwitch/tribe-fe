@@ -22,6 +22,8 @@ const AddItems = (props: AddItemsProps) => {
   const { itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
   const [localItemList, setLocalItemList] = useState(itemList || [])
 
+  console.log('itemList', itemList)
+
   const handleRemoveItem = (id: number) => {
     const newArray = [...localItemList].filter((item) => item.id !== id)
     setLocalItemList(newArray)
@@ -36,7 +38,7 @@ const AddItems = (props: AddItemsProps) => {
 
   const handleAddItem = () => {
     console.log("asjndkjansd")
-    setLocalItemList([...localItemList, { id: randomId() }])
+    setLocalItemList([...localItemList, { id: randomId(), isNew: true }])
   }
 
   const AddItemButton = () => (
