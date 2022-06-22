@@ -104,7 +104,8 @@ const Upload = (props: UploadProps) => {
           <Input />
         </div>
       ) : (
-        !["avatar", "banner", "cover"].includes(type) && (
+        !
+        ["avatar", "banner", "cover"].includes(type) && (
           <div className={styles.upgrade_now}>
             <div className={styles.tips}>
               <Icon icon="Group-966" color="#653fff" /> Tips

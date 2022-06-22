@@ -30,6 +30,7 @@ const BizInformation = () => {
   const informationList = isPaid ? paidInformationList : freeInformationList
 
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
+  const [isPayYearly, setIsPayYearly] = useState(false)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
   const [listing, setListing] = useState<any>()
@@ -70,7 +71,13 @@ const BizInformation = () => {
           </SectionLayout>
         )
       case InformationList.CHANGE_ACCOUNT_TIER:
-        return <TierTable isPaid={isPaid} />
+        return (
+          <TierTable
+            isPaid={isPaid}
+            isPayYearly={isPayYearly}
+            onSetIsPayYearly={(e) => setIsPayYearly(e)}
+          />
+        )
       case InformationList.VERIFICATION:
         return <Verification isPaid={isPaid} />
 
