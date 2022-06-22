@@ -22,6 +22,8 @@ import BusinessDetail from "components/BizInformationPage/TabContentComponents/B
 import TierTable from "components/TierTable/TierTable"
 import Verification from "components/BizInformationPage/TabContentComponents/Verification"
 import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos"
+import {useRouter} from "next/router";
+import BizListingApi from "../../../../services/biz-listing";
 
 const BizInformation = () => {
   const [isPaid, setIsPaid] = useState(true)
@@ -30,6 +32,24 @@ const BizInformation = () => {
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
+  const [listing, setListing] = useState<any>()
+  const {
+    query: { slug: listingSlug },
+  } = useRouter()
+
+  useEffect(() => {
+    const getListingData = async (listingSlug) => {
+      const data = await BizListingApi.getBizListingBySlug(listingSlug)
+      if (data.data.data.length > 0) {
+        const listing = data.data.data[0]
+        setListing(listing)
+      }
+    }
+    if (listingSlug) {
+      getListingData(listingSlug)
+    }
+  }, [listingSlug])
+
   const tabContent = () => {
     switch (selectedTab) {
       case InformationList.BUSINESS_INFORMATION:
@@ -37,7 +57,9 @@ const BizInformation = () => {
       case InformationList.BUSINESS_DETAIL:
         return <BusinessDetail isPaid={isPaid} />
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing isPaid={isPaid} />
+        return <ProductListing isPaid={isPaid}
+                               bizListingId={listing.id}
+                               products={listing.attributes.products.data} />
       case InformationList.PHOTOS_VIDEOS:
         return <PhotosVideos isPaid={isPaid} />
       case InformationList.MANAGE_DEALS:

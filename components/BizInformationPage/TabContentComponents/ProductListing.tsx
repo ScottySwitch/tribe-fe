@@ -9,8 +9,11 @@ import React, { useState } from "react"
 import { randomId } from "utils"
 import AddItems from "./AddItems/AddItems"
 import styles from "./TabContent.module.scss"
+import ProductApi from "../../../services/product";
 
 interface ProductListingProps {
+  bizListingId: number,
+  products: any,
   isPaid: boolean
 }
 
@@ -21,18 +24,36 @@ enum ProductListingScreens {
 }
 
 const ProductListing = (props: ProductListingProps) => {
-  const { isPaid } = props
+  let { isPaid, bizListingId, products } = props
   const [formData, setFormData] = useState(bizInformationDefaultFormData)
   const [selectedItem, setSelectedItem] = useState<any[]>([])
   const [screen, setScreen] = useState<ProductListingScreens>(ProductListingScreens.LIST)
-  const { productList = [], category } = formData
+  const { category } = formData
 
-  const submitProduct = (e) => {
-    console.log(e)
+  const [productList, setProductList] = useState(products)
+
+  const submitProduct = async (e: any) => {
+    // console.log('newProduct', e[0]);
+    const newProduct = e[0];
+    const dataSend = {
+      biz_listing: bizListingId,
+      name: newProduct.name,
+      description: newProduct.description,
+      price: newProduct.price,
+      tags: newProduct.tags,
+      images: [newProduct.imgUrl],
+    }
+    await ProductApi.createProduct(dataSend).then(result => {
+      setProductList([...productList, result.data.data])
+    });
   }
 
-  const handleDelete = (e) => {
-    console.log(e)
+  const handleDelete = async (e) => {
+    const newProductList = productList.filter(product => {
+      return product.id !== e
+    })
+    setProductList(newProductList)
+    await ProductApi.deleteProduct(e);
   }
 
   const handlePinToTop = (e) => {
@@ -49,7 +70,7 @@ const ProductListing = (props: ProductListingProps) => {
       >
         Edit
       </div>
-      <div className={styles.delete_action} onClick={() => handleDelete(item.name)}>
+      <div className={styles.delete_action} onClick={() => handleDelete(item.id)}>
         Delete
       </div>
     </React.Fragment>
@@ -90,14 +111,14 @@ const ProductListing = (props: ProductListingProps) => {
         </div>
         <Break />
         <div className={styles.product_container}>
-          {productList.map((item, index) => {
+          {productList && productList.map((item: any, index) => {
             return (
               <div key={item.id} className={styles.info_card_container}>
                 <InforCard
-                  imgUrl={item.images[0] || "https://picsum.photos/200/300"}
-                  title={item.name}
-                  price={item.price}
-                  description={item.description}
+                  imgUrl={item.attributes.images ? item.attributes.images[0] : "https://picsum.photos/200/300"}
+                  title={item.attributes.name}
+                  price={item.attributes.price}
+                  description={item.attributes.description}
                 />
                 <div className={styles.toolbar}>
                   <Popover content={<PopoverContent item={item} />}>
