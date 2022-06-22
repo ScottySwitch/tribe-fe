@@ -35,7 +35,7 @@ const AddDeals = (props: AddDealsProps) => {
   }
 
   const handleAddDeal = () => {
-    setLocalDeaList([...localDealList, { id: randomId(), validUntil: new Date() }])
+    setLocalDeaList([...localDealList, { isNew: true, validUntil: new Date() }])
   }
 
   const AddDealButton = () => (
