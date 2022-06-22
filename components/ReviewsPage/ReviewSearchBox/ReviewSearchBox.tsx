@@ -24,7 +24,7 @@ const ReviewSearchBox = () => {
   return (
     <div className={styles.review_search_box}>
       <div className={styles.title}>{`Review a place you've visited`}</div>
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-5 lg:gap-x-4 gap-y-4 lg:gap-y-0">
         <div className="col-span-2">
           <Select
             prefixIcon="map"

@@ -86,14 +86,20 @@ const ReviewsPage = () => {
           layout="responsive"
           alt=""
         />
-        <SectionLayout className={styles.section_review_search_box} childrenClassName="h-full" containerClassName="h-full">
+        <SectionLayout
+          className={styles.section_review_search_box}
+          childrenClassName="h-full"
+          containerClassName={styles.section_review_search_box_container}
+        >
           <ReviewSearchBox />
         </SectionLayout>
       </div>
-
-      <SectionLayout childrenClassName={styles.section_children_reviews}>
+      <SectionLayout 
+        childrenClassName={styles.section_children_reviews}
+        containerClassName={styles.section_children_reviews_container}
+      >
         <div className={styles.main_content}>
-          <div className="font-semibold text-base mb-8">Share your experiences with the Tribes community!</div>
+          <div className="font-semibold text-sm sm:text-base mb-8">Share your experiences with the Tribes community!</div>
           <div className="review-list">
             {
               dummyReviews?.map((review) => (
@@ -121,7 +127,7 @@ const ReviewsPage = () => {
         </div>
       </SectionLayout>
 
-      <SectionLayout>
+      <SectionLayout className={styles.top_search} containerClassName={styles.top_search_container}>
         <TopSearches keywords={dummyKeywords}/>
       </SectionLayout>
 

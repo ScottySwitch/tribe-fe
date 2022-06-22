@@ -19,4 +19,23 @@
     padding: 15px 16px;
     font-size: $fs-md;
   }
+
+  @media screen and (max-width: $big-tablet) {
+    & {
+      height: auto;
+    }
+  }
+
+  @media screen and (max-width: $mobile) {
+    & {
+      padding: $p-md;
+      padding: 24px;
+      border-radius: 8px;
+
+      .title {
+        font-size: 20px;
+        margin-bottom: 16px;
+      }
+    }
+  }
 }

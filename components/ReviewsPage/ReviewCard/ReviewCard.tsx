@@ -10,6 +10,7 @@ import styles from "./ReviewCard.module.scss"
 import Rate from "components/Rate/Rate"
 import Link from "next/link"
 import classNames from "classnames"
+import Break from "components/Break/Break"
 
 const dummyDate = [
   {label: "April 2022", value: "April 2022"},
@@ -64,7 +65,7 @@ export const ReviewForm = (props) => {
       <div className={styles.form_group}>
         <Checkbox id={Math.random().toString()} label="I certify that this review is solely based on my own experience, my genuine opinion and that I have no personal or business relationship with the establishment. I have not been offered any incentive or payment originating from the establishment to write this review. I understand that Tribes has a zero-tolerance policy on fake reviews"/>
       </div>
-      <Button text="Submit" width="auto" onClick={onSubmit} />
+      <Button text="Submit" width="auto" className={styles.btn_submit} onClick={onSubmit} />
     </div>
   )
 }
@@ -107,29 +108,53 @@ const ReviewCard = (props: IReviewCardProps) => {
   
   return (
     <div className={styles.review_card}>
-      <div className={styles.featured_image}>
-        {
-          isVerified && (
-            <div className={styles.verified}>
-              <Icon icon="verified-tag" className={styles.verified_icon} />
-            </div>
-          )
-        }
-        <Image
-          src={imgUrl}
-          width="100%"
-          height="56%"
-          layout="responsive"
-          className="rounded-lg"
-          alt="review_featured_image"
-        />
+      <div className="flex">
+        <div className={styles.featured_image}>
+          {
+            isVerified && (
+              <div className={styles.verified}>
+                <Icon icon="verified-tag" className={styles.verified_icon} />
+              </div>
+            )
+          }
+          <Image
+            src={imgUrl}
+            width="100%"
+            height="56%"
+            layout="responsive"
+            className="rounded-lg"
+            alt="review_featured_image"
+          />
+        </div>
+        <div className={styles.display_mobile}>
+          <h4 className={styles.title}>
+            <Link href={`/reviews/${id}`}>{title}</Link>
+          </h4>
+          <div className={styles.location}>{location}</div>
+          <Break />
+          <div className={`${styles.cta_group} mb-0`}>
+          <Rate
+            readonly={ratingReadonly}
+            initialRating={rating}
+            placeholderRating={rateNumber}
+            onClick={handleCickRating}
+          />
+          {
+            expanded
+            ? (<div className={styles.cta_click}>{ratingType}</div>)
+            : (<div className={`${styles.cta_click} cursor-pointer`} onClick={handleReview}>Click to rate</div>)
+          }
+        </div>
+        </div>
       </div>
       <div className="w-full">
-        <h4 className={styles.title}>
-          <Link href={`/reviews/${id}`}>{title}</Link>
-        </h4>
-        <div className={styles.location}>{location}</div>
-        <div className={styles.cta_group}>
+        <div className={styles.display_desktop}>
+          <h4 className={styles.title}>
+            <Link href={`/reviews/${id}`}>{title}</Link>
+          </h4>
+          <div className={styles.location}>{location}</div>
+        </div>
+        <div className={`${styles.cta_group} ${styles.display_desktop}`}>
           <Rate
             readonly={ratingReadonly}
             initialRating={rating}

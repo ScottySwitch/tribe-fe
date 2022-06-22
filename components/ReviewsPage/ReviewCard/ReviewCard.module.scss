@@ -41,6 +41,42 @@
       margin-bottom: 18px;
     }
 
+    .display_mobile {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    &_card {
+      flex-wrap: wrap;
+
+      .display_desktop {
+        display: none;
+      }
+      .display_mobile {
+        display: block;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile) {
+    &_card {
+      .featured_image {
+        max-width: 119px;
+        min-width: 119px;
+        height: 68px;
+        margin-right: 10px;
+      }
+
+      .title {
+        font-size: $fs-sm;
+        margin-bottom: 8px;
+      }
+
+      .location {
+        font-size: $fs-xs;
+      }
+    }
   }
 }
 
@@ -66,6 +102,21 @@
     font-size: $fs-sm;
     color: $bg-400;
     font-weight: $fw-semi-bold;
+  }
+}
+@media screen and (max-width: $mobile) {
+  .cta {
+    &_click {
+      font-size: $fs-sm;
+    }
+  }
+  .form {
+    &_group {
+      margin-bottom: 20px;
+    }
+  }
+  .btn_submit {
+    width: 100% !important;
   }
 }
 /* End Style ReviewForm Component*/

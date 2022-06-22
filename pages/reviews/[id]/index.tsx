@@ -10,6 +10,7 @@ import Image from "next/image"
 import Rate from "components/Rate/Rate"
 import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
 import styles from "styles/Reviews.module.scss"
+import ModalReviewFail from "components/ReviewsPage/ModalReviewFail/ModalReviewFail"
 
 const dummyKeywords = [
   "Fast Food", "Desserts", "Desserts", "Desserts", "Desserts", "Desserts", "Desserts",
@@ -25,6 +26,8 @@ const AddReviewPage = () => {
   const [rating, setRating] = useState<number>()
   const [ratingType, setRatingType] = useState<string>("")
   const [isRecent, setIsRecent] = useState<boolean>(true)
+  const [isModalSuccess, setIsModalSuccess] = useState<boolean>(false)
+  const [isModalFail, setIsModalFail] = useState<boolean>(false)
   
   const dividerVerticalClassName = classNames({
     [styles.divider_vertical]: isRecent
@@ -35,7 +38,18 @@ const AddReviewPage = () => {
     setRatingType(rateType[value])
   }
 
-  const handleSubmit = () => {}
+  const handleCloseModal = () => {
+    setIsModalSuccess(false)
+    setIsModalFail(false)
+    if (isModalSuccess) {
+      
+    }
+  }
+  
+  const handleSubmit = () => {
+    setIsModalSuccess(true)
+    // setIsModalFail(true)
+  }
 
   return (
     <div className={styles.review_add_new}>
@@ -43,7 +57,7 @@ const AddReviewPage = () => {
         <div className={styles.container}>
           <div className={`${styles.container_left} ${dividerVerticalClassName}`}>
             <h1 className={styles.page_title}>Add your review</h1>
-            <div className={`${styles.review_card} mb-7`}>
+            <div className={`${styles.review_card} mb-0 sm:mb-7`}>
               <div className={styles.featured_image}>
                 <div className={styles.verified}>
                   <Icon icon="verified-tag" className={styles.verified_icon} />
@@ -102,7 +116,8 @@ const AddReviewPage = () => {
         <TopSearches keywords={dummyKeywords}/>
       </SectionLayout>
       
-      <ModalReviewSuccess visible={false} />
+      <ModalReviewSuccess visible={isModalSuccess} onClose={handleCloseModal} />
+      <ModalReviewFail visible={isModalFail} onClose={handleCloseModal} />
     </div>
   )
 }

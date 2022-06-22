@@ -2,16 +2,17 @@
 @use "./../components/ReviewsPage/ReviewCard/ReviewCard.module.scss";
 
 .review {
+  .main_content {
+    flex: 1;
+    max-width: 790px;
+  }
+
   .section_children_reviews {
     display: flex;
     justify-content: space-between;
     height: 100%;
   }
   
-  .main_content {
-    flex: 1;
-    max-width: 790px;
-  }
   
   .section_review_search_box {
     position: absolute;
@@ -20,6 +21,10 @@
     z-index: 1;
     padding: 0 30px;
     background-color: transparent;
+
+    &_container {
+      height: 100%;
+    }
   }
 
   &_add_new {
@@ -59,6 +64,70 @@
       font-weight: $fw-semi-bold;
       color: $bg-600;
       max-width: 518px;
+    }
+  }
+
+  @media screen and (max-width: $big-tablet) {
+    .section_children_reviews {
+      padding-top: 200px;
+    }
+    .section_review_search_box {
+      bottom: -90px;
+      padding: 0 16px;
+      
+      &_container {
+        width: 100%;
+      }
+    }
+    .advertisement {
+      display: none;
+    }
+  
+    &_add_new {
+      .container {
+        &_left {
+          width: 100%;
+          padding-right: 0 !important;
+          margin-right: 0 !important;
+          
+          &.divider_vertical {
+            border: none;
+          }
+        }
+        &_right {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    &_add_new {
+      .featured_image {
+        max-width: 100%;
+        min-width: 100%;
+        height: 100%;
+        margin-bottom: 16px;
+      }
+    }
+  }
+  
+  @media screen and (max-width: $mobile) {
+    .section_children_reviews {
+      &_container {
+        width: 100%;
+        padding: 0 16px;
+      }
+    }
+    .section_review_search_box {
+      bottom: -140px;
+    }
+    .top_search {
+      padding-top: 0;
+      &_container {
+        width: 100%;
+        padding: 0 16px;
+      }
     }
   }
 }
