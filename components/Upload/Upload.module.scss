@@ -101,6 +101,12 @@
   }
 }
 
+.banner {
+  background-color: $bg-50;
+  border: none;
+  height: 400px;
+}
+
 .cover {
   overflow: hidden;
 
@@ -149,10 +155,4 @@
     border: 4px solid white;
     border-radius: 50%;
   }
-}
-
-.banner {
-  background-color: $bg-50;
-  border: none;
-  height: 400px;
 }

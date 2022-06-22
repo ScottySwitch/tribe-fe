@@ -153,7 +153,6 @@ const EditListingHomepage = (context) => {
           <Upload
             className={styles.banner}
             centerIcon={<CenterIcon />}
-            multiple={true}
             onChange={handleChangeImages}
             type="banner"
             isPaid

@@ -41,7 +41,7 @@ const BizInformation = () => {
       case InformationList.PHOTOS_VIDEOS:
         return <PhotosVideos isPaid={isPaid} />
       case InformationList.MANAGE_DEALS:
-        return <ManageDeals isPaid={isPaid} />
+        return <ManageDeals />
       case InformationList.ANALYTICS:
         return (
           <SectionLayout title="Analytics" className="px-[30px]" containerClassName="w-full">
