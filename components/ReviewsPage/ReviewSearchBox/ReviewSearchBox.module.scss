@@ -1,0 +1,41 @@
+@use "styles/variables.scss" as *;
+
+.review_search_box {
+  max-width: 1440px;
+  height: 100%;
+  background-color: $bg-0;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
+  padding: $p-xl;
+  
+  .title {
+    font-size: 28px;
+    color: $bg-600;
+    font-weight: $fw-bold;
+    margin-bottom: 34px;
+  }
+  
+  .button_search {
+    padding: 15px 16px;
+    font-size: $fs-md;
+  }
+
+  @media screen and (max-width: $big-tablet) {
+    & {
+      height: auto;
+    }
+  }
+
+  @media screen and (max-width: $mobile) {
+    & {
+      padding: $p-md;
+      padding: 24px;
+      border-radius: 8px;
+
+      .title {
+        font-size: 20px;
+        margin-bottom: 16px;
+      }
+    }
+  }
+}
