@@ -8,10 +8,7 @@
     min-height: 145px;
     padding: $p-md;
     width: 100%;
-    
-    &:not(:last-of-type) {
-      margin-bottom: 32px;
-    }
+    margin-bottom: 32px;    
   }
 
   &_avatar {

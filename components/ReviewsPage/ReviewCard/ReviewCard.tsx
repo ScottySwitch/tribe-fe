@@ -9,6 +9,7 @@ import Button from "components/Button/Button"
 import styles from "./ReviewCard.module.scss"
 import Rate from "components/Rate/Rate"
 import Link from "next/link"
+import classNames from "classnames"
 
 const dummyDate = [
   {label: "April 2022", value: "April 2022"},
@@ -27,10 +28,12 @@ export const rateType = {
 }
 
 export const ReviewForm = (props) => {
-  const {onSubmit} = props
+  const {
+    onSubmit
+  } = props
 
   return (
-    <div className="form_edit">
+    <div className={styles.form_review}>
       <div className={styles.form_group}>
         <Input
           size="large"
@@ -61,7 +64,7 @@ export const ReviewForm = (props) => {
       <div className={styles.form_group}>
         <Checkbox id={Math.random().toString()} label="I certify that this review is solely based on my own experience, my genuine opinion and that I have no personal or business relationship with the establishment. I have not been offered any incentive or payment originating from the establishment to write this review. I understand that Tribes has a zero-tolerance policy on fake reviews"/>
       </div>
-      <Button text="Submit" width="auto" onClick={onSubmit}/>
+      <Button text="Submit" width="auto" onClick={onSubmit} />
     </div>
   )
 }
@@ -127,21 +130,19 @@ const ReviewCard = (props: IReviewCardProps) => {
         </h4>
         <div className={styles.location}>{location}</div>
         <div className={styles.cta_group}>
-          <div>
-            <Rate
-              readonly={ratingReadonly}
-              initialRating={rating}
-              placeholderRating={rateNumber}
-              onClick={handleCickRating}
-            />
-          </div>
+          <Rate
+            readonly={ratingReadonly}
+            initialRating={rating}
+            placeholderRating={rateNumber}
+            onClick={handleCickRating}
+          />
           {
             expanded
             ? (<div className={styles.cta_click}>{ratingType}</div>)
             : (<div className={`${styles.cta_click} cursor-pointer`} onClick={handleReview}>Click to rate</div>)
           }
         </div>
-        { expanded && <ReviewForm onSubmit={onSubmit} /> }
+        {expanded && <ReviewForm onSubmit={onSubmit} />}
       </div>
     </div>
   )
