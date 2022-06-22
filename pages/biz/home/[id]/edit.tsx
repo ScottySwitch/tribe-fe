@@ -224,6 +224,7 @@ const EditListingHomepage = (context) => {
           title={getAddItemsFields(category).title}
         >
           <AddItems
+            multiple
             onSubmit={handleSetItemList}
             onCancel={handleCancel}
             itemList={itemList}
@@ -238,7 +239,12 @@ const EditListingHomepage = (context) => {
           title="Add deals"
           childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
         >
-          <AddDeals onCancel={handleCancel} onSubmit={handleSetDealList} dealList={dealList} />
+          <AddDeals
+            multiple
+            onCancel={handleCancel}
+            onSubmit={handleSetDealList}
+            dealList={dealList}
+          />
         </SectionLayout>
       </div>
     )

@@ -11,14 +11,14 @@ import { getIndex, randomId } from "utils"
 import styles from "./AddDeal.module.scss"
 
 interface AddDealsProps {
-  isMultiple?: boolean
+  multiple?: boolean
   dealList: { [key: string]: any }[]
   onCancel: () => void
   onSubmit: (dealList: { [key: string]: any }[]) => void
 }
 
 const AddDeals = (props: AddDealsProps) => {
-  const { dealList, isMultiple = true, onCancel, onSubmit } = props
+  const { dealList, multiple, onCancel, onSubmit } = props
   const [localDealList, setLocalDeaList] = useState(dealList || [])
 
   const handleRemoveDeal = (id: number) => {
@@ -69,9 +69,11 @@ const AddDeals = (props: AddDealsProps) => {
               <div className={styles.break} />
               <div className={styles.header}>
                 <p className="text-left">Add images</p>
-                <div className={styles.close} onClick={() => handleRemoveDeal(deal.id)}>
-                  <Icon icon="cancel" />
-                </div>
+                {multiple && (
+                  <div className={styles.close} onClick={() => handleRemoveDeal(deal.id)}>
+                    <Icon icon="cancel" />
+                  </div>
+                )}
               </div>
               <Upload type="media" centerIcon={<Icon icon="plus" size={20} />} />
               <Input
@@ -93,10 +95,10 @@ const AddDeals = (props: AddDealsProps) => {
                 placeholder="A valid tribe listing pass must be presented upon payment to enjoy the offer."
                 onChange={(e: any) => handleChangeDeal(deal.id, "termsConditions", e.target.value)}
               />
-              {isMultiple && <AddDealButton />}
+              {multiple && <AddDealButton />}
             </div>
           ))
-        : isMultiple && <AddDealButton />}
+        : multiple && <AddDealButton />}
       <Break />
       <div className="flex gap-5">
         <CancelButton />

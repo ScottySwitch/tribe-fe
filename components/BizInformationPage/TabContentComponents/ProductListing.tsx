@@ -112,7 +112,6 @@ const ProductListing = (props: ProductListingProps) => {
       >
         <AddItems
           isPaid={isPaid}
-          isMultiple={false}
           itemList={selectedItem}
           onSubmit={(e) => {
             setScreen(ProductListingScreens.LIST)

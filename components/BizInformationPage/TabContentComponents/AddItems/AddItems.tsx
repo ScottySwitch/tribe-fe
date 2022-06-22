@@ -11,7 +11,7 @@ import styles from "./AddItems.module.scss"
 
 interface AddItemsProps {
   isPaid?: boolean
-  isMultiple?: boolean
+  multiple?: boolean
   itemList?: { [key: string]: any }[]
   placeholders: string[]
   onSubmit: (list: { [key: string]: any }[]) => void
@@ -19,7 +19,7 @@ interface AddItemsProps {
 }
 
 const AddItems = (props: AddItemsProps) => {
-  const { itemList = [], isPaid, isMultiple = true, placeholders, onCancel, onSubmit } = props
+  const { itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
   const [localItemList, setLocalItemList] = useState(itemList || [])
 
   const handleRemoveItem = (id: number) => {
@@ -72,7 +72,7 @@ const AddItems = (props: AddItemsProps) => {
               <div className={styles.break} />
               <div className={styles.header}>
                 <p className="text-left">Add images</p>
-                {isMultiple && (
+                {multiple && (
                   <div className={styles.close} onClick={() => handleRemoveItem(item.id)}>
                     <Icon icon="cancel" />
                   </div>
@@ -105,10 +105,10 @@ const AddItems = (props: AddItemsProps) => {
                 placeholder="Tags"
                 onChange={(e: any) => handleChangeItem(item.id, "tags", e.target.value)}
               />
-              {isMultiple && <AddItemButton />}
+              {multiple && <AddItemButton />}
             </div>
           ))
-        : isMultiple && <AddItemButton />}
+        : multiple && <AddItemButton />}
       <Break />
       <div className="flex gap-5">
         <CancelButton />
