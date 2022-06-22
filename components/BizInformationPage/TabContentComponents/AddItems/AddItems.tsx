@@ -38,7 +38,7 @@ const AddItems = (props: AddItemsProps) => {
 
   const handleAddItem = () => {
     console.log("asjndkjansd")
-    setLocalItemList([...localItemList, { isNew: true }])
+    setLocalItemList([...localItemList, { id: randomId(), isNew: true }])
   }
 
   const AddItemButton = () => (

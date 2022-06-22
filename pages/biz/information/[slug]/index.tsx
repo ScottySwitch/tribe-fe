@@ -58,8 +58,7 @@ const BizInformation = () => {
         return <BusinessDetail isPaid={isPaid} />
       case InformationList.PRODUCT_LISTING:
         return <ProductListing isPaid={isPaid}
-                               bizListingId={listing.id}
-                               products={listing.attributes.products.data} />
+                               bizListingId={listing.id} />
       case InformationList.PHOTOS_VIDEOS:
         return <PhotosVideos isPaid={isPaid} />
       case InformationList.MANAGE_DEALS:

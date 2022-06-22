@@ -5,7 +5,7 @@ import InforCard from "components/InforCard/InforCard"
 import Popover from "components/Popover/Popover"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import { bizInformationDefaultFormData, getAddItemsFields } from "constant"
-import React, { useState } from "react"
+import React, {useEffect, useState} from "react"
 import { randomId } from "utils"
 import AddItems from "./AddItems/AddItems"
 import styles from "./TabContent.module.scss"
@@ -13,7 +13,6 @@ import ProductApi from "../../../services/product";
 
 interface ProductListingProps {
   bizListingId: number,
-  products: any,
   isPaid: boolean
 }
 
@@ -24,13 +23,20 @@ enum ProductListingScreens {
 }
 
 const ProductListing = (props: ProductListingProps) => {
-  let { isPaid, bizListingId, products } = props
+  const { isPaid, bizListingId } = props
   const [formData, setFormData] = useState(bizInformationDefaultFormData)
   const [selectedItem, setSelectedItem] = useState<any[]>([])
   const [screen, setScreen] = useState<ProductListingScreens>(ProductListingScreens.LIST)
   const { category } = formData
 
-  const [productList, setProductList] = useState(products)
+  const [productList, setProductList] = useState<any>()
+  useEffect(() => {
+    const getProductsByBizListingId = async (bizListingId: number) => {
+      const result = await ProductApi.getProductsByBizListingId(bizListingId)
+      setProductList(result.data.data)
+    }
+    getProductsByBizListingId(bizListingId)
+  }, [bizListingId])
 
   const submitProduct = async (e: any) => {
     // console.log('newProduct', e[0]);
