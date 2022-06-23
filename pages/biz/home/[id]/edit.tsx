@@ -28,6 +28,7 @@ import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
 import { getAddItemsFields } from "constant"
 import ProductApi from "../../../../services/product";
 import DealApi from "../../../../services/deal";
+import { is } from "date-fns/locale"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -190,7 +191,6 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
-    console.log('openHours', openHours);
     
     if (itemList.length > 0) {
       await Promise.all(
@@ -224,7 +224,6 @@ const EditListingHomepage = (context) => {
         })
       )
     }
-
     await BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
@@ -273,6 +272,7 @@ const EditListingHomepage = (context) => {
           <div className={styles.body}>
             <div className={styles.right_col}>
               <EditAction
+                isPaid={isPaid}
                 action={action}
                 onApplyAction={handleSetAction}
                 onPublishPage={handleSubmit}
