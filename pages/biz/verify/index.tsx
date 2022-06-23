@@ -36,29 +36,26 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   console.log(tier)
 
-
   useEffect(() => {
     const sessionId = router.query.sessionId
     if (sessionId && localStorage.getItem("isVeriFy") != "true") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
-      handleFinishVerifying('stripe')
+      handleFinishVerifying("stripe")
       // for storing product payment order in strapi
-      const checkoutSessionId = sessionId;
-      console.log(checkoutSessionId);
+      const checkoutSessionId = sessionId
+      console.log(checkoutSessionId)
       if (checkoutSessionId) {
-        SS_GetProductPaymentDetails(checkoutSessionId);
+        SS_GetProductPaymentDetails(checkoutSessionId)
       }
     }
 
-    
     //  storing product payment order in strapi logic
-    
   }, [])
 
   const handleSubmit = () => {
-    const ssProduct = document.getElementById("SS_ProductCheckout");
-    console.log(ssProduct);
-    SS_ProductCheckout();
+    const ssProduct = document.getElementById("SS_ProductCheckout")
+    console.log(ssProduct)
+    SS_ProductCheckout()
   }
 
   function SS_ProductCheckout() {
@@ -148,8 +145,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       })
   }
 
-  
-
   const handleRequestOTP = async () => {
     //send OPT
     await AuthApi.otpPhoneGenerate(phoneNumber)
@@ -163,8 +158,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const result = await AuthApi.otpPhoneConfirm({ otp })
       if (result.data.success) {
         const result1 = ClaimListingApi.createClaimListing({
-          paymentMethod: 'free',
-          transaction_id: '',
+          paymentMethod: "free",
+          transaction_id: "",
         })
         setShowResultModal(true)
       } else {
@@ -183,7 +178,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleDirectToStorePage = () => {
     const localLoginInfo = { tier: tier, token: "asd", type: UsersTypes.BIZ_USER }
     localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
-    window.location.href = `/biz/home/${localStorage.getItem('biz_slug')}/edit/`
+    window.location.href = `/biz/home/${localStorage.getItem("biz_slug")}/edit/`
     localStorage.setItem("isVeriFy", "false")
   }
 
@@ -242,20 +237,16 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       {verifyStep === VerifySteps.REQUEST_OTP && (
         <div className={styles.form}>
           <div className={styles.header}>Enter phone number</div>
-          {/* <Input
+          <SelectInput
+            label="Phone number"
             placeholder="your phone number"
-            width="100%"
-            prefix="+65"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
-          /> */}
-            <SelectInput
-              label="Phone number"
-              placeholder="your phone number"
-              selectPlaceholder="Area code"
-              options={formattedAreaCodes}
-              shouldControlShowValue
-              onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
-            />
+            selectPlaceholder="Area code"
+            options={formattedAreaCodes}
+            shouldControlShowValue
+            onChange={(e) =>
+              setPhoneNumber(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
+            }
+          />
           <Button text="Receive OTP" onClick={handleRequestOTP} />
         </div>
       )}
@@ -360,9 +351,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           </div>
           <div className="flex justify-center gap-5 w-full">
             <Button width="30%" variant="no-outlined" text="Change tier" />
-            {/* <button 
-              onClick={handleSubmit}
-              className="css style" type="button" id="SS_ProductCheckout" data-id="1" data-url="http://localhost:1337"> Subscribe </button> */}
             {paymentMethod == "stripe" ? (
               <Button
                 width="80%"

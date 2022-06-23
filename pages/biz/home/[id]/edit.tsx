@@ -29,7 +29,6 @@ import { getAddItemsFields } from "constant"
 import ProductApi from "../../../../services/product"
 import DealApi from "../../../../services/deal"
 import get from "lodash/get"
-import { is } from "date-fns/locale"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
