@@ -37,12 +37,14 @@ const SignupPage = () => {
   const [method, setMethod] = useState(LoginMethod.PHONE)
   const [showPassword, setShowPassword] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const [localValue, setLocalValue] = useState("")
   const router = useRouter()
 
   const [valuePassword, setValuePassword] = useState("")
 
   const handleSubmit = async (event: any) => {
+    setIsLoading(true)
     console.log(phoneNumber);
     event.preventDefault()
     const otpReceiver = method === LoginMethod.EMAIL ? event.target.email.value : phoneNumber
@@ -76,6 +78,7 @@ const SignupPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error)
+        setIsLoading(false)
       }
     } else {
       try {
@@ -108,8 +111,10 @@ const SignupPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error)
+        setIsLoading(false)
       }
     }
+    setIsLoading(false)
   }
 
   const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/facebook'
@@ -168,7 +173,7 @@ const SignupPage = () => {
               <Icon icon="facebook-color" size={20} className={styles.icon} />
             </a>
           </div>
-          <Button text="Sign up" type="submit" />
+          <Button text="Sign up" type="submit" isLoading={isLoading} />
           <div className={styles.sign_up}>
             Already have account?
             <span>

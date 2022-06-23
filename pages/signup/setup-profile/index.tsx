@@ -31,6 +31,7 @@ const StepOne = ({
 }) => {
   const router = useRouter()
   const [uploadAvatar, setUploadAvatar] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
 
   const { setValue, getValues, register, handleSubmit } = useForm({
     defaultValues: {
@@ -71,6 +72,7 @@ const StepOne = ({
   }, []);
 
   const onSubmit = async (data) => {
+    setIsLoading(true)
     console.log('data', data);
     try {
       const userId = parseInt(localStorage.getItem('user_id') || '0');
@@ -84,6 +86,7 @@ const StepOne = ({
     } catch (err) {
       // TODO: notify error (missing template)
       console.log(err);
+      setIsLoading(false)
       return false;
     }
     onNextStep(data)
@@ -143,7 +146,7 @@ const StepOne = ({
           {/* <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
             Skip
           </div> */}
-          <Button className="w-1/2" text="Next" type="submit" />
+          <Button className="w-1/2" text="Next" type="submit" isLoading={isLoading} />
         </div>
       </form>
     </div>
@@ -152,8 +155,12 @@ const StepOne = ({
 
 const StepTwo = ({ onBackStep, onSubmit }: any) => {
   const [interest, setInterest] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleSubmit = () => {
+    setIsLoading(true)
     onSubmit(interest)
+    setIsLoading(false)
   }
   return (
     <div>
@@ -192,7 +199,7 @@ const StepTwo = ({ onBackStep, onSubmit }: any) => {
         </div>
         <div className={styles.actions}>
           <Button variant="secondary-no-outlined" text="Back" onClick={onBackStep} width={50} />
-          <Button className="w-1/2" text="Next" onClick={handleSubmit} />
+          <Button className="w-1/2" text="Next" onClick={handleSubmit} isLoading={isLoading} />
         </div>
       </div>
     </div>
@@ -213,7 +220,7 @@ const SetupProfilePage = () => {
 
   const handleSubmit = (form) => {
     console.log({ ...formData, ...form })
-    router.push("/login")
+    router.push("/")
   }
 
   const handleBackStep = () => {

@@ -23,7 +23,7 @@
 
   .container {
     height: $input-height;
-    width: 100%;
+    //width: 100%;
     min-width: max-content;
     display: flex;
     align-items: center;
@@ -77,6 +77,12 @@
   &:hover {
     box-shadow: none;
   }
+}
+
+.loading {
+  cursor: wait;
+  opacity: 0.5;
+  width: auto;
 }
 
 .no_outlined {
