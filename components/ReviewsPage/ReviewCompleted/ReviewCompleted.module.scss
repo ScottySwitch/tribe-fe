@@ -1,0 +1,64 @@
+@use "styles/variables.scss" as *;
+
+.review {
+  &_completed {
+    display: flex;
+
+    &:not(:last-child) {
+      margin-bottom: 40px;
+    }
+  }
+
+  &_avatar {
+    min-width: 56px;
+    max-width: 56px;
+    height: 56px;
+    margin-right: 16px;
+  }
+
+  &_sumary {
+    flex: 1;
+    
+    .name {
+      font-size: $fs-md;
+      font-weight: $fw-bold;
+      color: $bg-700;
+      margin-bottom: 10px;
+    }
+    
+    .rating {
+      &_group {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      &_type {
+        font-size: $fs-md;
+        color: $bg-600;
+        font-weight: $fw-bold;
+        margin-left: 16px;
+        margin-bottom: 12px;
+      }
+    }
+
+    .content {
+      font-size: $fs-md;
+      color: $bg-500;
+      margin-bottom: 16px;
+    }
+
+    .image {
+      &_list {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      &_item {
+        margin-right: 17px;
+      }
+    }
+
+    .date_visit {
+      font-size: $fs-md;
+    }
+  }
+}

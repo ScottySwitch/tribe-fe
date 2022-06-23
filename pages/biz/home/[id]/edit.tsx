@@ -26,6 +26,8 @@ import { IOption } from "type"
 import Tags from "components/BizHomePage/Tags/Tags"
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
 import { getAddItemsFields } from "constant"
+import ProductApi from "../../../../services/product";
+import DealApi from "../../../../services/deal";
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -77,6 +79,9 @@ const EditListingHomepage = (context) => {
         setOpenHours(listing.attributes.open_hours)
         setPriceRange(listing.attributes.price_range)
         setSocialInfo(listing.attributes.social_info)
+        setItemList(listing.attributes.products.data)
+        setDealList(listing.attributes.deals.data)
+        // setPhoneNumber(listing.attributes.phone_number)
         setLogo(listing.attributes.logo)
         if(listing.attributes.tags.data.length > 0) {
           // console.log(listing.attributes.tags);
@@ -187,12 +192,43 @@ const EditListingHomepage = (context) => {
   const handleSubmit = async () => {
     console.log('openHours', openHours);
     
-    BizListingApi.updateBizListing(bizListing.id, {
+    if (itemList.length > 0) {
+      await Promise.all(
+        itemList.map(async (item) => {
+          if (item.isNew) {
+            const dataSend = {
+              biz_listing: bizListing.id,
+              name: item.name,
+              description: item.description,
+              price: item.price,
+              tags: item.tags,
+              images: [item.imgUrl],
+            }
+            await ProductApi.createProduct(dataSend)
+          }
+        })
+      )
+    }
+
+    if (dealList.length > 0) {
+      await Promise.all(
+        dealList.map(async (item) => {
+          const dataSend = {
+            biz_listing: bizListing.id,
+            name: item.name,
+            description: item.description,
+            images: [item.imgUrl],
+            end_date: item.validUntil,
+          }
+          await DealApi.createDeal(dataSend)
+        })
+      )
+    }
+
+    await BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
       action: action,
-      item_list: itemList,
-      deal_list: dealList,
       images: listingImages,
       social_info: socialInfo,
       phone_number: phoneNumber,

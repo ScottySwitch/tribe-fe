@@ -1,12 +1,12 @@
 import classNames from "classnames"
 import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
-import Switch from "components/Switch/Switch"
 import { Tiers } from "enums"
 import { Item } from "framer-motion/types/components/Reorder/Item"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import Switch from "react-switch"
 
 import styles from "./TierTable.module.scss"
 
@@ -84,7 +84,8 @@ const tableData = [
 const tiers = [
   {
     name: "Free Tier",
-    price: "SGD 0",
+    quarter_price: "SGD 0",
+    yearly_price: "SGD 0",
     demo: Tiers.FREE,
     value: Tiers.FREE,
     description:
@@ -93,7 +94,8 @@ const tiers = [
   },
   {
     name: "Basic Tier",
-    price: "SGD 150",
+    quarter_price: "SGD 150",
+    yearly_price: "SGD 600",
     demo: Tiers.BASIC,
     description:
       "With advance features to help you promote your business. Suitable for medium and large business.",
@@ -105,24 +107,24 @@ const tiers = [
 
 const DesktopTierTable = ({
   onDirectToVerification,
-  setIsActive,
-  isActive,
+  setIsPayYearly,
+  isPayYearly,
 }: {
   onDirectToVerification?(tier: Tiers): void
-  setIsActive?: (value: boolean) => void
-  isActive?: boolean
+  setIsPayYearly?: (value: boolean) => void
+  isPayYearly: boolean
 }) => {
+  useEffect(() => {
+    console.log(isPayYearly)
+  })
   const handleChangePayPrice = () => {
-    setIsActive?.(!isActive)
+    setIsPayYearly?.(!isPayYearly)
     if (localStorage.getItem("pay_price") == "600") {
       localStorage.setItem("pay_price", "150")
     } else {
       localStorage.setItem("pay_price", "600")
     }
-    console.log(localStorage.getItem("pay_price"))
-    console.log(isActive)
   }
-
   return (
     <table>
       <colgroup>
@@ -135,15 +137,28 @@ const DesktopTierTable = ({
         <tr>
           <th className={styles.tier_payment}>
             <span>Pay quarterly</span>
-            <Switch isActive={isActive} onClick={handleChangePayPrice} />
+            <Switch
+              onColor="#3faeff"
+              uncheckedIcon={false}
+              checkedIcon={false}
+              onChange={handleChangePayPrice}
+              checked={isPayYearly}
+            />
             <span>Pay yearly</span>
           </th>
           {tiers.map((tier) => (
             <th key={tier.name}>
               <div className={styles.tier_name}>{tier.name}</div>
               <div className={styles.tier_price}>
-                {tier.price}
-                <span> per quarter</span>
+                {isPayYearly ? (
+                  <>
+                    {tier.yearly_price} <span>per year</span>
+                  </>
+                ) : (
+                  <>
+                    {tier.quarter_price} <span>per quarter</span>
+                  </>
+                )}
               </div>
               <div>
                 <Link href={"/"}>View Demo page</Link>
@@ -182,27 +197,34 @@ const DesktopTierTable = ({
 
 const MobileTierTable = ({
   onDirectToVerification,
-  setIsActive,
-  isActive,
+  setIsPayYearly,
+  isPayYearly,
 }: {
   onDirectToVerification?(tier: Tiers): void
-  setIsActive?: (value: boolean) => void
-  isActive?: boolean
+  setIsPayYearly?: (value: boolean) => void
+  isPayYearly: boolean
 }) => {
+  const [tierList, setTierList] = useState<string[]>([])
   const handleChangePayPrice = () => {
-    setIsActive?.(!isActive)
+    setIsPayYearly?.(!isPayYearly)
     if (localStorage.getItem("pay_price") == "600") {
       localStorage.setItem("pay_price", "150")
     } else {
       localStorage.setItem("pay_price", "600")
     }
     console.log(localStorage.getItem("pay_price"))
-    console.log(isActive)
+    console.log(isPayYearly)
   }
-  const [tierList, setTierList] = useState<string[]>([])
   return (
     <div className={styles.tier_mobile}>
-      <Switch isActive={isActive} onClick={handleChangePayPrice} /> Pay yearly
+      <Switch
+        onColor="#3faeff"
+        uncheckedIcon={false}
+        checkedIcon={false}
+        onChange={handleChangePayPrice}
+        checked={isPayYearly}
+      />
+      Pay yearly
       {tiers.map((tier) => (
         <div key={tier.name} className="relative mt-10">
           {tier.recommended && (
@@ -221,7 +243,17 @@ const MobileTierTable = ({
               <span>{tier.description}</span>
               <div className={styles.price}>
                 <div>
-                  {tier.price} <span>per quarter</span>
+                  {isPayYearly ? (
+                    <>
+                      {tier.yearly_price}
+                      <span>per year</span>
+                    </>
+                  ) : (
+                    <>
+                      {tier.quarter_price}
+                      <span>per quarter</span>
+                    </>
+                  )}
                 </div>
                 <a onClick={() => setTierList([...tierList, tier.name])}>View detail</a>
               </div>
@@ -268,26 +300,29 @@ const MobileTierTable = ({
 
 const TierTable = ({
   isPaid,
-  isPayQuarterly,
-  onSetIsPayQuarterly,
+  isPayYearly,
+  onSetIsPayYearly,
   onDirectToVerification,
 }: {
   isPaid?: boolean
-  isPayQuarterly?: boolean
-  onSetIsPayQuarterly?: (e: any) => void
+  isPayYearly: boolean
+  onSetIsPayYearly?: (e: any) => void
   onDirectToVerification?(tier: Tiers): void
 }) => {
+  useEffect(() => {
+    console.log("isPayYearly", isPayYearly)
+  })
   return (
     <div className={styles.tier}>
       <DesktopTierTable
         onDirectToVerification={onDirectToVerification}
-        isActive={isPayQuarterly}
-        setIsActive={onSetIsPayQuarterly}
+        isPayYearly={isPayYearly}
+        setIsPayYearly={onSetIsPayYearly}
       />
       <MobileTierTable
         onDirectToVerification={onDirectToVerification}
-        isActive={isPayQuarterly}
-        setIsActive={onSetIsPayQuarterly}
+        isPayYearly={isPayYearly}
+        setIsPayYearly={onSetIsPayYearly}
       />
     </div>
   )

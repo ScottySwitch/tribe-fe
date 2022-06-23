@@ -12,7 +12,7 @@ import Link from "next/link"
 import Router, { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import BizListingApi from "../../../services/biz-listing"
+import BizListingApi from "../../services/biz-listing"
 
 const defaultListing = listingSearchResult[0]
 
@@ -21,6 +21,7 @@ const ClaimListing = (context) => {
   const [listing, setListing] = useState<{ [key: string]: any }>({})
   const [claimStep, setClaimStep] = useState(firstStep)
   const { handleSubmit, setValue, getValues, register } = useForm()
+  const [isPayYearly, setIsPayYearly] = useState(false)
   const router = useRouter()
   const {
     query: { listingId },
@@ -109,8 +110,8 @@ const ClaimListing = (context) => {
         show={claimStep === ClaimStep.CHOOSE_TIER}
       >
         <TierTable
-          isPayQuarterly={false}
-          onSetIsPayQuarterly={() => null}
+          isPayYearly={isPayYearly}
+          onSetIsPayYearly={(e) => setIsPayYearly(e)}
           onDirectToVerification={handleDirectToVerification}
         />
       </SectionLayout>

@@ -10,8 +10,8 @@ interface IScrollingBox {
 
 const ScrollingBox = (props: IScrollingBox) => {
   const _axis = {
-    x: 'overflow-x',
-    y: 'overflow-y',
+    x: 'overflowX',
+    y: 'overflowY',
     xy: 'overflow',
   }
 

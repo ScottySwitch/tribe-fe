@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, { useEffect } from "react"
 import Image from "next/image"
 import { useRouter } from "next/router"
 
@@ -98,10 +98,11 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter()
 
   const handleSwitchToBizUser = () => {
-    const localLoginInfo = { token: "asd", type: UsersTypes.BIZ_USER }
-    localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
-    const id = randomId()
-    router.push(`/biz/home/${id}/edit`)
+    // const localLoginInfo = { token: "asd", type: UsersTypes.BIZ_USER }
+    // localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
+    // const id = randomId()
+    // router.push(`/biz/home/${id}/edit`)
+    router.push("/claim")
   }
 
   const handleSwitchToNormalUser = () => {
@@ -127,7 +128,12 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
         </Popover>
         <Icon icon="noti-color" size={20} />
         <Popover content={<Menu loginInfor={loginInfor} />} position="bottom-left">
-          <Image src={loginInfor.avatar || require("public/images/avatar.png")} alt="" width={40} height={40} />
+          <Image
+            src={loginInfor.avatar || require("public/images/avatar.png")}
+            alt=""
+            width={40}
+            height={40}
+          />
         </Popover>
       </>
     )

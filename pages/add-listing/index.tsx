@@ -144,7 +144,7 @@ const AddListing = () => {
     } else {
       const listingId = result.data?.data?.id
       router.push({
-        pathname: `/add-listing/claim/${listingId}`,
+        pathname: `/claim/${listingId}`,
         query: { firstStep: ClaimStep.CHOOSE_TIER },
       })
     }

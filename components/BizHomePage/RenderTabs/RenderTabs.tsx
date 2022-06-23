@@ -18,11 +18,11 @@ const Cards = ({ list }) =>
       </div>
       {list.map((item) => (
         <InforCard
-          key={item.id}
-          imgUrl={item.imgUrl}
-          title={item.name}
-          price={item.price}
-          description={item.description || item.information}
+          key={item.attributes.id}
+          imgUrl={item.attributes.images ? item.attributes.images[0] : "https://picsum.photos/200/300"}
+          title={item.attributes.name}
+          price={item.attributes.price}
+          description={item.attributes.description || item.information}
         />
       ))}
     </div>
