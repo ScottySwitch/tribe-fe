@@ -9,6 +9,8 @@ import AuthApi from "../../services/auth";
 
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
+import SelectInput from "components/SelectInput/SelectInput"
+import { formattedAreaCodes, phoneAreaCodes } from "constant"
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone",
@@ -97,7 +99,15 @@ const ForgotPasswordPage = () => {
         </div>
         <form className={styles.body} onSubmit={handleSubmit}>
           {method === LoginMethod.PHONE_NUMBER ? (
-            <Input size="large" placeholder="Phone number" name="phone" />
+            <SelectInput
+              label="Phone number"
+              placeholder="Phone number"
+              selectPlaceholder="Area code"
+              options={formattedAreaCodes}
+              shouldControlShowValue
+              name="phone"
+              // onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
+            />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />
           )}

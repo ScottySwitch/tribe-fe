@@ -37,11 +37,13 @@ const SignupPage = () => {
   const [method, setMethod] = useState(LoginMethod.PHONE)
   const [showPassword, setShowPassword] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [localValue, setLocalValue] = useState("")
   const router = useRouter()
 
   const [valuePassword, setValuePassword] = useState("")
 
   const handleSubmit = async (event: any) => {
+    console.log(phoneNumber);
     event.preventDefault()
     const otpReceiver = method === LoginMethod.EMAIL ? event.target.email.value : phoneNumber
     const formData = {
@@ -134,7 +136,7 @@ const SignupPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) => setPhoneNumber(`${e.select.value}${e.input}`)}
+              onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
             />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />

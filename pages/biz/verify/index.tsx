@@ -15,6 +15,8 @@ import AuthApi from "../../../services/auth"
 import UserApi from "../../../services/user"
 import BizInvoinceApi from "../../../services/biz-invoice"
 import ClaimListingApi from "../../../services/claim-listing"
+import SelectInput from "components/SelectInput/SelectInput"
+import { formattedAreaCodes, phoneAreaCodes } from "constant"
 
 interface BizUserVerifyProps {
   tier: string
@@ -240,12 +242,20 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       {verifyStep === VerifySteps.REQUEST_OTP && (
         <div className={styles.form}>
           <div className={styles.header}>Enter phone number</div>
-          <Input
+          {/* <Input
             placeholder="your phone number"
             width="100%"
             prefix="+65"
             onChange={(e: ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
-          />
+          /> */}
+            <SelectInput
+              label="Phone number"
+              placeholder="your phone number"
+              selectPlaceholder="Area code"
+              options={formattedAreaCodes}
+              shouldControlShowValue
+              onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
+            />
           <Button text="Receive OTP" onClick={handleRequestOTP} />
         </div>
       )}
