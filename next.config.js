@@ -4,7 +4,8 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['picsum.photos', 'bamboohealth.s3.ap-southeast-1.amazonaws.com'],
+    domains: ['picsum.photos', 'bamboohealth.s3.ap-southeast-1.amazonaws.com',
+    'platform-lookaside.fbsbx.com', 'lh3.googleusercontent.com'],
   },
   i18n: {
     locales: ['en', 'sg'],
