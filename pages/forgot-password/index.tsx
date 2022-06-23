@@ -25,6 +25,7 @@ const tabList = [
 const ForgotPasswordPage = () => {
   const [method, setMethod] = useState(LoginMethod.EMAIL)
   const router = useRouter()
+  const [phoneNumber, setPhoneNumber] = useState("")
 
   const handleSubmit = async (event: any) => {
     event.preventDefault()
@@ -55,9 +56,9 @@ const ForgotPasswordPage = () => {
     else {
       try {
         console.log('forget password');
-        console.log('Phone: ', formData.phone);
+        console.log('Phone: ', phoneNumber);
         const result = await AuthApi.forgetPasswordByPhone({
-          phone_number: formData.phone,
+          phone_number: phoneNumber,
         });
         console.log('result: ', result);
         if (result.data.ok) {
@@ -106,7 +107,7 @@ const ForgotPasswordPage = () => {
               options={formattedAreaCodes}
               shouldControlShowValue
               name="phone"
-              // onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
+              onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
             />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />
