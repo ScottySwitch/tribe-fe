@@ -7,69 +7,68 @@
     max-width: 790px;
   }
 
-  .section_children_claims {
-    display: flex;
-    justify-content: space-between;
-    height: 100%;
-  }
-
   .section_claim_search_box {
     position: absolute;
     height: 200px;
-    bottom: 0;
-    z-index: 1;
-    padding: 0 30px;
+    bottom: -20px;
+    left: 50%;
     background-color: transparent;
-
-    &_container {
-      height: 100%;
-    }
+    z-index: 1;
+    transform: translateX(-50%);
+    padding-top: 50px;
   }
-
-  @media screen and (max-width: $big-tablet) {
-    .section_children_claims {
-      padding-top: 200px;
-    }
-    .section_claim_search_box {
-      bottom: -90px;
-      padding: 0 16px;
-
-      &_container {
-        width: 100%;
+  .header {
+    font-size: $fs-2xl;
+    font-weight: $fw-bold;
+    text-align: center;
+    margin: 80px 0 20px 0;
+  }
+  .advantage {
+    display: flex;
+    gap: 10px;
+    .description {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      .title {
+        font-size: $fs-xl;
+        font-weight: $fw-bold;
       }
-    }
-    .advertisement {
-      display: none;
     }
   }
 
   @media screen and (max-width: 768px) {
-    &_add_new {
-      .featured_image {
-        max-width: 100%;
-        min-width: 100%;
-        height: 100%;
-        margin-bottom: 16px;
+    .section_two {
+      padding-top: 270px;
+
+      .header {
+        margin: 0;
+      }
+
+      .advantage {
+        margin-top: 20px;
+        flex-direction: column;
+        text-align: center;
+        .description {
+          width: 100%;
+        }
+      }
+
+      .top_search {
+        padding-top: 0;
+        &_container {
+          width: 100%;
+          padding: 0 16px;
+        }
       }
     }
   }
 
   @media screen and (max-width: $mobile) {
-    .section_children_claims {
-      &_container {
-        width: 100%;
-        padding: 0 16px;
-      }
-    }
     .section_claim_search_box {
-      bottom: -140px;
-    }
-    .top_search {
-      padding-top: 0;
-      &_container {
-        width: 100%;
-        padding: 0 16px;
-      }
+      bottom: -100px;
     }
   }
 }

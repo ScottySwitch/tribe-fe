@@ -19,7 +19,7 @@
   height: 100%;
   background-color: $bg-0;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
-  border-radius: 24px;
+  border-radius: $border-radius;
   padding: $p-xl;
 
   .title {
@@ -44,7 +44,7 @@
     & {
       padding: $p-md;
       padding: 24px;
-      border-radius: 8px;
+      border-radius: $border-radius;
 
       .title {
         font-size: 20px;
