@@ -99,15 +99,15 @@ const EditListingHomepage = (context) => {
         }
         if(Array.isArray(get(listing, 'attributes.facilities.data')) && get(listing, 'attributes.facilities.data').length > 0) {
         // if(listing.attributes.facilities.data.length > 0) {
-          let arrayTags: IOption[] = [];
+          let arrayFacilities: IOption[] = [];
           listing.attributes.facilities.data.map((item: any) => {
-              arrayTags.push({
+            arrayFacilities.push({
                 label: item.attributes.label, 
                 value: item.attributes.value, 
                 id: item.id
               })
           })
-          setFacilities(arrayTags)
+          setFacilities(arrayFacilities)
         }
         if(Array.isArray(get(listing, 'attributes.biz_invoices.data')) && get(listing, 'attributes.biz_invoices.data').length > 0) {
         // if (listing.attributes.biz_invoices.data.length > 0) {
