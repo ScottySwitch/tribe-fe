@@ -8,11 +8,12 @@ import Select from "components/Select/Select"
 import TierTable from "components/TierTable/TierTable"
 import { listingSearchResult, loginInforItem, roleList } from "constant"
 import { ClaimStep, Tiers } from "enums"
+import { get } from "lodash"
 import Link from "next/link"
 import Router, { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import BizListingApi from "../../services/biz-listing"
+import BizListingApi from "../../../services/biz-listing"
 
 const defaultListing = listingSearchResult[0]
 
@@ -20,7 +21,13 @@ const ClaimListing = (context) => {
   const { firstStep } = context
   const [listing, setListing] = useState<{ [key: string]: any }>({})
   const [claimStep, setClaimStep] = useState(firstStep)
-  const { handleSubmit, setValue, getValues, register } = useForm()
+  const {
+    handleSubmit,
+    setValue,
+    getValues,
+    register,
+    formState: { isDirty, isValid },
+  } = useForm({ mode: "onChange" })
   const [isPayYearly, setIsPayYearly] = useState(false)
   const router = useRouter()
   const {
@@ -53,9 +60,15 @@ const ClaimListing = (context) => {
 
   const onSubmit = async (form) => {
     console.log(form)
+    let role = get(form, "role.value")
+
+    if (!role) {
+      return alert("Please select your role")
+    }
+
     await BizListingApi.createListingRole({
       bizListingId: listingId,
-      name: form.role.value,
+      role,
     })
     setClaimStep(ClaimStep.CHOOSE_TIER)
     localStorage.setItem("pay_price", "600")
@@ -82,8 +95,8 @@ const ClaimListing = (context) => {
           <div className="flex flex-col gap-5 sm:w-3/4 w-full">
             <ListingCard listing={listing} />
             <Select
-              label="Last name"
-              placeholder="Role of business"
+              label="Role of business"
+              placeholder="Select one"
               value={getValues("role")}
               options={roleList}
               onChange={(e) => setValue("role", e)}
@@ -94,13 +107,22 @@ const ClaimListing = (context) => {
             />
             <Question question="Please click the statements below to indicate you understand and accept these terms.">
               <Checkbox
-                register={register("isAuthorized")}
+                register={register("isAuthorized", { required: "Please confirm" })}
                 label="I certify that I am an authorized representative or affiliate of this establishment and have the authority to register as a business representative. The information I have entered into this form is neither false nor fraudulent. I also understand that Tripadvisor may disclose my name and affiliation to other verified representatives of this establishment."
               />
               <br />
-              <Checkbox register={register("agreePolicies")} label={agreePolicies} />
+              <Checkbox
+                register={register("agreePolicies", { required: "Please confirm" })}
+                label={agreePolicies}
+              />
             </Question>
-            <Button type="submit" text="Continue" size="small" width={280} />
+            <Button
+              type="submit"
+              text="Continue"
+              size="small"
+              width={280}
+              disabled={!isValid} // here
+            />
           </div>
         </form>
       </SectionLayout>
@@ -121,7 +143,7 @@ const ClaimListing = (context) => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  return { props: { firstStep: context.query.firstStep || ClaimStep.CHOOSE_TIER } }
+  return { props: { firstStep: context.query.firstStep || ClaimStep.CLAIM_FREE_LISTING } }
 }
 
 export default ClaimListing
