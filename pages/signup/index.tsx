@@ -37,11 +37,13 @@ const SignupPage = () => {
   const [method, setMethod] = useState(LoginMethod.PHONE)
   const [showPassword, setShowPassword] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const [valuePassword, setValuePassword] = useState("")
 
   const handleSubmit = async (event: any) => {
+    setIsLoading(true)
     event.preventDefault()
     const otpReceiver = method === LoginMethod.EMAIL ? event.target.email.value : phoneNumber
     const formData = {
@@ -74,6 +76,7 @@ const SignupPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error)
+        setIsLoading(false)
       }
     } else {
       try {
@@ -106,8 +109,10 @@ const SignupPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error)
+        setIsLoading(false)
       }
     }
+    setIsLoading(false)
   }
 
   return (
@@ -159,7 +164,7 @@ const SignupPage = () => {
             <Icon icon="google-logo" size={20} className={styles.icon} />
             <Icon icon="facebook-color" size={20} className={styles.icon} />
           </div>
-          <Button text="Sign up" type="submit" />
+          <Button text="Sign up" type="submit" isLoading={isLoading} />
           <div className={styles.sign_up}>
             Already have account?
             <span>

@@ -40,8 +40,10 @@ const LoginPage = () => {
   const [valueEmail, setValueEmail] = useState('');
   const [valuePhoneNumber, setValuePhoneNumber] = useState('');
   const [valuePassword, setValuePassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
+    setIsLoading(true)
     // localStorage.setItem(
     //   loginInforItem,
     //   JSON.stringify({ token: "sometoken", type: UsersTypes.NORMAL_USER })
@@ -57,6 +59,7 @@ const LoginPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error);
+        setIsLoading(false)
         return false;
       }
 
@@ -76,6 +79,7 @@ const LoginPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error);
+        setIsLoading(false)
         return false;
       }
 
@@ -137,7 +141,7 @@ const LoginPage = () => {
             <Icon icon="google-logo" size={20} className={styles.icon} />
             <Icon icon="facebook-color" size={20} className={styles.icon} />
           </div>
-          <Button text="Log in" onClick={handleLogin} />
+          <Button text="Log in" onClick={handleLogin} isLoading={isLoading} />
           <div className={styles.sign_up}>
             No account yet?
             <span>
