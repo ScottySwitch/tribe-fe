@@ -12,6 +12,7 @@ interface ReviewCompletedProps {
   dateVisit?: string
   name?: string
   rating?: number
+  user: any
 }
 
 const ReviewCompleted = (props: ReviewCompletedProps) => {
@@ -24,12 +25,15 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     dateVisit,
     name,
     rating,
+    user
   } = props
+
+  console.log('user', user)
   return (
     <div className={`${styles.review_completed} ${className}`}>
       <div className={styles.review_avatar}>
         <Image
-          src={avatarUrl}
+          src={user.avatar || avatarUrl}
           height={56}
           width={56}
           alt=""
@@ -37,7 +41,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
         />
       </div>
       <div className={styles.review_sumary}>
-        <h6 className={styles.name}>Pragya Method</h6>
+        <h6 className={styles.name}>{user.first_name + ' ' + user.last_name}</h6>
         {rating &&
           (<div className={styles.rating_group}>
             <Rate
@@ -68,7 +72,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
           }
         </ul>)}
         {dateVisit &&
-          (<div className={styles.date_visit}><strong>Date of visit:</strong> March 2021</div>)
+          (<div className={styles.date_visit}><strong>Date of visit:</strong> { dateVisit }</div>)
         }
       </div>
     </div>

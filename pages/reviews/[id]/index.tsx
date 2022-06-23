@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { rateType, ReviewForm } from "components/ReviewsPage/ReviewCard/ReviewCard"
 import classNames from "classnames"
 import SectionLayout from "components/SectionLayout/SectionLayout"
@@ -10,6 +10,9 @@ import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewComple
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal"
 import styles from "styles/Reviews.module.scss"
 import TopSearches from "components/TopSearches/TopSearches"
+import ReviewApi from "../../../services/review";
+import {data} from "browserslist";
+import BizListingApi from "../../../services/biz-listing";
 
 const dummyKeywords = [
   "Fast Food", "Desserts", "Desserts", "Desserts", "Desserts", "Desserts", "Desserts",
@@ -20,17 +23,37 @@ const dummyKeywords = [
 
 const AddReviewPage = () => {
   const router = useRouter()
-  const { id } = router.query
+  // const { id } = router.query
 
   const [rating, setRating] = useState<number>()
   const [ratingType, setRatingType] = useState<string>("")
   const [isRecent, setIsRecent] = useState<boolean>(true)
   const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
-  
+  const [reviews, setReviews] = useState<any>()
+  const [bizListing, setBizListing] = useState<any>()
+
   const dividerVerticalClassName = classNames({
     [styles.divider_vertical]: isRecent
   })
+
+  const {
+    query: { id: listingSlug },
+  } = useRouter()
+
+  useEffect(() => {
+    const getListingData = async (listingSlug) => {
+      const data = await BizListingApi.getBizListingReviews(listingSlug)
+      if (data.data.data.length > 0) {
+        const listing = data.data.data[0]
+        setReviews(listing.attributes.reviews.data)
+        setBizListing(listing)
+      }
+    }
+    if (listingSlug) {
+      getListingData(listingSlug)
+    }
+  }, [listingSlug])
 
   const handleCickRating = (value: number) => {
     setRating(value)
@@ -41,12 +64,31 @@ const AddReviewPage = () => {
     setIsShowResultModal(false)
   }
   
-  const handleSubmit = () => {
-    setIsSuccess(false)
+  const handleSubmit = async (dataSend) => {
+    console.log('rating', rating)
+    // console.log('ratingType', ratingType)
+    console.log('dataSend', dataSend)
+    console.log('bizListingId', bizListing.id)
+
     setIsShowResultModal(true)
+    if (!dataSend.checkbox) {
+      setIsSuccess(false)
+    } else {
+      const dataSendApi = {
+        user: localStorage.getItem('user_id'),
+        biz_listing: bizListing.id,
+        rating,
+        content: dataSend.content,
+        visited_date: dataSend.visitedDate,
+        images: dataSend.images
+      }
+      await ReviewApi.addReview(dataSendApi)
+        .then(() => setIsSuccess(true))
+    }
   }
 
   return (
+    bizListing &&
     <div className={styles.review_add_new}>
       <SectionLayout>
         <div className={styles.container}>
@@ -58,7 +100,7 @@ const AddReviewPage = () => {
                   <Icon icon="verified-tag" className={styles.verified_icon} />
                 </div>
                 <Image
-                  src="https://picsum.photos/300/600"
+                  src={bizListing.attributes.images[0] || 'https://picsum.photos/300/600'}
                   width="100%"
                   height="56%"
                   layout="responsive"
@@ -67,8 +109,8 @@ const AddReviewPage = () => {
                 />
               </div>
               <div className="w-full">
-                <h4 className={styles.title}>Evertop Hainanese Boneless Chicken</h4>
-                <div className={styles.location}>50 Bussorah St, Singapore 199466</div>
+                <h4 className={styles.title}>{bizListing.attributes.name}</h4>
+                <div className={styles.location}>{bizListing.attributes.address}</div>
               </div>
             </div>
             <p className={`${styles.note} mb-8`}>Your first-hand experiences would help and inspire our fellow Tribes member to get ideas and make better planning. Thank you!</p>
@@ -92,14 +134,14 @@ const AddReviewPage = () => {
                 <Icon icon="map-color" size={28}/>
                 <h2 className={styles.page_title_sub}>Recent reviews of this place</h2>
               </div>
-              {Array.from({length: 3}).map((review, index) => (
+              {reviews && reviews.map((review, index) => (
                 <ReviewCompleted
                   key={index}
-                  avatarUrl="https://picsum.photos/200"
-                  listImage={["https://picsum.photos/106", "https://picsum.photos/106"]}
-                  content={`Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy. `}
-                  dateVisit="March 2021"
-                  rating={5}
+                  user={review.attributes.user.data.attributes}
+                  listImage={review.attributes.images}
+                  content={review.attributes.content}
+                  dateVisit={review.attributes.visited_at}
+                  rating={review.attributes.rating}
                 />
               ))}
             </div>)

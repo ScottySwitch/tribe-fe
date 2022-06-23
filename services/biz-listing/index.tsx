@@ -92,11 +92,31 @@ const createBizListing = async (params: any) => {
   });
 }
 
+const getBizListingReviews = async (bizListingSlug: any) => {
+  const query = qs.stringify({
+    "filters": {
+      "slug": bizListingSlug
+    },
+    "populate": {
+      "reviews": {
+        "populate": [
+          "user"
+        ]
+      }
+    }
+  }, {
+    encodeValuesOnly: true
+  });
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
 export default {
   getBizListingsByCategoryId,
   getBizListingById,
   createListingRole,
   getBizListingBySlug,
   updateBizListing,
-  createBizListing
+  createBizListing,
+  getBizListingReviews
 }
