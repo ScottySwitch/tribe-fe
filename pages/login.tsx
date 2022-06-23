@@ -13,6 +13,8 @@ import { useRouter } from "next/router"
 import { loginInforItem } from "constant"
 import { UsersTypes } from "enums"
 import AuthApi from "../services/auth";
+import { formattedAreaCodes, phoneAreaCodes } from "constant"
+import SelectInput from "components/SelectInput/SelectInput"
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -110,9 +112,14 @@ const LoginPage = () => {
         </div>
         <div className={styles.body}>
           {method === LoginMethod.PHONE_NUMBER ? (
-            <Input size="large" placeholder="Phone number" 
-              onChange={(e: any) => setValuePhoneNumber(e.target.value)}  
-          />
+              <SelectInput
+              label="Phone number"
+              placeholder="Phone number"
+              selectPlaceholder="Area code"
+              options={formattedAreaCodes}
+              shouldControlShowValue
+              onChange={(e) => setValuePhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
+            />
           ) : (
             <Input label="Email" placeholder="Your email"
                    onChange={(e: any) => setValueEmail(e.target.value)}

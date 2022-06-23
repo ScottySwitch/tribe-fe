@@ -203,7 +203,6 @@ const EditListingHomepage = (context) => {
         })
       )
     }
-
     await BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
@@ -252,6 +251,7 @@ const EditListingHomepage = (context) => {
           <div className={styles.body}>
             <div className={styles.right_col}>
               <EditAction
+                isPaid={isPaid}
                 action={action}
                 onApplyAction={handleSetAction}
                 onPublishPage={handleSubmit}

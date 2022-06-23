@@ -5,15 +5,19 @@ import Modal from "components/Modal/Modal"
 import { Item } from "framer-motion/types/components/Reorder/Item"
 import React, { useState } from "react"
 import styles from "./EditAction.module.scss"
+import SelectInput from "components/SelectInput/SelectInput"
+import { formattedAreaCodes, phoneAreaCodes } from "constant"
 
 interface EditActionProps {
   action: { label: string; value: string }
   onApplyAction: (action: string, value: string) => void
   onPublishPage: () => void
+  isPaid?: boolean
 }
 
 const EditAction = (props: EditActionProps) => {
-  const { action, onPublishPage, onApplyAction } = props
+  const { action, isPaid, onPublishPage, onApplyAction } = props
+  console.log(isPaid)
 
   const [showEditActionModal, setShowEditActionModal] = useState(false)
   const [showBuyNow, setShowBuyNow] = useState(false)
@@ -25,6 +29,7 @@ const EditAction = (props: EditActionProps) => {
   const [showLearnMore, setShowLearnMore] = useState(false)
   const [showWatchVideo, setShowWatchVideo] = useState(false)
   const [showShopOnWebsite, setShowShopOnWebWebsite] = useState(false)
+  const [actionValue, setActionValue] = useState("")
 
   const actionList = [
     {
@@ -121,9 +126,7 @@ const EditAction = (props: EditActionProps) => {
   ]
 
   const handleApply = (action: string) => {
-    const input: any = document.getElementById(action)
-    console.log(action, input.value)
-    onApplyAction(action, input.value)
+    onApplyAction(action, actionValue)
   }
 
   return (
@@ -150,47 +153,65 @@ const EditAction = (props: EditActionProps) => {
             <div className={styles.instruction}>
               Choose the action you want your visitor to take
             </div>
-            {actionList.map((action) => (
-              <div key={action.label} className={styles.action} onClick={action.open}>
-                <div className={styles.icon_container}>
-                  <Icon icon={action.icon} size={25} />
+            {actionList.map((action) =>
+              isPaid === false && action.label === "Send WhatApps message" ? null : (
+                <div key={action.label} className={styles.action} onClick={action.open}>
+                  <div className={styles.icon_container}>
+                    <Icon icon={action.icon} size={25} />
+                  </div>
+                  <div className={styles.label_container}>
+                    <div className={styles.label}>{action.label}</div>
+                    <div className={styles.sub_label}>{action.subLabel}</div>
+                  </div>
                 </div>
-                <div className={styles.label_container}>
-                  <div className={styles.label}>{action.label}</div>
-                  <div className={styles.sub_label}>{action.subLabel}</div>
-                </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         </div>
       </Modal>
-      {actionList.map((action) => (
-        <Modal
-          key={action.label}
-          title={action.label}
-          visible={action.showModalState}
-          width={400}
-          mobilePosition="center"
-          onClose={action.close}
-        >
-          <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">
-            <Input
-              id={action.label}
-              placeholder={action.type === "phone" ? "Your phone number" : "Insert URL"}
-              width="100%"
-            />
-            <Button
-              text="Apply"
-              width="100%"
-              onClick={() => {
-                action.close()
-                setShowEditActionModal(false)
-                handleApply(action.label)
-              }}
-            />
-          </div>
-        </Modal>
-      ))}
+      {actionList.map((action) =>
+        isPaid === false && action.label === "Send WhatApps message" ? null : (
+          <Modal
+            key={action.label}
+            title={action.label}
+            visible={action.showModalState}
+            width={400}
+            mobilePosition="center"
+            onClose={action.close}
+          >
+            <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">
+              {action.type === "phone" ? (
+                <SelectInput
+                  id={action.label}
+                  label="Phone number"
+                  placeholder="your phone number"
+                  selectPlaceholder="Area code"
+                  options={formattedAreaCodes}
+                  shouldControlShowValue
+                  onChange={(e) =>
+                    setActionValue(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
+                  }
+                />
+              ) : (
+                <Input
+                  placeholder="Insert URL"
+                  width="100%"
+                  onChange={(e: any) => setActionValue(e.target.value)}
+                />
+              )}
+              <Button
+                text="Apply"
+                width="100%"
+                onClick={() => {
+                  action.close()
+                  setShowEditActionModal(false)
+                  handleApply(action.label)
+                }}
+              />
+            </div>
+          </Modal>
+        )
+      )}
     </React.Fragment>
   )
 }
