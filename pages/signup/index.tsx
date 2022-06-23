@@ -112,6 +112,9 @@ const SignupPage = () => {
     }
   }
 
+  const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/facebook'
+  const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/google'
+
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
@@ -158,8 +161,12 @@ const SignupPage = () => {
             <span>Or log in with</span>
           </div>
           <div className={styles.socials}>
-            <Icon icon="google-logo" size={20} className={styles.icon} />
-            <Icon icon="facebook-color" size={20} className={styles.icon} />
+            <a rel="noopener noreferrer" href={routeGoogleLogin}>
+              <Icon icon="google-logo" size={20} className={styles.icon} />
+            </a>
+            <a rel="noopener noreferrer" href={routeFacebookLogin}>
+              <Icon icon="facebook-color" size={20} className={styles.icon} />
+            </a>
           </div>
           <Button text="Sign up" type="submit" />
           <div className={styles.sign_up}>

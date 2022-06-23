@@ -17,7 +17,7 @@ import BizListingApi from "../../../../services/biz-listing"
 import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu"
 import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems"
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
-import TagApi from "services/tag";
+import TagApi from "services/tag"
 import FacilityApi from "services/facility"
 
 import styles from "styles/BizHomepage.module.scss"
@@ -26,8 +26,9 @@ import { IOption } from "type"
 import Tags from "components/BizHomePage/Tags/Tags"
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
 import { getAddItemsFields } from "constant"
-import ProductApi from "../../../../services/product";
-import DealApi from "../../../../services/deal";
+import ProductApi from "../../../../services/product"
+import DealApi from "../../../../services/deal"
+import get from "lodash/get"
 import { is } from "date-fns/locale"
 
 const CenterIcon = () => (
@@ -60,108 +61,86 @@ const EditListingHomepage = (context) => {
 
   const [isPaid, setIsPaid] = useState<boolean>(false)
 
-  const {
-    query: { id: listingSlug },
-  } = useRouter()
+  const router = useRouter()
+  const { query } = router
+  const { id: listingSlug } = query
+
+  const formatOptions = (list) =>
+    list.map((item: any) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
 
   useEffect(() => {
-    getTags()
-    getFacilities()
     const getListingData = async (listingSlug) => {
       const data = await BizListingApi.getBizListingBySlug(listingSlug)
-      if (data.data.data.length > 0) {
-        const listing = data.data.data[0]
+      const listing = get(data, "data.data[0]")
+
+      if (listing) {
         console.log(listing)
-        setAction(listing.attributes.action)
-        setListingImages(listing.attributes.images)
+        const rawTags = get(listing, "attributes.tags.data") || []
+        const rawFacilities = get(listing, "attributes.facilities.data") || []
+        const invoiceList = get(listing, "attributes.biz_invoices.data") || []
+        const rawPhoneNumber = get(listing, "attributes.phone_number")
+        const defaultPhone = rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7)
+
+        const tagArray = formatOptions(rawTags)
+        const arrayFacilities = formatOptions(rawFacilities)
+
         setBizListing(listing)
-        setCategory(listing.attributes.categories.data[0].id) // Get the first category
-        setDescription(listing.attributes.description)
-        setOpenHours(listing.attributes.open_hours)
-        setPriceRange(listing.attributes.price_range)
-        setSocialInfo(listing.attributes.social_info)
-        setItemList(listing.attributes.products.data)
-        setDealList(listing.attributes.deals.data)
-        // setPhoneNumber(listing.attributes.phone_number)
+        setAction(get(listing, "attributes.action"))
+        setListingImages(get(listing, "attributes.images"))
+        setCategory(get(listing, "attributes.categories.data[0].id") || Categories.BUY)
+        setDescription(get(listing, "attributes.description"))
+        setOpenHours(get(listing, "attributes.open_hours"))
+        setPriceRange(get(listing, "attributes.price_range"))
+        setSocialInfo(get(listing, "attributes.social_info"))
+        setItemList(get(listing, "attributes.products.data"))
+        setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
-        if(listing.attributes.tags.data.length > 0) {
-          // console.log(listing.attributes.tags);
-          let arrayTags: IOption[] = [];
-          listing.attributes.tags.data.map((item: any) => {
-              arrayTags.push({
-                label: item.attributes.label, 
-                value: item.attributes.value, 
-                id: item.id
-              })
-          })
-          setTags(arrayTags)
-        }
-        if(listing.attributes.facilities.data.length > 0) {
-          // console.log(listing.attributes.facilities);
-          let arrayTags: IOption[] = [];
-          listing.attributes.facilities.data.map((item: any) => {
-              arrayTags.push({
-                label: item.attributes.label, 
-                value: item.attributes.value, 
-                id: item.id
-              })
-          })
-          setFacilities(arrayTags)
-        }
-        if (listing.attributes.biz_invoices.data.length > 0) {
+        setTags(tagArray)
+        setFacilities(arrayFacilities)
+        // setPhoneNumber(listing.attributes.phone_number)
+
+        if (invoiceList.length > 0) {
           setIsPaid(true)
-        }
-        if (listing.attributes.biz_invoices.data.length > 0) {
-          setPhoneNumber(listing.attributes.phone_number)
+          setPhoneNumber(rawPhoneNumber)
         } else {
-          let defaultPhone = ""
-          for (let index = 0; index < listing.attributes.phone_number.length; index++) {
-            if (index < 6 && index > 2) {
-              defaultPhone = defaultPhone + "X"
-            } else {
-              defaultPhone = defaultPhone + listing.attributes.phone_number[index]
-            }
-          }
           setPhoneNumber(defaultPhone)
         }
       }
     }
+
     if (listingSlug) {
       getListingData(listingSlug)
+      getTags()
+      getFacilities()
     }
   }, [listingSlug])
 
   //Get tags
   const getTags = async () => {
     const data = await TagApi.getTags()
-    let arrayTags : IOption[] = [];
-    if (data.data.data && data.data.data.length > 0) {
-      data.data.data.map((item: any, index: number) => {
-        arrayTags.push({
-          label: item.attributes.label,
-          value: item.attributes.value,
-          id: item.id
-        })
-      })
-      setTagOptions(arrayTags);
-    }
+    const tagsList = get(data, "data.data") || []
+    const tagArray = tagsList.map((item) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
+    setTagOptions(tagArray)
   }
 
   //Get Facility
   const getFacilities = async () => {
     const data = await FacilityApi.getFacility()
-    let arrayTags : IOption[] = [];
-    console.log(data);
-    if (data.data.data && data.data.data.length > 0) {
-      data.data.data.map((item: any, index: number) => {
-        arrayTags.push({
-          label: item.attributes.label,
-          value: item.attributes.value,
-          id: item.id
-        })
-      })
-      setFacilityOptions(arrayTags);
-    }
+    const facilitiesList = get(data, "data.data") || []
+    const facilitiesArray = facilitiesList.map((item) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
+    setFacilityOptions(facilitiesArray)
   }
 
   // TODO: check function upload multiple images
@@ -191,7 +170,8 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
-    
+    console.log("openHours", openHours)
+
     if (itemList.length > 0) {
       await Promise.all(
         itemList.map(async (item) => {
