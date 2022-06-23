@@ -38,12 +38,14 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [localValue, setLocalValue] = useState("")
   const router = useRouter()
 
   const [valuePassword, setValuePassword] = useState("")
 
   const handleSubmit = async (event: any) => {
     setIsLoading(true)
+    console.log(phoneNumber);
     event.preventDefault()
     const otpReceiver = method === LoginMethod.EMAIL ? event.target.email.value : phoneNumber
     const formData = {
@@ -115,6 +117,9 @@ const SignupPage = () => {
     setIsLoading(false)
   }
 
+  const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/facebook'
+  const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/google'
+
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
@@ -139,7 +144,7 @@ const SignupPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) => setPhoneNumber(`${e.select.value}${e.input}`)}
+              onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
             />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />
@@ -161,8 +166,12 @@ const SignupPage = () => {
             <span>Or log in with</span>
           </div>
           <div className={styles.socials}>
-            <Icon icon="google-logo" size={20} className={styles.icon} />
-            <Icon icon="facebook-color" size={20} className={styles.icon} />
+            <a rel="noopener noreferrer" href={routeGoogleLogin}>
+              <Icon icon="google-logo" size={20} className={styles.icon} />
+            </a>
+            <a rel="noopener noreferrer" href={routeFacebookLogin}>
+              <Icon icon="facebook-color" size={20} className={styles.icon} />
+            </a>
           </div>
           <Button text="Sign up" type="submit" isLoading={isLoading} />
           <div className={styles.sign_up}>

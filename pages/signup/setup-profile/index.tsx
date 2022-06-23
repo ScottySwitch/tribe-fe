@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import React, {FormEvent, useCallback, useState} from "react"
+import React, {FormEvent, useCallback, useEffect, useState} from "react"
 import Image from "next/image"
 import classNames from "classnames"
 
@@ -15,6 +15,7 @@ import styles from "styles/Auth.module.scss"
 import DatePicker from "components/DatePicker/DatePicker"
 import { useForm } from "react-hook-form"
 import UserApi from "../../../services/user"
+import AuthApi from "../../../services/auth"
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
@@ -42,6 +43,29 @@ const StepOne = ({
       industry: formData.industry,
     },
   })
+
+  const [avatar, setAvatar] = useState(["https://picsum.photos/200"]);
+  // If user is come from Facebook, Google
+  useEffect(() => {
+    const loginFacebookCallback = async (accessToken: any) => {
+      const data = await AuthApi.loginFacebookCallback(accessToken)
+      updateUserForm(data.user)
+    }
+    const loginGoogleCallback = async (accessTokenGoogle: any) => {
+      const data = await AuthApi.loginGoogleCallback(accessTokenGoogle)
+      updateUserForm(data.user)
+    }
+    if (router.query.id_token) { // google has id_token
+      loginGoogleCallback(router.query.access_token).catch(e => console.log(e))
+    } else if (router.query.access_token) {
+      loginFacebookCallback(router.query.access_token).catch(e => console.log(e))
+    }
+  }, [router])
+
+  const updateUserForm = (user) => {
+    setValue('name', user.first_name);
+    setAvatar([user.avatar]); // TODO: this function do not change avatar in form?
+  }
 
   const handleUploadAvatar = useCallback((srcAvatar) => {
     setUploadAvatar(srcAvatar[1]);
@@ -80,7 +104,7 @@ const StepOne = ({
             fileList={["https://picsum.photos/200/300"]}
           />
           <Upload
-            fileList={["https://picsum.photos/200"]}
+            fileList={avatar}
             type="avatar"
             className={styles.avatar}
             onChange={handleUploadAvatar}

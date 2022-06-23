@@ -79,6 +79,12 @@
   }
 }
 
+.loading {
+  cursor: wait;
+  opacity: 0.5;
+  width: auto;
+}
+
 .no_outlined {
   color: $primary-500;
   border: none;

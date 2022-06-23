@@ -56,7 +56,8 @@ const Facilities = (props: FacilitiesProps) => {
             setLocalFacilities(facilities)
             setShowFacilitiesModal(false)
           }}
-          onSubmit={() => {
+          onSubmit={(localFacilities) => {
+            setLocalFacilities(localFacilities)
             onSetFacilities(localFacilities)
             setShowFacilitiesModal(false)
           }}

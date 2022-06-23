@@ -17,6 +17,8 @@ import BizListingApi from "../../../../services/biz-listing"
 import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu"
 import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems"
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
+import TagApi from "services/tag"
+import FacilityApi from "services/facility"
 
 import styles from "styles/BizHomepage.module.scss"
 import Facilities from "components/BizHomePage/Facilities/Facilities"
@@ -24,8 +26,9 @@ import { IOption } from "type"
 import Tags from "components/BizHomePage/Tags/Tags"
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
 import { getAddItemsFields } from "constant"
-import ProductApi from "../../../../services/product";
-import DealApi from "../../../../services/deal";
+import ProductApi from "../../../../services/product"
+import DealApi from "../../../../services/deal"
+import get from "lodash/get"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -39,7 +42,9 @@ const EditListingHomepage = (context) => {
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME)
   const [description, setDescription] = useState<string>("")
   const [facilities, setFacilities] = useState<IOption[]>([])
+  const [facilityOptions, setFacilityOptions] = useState<IOption[]>([])
   const [tags, setTags] = useState<IOption[]>([])
+  const [tagOptions, setTagOptions] = useState<IOption[]>([])
   const [openHours, setOpenHours] = useState([])
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
   const [socialInfo, setSocialInfo] = useState<any>("")
@@ -55,52 +60,87 @@ const EditListingHomepage = (context) => {
 
   const [isPaid, setIsPaid] = useState<boolean>(false)
 
-  const {
-    query: { id: listingSlug },
-  } = useRouter()
+  const router = useRouter()
+  const { query } = router
+  const { id: listingSlug } = query
+
+  const formatOptions = (list) =>
+    list.map((item: any) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
       const data = await BizListingApi.getBizListingBySlug(listingSlug)
-      if (data.data.data.length > 0) {
-        const listing = data.data.data[0]
+      const listing = get(data, "data.data[0]")
+
+      if (listing) {
         console.log(listing)
-        setAction(listing.attributes.action)
-        setListingImages(listing.attributes.images)
+        const rawTags = get(listing, "attributes.tags.data") || []
+        const rawFacilities = get(listing, "attributes.facilities.data") || []
+        const invoiceList = get(listing, "attributes.biz_invoices.data") || []
+        const rawPhoneNumber = get(listing, "attributes.phone_number")
+        const defaultPhone = rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7)
+
+        const tagArray = formatOptions(rawTags)
+        const arrayFacilities = formatOptions(rawFacilities)
+
         setBizListing(listing)
-        setCategory(listing.attributes.categories.data[0].id) // Get the first category
-        setDescription(listing.attributes.description)
-        setFacilities(listing.attributes.facilities.data || [])
-        setTags(listing.attributes.tags || [])
-        // setOpenHours(listing.attributes.open_hours)
-        setPriceRange(listing.attributes.price_range)
-        setSocialInfo(listing.attributes.social_info)
-        setItemList(listing.attributes.products.data)
-        setDealList(listing.attributes.deals.data)
-        // setPhoneNumber(listing.attributes.phone_number)
+        setAction(get(listing, "attributes.action"))
+        setListingImages(get(listing, "attributes.images"))
+        setCategory(get(listing, "attributes.categories.data[0].id") || Categories.BUY)
+        setDescription(get(listing, "attributes.description"))
+        setOpenHours(get(listing, "attributes.open_hours"))
+        setPriceRange(get(listing, "attributes.price_range"))
+        setSocialInfo(get(listing, "attributes.social_info"))
+        setItemList(get(listing, "attributes.products.data"))
+        setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
-        if (listing.attributes.biz_invoices.data.length > 0) {
+        setTags(tagArray)
+        setFacilities(arrayFacilities)
+        // setPhoneNumber(listing.attributes.phone_number)
+
+        if (invoiceList.length > 0) {
           setIsPaid(true)
-        }
-        if (listing.attributes.biz_invoices.data.length > 0) {
-          setPhoneNumber(listing.attributes.phone_number)
+          setPhoneNumber(rawPhoneNumber)
         } else {
-          let defaultPhone = ""
-          for (let index = 0; index < listing.attributes.phone_number.length; index++) {
-            if (index < 6 && index > 2) {
-              defaultPhone = defaultPhone + "X"
-            } else {
-              defaultPhone = defaultPhone + listing.attributes.phone_number[index]
-            }
-          }
           setPhoneNumber(defaultPhone)
         }
       }
     }
+
     if (listingSlug) {
       getListingData(listingSlug)
+      getTags()
+      getFacilities()
     }
   }, [listingSlug])
+
+  //Get tags
+  const getTags = async () => {
+    const data = await TagApi.getTags()
+    const tagsList = get(data, "data.data") || []
+    const tagArray = tagsList.map((item) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
+    setTagOptions(tagArray)
+  }
+
+  //Get Facility
+  const getFacilities = async () => {
+    const data = await FacilityApi.getFacility()
+    const facilitiesList = get(data, "data.data") || []
+    const facilitiesArray = facilitiesList.map((item) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
+    setFacilityOptions(facilitiesArray)
+  }
 
   // TODO: check function upload multiple images
   const handleChangeImages = (srcImages) => setListingImages(srcImages)
@@ -129,6 +169,8 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
+    console.log("openHours", openHours)
+
     if (itemList.length > 0) {
       await Promise.all(
         itemList.map(async (item) => {
@@ -161,7 +203,6 @@ const EditListingHomepage = (context) => {
         })
       )
     }
-
     await BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
@@ -171,7 +212,7 @@ const EditListingHomepage = (context) => {
       phone_number: phoneNumber,
       facilities: facilities,
       open_hours: openHours,
-      tags: tags,
+      tags: tags.map((item) => item.id),
       is_verified: false,
       logo: logo,
     }).then((response) => {
@@ -210,6 +251,7 @@ const EditListingHomepage = (context) => {
           <div className={styles.body}>
             <div className={styles.right_col}>
               <EditAction
+                isPaid={isPaid}
                 action={action}
                 onApplyAction={handleSetAction}
                 onPublishPage={handleSubmit}
@@ -224,10 +266,10 @@ const EditListingHomepage = (context) => {
               <Facilities
                 facilities={facilities}
                 onSetFacilities={handleSetFacilities}
-                facilityOptions={[]}
+                facilityOptions={facilityOptions}
               />
               <div className={styles.break} />
-              <Tags tags={tags} onSetTags={handleSetTags} tagOptions={[]} />
+              <Tags tags={tags} onSetTags={handleSetTags} tagOptions={tagOptions} />
               <div className={styles.break} />
               <HomeOpenHours openHours={openHours} onSetOpenHours={handleSetOpenHours} />
               <div className={styles.break} />
