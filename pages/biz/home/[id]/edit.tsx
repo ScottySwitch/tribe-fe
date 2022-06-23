@@ -74,8 +74,7 @@ const EditListingHomepage = (context) => {
         setBizListing(listing)
         setCategory(listing.attributes.categories.data[0].id) // Get the first category
         setDescription(listing.attributes.description)
-        // setTags(listing.attributes.tags.data || [])
-        // setOpenHours(listing.attributes.open_hours)
+        setOpenHours(listing.attributes.open_hours)
         setPriceRange(listing.attributes.price_range)
         setSocialInfo(listing.attributes.social_info)
         setLogo(listing.attributes.logo)
@@ -186,7 +185,8 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
-    console.log(tags.map((item) => item.id));
+    console.log('openHours', openHours);
+    
     BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
