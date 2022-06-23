@@ -17,7 +17,7 @@ import BizListingApi from "../../../../services/biz-listing"
 import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu"
 import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems"
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
-import TagApi from "services/tag";
+import TagApi from "services/tag"
 import FacilityApi from "services/facility"
 
 import styles from "styles/BizHomepage.module.scss"
@@ -26,8 +26,8 @@ import { IOption } from "type"
 import Tags from "components/BizHomePage/Tags/Tags"
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
 import { getAddItemsFields } from "constant"
-import ProductApi from "../../../../services/product";
-import DealApi from "../../../../services/deal";
+import ProductApi from "../../../../services/product"
+import DealApi from "../../../../services/deal"
 import get from "lodash/get"
 
 const CenterIcon = () => (
@@ -60,110 +60,86 @@ const EditListingHomepage = (context) => {
 
   const [isPaid, setIsPaid] = useState<boolean>(false)
 
-  const {
-    query: { id: listingSlug },
-  } = useRouter()
+  const router = useRouter()
+  const { query } = router
+  const { id: listingSlug } = query
+
+  const formatOptions = (list) =>
+    list.map((item: any) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
 
   useEffect(() => {
-    getTags()
-    getFacilities()
     const getListingData = async (listingSlug) => {
       const data = await BizListingApi.getBizListingBySlug(listingSlug)
-      // if (data.data.data.length > 0) {
-      if (Array.isArray(get(data, 'data.data')) && get(data, 'data.data').length > 0 ) {
-        const listing = data.data.data[0]
+      const listing = get(data, "data.data[0]")
+
+      if (listing) {
         console.log(listing)
+        const rawTags = get(listing, "attributes.tags.data") || []
+        const rawFacilities = get(listing, "attributes.facilities.data") || []
+        const invoiceList = get(listing, "attributes.biz_invoices.data") || []
+        const rawPhoneNumber = get(listing, "attributes.phone_number")
+        const defaultPhone = rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7)
+
+        const tagArray = formatOptions(rawTags)
+        const arrayFacilities = formatOptions(rawFacilities)
+
         setBizListing(listing)
-        setAction(get(listing, 'attributes.action'))
-        setListingImages(get(listing, 'attributes.images'))
+        setAction(get(listing, "attributes.action"))
+        setListingImages(get(listing, "attributes.images"))
         setCategory(get(listing, "attributes.categories.data[0].id") || Categories.BUY)
-        setDescription(get(listing, 'attributes.description'))
-        setOpenHours(get(listing, 'attributes.open_hours'))
-        setPriceRange(get(listing, 'attributes.price_range'))
-        setSocialInfo(get(listing, 'attributes.social_info'))
-        setItemList(get(listing, 'attributes.products.data'))
-        setDealList(get(listing, 'attributes.deals.data'))
-        // setPhoneNumber(listing.attributes.phone_number)
+        setDescription(get(listing, "attributes.description"))
+        setOpenHours(get(listing, "attributes.open_hours"))
+        setPriceRange(get(listing, "attributes.price_range"))
+        setSocialInfo(get(listing, "attributes.social_info"))
+        setItemList(get(listing, "attributes.products.data"))
+        setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
-        if(Array.isArray(get(listing, 'attributes.tags.data')) && get(listing, 'attributes.tags.data').length > 0) {
-        // if(listing.attributes.tags.data.length > 0) {
-          let arrayTags: IOption[] = [];
-          listing.attributes.tags.data.map((item: any) => {
-              arrayTags.push({
-                label: item.attributes.label, 
-                value: item.attributes.value, 
-                id: item.id
-              })
-          })
-          setTags(arrayTags)
-        }
-        if(Array.isArray(get(listing, 'attributes.facilities.data')) && get(listing, 'attributes.facilities.data').length > 0) {
-        // if(listing.attributes.facilities.data.length > 0) {
-          let arrayFacilities: IOption[] = [];
-          listing.attributes.facilities.data.map((item: any) => {
-            arrayFacilities.push({
-                label: item.attributes.label, 
-                value: item.attributes.value, 
-                id: item.id
-              })
-          })
-          setFacilities(arrayFacilities)
-        }
-        if(Array.isArray(get(listing, 'attributes.biz_invoices.data')) && get(listing, 'attributes.biz_invoices.data').length > 0) {
-        // if (listing.attributes.biz_invoices.data.length > 0) {
+        setTags(tagArray)
+        setFacilities(arrayFacilities)
+        // setPhoneNumber(listing.attributes.phone_number)
+
+        if (invoiceList.length > 0) {
           setIsPaid(true)
-        }
-        if(Array.isArray(get(listing, 'attributes.biz_invoices.data')) && get(listing, 'attributes.biz_invoices.data').length > 0) {
-        // if (listing.attributes.biz_invoices.data.length > 0) {
-          setPhoneNumber(listing.attributes.phone_number)
+          setPhoneNumber(rawPhoneNumber)
         } else {
-          let defaultPhone = ""
-          for (let index = 0; index < listing.attributes.phone_number.length; index++) {
-            if (index < 6 && index > 2) {
-              defaultPhone = defaultPhone + "X"
-            } else {
-              defaultPhone = defaultPhone + listing.attributes.phone_number[index]
-            }
-          }
           setPhoneNumber(defaultPhone)
         }
       }
     }
+
     if (listingSlug) {
       getListingData(listingSlug)
+      getTags()
+      getFacilities()
     }
   }, [listingSlug])
 
   //Get tags
   const getTags = async () => {
     const data = await TagApi.getTags()
-    const tagsList = get(data, 'data.data')||[]
-    let arrayTags : IOption[] = [];
-    const tagArray = tagsList.map( item => ( { label: item.attributes.label, value: item.attributes.value, id: item.id } ))
-    setTagOptions(tagArray);
-    // if (Array.isArray(get(data, 'data.data')) && get(data, 'data.data').length > 0 ) {
-    // // if (data.data.data && data.data.data.length > 0) {
-    // }
+    const tagsList = get(data, "data.data") || []
+    const tagArray = tagsList.map((item) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
+    setTagOptions(tagArray)
   }
 
   //Get Facility
   const getFacilities = async () => {
     const data = await FacilityApi.getFacility()
-    const facilitiesList = get(data, 'data.data')||[]
-    let arrayFacilities : IOption[] = [];
-    const facilitiesArray = facilitiesList.map( item => ( { label: item.attributes.label, value: item.attributes.value, id: item.id } ))
-    setFacilityOptions(facilitiesArray);
-    // if (Array.isArray(get(data, 'data.data')) && get(data, 'data.data').length > 0 ) {
-    // // if (data.data.data && data.data.data.length > 0) {
-            // data.data.data.map((item: any, index: number) => {
-            //   arrayTags.push({
-            //     label: item.attributes.label,
-            //     value: item.attributes.value,
-            //     id: item.id
-            //   })
-            // })
-          // }
-    // }
+    const facilitiesList = get(data, "data.data") || []
+    const facilitiesArray = facilitiesList.map((item) => ({
+      label: item.attributes.label,
+      value: item.attributes.value,
+      id: item.id,
+    }))
+    setFacilityOptions(facilitiesArray)
   }
 
   // TODO: check function upload multiple images
@@ -193,8 +169,8 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
-    console.log('openHours', openHours);
-    
+    console.log("openHours", openHours)
+
     if (itemList.length > 0) {
       await Promise.all(
         itemList.map(async (item) => {
