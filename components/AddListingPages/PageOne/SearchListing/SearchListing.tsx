@@ -21,7 +21,6 @@ const RightColumn = (props: {
   isRelationship?: boolean
 }) => {
   const { listing, isRelationship, onShowUpcomingFeature } = props
-  console.log("sssssss", listing)
   const router = useRouter()
   return (
     <>

@@ -22,8 +22,8 @@ import BusinessDetail from "components/BizInformationPage/TabContentComponents/B
 import TierTable from "components/TierTable/TierTable"
 import Verification from "components/BizInformationPage/TabContentComponents/Verification"
 import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos"
-import {useRouter} from "next/router";
-import BizListingApi from "../../../../services/biz-listing";
+import { useRouter } from "next/router"
+import BizListingApi from "../../../../services/biz-listing"
 
 const BizInformation = () => {
   const [isPaid, setIsPaid] = useState(true)
@@ -58,8 +58,7 @@ const BizInformation = () => {
       case InformationList.BUSINESS_DETAIL:
         return <BusinessDetail isPaid={isPaid} />
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing isPaid={isPaid}
-                               bizListingId={listing.id} />
+        return <ProductListing isPaid={isPaid} bizListingId={listing.id} />
       case InformationList.PHOTOS_VIDEOS:
         return <PhotosVideos isPaid={isPaid} />
       case InformationList.MANAGE_DEALS:

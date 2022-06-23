@@ -16,16 +16,33 @@ const dummyLocation: IOption[] = [
   { label: "Hong Kong", value: "Hong Kong" },
 ]
 
-const ListingSearchBox = ({ title }: { title: string }) => {
+interface ListingSearchBoxProps {
+  title?: string
+  listingOptions?: any[]
+  locationList?: any[]
+  onListingSearchChange?: (item: { [key: string]: any }) => void
+  onLocationChange?: (item: { [key: string]: any }) => void
+}
+const ListingSearchBox = (props: ListingSearchBoxProps) => {
+  const { title, locationList, listingOptions, onLocationChange, onListingSearchChange } = props
   return (
     <div className={styles.listing_search_box}>
       <div className={styles.title}>{title}</div>
       <div className="grid grid-cols-1 lg:grid-cols-5 lg:gap-x-4 gap-y-4 lg:gap-y-0">
         <div className="col-span-2">
-          <Select prefixIcon="map" size="large" placeholder="Location" options={dummyLocation} />
+          <Select
+            prefixIcon="map"
+            size="large"
+            placeholder="Location"
+            options={locationList || dummyLocation}
+            onChange={onLocationChange}
+          />
         </div>
         <div className="col-span-2">
-          <ListingSearch listingOptions={listingSearchResult} onChange={(e) => console.log(e)} />
+          <ListingSearch
+            listingOptions={listingOptions || listingSearchResult}
+            onChange={onListingSearchChange}
+          />
         </div>
         <div className="col-auto">
           <Button size="large" text="Search" className={styles.button_search} />
