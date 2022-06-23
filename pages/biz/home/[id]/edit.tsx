@@ -28,6 +28,7 @@ import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
 import { getAddItemsFields } from "constant"
 import ProductApi from "../../../../services/product";
 import DealApi from "../../../../services/deal";
+import get from "lodash/get"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -68,23 +69,24 @@ const EditListingHomepage = (context) => {
     getFacilities()
     const getListingData = async (listingSlug) => {
       const data = await BizListingApi.getBizListingBySlug(listingSlug)
-      if (data.data.data.length > 0) {
+      // if (data.data.data.length > 0) {
+      if (Array.isArray(get(data, 'data.data')) && get(data, 'data.data').length > 0 ) {
         const listing = data.data.data[0]
         console.log(listing)
-        setAction(listing.attributes.action)
-        setListingImages(listing.attributes.images)
         setBizListing(listing)
-        setCategory(listing.attributes.categories.data[0].id) // Get the first category
-        setDescription(listing.attributes.description)
-        setOpenHours(listing.attributes.open_hours)
-        setPriceRange(listing.attributes.price_range)
-        setSocialInfo(listing.attributes.social_info)
-        setItemList(listing.attributes.products.data)
-        setDealList(listing.attributes.deals.data)
+        setAction(get(listing, 'attributes.action'))
+        setListingImages(get(listing, 'attributes.images'))
+        setCategory(get(listing, "attributes.categories.data[0].id") || Categories.BUY)
+        setDescription(get(listing, 'attributes.description'))
+        setOpenHours(get(listing, 'attributes.open_hours'))
+        setPriceRange(get(listing, 'attributes.price_range'))
+        setSocialInfo(get(listing, 'attributes.social_info'))
+        setItemList(get(listing, 'attributes.products.data'))
+        setDealList(get(listing, 'attributes.deals.data'))
         // setPhoneNumber(listing.attributes.phone_number)
         setLogo(listing.attributes.logo)
-        if(listing.attributes.tags.data.length > 0) {
-          // console.log(listing.attributes.tags);
+        if(Array.isArray(get(listing, 'attributes.tags.data')) && get(listing, 'attributes.tags.data').length > 0) {
+        // if(listing.attributes.tags.data.length > 0) {
           let arrayTags: IOption[] = [];
           listing.attributes.tags.data.map((item: any) => {
               arrayTags.push({
@@ -95,8 +97,8 @@ const EditListingHomepage = (context) => {
           })
           setTags(arrayTags)
         }
-        if(listing.attributes.facilities.data.length > 0) {
-          // console.log(listing.attributes.facilities);
+        if(Array.isArray(get(listing, 'attributes.facilities.data')) && get(listing, 'attributes.facilities.data').length > 0) {
+        // if(listing.attributes.facilities.data.length > 0) {
           let arrayTags: IOption[] = [];
           listing.attributes.facilities.data.map((item: any) => {
               arrayTags.push({
@@ -107,10 +109,12 @@ const EditListingHomepage = (context) => {
           })
           setFacilities(arrayTags)
         }
-        if (listing.attributes.biz_invoices.data.length > 0) {
+        if(Array.isArray(get(listing, 'attributes.biz_invoices.data')) && get(listing, 'attributes.biz_invoices.data').length > 0) {
+        // if (listing.attributes.biz_invoices.data.length > 0) {
           setIsPaid(true)
         }
-        if (listing.attributes.biz_invoices.data.length > 0) {
+        if(Array.isArray(get(listing, 'attributes.biz_invoices.data')) && get(listing, 'attributes.biz_invoices.data').length > 0) {
+        // if (listing.attributes.biz_invoices.data.length > 0) {
           setPhoneNumber(listing.attributes.phone_number)
         } else {
           let defaultPhone = ""
@@ -133,34 +137,33 @@ const EditListingHomepage = (context) => {
   //Get tags
   const getTags = async () => {
     const data = await TagApi.getTags()
+    const tagsList = get(data, 'data.data')||[]
     let arrayTags : IOption[] = [];
-    if (data.data.data && data.data.data.length > 0) {
-      data.data.data.map((item: any, index: number) => {
-        arrayTags.push({
-          label: item.attributes.label,
-          value: item.attributes.value,
-          id: item.id
-        })
-      })
-      setTagOptions(arrayTags);
-    }
+    const tagArray = tagsList.map( item => ( { label: item.attributes.label, value: item.attributes.value, id: item.id } ))
+    setTagOptions(tagArray);
+    // if (Array.isArray(get(data, 'data.data')) && get(data, 'data.data').length > 0 ) {
+    // // if (data.data.data && data.data.data.length > 0) {
+    // }
   }
 
   //Get Facility
   const getFacilities = async () => {
     const data = await FacilityApi.getFacility()
-    let arrayTags : IOption[] = [];
-    console.log(data);
-    if (data.data.data && data.data.data.length > 0) {
-      data.data.data.map((item: any, index: number) => {
-        arrayTags.push({
-          label: item.attributes.label,
-          value: item.attributes.value,
-          id: item.id
-        })
-      })
-      setFacilityOptions(arrayTags);
-    }
+    const facilitiesList = get(data, 'data.data')||[]
+    let arrayFacilities : IOption[] = [];
+    const facilitiesArray = facilitiesList.map( item => ( { label: item.attributes.label, value: item.attributes.value, id: item.id } ))
+    setFacilityOptions(facilitiesArray);
+    // if (Array.isArray(get(data, 'data.data')) && get(data, 'data.data').length > 0 ) {
+    // // if (data.data.data && data.data.data.length > 0) {
+            // data.data.data.map((item: any, index: number) => {
+            //   arrayTags.push({
+            //     label: item.attributes.label,
+            //     value: item.attributes.value,
+            //     id: item.id
+            //   })
+            // })
+          // }
+    // }
   }
 
   // TODO: check function upload multiple images
