@@ -8,7 +8,7 @@ import styles from "./EditAction.module.scss"
 import SelectInput from "components/SelectInput/SelectInput"
 import { formattedAreaCodes, phoneAreaCodes } from "constant"
 
-interface EditActionProps {  
+interface EditActionProps {
   action: { label: string; value: string }
   onApplyAction: (action: string, value: string) => void
   onPublishPage: () => void
@@ -17,8 +17,8 @@ interface EditActionProps {
 
 const EditAction = (props: EditActionProps) => {
   const { action, isPaid, onPublishPage, onApplyAction } = props
-  console.log(isPaid);
-  
+  console.log(isPaid)
+
   const [showEditActionModal, setShowEditActionModal] = useState(false)
   const [showBuyNow, setShowBuyNow] = useState(false)
   const [showContactUs, setShowContactUs] = useState(false)
@@ -29,7 +29,7 @@ const EditAction = (props: EditActionProps) => {
   const [showLearnMore, setShowLearnMore] = useState(false)
   const [showWatchVideo, setShowWatchVideo] = useState(false)
   const [showShopOnWebsite, setShowShopOnWebWebsite] = useState(false)
-  const [phoneNumber, setPhoneNumber] = useState("")
+  const [actionValue, setActionValue] = useState("")
 
   const actionList = [
     {
@@ -126,13 +126,7 @@ const EditAction = (props: EditActionProps) => {
   ]
 
   const handleApply = (action: string) => {
-    const input: any = document.getElementById(action)
-    if (action === 'Contact us' || action === 'Send WhatApps message') {
-      onApplyAction(action, phoneNumber)
-    }
-    else {
-      onApplyAction(action, input.value)
-    }
+    onApplyAction(action, actionValue)
   }
 
   return (
@@ -159,125 +153,65 @@ const EditAction = (props: EditActionProps) => {
             <div className={styles.instruction}>
               Choose the action you want your visitor to take
             </div>
-            {actionList.map((action) => {
-                if ( action.label === "Send WhatApps message" ) {
-                  if ( isPaid === true ) {
-                    return (
-                      <div key={action.label} className={styles.action} onClick={action.open}>
-                        <div className={styles.icon_container}>
-                          <Icon icon={action.icon} size={25} />
-                        </div>
-                        <div className={styles.label_container}>
-                          <div className={styles.label}>{action.label}</div>
-                          <div className={styles.sub_label}>{action.subLabel}</div>
-                        </div>
-                      </div>
-                    )
-                  }
-                }
-                else {
-                  return (
-                    <div key={action.label} className={styles.action} onClick={action.open}>
-                      <div className={styles.icon_container}>
-                        <Icon icon={action.icon} size={25} />
-                      </div>
-                      <div className={styles.label_container}>
-                        <div className={styles.label}>{action.label}</div>
-                        <div className={styles.sub_label}>{action.subLabel}</div>
-                      </div>
-                    </div>
-                  )
-                }
-            })}
+            {actionList.map((action) =>
+              isPaid === false && action.label === "Send WhatApps message" ? null : (
+                <div key={action.label} className={styles.action} onClick={action.open}>
+                  <div className={styles.icon_container}>
+                    <Icon icon={action.icon} size={25} />
+                  </div>
+                  <div className={styles.label_container}>
+                    <div className={styles.label}>{action.label}</div>
+                    <div className={styles.sub_label}>{action.subLabel}</div>
+                  </div>
+                </div>
+              )
+            )}
           </div>
         </div>
       </Modal>
-      {actionList.map((action) => {
-        if ( action.label === "Send WhatApps message" ) {
-          if ( isPaid === true ) {
-            return (
-              <Modal
-                key={action.label}
-                title={action.label}
-                visible={action.showModalState}
-                width={400}
-                mobilePosition="center"
-                onClose={action.close}
-              >
-                <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">
-                  {action.type === "phone" ? 
-                    <SelectInput
-                      id={action.label}
-                      label="Phone number"
-                      placeholder="your phone number"
-                      selectPlaceholder="Area code"
-                      options={formattedAreaCodes}
-                      shouldControlShowValue
-                      onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
-                    />:
-                    <Input
-                      id={action.label}
-                      placeholder="Insert URL"
-                      width="100%"
-                    />
+      {actionList.map((action) =>
+        isPaid === false && action.label === "Send WhatApps message" ? null : (
+          <Modal
+            key={action.label}
+            title={action.label}
+            visible={action.showModalState}
+            width={400}
+            mobilePosition="center"
+            onClose={action.close}
+          >
+            <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">
+              {action.type === "phone" ? (
+                <SelectInput
+                  id={action.label}
+                  label="Phone number"
+                  placeholder="your phone number"
+                  selectPlaceholder="Area code"
+                  options={formattedAreaCodes}
+                  shouldControlShowValue
+                  onChange={(e) =>
+                    setActionValue(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
                   }
-                  <Button
-                    text="Apply"
-                    width="100%"
-                    onClick={() => {
-                      action.close()
-                      setShowEditActionModal(false)
-                      handleApply(action.label)
-                    }}
-                  />
-                </div>
-              </Modal>
-            )
-          }
-        }
-        else {
-          return (
-            <Modal
-              key={action.label}
-              title={action.label}
-              visible={action.showModalState}
-              width={400}
-              mobilePosition="center"
-              onClose={action.close}
-            >
-              <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">
-                {action.type === "phone" ? 
-                  <SelectInput
-                    id={action.label}
-                    label="Phone number"
-                    placeholder="your phone number"
-                    selectPlaceholder="Area code"
-                    options={formattedAreaCodes}
-                    shouldControlShowValue
-                    onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
-                  />:
-                  <Input
-                    id={action.label}
-                    placeholder="Insert URL"
-                    width="100%"
-                  />
-                }
-                <Button
-                  text="Apply"
-                  width="100%"
-                  onClick={() => {
-                    action.close()
-                    setShowEditActionModal(false)
-                    handleApply(action.label)
-                  }}
                 />
-              </div>
-            </Modal>
-          )
-        }
-      })
-
-      }
+              ) : (
+                <Input
+                  placeholder="Insert URL"
+                  width="100%"
+                  onChange={(e: any) => setActionValue(e.target.value)}
+                />
+              )}
+              <Button
+                text="Apply"
+                width="100%"
+                onClick={() => {
+                  action.close()
+                  setShowEditActionModal(false)
+                  handleApply(action.label)
+                }}
+              />
+            </div>
+          </Modal>
+        )
+      )}
     </React.Fragment>
   )
 }
