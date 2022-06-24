@@ -31,7 +31,7 @@ const ClaimListing = (context) => {
   const [isPayYearly, setIsPayYearly] = useState(false)
   const router = useRouter()
   const {
-    query: { listingId },
+    query: { listingid: listingId },
   } = useRouter()
 
   useEffect(() => {
