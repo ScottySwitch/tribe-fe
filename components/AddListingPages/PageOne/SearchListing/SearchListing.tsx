@@ -7,6 +7,7 @@ import Modal from "components/Modal/Modal"
 import Select from "components/Select/Select"
 // import { listingSearchResult } from "constant"
 import { ClaimStep, YesNo } from "enums"
+import { get } from "lodash"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
@@ -54,10 +55,12 @@ const SearchListing = ({
   relationship?: string
 }) => {
   console.log("listing", listing)
+
   if (listing) {
-    localStorage.setItem("biz_id", listing.id)
-    localStorage.setItem("biz_slug", listing.attributes.slug)
+    localStorage.setItem("biz_id", get(listing, "id"))
+    localStorage.setItem("biz_slug", get(listing, "attributes.slug"))
   }
+  
   const [showUpcomingFeature, setShowUpcomingFeature] = useState(false)
   switch (listing) {
     case undefined:
