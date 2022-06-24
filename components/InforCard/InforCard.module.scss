@@ -41,12 +41,12 @@
   .details {
     border-top: 1px solid transparent;
     padding: 10px;
-    font-size: $fs-sm;
+    font-size: $text-sm;
 
     .title {
       margin-bottom: 8px;
-      font-weight: $fw-semi-bold;
-      font-size: $fs-md;
+      font-weight: $font-semi-bold;
+      font-size: $text-md;
     }
 
     .reviews {
@@ -55,7 +55,7 @@
 
       .rate {
         color: $primary-500;
-        font-weight: $fw-semi-bold;
+        font-weight: $font-semi-bold;
         margin: 0 4px;
       }
 
@@ -70,7 +70,7 @@
 
       .category {
         line-height: 1;
-        font-weight: $fw-light;
+        font-weight: $font-light;
         color: $bg-400;
 
         &:first-child {
@@ -91,8 +91,8 @@
 
     .description {
       color: $bg-400;
-      font-size: $fs-sm;
-      font-weight: $fw-light;
+      font-size: $text-sm;
+      font-weight: $font-light;
     }
 
     .price {
@@ -101,8 +101,8 @@
       gap: 6px;
 
       span {
-        font-size: $fs-md;
-        font-weight: $fw-bold;
+        font-size: $text-md;
+        font-weight: $font-bold;
       }
     }
 
@@ -133,12 +133,12 @@
 
     .details {
       padding: 4px 8px 8px 8px;
-      font-size: $fs-xxs;
+      font-size: $text-2xs;
       .title {
-        font-size: $fs-sm;
+        font-size: $text-sm;
       }
       .price {
-        font-size: $fs-xs;
+        font-size: $text-xs;
       }
       .break {
         margin: 8px 0;
@@ -162,12 +162,12 @@
 
     .details {
       padding: 4px 8px 8px 8px;
-      font-size: $fs-xxs;
+      font-size: $text-2xs;
       .title {
-        font-size: $fs-sm;
+        font-size: $text-sm;
       }
       .price {
-        font-size: $fs-xs;
+        font-size: $text-xs;
       }
       .break {
         margin: 8px 0;

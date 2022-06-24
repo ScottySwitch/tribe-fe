@@ -11,8 +11,8 @@
 
   a {
     color: #3faeff;
-    font-size: $fs-md;
-    font-weight: $fw-light;
+    font-size: $text-md;
+    font-weight: $font-light;
     text-decoration: underline;
     cursor: pointer;
   }
@@ -30,27 +30,27 @@
 
   td {
     color: $bg-700;
-    font-size: $fs-md;
+    font-size: $text-md;
   }
 
   &_name {
     color: $bg-500;
-    font-size: $fs-md;
+    font-size: $text-md;
   }
 
   &_price {
     margin-bottom: 10px;
-    font-size: $fs-lg;
+    font-size: $text-lg;
 
     span {
-      font-weight: $fw-light;
+      font-weight: $font-light;
       color: $bg-400;
-      font-size: $fs-md;
+      font-size: $text-md;
     }
   }
 
   &_payment {
-    font-size: $fs-md;
+    font-size: $text-md;
     font-weight: normal;
     height: 100%;
     display: flex;
@@ -61,8 +61,8 @@
 
   &_feature {
     color: $bg-700;
-    font-size: $fs-md;
-    font-weight: $fw-bold;
+    font-size: $text-md;
+    font-weight: $font-bold;
     height: 100%;
   }
 }
@@ -103,15 +103,15 @@
 
           .name {
             color: $bg-700;
-            font-size: $fs-md;
-            font-weight: $fw-bold;
+            font-size: $text-md;
+            font-weight: $font-bold;
             height: 100%;
           }
 
           span {
-            font-weight: $fw-light;
+            font-weight: $font-light;
             color: $bg-400;
-            font-size: $fs-xs;
+            font-size: $text-xs;
           }
         }
 
@@ -123,7 +123,7 @@
           flex-direction: column;
           gap: 16px;
           color: $bg-600;
-          font-size: $fs-sm;
+          font-size: $text-sm;
           color: $bg-600;
 
           .feature {
@@ -139,9 +139,9 @@
         }
 
         .price {
-          font-weight: $fw-bold;
+          font-weight: $font-bold;
           color: $bg-700;
-          font-size: $fs-lg;
+          font-size: $text-lg;
           display: flex;
           justify-content: space-between;
           align-items: center;

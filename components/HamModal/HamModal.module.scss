@@ -24,8 +24,8 @@
   justify-content: center;
   &::after {
     content: "Explore more with Tribes!";
-    font-weight: $fw-bold;
-    font-size: $fs-lg;
+    font-weight: $font-bold;
+    font-size: $text-lg;
     width: 40%;
     text-align: center;
     color: $orange-600;
@@ -55,11 +55,11 @@
     gap: 20px;
     .user_infor {
       .name {
-        font-weight: $fw-bold;
+        font-weight: $font-bold;
       }
       .see_profile {
         color: $bg-400;
-        font-size: $fs-sm;
+        font-size: $text-sm;
       }
     }
   }

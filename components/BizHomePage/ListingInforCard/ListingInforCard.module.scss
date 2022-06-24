@@ -30,7 +30,7 @@
       display: none;
     }
   }
-  
+
   .listing_infor_container {
     gap: 20px;
     display: flex;
@@ -48,12 +48,12 @@
     .detail {
       width: calc(100% - 80px);
       .name {
-        font-weight: $fw-bold;
+        font-weight: $font-bold;
       }
 
       .contact {
         color: $bg-500;
-        font-size: $fs-sm;
+        font-size: $text-sm;
         display: flex;
         flex-wrap: wrap;
         gap: 4%;

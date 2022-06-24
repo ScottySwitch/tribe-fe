@@ -21,8 +21,8 @@
     border-top: 1px solid $bg-100;
     border-bottom: 1px solid $bg-100;
     .instruction {
-      font-weight: $fw-bold;
-      font-size: $fs-md;
+      font-weight: $font-bold;
+      font-size: $text-md;
     }
   }
 
@@ -55,13 +55,13 @@
       justify-content: center;
 
       .label {
-        font-weight: $fw-bold;
-        font-size: $fs-md;
+        font-weight: $font-bold;
+        font-size: $text-md;
       }
 
       .sub_label {
-        font-weight: $fw-light;
-        font-size: $fs-md;
+        font-weight: $font-light;
+        font-size: $text-md;
         color: $bg-500;
       }
     }

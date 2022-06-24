@@ -48,13 +48,13 @@
       width: 40px;
     }
     &_title {
-      font-size: $fs-xl;
+      font-size: $text-xl;
     }
   }
 
   @media screen and (max-width: $tablet) {
     &_title {
-      font-size: $fs-lg;
+      font-size: $text-lg;
     }
   }
 }

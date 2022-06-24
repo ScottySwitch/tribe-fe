@@ -3,14 +3,14 @@
 .listing_homepage {
   p {
     color: $bg-400;
-    font-size: $fs-sm;
+    font-size: $text-sm;
     text-align: center;
   }
 
   a {
     color: $blue-500;
     text-decoration: underline;
-    font-size: $fs-sm;
+    font-size: $text-sm;
     cursor: pointer;
   }
 
@@ -22,7 +22,7 @@
   }
 
   .heading {
-    font-weight: $fw-bold;
+    font-weight: $font-bold;
     display: flex;
     align-items: center;
 
@@ -42,7 +42,7 @@
     display: flex;
     gap: 6px;
     color: $bg-400;
-    font-size: $fs-sm;
+    font-size: $text-sm;
     align-items: center;
   }
 

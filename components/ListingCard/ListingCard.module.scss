@@ -29,13 +29,13 @@
 
       &_infor {
         &_name {
-          font-weight: $fw-semi-bold;
+          font-weight: $font-semi-bold;
           color: $bg-600;
         }
 
         &_location {
-          font-size: $fs-sm;
-          font-weight: $fw-normal;
+          font-size: $text-sm;
+          font-weight: $font-normal;
           color: $bg-400;
         }
       }
@@ -44,12 +44,12 @@
     .listing_number {
       display: flex;
       gap: 20px;
-      font-size: $fs-sm;
+      font-size: $text-sm;
       color: $bg-400;
 
       p {
-        font-size: $fs-lg;
-        font-weight: $fw-semi-bold;
+        font-size: $text-lg;
+        font-weight: $font-semi-bold;
         color: $bg-600;
         text-align: center;
       }
@@ -65,7 +65,7 @@
 
     span {
       text-decoration: underline;
-      font-size: $fs-sm;
+      font-size: $text-sm;
       color: $bg-400;
       cursor: pointer;
 

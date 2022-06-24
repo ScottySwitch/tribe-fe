@@ -8,8 +8,8 @@
   min-width: 100px;
   width: 100%;
   color: white;
-  font-weight: $fw-bold;
-  font-size: $fs-md;
+  font-weight: $font-bold;
+  font-size: $text-md;
   border-radius: $border-radius;
   padding: $p-md;
 
@@ -35,14 +35,14 @@
 
 .small {
   height: fit-content;
-  font-size: $fs-sm;
+  font-size: $text-sm;
   padding: $p-sm;
 }
 
 .large {
   height: fit-content;
   min-width: 130px;
-  font-size: $fs-lg;
+  font-size: $text-lg;
   padding: $p-lg;
 }
 
@@ -98,7 +98,7 @@
 .secondary_no_outlined {
   color: $bg-700;
   border: none;
-  font-weight: $fw-light;
+  font-weight: $font-light;
 
   &[type="submit"],
   &[type="button"] {

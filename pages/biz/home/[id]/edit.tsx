@@ -51,7 +51,7 @@ const EditListingHomepage = (context) => {
   const [phoneNumber, setPhoneNumber] = useState<any>("")
   const [action, setAction] = useState({ label: "", value: "" })
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
-  const [menu, setMenu] = useState<string[]>()
+  const [menuList, setMenuList] = useState<string[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
   // const [listingImages, setListingImages] = useState<string[]>([])
@@ -163,7 +163,7 @@ const EditListingHomepage = (context) => {
     setScreen(ListingHomePageScreens.HOME)
   }
   const handleSetMenu = (menu) => {
-    setMenu(menu)
+    setMenuList(menu)
     setScreen(ListingHomePageScreens.HOME)
   }
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
@@ -275,6 +275,7 @@ const EditListingHomepage = (context) => {
               <div className={styles.break} />
               <div>
                 <RenderTabs
+                  menuList={menuList}
                   category={category}
                   itemList={itemList}
                   dealList={dealList}
@@ -307,7 +308,7 @@ const EditListingHomepage = (context) => {
           />
         </SectionLayout>
         <SectionLayout show={screen === ListingHomePageScreens.ADD_MENU} title="Add a menu">
-          <AddMenu menu={menu} onCancel={handleCancel} onSubmit={handleSetMenu} />
+          <AddMenu menu={menuList} onCancel={handleCancel} onSubmit={handleSetMenu} />
         </SectionLayout>
         <SectionLayout
           show={screen === ListingHomePageScreens.ADD_DEALS}

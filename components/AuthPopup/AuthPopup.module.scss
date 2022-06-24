@@ -18,8 +18,8 @@
 
   &::after {
     content: "Log in or Sign up now to explore more with Tribes";
-    font-weight: $fw-bold;
-    font-size: $fs-xl;
+    font-weight: $font-bold;
+    font-size: $text-xl;
     width: 65%;
     text-align: center;
     color: white;
@@ -60,7 +60,7 @@
 
     &::after {
       width: 60%;
-      font-size: $fs-md;
+      font-size: $text-md;
     }
 
     .close {
@@ -82,7 +82,7 @@
     padding-top: 40px;
     &::after {
       width: 55%;
-      font-size: $fs-md;
+      font-size: $text-md;
     }
     .close {
       top: 20px;

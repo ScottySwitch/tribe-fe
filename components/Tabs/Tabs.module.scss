@@ -15,8 +15,8 @@
       align-items: center;
       padding: 9px 20px 9px 0;
       height: 72px;
-      font-weight: $fw-semi-bold;
-      font-size: $fs-md;
+      font-weight: $font-semi-bold;
+      font-size: $text-md;
       cursor: pointer;
 
       .left_border {
@@ -62,8 +62,8 @@
   .tabs {
     .tab_label_container {
       .tab {
-        font-size: $fs-md;
-        font-weight: $fw-semi-bold;
+        font-size: $text-md;
+        font-weight: $font-semi-bold;
       }
     }
 

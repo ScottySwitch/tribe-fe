@@ -52,14 +52,14 @@
 
       .title {
         color: $bg-700;
-        font-size: $fs-lg;
-        font-weight: $fw-bold;
+        font-size: $text-xl;
+        font-weight: $font-bold;
       }
 
       .sub_title {
         color: $bg-500;
-        font-size: $fs-sm;
-        font-weight: $fw-light;
+        font-size: $text-md;
+        font-weight: $font-light;
       }
 
       .close {
@@ -90,8 +90,8 @@
 .header {
   display: flex;
   align-items: center;
-  font-weight: $fw-semi-bold;
-  font-size: $fs-lg;
+  font-weight: $font-semi-bold;
+  font-size: $text-lg;
   padding: 30px;
   padding-bottom: 0;
   width: 100%;

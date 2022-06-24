@@ -70,18 +70,18 @@
 
     .tips {
       padding: 10px 0;
-      font-weight: $fw-bold;
+      font-weight: $font-bold;
       display: flex;
       gap: 6px;
     }
 
     .upgrade {
-      font-weight: $fw-light;
-      font-size: $fs-md;
+      font-weight: $font-light;
+      font-size: $text-md;
     }
 
     a {
-      font-size: $fs-sm;
+      font-size: $text-sm;
       text-decoration: underline;
       color: $blue-500;
     }

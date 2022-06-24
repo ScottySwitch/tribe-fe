@@ -1,11 +1,13 @@
+import Image from "next/image"
+import { useState } from "react"
 import classNames from "classnames"
+
 import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
 import Upload from "components/Upload/Upload"
-import Image from "next/image"
-import { useEffect, useState } from "react"
+
 import styles from "./ListingInforCard.module.scss"
 
 interface ListingInforCardProps {

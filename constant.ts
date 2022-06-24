@@ -1,4 +1,4 @@
-import { Categories, InformationList, ListingTabs } from "enums"
+import { Categories, InformationList, ListingHomePageScreens, ListingTabs } from "enums"
 import { IAddListingForm } from "pages/add-listing"
 
 export const loginInforItem = "login_infor"
@@ -225,12 +225,6 @@ export const previewInfo = [
   { question: "Min price", valueKey: "minPrice" },
 ]
 
-export const eatTabList = [
-  { text: "Dishes", value: ListingTabs.DISH },
-  { text: "Menus", value: ListingTabs.MENU },
-  { text: "Deals", value: ListingTabs.DEAL },
-]
-
 export const paidInformationList = [
   { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
   { label: InformationList.BUSINESS_DETAIL, icon: "business" },
@@ -252,14 +246,20 @@ export const freeInformationList = [
   { label: InformationList.VERIFICATION, icon: "like-color-2" },
 ]
 
+export const eatTabList = [
+  { text: "Dishes", value: ListingTabs.DISH, screen: ListingHomePageScreens.ADD_ITEMS },
+  { text: "Menus", value: ListingTabs.MENU, screen: ListingHomePageScreens.ADD_MENU },
+  { text: "Deals", value: ListingTabs.DEAL, screen: ListingHomePageScreens.ADD_DEALS },
+]
+
 export const productTabList = [
-  { text: "Products", value: ListingTabs.PRODUCT },
-  { text: "Deals", value: ListingTabs.DEAL },
+  { text: "Products", value: ListingTabs.PRODUCT, screen: ListingHomePageScreens.ADD_ITEMS },
+  { text: "Deals", value: ListingTabs.DEAL, screen: ListingHomePageScreens.ADD_DEALS },
 ]
 
 export const serviceTabList = [
-  { text: "Services", value: ListingTabs.SERVICE },
-  { text: "Deals", value: ListingTabs.DEAL },
+  { text: "Services", value: ListingTabs.SERVICE, screen: ListingHomePageScreens.ADD_ITEMS },
+  { text: "Deals", value: ListingTabs.DEAL, screen: ListingHomePageScreens.ADD_DEALS },
 ]
 
 export const inforCardList = [

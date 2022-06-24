@@ -41,7 +41,7 @@
   }
 
   td {
-    font-size: $fs-md;
+    font-size: $text-md;
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -73,7 +73,7 @@
       background-color: white;
       color: $blue-500;
       padding: 12px;
-      font-weight: $fw-bold;
+      font-weight: $font-bold;
       font-size: 0.85rem;
       line-height: 1.5;
 

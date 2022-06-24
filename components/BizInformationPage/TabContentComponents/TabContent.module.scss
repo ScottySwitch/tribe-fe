@@ -3,13 +3,13 @@
 .information {
   padding: 30px;
   .name {
-    font-weight: $fw-bold;
+    font-weight: $font-bold;
   }
 
   p {
-    font-weight: $fw-light;
+    font-weight: $font-light;
     color: $bg-700;
-    font-size: $fs-md;
+    font-size: $text-md;
   }
 }
 
@@ -86,7 +86,7 @@
   }
 
   .name {
-    font-weight: $fw-bold;
+    font-weight: $font-bold;
   }
 
   .deal_information {
@@ -94,7 +94,7 @@
   }
 
   .clicks {
-    font-weight: $fw-bold;
+    font-weight: $font-bold;
   }
 }
 
@@ -103,8 +103,8 @@
   .change_link {
     color: $blue-500;
     text-decoration: underline;
-    font-size: $fs-sm;
-    font-weight: $fw-light;
+    font-size: $text-sm;
+    font-weight: $font-light;
     margin-top: 10px;
     cursor: pointer;
   }
@@ -113,7 +113,7 @@
 .upgrade_now {
   color: $blue-500;
   text-decoration: underline;
-  font-weight: $fw-normal;
-  font-size: $fs-md;
+  font-weight: $font-normal;
+  font-size: $text-md;
   cursor: pointer;
 }

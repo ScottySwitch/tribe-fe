@@ -1,11 +1,7 @@
 import { useState } from "react"
 
-import Button from "components/Button/Button"
-import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
-import Heading from "../../Heading/Heading"
 import Icon from "components/Icon/Icon"
-import Link from "next/link"
 import TagsSelection from "components/TagsSelection/TagsSelection"
 import { IOption } from "type"
 
@@ -18,7 +14,6 @@ interface FacilitiesProps {
 const Facilities = (props: FacilitiesProps) => {
   const { facilities = [], facilityOptions, onSetFacilities } = props
   const [showFacilitiesModal, setShowFacilitiesModal] = useState(false)
-  const [localFacilities, setLocalFacilities] = useState(facilities)
 
   return (
     <div>
@@ -29,23 +24,21 @@ const Facilities = (props: FacilitiesProps) => {
         </div>
         <a onClick={() => setShowFacilitiesModal(true)}>Add facilities</a>
       </div>
-      <div className="flex flex-wrap gap-y-2">
+      <div className="flex flex-wrap mt-5 gap-y-5">
         {Array.isArray(facilities) &&
           facilities.map((item) => (
-            <div key={item.value} className="mt-3 flex items-center w-full md:w-1/2 lg:w-1/3 pr-1">
-              <>
-                <Icon icon="checked-circle" /> {item.label}
-              </>
+            <div key={item.value} className="flex gap-2 items-center w-full md:w-1/2 lg:w-1/3 pr-1">
+              <Icon icon="checked-circle" size={14} /> {item.label}
             </div>
           ))}
       </div>
       <Modal
         title="Facilities"
+        subTitle="Select 5 max"
         visible={showFacilitiesModal}
-        width={500}
+        width={750}
         mobilePosition="center"
         onClose={() => {
-          setLocalFacilities(facilities)
           setShowFacilitiesModal(false)
         }}
       >
@@ -53,11 +46,9 @@ const Facilities = (props: FacilitiesProps) => {
           selectedList={facilities}
           options={facilityOptions}
           onCancel={() => {
-            setLocalFacilities(facilities)
             setShowFacilitiesModal(false)
           }}
           onSubmit={(localFacilities) => {
-            setLocalFacilities(localFacilities)
             onSetFacilities(localFacilities)
             setShowFacilitiesModal(false)
           }}
