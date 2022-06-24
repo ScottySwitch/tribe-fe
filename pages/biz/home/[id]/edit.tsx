@@ -102,13 +102,16 @@ const EditListingHomepage = (context) => {
         setFacilities(arrayFacilities)
         const rawListing = get(listing, "attributes.products.data") || []
         const listingArray = rawListing.map((item) => ({
-          name: item.attributes.name,
-          price: item.attributes.price,
+          name: get(item, 'attributes.name'),
+          price: get(item, 'attributes.price'),
           id: item.id,
-          description: item.attributes.description,
-          images: item.attributes.images,
-          discount_price: item.attributes.discount_price,
-          tags: item.attributes.tags
+          description: get(item, 'attributes.description'),
+          images: get(item, 'attributes.images'),
+          imgUrl: get(item, 'attributes.images[0]'),
+          discount: get(item, 'attributes.discount_percent'),
+          tags: get(item, 'attributes.tags'),
+          websiteUrl: get(item, 'attributes.website_url'),
+          klookUrl: get(item, 'attributes.klook_url'),
         }))
         setItemList(listingArray)
         const rawMenu = get(listing, 'attributes.menus.data') || []
@@ -129,8 +132,8 @@ const EditListingHomepage = (context) => {
           images: item.attributes.images,
           information: item.attributes.description,
           // start_date: item.attributes.start_date,
-          validUntil: item.attributes.start_date,
-          end_date: item.attributes.end_date
+          // validUntil: item.attributes.start_date,
+          // end_date: item.attributes.end_date
         }))
         setDealList(dealArray)
       }
@@ -180,6 +183,7 @@ const EditListingHomepage = (context) => {
   const handleSetAction = (action: string, value: string) =>
     setAction({ label: action, value: value })
   const handleSetItemList = (list: { [key: string]: string }[]) => {
+    console.log('list', list);
     setItemList(list)
     setScreen(ListingHomePageScreens.HOME)
   }
@@ -194,56 +198,7 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
-    console.log('itemList', itemList);
-    if (itemList.length > 0) {
-      await Promise.all(
-        itemList.map(async (item) => {
-          if (item.isNew) {
-            const dataSend = {
-              biz_listing: bizListing.id,
-              name: item.name,
-              description: item.description,
-              price: item.price,
-              tags: item.tags,
-              images: [item.imgUrl],
-            }
-            await ProductApi.createProduct(dataSend)
-          }
-        })
-      )
-    }
-
-    if (menuList.length > 0) {
-      await Promise.all(
-        itemList.map(async (item) => {
-          if (item.isNew) {
-            const dataSend = {
-              biz_listing: bizListing.id,
-              name: item.name,
-              images: [item.imgUrl],
-            }
-            await ProductApi.createProduct(dataSend)
-          }
-        })
-      )
-    }
-
-    if (dealList.length > 0) {
-      await Promise.all(
-        dealList.map(async (item) => {
-          const dataSend = {
-            biz_listing: bizListing.id,
-            name: item.name,
-            description: item.description,
-            images: [item.imgUrl],
-            start_date: item.validUntil,
-            end_date: item.validUntil,
-          }
-          await DealApi.createDeal(dataSend)
-        })
-      )
-    }
-
+    // const itemListId = [...itemList].filter((item) => item.isNew !== true)
     // await BizListingApi.updateBizListing(bizListing.id, {
     //   description: description,
     //   price_range: priceRange,
@@ -256,10 +211,86 @@ const EditListingHomepage = (context) => {
     //   tags: tags.map((item) => item.id),
     //   is_verified: false,
     //   logo: logo,
+    //   products: itemListId.map((item) => (item.id))
     // }).then((response) => {
     //   console.log(response)
-    //   window.location.reload()
     // })
+
+    if (itemList.length > 0) {
+
+      await Promise.all(
+        itemList.map(async (item) => {
+          let imageUrl: String[] = [];
+          if (item.imgUrl) {
+            imageUrl[0] = item.imgUrl
+          }
+          else if (item.images) {
+            imageUrl[0] = item.images[0]
+          }
+          if (item.isNew) {
+            const dataSend = {
+              biz_listing: bizListing.id,
+              name: item.name,
+              description: item.description,
+              price: item.price,
+              discount_percent: item.discount,
+              tags: item.tags,
+              images: imageUrl || [],
+              website_url: item.websiteUrl,
+              klook_url: item.klookUrl,
+            }
+            await ProductApi.createProduct(dataSend)
+          }
+          else {
+            const dataUpdate = {
+              biz_listing: bizListing.id,
+              name: item.name,
+              description: item.description,
+              price: item.price,
+              discount_percent: item.discount,
+              tags: item.tags,
+              images: imageUrl || [],
+              website_url: item.websiteUrl,
+              klook_url: item.klookUrl,
+            }
+            await ProductApi.updateProduct(item.id, dataUpdate)
+          }
+        })
+      )
+    }
+
+    // if (menuList.length > 0) {
+    //   await Promise.all(
+    //     itemList.map(async (item) => {
+    //       if (item.isNew) {
+    //         const dataSend = {
+    //           biz_listing: bizListing.id,
+    //           name: item.name,
+    //           images: [item.imgUrl],
+    //         }
+    //         await ProductApi.createProduct(dataSend)
+    //       }
+    //     })
+    //   )
+    // }
+
+    // if (dealList.length > 0) {
+    //   await Promise.all(
+    //     dealList.map(async (item) => {
+    //       const dataSend = {
+    //         biz_listing: bizListing.id,
+    //         name: item.name,
+    //         description: item.description,
+    //         images: [item.imgUrl],
+    //         start_date: item.validUntil,
+    //         end_date: item.validUntil,
+    //       }
+    //       await DealApi.createDeal(dataSend)
+    //     })
+    //   )
+    // }
+
+    window.location.reload()
   }
 
   return (

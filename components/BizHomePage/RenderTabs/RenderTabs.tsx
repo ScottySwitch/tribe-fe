@@ -35,36 +35,6 @@ const initSelectedTab = (category) => {
   }
 }
 
-<<<<<<< HEAD
-const CardContainer = ({ list }) =>
-  Array.isArray(list) ? (
-    <div className={styles.items_container}>
-      <div className="w-full flex justify-center">
-        <Input placeholder="search" width="100%" prefix={<Icon icon="search" />} />
-      </div>
-      {list.map((item) => (
-          // <InforCard
-          //   key={item.attributes.id}
-          //   imgUrl={item.attributes.images ? item.attributes.images[0] : "https://picsum.photos/200/300"}
-          //   title={item.attributes.name}
-          //   price={item.attributes.price}
-          //   description={item.attributes.description || item.information}
-          // />
-          <InforCard
-            key={item.id}
-            imgUrl={item.images ? item.images[0] : "https://picsum.photos/200/300"}
-            title={item.name}
-            price={item.price}
-            description={item.description || item.information}
-            tags={item.tags}
-            validUntil={item.validUntil}
-          />
-      ))}
-    </div>
-  ) : null
-
-=======
->>>>>>> master
 const EditList = ({ category, selectedTab, onSetScreen }) => {
   const tabList = initSelectedTab(category).tabList
   const tabScreen = tabList.find((tab) => tab.value === selectedTab)?.screen
@@ -96,7 +66,6 @@ const TabContent = ({
       </div>
     )
   }
-
   return (
     <div className={styles.items_container}>
       <div className="w-full flex justify-center">
@@ -104,7 +73,9 @@ const TabContent = ({
       </div>
       {list.map((item) => {
         const id = get(item, "attributes.id") || item.id
-        const images = get(item, "attributes.images")
+        // const images = get(item, "attributes.images")
+        // const firstImage = get(item, "attributes.images[0]") || item.imgUrl
+        const images = item.images || []
         const firstImage = get(item, "attributes.images[0]") || item.imgUrl
         const name = get(item, "attributes.name") || item.name || ""
         const price = get(item, "attributes.price") || item.price || ""

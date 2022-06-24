@@ -20,13 +20,11 @@ interface AddItemsProps {
   onCancel: () => void
 }
 
-const AddItems = (props: AddItemsProps) => {
+const AddItems = (props: AddItemsProps) => {  
   const { itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
   const [localItemList, setLocalItemList] = useState(itemList || [])
   const router = useRouter()
   
-  console.log("itemList", itemList)
-
   const handleRemoveItem = (id: number) => {
     const newArray = [...localItemList].filter((item) => item.id !== id)
     setLocalItemList(newArray)
@@ -120,7 +118,8 @@ const AddItems = (props: AddItemsProps) => {
                   selectPosition="suffix"
                   placeholder="Enter discount"
                   selectDefaultValue={{ label: "%", value: "%" }}
-                  onChange={(e: any) => handleChangeItem(item.id, "discount", e.target.value)}
+                  onChange={(e: any) => handleChangeItem(item.id, "discount", e.input)}
+                  // onChange={(e: any) => console.log(e)}
                 />
               </div>
               <Input
@@ -131,14 +130,14 @@ const AddItems = (props: AddItemsProps) => {
               />
               <Input
                 label="Klook URL"
-                value={item.tags}
+                value={item.klookUrl}
                 placeholder="Enter URL"
                 onChange={(e: any) => handleChangeItem(item.id, "klookUrl", e.target.value)}
               />
               {isPaid ? (
                 <Input
                   label="Website URL"
-                  value={item.tags}
+                  value={item.websiteUrl}
                   placeholder="Enter URL"
                   onChange={(e: any) => handleChangeItem(item.id, "websiteUrl", e.target.value)}
                 />
