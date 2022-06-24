@@ -61,7 +61,7 @@ const SearchListing = ({
   const [showUpcomingFeature, setShowUpcomingFeature] = useState(false)
   switch (listing) {
     case undefined:
-      return <ListingSearch listingOptions={listingSearchResult} onChange={setListing} />
+      return <ListingSearch listingOptions={bizListing} onChange={setListing} />
     case YesNo.NO:
       return (
         <div className="flex gap-2">

@@ -67,7 +67,7 @@ const AddDeals = (props: AddDealsProps) => {
       {Array.isArray(localDealList) && localDealList.length
         ? localDealList.map((deal) => (
             <div key={deal.id} className={styles.add_deals_container}>
-              <Break />
+              <div className={styles.break} />
               <div className={styles.header}>
                 <p className="text-left">Add images</p>
                 {multiple && (
@@ -99,10 +99,15 @@ const AddDeals = (props: AddDealsProps) => {
                 onChange={(e: any) => handleChangeDeal(deal.id, "termsConditions", e.target.value)}
               />
               {multiple && <AddDealButton />}
+              <Break />
             </div>
           ))
-        : multiple && <AddDealButton />}
-      <Break />
+        : multiple && (
+            <div>
+              <AddDealButton />
+              <Break />
+            </div>
+          )}
       <div className="flex gap-5">
         <CancelButton />
         <Button text="Confirm" width={280} size="small" onClick={() => onSubmit(localDealList)} />

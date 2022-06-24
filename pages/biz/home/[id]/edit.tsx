@@ -298,6 +298,7 @@ const EditListingHomepage = (context) => {
         <SectionLayout
           show={screen === ListingHomePageScreens.ADD_ITEMS}
           title={getAddItemsFields(category).title}
+          childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
         >
           <AddItems
             multiple
@@ -307,7 +308,11 @@ const EditListingHomepage = (context) => {
             placeholders={getAddItemsFields(category).placeholder}
           />
         </SectionLayout>
-        <SectionLayout show={screen === ListingHomePageScreens.ADD_MENU} title="Add a menu">
+        <SectionLayout
+          show={screen === ListingHomePageScreens.ADD_MENU}
+          title="Add a menu"
+          childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
+        >
           <AddMenu menu={menuList} onCancel={handleCancel} onSubmit={handleSetMenu} />
         </SectionLayout>
         <SectionLayout
