@@ -51,7 +51,7 @@ const EditListingHomepage = (context) => {
   const [phoneNumber, setPhoneNumber] = useState<any>("")
   const [action, setAction] = useState({ label: "", value: "" })
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
-  const [menuList, setMenuList] = useState<string[]>([])
+  const [menuList, setMenuList] = useState<{ [key: string]: any }[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
   // const [listingImages, setListingImages] = useState<string[]>([])
@@ -321,6 +321,7 @@ const EditListingHomepage = (context) => {
                   itemList={itemList}
                   dealList={dealList}
                   onSetScreen={(e) => setScreen(e)}
+                  onDelete={(e) => console.log(e)}
                 />
               </div>
               <div className={styles.break} />
@@ -339,9 +340,10 @@ const EditListingHomepage = (context) => {
         <SectionLayout
           show={screen === ListingHomePageScreens.ADD_ITEMS}
           title={getAddItemsFields(category).title}
-          childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
+          childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
         >
           <AddItems
+            isPaid={isPaid}
             multiple
             onSubmit={handleSetItemList}
             onCancel={handleCancel}
@@ -352,16 +354,23 @@ const EditListingHomepage = (context) => {
         <SectionLayout
           show={screen === ListingHomePageScreens.ADD_MENU}
           title="Add a menu"
-          childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
+          childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
         >
-          <AddMenu menu={menuList} onCancel={handleCancel} onSubmit={handleSetMenu} />
+          <AddMenu
+            isPaid={isPaid}
+            multiple={true}
+            menuList={menuList}
+            onCancel={handleCancel}
+            onSubmit={handleSetMenu}
+          />
         </SectionLayout>
         <SectionLayout
           show={screen === ListingHomePageScreens.ADD_DEALS}
           title="Add deals"
-          childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
+          childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
         >
           <AddDeals
+            isPaid={isPaid}
             multiple
             onCancel={handleCancel}
             onSubmit={handleSetDealList}

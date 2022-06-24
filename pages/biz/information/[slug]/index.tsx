@@ -24,6 +24,7 @@ import Verification from "components/BizInformationPage/TabContentComponents/Ver
 import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos"
 import { useRouter } from "next/router"
 import BizListingApi from "../../../../services/biz-listing"
+import { get } from "lodash"
 
 const BizInformation = () => {
   const [isPaid, setIsPaid] = useState(true)
@@ -33,7 +34,7 @@ const BizInformation = () => {
   const [isPayYearly, setIsPayYearly] = useState(false)
   const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
 
-  const [listing, setListing] = useState<any>()
+  const [listing, setListing] = useState<any>({})
   const {
     query: { slug: listingSlug },
   } = useRouter()
@@ -42,7 +43,7 @@ const BizInformation = () => {
     const getListingData = async (listingSlug) => {
       const data = await BizListingApi.getBizListingBySlug(listingSlug)
       if (data.data.data.length > 0) {
-        const listing = data.data.data[0]
+        const listing = get(data, "data.data[0]") || {}
         setListing(listing)
       }
     }

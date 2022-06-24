@@ -7,3 +7,21 @@
   height: 100px;
   margin-top: 10px;
 }
+
+.add_menu_container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    .close {
+      font-size: 20px;
+      font-weight: $font-light;
+      height: min-content;
+      cursor: pointer;
+    }
+  }
+}
