@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import React, {FormEvent, useCallback, useEffect, useState} from "react"
+import React, { FormEvent, useCallback, useEffect, useState } from "react"
 import Image from "next/image"
 import classNames from "classnames"
 
@@ -30,7 +30,7 @@ const StepOne = ({
   onNextStep: (e: FormEvent<HTMLFormElement>) => void
 }) => {
   const router = useRouter()
-  const [uploadAvatar, setUploadAvatar] = useState('');
+  const [uploadAvatar, setUploadAvatar] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const { setValue, getValues, register, handleSubmit } = useForm({
@@ -44,7 +44,7 @@ const StepOne = ({
     },
   })
 
-  const [avatar, setAvatar] = useState(["https://picsum.photos/200"]);
+  const [avatar, setAvatar] = useState([require("public/images/avatar.png")])
   // If user is come from Facebook, Google
   useEffect(() => {
     const loginFacebookCallback = async (accessToken: any) => {
@@ -55,39 +55,40 @@ const StepOne = ({
       const data = await AuthApi.loginGoogleCallback(accessTokenGoogle)
       updateUserForm(data.user)
     }
-    if (router.query.id_token) { // google has id_token
-      loginGoogleCallback(router.query.access_token).catch(e => console.log(e))
+    if (router.query.id_token) {
+      // google has id_token
+      loginGoogleCallback(router.query.access_token).catch((e) => console.log(e))
     } else if (router.query.access_token) {
-      loginFacebookCallback(router.query.access_token).catch(e => console.log(e))
+      loginFacebookCallback(router.query.access_token).catch((e) => console.log(e))
     }
   }, [router])
 
   const updateUserForm = (user) => {
-    setValue('name', user.first_name);
-    setAvatar([user.avatar]); // TODO: this function do not change avatar in form?
+    setValue("name", user.first_name)
+    setAvatar([user.avatar]) // TODO: this function do not change avatar in form?
   }
 
   const handleUploadAvatar = useCallback((srcAvatar) => {
-    setUploadAvatar(srcAvatar[1]);
-  }, []);
+    setUploadAvatar(srcAvatar[1])
+  }, [])
 
   const onSubmit = async (data) => {
     setIsLoading(true)
-    console.log('data', data);
+    console.log("data", data)
     try {
-      const userId = parseInt(localStorage.getItem('user_id') || '0');
+      const userId = parseInt(localStorage.getItem("user_id") || "0")
       await UserApi.updateUser(userId, {
         first_name: data.name,
         gender: data.gender,
         birthday: data.birthday,
         country: data.country?.value || null,
-        avatar: uploadAvatar
+        avatar: uploadAvatar,
       })
     } catch (err) {
       // TODO: notify error (missing template)
-      console.log(err);
+      console.log(err)
       setIsLoading(false)
-      return false;
+      return false
     }
     onNextStep(data)
   }
@@ -98,17 +99,7 @@ const StepOne = ({
       </ModalHeader>
       <form className={styles.body} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.profile_imgs}>
-          <Upload
-            type="cover"
-            className={styles.cover}
-            fileList={["https://picsum.photos/200/300"]}
-          />
-          <Upload
-            fileList={avatar}
-            type="avatar"
-            className={styles.avatar}
-            onChange={handleUploadAvatar}
-          />
+          <Upload fileList={avatar} type="avatar" onChange={handleUploadAvatar} />
         </div>
         <Input placeholder="Your name" label="Name" register={register("name")} />
         <Select

@@ -121,18 +121,18 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
         <Popover content={<ContributeContent />}>
           <Button
             prefix={<Icon icon="plus" size={20} />}
-            size="small"
             text="Contribute"
             className={styles.contribute_button}
           />
         </Popover>
-        <Icon icon="noti-color" size={20} />
+        {/* <Icon icon="noti-color" size={20} /> */}
         <Popover content={<Menu loginInfor={loginInfor} />} position="bottom-left">
           <Image
             src={loginInfor.avatar || require("public/images/avatar.png")}
             alt=""
             width={40}
             height={40}
+            className={styles.avatar}
           />
         </Popover>
       </>
@@ -156,20 +156,15 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           width={40}
           height={40}
           onClick={() => router.push("/biz/information")}
-          className="cursor-pointer"
+          className={styles.avatar}
         />
       </>
     )
   }
   return (
     <>
-      <Button
-        text="Sign up"
-        variant="outlined"
-        onClick={() => router.push("/signup")}
-        size="small"
-      />
-      <Button text="Login" onClick={() => router.push("/login")} size="small" />
+      <Button text="Sign up" variant="outlined" onClick={() => router.push("/signup")} />
+      <Button text="Login" onClick={() => router.push("/login")} />
     </>
   )
 }

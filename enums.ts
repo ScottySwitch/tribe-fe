@@ -3,7 +3,7 @@ export enum Categories {
   EAT = 2,
   STAY = 5,
   TRANSPORT = 4,
-  SEE_AND_DO = 2,
+  SEE_AND_DO = 3,
   OTHER = "Other",
 }
 
