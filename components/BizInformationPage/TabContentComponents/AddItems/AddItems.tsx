@@ -22,8 +22,6 @@ const AddItems = (props: AddItemsProps) => {
   const { itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
   const [localItemList, setLocalItemList] = useState(itemList || [])
 
-  console.log('itemList', itemList)
-
   const handleRemoveItem = (id: number) => {
     const newArray = [...localItemList].filter((item) => item.id !== id)
     setLocalItemList(newArray)
@@ -37,7 +35,6 @@ const AddItems = (props: AddItemsProps) => {
   }
 
   const handleAddItem = () => {
-    console.log("asjndkjansd")
     setLocalItemList([...localItemList, { id: randomId(), isNew: true }])
   }
 
@@ -98,6 +95,7 @@ const AddItems = (props: AddItemsProps) => {
                 onChange={(e: any) => handleChangeItem(item.id, "description", e.target.value)}
               />
               <Input
+                type="number"
                 value={item.price}
                 placeholder="Price"
                 onChange={(e: any) => handleChangeItem(item.id, "price", e.target.value)}

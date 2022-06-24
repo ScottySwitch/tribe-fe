@@ -95,13 +95,22 @@ const EditListingHomepage = (context) => {
         setOpenHours(get(listing, "attributes.open_hours"))
         setPriceRange(get(listing, "attributes.price_range"))
         setSocialInfo(get(listing, "attributes.social_info"))
-        setItemList(get(listing, "attributes.products.data"))
+        // setItemList(get(listing, "attributes.products.data"))
         setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
         setTags(tagArray)
         setFacilities(arrayFacilities)
-        // setPhoneNumber(listing.attributes.phone_number)
-
+        const rawListing = get(listing, "attributes.products.data") || []
+        const listingArray = rawListing.map((item) => ({
+          name: item.attributes.name,
+          price: item.attributes.price,
+          id: item.id,
+          description: item.attributes.description,
+          images: item.attributes.images,
+          discount_price: item.attributes.discount_price,
+          tags: item.attributes.tags
+        }))
+        setItemList(listingArray)
         if (invoiceList.length > 0) {
           setIsPaid(true)
           setPhoneNumber(rawPhoneNumber)
@@ -169,8 +178,7 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
-    console.log("openHours", openHours)
-
+    console.log('itemList', itemList);
     if (itemList.length > 0) {
       await Promise.all(
         itemList.map(async (item) => {
@@ -189,36 +197,36 @@ const EditListingHomepage = (context) => {
       )
     }
 
-    if (dealList.length > 0) {
-      await Promise.all(
-        dealList.map(async (item) => {
-          const dataSend = {
-            biz_listing: bizListing.id,
-            name: item.name,
-            description: item.description,
-            images: [item.imgUrl],
-            end_date: item.validUntil,
-          }
-          await DealApi.createDeal(dataSend)
-        })
-      )
-    }
-    await BizListingApi.updateBizListing(bizListing.id, {
-      description: description,
-      price_range: priceRange,
-      action: action,
-      images: listingImages,
-      social_info: socialInfo,
-      phone_number: phoneNumber,
-      facilities: facilities,
-      open_hours: openHours,
-      tags: tags.map((item) => item.id),
-      is_verified: false,
-      logo: logo,
-    }).then((response) => {
-      console.log(response)
-      window.location.reload()
-    })
+    // if (dealList.length > 0) {
+    //   await Promise.all(
+    //     dealList.map(async (item) => {
+    //       const dataSend = {
+    //         biz_listing: bizListing.id,
+    //         name: item.name,
+    //         description: item.description,
+    //         images: [item.imgUrl],
+    //         end_date: item.validUntil,
+    //       }
+    //       await DealApi.createDeal(dataSend)
+    //     })
+    //   )
+    // }
+    // await BizListingApi.updateBizListing(bizListing.id, {
+    //   description: description,
+    //   price_range: priceRange,
+    //   action: action,
+    //   images: listingImages,
+    //   social_info: socialInfo,
+    //   phone_number: phoneNumber,
+    //   facilities: facilities,
+    //   open_hours: openHours,
+    //   tags: tags.map((item) => item.id),
+    //   is_verified: false,
+    //   logo: logo,
+    // }).then((response) => {
+    //   console.log(response)
+    //   window.location.reload()
+    // })
   }
 
   return (

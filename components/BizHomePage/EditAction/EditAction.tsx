@@ -17,7 +17,6 @@ interface EditActionProps {
 
 const EditAction = (props: EditActionProps) => {
   const { action, isPaid, onPublishPage, onApplyAction } = props
-  console.log(isPaid)
 
   const [showEditActionModal, setShowEditActionModal] = useState(false)
   const [showBuyNow, setShowBuyNow] = useState(false)

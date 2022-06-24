@@ -20,7 +20,6 @@ const Tags = (props: TagsProps) => {
   const [showTagsModal, setShowTagsModal] = useState(false)
   const [localTags, setLocalTags] = useState(tags)
 
-  console.log('tags', tags);
   return (
     <div>
       <div className="flex justify-between">

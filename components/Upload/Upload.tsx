@@ -39,8 +39,6 @@ const Upload = (props: UploadProps) => {
   const [srcList, setSrcList] = useState<string[]>(initFileList)
 
   const handleChange = (event: any) => {
-    // console.log(isBanner, srcList, isPaid);
-    // console.log(srcList)
     const file = event.target.files[0]
     const src = URL.createObjectURL(file)
     const newFileList = multiple ? [...srcList, src] : [src]

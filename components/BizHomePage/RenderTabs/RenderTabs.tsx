@@ -17,13 +17,21 @@ const Cards = ({ list }) =>
         <Input placeholder="search" width="100%" prefix={<Icon icon="search" />} />
       </div>
       {list.map((item) => (
-        <InforCard
-          key={item.attributes.id}
-          imgUrl={item.attributes.images ? item.attributes.images[0] : "https://picsum.photos/200/300"}
-          title={item.attributes.name}
-          price={item.attributes.price}
-          description={item.attributes.description || item.information}
-        />
+          // <InforCard
+          //   key={item.attributes.id}
+          //   imgUrl={item.attributes.images ? item.attributes.images[0] : "https://picsum.photos/200/300"}
+          //   title={item.attributes.name}
+          //   price={item.attributes.price}
+          //   description={item.attributes.description || item.information}
+          // />
+          <InforCard
+            key={item.id}
+            imgUrl={item.images ? item.images[0] : "https://picsum.photos/200/300"}
+            title={item.name}
+            price={item.price}
+            description={item.description || item.information}
+            tags={item.tags}
+          />
       ))}
     </div>
   ) : null
