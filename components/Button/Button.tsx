@@ -1,6 +1,7 @@
 import classNames from "classnames"
 import { ReactNode } from "react"
 import styles from "./Button.module.scss"
+import Loading from "./Loading"
 
 export interface ButtonProps
   extends Omit<React.HTMLProps<HTMLButtonElement>, "size" | "prefix" | "className"> {
@@ -18,6 +19,7 @@ export interface ButtonProps
     | "underlined"
   size?: "small" | "medium" | "large"
   type?: "button" | "submit" | "reset"
+  isLoading?: boolean
 }
 
 const Button = (props: ButtonProps) => {
@@ -32,6 +34,7 @@ const Button = (props: ButtonProps) => {
     disabled,
     width,
     type = "button",
+    isLoading,
     ...rest
   } = props
 
@@ -44,17 +47,18 @@ const Button = (props: ButtonProps) => {
     [styles.secondary_no_outlined]: variant === "secondary-no-outlined",
     [styles.large]: size === "large",
     [styles.small]: size === "small",
+    [styles.loading]: isLoading,
   })
-
   return (
     <button
       className={buttonClassName}
       id={id}
       type={type}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       {...rest}
       style={{ width }}
     >
+      {isLoading && <Loading />}
       <div className={styles.container}>
         {prefix && <div>{prefix}</div>}
         {text}

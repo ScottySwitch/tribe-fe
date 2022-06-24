@@ -6,15 +6,40 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 
 import styles from "styles/Auth.module.scss";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import AuthApi from "../../../services/auth";
 
 const OtpPage = (context) => {
   const { method, otpReceiver } = context
   const router = useRouter()
   const [valueOtp, setValueOtp] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
+  const [time, setTime] = useState<number>(30);
+  const returnTime = (time) => {
+    if ( time == 0 ) {
+      return '00';
+    }
+    else if (time < 10) {
+      return '0' + time;
+    }
+    else {
+      return time;
+    }
+  }
+
+  useEffect( () => {
+    let timer = setTimeout(() => {
+      if (time > 0) {
+        setTime(returnTime(time-1));
+      }
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  });
 
   const verifyOtp = async () => {
+    setIsLoading(true)
     let result: any = null;
     if (method == 'email') {
       try {
@@ -24,6 +49,7 @@ const OtpPage = (context) => {
       } catch (err) {
         // TODO: notify error (missing template)
         console.log(err);
+        setIsLoading(false)
         return false;
       }
       let { success } = result.data;
@@ -31,6 +57,7 @@ const OtpPage = (context) => {
         await router.push("/signup/setup-profile")
       } else {
         setValueOtp('')
+        setIsLoading(false)
         // TODO: notify error (missing template)
         alert('Wrong OTP');
       }
@@ -43,6 +70,7 @@ const OtpPage = (context) => {
       } catch (err) {
         // TODO: notify error (missing template)
         console.log(err);
+        setIsLoading(false)
         return false;
       }
       let { success } = result.data;
@@ -51,6 +79,7 @@ const OtpPage = (context) => {
         await router.push("/signup/setup-profile")
       } else {
         setValueOtp('')
+        setIsLoading(false)
         // TODO: notify error (missing template)
         alert('Wrong OTP');
       }
@@ -71,12 +100,13 @@ const OtpPage = (context) => {
                  onChange={(e: any) => setValueOtp(e.target.value)}
           />
           <div className="flex justify-between">
-            <div>00:39</div>
+            <div>00:{time}</div>
             <div>Resend</div>
           </div>
           <Button
             text="Sign up"
             onClick={() => verifyOtp()}
+            isLoading={isLoading}
           />
           <div className={styles.sign_up}>
             Already have account?

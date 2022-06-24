@@ -3,6 +3,7 @@
 .button {
   display: flex;
   align-items: center;
+  justify-content: center;
   height: $field-height-md;
   min-width: 100px;
   width: 100%;
@@ -23,7 +24,7 @@
 
   .container {
     height: $input-height;
-    width: 100%;
+    //width: 100%;
     min-width: max-content;
     display: flex;
     align-items: center;
@@ -77,6 +78,11 @@
   &:hover {
     box-shadow: none;
   }
+}
+
+.loading {
+  cursor: wait;
+  opacity: 0.5;
 }
 
 .no_outlined {

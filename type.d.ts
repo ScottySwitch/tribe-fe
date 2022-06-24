@@ -1,1 +1,1 @@
-export type IOption = { label: string; value: string }
+export type IOption = { label: string; value: string, id?: string }

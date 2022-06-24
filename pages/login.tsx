@@ -13,6 +13,8 @@ import { useRouter } from "next/router"
 import { loginInforItem } from "constant"
 import { UsersTypes } from "enums"
 import AuthApi from "../services/auth";
+import { formattedAreaCodes, phoneAreaCodes } from "constant"
+import SelectInput from "components/SelectInput/SelectInput"
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -40,8 +42,10 @@ const LoginPage = () => {
   const [valueEmail, setValueEmail] = useState('');
   const [valuePhoneNumber, setValuePhoneNumber] = useState('');
   const [valuePassword, setValuePassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
+    setIsLoading(true)
     // localStorage.setItem(
     //   loginInforItem,
     //   JSON.stringify({ token: "sometoken", type: UsersTypes.NORMAL_USER })
@@ -57,6 +61,7 @@ const LoginPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error);
+        setIsLoading(false)
         return false;
       }
 
@@ -76,6 +81,7 @@ const LoginPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error);
+        setIsLoading(false)
         return false;
       }
 
@@ -88,6 +94,9 @@ const LoginPage = () => {
 
     window.location.href = "/"
   }
+
+  const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/facebook'
+  const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/google'
 
   return (
     <div className={styles.auth}>
@@ -107,9 +116,14 @@ const LoginPage = () => {
         </div>
         <div className={styles.body}>
           {method === LoginMethod.PHONE_NUMBER ? (
-            <Input size="large" placeholder="Phone number" 
-              onChange={(e: any) => setValuePhoneNumber(e.target.value)}  
-          />
+              <SelectInput
+              label="Phone number"
+              placeholder="Phone number"
+              selectPlaceholder="Area code"
+              options={formattedAreaCodes}
+              shouldControlShowValue
+              onChange={(e) => setValuePhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
+            />
           ) : (
             <Input label="Email" placeholder="Your email"
                    onChange={(e: any) => setValueEmail(e.target.value)}
@@ -134,10 +148,14 @@ const LoginPage = () => {
             <span>Or log in with</span>
           </div>
           <div className={styles.socials}>
-            <Icon icon="google-logo" size={20} className={styles.icon} />
-            <Icon icon="facebook-color" size={20} className={styles.icon} />
+            <a rel="noopener noreferrer" href={routeGoogleLogin}>
+              <Icon icon="google-logo" size={20} className={styles.icon} />
+            </a>
+            <a rel="noopener noreferrer" href={routeFacebookLogin}>
+              <Icon icon="facebook-color" size={20} className={styles.icon} />
+            </a>
           </div>
-          <Button text="Log in" onClick={handleLogin} />
+          <Button text="Log in" onClick={handleLogin} isLoading={isLoading} />
           <div className={styles.sign_up}>
             No account yet?
             <span>

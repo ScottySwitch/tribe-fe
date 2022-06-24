@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import React, {FormEvent, useCallback, useState} from "react"
+import React, {FormEvent, useCallback, useEffect, useState} from "react"
 import Image from "next/image"
 import classNames from "classnames"
 
@@ -15,6 +15,7 @@ import styles from "styles/Auth.module.scss"
 import DatePicker from "components/DatePicker/DatePicker"
 import { useForm } from "react-hook-form"
 import UserApi from "../../../services/user"
+import AuthApi from "../../../services/auth"
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
@@ -30,6 +31,7 @@ const StepOne = ({
 }) => {
   const router = useRouter()
   const [uploadAvatar, setUploadAvatar] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
 
   const { setValue, getValues, register, handleSubmit } = useForm({
     defaultValues: {
@@ -42,11 +44,35 @@ const StepOne = ({
     },
   })
 
+  const [avatar, setAvatar] = useState(["https://picsum.photos/200"]);
+  // If user is come from Facebook, Google
+  useEffect(() => {
+    const loginFacebookCallback = async (accessToken: any) => {
+      const data = await AuthApi.loginFacebookCallback(accessToken)
+      updateUserForm(data.user)
+    }
+    const loginGoogleCallback = async (accessTokenGoogle: any) => {
+      const data = await AuthApi.loginGoogleCallback(accessTokenGoogle)
+      updateUserForm(data.user)
+    }
+    if (router.query.id_token) { // google has id_token
+      loginGoogleCallback(router.query.access_token).catch(e => console.log(e))
+    } else if (router.query.access_token) {
+      loginFacebookCallback(router.query.access_token).catch(e => console.log(e))
+    }
+  }, [router])
+
+  const updateUserForm = (user) => {
+    setValue('name', user.first_name);
+    setAvatar([user.avatar]); // TODO: this function do not change avatar in form?
+  }
+
   const handleUploadAvatar = useCallback((srcAvatar) => {
     setUploadAvatar(srcAvatar[1]);
   }, []);
 
   const onSubmit = async (data) => {
+    setIsLoading(true)
     console.log('data', data);
     try {
       const userId = parseInt(localStorage.getItem('user_id') || '0');
@@ -60,6 +86,7 @@ const StepOne = ({
     } catch (err) {
       // TODO: notify error (missing template)
       console.log(err);
+      setIsLoading(false)
       return false;
     }
     onNextStep(data)
@@ -77,7 +104,7 @@ const StepOne = ({
             fileList={["https://picsum.photos/200/300"]}
           />
           <Upload
-            fileList={["https://picsum.photos/200"]}
+            fileList={avatar}
             type="avatar"
             className={styles.avatar}
             onChange={handleUploadAvatar}
@@ -119,7 +146,7 @@ const StepOne = ({
           {/* <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
             Skip
           </div> */}
-          <Button className="w-1/2" text="Next" type="submit" />
+          <Button className="w-1/2" text="Next" type="submit" isLoading={isLoading} />
         </div>
       </form>
     </div>
@@ -128,8 +155,12 @@ const StepOne = ({
 
 const StepTwo = ({ onBackStep, onSubmit }: any) => {
   const [interest, setInterest] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleSubmit = () => {
+    setIsLoading(true)
     onSubmit(interest)
+    setIsLoading(false)
   }
   return (
     <div>
@@ -168,7 +199,7 @@ const StepTwo = ({ onBackStep, onSubmit }: any) => {
         </div>
         <div className={styles.actions}>
           <Button variant="secondary-no-outlined" text="Back" onClick={onBackStep} width={50} />
-          <Button className="w-1/2" text="Next" onClick={handleSubmit} />
+          <Button className="w-1/2" text="Next" onClick={handleSubmit} isLoading={isLoading} />
         </div>
       </div>
     </div>
@@ -189,7 +220,7 @@ const SetupProfilePage = () => {
 
   const handleSubmit = (form) => {
     console.log({ ...formData, ...form })
-    router.push("/login")
+    router.push("/")
   }
 
   const handleBackStep = () => {

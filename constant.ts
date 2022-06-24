@@ -469,8 +469,8 @@ export const listingSearchResult = [
     attributes: {
       id: "a1762871287348",
       label: "Minatoso",
-      name: "Minatoso",
-      value: "minatoso",
+      name: "Minatosu",
+      value: "minatosu",
       address: "Kyoto, Japan",
       category: Categories.SEE_AND_DO,
       avatar: "https://picsum.photos/200/300",
