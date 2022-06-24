@@ -5,7 +5,7 @@
     display: flex;
     background-color: $bg-0;
     border-radius: 8px;
-    min-height: 145px;
+    min-height: 115px;
     padding: $p-md;
     width: 100%;
     margin-bottom: 32px;
@@ -13,9 +13,9 @@
 
   &_avatar {
     position: relative;
-    min-width: 130px;
-    max-width: 130px;
-    height: 130px;
+    min-width: 100px;
+    max-width: 100px;
+    height: 100px;
     margin-right: 24px;
   }
 

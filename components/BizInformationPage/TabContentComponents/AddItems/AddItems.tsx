@@ -2,8 +2,10 @@ import Break from "components/Break/Break"
 import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
+import SelectInput from "components/SelectInput/SelectInput"
 import Upload from "components/Upload/Upload"
 import { ListingHomePageScreens } from "enums"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { getIndex, randomId } from "utils"
 
@@ -21,15 +23,20 @@ interface AddItemsProps {
 const AddItems = (props: AddItemsProps) => {
   const { itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
   const [localItemList, setLocalItemList] = useState(itemList || [])
-
-  console.log('itemList', itemList)
+  const router = useRouter()
+  
+  console.log("itemList", itemList)
 
   const handleRemoveItem = (id: number) => {
     const newArray = [...localItemList].filter((item) => item.id !== id)
     setLocalItemList(newArray)
   }
 
-  const handleChangeItem = (id: number, type: string, value: string | number | string[]) => {
+  const handleChangeItem = (
+    id: number,
+    type: string,
+    value: string | number | string[] | { [key: string]: any }
+  ) => {
     const index = getIndex(id, localItemList)
     const newArray = [...localItemList]
     newArray[index][type] = value
@@ -37,7 +44,6 @@ const AddItems = (props: AddItemsProps) => {
   }
 
   const handleAddItem = () => {
-    console.log("asjndkjansd")
     setLocalItemList([...localItemList, { id: randomId(), isNew: true }])
   }
 
@@ -97,16 +103,57 @@ const AddItems = (props: AddItemsProps) => {
                 placeholder={placeholders[1]}
                 onChange={(e: any) => handleChangeItem(item.id, "description", e.target.value)}
               />
+              <div className="flex gap-3">
+                <SelectInput
+                  width="50%"
+                  selectPosition="suffix"
+                  value={item.price}
+                  placeholder="Enter price"
+                  selectDefaultValue={{ label: "SGD", value: "SGD" }}
+                  onChange={(e: any) =>
+                    handleChangeItem(item.id, "price", { price: e.input, currency: e.select })
+                  }
+                />
+                <SelectInput
+                  width="50%"
+                  value={item.discount}
+                  selectPosition="suffix"
+                  placeholder="Enter discount"
+                  selectDefaultValue={{ label: "%", value: "%" }}
+                  onChange={(e: any) => handleChangeItem(item.id, "discount", e.target.value)}
+                />
+              </div>
               <Input
-                value={item.price}
-                placeholder="Price"
-                onChange={(e: any) => handleChangeItem(item.id, "price", e.target.value)}
-              />
-              <Input
+                label="Klook URL"
                 value={item.tags}
-                placeholder="Tags"
-                onChange={(e: any) => handleChangeItem(item.id, "tags", e.target.value)}
+                placeholder="Enter URL"
+                onChange={(e: any) => handleChangeItem(item.id, "klookUrl", e.target.value)}
               />
+              {isPaid ? (
+                <Input
+                  label="Website URL"
+                  value={item.tags}
+                  placeholder="Enter URL"
+                  onChange={(e: any) => handleChangeItem(item.id, "websiteUrl", e.target.value)}
+                />
+              ) : (
+                <Input
+                  disabled
+                  label="Website URL"
+                  value="Upgrade to Premium to link website"
+                  suffix={
+                    <div className="flex gap-2">
+                      <a
+                        style={{ width: "max-content", color: "#653fff" }}
+                        onClick={() => router.push("/")}
+                      >
+                        View detail
+                      </a>
+                      <Icon icon="star-2" color="#653fff" />
+                    </div>
+                  }
+                />
+              )}
               {multiple && <AddItemButton />}
             </div>
           ))

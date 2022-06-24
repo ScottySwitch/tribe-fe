@@ -89,7 +89,7 @@ const AddDeals = (props: AddDealsProps) => {
               />
               <DatePicker
                 value={new Date()}
-                onChange={(e: any) => handleChangeDeal(deal.id, "validUntil", e)}
+                onChange={(e: any) => handleChangeDeal(deal.id, "expireAt", e)}
                 suffixIcon
                 label="Valid until"
               />

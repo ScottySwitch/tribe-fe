@@ -248,7 +248,7 @@ export const freeInformationList = [
 
 export const eatTabList = [
   { text: "Dishes", value: ListingTabs.DISH, screen: ListingHomePageScreens.ADD_ITEMS },
-  { text: "Menus", value: ListingTabs.MENU, screen: ListingHomePageScreens.ADD_MENU },
+  { text: "Menu", value: ListingTabs.MENU, screen: ListingHomePageScreens.ADD_MENU },
   { text: "Deals", value: ListingTabs.DEAL, screen: ListingHomePageScreens.ADD_DEALS },
 ]
 

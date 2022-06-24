@@ -1,3 +1,5 @@
+@import "styles/variables.scss";
+
 .items_container {
   background-color: #f6f6f6;
   border-radius: 8px;
@@ -13,5 +15,24 @@
   scrollbar-width: none; /* Firefox */
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+.info_card_container {
+  position: relative;
+
+  .delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.517);
+    border-radius: 50%;
+    padding: 6px;
+    cursor: pointer;
+    fill: white;
+
+    &:hover {
+      fill: $primary-500;
+    }
   }
 }
