@@ -1,13 +1,10 @@
 import { useState } from "react"
 
-import Button from "components/Button/Button"
-import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
-import Heading from "../../Heading/Heading"
 import Icon from "components/Icon/Icon"
-import Link from "next/link"
 import TagsSelection from "components/TagsSelection/TagsSelection"
 import { IOption } from "type"
+import Badge from "components/Badge/Badge"
 
 interface TagsProps {
   tags: IOption[]
@@ -20,6 +17,7 @@ const Tags = (props: TagsProps) => {
   const [showTagsModal, setShowTagsModal] = useState(false)
   const [localTags, setLocalTags] = useState(tags)
 
+  // console.log("tags", tags)
   return (
     <div>
       <div className="flex justify-between">
@@ -29,20 +27,19 @@ const Tags = (props: TagsProps) => {
         </div>
         <a onClick={() => setShowTagsModal(true)}>Add tags</a>
       </div>
-      <div className="flex flex-wrap gap-y-2">
+      <div className="flex flex-wrap mt-5 gap-y-5 gap-5">
         {Array.isArray(tags) &&
           tags.map((item) => (
-            <div key={item.value} className="mt-3 flex items-center w-full md:w-1/2 lg:w-1/3 pr-1">
-              <>
-                <Icon icon="dot" /> {item.label}
-              </>
+            <div key={item.value} className="">
+              <Badge text={item.label} />
             </div>
           ))}
       </div>
       <Modal
         title="Tags"
+        subTitle="Select 5 max"
         visible={showTagsModal}
-        width={500}
+        width={750}
         mobilePosition="center"
         onClose={() => {
           setLocalTags(tags)

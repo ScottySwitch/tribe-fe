@@ -13,6 +13,7 @@ import { useRouter } from "next/router"
 import AuthApi from "../../services/auth"
 import SelectInput from "components/SelectInput/SelectInput"
 import { formattedAreaCodes, phoneAreaCodes } from "constant"
+import { get } from "lodash"
 
 export enum LoginMethod {
   PHONE = "phone",
@@ -45,14 +46,15 @@ const SignupPage = () => {
 
   const handleSubmit = async (event: any) => {
     setIsLoading(true)
-    console.log(phoneNumber);
+    console.log(phoneNumber)
     event.preventDefault()
-    const otpReceiver = method === LoginMethod.EMAIL ? event.target.email.value : phoneNumber
+    const otpReceiver =
+      method === LoginMethod.EMAIL ? get(event, "target.email.value") : phoneNumber
     const formData = {
       method: method,
       [method]: otpReceiver,
-      receive_promotions: event.target.receive_promotions.value,
-      agree_policies: event.target.agree_policies.value,
+      receive_promotions: get(event, "target.receive_promotions.value"),
+      agree_policies: get(event, "target.agree_policies.value"),
     }
     console.log(formData)
     if (method === LoginMethod.EMAIL) {
@@ -77,7 +79,7 @@ const SignupPage = () => {
         }
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(err.response.data.error)
+        console.log(get(err, "response.data.error"))
         setIsLoading(false)
       }
     } else {
@@ -110,15 +112,15 @@ const SignupPage = () => {
         }
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(err.response.data.error)
+        console.log(get(err, "response.data.error"))
         setIsLoading(false)
       }
     }
     setIsLoading(false)
   }
 
-  const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/facebook'
-  const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/google'
+  const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/facebook"
+  const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/google"
 
   return (
     <div className={styles.auth}>
@@ -144,7 +146,9 @@ const SignupPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
+              onChange={(e) =>
+                setPhoneNumber(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
+              }
             />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />

@@ -12,8 +12,7 @@
     justify-content: space-between;
     height: 100%;
   }
-  
-  
+
   .section_review_search_box {
     position: absolute;
     height: 200px;
@@ -30,13 +29,13 @@
   &_add_new {
     .page_title {
       font-size: 32px;
-      font-weight: $fw-bold;
+      font-weight: $font-bold;
       color: $bg-700;
       margin-bottom: 40px;
 
       &_sub {
         font-size: 20px;
-        font-weight: $fw-bold;
+        font-weight: $font-bold;
         color: $bg-700;
         margin-left: 23px;
       }
@@ -60,8 +59,8 @@
     }
 
     .note {
-      font-size: $fs-md;
-      font-weight: $fw-semi-bold;
+      font-size: $text-md;
+      font-weight: $font-semi-bold;
       color: $bg-600;
       max-width: 518px;
     }
@@ -74,7 +73,7 @@
     .section_review_search_box {
       bottom: -90px;
       padding: 0 16px;
-      
+
       &_container {
         width: 100%;
       }
@@ -82,14 +81,14 @@
     .advertisement {
       display: none;
     }
-  
+
     &_add_new {
       .container {
         &_left {
           width: 100%;
           padding-right: 0 !important;
           margin-right: 0 !important;
-          
+
           &.divider_vertical {
             border: none;
           }
@@ -111,7 +110,7 @@
       }
     }
   }
-  
+
   @media screen and (max-width: $mobile) {
     .section_children_reviews {
       &_container {

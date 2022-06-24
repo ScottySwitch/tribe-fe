@@ -12,9 +12,10 @@ import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
 import { loginInforItem } from "constant"
 import { UsersTypes } from "enums"
-import AuthApi from "../services/auth";
+import AuthApi from "../services/auth"
 import { formattedAreaCodes, phoneAreaCodes } from "constant"
 import SelectInput from "components/SelectInput/SelectInput"
+import { get } from "lodash"
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -39,9 +40,9 @@ const LoginPage = () => {
   const [method, setMethod] = useState(LoginMethod.EMAIL)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
-  const [valueEmail, setValueEmail] = useState('');
-  const [valuePhoneNumber, setValuePhoneNumber] = useState('');
-  const [valuePassword, setValuePassword] = useState('');
+  const [valueEmail, setValueEmail] = useState("")
+  const [valuePhoneNumber, setValuePhoneNumber] = useState("")
+  const [valuePassword, setValuePassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
@@ -52,51 +53,50 @@ const LoginPage = () => {
     // )
     // Email
     if (method === LoginMethod.EMAIL) {
-      let result: any = null;
+      let result: any = null
       try {
         result = await AuthApi.loginByEmail({
           email: valueEmail,
-          password: valuePassword
-        });
+          password: valuePassword,
+        })
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(err.response.data.error);
+        console.log(get(err, "response.data.error"))
         setIsLoading(false)
-        return false;
+        return false
       }
 
       if (result.data) {
-        let { jwt } = result.data;
+        let { jwt } = result.data
         localStorage.setItem("token", jwt)
-        await AuthApi.getMe();
+        await AuthApi.getMe()
       }
-    }
-    else {
-      let result: any = null;
+    } else {
+      let result: any = null
       try {
         result = await AuthApi.loginByPhone({
           phone_number: valuePhoneNumber,
-          password: valuePassword
-        });
+          password: valuePassword,
+        })
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(err.response.data.error);
+        console.log(err.response.data.error)
         setIsLoading(false)
-        return false;
+        return false
       }
 
       if (result.data) {
-        let { jwt } = result.data;
+        let { jwt } = result.data
         localStorage.setItem("token", jwt)
-        await AuthApi.getMe();
+        await AuthApi.getMe()
       }
     }
 
     window.location.href = "/"
   }
 
-  const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/facebook'
-  const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + '/api/connect/google'
+  const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/facebook"
+  const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/google"
 
   return (
     <div className={styles.auth}>
@@ -116,17 +116,21 @@ const LoginPage = () => {
         </div>
         <div className={styles.body}>
           {method === LoginMethod.PHONE_NUMBER ? (
-              <SelectInput
+            <SelectInput
               label="Phone number"
               placeholder="Phone number"
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) => setValuePhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
+              onChange={(e) =>
+                setValuePhoneNumber(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
+              }
             />
           ) : (
-            <Input label="Email" placeholder="Your email"
-                   onChange={(e: any) => setValueEmail(e.target.value)}
+            <Input
+              label="Email"
+              placeholder="Your email"
+              onChange={(e: any) => setValueEmail(e.target.value)}
             />
           )}
           <Input

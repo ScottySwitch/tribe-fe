@@ -5,7 +5,7 @@ import ListingCard from "components/ListingCard/ListingCard"
 import ListingSearch from "components/ListingSearch/ListingSearch"
 import Modal from "components/Modal/Modal"
 import Select from "components/Select/Select"
-import { listingSearchResult } from "constant"
+// import { listingSearchResult } from "constant"
 import { ClaimStep, YesNo } from "enums"
 import Image from "next/image"
 import { useRouter } from "next/router"
@@ -31,7 +31,7 @@ const RightColumn = (props: {
         onClick={() =>
           isRelationship
             ? router.push({
-                pathname: `/claim/${listing.attributes.id}`,
+                pathname: `/claim/${listing.id}`,
                 query: { firstStep: ClaimStep.CLAIM_FREE_LISTING },
               })
             : onShowUpcomingFeature()
@@ -61,7 +61,7 @@ const SearchListing = ({
   const [showUpcomingFeature, setShowUpcomingFeature] = useState(false)
   switch (listing) {
     case undefined:
-      return <ListingSearch listingOptions={listingSearchResult} onChange={setListing} />
+      return <ListingSearch listingOptions={bizListing} onChange={setListing} />
     case YesNo.NO:
       return (
         <div className="flex gap-2">

@@ -14,14 +14,14 @@
     .title_container {
       margin-bottom: 30px;
       .title {
-        font-size: $fs-xl;
-        font-weight: $fw-bold;
+        font-size: $text-xl;
+        font-weight: $font-bold;
       }
 
       .sub_title {
         margin-top: 8px;
-        font-weight: $fw-light;
-        font-size: $fs-sm;
+        font-weight: $font-light;
+        font-size: $text-sm;
         color: $bg-500;
       }
     }

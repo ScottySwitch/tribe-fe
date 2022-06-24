@@ -5,23 +5,23 @@
   margin: 30px 0 16px 0;
 
   .question {
-    font-size: $fs-md;
-    font-weight: $fw-bold;
+    font-size: $text-md;
+    font-weight: $font-bold;
   }
 
   .optional {
     color: $bg-400;
-    font-size: $fs-md;
+    font-size: $text-md;
   }
 
   .instruction {
     color: $bg-600;
-    font-size: $fs-xs;
-    font-weight: $fw-light;
+    font-size: $text-xs;
+    font-weight: $font-light;
   }
 }
 
 .children {
-  font-weight: $fw-light;
-  font-size: $fs-md;
+  font-weight: $font-light;
+  font-size: $text-md;
 }

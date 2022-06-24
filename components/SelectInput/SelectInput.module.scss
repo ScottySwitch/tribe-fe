@@ -3,8 +3,8 @@
 .select_input {
   label {
     display: block;
-    font-size: $fs-xs;
-    font-weight: $fw-light;
+    font-size: $text-xs;
+    font-weight: $font-light;
     color: $bg-200;
   }
 
@@ -22,8 +22,8 @@
   input {
     width: 100%;
     height: $input-height;
-    font-weight: $fw-light;
-    font-size: $fs-md;
+    font-weight: $font-light;
+    font-size: $text-md;
     text-overflow: ellipsis;
     border: none;
     color: $bg-700;

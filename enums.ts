@@ -26,11 +26,11 @@ export enum Tiers {
 }
 
 export enum ListingTabs {
-  SERVICE = "service",
-  PRODUCT = "product",
-  DISH = "dish",
-  MENU = "menu",
-  DEAL = "deal",
+  SERVICE = "services",
+  PRODUCT = "products",
+  DISH = "dishes",
+  MENU = "menus",
+  DEAL = "deals",
 }
 
 export enum ListingHomePageScreens {

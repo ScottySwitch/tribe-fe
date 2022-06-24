@@ -5,10 +5,10 @@
   flex-wrap: wrap;
   gap: 10px;
   &_value {
-    font-weight: $fw-light;
+    font-weight: $font-light;
   }
   &_value_badge {
-    font-weight: $fw-light;
+    font-weight: $font-light;
     padding: 0 6px;
     height: 30px;
   }
@@ -21,9 +21,9 @@
   .day_name {
     width: 30%;
     max-width: 100px;
-    font-weight: $fw-normal;
+    font-weight: $font-normal;
   }
   .open_hour {
-    font-weight: $fw-light;
+    font-weight: $font-light;
   }
 }

@@ -2,8 +2,8 @@
 
 .top_search {
   &_label {
-    font-size: $fs-md;
-    font-weight: $fw-semi-bold;
+    font-size: $text-md;
+    font-weight: $font-semi-bold;
     color: $bg-600;
     margin-bottom: 3px;
   }
@@ -22,13 +22,13 @@
   }
 
   &_keyword {
-    font-size: $fs-xs;
+    font-size: $text-xs;
     color: $primary-500;
   }
-  
+
   .divider {
     visibility: hidden;
-    font-size: $fs-xs;
+    font-size: $text-xs;
     color: $bg-200;
     margin: 0 10px;
   }

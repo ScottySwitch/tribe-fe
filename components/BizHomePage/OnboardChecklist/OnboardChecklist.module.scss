@@ -11,13 +11,13 @@
     align-items: flex-end;
     &_title {
       color: $bg-700;
-      font-size: $fs-lg;
-      font-weight: $fw-semi-bold;
+      font-size: $text-lg;
+      font-weight: $font-semi-bold;
     }
     &_progress {
-      font-weight: $fw-bold;
+      font-weight: $font-bold;
       color: $blue-700;
-      font-size: $fs-md;
+      font-size: $text-md;
     }
   }
 

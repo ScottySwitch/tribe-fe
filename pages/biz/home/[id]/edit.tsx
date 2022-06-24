@@ -51,7 +51,7 @@ const EditListingHomepage = (context) => {
   const [phoneNumber, setPhoneNumber] = useState<any>("")
   const [action, setAction] = useState({ label: "", value: "" })
   const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
-  const [menu, setMenu] = useState<string[]>()
+  const [menuList, setMenuList] = useState<string[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
   // const [listingImages, setListingImages] = useState<string[]>([])
@@ -172,7 +172,7 @@ const EditListingHomepage = (context) => {
     setScreen(ListingHomePageScreens.HOME)
   }
   const handleSetMenu = (menu) => {
-    setMenu(menu)
+    setMenuList(menu)
     setScreen(ListingHomePageScreens.HOME)
   }
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
@@ -283,6 +283,7 @@ const EditListingHomepage = (context) => {
               <div className={styles.break} />
               <div>
                 <RenderTabs
+                  menuList={menuList}
                   category={category}
                   itemList={itemList}
                   dealList={dealList}
@@ -305,6 +306,7 @@ const EditListingHomepage = (context) => {
         <SectionLayout
           show={screen === ListingHomePageScreens.ADD_ITEMS}
           title={getAddItemsFields(category).title}
+          childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
         >
           <AddItems
             multiple
@@ -314,8 +316,12 @@ const EditListingHomepage = (context) => {
             placeholders={getAddItemsFields(category).placeholder}
           />
         </SectionLayout>
-        <SectionLayout show={screen === ListingHomePageScreens.ADD_MENU} title="Add a menu">
-          <AddMenu menu={menu} onCancel={handleCancel} onSubmit={handleSetMenu} />
+        <SectionLayout
+          show={screen === ListingHomePageScreens.ADD_MENU}
+          title="Add a menu"
+          childrenClassName=" w-full sm:w-3/4 lg:w-1/2"
+        >
+          <AddMenu menu={menuList} onCancel={handleCancel} onSubmit={handleSetMenu} />
         </SectionLayout>
         <SectionLayout
           show={screen === ListingHomePageScreens.ADD_DEALS}

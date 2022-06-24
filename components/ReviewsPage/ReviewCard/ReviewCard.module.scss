@@ -27,17 +27,17 @@
       max-width: 220px;
       margin-right: 24px;
     }
-  
+
     .title {
-      font-size: $fs-md + 2px;
-      font-weight: $fw-bold;
+      font-size: $text-md + 2px;
+      font-weight: $font-bold;
       color: $bg-600;
       margin-bottom: 8px;
     }
 
     .location {
-      font-size: $fs-sm;
-      font-weight: $fw-light;
+      font-size: $text-sm;
+      font-weight: $font-light;
       margin-bottom: 18px;
     }
 
@@ -69,12 +69,12 @@
       }
 
       .title {
-        font-size: $fs-sm;
+        font-size: $text-sm;
         margin-bottom: 8px;
       }
 
       .location {
-        font-size: $fs-xs;
+        font-size: $text-xs;
       }
     }
   }
@@ -88,8 +88,8 @@
   }
   &_click {
     color: $primary-500;
-    font-size: $fs-md;
-    font-weight: $fw-semi-bold;
+    font-size: $text-md;
+    font-weight: $font-semi-bold;
     margin-left: 23px;
   }
 }
@@ -99,15 +99,15 @@
     margin-bottom: 32px;
   }
   &_label {
-    font-size: $fs-sm;
+    font-size: $text-sm;
     color: $bg-400;
-    font-weight: $fw-semi-bold;
+    font-weight: $font-semi-bold;
   }
 }
 @media screen and (max-width: $mobile) {
   .cta {
     &_click {
-      font-size: $fs-sm;
+      font-size: $text-sm;
     }
   }
   .form {

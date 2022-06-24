@@ -99,10 +99,15 @@ const AddDeals = (props: AddDealsProps) => {
                 onChange={(e: any) => handleChangeDeal(deal.id, "termsConditions", e.target.value)}
               />
               {multiple && <AddDealButton />}
+              <Break />
             </div>
           ))
-        : multiple && <AddDealButton />}
-      <Break />
+        : multiple && (
+            <div>
+              <AddDealButton />
+              <Break />
+            </div>
+          )}
       <div className="flex gap-5">
         <CancelButton />
         <Button text="Confirm" width={280} size="small" onClick={() => onSubmit(localDealList)} />

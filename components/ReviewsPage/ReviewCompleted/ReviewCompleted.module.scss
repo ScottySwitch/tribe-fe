@@ -18,30 +18,30 @@
 
   &_sumary {
     flex: 1;
-    
+
     .name {
-      font-size: $fs-md;
-      font-weight: $fw-bold;
+      font-size: $text-md;
+      font-weight: $font-bold;
       color: $bg-700;
       margin-bottom: 10px;
     }
-    
+
     .rating {
       &_group {
         display: flex;
         flex-wrap: wrap;
       }
       &_type {
-        font-size: $fs-md;
+        font-size: $text-md;
         color: $bg-600;
-        font-weight: $fw-bold;
+        font-weight: $font-bold;
         margin-left: 16px;
         margin-bottom: 12px;
       }
     }
 
     .content {
-      font-size: $fs-md;
+      font-size: $text-md;
       color: $bg-500;
       margin-bottom: 16px;
     }
@@ -58,7 +58,7 @@
     }
 
     .date_visit {
-      font-size: $fs-md;
+      font-size: $text-md;
     }
   }
 }

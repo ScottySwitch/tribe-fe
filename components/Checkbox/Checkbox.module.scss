@@ -42,11 +42,11 @@
       border: none;
     }
   }
+
   label {
     display: flex;
     flex-wrap: wrap;
     width: fit-content;
-    align-items: center;
-    font-size: $fs-md;
+    font-size: $text-md;
   }
 }

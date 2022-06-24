@@ -61,7 +61,6 @@ const formatListingResultOption = (bizListing: any[]) => {
 }
 
 const ListingSearch = ({ listingOptions, onChange }) => {
-  const router = useRouter()
   return (
     <Select
       shouldControlShowValue

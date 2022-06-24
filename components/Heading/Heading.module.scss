@@ -1,7 +1,7 @@
 @import "styles/variables.scss";
 
 .heading {
-  font-weight: $fw-bold;
+  font-weight: $font-bold;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -34,7 +34,7 @@
   }
 
   &.un_selected {
-    font-weight: $fw-light;
+    font-weight: $font-light;
 
     .icon {
       max-width: 0;
@@ -45,7 +45,7 @@
   }
 
   &:hover {
-    font-weight: $fw-bold;
+    font-weight: $font-bold;
     color: $bg-700;
     &::before {
       height: 23px;

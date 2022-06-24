@@ -17,11 +17,11 @@
 
     .nav {
       width: 16%;
-      font-size: $fs-sm;
+      font-size: $text-sm;
       .header {
         color: $bg-500;
-        font-size: $fs-md;
-        font-weight: $fw-semi-bold;
+        font-size: $text-md;
+        font-weight: $font-semi-bold;
       }
       .item_container {
         display: flex;
@@ -46,7 +46,7 @@
   border-top: 1px solid $bg-100;
   padding-top: 16px;
   margin-top: 16px;
-  font-size: $fs-xs;
+  font-size: $text-xs;
   color: $bg-400;
 }
 
