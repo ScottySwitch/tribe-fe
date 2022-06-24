@@ -52,7 +52,7 @@ const TabContent = ({ list, blankImg, blankText, buttonText, onClick }) => {
     <CardContainer list={list} />
   ) : (
     <div className="flex flex-col items-center justify-center">
-      <Image src={require(blankImg)} width={100} alt="" />
+      <Image src={blankImg} width={100} alt="" />
       <p>{blankText}</p>
       <Button text={buttonText} size="small" width={300} className="my-5" onClick={onClick} />
     </div>
@@ -74,27 +74,30 @@ const RenderTabs = (props: {
       tabContent = (
         <TabContent
           list={itemList}
-          blankImg="public/images/no-product.svg"
+          blankImg={require("public/images/no-product.svg")}
           blankText="There are no services yet"
           buttonText="Add Service now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
         />
       )
+      break
     case ListingTabs.PRODUCT:
       tabContent = (
         <TabContent
           list={itemList}
-          blankImg="public/images/no-product.svg"
+          blankImg={require("public/images/no-product.svg")}
           blankText="There are no products yet"
           buttonText="Add product now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
         />
       )
+      break
+
     case ListingTabs.DISH:
       tabContent = (
         <TabContent
           list={itemList}
-          blankImg="public/images/no-dish.svg"
+          blankImg={require("public/images/no-dish.svg")}
           blankText="There are no dish yet"
           buttonText="Add dish now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
@@ -105,22 +108,25 @@ const RenderTabs = (props: {
       tabContent = (
         <TabContent
           list={menuList}
-          blankImg="public/images/no-product.svg"
+          blankImg={require("public/images/no-product.svg")}
           blankText="There are no menu yet"
           buttonText="Add menu now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_MENU)}
         />
       )
+      break
+
     case ListingTabs.DEAL:
       tabContent = (
         <TabContent
           list={dealList}
-          blankImg="public/images/no-product.svg"
+          blankImg={require("public/images/no-product.svg")}
           blankText="There are no deal yet"
           buttonText="Add deals now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEALS)}
         />
       )
+      break
   }
 
   return (

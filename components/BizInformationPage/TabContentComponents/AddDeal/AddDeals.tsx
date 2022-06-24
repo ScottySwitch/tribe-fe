@@ -67,7 +67,7 @@ const AddDeals = (props: AddDealsProps) => {
       {Array.isArray(localDealList) && localDealList.length
         ? localDealList.map((deal) => (
             <div key={deal.id} className={styles.add_deals_container}>
-              <div className={styles.break} />
+              <Break />
               <div className={styles.header}>
                 <p className="text-left">Add images</p>
                 {multiple && (

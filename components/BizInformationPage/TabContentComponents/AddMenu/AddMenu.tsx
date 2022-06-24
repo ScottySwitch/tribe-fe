@@ -8,13 +8,14 @@ import { useState } from "react"
 import styles from "./AddMenu.module.scss"
 
 interface AddItemsProps {
+  isPaid?: boolean
   menu?: string[]
   onCancel: () => void
   onSubmit: (fileList: string[]) => void
 }
 
 const AddMenu = (props: AddItemsProps) => {
-  const { menu, onCancel, onSubmit } = props
+  const { isPaid, menu, onCancel, onSubmit } = props
 
   const [fileList, setFileList] = useState<string[]>(menu || [])
 
@@ -29,10 +30,11 @@ const AddMenu = (props: AddItemsProps) => {
   )
 
   return (
-    <div className=" w-full sm:w-3/4 lg:w-1/2">
+    <div>
       <Break />
       <Upload
-        className={styles.upload}
+        isPaid={isPaid}
+        multiple
         centerIcon={<Icon icon="plus" size={20} />}
         fileList={fileList}
         onChange={(list) => setFileList(list)}
