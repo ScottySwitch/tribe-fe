@@ -80,7 +80,7 @@ const AddItems = (props: AddItemsProps) => {
               <Upload
                 isPaid={isPaid}
                 multiple
-                fileList={item.images}
+                fileList={item.images || []}
                 centerIcon={<Icon icon="plus" size={20} />}
                 onChange={(e) => handleChangeItem(item.id, "imgUrl", e[0])}
               />

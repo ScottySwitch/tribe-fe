@@ -111,12 +111,28 @@ const EditListingHomepage = (context) => {
           tags: item.attributes.tags
         }))
         setItemList(listingArray)
+        const rawMenu = get(listing, 'attributes.menus.data') || []
+        const menuArray = rawMenu.map((item) => ({
+          name: item.attributes.name,
+          images: item.attributes.menu_file
+        }))
+        setMenuList(menuArray)
         if (invoiceList.length > 0) {
           setIsPaid(true)
           setPhoneNumber(rawPhoneNumber)
         } else {
           setPhoneNumber(defaultPhone)
         }
+        const rawDeal = get(listing, 'attributes.deals.data') || []
+        const dealArray = rawDeal.map((item) => ({
+          name: item.attributes.name,
+          images: item.attributes.images,
+          information: item.attributes.description,
+          // start_date: item.attributes.start_date,
+          validUntil: item.attributes.start_date,
+          end_date: item.attributes.end_date
+        }))
+        setDealList(dealArray)
       }
     }
 
@@ -197,20 +213,37 @@ const EditListingHomepage = (context) => {
       )
     }
 
-    // if (dealList.length > 0) {
-    //   await Promise.all(
-    //     dealList.map(async (item) => {
-    //       const dataSend = {
-    //         biz_listing: bizListing.id,
-    //         name: item.name,
-    //         description: item.description,
-    //         images: [item.imgUrl],
-    //         end_date: item.validUntil,
-    //       }
-    //       await DealApi.createDeal(dataSend)
-    //     })
-    //   )
-    // }
+    if (menuList.length > 0) {
+      await Promise.all(
+        itemList.map(async (item) => {
+          if (item.isNew) {
+            const dataSend = {
+              biz_listing: bizListing.id,
+              name: item.name,
+              images: [item.imgUrl],
+            }
+            await ProductApi.createProduct(dataSend)
+          }
+        })
+      )
+    }
+
+    if (dealList.length > 0) {
+      await Promise.all(
+        dealList.map(async (item) => {
+          const dataSend = {
+            biz_listing: bizListing.id,
+            name: item.name,
+            description: item.description,
+            images: [item.imgUrl],
+            start_date: item.validUntil,
+            end_date: item.validUntil,
+          }
+          await DealApi.createDeal(dataSend)
+        })
+      )
+    }
+
     // await BizListingApi.updateBizListing(bizListing.id, {
     //   description: description,
     //   price_range: priceRange,

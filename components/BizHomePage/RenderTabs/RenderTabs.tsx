@@ -42,6 +42,7 @@ const CardContainer = ({ list }) =>
             price={item.price}
             description={item.description || item.information}
             tags={item.tags}
+            validUntil={item.validUntil}
           />
       ))}
     </div>

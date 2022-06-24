@@ -17,6 +17,7 @@ export interface InforCardProps {
   followerNumber?: number
   description?: string
   width?: string | number
+  validUntil?: any
 }
 
 const InforCard = (props: InforCardProps) => {
@@ -35,7 +36,7 @@ const InforCard = (props: InforCardProps) => {
     isVerified,
     width,
   } = props
-  // console.log('props',props);
+  console.log('props',props);
   return (
     <div className={`${styles.infor_card} ${className}`} style={{ width }}>
       {isVerified && (
