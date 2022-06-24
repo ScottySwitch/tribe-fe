@@ -24,7 +24,7 @@ const AddItems = (props: AddItemsProps) => {
   const { itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
   const [localItemList, setLocalItemList] = useState(itemList || [])
   const router = useRouter()
-  
+
   console.log("itemList", itemList)
 
   const handleRemoveItem = (id: number) => {
@@ -91,7 +91,7 @@ const AddItems = (props: AddItemsProps) => {
                 multiple
                 fileList={item.images}
                 centerIcon={<Icon icon="plus" size={20} />}
-                onChange={(e) => handleChangeItem(item.id, "imgUrl", e[0])}
+                onChange={(e) => handleChangeItem(item.id, "images", e)}
               />
               <Input
                 value={item.name}

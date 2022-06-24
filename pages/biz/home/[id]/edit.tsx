@@ -181,7 +181,7 @@ const EditListingHomepage = (context) => {
               description: item.description,
               price: item.price,
               tags: item.tags,
-              images: [item.imgUrl],
+              images: item.images,
             }
             await ProductApi.createProduct(dataSend)
           }
@@ -196,7 +196,7 @@ const EditListingHomepage = (context) => {
             biz_listing: bizListing.id,
             name: item.name,
             description: item.description,
-            images: [item.imgUrl],
+            images: item.images,
             end_date: item.validUntil,
           }
           await DealApi.createDeal(dataSend)

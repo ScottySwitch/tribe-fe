@@ -27,7 +27,7 @@ const Home: NextPage = () => {
           {inforCardList?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
-                imgUrl={card.imgUrl}
+                imgUrl={card.images[0]}
                 title={card.title}
                 rate={card.rate}
                 rateNumber={card.rateNumber}
@@ -46,7 +46,7 @@ const Home: NextPage = () => {
           {inforCardList?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
-                imgUrl={card.imgUrl}
+                imgUrl={card.images[0]}
                 title={card.title}
                 rate={card.rate}
                 rateNumber={card.rateNumber}
@@ -65,7 +65,7 @@ const Home: NextPage = () => {
           {inforCardList?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
-                imgUrl={card.imgUrl}
+                imgUrl={card.images[0]}
                 title={card.title}
                 rate={card.rate}
                 rateNumber={card.rateNumber}
@@ -84,7 +84,7 @@ const Home: NextPage = () => {
           {inforCardList?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
-                imgUrl={card.imgUrl}
+                imgUrl={card.images[0]}
                 title={card.title}
                 rate={card.rate}
                 rateNumber={card.rateNumber}

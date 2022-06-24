@@ -85,7 +85,10 @@ const AddMenu = (props: AddItemsProps) => {
                 multiple
                 fileList={item.images}
                 centerIcon={<Icon icon="plus" size={20} />}
-                onChange={(e) => handleChangeMenu(item.id, "imgUrl", e[0])}
+                onChange={(e) => {
+                  console.log(e)
+                  handleChangeMenu(item.id, "images", e)
+                }}
               />
               <Input
                 value={item.name}
