@@ -6,7 +6,11 @@
   background-color: white;
   width: 200px;
   height: auto;
+  min-height: 250px;
   box-shadow: $box-shadow;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
   cursor: pointer;
 
   &:hover {
@@ -42,11 +46,15 @@
     border-top: 1px solid transparent;
     padding: 10px;
     font-size: $text-sm;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 
     .title {
       margin-bottom: 8px;
       font-weight: $font-semi-bold;
       font-size: $text-md;
+      flex-grow: 1;
     }
 
     .reviews {
