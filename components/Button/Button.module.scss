@@ -3,6 +3,7 @@
 .button {
   display: flex;
   align-items: center;
+  justify-content: center;
   height: $field-height-md;
   min-width: 100px;
   width: 100%;
@@ -82,7 +83,6 @@
 .loading {
   cursor: wait;
   opacity: 0.5;
-  width: auto;
 }
 
 .no_outlined {
