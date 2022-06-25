@@ -2,6 +2,11 @@ import Api from "../index";
 
 const qs = require('qs');
 
+const getBizListing = async (bizListingId: any) => {
+  const url = `/api/biz-listings`;
+  return await Api.get(url);
+}
+
 const getBizListingsByCategoryId = async (categoryId: number) => {
   const query = qs.stringify({
     "filters": {
@@ -93,6 +98,7 @@ const createBizListing = async (params: any) => {
 }
 
 export default {
+  getBizListing,
   getBizListingsByCategoryId,
   getBizListingById,
   createListingRole,

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Image from "next/image"
 
 import SectionLayout from "components/SectionLayout/SectionLayout"
@@ -10,9 +10,31 @@ import styles from "styles/Claim.module.scss"
 import ListingCard from "components/ListingCard/ListingCard"
 import Button from "components/Button/Button"
 import { useRouter } from "next/router"
+import BizListingApi from "services/biz-listing"
+import { Categories, YesNo } from "enums"
+import SearchListing, {
+  listingTypes,
+} from "components/AddListingPages/PageOne/SearchListing/SearchListing"
+
 
 const ClaimPage = () => {
-  const [listing, setListing] = useState<{ [key: string]: any }>()
+  const [category, setCategory] = useState<Categories | undefined>()
+  const [relationship, setRelationship] = useState<YesNo | undefined>()
+  const [listing, setListing] = useState<listingTypes>()
+  const [bizListing, setBizListing] = useState([])
+
+  useEffect(() => {
+    const getBizListing = async (categoryId) => {
+      const data = await BizListingApi.getBizListing(categoryId)
+      setBizListing(data.data.data);
+      console.log('data', data);
+    }
+
+    if (category && relationship === 'Yes') {
+      getBizListing(category).catch(console.error)
+    }
+  }, [category, relationship])
+
 
   const RightColumn = (props: { listing: { [key: string]: any } }) => {
     const { listing } = props
