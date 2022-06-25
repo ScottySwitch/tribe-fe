@@ -1,14 +1,14 @@
 import Icon from "components/Icon/Icon"
 import Select from "components/Select/Select"
-import { Categories } from "enums"
+import { Categories, YesNo } from "enums"
 import { useRouter } from "next/router"
 
 import styles from "./ListingSearch.module.scss"
 
-const ListingMenuFooter = () => {
+const ListingMenuFooter = ({ onClick }) => {
   const router = useRouter()
   return (
-    <div className={styles.add_listing_search_footer} onClick={() => router.push("/add-listing")}>
+    <div className={styles.add_listing_search_footer} onClick={() => onClick(YesNo.NO)}>
       <div>Cannot find the listing?</div>
       <p>List it now</p>
     </div>
@@ -68,7 +68,7 @@ const ListingSearch = ({ listingOptions, onChange }) => {
       size="large"
       options={formatListingResultOption(listingOptions)}
       onChange={(e) => onChange(e)}
-      menuFooter={<ListingMenuFooter />}
+      menuFooter={<ListingMenuFooter onClick={onChange} />}
     />
   )
 }

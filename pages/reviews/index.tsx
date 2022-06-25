@@ -14,7 +14,7 @@ const dummyReviews = [
   {
     id: randomId(),
     title: "Evertop Hainanese Boneless Chicken",
-    imgUrl: "https://picsum.photos/300/600",
+    images: ["https://picsum.photos/300/600"],
     isVerified: true,
     rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466",
@@ -22,7 +22,7 @@ const dummyReviews = [
   {
     id: randomId(),
     title: "Evertop Hainanese Boneless Chicken",
-    imgUrl: "https://picsum.photos/300/600",
+    images: ["https://picsum.photos/300/600"],
     isVerified: true,
     rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466",
@@ -30,7 +30,7 @@ const dummyReviews = [
   {
     id: randomId(),
     title: "Evertop Hainanese Boneless Chicken",
-    imgUrl: "https://picsum.photos/300/600",
+    images: ["https://picsum.photos/300/600"],
     isVerified: true,
     rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466",
@@ -38,7 +38,7 @@ const dummyReviews = [
   {
     id: randomId(),
     title: "Evertop Hainanese Boneless Chicken",
-    imgUrl: "https://picsum.photos/300/600",
+    images: ["https://picsum.photos/300/600"],
     isVerified: true,
     rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466",
@@ -46,7 +46,7 @@ const dummyReviews = [
   {
     id: randomId(),
     title: "Evertop Hainanese Boneless Chicken",
-    imgUrl: "https://picsum.photos/300/600",
+    images: ["https://picsum.photos/300/600"],
     isVerified: true,
     rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466",
@@ -98,7 +98,7 @@ const ReviewsPage = () => {
                 key={review.id}
                 id={review.id}
                 title={review.title}
-                imgUrl={review.imgUrl}
+                imgUrl={review.images[0]}
                 isVerified={review.isVerified}
                 rateNumber={review.rateNumber}
                 location={review.location}

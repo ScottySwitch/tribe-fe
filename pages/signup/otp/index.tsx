@@ -5,83 +5,80 @@ import Modal, { ModalHeader } from "components/Modal/Modal"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import styles from "styles/Auth.module.scss";
-import {useEffect, useState} from "react";
-import AuthApi from "../../../services/auth";
+import styles from "styles/Auth.module.scss"
+import { useEffect, useState } from "react"
+import AuthApi from "../../../services/auth"
 
 const OtpPage = (context) => {
   const { method, otpReceiver } = context
   const router = useRouter()
-  const [valueOtp, setValueOtp] = useState('');
+  const [valueOtp, setValueOtp] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [time, setTime] = useState<number>(30);
+  const [time, setTime] = useState<number>(30)
   const returnTime = (time) => {
-    if ( time == 0 ) {
-      return '00';
-    }
-    else if (time < 10) {
-      return '0' + time;
-    }
-    else {
-      return time;
+    if (time == 0) {
+      return "00"
+    } else if (time < 10) {
+      return "0" + time
+    } else {
+      return time
     }
   }
 
-  useEffect( () => {
+  useEffect(() => {
     let timer = setTimeout(() => {
       if (time > 0) {
-        setTime(returnTime(time-1));
+        setTime(returnTime(time - 1))
       }
-    }, 1000);
+    }, 1000)
     return () => {
-      clearTimeout(timer);
-    };
-  });
+      clearTimeout(timer)
+    }
+  })
 
   const verifyOtp = async () => {
     setIsLoading(true)
-    let result: any = null;
-    if (method == 'email') {
+    let result: any = null
+    if (method == "email") {
       try {
         result = await AuthApi.otpEmailConfirm({
           otp: valueOtp,
-        });
+        })
       } catch (err) {
         // TODO: notify error (missing template)
-        console.log(err);
+        console.log(err)
         setIsLoading(false)
-        return false;
+        return false
       }
-      let { success } = result.data;
+      let { success } = result.data
       if (success) {
         await router.push("/signup/setup-profile")
       } else {
-        setValueOtp('')
+        setValueOtp("")
         setIsLoading(false)
         // TODO: notify error (missing template)
-        alert('Wrong OTP');
+        alert("Wrong OTP")
       }
-    }
-    else {
+    } else {
       try {
         result = await AuthApi.otpPhoneConfirm({
           otp: valueOtp,
-        });
+        })
       } catch (err) {
         // TODO: notify error (missing template)
-        console.log(err);
+        console.log(err)
         setIsLoading(false)
-        return false;
+        return false
       }
-      let { success } = result.data;
-      console.log(result);
+      let { success } = result.data
+      console.log(result)
       if (success) {
         await router.push("/signup/setup-profile")
       } else {
-        setValueOtp('')
+        setValueOtp("")
         setIsLoading(false)
         // TODO: notify error (missing template)
-        alert('Wrong OTP');
+        alert("Wrong OTP")
       }
     }
   }
@@ -96,14 +93,18 @@ const OtpPage = (context) => {
             </div>
             <div>Please check and enter your OTP</div>
           </div>
-          <Input size="large" placeholder="Enter OTP" value={valueOtp}
-                 onChange={(e: any) => setValueOtp(e.target.value)}
+          <Input
+            size="large"
+            placeholder="Enter OTP"
+            value={valueOtp}
+            onChange={(e: any) => setValueOtp(e.target.value)}
           />
           <div className="flex justify-between">
             <div>00:{time}</div>
             <div>Resend</div>
           </div>
           <Button
+            disabled={!valueOtp}
             text="Sign up"
             onClick={() => verifyOtp()}
             isLoading={isLoading}

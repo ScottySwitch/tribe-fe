@@ -14,17 +14,21 @@ import AuthApi from "../../services/auth"
 import SelectInput from "components/SelectInput/SelectInput"
 import { formattedAreaCodes, phoneAreaCodes } from "constant"
 import { get } from "lodash"
+import { useForm } from "react-hook-form"
 
 export enum LoginMethod {
   PHONE = "phone",
   EMAIL = "email",
 }
 
-const PasswordEye = (props: { onClick: MouseEventHandler<HTMLDivElement> }) => {
-  const { onClick } = props
+const PasswordEye = (props: {
+  showPassword: boolean
+  onClick: MouseEventHandler<HTMLDivElement>
+}) => {
+  const { showPassword, onClick } = props
   return (
     <div className="cursor-pointer" onClick={onClick}>
-      <Icon icon="eye" size={20} color="#A4A8B7" />
+      <Icon icon={showPassword ? "eye" : "eye-closed"} size={20} color="#A4A8B7" />
     </div>
   )
 }
@@ -37,31 +41,30 @@ const tabList = [
 const SignupPage = () => {
   const [method, setMethod] = useState(LoginMethod.PHONE)
   const [showPassword, setShowPassword] = useState(false)
-  const [phoneNumber, setPhoneNumber] = useState("")
+  const [otpReceiver, setOtpReceiver] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
-  const [localValue, setLocalValue] = useState("")
   const router = useRouter()
 
-  const [valuePassword, setValuePassword] = useState("")
+  const {
+    register,
+    handleSubmit,
+    formState: { isDirty, isValid },
+  } = useForm({ mode: "onChange" })
 
-  const handleSubmit = async (event: any) => {
+  const onSubmit = async (form: any) => {
     setIsLoading(true)
-    console.log(phoneNumber)
-    event.preventDefault()
-    const otpReceiver =
-      method === LoginMethod.EMAIL ? get(event, "target.email.value") : phoneNumber
     const formData = {
       method: method,
       [method]: otpReceiver,
-      receive_promotions: get(event, "target.receive_promotions.value"),
-      agree_policies: get(event, "target.agree_policies.value"),
+      receive_promotions: form.receivePromotions,
+      agree_policies: form.agreePolicies,
     }
     console.log(formData)
     if (method === LoginMethod.EMAIL) {
       try {
         const result = await AuthApi.signUpByEmail({
           email: formData.email,
-          password: valuePassword,
+          password: form.password,
         })
         const { jwt } = result.data
         if (jwt) {
@@ -94,7 +97,7 @@ const SignupPage = () => {
         const result = await AuthApi.signUpByPhone({
           email: emailFake,
           phone_number: formData.phone,
-          password: valuePassword,
+          password: form.password,
         })
         const { jwt } = result.data
         if (jwt) {
@@ -138,7 +141,7 @@ const SignupPage = () => {
             )
           })}
         </div>
-        <form onSubmit={handleSubmit} className={styles.body}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.body}>
           {method === LoginMethod.PHONE ? (
             <SelectInput
               label="Phone number"
@@ -147,24 +150,35 @@ const SignupPage = () => {
               options={formattedAreaCodes}
               shouldControlShowValue
               onChange={(e) =>
-                setPhoneNumber(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
+                setOtpReceiver(`${e.select.value}${e.input.substring(1, e.input.length - 1)}`)
               }
             />
           ) : (
-            <Input label="Email" placeholder="Your email" name="email" />
+            <Input
+              label="Email"
+              placeholder="Your email"
+              onChange={(e: any) => setOtpReceiver(e.target.value)}
+            />
           )}
           <Input
             size="large"
             placeholder="Password"
             type={showPassword ? "default" : "password"}
-            suffix={<PasswordEye onClick={() => setShowPassword(!showPassword)} />}
-            name="password"
-            onChange={(e: any) => setValuePassword(e.target.value)}
+            suffix={
+              <PasswordEye
+                showPassword={showPassword}
+                onClick={() => setShowPassword(!showPassword)}
+              />
+            }
+            register={register("password", { required: true })}
           />
-          <Checkbox label="I have read and agree to the T&C of Tribes" name="agree_policies" />
+          <Checkbox
+            label="I have read and agree to the T&C of Tribes"
+            register={register("agreePolicies", { required: true })}
+          />
           <Checkbox
             label="I would like to recieve offers, promotion and other informations"
-            name="receive_promotions"
+            register={register("receivePromotions", { required: true })}
           />
           <div className={styles.break}>
             <span>Or log in with</span>
@@ -177,7 +191,12 @@ const SignupPage = () => {
               <Icon icon="facebook-color" size={20} className={styles.icon} />
             </a>
           </div>
-          <Button text="Sign up" type="submit" isLoading={isLoading} />
+          <Button
+            text="Sign up"
+            type="submit"
+            isLoading={isLoading}
+            disabled={!(isValid && otpReceiver)}
+          />
           <div className={styles.sign_up}>
             Already have account?
             <span>

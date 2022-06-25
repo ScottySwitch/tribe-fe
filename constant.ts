@@ -264,7 +264,7 @@ export const serviceTabList = [
 
 export const inforCardList = [
   {
-    imgUrl: "https://picsum.photos/200/300",
+    images: ["https://picsum.photos/300/600"],
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -275,7 +275,7 @@ export const inforCardList = [
     isVerified: true,
   },
   {
-    imgUrl: "https://picsum.photos/200/300",
+    images: ["https://picsum.photos/300/600"],
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -286,7 +286,7 @@ export const inforCardList = [
     isVerified: false,
   },
   {
-    imgUrl: "https://picsum.photos/200/300",
+    images: ["https://picsum.photos/300/600"],
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -297,7 +297,7 @@ export const inforCardList = [
     isVerified: true,
   },
   {
-    imgUrl: "https://picsum.photos/200/300",
+    images: ["https://picsum.photos/300/600"],
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -307,18 +307,7 @@ export const inforCardList = [
     tags: ["Hot deals", "Best sellers"],
   },
   {
-    imgUrl: "https://picsum.photos/200/300",
-    title: "Evertop Hainanese Boneless Chicken",
-    rate: 4.5,
-    rateNumber: 25,
-    followerNumber: 500,
-    price: "$37.35",
-    categories: ["Fast food", "Desserts"],
-    tags: ["Hot deals", "Best sellers"],
-    isVerified: true,
-  },
-  {
-    imgUrl: "https://picsum.photos/200/300",
+    images: ["https://picsum.photos/300/600"],
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -329,7 +318,7 @@ export const inforCardList = [
     isVerified: true,
   },
   {
-    imgUrl: "https://picsum.photos/200/300",
+    images: ["https://picsum.photos/300/600"],
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -340,7 +329,7 @@ export const inforCardList = [
     isVerified: true,
   },
   {
-    imgUrl: "https://picsum.photos/200/300",
+    images: ["https://picsum.photos/300/600"],
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -351,7 +340,18 @@ export const inforCardList = [
     isVerified: true,
   },
   {
-    imgUrl: "https://picsum.photos/200/300",
+    images: ["https://picsum.photos/300/600"],
+    title: "Evertop Hainanese Boneless Chicken",
+    rate: 4.5,
+    rateNumber: 25,
+    followerNumber: 500,
+    price: "$37.35",
+    categories: ["Fast food", "Desserts"],
+    tags: ["Hot deals", "Best sellers"],
+    isVerified: true,
+  },
+  {
+    images: ["https://picsum.photos/300/600"],
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,

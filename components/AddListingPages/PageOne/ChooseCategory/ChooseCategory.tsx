@@ -22,7 +22,7 @@ const SubTitle = ({category}) => {
       subTitle = "Hotels, resorts, homestays with Halal/Muslim-friendly amenities, ect"
       break
     case Categories.SEE_AND_DO:
-      subTitle = " Attractions, tours, relaxation, etc"
+      subTitle = "Attractions, tours, relaxation, etc"
       break
     case Categories.TRANSPORT:
       subTitle = "Airport transfer, Car rentals, Trains, Buses."

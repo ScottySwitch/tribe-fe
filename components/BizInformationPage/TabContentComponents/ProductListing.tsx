@@ -5,14 +5,15 @@ import InforCard from "components/InforCard/InforCard"
 import Popover from "components/Popover/Popover"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import { bizInformationDefaultFormData, getAddItemsFields } from "constant"
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react"
 import { randomId } from "utils"
 import AddItems from "./AddItems/AddItems"
 import styles from "./TabContent.module.scss"
-import ProductApi from "../../../services/product";
+import ProductApi from "../../../services/product"
+import { get } from "lodash"
 
 interface ProductListingProps {
-  bizListingId: number,
+  bizListingId: number
   isPaid: boolean
 }
 
@@ -40,26 +41,26 @@ const ProductListing = (props: ProductListingProps) => {
 
   const submitProduct = async (e: any) => {
     // console.log('newProduct', e[0]);
-    const newProduct = e[0];
+    const newProduct = e[0]
     const dataSend = {
       biz_listing: bizListingId,
       name: newProduct.name,
       description: newProduct.description,
       price: newProduct.price,
       tags: newProduct.tags,
-      images: [newProduct.imgUrl],
+      images: newProduct.images,
     }
-    await ProductApi.createProduct(dataSend).then(result => {
+    await ProductApi.createProduct(dataSend).then((result) => {
       setProductList([...productList, result.data.data])
-    });
+    })
   }
 
   const handleDelete = async (e) => {
-    const newProductList = productList.filter(product => {
+    const newProductList = productList.filter((product) => {
       return product.id !== e
     })
     setProductList(newProductList)
-    await ProductApi.deleteProduct(e);
+    await ProductApi.deleteProduct(e)
   }
 
   const handlePinToTop = (e) => {
@@ -117,26 +118,31 @@ const ProductListing = (props: ProductListingProps) => {
         </div>
         <Break />
         <div className={styles.product_container}>
-          {productList && productList.map((item: any, index) => {
-            return (
-              <div key={item.id} className={styles.info_card_container}>
-                <InforCard
-                  imgUrl={item.attributes.images ? item.attributes.images[0] : "https://picsum.photos/200/300"}
-                  title={item.attributes.name}
-                  price={item.attributes.price}
-                  description={item.attributes.description}
-                />
-                <div className={styles.toolbar}>
-                  <Popover content={<PopoverContent item={item} />}>
-                    <Icon icon="toolbar" color="white" />
-                  </Popover>
+          {productList &&
+            productList.map((item: any, index) => {
+              const imgUrl =
+                get(item, "attributes.images[0]") ||
+                get(item, "images[0]") ||
+                "https://picsum.photos/200/300"
+              return (
+                <div key={item.id} className={styles.info_card_container}>
+                  <InforCard
+                    imgUrl={imgUrl}
+                    title={item.attributes.name}
+                    price={item.attributes.price}
+                    description={item.attributes.description}
+                  />
+                  <div className={styles.toolbar}>
+                    <Popover content={<PopoverContent item={item} />}>
+                      <Icon icon="toolbar" color="white" />
+                    </Popover>
+                  </div>
+                  <div className={styles.pin} onClick={() => handlePinToTop(item)}>
+                    <Icon icon="pin" color={index < 6 ? undefined : "white"} />
+                  </div>
                 </div>
-                <div className={styles.pin} onClick={() => handlePinToTop(item)}>
-                  <Icon icon="pin" color={index < 6 ? undefined : "white"} />
-                </div>
-              </div>
-            )
-          })}
+              )
+            })}
         </div>
         <Break />
       </SectionLayout>
