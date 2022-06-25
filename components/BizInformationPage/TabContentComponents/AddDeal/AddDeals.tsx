@@ -7,6 +7,8 @@ import Upload from "components/Upload/Upload"
 import { ListingHomePageScreens } from "enums"
 import React, { useState } from "react"
 import { getIndex, randomId } from "utils"
+import moment from "moment"
+import parseISO from 'date-fns/parseISO'
 
 import styles from "./AddDeal.module.scss"
 
@@ -31,6 +33,7 @@ const AddDeals = (props: AddDealsProps) => {
     const index = getIndex(id, localDealList)
     const newArray = [...localDealList]
     newArray[index][type] = value
+    newArray[index].isEdited = true
     setLocalDeaList(newArray)
   }
 
@@ -76,7 +79,13 @@ const AddDeals = (props: AddDealsProps) => {
                   </div>
                 )}
               </div>
-              <Upload multiple isPaid={isPaid} centerIcon={<Icon icon="plus" size={20} />} />
+              <Upload 
+                multiple 
+                isPaid={isPaid} 
+                centerIcon={<Icon icon="plus" size={20} />} 
+                fileList={deal.images || []}
+                onChange={(e) => handleChangeDeal(deal.id, "images", e)}
+              />
               <Input
                 value={deal.name}
                 placeholder="Deal name"
@@ -88,12 +97,13 @@ const AddDeals = (props: AddDealsProps) => {
                 onChange={(e: any) => handleChangeDeal(deal.id, "information", e.target.value)}
               />
               <DatePicker
-                value={new Date()}
-                onChange={(e: any) => handleChangeDeal(deal.id, "expireAt", e)}
+                value={deal.validUntil || new Date()}
+                onChange={(e: any) => handleChangeDeal(deal.id, "validUntil", e)}
                 suffixIcon
                 label="Valid until"
               />
               <Input
+                value={deal.termsConditions}
                 label="Terms and Conditions"
                 placeholder="A valid tribe listing pass must be presented upon payment to enjoy the offer."
                 onChange={(e: any) => handleChangeDeal(deal.id, "termsConditions", e.target.value)}

@@ -47,6 +47,7 @@ const AddMenu = (props: AddItemsProps) => {
     const index = getIndex(id, localMenuList)
     const newArray = [...localMenuList]
     newArray[index][type] = value
+    newArray[index].isEdited = true
     setLocalMenuList(newArray)
   }
 
@@ -83,10 +84,9 @@ const AddMenu = (props: AddItemsProps) => {
               <Upload
                 isPaid={isPaid}
                 multiple
-                fileList={item.images}
+                fileList={item.images || [ ]}
                 centerIcon={<Icon icon="plus" size={20} />}
                 onChange={(e) => {
-                  console.log(e)
                   handleChangeMenu(item.id, "images", e)
                 }}
               />

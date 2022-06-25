@@ -24,6 +24,13 @@ const createProduct = async (params: any) => {
   });
 }
 
+const updateProduct = async (productId: string ,params: any) => {
+  const url = `/api/products/${productId}`;
+  return await Api.put(url, {
+    data: params
+  })
+}
+
 const deleteProduct = async (productId: any) => {
   const url = `/api/products/${productId}`;
   return await Api.delete(url);
@@ -32,5 +39,6 @@ const deleteProduct = async (productId: any) => {
 export default {
   getProductsByBizListingId,
   createProduct,
-  deleteProduct
+  deleteProduct,
+  updateProduct
 }

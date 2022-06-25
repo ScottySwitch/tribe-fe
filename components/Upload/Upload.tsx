@@ -39,13 +39,10 @@ const Upload = (props: UploadProps) => {
   const [srcList, setSrcList] = useState<string[]>(initFileList)
 
   const handleChange = (event: any) => {
-    // console.log(isBanner, srcList, isPaid);
-    // console.log(srcList)
     const file = event.target.files[0]
     const src = URL.createObjectURL(file)
     const newFileList = multiple ? [...srcList, src] : [src]
     setSrcList(newFileList)
-
     let data = new FormData()
     data.append("files", file)
 
@@ -59,6 +56,7 @@ const Upload = (props: UploadProps) => {
       .then((res) => {
         if (res.data.urls && Array.isArray(res.data.urls) && res.data.urls.length > 0) {
           // alert("Upload successfully!")
+          console.log([...fileList, ...res.data.urls]);
           onChange?.([...fileList, ...res.data.urls])
         }
       })

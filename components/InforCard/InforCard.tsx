@@ -17,6 +17,7 @@ export interface InforCardProps {
   followerNumber?: number
   description?: string
   width?: string | number
+  validUntil?: any
 }
 
 const InforCard = (props: InforCardProps) => {
@@ -35,6 +36,7 @@ const InforCard = (props: InforCardProps) => {
     isVerified,
     width,
   } = props
+  // console.log('props', props)
   return (
     <div className={`${styles.infor_card} ${className}`} style={{ width }}>
       {isVerified && (
@@ -56,7 +58,10 @@ const InforCard = (props: InforCardProps) => {
             <div>{followerNumber} followers</div>
           </div>
         )}
-        {description && <div className={styles.description}>{description}</div>}
+        {description && <div className={styles.description}>
+          {description}
+          {/* {description.length > 50 ? description.substr(0, 50) : description} */}
+        </div>}
         {Array.isArray(categories) && (
           <div className={styles.categories}>
             {categories.map((cate) => (

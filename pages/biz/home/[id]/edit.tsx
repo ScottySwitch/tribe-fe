@@ -27,8 +27,11 @@ import Tags from "components/BizHomePage/Tags/Tags"
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
 import { getAddItemsFields } from "constant"
 import ProductApi from "../../../../services/product"
+import MenuApi from "../../../../services/menu"
 import DealApi from "../../../../services/deal"
 import get from "lodash/get"
+import moment from "moment"
+import parseISO from 'date-fns/parseISO'
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -83,7 +86,41 @@ const EditListingHomepage = (context) => {
         const invoiceList = get(listing, "attributes.biz_invoices.data") || []
         const rawPhoneNumber = get(listing, "attributes.phone_number")
         const defaultPhone = rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7)
-
+        const rawListing = get(listing, "attributes.products.data") || []
+        const listingArray = rawListing.map((item) => ({
+          name: get(item, 'attributes.name'),
+          price: get(item, 'attributes.price'),
+          id: item.id,
+          description: get(item, 'attributes.description'),
+          images: get(item, 'attributes.images'),
+          imgUrl: get(item, 'attributes.images[0]'),
+          discount: get(item, 'attributes.discount_percent'),
+          tags: get(item, 'attributes.tags'),
+          websiteUrl: get(item, 'attributes.website_url'),
+          klookUrl: get(item, 'attributes.klook_url'),
+          isChange: false,
+        }))
+        const rawMenu = get(listing, 'attributes.menus.data') || []
+        const menuArray = rawMenu.map((item) => ({
+          id: item.id,
+          name: get(item, 'attributes.name'),
+          images: get(item, 'attributes.menu_file'),
+          imgUrl: get(item, 'attributes.menu_file[0]'),
+          isChange: false,
+        }))
+        const rawDeal = get(listing, 'attributes.deals.data') || []
+        const dealArray = rawDeal.map((item) => ({
+          id: item.id,
+          name: get(item, 'attributes.name'),
+          images: get(item, 'attributes.images'),
+          imgUrl: get(item, 'attributes.images[0]'),
+          information: get(item, 'attributes.description'),
+          termsConditions: get(item,'attributes.terms_conditions'),
+          // start_date: item.attributes.start_date,
+          // end_date: moment(get(item,'attributes.end_date')).format("YYYY-MM-DD HH:mm:ss"),
+          validUntil: parseISO(moment(get(item,'attributes.end_date')).format("YYYY-MM-DD HH:mm:ss")),
+          isChange: false,
+        }))
         const tagArray = formatOptions(rawTags)
         const arrayFacilities = formatOptions(rawFacilities)
 
@@ -95,13 +132,14 @@ const EditListingHomepage = (context) => {
         setOpenHours(get(listing, "attributes.open_hours"))
         setPriceRange(get(listing, "attributes.price_range"))
         setSocialInfo(get(listing, "attributes.social_info"))
-        setItemList(get(listing, "attributes.products.data"))
+        // setItemList(get(listing, "attributes.products.data"))
         setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
         setTags(tagArray)
         setFacilities(arrayFacilities)
-        // setPhoneNumber(listing.attributes.phone_number)
-
+        setItemList(listingArray)
+        setMenuList(menuArray)
+        setDealList(dealArray)
         if (invoiceList.length > 0) {
           setIsPaid(true)
           setPhoneNumber(rawPhoneNumber)
@@ -159,6 +197,7 @@ const EditListingHomepage = (context) => {
     setScreen(ListingHomePageScreens.HOME)
   }
   const handleSetDealList = (dealList: { [key: string]: string }[]) => {
+    console.log('deal', dealList);
     setDealList(dealList)
     setScreen(ListingHomePageScreens.HOME)
   }
@@ -169,40 +208,15 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
-    console.log("openHours", openHours)
-
-    if (itemList.length > 0) {
-      await Promise.all(
-        itemList.map(async (item) => {
-          if (item.isNew) {
-            const dataSend = {
-              biz_listing: bizListing.id,
-              name: item.name,
-              description: item.description,
-              price: item.price,
-              tags: item.tags,
-              images: item.images,
-            }
-            await ProductApi.createProduct(dataSend)
-          }
-        })
-      )
-    }
-
-    if (dealList.length > 0) {
-      await Promise.all(
-        dealList.map(async (item) => {
-          const dataSend = {
-            biz_listing: bizListing.id,
-            name: item.name,
-            description: item.description,
-            images: item.images,
-            end_date: item.validUntil,
-          }
-          await DealApi.createDeal(dataSend)
-        })
-      )
-    }
+    const currentItemList = [...itemList].filter((item) => item.isNew !== true)
+    const currentMenuList = [...menuList].filter((item) => item.isNew !== true)
+    const currentDealList = [...dealList].filter((item) => item.isNew !== true)
+    const newItemList = itemList.filter(item => item.isNew) 
+    const editedItemList  = itemList.filter(item => !item.isNew && item.isEdited)
+    const newMenuList = menuList.filter(item => item.isNew) 
+    const editedMenuList  = menuList.filter(item => !item.isNew && item.isEdited)
+    const newDealList = dealList.filter(item => item.isNew) 
+    const editedDealList  = dealList.filter(item => !item.isNew && item.isEdited)
     await BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
@@ -215,10 +229,109 @@ const EditListingHomepage = (context) => {
       tags: tags.map((item) => item.id),
       is_verified: false,
       logo: logo,
+      products: currentItemList.map((item) => (item.id)) || [],
+      menus: currentMenuList.map((item) => item.id) || [],
+      deals: currentDealList.map((item) => item.id) || [],
     }).then((response) => {
       console.log(response)
-      window.location.reload()
     })
+
+    if (newItemList.length > 0) {
+      await Promise.all(
+        newItemList.map(async (item) => {
+          const dataSend = {
+            biz_listing: bizListing.id,
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            discount_percent: item.discount,
+            tags: item.tags,
+            images: item.images,
+            website_url: item.websiteUrl,
+            klook_url: item.klookUrl,
+          }
+          await ProductApi.createProduct(dataSend)
+        })
+      )
+    }
+    if (editedItemList.length > 0) {
+      await Promise.all(
+        editedItemList.map(async (item) => {
+            const dataUpdate = {
+              biz_listing: bizListing.id,
+              name: item.name,
+              description: item.description,
+              price: item.price,
+              discount_percent: item.discount,
+              tags: item.tags,
+              images: item.images,
+              website_url: item.websiteUrl,
+              klook_url: item.klookUrl,
+            }
+            await ProductApi.updateProduct(item.id, dataUpdate)
+        })
+      )
+    }
+
+    if (newMenuList.length > 0) {
+      await Promise.all(
+        newMenuList.map(async (item) => {
+          const dataSend = {
+            biz_listing: bizListing.id,
+            name: item.name,
+            menu_file: item.images,
+          }
+          await MenuApi.createMenu(dataSend)
+        })
+      )
+    }
+    if (editedMenuList.length > 0) {
+      await Promise.all(
+        editedMenuList.map(async (item) => {
+          const dataUpdate = {
+            biz_listing: bizListing.id,
+            name: item.name,
+            menu_file: item.images,
+          }
+          await MenuApi.updateMenu(item.id, dataUpdate)
+        })
+      )
+    }
+
+    if (newDealList.length > 0) {
+      await Promise.all(
+        newDealList.map(async (item) => {
+          let convertEndDate = (moment(item.validUntil).format("YYYY-MM-DD") + 'T:00:00.000Z');
+          const dataSend = {
+            biz_listing: bizListing.id,
+            name: item.name,
+            description: item.information,
+            images: item.images,
+            terms_conditions: item.termsConditions,
+            start_date: item.validUntil,
+            end_date: convertEndDate,
+          }
+          await DealApi.createDeal(dataSend)          
+        })
+      )
+    }
+    if (editedDealList.length > 0) {
+      await Promise.all(
+        editedDealList.map(async (item) => {
+            let convertEndDate = (moment(item.validUntil).format("YYYY-MM-DD") + 'T:00:00.000Z');
+            const dataUpdate = {
+              biz_listing: bizListing.id,
+              name: item.name,
+              description: item.information,
+              images: item.images,
+              terms_conditions: item.termsConditions,
+              end_date: convertEndDate,
+            }
+            await DealApi.updateDeal(item.id, dataUpdate)          
+        })
+      )
+    }
+    // window.location.reload()
   }
 
   return (
