@@ -2,7 +2,7 @@ import axios from "axios"
 import classNames from "classnames"
 import Icon from "components/Icon/Icon"
 import Image from "next/image"
-import React, { ReactNode, useState } from "react"
+import React, {ReactNode, useEffect, useState} from "react"
 import styles from "./Upload.module.scss"
 
 export interface UploadProps {
@@ -32,12 +32,15 @@ const Upload = (props: UploadProps) => {
     type = "media",
     isPaid,
   } = props
-  // console.log(fileList)
   const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : []
   const initFileList = multiple ? fileList : lastItemArray
 
   const [srcList, setSrcList] = useState<string[]>(initFileList)
   const [isUpload, setIsUpload] = useState<boolean>(false)
+  useEffect(() => {
+    console.log('fileList', fileList)
+    setSrcList(initFileList)
+  }, [fileList])
 
   const handleChange = (event: any) => {
     const file = event.target.files[0]
