@@ -92,14 +92,7 @@ const AddListing = () => {
 
     let address = "Online Business"
     if (!formData.isOnline) {
-      address =
-        formData.additionalAddress +
-        " - " +
-        formData.address +
-        " - " +
-        formData.city +
-        " - " +
-        formData.country
+      address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`
     }
     const dataSend = {
       user: localStorage.getItem("user_id"),
@@ -174,7 +167,7 @@ const AddListing = () => {
         <AddBuyInfor
           subCateList={fakeSubCateList}
           data={formData}
-          show={pageNumber === 3 && formData.category === Categories.EAT}
+          show={pageNumber === 3 && formData.category === Categories.BUY}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
