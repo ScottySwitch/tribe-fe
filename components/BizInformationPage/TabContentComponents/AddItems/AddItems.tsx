@@ -40,12 +40,12 @@ const AddItems = (props: AddItemsProps) => {
     const index = getIndex(id, localItemList)
     const newArray = [...localItemList]
     newArray[index][type] = value
-    newArray[index]['isChange'] = true
+    newArray[index].isEdited = true
     setLocalItemList(newArray)
   }
 
   const handleAddItem = () => {
-    setLocalItemList([...localItemList, { id: randomId(), isNew: true, isChange: false }])
+    setLocalItemList([...localItemList, { id: randomId(), isNew: true}])
   }
 
   const AddItemButton = () => (
@@ -111,9 +111,7 @@ const AddItems = (props: AddItemsProps) => {
                   value={item.price}
                   placeholder="Enter price"
                   selectDefaultValue={{ label: "SGD", value: "SGD" }}
-                  onChange={(e: any) =>
-                    handleChangeItem(item.id, "price", { price: e.input, currency: e.select })
-                  }
+                  onChange={(e: any) => handleChangeItem(item.id, "price", e.input)}
                 />
                 <SelectInput
                   width="50%"
@@ -125,12 +123,12 @@ const AddItems = (props: AddItemsProps) => {
                   // onChange={(e: any) => console.log(e)}
                 />
               </div>
-              <Input
+              {/* <Input
                 type="number"
                 value={item.price}
                 placeholder="Price"
                 onChange={(e: any) => handleChangeItem(item.id, "price", e.target.value)}
-              />
+              /> */}
               <Input
                 label="Klook URL"
                 value={item.klookUrl}

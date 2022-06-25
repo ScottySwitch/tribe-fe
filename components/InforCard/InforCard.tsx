@@ -59,7 +59,8 @@ const InforCard = (props: InforCardProps) => {
           </div>
         )}
         {description && <div className={styles.description}>
-          {description.length > 50 ? description.substr(0, 50) : description}
+          {description}
+          {/* {description.length > 50 ? description.substr(0, 50) : description} */}
         </div>}
         {Array.isArray(categories) && (
           <div className={styles.categories}>

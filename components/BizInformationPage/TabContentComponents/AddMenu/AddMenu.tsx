@@ -47,12 +47,12 @@ const AddMenu = (props: AddItemsProps) => {
     const index = getIndex(id, localMenuList)
     const newArray = [...localMenuList]
     newArray[index][type] = value
-    newArray[index]['isChange'] = true
+    newArray[index].isEdited = true
     setLocalMenuList(newArray)
   }
 
   const handleAddMenu = () => {
-    setLocalMenuList([...localMenuList, { id: randomId(), isNew: true, isChange: false }])
+    setLocalMenuList([...localMenuList, { id: randomId(), isNew: true }])
   }
 
   const AddItemButton = () => (
@@ -87,7 +87,6 @@ const AddMenu = (props: AddItemsProps) => {
                 fileList={item.images || [ ]}
                 centerIcon={<Icon icon="plus" size={20} />}
                 onChange={(e) => {
-                  console.log(e)
                   handleChangeMenu(item.id, "images", e)
                 }}
               />

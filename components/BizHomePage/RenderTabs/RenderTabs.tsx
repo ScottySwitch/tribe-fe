@@ -78,10 +78,10 @@ const TabContent = ({
         // console.log('item', item);
         // console.log('imgUrl', item.imgUrl);
         const images = item.images || []
-        const firstImage = item.imgUrl || get(item, "images[0]")
+        const firstImage = item.imgUrl || images[0]
         const name = get(item, "attributes.name") || item.name || ""
         const price = get(item, "attributes.price") || item.price || ""
-        const description = get(item, "attributes.description") || item.information || ""
+        const description = get(item, "attributes.description") || item.information || item.description || ""
         const expiredAt = get(item, "attributes.expire_at") || item.expireAt || ""
         return (
           <div

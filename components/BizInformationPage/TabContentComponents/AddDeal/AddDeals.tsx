@@ -33,12 +33,12 @@ const AddDeals = (props: AddDealsProps) => {
     const index = getIndex(id, localDealList)
     const newArray = [...localDealList]
     newArray[index][type] = value
-    newArray[index]['isChange'] = true
+    newArray[index].isEdited = true
     setLocalDeaList(newArray)
   }
 
   const handleAddDeal = () => {
-    setLocalDeaList([...localDealList, { id: randomId(), isNew: true, validUntil: new Date(), isChange: false }])
+    setLocalDeaList([...localDealList, { id: randomId(), isNew: true, validUntil: new Date() }])
   }
 
   const AddDealButton = () => (
@@ -84,7 +84,7 @@ const AddDeals = (props: AddDealsProps) => {
                 isPaid={isPaid} 
                 centerIcon={<Icon icon="plus" size={20} />} 
                 fileList={deal.images || []}
-                onChange={(e) => handleChangeDeal(deal.id, "imgUrl", e[0])}
+                onChange={(e) => handleChangeDeal(deal.id, "images", e)}
               />
               <Input
                 value={deal.name}
