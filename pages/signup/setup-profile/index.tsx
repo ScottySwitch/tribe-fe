@@ -57,7 +57,7 @@ const StepOne = ({
       // google has id_token
       loginGoogleCallback(router.query.access_token).catch((e) => console.log(e))
     } else if (router.query.access_token) {
-       loginFacebookCallback(router.query.access_token).catch((e) => console.log(e))
+      loginFacebookCallback(router.query.access_token).catch((e) => console.log(e))
     }
   }, [router])
 
