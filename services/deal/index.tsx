@@ -9,6 +9,13 @@ const createDeal = async (params: any) => {
   });
 }
 
+const updateDeal = async (dealId: string ,params: any) => {
+  const url = `/api/deals/${dealId}`;
+  return await Api.put(url, {
+    data: params
+  })
+}
+
 const deleteDeal = async (dealId: any) => {
   const url = `/api/deals/${dealId}`;
   return await Api.delete(url);
@@ -16,5 +23,6 @@ const deleteDeal = async (dealId: any) => {
 
 export default {
   createDeal,
+  updateDeal,
   deleteDeal
 }

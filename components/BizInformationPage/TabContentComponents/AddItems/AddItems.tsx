@@ -38,11 +38,12 @@ const AddItems = (props: AddItemsProps) => {
     const index = getIndex(id, localItemList)
     const newArray = [...localItemList]
     newArray[index][type] = value
+    newArray[index]['isChange'] = true
     setLocalItemList(newArray)
   }
 
   const handleAddItem = () => {
-    setLocalItemList([...localItemList, { id: randomId(), isNew: true }])
+    setLocalItemList([...localItemList, { id: randomId(), isNew: true, isChange: false }])
   }
 
   const AddItemButton = () => (
