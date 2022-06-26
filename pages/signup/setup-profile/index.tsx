@@ -48,12 +48,10 @@ const StepOne = ({
   // If user is come from Facebook, Google
   useEffect(() => {
     const loginFacebookCallback = async (accessToken: any) => {
-      const data = await AuthApi.loginFacebookCallback(accessToken)
-      updateUserForm(data.user)
+      await AuthApi.loginFacebookCallback(accessToken)
     }
     const loginGoogleCallback = async (accessTokenGoogle: any) => {
-      const data = await AuthApi.loginGoogleCallback(accessTokenGoogle)
-      updateUserForm(data.user)
+      await AuthApi.loginGoogleCallback(accessTokenGoogle)
     }
     if (router.query.id_token) {
       // google has id_token
@@ -63,10 +61,18 @@ const StepOne = ({
     }
   }, [router])
 
-  const updateUserForm = (user) => {
-    setValue("name", user.first_name)
-    setAvatar([user.avatar]) // TODO: this function do not change avatar in form?
-  }
+  const [socialUser, setSocialUser] = useState<any>()
+  useEffect(() => {
+    const user = localStorage.getItem('user')
+    if (user) {
+      setSocialUser(user)
+      const userJson = JSON.parse(user || '')
+      setValue("name", userJson.first_name)
+      if (userJson.avatar) {
+        setAvatar([userJson.avatar])
+      }
+    }
+  }, [socialUser])
 
   const handleUploadAvatar = useCallback((srcAvatar) => {
     setUploadAvatar(srcAvatar[1])
@@ -74,16 +80,18 @@ const StepOne = ({
 
   const onSubmit = async (data) => {
     setIsLoading(true)
-    console.log("data", data)
+    const userId = parseInt(localStorage.getItem("user_id") || "0")
+    let dataSend: any = {
+      first_name: data.name,
+      gender: data.gender,
+      birthday: data.birthday,
+      country: data.country?.value || null,
+    }
+    if (uploadAvatar !== "") {
+      dataSend = {...dataSend, avatar: uploadAvatar}
+    }
     try {
-      const userId = parseInt(localStorage.getItem("user_id") || "0")
-      await UserApi.updateUser(userId, {
-        first_name: data.name,
-        gender: data.gender,
-        birthday: data.birthday,
-        country: data.country?.value || null,
-        avatar: uploadAvatar,
-      })
+      await UserApi.updateUser(userId, dataSend)
     } catch (err) {
       // TODO: notify error (missing template)
       console.log(err)
@@ -144,7 +152,7 @@ const StepOne = ({
   )
 }
 
-const StepTwo = ({ onBackStep, onSubmit }: any) => {
+const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
   const [interest, setInterest] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -157,7 +165,7 @@ const StepTwo = ({ onBackStep, onSubmit }: any) => {
     <div>
       <ModalHeader alignTitle="left">
         <div>
-          <div>👋 &nbsp; Hello Anna Nhun,</div>
+          <div>👋 &nbsp; Hello {formData.name}</div>
           <div>What are you most interested in lately?</div>
         </div>
       </ModalHeader>
@@ -224,7 +232,7 @@ const SetupProfilePage = () => {
         {step === ProfileSteps.STEP_ONE ? (
           <StepOne onNextStep={handleNextStep} formData={formData} />
         ) : (
-          <StepTwo onSubmit={handleSubmit} onBackStep={handleBackStep} />
+          <StepTwo onSubmit={handleSubmit} onBackStep={handleBackStep} formData={formData} />
         )}
       </div>
     </div>

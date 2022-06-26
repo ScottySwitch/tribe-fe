@@ -138,6 +138,30 @@ const getBizListingReviews = async (bizListingSlug: any) => {
   return await Api.get(url);
 }
 
+const getBizListingCountries = async () => {
+  const url = `/api/biz-listings/countries`;
+  return await Api.get(url);
+}
+
+const getBizListingByCountry = async (country: string) => {
+  const query = qs.stringify({
+    "filters": {
+      "country": country
+    },
+    "populate": {
+      "reviews": {
+        "populate": [
+          "user"
+        ]
+      }
+    }
+  }, {
+    encodeValuesOnly: true
+  });
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
 export default {
   getBizListing,
   getBizListingsByCategoryId,
@@ -146,5 +170,7 @@ export default {
   getBizListingBySlug,
   updateBizListing,
   createBizListing,
-  getBizListingReviews
+  getBizListingReviews,
+  getBizListingCountries,
+  getBizListingByCountry
 }

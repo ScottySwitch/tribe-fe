@@ -30,6 +30,7 @@ export const rateType = {
 
 export const ReviewForm = (props) => {
   const {
+    rating,
     onSubmit
   } = props
 
@@ -43,6 +44,7 @@ export const ReviewForm = (props) => {
       content,
       images,
       visitedDate,
+      rating, // TODO: check
     }
     onSubmit(dataSend);
   }
@@ -94,7 +96,7 @@ interface IReviewCardProps {
   isVerified: boolean
   rateNumber: number
   location?: string
-  onSubmit?: () => void
+  onSubmit?: any
 }
 
 const ReviewCard = (props: IReviewCardProps) => {
@@ -184,7 +186,7 @@ const ReviewCard = (props: IReviewCardProps) => {
             : (<div className={`${styles.cta_click} cursor-pointer`} onClick={handleReview}>Click to rate</div>)
           }
         </div>
-        {expanded && <ReviewForm onSubmit={onSubmit} />}
+        {expanded && <ReviewForm onSubmit={onSubmit} rating={rating} />}
       </div>
     </div>
   )

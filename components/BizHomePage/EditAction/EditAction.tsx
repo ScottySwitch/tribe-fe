@@ -12,11 +12,12 @@ interface EditActionProps {
   action: { label: string; value: string }
   onApplyAction: (action: string, value: string) => void
   onPublishPage: () => void
-  isPaid?: boolean
+  isPaid?: boolean,
+  isLoading?: boolean,
 }
 
 const EditAction = (props: EditActionProps) => {
-  const { action, isPaid, onPublishPage, onApplyAction } = props
+  const { action, isPaid, isLoading, onPublishPage, onApplyAction } = props
 
   const [showEditActionModal, setShowEditActionModal] = useState(false)
   const [showBuyNow, setShowBuyNow] = useState(false)
@@ -136,7 +137,7 @@ const EditAction = (props: EditActionProps) => {
           size="small"
           onClick={() => setShowEditActionModal(true)}
         />
-        <Button variant="outlined" text="Publish page" size="small" onClick={onPublishPage} />
+        <Button isLoading={isLoading} variant={isLoading === false ? 'outlined' : ''} text="Publish page" size="small" onClick={onPublishPage} />
       </div>
       <Modal
         title="Edit action button"

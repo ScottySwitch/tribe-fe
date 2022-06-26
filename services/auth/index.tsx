@@ -130,8 +130,8 @@ const loginFacebookCallback = async (accessToken: any) => {
     let { jwt } = user.data;
     localStorage.setItem("token", jwt)
     await getMe();
+    window.location.href = '/signup/setup-profile';
   }
-  return user.data
 }
 
 const loginGoogleCallback = async (accessToken: any) => {
@@ -142,8 +142,8 @@ const loginGoogleCallback = async (accessToken: any) => {
     let { jwt } = user.data;
     localStorage.setItem("token", jwt)
     await getMe();
+    window.location.href = '/signup/setup-profile';
   }
-  return user.data
 }
 
 export default {

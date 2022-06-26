@@ -101,6 +101,7 @@ const AddListing = () => {
       name: formData.businessName,
       description: formData.description,
       address,
+      country: formData.country,
       social_info: formData.socialMedia,
       phone_number: formData.contact,
       email: formData.email === "" ? null : formData.email,
