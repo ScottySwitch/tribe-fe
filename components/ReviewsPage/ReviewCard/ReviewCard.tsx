@@ -43,7 +43,6 @@ export const ReviewForm = (props) => {
       content,
       images,
       visitedDate,
-      checkbox
     }
     onSubmit(dataSend);
   }
@@ -83,7 +82,7 @@ export const ReviewForm = (props) => {
         <Checkbox id={Math.random().toString()} label="I certify that this review is solely based on my own experience, my genuine opinion and that I have no personal or business relationship with the establishment. I have not been offered any incentive or payment originating from the establishment to write this review. I understand that Tribes has a zero-tolerance policy on fake reviews"
                   onChange={() => setCheckbox(!checkbox)}/>
       </div>
-      <Button text="Submit" width="auto" className={styles.btn_submit} onClick={handleSubmit} />
+      <Button text="Submit" width="auto" className={styles.btn_submit} onClick={handleSubmit} disabled={!checkbox} />
     </div>
   )
 }

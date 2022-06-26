@@ -28,7 +28,6 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     user
   } = props
 
-  console.log('user', user)
   return (
     <div className={`${styles.review_completed} ${className}`}>
       <div className={styles.review_avatar}>
