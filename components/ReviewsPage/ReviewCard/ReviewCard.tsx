@@ -33,6 +33,20 @@ export const ReviewForm = (props) => {
     onSubmit
   } = props
 
+  const [content, setContent] = useState<string>()
+  const [images, setImages] = useState<any>()
+  const [visitedDate, setVisitedDate] = useState<any>()
+  const [checkbox, setCheckbox] = useState<boolean>(false)
+
+  const handleSubmit = () => {
+    const dataSend = {
+      content,
+      images,
+      visitedDate,
+    }
+    onSubmit(dataSend);
+  }
+
   return (
     <div className={styles.form_review}>
       <div className={styles.form_group}>
@@ -42,6 +56,7 @@ export const ReviewForm = (props) => {
           width={`100%`}
           maxLength={100}
           autoFocus
+          onChange={(e: any) => setContent(e.target.value)}
         />
       </div>
       <div className={styles.form_group}>
@@ -51,6 +66,7 @@ export const ReviewForm = (props) => {
           accept="images"
           type="media"
           centerIcon={<Icon icon="plus" />}
+          onChange={(urls) => setImages(urls)}
         />
       </div>
       <div className={styles.form_group}>
@@ -59,13 +75,14 @@ export const ReviewForm = (props) => {
           placeholder="Select one"
           size="large"
           options={dummyDate}
-          onChange={() => {}}
+          onChange={(e: any) => {setVisitedDate(e.value)}}
         />
       </div>
       <div className={styles.form_group}>
-        <Checkbox id={Math.random().toString()} label="I certify that this review is solely based on my own experience, my genuine opinion and that I have no personal or business relationship with the establishment. I have not been offered any incentive or payment originating from the establishment to write this review. I understand that Tribes has a zero-tolerance policy on fake reviews"/>
+        <Checkbox id={Math.random().toString()} label="I certify that this review is solely based on my own experience, my genuine opinion and that I have no personal or business relationship with the establishment. I have not been offered any incentive or payment originating from the establishment to write this review. I understand that Tribes has a zero-tolerance policy on fake reviews"
+                  onChange={() => setCheckbox(!checkbox)}/>
       </div>
-      <Button text="Submit" width="auto" className={styles.btn_submit} onClick={onSubmit} />
+      <Button text="Submit" width="auto" className={styles.btn_submit} onClick={handleSubmit} disabled={!checkbox} />
     </div>
   )
 }
