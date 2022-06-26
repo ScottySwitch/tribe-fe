@@ -20,12 +20,12 @@ interface AddItemsProps {
   onCancel: () => void
 }
 
-const AddItems = (props: AddItemsProps) => {
+const AddItems = (props: AddItemsProps) => {  
   const { itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
   const [localItemList, setLocalItemList] = useState(itemList || [])
   const router = useRouter()
 
-  console.log("itemList", itemList)
+  // console.log("itemList", itemList)
 
   const handleRemoveItem = (id: number) => {
     const newArray = [...localItemList].filter((item) => item.id !== id)
@@ -40,11 +40,12 @@ const AddItems = (props: AddItemsProps) => {
     const index = getIndex(id, localItemList)
     const newArray = [...localItemList]
     newArray[index][type] = value
+    newArray[index].isEdited = true
     setLocalItemList(newArray)
   }
 
   const handleAddItem = () => {
-    setLocalItemList([...localItemList, { id: randomId(), isNew: true }])
+    setLocalItemList([...localItemList, { id: randomId(), isNew: true}])
   }
 
   const AddItemButton = () => (
@@ -89,7 +90,7 @@ const AddItems = (props: AddItemsProps) => {
               <Upload
                 isPaid={isPaid}
                 multiple
-                fileList={item.images}
+                fileList={item.images || []}
                 centerIcon={<Icon icon="plus" size={20} />}
                 onChange={(e) => handleChangeItem(item.id, "images", e)}
               />
@@ -110,9 +111,7 @@ const AddItems = (props: AddItemsProps) => {
                   value={item.price}
                   placeholder="Enter price"
                   selectDefaultValue={{ label: "SGD", value: "SGD" }}
-                  onChange={(e: any) =>
-                    handleChangeItem(item.id, "price", { price: e.input, currency: e.select })
-                  }
+                  onChange={(e: any) => handleChangeItem(item.id, "price", e.input)}
                 />
                 <SelectInput
                   width="50%"
@@ -120,19 +119,26 @@ const AddItems = (props: AddItemsProps) => {
                   selectPosition="suffix"
                   placeholder="Enter discount"
                   selectDefaultValue={{ label: "%", value: "%" }}
-                  onChange={(e: any) => handleChangeItem(item.id, "discount", e.target.value)}
+                  onChange={(e: any) => handleChangeItem(item.id, "discount", e.input)}
+                  // onChange={(e: any) => console.log(e)}
                 />
               </div>
+              {/* <Input
+                type="number"
+                value={item.price}
+                placeholder="Price"
+                onChange={(e: any) => handleChangeItem(item.id, "price", e.target.value)}
+              /> */}
               <Input
                 label="Klook URL"
-                value={item.tags}
+                value={item.klookUrl}
                 placeholder="Enter URL"
                 onChange={(e: any) => handleChangeItem(item.id, "klookUrl", e.target.value)}
               />
               {isPaid ? (
                 <Input
                   label="Website URL"
-                  value={item.tags}
+                  value={item.websiteUrl}
                   placeholder="Enter URL"
                   onChange={(e: any) => handleChangeItem(item.id, "websiteUrl", e.target.value)}
                 />
