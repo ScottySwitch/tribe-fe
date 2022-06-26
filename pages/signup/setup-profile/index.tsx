@@ -80,17 +80,17 @@ const StepOne = ({
 
   const onSubmit = async (data) => {
     setIsLoading(true)
+    const userId = parseInt(localStorage.getItem("user_id") || "0")
+    let dataSend: any = {
+      first_name: data.name,
+      gender: data.gender,
+      birthday: data.birthday,
+      country: data.country?.value || null,
+    }
+    if (uploadAvatar !== "") {
+      dataSend = {...dataSend, avatar: uploadAvatar}
+    }
     try {
-      const userId = parseInt(localStorage.getItem("user_id") || "0")
-      let dataSend: any = {
-        first_name: data.name,
-        gender: data.gender,
-        birthday: data.birthday,
-        country: data.country?.value || null,
-      }
-      if (uploadAvatar !== "") {
-        dataSend = {...dataSend, avatar: uploadAvatar}
-      }
       await UserApi.updateUser(userId, dataSend)
     } catch (err) {
       // TODO: notify error (missing template)
