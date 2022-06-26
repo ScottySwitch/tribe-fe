@@ -2,6 +2,33 @@ import Api from "../index";
 
 const qs = require('qs');
 
+const getBizListing = async () => {
+  const query = qs.stringify({
+    "populate": {
+      "user_listing_follows": {
+        "fields": [
+          "id"
+        ]
+      },
+      "reviews": {
+        "fields": [
+          "id"
+        ]
+      },
+      "categories": {
+        "data": [
+          "id",
+          "attributes"
+        ]
+      }
+    }
+  }, {
+    encodeValuesOnly: true, // prettify url
+  });
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
 const getBizListingsByCategoryId = async (categoryId: number) => {
   const query = qs.stringify({
     "filters": {
@@ -112,6 +139,7 @@ const getBizListingReviews = async (bizListingSlug: any) => {
 }
 
 export default {
+  getBizListing,
   getBizListingsByCategoryId,
   getBizListingById,
   createListingRole,

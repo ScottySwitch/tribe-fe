@@ -37,12 +37,14 @@ const Upload = (props: UploadProps) => {
   const initFileList = multiple ? fileList : lastItemArray
 
   const [srcList, setSrcList] = useState<string[]>(initFileList)
+  const [isUpload, setIsUpload] = useState<boolean>(false)
 
   const handleChange = (event: any) => {
     const file = event.target.files[0]
     const src = URL.createObjectURL(file)
     const newFileList = multiple ? [...srcList, src] : [src]
     setSrcList(newFileList)
+    setIsUpload(true)
     let data = new FormData()
     data.append("files", file)
 
@@ -59,6 +61,7 @@ const Upload = (props: UploadProps) => {
           console.log([...fileList, ...res.data.urls]);
           onChange?.([...fileList, ...res.data.urls])
         }
+        setIsUpload(false)
       })
   }
 
@@ -93,12 +96,15 @@ const Upload = (props: UploadProps) => {
         srcList.map((src) => (
           <div className={styles.image} key={src}>
             <Image src={src} alt="" layout="fill" />
-            <Input />
+            <div className={classNames(isUpload && styles.disabled_upload)}>
+              <Input />
+            </div>
           </div>
         ))}
 
       {showInput ? (
-        <div className={styles.input}>
+        <div className={classNames(styles.input, isUpload && styles.disabled_upload)}
+        >
           <Input />
         </div>
       ) : (

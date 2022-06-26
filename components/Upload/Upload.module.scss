@@ -155,3 +155,8 @@
     border-radius: 50%;
   }
 }
+
+.disabled_upload {
+  opacity: 0.5;
+  pointer-events: none;
+}

@@ -4,6 +4,7 @@ import { Categories, YesNo } from "enums"
 import { useRouter } from "next/router"
 
 import styles from "./ListingSearch.module.scss"
+import get from "lodash/get"
 
 const ListingMenuFooter = ({ onClick }) => {
   const router = useRouter()
@@ -41,14 +42,15 @@ const listingIcon = (category) => {
 }
 
 const formatListingResultOption = (bizListing: any[]) => {
-  const result = bizListing.map((item: any) => ({
+  const result = bizListing.map((item: any) =>
+  ({
     ...item,
     value: item.attributes.name,
     // @ts-ignore
     label: (
       <div className="flex gap-2">
         <div>
-          <Icon icon={listingIcon(item.attributes.category)} size={20} />
+          <Icon icon={listingIcon(get(item, 'attributes.categories.data[0].attributes.order'))} size={20} />
         </div>
         <div>
           <div>{item.attributes.name}</div>
