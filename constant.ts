@@ -377,7 +377,7 @@ export const interestingList = [
 
 export const contributePopOverList = [
   { icon: "map-color", label: "Add new listing", href: "/add-listing" },
-  { icon: "comment-color", label: "Add new review", href: "/add-review" },
+  { icon: "comment-color", label: "Add new review", href: "/reviews" },
   { icon: "update-color", label: "Update listing", href: "/update-listing" },
 ]
 
