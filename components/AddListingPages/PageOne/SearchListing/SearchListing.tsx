@@ -54,7 +54,7 @@ const SearchListing = ({
   bizListing: any
   relationship?: string
 }) => {
-  console.log("listing", listing)
+  console.log("bizListing", bizListing)
 
   if (listing) {
     localStorage.setItem("biz_id", get(listing, "id"))

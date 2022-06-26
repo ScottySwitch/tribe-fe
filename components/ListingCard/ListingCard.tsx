@@ -10,6 +10,7 @@ interface ListingCardProps {
 }
 const ListingCard = (props: ListingCardProps) => {
   const { listing, rightColumn, onClose } = props
+  // console.log(listing);
   let avatar = null
   let imageNumber = 0
   if (listing.attributes?.images !== null) {

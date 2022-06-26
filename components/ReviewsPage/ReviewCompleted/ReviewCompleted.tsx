@@ -18,6 +18,7 @@ export interface ReviewCompletedProps {
   status?: "pending" | "approved" | "denied",
   date?: string
   isDivier?: boolean
+  user: any
 }
 
 const ReviewCompleted = (props: ReviewCompletedProps) => {
@@ -30,6 +31,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     dateVisit,
     name,
     rating,
+    user,
     censorshipLabel,
     status,
     date,
@@ -53,7 +55,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     <div className={reviewCompletedClassName}>
       <div className={styles.review_avatar}>
         <Image
-          src={avatarUrl}
+          src={user?.avatar || avatarUrl}
           height={56}
           width={56}
           alt=""
@@ -63,7 +65,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
       <div className={styles.review_sumary}>
         <div className="flex items-center justify-between mb-2.5">
           <h6 className={styles.name}>
-            <span>Pragya Method</span>
+            <span>{user?.first_name + " " + user?.last_name}</span>
             {censorshipLabel && (<span className="font-normal ml-2">has reviewed</span>)}
           </h6>
           <div className={styles.status_date}>
