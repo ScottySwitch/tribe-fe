@@ -20,20 +20,22 @@ import SearchListing, {
 const ClaimPage = () => {
   const [category, setCategory] = useState<Categories | undefined>()
   const [relationship, setRelationship] = useState<YesNo | undefined>()
-  const [listing, setListing] = useState<listingTypes>()
+  // const [listing, setListing] = useState<listingTypes>()
+  const [listing, setListing] = useState<{ [key: string]: any }>()
   const [bizListing, setBizListing] = useState([])
 
   useEffect(() => {
-    const getBizListing = async (categoryId) => {
-      const data = await BizListingApi.getBizListing(categoryId)
-      setBizListing(data.data.data);
-      console.log('data', data);
-    }
-
-    if (category && relationship === 'Yes') {
-      getBizListing(category).catch(console.error)
-    }
+    // if (category && relationship === 'Yes') {
+    //   getBizListing(category).catch(console.error)
+    // }
+    getBizListing()
   }, [category, relationship])
+
+  const getBizListing = async () => {
+    const data = await BizListingApi.getBizListing()
+    setBizListing(data.data.data);
+    console.log('data', data);
+  }
 
 
   const RightColumn = (props: { listing: { [key: string]: any } }) => {
