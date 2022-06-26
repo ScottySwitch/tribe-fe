@@ -61,3 +61,18 @@ export enum UsersTypes {
   NORMAL_USER = "normal_user",
   BIZ_USER = "biz_user",
 }
+
+export enum ProfileTabs {
+  FAVOURITED = "favourited",
+  SAVED_DEALS = "saved-deals",
+  CONTRIBUTED = "contributed",
+  ABOUT = "about",
+}
+
+export enum ProfileTabFavourited {
+  EAT = "Eat",
+  BUY = "buy",
+  SEE_DO = "see-do",
+  TRANSPORT = "transport",
+  STAY = "stay",
+}

@@ -361,6 +361,17 @@ export const inforCardList = [
     tags: ["Hot deals", "Best sellers"],
     isVerified: true,
   },
+  {
+    images: ["https://picsum.photos/300/600"],
+    title: "Evertop Hainanese Boneless Chicken",
+    rate: 4.5,
+    rateNumber: 25,
+    followerNumber: 500,
+    price: "$37.35",
+    categories: ["Fast food", "Desserts"],
+    tags: ["Hot deals", "Best sellers"],
+    isVerified: true,
+  },
 ]
 
 export const interestingList = [

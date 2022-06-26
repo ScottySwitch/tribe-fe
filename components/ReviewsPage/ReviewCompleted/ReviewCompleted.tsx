@@ -1,17 +1,23 @@
+import { ReactElement, ReactNode } from "react"
+import { rateType } from "../ReviewCard/ReviewCard"
+import classNames from "classnames"
+import Icon from "components/Icon/Icon"
 import Rate from "components/Rate/Rate"
 import Image from "next/image"
-import { ReactElement } from "react"
-import { rateType } from "../ReviewCard/ReviewCard"
 import styles from "./ReviewCompleted.module.scss"
-interface ReviewCompletedProps {
+export interface ReviewCompletedProps {
   className?: string
-  children?: ReactElement
+  children?: ReactElement | ReactNode
   avatarUrl?: string
   content?: string
   listImage?: any[]
   dateVisit?: string
   name?: string
   rating?: number
+  censorshipLabel?: string
+  status?: "pending" | "approved" | "denied",
+  date?: string
+  isDivier?: boolean
 }
 
 const ReviewCompleted = (props: ReviewCompletedProps) => {
@@ -24,9 +30,27 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     dateVisit,
     name,
     rating,
+    censorshipLabel,
+    status,
+    date,
+    isDivier = false
   } = props
+
+  const reviewCompletedClassName = classNames(styles.review_completed, className, {
+    [styles.divider]: isDivier
+  })
+
+  const statusClassName = classNames(styles.status, {
+    [styles.pending]: status === "pending",
+    [styles.approved]: status === "approved",
+    [styles.denied]: status === "denied",
+  })
+  const censoredStatusClassName = classNames(styles.censored_status, "flex", {
+    ['justify-end']: status === "denied",
+  })
+
   return (
-    <div className={`${styles.review_completed} ${className}`}>
+    <div className={reviewCompletedClassName}>
       <div className={styles.review_avatar}>
         <Image
           src={avatarUrl}
@@ -37,24 +61,29 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
         />
       </div>
       <div className={styles.review_sumary}>
-        <h6 className={styles.name}>Pragya Method</h6>
-        {rating &&
-          (<div className={styles.rating_group}>
+        <div className="flex items-center justify-between mb-2.5">
+          <h6 className={styles.name}>
+            <span>Pragya Method</span>
+            {censorshipLabel && (<span className="font-normal ml-2">has reviewed</span>)}
+          </h6>
+          <div className={styles.status_date}>
+            {status && (<div className={statusClassName}>{status}</div>)}
+            {date && (<div className={styles.date}>{`24-2-2021`}</div>)}
+          </div>
+        </div>
+        {rating && (
+          <div className={styles.rating_group}>
             <Rate
               readonly={true}
               initialRating={rating}
             />
             <div className={styles.rating_type}>{rateType[rating]}</div>
-          </div>)
-        }
-
-        {content &&
-          (<p className={styles.content}>{content}</p>)
-        }
-
+          </div>
+        )}
+        {content && (<p className={styles.content}>{content}</p>)}
         {listImage && listImage.length &&
         (<ul className={styles.image_list}>
-          { listImage?.map((image, index) => (
+          {listImage?.map((image, index) => (
             <li key={index} className={styles.image_item}>
               <Image
                 src={image}
@@ -63,13 +92,30 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
                 className="rounded-2xl"
                 alt=""
               />
-            </li>
-          ))
-          }
+            </li>))}
         </ul>)}
-        {dateVisit &&
-          (<div className={styles.date_visit}><strong>Date of visit:</strong> March 2021</div>)
-        }
+        {dateVisit && (<div className={styles.date_visit}><strong>Date of visit:</strong> March 2021</div>)}
+        {children && (
+          <div className={styles.children}>
+            {children}
+          </div>
+        )}
+
+        {status !== "pending" && (
+          <div className={censoredStatusClassName}>
+            {status === "approved" && (
+              <div className={styles.censored_status_approved}>
+                <Icon icon="checked-approved" className="mr-3"/>
+                <span>Approved on {date}</span>
+              </div>
+            )}
+            {status === "denied" && (
+              <div className={styles.censored_status_denied}>
+                <span>Contact admin</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

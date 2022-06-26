@@ -7,7 +7,7 @@ import { PromotionType } from "./enums"
 import styles from "./PromotionCard.module.scss"
 
 export interface IPromotionProp {
-  imgUrl: string
+  imgUrl?: string
   title: string
   expiredAt: string
   type?: string | number

@@ -13,9 +13,9 @@
 
   &_avatar {
     position: relative;
-    min-width: 100px;
-    max-width: 100px;
-    height: 100px;
+    min-width: 130px;
+    max-width: 130px;
+    height: 130px;
     margin-right: 24px;
   }
 
@@ -70,16 +70,18 @@
     color: $bg-400;
     font-size: $text-sm;
     font-weight: $font-light;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   &_cta {
     &_primary {
+      font-size: $text-sm;
       background-color: $primary-50 !important;
       color: $primary-500 !important;
       min-width: 64px !important;
     }
     &_secondary {
+      font-size: $text-sm;
       background-color: $bg-50 !important;
       color: $bg-400 !important;
       min-width: 64px !important;

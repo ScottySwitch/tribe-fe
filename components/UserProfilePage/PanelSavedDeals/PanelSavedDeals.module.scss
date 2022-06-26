@@ -1,0 +1,8 @@
+@use "styles/variables.scss" as *;
+
+.save_deals_panel {
+  .total {
+    font-size: $text-sm;
+    margin: 25px 0;
+  }
+}
