@@ -15,12 +15,10 @@ import { Categories, YesNo } from "enums"
 import SearchListing, {
   listingTypes,
 } from "components/AddListingPages/PageOne/SearchListing/SearchListing"
+import get from "lodash/get"
 
 
 const ClaimPage = () => {
-  const [category, setCategory] = useState<Categories | undefined>()
-  const [relationship, setRelationship] = useState<YesNo | undefined>()
-  // const [listing, setListing] = useState<listingTypes>()
   const [listing, setListing] = useState<{ [key: string]: any }>()
   const [bizListing, setBizListing] = useState([])
 
@@ -29,19 +27,20 @@ const ClaimPage = () => {
     //   getBizListing(category).catch(console.error)
     // }
     getBizListing()
-  }, [category, relationship])
+  }, [])
 
   const getBizListing = async () => {
     const data = await BizListingApi.getBizListing()
-    setBizListing(data.data.data);
-    console.log('data', data);
+    setBizListing(get(data, 'data.data'));
+    console.log('data', get(data, 'data.data'));
   }
 
 
   const RightColumn = (props: { listing: { [key: string]: any } }) => {
     const { listing } = props
+    // console.log('listing', listing);
     const router = useRouter()
-    const handleClick = () => router.push(`/claim/${listing.attributes.id}`)
+    const handleClick = () => router.push(`/claim/${listing.id}`)
     return (
       <>
         <Button text="Claim free listing" onClick={handleClick} />
@@ -70,6 +69,7 @@ const ClaimPage = () => {
           ) : (
             <ListingSearchBox
               title="Claim Your Free Listing"
+              listingOptions={bizListing}
               onListingSearchChange={(e) => setListing(e)}
             />
           )}
