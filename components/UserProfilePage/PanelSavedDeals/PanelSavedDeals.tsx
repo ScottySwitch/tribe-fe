@@ -81,7 +81,7 @@ const SavedDealsPanel = () => {
   return (
     <div className={styles.save_deals_panel}>
       {total && (<div className={styles.total}>Total: {total}</div>)}
-      <div className="grid grid-cols-2 gap-x-16">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
       {listSaveDeals?.map((item, index) => (
         <PromotionCard
           key={index}

@@ -17,7 +17,7 @@ const GroupHeadingOne = (props: {name: string, imageUrl: string}) => {
 
   return (
     <div className={styles.group_heading_one}>
-      <div className="flex items-end">
+      <div className="flex items-end flex-wrap lg:flex-nowrap">
         <div className={styles.avatar}>
           <Image
             className={styles.avatar_img}
@@ -34,6 +34,7 @@ const GroupHeadingOne = (props: {name: string, imageUrl: string}) => {
         stepCurrent={3}
         stepCompleted={5}
         linkable="/profile/information"
+        className={styles.CompleteProfileCard_desktop}
       />
     </div>
   )
@@ -43,29 +44,37 @@ const GroupHeadingTwo = (props: {contributions: number, following: number, point
   const { contributions, following, points } = props
   const router = useRouter()
   return (
-    <div className={styles.group_heading_two}>
-      <div className={styles.outstanding_criteria_container}>
-        <div className={styles.outstanding_criteria}>
-          <h5>Contributions</h5>
-          <span>{contributions}</span>
+    <React.Fragment>
+      <div className={styles.group_heading_two}>
+        <div className={styles.outstanding_criteria_container}>
+          <div className={styles.outstanding_criteria}>
+            <h5>Contributions</h5>
+            <span>{contributions}</span>
+          </div>
+          <div className={styles.outstanding_criteria}>
+            <h5>Following</h5>
+            <span>{following}</span>
+          </div>
+          <div className={styles.outstanding_criteria}>
+            <h5>Points</h5>
+            <span>{points}</span>
+          </div>
         </div>
-        <div className={styles.outstanding_criteria}>
-          <h5>Following</h5>
-          <span>{following}</span>
-        </div>
-        <div className={styles.outstanding_criteria}>
-          <h5>Points</h5>
-          <span>{points}</span>
-        </div>
+        <Button
+          className={styles.btn_edit_profile}
+          variant="secondary"
+          text="Edit profile"
+          width={164}
+          onClick={() => {router.push("/profile/information")}}
+        />
       </div>
-      <Button
-        className={styles.btn_edit_profile}
-        variant="secondary"
-        text="Edit profile"
-        width={164}
-        onClick={() => {router.push("/profile/information")}}
+      <CompleteProfileCard
+        stepCurrent={3}
+        stepCompleted={5}
+        linkable="/profile/information"
+        className={styles.CompleteProfileCard_mobile}
       />
-    </div>
+    </React.Fragment>
   )
 }
 

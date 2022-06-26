@@ -10,7 +10,7 @@ const ProfilePage = () => {
       <div className={styles.section_cover_image}>
         <CoverImage imageUrl="https://picsum.photos/1440/360"/>
       </div>
-      <SectionLayout>
+      <SectionLayout className={styles.section_profile} containerClassName={styles.section_profile_container}>
         <UserProfileDetail/>
         <TopSearches keywords={["Fast Food ", "Desserts", "Beverages"]} className={styles.top_searches}/>
       </SectionLayout>

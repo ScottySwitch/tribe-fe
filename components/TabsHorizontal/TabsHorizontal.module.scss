@@ -4,6 +4,10 @@
   &_container {
     display: flex;
     margin-bottom: 10px;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   
   &_nav {
@@ -15,6 +19,7 @@
     padding-bottom: 10px;
     cursor: pointer;
     font-weight: $font-semi-bold;
+    white-space: nowrap;
 
     &.secondary_outline {
       padding: 7px 24px;
@@ -65,6 +70,52 @@
       }
       &.selected, &:hover {
         color: $primary-500;
+      }
+    }
+  }
+
+  @media screen and (max-width: $big-tablet) {
+    &_nav {
+      &.secondary_no_outline {
+        &::before {
+          bottom: 0;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $tablet) {
+    &_container {
+      overflow-x: auto;
+    }
+    &_nav {
+      margin-right: 60px !important;
+      &.secondary_outline {
+        margin-right: 30px !important;
+      }
+      &.secondary_no_outline {
+        &::before {
+          bottom: 0;
+          left: 0;
+          transform: translateX(0);
+        }
+        &.selected {
+          &::before {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  
+  @media screen and (max-width: $mobile) {
+    &_nav {
+      margin-right: 16px;
+      font-size: $text-xs;
+      margin-right: 35px !important;
+
+      &.secondary_outline {
+        margin-right: 10px !important;
       }
     }
   }

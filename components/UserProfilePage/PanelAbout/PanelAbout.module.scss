@@ -25,4 +25,16 @@
     color: $primary-500;
     cursor: pointer;
   }
+
+  @media screen and (max-width: $tablet) {
+    .field {
+      margin-bottom: 32px;
+    }
+  }
+
+  @media screen and (max-width: $mobile) {
+    .field {
+      font-size: $text-sm;
+    }
+  }
 }

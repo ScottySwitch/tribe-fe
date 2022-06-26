@@ -24,19 +24,21 @@ const ProgressComplete = (props: ProgressCompleteProps) => {
 }
 
 export interface CompleteProfileCardProps extends ProgressCompleteProps {
+  className?: string
   linkLabel?: string
   linkable?: string | UrlObject
 }
 
 const CompleteProfileCard = (props: CompleteProfileCardProps) => {
   const {
+    className = "",
     stepCurrent,
     stepCompleted,
     linkable = "/",
     linkLabel = "Complete it.",
   } = props
   return (
-    <div className={styles.card}>
+    <div className={`${className} ${styles.card}`}>
       <ProgressComplete
         stepCurrent={stepCurrent}
         stepCompleted={stepCompleted}

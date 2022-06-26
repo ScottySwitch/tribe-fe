@@ -151,6 +151,8 @@ const ListCard = (props) => {
           date={item.date}
           status={item.status}
           isDivier
+          className={styles.ReviewCompleted}
+          user={{first_name: "Anna", last_name: "Nhun"}}
         >
           <ReviewBizInfoCard
             title={item.biz.title}
@@ -168,14 +170,21 @@ const ListCard = (props) => {
 }
 
 const ContributedPanel = () => {
+  const [total, setTotal] = useState<number>()
+
   const TabList: ITab[] = [
     { label: "Pending", value: "pending", content: <ListCard data={dummyPending} /> },
     { label: "Approved", value: "approved", content: <ListCard data={dummyApproved} />},
     { label: "Denied", value: "denied", content: <ListCard data={dummyDenied} /> },
   ]
 
+  useEffect(() => {
+    setTotal(dummyPending.length)
+  }, [])
+
   return (
     <div className={styles.contributed_panel}>
+      {total && (<div className={styles.total}>Total: {total}</div>)}
       <TabsHorizontal tablist={TabList} type="primary-outline" className={styles.contributed_tab}/>
     </div>
   )

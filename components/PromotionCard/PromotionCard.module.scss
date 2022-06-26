@@ -104,7 +104,7 @@
       margin-right: 12px;
     }
     &_title {
-      font-size: $text-sm;
+      font-size: $text-xs;
     }
     &_date {
       font-size: $text-xs;
@@ -121,7 +121,7 @@
       &_primary,
       &_secondary {
         height: 32px;
-        font-size: $text-sm;
+        font-size: $text-xs;
       }
     }
   }

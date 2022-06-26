@@ -1,6 +1,27 @@
+@use "styles/variables.scss" as *;
+
 .section_cover_image {
   padding-top: 0;
 }
 .top_searches {
   margin-top: 80px;
+}
+
+@media screen and (max-width: $big-tablet) {
+  .section_profile {
+    &_container {
+      width: 100% !important;
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .section_profile {
+    &_container {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
 }

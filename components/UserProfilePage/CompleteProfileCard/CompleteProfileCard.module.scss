@@ -30,4 +30,17 @@
       background: linear-gradient(113.49deg, #2BA6FF -3.39%, #943FFF 88.73%);
     }
   }
+
+  @media screen and (max-width: $big-tablet) {
+    padding: 15px 20px;
+  }
+
+  @media screen and (max-width: $mobile) {
+    padding: 13px 14px;
+    border-radius: $border-radius;
+    
+    .note_cta {
+      font-size: $text-xs;
+    }
+  }
 }

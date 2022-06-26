@@ -1,10 +1,37 @@
+
+@use "styles/variables.scss" as *;
+
 .contributed {
   &_panel {
-    max-width: 780px;
+    position: relative;
+    
+    .total {
+      position: absolute;
+      top: 8px;
+      right: 0;
+    }
+    .ReviewCompleted {
+      max-width: 780px;
+    }
   }
 
   &_tab {
     margin-top: 26px;
     margin-bottom: 40px;
   }
-} 
+
+  @media screen and (max-width: $mobile) {
+    &_panel {
+      .total {
+        right: unset;
+        top: 45px;
+        left: 0;
+        font-size: $text-xs;
+        font-weight: $font-semi-bold;
+      }
+    }
+    &_tab {
+      margin-bottom: 50px;
+    }
+  }
+}

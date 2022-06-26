@@ -53,17 +53,17 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
 
   return (
     <div className={reviewCompletedClassName}>
-      <div className={styles.review_avatar}>
-        <Image
-          src={user?.avatar || avatarUrl}
-          height={56}
-          width={56}
-          alt=""
-          className="rounded-full"
-        />
-      </div>
-      <div className={styles.review_sumary}>
-        <div className="flex items-center justify-between mb-2.5">
+      <div className={styles.group_heading}>
+        <div className={styles.review_avatar}>
+          <Image
+            src={user?.avatar || avatarUrl}
+            height={56}
+            width={56}
+            alt=""
+            className="rounded-full"
+          />
+        </div>
+        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
           <h6 className={styles.name}>
             <span>{user?.first_name + " " + user?.last_name}</span>
             {censorshipLabel && (<span className="font-normal ml-2">has reviewed</span>)}
@@ -73,6 +73,8 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
             {date && (<div className={styles.date}>{`24-2-2021`}</div>)}
           </div>
         </div>
+      </div>
+      <div className={styles.review_summary}>
         {rating && (
           <div className={styles.rating_group}>
             <Rate

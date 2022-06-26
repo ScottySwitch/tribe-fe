@@ -12,8 +12,8 @@ const dummyInfo = {
 }
 
 const PanelAbout = () => {
-  const containerClassName = classNames("grid grid-cols-3", styles.container)
-  const col2ClassName = classNames("col-start-2 col-span-4", styles.field)
+  const containerClassName = classNames("grid md:grid-cols-3", styles.container)
+  const col2ClassName = classNames("md:col-start-2 md:col-span-4", styles.field)
 
   return (
     <div className={styles.about_panel}>
