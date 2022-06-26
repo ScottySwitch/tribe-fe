@@ -62,6 +62,7 @@ const EditListingHomepage = (context) => {
   const [logo, setLogo] = useState<any>([])
 
   const [isPaid, setIsPaid] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const router = useRouter()
   const { query } = router
@@ -208,6 +209,7 @@ const EditListingHomepage = (context) => {
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
   const handleSubmit = async () => {
+    setIsLoading(true)
     const currentItemList = [...itemList].filter((item) => item.isNew !== true)
     const currentMenuList = [...menuList].filter((item) => item.isNew !== true)
     const currentDealList = [...dealList].filter((item) => item.isNew !== true)
@@ -331,7 +333,7 @@ const EditListingHomepage = (context) => {
         })
       )
     }
-    // window.location.reload()
+    window.location.reload()
   }
 
   return (
@@ -364,6 +366,7 @@ const EditListingHomepage = (context) => {
           <div className={styles.body}>
             <div className={styles.right_col}>
               <EditAction
+                isLoading={isLoading}
                 isPaid={isPaid}
                 action={action}
                 onApplyAction={handleSetAction}

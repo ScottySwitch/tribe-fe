@@ -17,6 +17,7 @@ export interface ButtonProps
     | "no-outlined"
     | "secondary-no-outlined"
     | "underlined"
+    | ""
   size?: "small" | "medium" | "large"
   type?: "button" | "submit" | "reset"
   isLoading?: boolean
