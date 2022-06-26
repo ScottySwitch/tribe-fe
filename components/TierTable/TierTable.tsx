@@ -1,8 +1,6 @@
 import classNames from "classnames"
 import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
 import { Tiers } from "enums"
-import { Item } from "framer-motion/types/components/Reorder/Item"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
