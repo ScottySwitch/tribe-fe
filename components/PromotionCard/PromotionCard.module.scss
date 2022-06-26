@@ -13,10 +13,18 @@
 
   &_avatar {
     position: relative;
-    min-width: 130px;
-    max-width: 130px;
-    height: 130px;
     margin-right: 24px;
+    
+    &.medium {
+      min-width: 100px;
+      max-width: 100px;
+      height: 100px;
+    }
+    &.large {
+      min-width: 130px;
+      max-width: 130px;
+      height: 130px;
+    }
   }
 
   &_image {
@@ -28,7 +36,7 @@
     position: absolute;
     top: 13px;
     right: 10px;
-    z-index: 10;
+    z-index: 1;
     background-color: $bg-0;
     border-radius: 50%;
   }
@@ -38,19 +46,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    &_cta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      a {
-        color: $blue-500;
-        text-decoration: underline;
-        font-size: $text-sm;
-        font-weight: $font-semi-bold;
-      }
-    }
   }
 
   &_title {
@@ -109,13 +104,6 @@
     &_date {
       font-size: $text-xs;
       margin-bottom: 10px;
-    }
-    &_info {
-      &_cta {
-        a {
-          font-size: $text-xs;
-        }
-      }
     }
     &_cta {
       &_primary,

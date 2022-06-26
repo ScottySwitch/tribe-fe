@@ -1,5 +1,4 @@
 export enum PromotionType {
-  CLAIM = 1,
-  FULLY_REDEEMED = 2,
-  USE_NOW = 3,
+  VIEW_DETAIL = 1,
+  USE_NOW = 2,
 }
