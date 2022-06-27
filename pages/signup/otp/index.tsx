@@ -85,12 +85,10 @@ const OtpPage = (context) => {
   }
 
   const requireOTP = async () => {
-    if ( time == 0 ) {
-      let phoneNumer = localStorage.getItem('phone_number')
-      if (phoneNumer) {
-        await AuthApi.otpPhoneGenerate(phoneNumer)
-        setTime(30)
-      }
+    let phoneNumer = localStorage.getItem('phone_number')
+    if (phoneNumer) {
+      await AuthApi.otpPhoneGenerate(phoneNumer)
+      setTime(30)
     }
   }
 
@@ -113,11 +111,13 @@ const OtpPage = (context) => {
           />
           <div className="flex justify-between">
             <div>00:{time}</div>
-            <div 
-              className={classNames(time == 0 && "cursor-pointer")}
-              onClick={() => requireOTP()}
-            >
-                Resend
+            <div>
+              <Button 
+                text="Resend"
+                disabled={time != 0 ? true : false}
+                variant="secondary-no-outlined"
+                onClick={() => requireOTP()}
+              />
             </div>
           </div>
           <Button
