@@ -123,6 +123,17 @@ const SignupPage = () => {
     setIsLoading(false)
   }
 
+  const handleSetValuePhoneNumber = (e) => {
+    let phoneNumber = ''
+    if (e.input[0] == 0 ) {
+      phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
+    }
+    else {
+      phoneNumber = e.select.value + e.input
+    }
+    setOtpReceiver(phoneNumber)
+  }
+
   const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/facebook"
   const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/google"
 
@@ -150,11 +161,7 @@ const SignupPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) =>
-                [console.log(e),
-                console.log(e.input.substring(1)),
-                setOtpReceiver(`${e.select.value}${e.input.substring(1)}`)]
-              }
+              onChange={(e) => handleSetValuePhoneNumber(e)}
             />
           ) : (
             <Input

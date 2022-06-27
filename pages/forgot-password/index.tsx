@@ -83,6 +83,17 @@ const ForgotPasswordPage = () => {
     }
   }
 
+  const handleSetValuePhoneNumber = (e) => {
+    let phoneNumber = ''
+    if (e.input[0] == 0 ) {
+      phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
+    }
+    else {
+      phoneNumber = e.select.value + e.input
+    }
+    setPhoneNumber(phoneNumber)
+  }
+
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
@@ -108,7 +119,7 @@ const ForgotPasswordPage = () => {
               options={formattedAreaCodes}
               shouldControlShowValue
               name="phone"
-              onChange={(e) => setPhoneNumber(`${e.select.value}${(e.input).substr(1, e.input.length - 1)}`)}
+              onChange={(e) => handleSetValuePhoneNumber(e)}
             />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />

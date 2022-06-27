@@ -95,6 +95,17 @@ const LoginPage = () => {
     window.location.href = "/"
   }
 
+  const handleSetValuePhoneNumber = (e) => {
+    let phoneNumber = ''
+    if (e.input[0] == 0 ) {
+      phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
+    }
+    else {
+      phoneNumber = e.select.value + e.input
+    }
+    setValuePhoneNumber(phoneNumber)
+  }
+
   const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/facebook"
   const routeGoogleLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/google"
 
@@ -122,9 +133,10 @@ const LoginPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) =>
-                setValuePhoneNumber(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
-              }
+              // onChange={(e) =>
+              //   setValuePhoneNumber(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
+              // }
+              onChange={(e) => handleSetValuePhoneNumber(e)}
             />
           ) : (
             <Input

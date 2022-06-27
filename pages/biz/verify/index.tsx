@@ -232,6 +232,17 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     console.log("srcImages", srcImages)
   }, [])
 
+  const handleSetValuePhoneNumber = (e) => {
+    let phoneNumber = ''
+    if (e.input[0] == 0 ) {
+      phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
+    }
+    else {
+      phoneNumber = e.select.value + e.input
+    }
+    setPhoneNumber(phoneNumber)
+  }
+
   return (
     <div className={styles.biz_verify}>
       {verifyStep === VerifySteps.REQUEST_OTP && (
@@ -243,9 +254,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             selectPlaceholder="Area code"
             options={formattedAreaCodes}
             shouldControlShowValue
-            onChange={(e) =>
-              setPhoneNumber(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
-            }
+            onChange={(e) => handleSetValuePhoneNumber(e)}
           />
           <Button text="Receive OTP" onClick={handleRequestOTP} />
         </div>
