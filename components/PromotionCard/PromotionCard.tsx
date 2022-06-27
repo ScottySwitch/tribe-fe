@@ -11,34 +11,37 @@ export interface IPromotionProp {
   title: string
   expiredAt: string
   type?: string | number
-  link?: string
   favourite?: boolean
   width?: string | number
+  size?: "medium" | "large" 
 }
 
 const PromotionCard = (props: IPromotionProp) => {
-  const { imgUrl, width, title, expiredAt, link, type, favourite } = props
+  const { imgUrl, width, title, expiredAt, type, favourite, size = "medium" } = props
 
   const buttonClasses = classNames({
-    [styles.promotion_cta_primary]: PromotionType.CLAIM === type || PromotionType.USE_NOW === type,
-    [styles.promotion_cta_secondary]: PromotionType.FULLY_REDEEMED === type,
+    [styles.promotion_cta_primary]: PromotionType.VIEW_DETAIL === type || PromotionType.USE_NOW === type,
+  })
+  const avatarClassName = classNames(styles.promotion_avatar, {
+    [styles.medium]: size === "medium",
+    [styles.large]: size === "large",
   })
 
   const types = {
-    [PromotionType.CLAIM]: "Claim",
+    [PromotionType.VIEW_DETAIL]: "View detail",
     [PromotionType.USE_NOW]: "Use now",
-    [PromotionType.FULLY_REDEEMED]: "Fully redeemed",
   }
 
   return (
     <div style={{ width }} className={styles.promotion_card}>
-      <div className={styles.promotion_avatar}>
+      <div className={avatarClassName}>
         {imgUrl && (
           <Image
             src={imgUrl}
-            width={130}
-            height={130}
+            width="100%"
+            height="100%"
             alt="promotion-alt"
+            layout="responsive"
             className={styles.promotion_image}
           />
         )}
@@ -53,14 +56,7 @@ const PromotionCard = (props: IPromotionProp) => {
           <h3 className={styles.promotion_title}>{title}</h3>
           <div className={styles.promotion_date}>{expiredAt}</div>
         </div>
-        {(type || link) && (
-          <div className={styles.promotion_info_cta}>
-            <div>
-              {type && <Button className={buttonClasses} text={types[type]} width="max-content" />}
-            </div>
-            {link && <Link href={link}>Terms</Link>}
-          </div>
-        )}
+        {type && <Button className={buttonClasses} text={types[type]} width="max-content" />}
       </div>
     </div>
   )

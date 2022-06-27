@@ -10,7 +10,7 @@ import styles from "styles/Promotions.module.scss"
 
 const dummyPromotion = [
   {
-    images: ["https://picsum.photos/300/600"],
+    images: ["https://picsum.photos/130"],
     title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 17, 2022",
     type: 1,
@@ -18,15 +18,15 @@ const dummyPromotion = [
     favourite: false,
   },
   {
-    images: ["https://picsum.photos/300/600"],
+    images: ["https://picsum.photos/130"],
     title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 30, 2022",
-    type: 2,
+    type: 1,
     link: "/",
     favourite: false,
   },
   {
-    images: ["https://picsum.photos/300/600"],
+    images: ["https://picsum.photos/130"],
     title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 24, 2022",
     type: 1,
@@ -34,42 +34,42 @@ const dummyPromotion = [
     favourite: false,
   },
   {
-    images: ["https://picsum.photos/300/600"],
+    images: ["https://picsum.photos/130"],
     title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 2,
+    type: 1,
     link: "/",
     favourite: false,
   },
   {
-    images: ["https://picsum.photos/300/600"],
+    images: ["https://picsum.photos/130"],
     title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 2,
+    type: 1,
     link: "/",
     favourite: false,
   },
   {
-    images: ["https://picsum.photos/300/600"],
+    images: ["https://picsum.photos/130"],
     title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 2,
+    type: 1,
     link: "/",
     favourite: false,
   },
   {
-    images: ["https://picsum.photos/300/600"],
+    images: ["https://picsum.photos/130"],
     title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 2,
+    type: 1,
     link: "/",
     favourite: false,
   },
   {
-    images: ["https://picsum.photos/300/600"],
+    images: ["https://picsum.photos/130"],
     title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 2,
+    type: 1,
     link: "/",
     favourite: false,
   },
@@ -109,7 +109,7 @@ const PromotionsPage = () => {
                 expiredAt={promotion.expiredAt}
                 type={promotion.type}
                 favourite={promotion.favourite}
-                link={promotion.link}
+                size="large"
               />
             ))}
           </div>
