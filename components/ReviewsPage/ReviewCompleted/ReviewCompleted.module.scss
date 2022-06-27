@@ -2,10 +2,87 @@
 
 .review {
   &_completed {
-    display: flex;
+    position: relative;
 
     &:not(:last-child) {
       margin-bottom: 40px;
+
+      &.divider {
+        padding-bottom: 25px;
+        margin-bottom: 25px;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          border-bottom: 1px solid $bg-100;
+        }
+      }
+    }
+
+    .group_heading {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .children {
+      margin-top: 16px;
+    }
+
+    .censored_status {
+      margin-top: 16px;
+      font-size: $text-sm;
+
+      &_approved {
+        display: flex;
+        align-items: center;
+        color: $bg-500;
+      }
+
+      &_denied {
+        color: $blue-600;
+        font-weight: $font-normal;
+      }
+    }
+
+    .name {
+      font-size: $text-sm;
+      font-weight: $font-bold;
+      color: $bg-700;
+    }
+  
+    .status_date {
+      display: flex;
+      align-items: center;
+      font-size: $text-sm;
+  
+      .date {
+        color: $bg-400;
+        margin-left: 16px;
+      }
+  
+      .status {
+        text-transform: capitalize;
+        font-weight: $font-normal;
+        height: 22px;
+        padding: 0 12px;
+        border-radius: 24px;
+        
+        &.pending {
+          background-color: $yellow-100;
+          color: $yellow-700;
+        }
+        &.approved {
+          background-color: $green-50;
+          color: $green-600;
+        }
+        &.denied {
+          background-color: $primary-50;
+          color: $primary-500;
+        }
+      }
     }
   }
 
@@ -16,15 +93,10 @@
     margin-right: 16px;
   }
 
-  &_sumary {
+  &_summary {
     flex: 1;
-
-    .name {
-      font-size: $text-md;
-      font-weight: $font-bold;
-      color: $bg-700;
-      margin-bottom: 10px;
-    }
+    padding-left: 70px;
+    margin-top: -20px;
 
     .rating {
       &_group {
@@ -32,7 +104,7 @@
         flex-wrap: wrap;
       }
       &_type {
-        font-size: $text-md;
+        font-size: $text-sm;
         color: $bg-600;
         font-weight: $font-bold;
         margin-left: 16px;
@@ -41,7 +113,7 @@
     }
 
     .content {
-      font-size: $text-md;
+      font-size: $text-sm;
       color: $bg-500;
       margin-bottom: 16px;
     }
@@ -58,7 +130,38 @@
     }
 
     .date_visit {
-      font-size: $text-md;
+      font-size: $text-sm;
+    }
+  }
+
+  @media screen and (max-width: $mobile) {
+    &_completed {
+      .name {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+      .status_date {
+        .status {
+          display: none;
+        }
+        .date {
+          font-size: $text-xs;
+          margin-left: 0;
+        }
+      }
+      .censored_status {
+        font-size: $text-xs;
+      }
+    }
+    &_avatar {
+      min-width: 40px;
+      max-width: 40px;
+      height: 40px;
+    }
+    &_summary {
+      margin-top: 0;
+      padding-left: 0;
+
     }
   }
 }

@@ -1,6 +1,6 @@
 import { inforCardList } from "constant"
-import InforCard, { InforCardProps } from "components/InforCard/InforCard"
-import PromotionCard, { IPromotionProp } from "components/PromotionCard/PromotionCard"
+import InforCard from "components/InforCard/InforCard"
+import PromotionCard from "components/PromotionCard/PromotionCard"
 import Image from "next/image"
 import CarouselBanner from "components/CarouselBanner/CarouselBanner"
 import SectionLayout from "components/SectionLayout/SectionLayout"
