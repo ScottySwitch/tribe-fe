@@ -19,21 +19,21 @@ interface ReviewCompletedProps {
   name?: string
   rating?: number
   user: any
+  onReplyClick?(): void
 }
 
 const ReviewCompleted = (props: ReviewCompletedProps) => {
   const {
     className = "",
-    children,
     avatarUrl = "https://picsum.photos/200",
     content,
     listImage,
     dateVisit,
-    name,
     isPaid,
     repliable,
     rating,
     user = {},
+    onReplyClick,
   } = props
 
   return (
@@ -53,7 +53,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
         <div className={styles.header}>
           <h6 className={styles.name}>{user.first_name + " " + user.last_name}</h6>
           {repliable && (
-            <Popover content={<div>Report review</div>}>
+            <Popover content={<div>Report review</div>} position="bottom-left">
               <Icon icon="toolbar" />
             </Popover>
           )}
@@ -64,9 +64,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
             <div className={styles.rating_type}>{rateType[rating]}</div>
           </div>
         )}
-
         {content && <p className={styles.content}>{content}</p>}
-
         {listImage && listImage.length && (
           <ul className={styles.image_list}>
             {listImage?.map((image, index) => (
@@ -89,6 +87,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
               width={150}
               className="mt-4"
               disabled={!isPaid}
+              onClick={onReplyClick}
             />
             {!isPaid && (
               <Button

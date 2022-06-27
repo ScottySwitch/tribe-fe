@@ -218,6 +218,10 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   }
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
+  const handleSubmitReply = (values) => {
+    console.log(values)
+  }
+
   const handleSubmit = async () => {
     setIsLoading(true)
     const currentItemList = [...itemList].filter((item) => item.isNew !== true)
@@ -426,7 +430,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 />
               </div>
               <Break />
-              <HomepageReviews isPaid={isPaid} isViewPage={isViewPage} reviews={reviews} />
+              <HomepageReviews
+                isPaid={isPaid}
+                isViewPage={isViewPage}
+                reviews={reviews}
+                onSubmitReply={handleSubmitReply}
+              />
               <Break />
               <Contacts />
             </div>
