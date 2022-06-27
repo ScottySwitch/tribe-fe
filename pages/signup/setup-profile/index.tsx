@@ -109,7 +109,7 @@ const StepOne = ({
         <div className={styles.profile_imgs}>
           <Upload fileList={avatar} type="avatar" onChange={handleUploadAvatar} />
         </div>
-        <Input placeholder="Your name" label="Name" register={register("name")} />
+        <Input placeholder="Your name" register={register("name")} />
         <Select
           placeholder="Your country"
           options={countryList}

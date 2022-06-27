@@ -114,7 +114,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {
     return (
       <>
-        <div className="flex gap-2 cursor-pointer" onClick={handleSwitchToBizUser}>
+        <div className="flex gap-2 cursor-pointer mr-[32px]" onClick={handleSwitchToBizUser}>
           <Icon icon="business" size={20} />
           Business
         </div>
