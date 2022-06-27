@@ -1,4 +1,4 @@
-import { Categories, InformationList, ListingHomePageScreens, ListingTabs } from "enums"
+import { Categories, InformationList, ListingHomePageScreens, ListingTabs, UserInformationList } from "enums"
 import { IAddListingForm } from "pages/add-listing"
 
 export const loginInforItem = "login_infor"
@@ -244,6 +244,17 @@ export const freeInformationList = [
   { label: InformationList.ANALYTICS, icon: "chart" },
   { label: InformationList.CHANGE_ACCOUNT_TIER, icon: "reward-color", star: true },
   { label: InformationList.VERIFICATION, icon: "like-color-2" },
+]
+
+export const userInformationList = [
+  { label: UserInformationList.USER_INFORMATION, icon: "user-color-2"},
+  { label: UserInformationList.CHANGE_PASSWORD, icon: "password" },
+  { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
+  { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
+  { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
+  { label: UserInformationList.TRIBES_FOR_BUSINESSES, icon: "user-color-2" },
+  { label: UserInformationList.SUPPORT, icon: "support-color" },
+  { label: UserInformationList.TERMS_CONDITIONS, icon: "user-color-2" },
 ]
 
 export const eatTabList = [

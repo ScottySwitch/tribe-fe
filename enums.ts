@@ -52,6 +52,20 @@ export enum InformationList {
   LOGOUT = "Log out",
 }
 
+export enum UserInformationList {
+  USER_INFORMATION = "User information",
+  CHANGE_PASSWORD = "Change password",
+  NOTIFICATION_SETTINGS = "Notification settings",
+  REFERRAL_CODE = "Referral code",
+  POINT_HISTORY = "Point history",
+  TRIBES_FOR_BUSINESSES = "Tribes for Businesses",
+  SUPPORT = "Support",
+  TERMS_CONDITIONS = "Terms & Conditions",
+  LOGOUT = "Log out",
+}
+
+
+
 export enum ClaimStep {
   CLAIM_FREE_LISTING = "claim_free_listing",
   CHOOSE_TIER = "choose_tierr",
