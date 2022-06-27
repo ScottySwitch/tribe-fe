@@ -2,7 +2,7 @@ import axios from "axios"
 import classNames from "classnames"
 import Icon from "components/Icon/Icon"
 import Image from "next/image"
-import React, {ReactNode, useEffect, useState} from "react"
+import React, { ReactNode, useEffect, useState } from "react"
 import styles from "./Upload.module.scss"
 
 export interface UploadProps {
@@ -37,10 +37,6 @@ const Upload = (props: UploadProps) => {
 
   const [srcList, setSrcList] = useState<string[]>(initFileList)
   const [isUpload, setIsUpload] = useState<boolean>(false)
-  useEffect(() => {
-    console.log('fileList', fileList)
-    setSrcList(initFileList)
-  }, [fileList])
 
   const handleChange = (event: any) => {
     const file = event.target.files[0]
@@ -61,7 +57,7 @@ const Upload = (props: UploadProps) => {
       .then((res) => {
         if (res.data.urls && Array.isArray(res.data.urls) && res.data.urls.length > 0) {
           // alert("Upload successfully!")
-          console.log([...fileList, ...res.data.urls]);
+          console.log([...fileList, ...res.data.urls])
           onChange?.([...fileList, ...res.data.urls])
         }
         setIsUpload(false)
@@ -106,13 +102,11 @@ const Upload = (props: UploadProps) => {
         ))}
 
       {showInput ? (
-        <div className={classNames(styles.input, isUpload && styles.disabled_upload)}
-        >
+        <div className={classNames(styles.input, isUpload && styles.disabled_upload)}>
           <Input />
         </div>
       ) : (
-        !
-        ["avatar", "banner", "cover"].includes(type) && (
+        !["avatar", "banner", "cover"].includes(type) && (
           <div className={styles.upgrade_now}>
             <div className={styles.tips}>
               <Icon icon="Group-966" color="#653fff" /> Tips

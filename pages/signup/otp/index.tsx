@@ -4,6 +4,7 @@ import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import classNames from "classnames";
 
 import styles from "styles/Auth.module.scss"
 import { useEffect, useState } from "react"
@@ -82,6 +83,15 @@ const OtpPage = (context) => {
       }
     }
   }
+
+  const requireOTP = async () => {
+    let phoneNumer = localStorage.getItem('phone_number')
+    if (phoneNumer) {
+      await AuthApi.otpPhoneGenerate(phoneNumer)
+      setTime(30)
+    }
+  }
+
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
@@ -101,7 +111,14 @@ const OtpPage = (context) => {
           />
           <div className="flex justify-between">
             <div>00:{time}</div>
-            <div>Resend</div>
+            <div>
+              <Button 
+                text="Resend"
+                disabled={time != 0 ? true : false}
+                variant="secondary-no-outlined"
+                onClick={() => requireOTP()}
+              />
+            </div>
           </div>
           <Button
             disabled={!valueOtp}

@@ -101,6 +101,7 @@ const SignupPage = () => {
         })
         const { jwt } = result.data
         if (jwt) {
+          localStorage.setItem("phone_number", formData.phone);
           localStorage.setItem("token", jwt)
           // OTP flow
           await AuthApi.otpPhoneGenerate(formData.phone)
@@ -150,7 +151,9 @@ const SignupPage = () => {
               options={formattedAreaCodes}
               shouldControlShowValue
               onChange={(e) =>
-                setOtpReceiver(`${e.select.value}${e.input.substring(1, e.input.length - 1)}`)
+                [console.log(e),
+                console.log(e.input.substring(1)),
+                setOtpReceiver(`${e.select.value}${e.input.substring(1)}`)]
               }
             />
           ) : (

@@ -1,8 +1,9 @@
+import classNames from "classnames";
 import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import { useRouter } from "next/router"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import styles from "styles/Auth.module.scss";
 
@@ -12,6 +13,27 @@ const OtpPage = (context) => {
   const { method, otpReceiver } = context
   const router = useRouter()
   const [valueOTP, setValueOTP] = useState<any>('');
+  const [time, setTime] = useState<number>(30)
+  const returnTime = (time) => {
+    if (time == 0) {
+      return "00"
+    } else if (time < 10) {
+      return "0" + time
+    } else {
+      return time
+    }
+  }
+
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      if (time > 0) {
+        setTime(returnTime(time - 1))
+      }
+    }, 1000)
+    return () => {
+      clearTimeout(timer)
+    }
+  })
 
   const verifyOtp = async () => {
     let result: any = null;
@@ -33,7 +55,17 @@ const OtpPage = (context) => {
       // TODO: notify error (missing template)
       alert('Wrong OTP');
     }
-}
+  }
+
+  const requireOTP = async () => {
+    let phoneNumer = localStorage.getItem('phone_number')
+    if (phoneNumer) {
+      const result = await AuthApi.forgetPasswordByPhone({
+        phone_number: phoneNumer,
+      });
+      setTime(30)
+    }
+  }
 
 
   return (
@@ -53,8 +85,15 @@ const OtpPage = (context) => {
             onChange={(e: any) => setValueOTP(e.target.value)}
           />
           <div className="flex justify-between">
-            <div>00:39</div>
-            <div>Resend</div>
+            <div>00:{time}</div>
+            <div>
+              <Button 
+                text="Resend"
+                disabled={time != 0 ? true : false}
+                variant="secondary-no-outlined"
+                onClick={() => requireOTP()}
+              />
+            </div>
           </div>
           <Button text="Next" onClick={() => verifyOtp()} />
         </div>
