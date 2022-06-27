@@ -12,6 +12,7 @@ import Heading from "components/Heading/Heading"
 import UserInformation from "components/UserProfilePage/UserInformation/TabContent/UserInformation"
 import ChangePassword from "components/UserProfilePage/UserInformation/TabContent/ChangePassword"
 import styles from "styles/BizInformation.module.scss"
+import style from "styles/Profile.module.scss"
 
 const ProfileInformationPage = () => {
   const informationList = userInformationList
@@ -37,10 +38,10 @@ const ProfileInformationPage = () => {
   }
 
   return (
-    <SectionLayout backgroundColor>
-      <div className={styles.biz_information}>
-        <div className={styles.left_col}>
-          <div className={`${styles.left_col_bottom} mt-0`}>
+    <SectionLayout backgroundColor className={style.section_user_information} containerClassName={style.container_user_information}>
+      <div className={`${styles.biz_information} ${style.user_information}`}>
+        <div className={`${styles.left_col} ${style.menu_sidebar}`}>
+          <div className={`${styles.left_col_bottom}  mt-0`}>
             <div>View profile</div>
             {informationList.map((item) => (
               <div
@@ -62,7 +63,7 @@ const ProfileInformationPage = () => {
             </div>
           </div>
         </div>
-        <div className={`${styles.right_col} overflow-visible`}>{tabContent()}</div>
+        <div className={`${styles.right_col} ${style.tab_content} overflow-visible`}>{tabContent()}</div>
       </div>
     </SectionLayout>
   )

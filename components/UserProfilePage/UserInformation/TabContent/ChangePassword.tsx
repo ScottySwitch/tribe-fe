@@ -16,7 +16,7 @@ const ChangePassword = () => {
         <div className={styles.form_group}>
           <Input placeholder="Confirm new password" type="password" size="large"/>
         </div>
-        <Button text="Save" size="large" className="max-w-max ml-auto text-sm"/>
+        <Button text="Save" size="large" className="w-full lg:max-w-max ml-auto text-sm"/>
       </form>
     </div>
   )
