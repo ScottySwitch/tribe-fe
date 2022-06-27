@@ -9,6 +9,7 @@ import {
   AuthForgetPasswordByPhone
 } from "../../types/auth";
 import {UsersTypes} from "../../enums";
+const qs = require('qs');
 
 const signUpByEmail = async (params: AuthEmailPayload) => {
   localStorage.removeItem("token");
@@ -74,7 +75,13 @@ const loginByPhone = async (params: AuthPhonePayload) => {
 }
 
 const getMe = async () => {
-  const url = `/api/users/me`;
+  const query = qs.stringify({
+    "populate": "*"
+  },{
+    encodeValuesOnly: true, // prettify url
+  });
+
+  const url = `/api/users/me?${query}`;
   const me = await Api.get(url);
   if (!me.data) {
     localStorage.removeItem('token');

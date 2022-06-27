@@ -9,8 +9,9 @@ const createClaimListing = async (params: any) => {
           user: localStorage.getItem('user_id'),
           payment_method: params.paymentMethod,
           transaction_id: params.transaction_id,
-          biz_listings: localStorage.getItem('biz_id')
-      }
+          biz_listings: localStorage.getItem('biz_id'),
+          publishedAt: null
+        }
     });
   }
 

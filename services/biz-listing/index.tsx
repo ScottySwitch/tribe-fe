@@ -58,6 +58,24 @@ const getBizListingsByCategoryId = async (categoryId: number) => {
   return await Api.get(url);
 }
 
+const getBizListingByUserId = async (userId: number) => {
+  const query = qs.stringify({
+    "filters": {
+      "user": {
+        "id": {
+          "$eq": userId
+        }
+      }    
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true, 
+  });
+
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
 const getBizListingById = async (bizListingId: any) => {
   const query = qs.stringify({
     "populate": {
@@ -164,6 +182,7 @@ const getBizListingByCountry = async (country: string) => {
 
 export default {
   getBizListing,
+  getBizListingByUserId,
   getBizListingsByCategoryId,
   getBizListingById,
   createListingRole,

@@ -16,6 +16,25 @@ const createBizInvoice = async (params: any) => {
   });
 }
 
+const getBizInvoiceByUserId = async (userId: number) => {
+  const query = qs.stringify({
+    "filters": {
+      "user": {
+        "id": {
+          "$eq": userId
+        }
+      }    
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true, 
+  });
+
+  const url = `/api/biz-invoices?${query}`;
+  return await Api.get(url);
+}
+
 export default {
-    createBizInvoice
+    createBizInvoice,
+    getBizInvoiceByUserId
 }
