@@ -109,6 +109,25 @@ const createListingRole = async (params: any) => {
   });
 }
 
+const getOwnerListingRoleByUserId = async (userId: any) => {
+  const query = qs.stringify({
+    "filters": {
+      "name": "owner",
+      "user": {
+        "id": {
+          "$eq": userId
+        }
+      }    
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true, 
+  });
+
+  const url = `/api/listing-roles?${query}`;
+  return await Api.get(url);
+}
+
 const getBizListingBySlug = async (bizListingSlug: any) => {
   const query = qs.stringify({
     "filters": {
@@ -182,6 +201,7 @@ const getBizListingByCountry = async (country: string) => {
 
 export default {
   getBizListing,
+  getOwnerListingRoleByUserId,
   getBizListingByUserId,
   getBizListingsByCategoryId,
   getBizListingById,

@@ -92,7 +92,15 @@ const getMe = async () => {
   } else {
     me.data.avatar = me.data.avatar
   }
-  me.data.type = UsersTypes.NORMAL_USER // TODO: confirm this logic
+  if (localStorage.getItem("user")) {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '')
+    if (!userInfo.type) {
+      me.data.type = UsersTypes.NORMAL_USER
+    }
+    else {
+      me.data.type = userInfo.type
+    }
+  }
   me.data.token = localStorage.getItem('token');
   localStorage.setItem("user", JSON.stringify(me.data))
   localStorage.setItem("user_id", me.data.id)

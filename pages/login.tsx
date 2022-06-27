@@ -91,20 +91,10 @@ const LoginPage = () => {
         let { jwt } = result.data
         localStorage.setItem("token", jwt)
         await AuthApi.getMe()
-        let userInfo = JSON.parse(localStorage.getItem("user") || '')
-        if(userInfo) {
-          const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
-          userInfo.biz_listings = dataBizlisting.data
-        }
-        if (userInfo) {
-          const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
-          userInfo.biz_invoice = dataBizInvoice.data
-        }
-        console.log(userInfo);
       }
     }
 
-    // window.location.href = "/"
+    window.location.href = "/"
   }
 
   const routeFacebookLogin = process.env.NEXT_PUBLIC_API_URL + "/api/connect/facebook"

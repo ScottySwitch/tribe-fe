@@ -14,6 +14,10 @@ import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar"
 import { loginInforItem } from "constant"
 import { Tiers, UsersTypes } from "enums"
 import AuthApi from "../services/auth"
+import BizApi from "services/biz-listing"
+import BizInvoice from "services/biz-invoice"
+import ClaimListingApi from "services/claim-listing"
+import get from "lodash/get"
 
 export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers; avatar?: string }
 
@@ -62,6 +66,35 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const getMe = async () => {
       await AuthApi.getMe()
+      let userInfo = JSON.parse(localStorage.getItem("user") || '')
+      console.log(userInfo);
+      // if (!userInfo.type) {
+      //   userInfo.type = UsersTypes.NORMAL_USER
+      // }
+      // else {
+      //   userInfo.type = userInfo.type
+      // }
+      let ownerListing = []
+      if (userInfo) {
+        const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
+        const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
+        const dataClaimListing = await ClaimListingApi.getClaimListingByUserId(userInfo.id)
+        const dataListingRoles = await BizApi.getOwnerListingRoleByUserId(userInfo.id)
+        userInfo.biz_listings = dataBizlisting.data.data
+        userInfo.biz_invoice = dataBizInvoice.data.data
+        userInfo.claim_listings = dataClaimListing.data.data
+        ownerListing = get(dataClaimListing, 'data.data').map((item) => get(item, 'attributes.biz_listings.data'))
+        userInfo.listing_roles = dataListingRoles.data
+        get(dataListingRoles, 'data.data').map((item) => {
+          let isVisible = ownerListing.filter((item1: any) => item1.id === get(item, 'attributes.biz_listing.data.id'))
+          if (isVisible.length == 0) {
+            ownerListing = ownerListing.concat(get(item, 'attributes.biz_listing.data'))
+          }
+        })
+        userInfo.owner_listings = ownerListing
+      }
+      console.log(userInfo);
+      localStorage.setItem("user", JSON.stringify(userInfo))
     }
     if (localStorage.getItem("token")) {
       getMe().catch((e) => console.log(e))
@@ -73,6 +106,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const stringyLoginInfo = localStorage.getItem("user")
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {}
     if (localLoginInfo.token) {
+      console.log(localLoginInfo);
       setLoginInfo(localLoginInfo)
       setShowAuthPopup(false)
     } else {
