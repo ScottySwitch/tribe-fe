@@ -9,7 +9,7 @@ export interface ITab {
   value: string
   content?: ReactNode | ReactNode[]
   currentTab?: string
-  onSelected?: (e: string) => void
+  onSelectedTab?: (e: string) => void
 }
 
 const TabNav = (props: ITab) => {
@@ -18,7 +18,7 @@ const TabNav = (props: ITab) => {
     label,
     value,
     currentTab,
-    onSelected = () => "",
+    onSelectedTab = () => "",
   } = props
 
   const selectedClassNames = classNames(styles.tab_nav, className, {
@@ -32,7 +32,7 @@ const TabNav = (props: ITab) => {
   return (
     <div
       className={selectedClassNames}
-      onClick={() => onSelected(value)}
+      onClick={() => (onSelectedTab(value))}
     >
       <span className="capitalize">{formatLabel(label)}</span>
     </div>
@@ -42,7 +42,8 @@ const TabNav = (props: ITab) => {
 interface TabsHorizontalProps {
   className?: string
   type?: "secondary-no-outline" | "secondary-outline" | "primary-no-outline" | "primary-outline"
-  tablist?: ITab[]
+  tablist?: ITab[],
+  onCurrentTab?: (e: string) => void
 }
 
 const TabsHorizontal = (props: TabsHorizontalProps) => {
@@ -50,13 +51,12 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     className = "",
     type = "secondary-no-outline",
     tablist = [],
+    onCurrentTab = () => ""
   } = props
   
-  const [currentTab, setCurrentTab] = useState<string>(tablist[0]?.value);
+  const [currentTab, setCurrentTab] = useState<string>(tablist[0]?.value)
   
-  const getCurrentTabIndex = tablist.findIndex(
-    (item) => item.value === currentTab
-    );
+  const getCurrentTabIndex = tablist.findIndex((item) => item.value === currentTab)
     
   const typeClassName = classNames({
     [styles.secondary_outline]: type === "secondary-outline",
@@ -65,6 +65,10 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     [styles.primary_no_outline]: type === "primary-no-outline",
   })
 
+  const handleSelectedTab = (e) => {
+    setCurrentTab(e)
+    onCurrentTab(e)
+  }
 
   return (
     <React.Fragment>
@@ -77,8 +81,7 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
               label={tab.label}
               value={tab.value}
               currentTab={currentTab}
-              onSelected={(e: string) => setCurrentTab(e)
-              }
+              onSelectedTab={(e: string) => handleSelectedTab(e)}
             />
           )
         })}

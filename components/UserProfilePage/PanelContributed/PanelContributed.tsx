@@ -3,143 +3,26 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal"
 import React, { useEffect, useState } from "react"
 import ReviewBizInfoCard from "components/ReviewsPage/ReviewBizInfoCard/ReviewBizInfoCard"
 import styles from "./PanelContributed.module.scss"
+import { dummyApproved, dummyDenied, dummyPending } from "constant"
+interface IBiz {
+  title: string
+  imgUrl: string
+  location: string
+  rate?: number
+  rateNumber?: number
+  followerNumber?: number
+  tags?: any[]
+}
+export interface ListCardProps extends ReviewCompletedProps {
+  biz?: IBiz
+}
 
-const dummyPending = [
-  {
-    avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
-    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
-    dateVisit: "March 2021",
-    name: "Anna Nhun",
-    rating: 5,
-    censorshipLabel: "has created a new listing",
-    date: "24-2-2021",
-    status: "pending",
-    biz: {
-      title: "Evertop Hainanese Bonelele",
-      rate: 4,
-      rateNumber: 24,
-      followerNumber: 500,
-      imgUrl: "https://picsum.photos/200",
-      tags: ["Fast Food", "Desserts", "Beverages"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  },
-  {
-    avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
-    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
-    dateVisit: "March 2021",
-    name: "Anna Nhun",
-    rating: 5,
-    censorshipLabel: "has reviewed",
-    date: "24-2-2021",
-    status: "pending",
-    biz: {
-      title: "Evertop Hainanese Bonelele",
-      rate: 4,
-      rateNumber: 24,
-      followerNumber: 500,
-      imgUrl: "https://picsum.photos/200",
-      tags: ["Fast Food", "Desserts"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  }
-]
-
-const dummyApproved = [
-  {
-    avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
-    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
-    dateVisit: "March 2021",
-    name: "Anna Nhun",
-    rating: 5,
-    censorshipLabel: "has created a new listing",
-    date: "24-2-2021",
-    status: "approved",
-    biz: {
-      title: "Evertop Hainanese Bonelele",
-      rate: 4,
-      rateNumber: 24,
-      followerNumber: 500,
-      imgUrl: "https://picsum.photos/200",
-      tags: ["Fast Food", "Desserts", "Beverages"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  },
-  {
-    avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
-    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
-    dateVisit: "March 2021",
-    name: "Anna Nhun",
-    rating: 5,
-    censorshipLabel: "has reviewed",
-    date: "24-2-2021",
-    status: "approved",
-    biz: {
-      title: "Evertop Hainanese Bonelele",
-      rate: 4,
-      rateNumber: 24,
-      followerNumber: 500,
-      imgUrl: "https://picsum.photos/200",
-      tags: ["Fast Food", "Desserts"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  }
-]
-
-const dummyDenied = [
-  {
-    avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
-    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
-    dateVisit: "March 2021",
-    name: "Anna Nhun",
-    rating: 5,
-    censorshipLabel: "has created a new listing",
-    date: "24-2-2021",
-    status: "denied",
-    biz: {
-      title: "Evertop Hainanese Bonelele",
-      rate: 4,
-      rateNumber: 24,
-      followerNumber: 500,
-      imgUrl: "https://picsum.photos/200",
-      tags: ["Fast Food", "Desserts", "Beverages"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  },
-  {
-    avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
-    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
-    dateVisit: "March 2021",
-    name: "Anna Nhun",
-    rating: 5,
-    censorshipLabel: "has reviewed",
-    date: "24-2-2021",
-    status: "denied",
-    biz: {
-      title: "Evertop Hainanese Bonelele",
-      rate: 4,
-      rateNumber: 24,
-      followerNumber: 500,
-      imgUrl: "https://picsum.photos/200",
-      tags: ["Fast Food", "Desserts"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  }
-]
-
-
-const ListCard = (props) => {
+const ListCard = (props: {data: ListCardProps[]}) => {
   const { data } = props
 
   return (
     <React.Fragment>
-      {data?.map((item, index) => (
+      {data?.map((item: ListCardProps, index) => (
         <ReviewCompleted
           key={index}
           avatarUrl={item.avatarUrl}
@@ -152,17 +35,19 @@ const ListCard = (props) => {
           status={item.status}
           isDivier
           className={styles.ReviewCompleted}
-          user={{first_name: "Anna", last_name: "Nhun"}}
+          displayName={item.displayName}
         >
-          <ReviewBizInfoCard
-            title={item.biz.title}
-            rate={item.biz.rate}
-            rateNumber={item.biz.rateNumber}
-            followerNumber={item.biz.followerNumber}
-            imgUrl={item.biz.imgUrl}
-            tags={item.biz.tags}
-            location={item.biz.location}
-          />
+          {item.biz && (
+            <ReviewBizInfoCard
+              title={item.biz.title}
+              imgUrl={item.biz.imgUrl}
+              location={item.biz.location}
+              rate={item.biz.rate}
+              rateNumber={item.biz.rateNumber}
+              followerNumber={item.biz.followerNumber}
+              tags={item.biz.tags}
+            />
+          )}
         </ReviewCompleted>
       ))}
     </React.Fragment>
@@ -170,22 +55,38 @@ const ListCard = (props) => {
 }
 
 const ContributedPanel = () => {
+  const [listCard, setListCard] = useState<ListCardProps[]|any>()
+  const [currentTab, setCurrentTab] = useState<string>()
   const [total, setTotal] = useState<number>()
 
   const TabList: ITab[] = [
-    { label: "Pending", value: "pending", content: <ListCard data={dummyPending} /> },
-    { label: "Approved", value: "approved", content: <ListCard data={dummyApproved} />},
-    { label: "Denied", value: "denied", content: <ListCard data={dummyDenied} /> },
+    { label: "Pending", value: "pending", content: <ListCard data={listCard} /> },
+    { label: "Approved", value: "approved", content: <ListCard data={listCard} />},
+    { label: "Denied", value: "denied", content: <ListCard data={listCard} /> },
   ]
 
-  useEffect(() => {
-    setTotal(dummyPending.length)
-  }, [])
+  useEffect(() => {      
+    switch (currentTab) {
+      case "pending":
+        setListCard(dummyPending)
+        break;
+      case "approved":
+        setListCard(dummyApproved)
+        break;
+      case "denied":
+        setListCard(dummyDenied)
+        break;
+      default:
+        setListCard(dummyPending)
+        break;
+    }
+    setTotal(listCard?.length)
+  }, [currentTab])
 
   return (
     <div className={styles.contributed_panel}>
       {total && (<div className={styles.total}>Total: {total}</div>)}
-      <TabsHorizontal tablist={TabList} type="primary-outline" className={styles.contributed_tab}/>
+      <TabsHorizontal tablist={TabList} type="primary-outline" className={styles.contributed_tab} onCurrentTab={(e) => setCurrentTab(e)}/>
     </div>
   )
 }

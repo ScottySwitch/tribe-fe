@@ -12,13 +12,13 @@ export interface ReviewCompletedProps {
   content?: string
   listImage?: any[]
   dateVisit?: string
-  name?: string
+  displayName?: string
   rating?: number
   censorshipLabel?: string
-  status?: "pending" | "approved" | "denied",
+  status: "pending" | "approved" | "denied"
   date?: string
   isDivier?: boolean
-  user: any
+  user?: any
 }
 
 const ReviewCompleted = (props: ReviewCompletedProps) => {
@@ -29,7 +29,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     content,
     listImage,
     dateVisit,
-    name,
+    displayName,
     rating,
     user,
     censorshipLabel,
@@ -65,12 +65,13 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
         </div>
         <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
           <h6 className={styles.name}>
+            {/* <span>{displayName}</span> */}
             <span>{user?.first_name + " " + user?.last_name}</span>
-            {censorshipLabel && (<span className="font-normal ml-2">has reviewed</span>)}
+            {censorshipLabel && (<span className="font-normal ml-2">{censorshipLabel}</span>)}
           </h6>
           <div className={styles.status_date}>
             {status && (<div className={statusClassName}>{status}</div>)}
-            {date && (<div className={styles.date}>{`24-2-2021`}</div>)}
+            {date && (<div className={styles.date}>{date}</div>)}
           </div>
         </div>
       </div>
@@ -98,7 +99,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
               />
             </li>))}
         </ul>)}
-        {dateVisit && (<div className={styles.date_visit}><strong>Date of visit:</strong> March 2021</div>)}
+        {dateVisit && (<div className={styles.date_visit}><strong>Date of visit:</strong>{dateVisit}</div>)}
         {children && (
           <div className={styles.children}>
             {children}

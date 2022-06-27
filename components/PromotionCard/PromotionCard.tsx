@@ -2,21 +2,20 @@ import classNames from "classnames"
 import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
 import Image from "next/image"
-import Link from "next/link"
 import { PromotionType } from "./enums"
 import styles from "./PromotionCard.module.scss"
 
-export interface IPromotionProp {
+export interface PromotionProps {
   imgUrl?: string
   title: string
   expiredAt: string
   type?: string | number
   favourite?: boolean
   width?: string | number
-  size?: "medium" | "large" 
+  size?: "medium" | "large"
 }
 
-const PromotionCard = (props: IPromotionProp) => {
+const PromotionCard = (props: PromotionProps) => {
   const { imgUrl, width, title, expiredAt, type, favourite, size = "medium" } = props
 
   const buttonClasses = classNames({
