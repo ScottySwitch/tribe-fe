@@ -18,7 +18,10 @@
 
   &_sumary {
     flex: 1;
-
+    .header {
+      display: flex;
+      justify-content: space-between;
+    }
     .name {
       font-size: $text-md;
       font-weight: $font-bold;
@@ -44,6 +47,7 @@
       font-size: $text-md;
       color: $bg-500;
       margin-bottom: 16px;
+      text-align: left;
     }
 
     .image {

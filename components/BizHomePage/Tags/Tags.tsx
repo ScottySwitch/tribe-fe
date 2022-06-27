@@ -5,15 +5,17 @@ import Icon from "components/Icon/Icon"
 import TagsSelection from "components/TagsSelection/TagsSelection"
 import { IOption } from "type"
 import Badge from "components/Badge/Badge"
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 
 interface TagsProps {
+  isViewPage?: boolean
   tags: IOption[]
   tagOptions: IOption[]
   onSetTags: (tags: IOption[]) => void
 }
 
 const Tags = (props: TagsProps) => {
-  const { tags = [], tagOptions, onSetTags } = props
+  const { isViewPage, tags = [], tagOptions, onSetTags } = props
   const [showTagsModal, setShowTagsModal] = useState(false)
   const [localTags, setLocalTags] = useState(tags)
 
@@ -25,15 +27,10 @@ const Tags = (props: TagsProps) => {
           <Icon icon="tags-color" />
           Tags
         </div>
-        <a onClick={() => setShowTagsModal(true)}>Add tags</a>
+        {!isViewPage && <a onClick={() => setShowTagsModal(true)}>Add tags</a>}
       </div>
       <div className="flex flex-wrap mt-5 gap-y-5 gap-5">
-        {Array.isArray(tags) &&
-          tags.map((item) => (
-            <div key={item.value} className="">
-              <Badge text={item.label} />
-            </div>
-          ))}
+        <PreviewValue valueKey="tags" value={tags} />
       </div>
       <Modal
         title="Tags"

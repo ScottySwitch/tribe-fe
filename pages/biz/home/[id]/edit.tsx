@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useState } from "react"
 import Icon from "components/Icon/Icon"
 import Details from "components/BizHomePage/Details/Details"
 import EditAction from "components/BizHomePage/EditAction/EditAction"
-import Links from "components/BizHomePage/Links/Links"
 import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard"
 import OnboardChecklist from "components/BizHomePage/OnboardChecklist/OnboardChecklist"
 import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs"
@@ -31,7 +30,13 @@ import MenuApi from "../../../../services/menu"
 import DealApi from "../../../../services/deal"
 import get from "lodash/get"
 import moment from "moment"
-import parseISO from 'date-fns/parseISO'
+import parseISO from "date-fns/parseISO"
+import Break from "components/Break/Break"
+import Contacts from "components/BizHomePage/Contacts/Contacts"
+import ReviewCard from "components/ReviewsPage/ReviewCard/ReviewCard"
+import { calcRateNumber } from "utils"
+import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
+import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReview"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -40,7 +45,8 @@ const CenterIcon = () => (
   </div>
 )
 
-const EditListingHomepage = (context) => {
+const EditListingHomepage = (props: { isViewPage?: boolean }) => {
+  const { isViewPage } = props
   const [category, setCategory] = useState(Categories.EAT)
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME)
   const [description, setDescription] = useState<string>("")
@@ -49,6 +55,7 @@ const EditListingHomepage = (context) => {
   const [tags, setTags] = useState<IOption[]>([])
   const [tagOptions, setTagOptions] = useState<IOption[]>([])
   const [openHours, setOpenHours] = useState([])
+  const [reviews, setReviews] = useState([])
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
   const [socialInfo, setSocialInfo] = useState<any>("")
   const [phoneNumber, setPhoneNumber] = useState<any>("")
@@ -89,37 +96,39 @@ const EditListingHomepage = (context) => {
         const defaultPhone = rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7)
         const rawListing = get(listing, "attributes.products.data") || []
         const listingArray = rawListing.map((item) => ({
-          name: get(item, 'attributes.name'),
-          price: get(item, 'attributes.price'),
+          name: get(item, "attributes.name"),
+          price: get(item, "attributes.price"),
           id: item.id,
-          description: get(item, 'attributes.description'),
-          images: get(item, 'attributes.images'),
-          imgUrl: get(item, 'attributes.images[0]'),
-          discount: get(item, 'attributes.discount_percent'),
-          tags: get(item, 'attributes.tags'),
-          websiteUrl: get(item, 'attributes.website_url'),
-          klookUrl: get(item, 'attributes.klook_url'),
+          description: get(item, "attributes.description"),
+          images: get(item, "attributes.images"),
+          imgUrl: get(item, "attributes.images[0]"),
+          discount: get(item, "attributes.discount_percent"),
+          tags: get(item, "attributes.tags"),
+          websiteUrl: get(item, "attributes.website_url"),
+          klookUrl: get(item, "attributes.klook_url"),
           isChange: false,
         }))
-        const rawMenu = get(listing, 'attributes.menus.data') || []
+        const rawMenu = get(listing, "attributes.menus.data") || []
         const menuArray = rawMenu.map((item) => ({
           id: item.id,
-          name: get(item, 'attributes.name'),
-          images: get(item, 'attributes.menu_file'),
-          imgUrl: get(item, 'attributes.menu_file[0]'),
+          name: get(item, "attributes.name"),
+          images: get(item, "attributes.menu_file"),
+          imgUrl: get(item, "attributes.menu_file[0]"),
           isChange: false,
         }))
-        const rawDeal = get(listing, 'attributes.deals.data') || []
+        const rawDeal = get(listing, "attributes.deals.data") || []
         const dealArray = rawDeal.map((item) => ({
           id: item.id,
-          name: get(item, 'attributes.name'),
-          images: get(item, 'attributes.images'),
-          imgUrl: get(item, 'attributes.images[0]'),
-          information: get(item, 'attributes.description'),
-          termsConditions: get(item,'attributes.terms_conditions'),
+          name: get(item, "attributes.name"),
+          images: get(item, "attributes.images"),
+          imgUrl: get(item, "attributes.images[0]"),
+          information: get(item, "attributes.description"),
+          termsConditions: get(item, "attributes.terms_conditions"),
           // start_date: item.attributes.start_date,
           // end_date: moment(get(item,'attributes.end_date')).format("YYYY-MM-DD HH:mm:ss"),
-          validUntil: parseISO(moment(get(item,'attributes.end_date')).format("YYYY-MM-DD HH:mm:ss")),
+          validUntil: parseISO(
+            moment(get(item, "attributes.end_date")).format("YYYY-MM-DD HH:mm:ss")
+          ),
           isChange: false,
         }))
         const tagArray = formatOptions(rawTags)
@@ -133,6 +142,7 @@ const EditListingHomepage = (context) => {
         setOpenHours(get(listing, "attributes.open_hours"))
         setPriceRange(get(listing, "attributes.price_range"))
         setSocialInfo(get(listing, "attributes.social_info"))
+        setReviews(get(listing, "attributes.reviews.data"))
         // setItemList(get(listing, "attributes.products.data"))
         setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
@@ -198,7 +208,7 @@ const EditListingHomepage = (context) => {
     setScreen(ListingHomePageScreens.HOME)
   }
   const handleSetDealList = (dealList: { [key: string]: string }[]) => {
-    console.log('deal', dealList);
+    console.log("deal", dealList)
     setDealList(dealList)
     setScreen(ListingHomePageScreens.HOME)
   }
@@ -213,12 +223,12 @@ const EditListingHomepage = (context) => {
     const currentItemList = [...itemList].filter((item) => item.isNew !== true)
     const currentMenuList = [...menuList].filter((item) => item.isNew !== true)
     const currentDealList = [...dealList].filter((item) => item.isNew !== true)
-    const newItemList = itemList.filter(item => item.isNew) 
-    const editedItemList  = itemList.filter(item => !item.isNew && item.isEdited)
-    const newMenuList = menuList.filter(item => item.isNew) 
-    const editedMenuList  = menuList.filter(item => !item.isNew && item.isEdited)
-    const newDealList = dealList.filter(item => item.isNew) 
-    const editedDealList  = dealList.filter(item => !item.isNew && item.isEdited)
+    const newItemList = itemList.filter((item) => item.isNew)
+    const editedItemList = itemList.filter((item) => !item.isNew && item.isEdited)
+    const newMenuList = menuList.filter((item) => item.isNew)
+    const editedMenuList = menuList.filter((item) => !item.isNew && item.isEdited)
+    const newDealList = dealList.filter((item) => item.isNew)
+    const editedDealList = dealList.filter((item) => !item.isNew && item.isEdited)
     await BizListingApi.updateBizListing(bizListing.id, {
       description: description,
       price_range: priceRange,
@@ -231,7 +241,7 @@ const EditListingHomepage = (context) => {
       tags: tags.map((item) => item.id),
       is_verified: false,
       logo: logo,
-      products: currentItemList.map((item) => (item.id)) || [],
+      products: currentItemList.map((item) => item.id) || [],
       menus: currentMenuList.map((item) => item.id) || [],
       deals: currentDealList.map((item) => item.id) || [],
     }).then((response) => {
@@ -259,18 +269,18 @@ const EditListingHomepage = (context) => {
     if (editedItemList.length > 0) {
       await Promise.all(
         editedItemList.map(async (item) => {
-            const dataUpdate = {
-              biz_listing: bizListing.id,
-              name: item.name,
-              description: item.description,
-              price: item.price,
-              discount_percent: item.discount,
-              tags: item.tags,
-              images: item.images,
-              website_url: item.websiteUrl,
-              klook_url: item.klookUrl,
-            }
-            await ProductApi.updateProduct(item.id, dataUpdate)
+          const dataUpdate = {
+            biz_listing: bizListing.id,
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            discount_percent: item.discount,
+            tags: item.tags,
+            images: item.images,
+            website_url: item.websiteUrl,
+            klook_url: item.klookUrl,
+          }
+          await ProductApi.updateProduct(item.id, dataUpdate)
         })
       )
     }
@@ -303,7 +313,7 @@ const EditListingHomepage = (context) => {
     if (newDealList.length > 0) {
       await Promise.all(
         newDealList.map(async (item) => {
-          let convertEndDate = (moment(item.validUntil).format("YYYY-MM-DD") + 'T:00:00.000Z');
+          let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
           const dataSend = {
             biz_listing: bizListing.id,
             name: item.name,
@@ -313,23 +323,23 @@ const EditListingHomepage = (context) => {
             start_date: item.validUntil,
             end_date: convertEndDate,
           }
-          await DealApi.createDeal(dataSend)          
+          await DealApi.createDeal(dataSend)
         })
       )
     }
     if (editedDealList.length > 0) {
       await Promise.all(
         editedDealList.map(async (item) => {
-            let convertEndDate = (moment(item.validUntil).format("YYYY-MM-DD") + 'T:00:00.000Z');
-            const dataUpdate = {
-              biz_listing: bizListing.id,
-              name: item.name,
-              description: item.information,
-              images: item.images,
-              terms_conditions: item.termsConditions,
-              end_date: convertEndDate,
-            }
-            await DealApi.updateDeal(item.id, dataUpdate)          
+          let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
+          const dataUpdate = {
+            biz_listing: bizListing.id,
+            name: item.name,
+            description: item.information,
+            images: item.images,
+            terms_conditions: item.termsConditions,
+            end_date: convertEndDate,
+          }
+          await DealApi.updateDeal(item.id, dataUpdate)
         })
       )
     }
@@ -353,6 +363,7 @@ const EditListingHomepage = (context) => {
             {bizListing.attributes.name}
           </div>
           <ListingInforCard
+            isViewPage={isViewPage}
             logo={logo}
             handleChangeLogo={handleChangeLogo}
             bizListing={bizListing.attributes}
@@ -374,23 +385,38 @@ const EditListingHomepage = (context) => {
               />
             </div>
             <div className={styles.left_col}>
-              <div className={styles.break} />
-              <OnboardChecklist />
-              <div className={styles.break} />
-              <Details description={description} onSetDescription={handleSetDescription} />
-              <div className={styles.break} />
+              <Break show={!isViewPage} />
+              {!isViewPage && <OnboardChecklist />}
+              <Break show={!isViewPage} />
+              <Details
+                isViewPage={isViewPage}
+                description={description}
+                onSetDescription={handleSetDescription}
+              />
+              <Break show={!isViewPage} />
               <Facilities
+                isViewPage={isViewPage}
                 facilities={facilities}
                 onSetFacilities={handleSetFacilities}
                 facilityOptions={facilityOptions}
               />
-              <div className={styles.break} />
-              <Tags tags={tags} onSetTags={handleSetTags} tagOptions={tagOptions} />
-              <div className={styles.break} />
-              <HomeOpenHours openHours={openHours} onSetOpenHours={handleSetOpenHours} />
-              <div className={styles.break} />
+              <Break show={!isViewPage} />
+              <Tags
+                isViewPage={isViewPage}
+                tags={tags}
+                onSetTags={handleSetTags}
+                tagOptions={tagOptions}
+              />
+              <Break show={!isViewPage} />
+              <HomeOpenHours
+                isViewPage={isViewPage}
+                openHours={openHours}
+                onSetOpenHours={handleSetOpenHours}
+              />
+              <Break />
               <div>
                 <RenderTabs
+                  isViewPage={isViewPage}
                   menuList={menuList}
                   category={category}
                   itemList={itemList}
@@ -399,16 +425,10 @@ const EditListingHomepage = (context) => {
                   onDelete={(e) => console.log(e)}
                 />
               </div>
-              <div className={styles.break} />
-              <div>
-                <div className={styles.heading}>Reviews</div>
-                <div className="flex flex-col items-center justify-center">
-                  <Image src={require("public/images/no-review.svg")} width={100} alt="" />
-                  <p>There are no review yet</p>
-                </div>
-              </div>
-              <div className={styles.break} />
-              <Links />
+              <Break />
+              <HomepageReviews isPaid={isPaid} isViewPage={isViewPage} reviews={reviews} />
+              <Break />
+              <Contacts />
             </div>
           </div>
         </SectionLayout>

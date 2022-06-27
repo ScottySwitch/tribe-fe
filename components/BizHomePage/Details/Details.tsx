@@ -6,12 +6,13 @@ import Modal from "components/Modal/Modal"
 import Heading from "../../Heading/Heading"
 
 interface DetailsProps {
+  isViewPage?: boolean
   description: string
   onSetDescription: (description: string) => void
 }
 
 const Details = (props: DetailsProps) => {
-  const { description, onSetDescription } = props
+  const { isViewPage, description, onSetDescription } = props
   const [showDescriptionModal, setShowDescriptionModal] = useState(false)
   const [localDescription, setLocalDescription] = useState(description)
 
@@ -19,7 +20,7 @@ const Details = (props: DetailsProps) => {
     <div>
       <div className="flex justify-between items-center">
         <Heading text="Details" />
-        <a onClick={() => setShowDescriptionModal(true)}>Add description</a>
+        {!isViewPage && <a onClick={() => setShowDescriptionModal(true)}>Add description</a>}
       </div>
       <p className="text-left mt-[10px]">{description}</p>
       <Modal
