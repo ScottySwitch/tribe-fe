@@ -36,7 +36,7 @@ import Contacts from "components/BizHomePage/Contacts/Contacts"
 import ReviewCard from "components/ReviewsPage/ReviewCard/ReviewCard"
 import { calcRateNumber } from "utils"
 import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
-import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReview"
+import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">

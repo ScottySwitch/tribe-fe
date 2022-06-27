@@ -10,7 +10,7 @@ import styles from "./ReviewCompleted.module.scss"
 interface ReviewCompletedProps {
   className?: string
   isPaid?: boolean
-  repliable?: boolean
+  actions?: boolean
   children?: ReactElement
   avatarUrl?: string
   content?: string
@@ -30,7 +30,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     listImage,
     dateVisit,
     isPaid,
-    repliable,
+    actions,
     rating,
     user = {},
     onReplyClick,
@@ -52,7 +52,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
       <div className={styles.review_sumary}>
         <div className={styles.header}>
           <h6 className={styles.name}>{user.first_name + " " + user.last_name}</h6>
-          {repliable && (
+          {actions && (
             <Popover content={<div>Report review</div>} position="bottom-left">
               <Icon icon="toolbar" />
             </Popover>
@@ -79,7 +79,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
             <strong>Date of visit:</strong> {dateVisit}
           </div>
         )}
-        {repliable && (
+        {actions && (
           <div className="flex gap-3">
             <Button
               variant="secondary"

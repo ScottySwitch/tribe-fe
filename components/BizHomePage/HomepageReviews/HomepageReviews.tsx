@@ -29,7 +29,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             <div key={index}>
               <ReviewCompleted
                 isPaid={true}
-                repliable={!isViewPage}
+                actions={!isViewPage}
                 user={get(review, "attributes.user.data.attributes")}
                 listImage={get(review, "attributes.images")}
                 content={get(review, "attributes.content")}
@@ -58,7 +58,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         <div className="p-[30px]">
           <ReviewCompleted
             isPaid={true}
-            repliable={!isViewPage}
+            actions={!isViewPage}
             user={get(selectedReview, "attributes.user.data.attributes")}
             listImage={get(selectedReview, "attributes.images")}
             content={get(selectedReview, "attributes.content")}
