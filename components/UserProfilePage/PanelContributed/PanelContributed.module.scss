@@ -1,16 +1,15 @@
-
 @use "styles/variables.scss" as *;
 
 .contributed {
   &_panel {
     position: relative;
-    
+
     .total {
       position: absolute;
       top: 8px;
       right: 0;
     }
-    .ReviewCompleted {
+    .user_review_card {
       max-width: 780px;
     }
   }

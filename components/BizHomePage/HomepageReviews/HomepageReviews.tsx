@@ -6,7 +6,7 @@ import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
 import Rate from "components/Rate/Rate"
 import { ReviewForm } from "components/ReviewsPage/ReviewCard/ReviewCard"
-import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
+import UserReviewCard from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
 import Select from "components/Select/Select"
 import { reviewSequenceOptions } from "constant"
 import { get } from "lodash"
@@ -63,7 +63,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         {Array.isArray(reviews) && reviews.length > 0 ? (
           reviews.map((review, index) => (
             <div key={index}>
-              <ReviewCompleted
+              <UserReviewCard
                 isPaid={isPaid}
                 actions={!isViewPage}
                 user={get(review, "attributes.user.data.attributes")}
@@ -92,7 +92,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         onClose={() => setShowReplyModal(false)}
       >
         <div className="p-[30px]">
-          <ReviewCompleted
+          <UserReviewCard
             isPaid={isPaid}
             actions={!isViewPage}
             user={get(selectedReview, "attributes.user.data.attributes")}

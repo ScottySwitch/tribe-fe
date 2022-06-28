@@ -6,7 +6,6 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import Icon from "components/Icon/Icon"
 import Image from "next/image"
 import Rate from "components/Rate/Rate"
-import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal"
 import styles from "styles/Reviews.module.scss"
 import TopSearches from "components/TopSearches/TopSearches"
@@ -14,6 +13,7 @@ import ReviewApi from "../../../services/review"
 import { data } from "browserslist"
 import BizListingApi from "../../../services/biz-listing"
 import get from "lodash/get"
+import UserReviewCard from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
 
 const dummyKeywords = [
   "Fast Food",
@@ -156,7 +156,7 @@ const AddReviewPage = () => {
                 </div>
                 {reviews.length > 0 &&
                   reviews.map((review, index) => (
-                    <ReviewCompleted
+                    <UserReviewCard
                       key={index}
                       user={get(review, "attributes.user.data.attributes")}
                       listImage={get(review, "attributes.images")}

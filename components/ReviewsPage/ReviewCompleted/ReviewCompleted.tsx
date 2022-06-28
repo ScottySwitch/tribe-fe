@@ -4,10 +4,10 @@ import classNames from "classnames"
 import Icon from "components/Icon/Icon"
 import Rate from "components/Rate/Rate"
 import Image from "next/image"
-import styles from "./ReviewCompleted.module.scss"
+import styles from "./UserReviewCard.module.scss"
 import Popover from "components/Popover/Popover"
 import Button from "components/Button/Button"
-export interface ReviewCompletedProps {
+export interface UserReviewCardProps {
   className?: string
   isPaid?: boolean
   actions?: boolean
@@ -26,7 +26,7 @@ export interface ReviewCompletedProps {
   onReplyClick?(): void
 }
 
-const ReviewCompleted = (props: ReviewCompletedProps) => {
+const UserReviewCard = (props: UserReviewCardProps) => {
   const {
     className = "",
     avatarUrl = "https://picsum.photos/200",
@@ -46,7 +46,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     isDivier = false,
   } = props
 
-  const reviewCompletedClassName = classNames(styles.review_completed, className, {
+  const userReviewCardClassName = classNames(styles.review_completed, className, {
     [styles.divider]: isDivier,
   })
 
@@ -60,7 +60,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
   })
 
   return (
-    <div className={reviewCompletedClassName}>
+    <div className={userReviewCardClassName}>
       <div className={styles.group_heading}>
         <div className={styles.review_avatar}>
           <Image
@@ -156,4 +156,4 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
   )
 }
 
-export default ReviewCompleted
+export default UserReviewCard
