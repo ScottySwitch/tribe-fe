@@ -10,6 +10,7 @@ export interface ModalProps {
   subTitle?: string;
   closable?: boolean;
   width?: string | number;
+  maxWidth?: string | number;
   mobilePosition?: "center" | "bottom" | "top" | "left" | "right";
   backdrop?: boolean;
   mobileFullHeight?: boolean;
@@ -23,6 +24,7 @@ const Modal = (props: ModalProps) => {
     title,
     transparent,
     width,
+    maxWidth,
     closable = true,
     mobilePosition = "bottom",
     mobileFullHeight,
@@ -40,12 +42,12 @@ const Modal = (props: ModalProps) => {
   });
 
   const handleOnBlurModal: MouseEventHandler<HTMLDivElement> = (e) => {
-    e.target === e.currentTarget && onClose?.();
+    e.target === e.currentTarget && onClose?.();    
   };
 
   return (
     <div className={modalClassName} onClick={handleOnBlurModal}>
-      <div style={{ width }} className={styles.container}>
+      <div style={{ width, maxWidth }} className={styles.container}>
         {title && (
           <div className={styles.header}>
             <div>

@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { inforCardList } from "constant"
 import InforCard from "components/InforCard/InforCard"
 import PromotionCard from "components/PromotionCard/PromotionCard"
@@ -7,6 +8,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import DividerSection from "components/DividerSection/DividerSection"
 import ScrollingBox from "components/ScrollingBox/ScrollingBox"
 import styles from "styles/Promotions.module.scss"
+import DealsDetailsModal, { IDealsDetails } from "components/DealsDetailsModal/DealsDetailsModal"
 
 const dummyPromotion = [
   {
@@ -81,7 +83,31 @@ const dummyBanner = [
   "https://picsum.photos/1185/255/",
 ]
 
+const dummyDealsDetails: IDealsDetails = {
+  title: "Evertop Hainanese Boneless Chicken",
+  imgUrl: "https://picsum.photos/678/169",
+  offers: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased.",
+  valid: "April 17, 2022 - April 17, 2022",
+  conditions: "A valid tribe listing pass must be presented upon payment to enjoy the offer.",
+}
+
 const PromotionsPage = () => {
+  const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>()
+  const [dealsDetails, setDealsDetails] = useState<IDealsDetails>({} as IDealsDetails)
+
+  const handleDealsDeatails = (value: boolean) => {
+    setShowModalDealsDetails(value)
+    setDealsDetails(dummyDealsDetails)
+  }
+
+  const handleShare = () => {
+    console.log("handleShare");
+  }
+
+  const handleFavourite = () => {
+    console.log("handleFavourite");
+  }
+  
   return (
     <div className={styles.wrapper_promotions}>
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}>
@@ -110,6 +136,7 @@ const PromotionsPage = () => {
                 type={promotion.type}
                 favourite={promotion.favourite}
                 size="large"
+                onClick={() => handleDealsDeatails(true)}
               />
             ))}
           </div>
@@ -303,6 +330,14 @@ const PromotionsPage = () => {
         </div>
       </SectionLayout>
       {/* End Shop more deals */}
+
+      <DealsDetailsModal
+        visible={showModalDealsDetails}
+        data={dealsDetails}
+        onClose={() => handleDealsDeatails(false)}
+        onShare={() => handleShare()}
+        onFavourite={() => handleFavourite()}
+      />
     </div>
   )
 }
