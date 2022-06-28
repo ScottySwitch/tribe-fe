@@ -20,6 +20,7 @@ export interface ButtonProps
     | ""
   size?: "small" | "medium" | "large"
   type?: "button" | "submit" | "reset"
+  backgroundColor?: string
   isLoading?: boolean
 }
 
@@ -36,6 +37,7 @@ const Button = (props: ButtonProps) => {
     width,
     type = "button",
     isLoading,
+    backgroundColor,
     ...rest
   } = props
 
@@ -57,7 +59,7 @@ const Button = (props: ButtonProps) => {
       type={type}
       disabled={disabled || isLoading}
       {...rest}
-      style={{ width }}
+      style={{ width, backgroundColor }}
     >
       {isLoading && <Loading />}
       <div className={styles.container}>

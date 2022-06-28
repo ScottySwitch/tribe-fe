@@ -11,6 +11,7 @@ import Upload from "components/Upload/Upload"
 import styles from "./ListingInforCard.module.scss"
 
 interface ListingInforCardProps {
+  isViewPage?: boolean
   bizListing: { [key: string]: any }
   priceRange: { min: string; max: string; currency: string }
   socialInfo: string
@@ -22,31 +23,114 @@ interface ListingInforCardProps {
   onSetPhoneNumber: (value: string | number) => void
 }
 
-const ReviewsFollowers = (props: { className?: string; bizListing: any }) => {
-  const { className, bizListing } = props
+const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; bizListing: any }) => {
+  const { isViewPage, className, bizListing } = props
   const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
 
   const bizListingReviewCount = bizListing.reviews.data.length
   const bizListingFollowerCount = bizListing.user_listing_follows.data.length
   return (
-    <div className={reviewsFollowersClassName}>
-      <div className={styles.reviews}>
-        {/*// TODO: currently review star is image*/}
-        <Image src={require("public/images/no-review-star.svg")} width={80} height={40} alt="" />
-        <p>
-          ({bizListingReviewCount} review{bizListingReviewCount > 1 ? "s" : ""})
-        </p>
-      </div>
-      <div className={styles.followers}>
-        <div className="h-[40px] flex items-center">{bizListingFollowerCount}</div>
-        <p>follower{bizListingFollowerCount > 1 ? "s" : ""}</p>
+    <div>
+      {isViewPage && (
+        <div className="flex gap-3 mb-2">
+          <Button text="Follow" size="small" width={130} />
+          <Button
+            prefix={<Icon icon="like-stroke" color="#e60112" />}
+            text="Add to favourite "
+            size="small"
+            variant="secondary"
+          />
+        </div>
+      )}
+      <div className={reviewsFollowersClassName}>
+        <div className={styles.reviews}>
+          {/*// TODO: currently review star is image*/}
+          <Image src={require("public/images/no-review-star.svg")} width={80} height={40} alt="" />
+          <p>
+            ({bizListingReviewCount} review{bizListingReviewCount > 1 ? "s" : ""})
+          </p>
+        </div>
+        <div className={styles.followers}>
+          <div className="h-[40px] flex items-center">{bizListingFollowerCount}</div>
+          <p>follower{bizListingFollowerCount > 1 ? "s" : ""}</p>
+        </div>
       </div>
     </div>
   )
 }
 
+const Price = ({ isViewPage, newPriceRange, onSetShowPriceRangeModal }) => {
+  const isDataAvailable = newPriceRange?.currency && newPriceRange.min && newPriceRange.max
+  if (isViewPage) {
+    return isDataAvailable ? (
+      <div>{`${newPriceRange.min} ${newPriceRange?.currency} - ${newPriceRange.max}  ${newPriceRange?.currency}`}</div>
+    ) : (
+      <div>Not provided</div>
+    )
+  }
+  return isDataAvailable ? (
+    <div className="flex gap-5">
+      <div>{`${newPriceRange.min} ${newPriceRange?.currency} - ${newPriceRange.max}  ${newPriceRange?.currency}`}</div>
+      <div>
+        <a onClick={() => onSetShowPriceRangeModal(true)}>Edit</a>
+      </div>
+    </div>
+  ) : (
+    <a onClick={() => onSetShowPriceRangeModal(true)}>Add price range</a>
+  )
+}
+
+const SocialInfo = ({ isViewPage, newSocialInfo, onSetShowSocialInfoModal }) => {
+  if (isViewPage) {
+    return newSocialInfo ? (
+      <a target="_blank" rel="noreferrer" href={newSocialInfo}>
+        {newSocialInfo}
+      </a>
+    ) : (
+      <div>Not provided</div>
+    )
+  }
+  return newSocialInfo ? (
+    <div className="flex gap-5">
+      <a target="_blank" rel="noreferrer" href={newSocialInfo}>
+        {newSocialInfo}
+      </a>
+      <div>
+        <a onClick={() => onSetShowSocialInfoModal(true)}>Edit</a>
+      </div>
+    </div>
+  ) : (
+    <a onClick={() => onSetShowSocialInfoModal(true)}>Add social media</a>
+  )
+}
+
+const PhoneNumber = ({ isViewPage, phoneNumber, onSetPhoneNumberModal }) => {
+  if (isViewPage) {
+    return phoneNumber ? (
+      <a target="_blank" rel="noreferrer" href={phoneNumber}>
+        {phoneNumber}
+      </a>
+    ) : (
+      <div>Not provided</div>
+    )
+  }
+  return phoneNumber ? (
+    <div className="flex gap-5">
+      <a target="_blank" rel="noreferrer" href={phoneNumber}>
+        {phoneNumber}
+      </a>
+      <div>
+        <a onClick={() => onSetPhoneNumberModal(true)}>Edit</a>
+      </div>
+    </div>
+  ) : (
+    <a onClick={() => onSetPhoneNumberModal(true)}>Add phone number</a>
+  )
+}
+
 const ListingInforCard = (props: ListingInforCardProps) => {
   const {
+    isViewPage,
     bizListing,
     priceRange,
     phoneNumber,
@@ -98,66 +182,41 @@ const ListingInforCard = (props: ListingInforCardProps) => {
           <div className={styles.contact}>
             <div className={styles.contact_left}>
               <Icon icon="map" size={20} />
-              {bizListing.address}
+              {isViewPage ? bizListing.address : <div>{bizListing.address}</div>}
             </div>
             <div className={styles.contact_right}>
-              <Icon icon="call" size={20} />
-              {phoneNumber ? (
-                <div className="flex gap-5">
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={phoneNumber}
-                    onClick={() => setPhoneNumberModal(true)}
-                  >
-                    {phoneNumber}
-                  </a>
-                  <div>
-                    <a onClick={() => setPhoneNumberModal(true)}>Edit</a>
-                  </div>
-                </div>
-              ) : (
-                <a onClick={() => setPhoneNumberModal(true)}>Add phone number</a>
-              )}
+              <Icon icon="phone-color" size={20} />
+              <PhoneNumber
+                isViewPage={isViewPage}
+                phoneNumber={phoneNumber}
+                onSetPhoneNumberModal={(e) => setPhoneNumberModal(e)}
+              />
             </div>
             <div className={styles.contact_left}>
-              <Icon icon="tags-color" size={20} />
-              {newPriceRange?.currency && newPriceRange.min && newPriceRange.max ? (
-                <div className="flex gap-5">
-                  <div>{`${newPriceRange.min} ${newPriceRange?.currency} - ${newPriceRange.max}  ${newPriceRange?.currency}`}</div>
-                  <div>
-                    <a onClick={() => setShowPriceRangeModal(true)}>Edit</a>
-                  </div>
-                </div>
-              ) : (
-                <a onClick={() => setShowPriceRangeModal(true)}>Add price range</a>
-              )}
+              <Icon icon="price-color" size={20} />
+              <Price
+                isViewPage={isViewPage}
+                newPriceRange={newPriceRange}
+                onSetShowPriceRangeModal={(e) => setShowPriceRangeModal(e)}
+              />
             </div>
             <div className={styles.contact_right}>
               <Icon icon="web-color" size={20} />
-              {newSocialInfo ? (
-                <div className="flex gap-5">
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={newSocialInfo}
-                    onClick={() => setShowSocialInfoModal(true)}
-                  >
-                    {newSocialInfo}
-                  </a>{" "}
-                  <div>
-                    <a onClick={() => setShowSocialInfoModal(true)}>Edit</a>
-                  </div>
-                </div>
-              ) : (
-                <a onClick={() => setShowSocialInfoModal(true)}>Add social media</a>
-              )}
+              <SocialInfo
+                isViewPage={isViewPage}
+                newSocialInfo={newSocialInfo}
+                onSetShowSocialInfoModal={(e) => setShowSocialInfoModal(e)}
+              />
             </div>
           </div>
         </div>
       </div>
       {bizListing && (
-        <ReviewsFollowers className={styles.reviews_followers_desktop} bizListing={bizListing} />
+        <ReviewsFollowers
+          isViewPage={isViewPage}
+          className={styles.reviews_followers_desktop}
+          bizListing={bizListing}
+        />
       )}
       <Modal
         title="What’s the general price range of a meal?"

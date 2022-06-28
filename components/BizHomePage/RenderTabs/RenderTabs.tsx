@@ -14,6 +14,7 @@ import Heading from "../../Heading/Heading"
 import styles from "./RenderTabs.module.scss"
 
 interface TabContentProps {
+  isViewPage?: boolean
   selectedTab?: ListingTabs
   cardItem?: any
   list: any[]
@@ -42,6 +43,7 @@ const EditList = ({ category, selectedTab, onSetScreen }) => {
 }
 
 const TabContent = ({
+  isViewPage,
   selectedTab,
   cardItem,
   list,
@@ -62,10 +64,13 @@ const TabContent = ({
       <div className="flex flex-col items-center justify-center">
         <Image src={blankImg} width={100} alt="" />
         <p>{blankText}</p>
-        <Button text={buttonText} size="small" width={300} className="my-5" onClick={onClick} />
+        {!isViewPage && (
+          <Button text={buttonText} size="small" width={300} className="my-5" onClick={onClick} />
+        )}
       </div>
     )
   }
+
   return (
     <div className={styles.items_container}>
       <div className="w-full flex justify-center">
@@ -73,15 +78,12 @@ const TabContent = ({
       </div>
       {list.map((item) => {
         const id = get(item, "attributes.id") || item.id
-        // const images = get(item, "attributes.images")
-        // const firstImage = get(item, "attributes.images[0]") || item.imgUrl
-        // console.log('item', item);
-        // console.log('imgUrl', item.imgUrl);
         const images = item.images || []
         const firstImage = item.imgUrl || images[0]
         const name = get(item, "attributes.name") || item.name || ""
         const price = get(item, "attributes.price") || item.price || ""
-        const description = get(item, "attributes.description") || item.information || item.description || ""
+        const description =
+          get(item, "attributes.description") || item.information || item.description || ""
         const expiredAt = get(item, "attributes.expire_at") || item.expireAt || ""
         return (
           <div
@@ -109,6 +111,8 @@ const TabContent = ({
 }
 
 const RenderTabs = (props: {
+  isPaid?: boolean
+  isViewPage?: boolean
   itemList: any[]
   dealList: any[]
   menuList: any[]
@@ -116,13 +120,16 @@ const RenderTabs = (props: {
   onSetScreen: (e: ListingHomePageScreens) => void
   onDelete: (e: { [key: string]: any }) => void
 }) => {
-  const { itemList, dealList, menuList, category, onSetScreen, onDelete } = props
+  const { isPaid, isViewPage, itemList, dealList, menuList, category, onSetScreen, onDelete } =
+    props
   const [selectedTab, setSelectedTab] = useState<ListingTabs>(initSelectedTab(category).itemType)
+
   let tabContent
   switch (selectedTab) {
     case ListingTabs.SERVICE:
       tabContent = (
         <TabContent
+          isViewPage={isViewPage}
           cardItem={InforCard}
           onDelete={onDelete}
           list={itemList}
@@ -136,6 +143,7 @@ const RenderTabs = (props: {
     case ListingTabs.PRODUCT:
       tabContent = (
         <TabContent
+          isViewPage={isViewPage}
           cardItem={InforCard}
           onDelete={onDelete}
           list={itemList}
@@ -146,10 +154,10 @@ const RenderTabs = (props: {
         />
       )
       break
-
     case ListingTabs.DISH:
       tabContent = (
         <TabContent
+          isViewPage={isViewPage}
           cardItem={InforCard}
           onDelete={onDelete}
           list={itemList}
@@ -163,6 +171,7 @@ const RenderTabs = (props: {
     case ListingTabs.MENU:
       tabContent = (
         <TabContent
+          isViewPage={isViewPage}
           cardItem={MenuCard}
           onDelete={onDelete}
           list={menuList}
@@ -176,6 +185,7 @@ const RenderTabs = (props: {
     case ListingTabs.DEAL:
       tabContent = (
         <TabContent
+          isViewPage={isViewPage}
           selectedTab={ListingTabs.DEAL}
           cardItem={PromotionCard}
           onDelete={onDelete}
@@ -198,11 +208,15 @@ const RenderTabs = (props: {
               key={tab.text}
               selected={selectedTab === tab.value}
               text={tab.text}
-              onClick={() => setSelectedTab(tab.value)}
+              onClick={() =>
+                !(tab.value === ListingTabs.DEAL && !isPaid) && setSelectedTab(tab.value)
+              }
             />
           ))}
         </div>
-        <EditList category={category} selectedTab={selectedTab} onSetScreen={onSetScreen} />
+        {!isViewPage && (
+          <EditList category={category} selectedTab={selectedTab} onSetScreen={onSetScreen} />
+        )}
       </div>
       {tabContent}
     </div>

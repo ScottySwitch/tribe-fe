@@ -1,10 +1,11 @@
-import Icon from "components/Icon/Icon";
-import styles from "./Links.module.scss";
+import Heading from "components/Heading/Heading"
+import Icon from "components/Icon/Icon"
+import styles from "./Contacts.module.scss"
 
-const Links = () => {
+const Contacts = () => {
   return (
     <div className="">
-      <div className={styles.heading}>Links</div>
+      <Heading text="Links" />
       <div className={styles.social_link_container}>
         <div className={styles.social_link}>
           <div className={styles.social_link_title}>
@@ -34,7 +35,7 @@ const Links = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Links;
+export default Contacts
