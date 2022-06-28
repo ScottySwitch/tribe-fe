@@ -7,6 +7,7 @@ import Checkbox from "components/Checkbox/Checkbox"
 import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
+import { calcSetPhoneNumber } from "utils"
 
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
@@ -122,9 +123,7 @@ const LoginPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) =>
-                setValuePhoneNumber(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
-              }
+              onChange={(e) => setValuePhoneNumber(calcSetPhoneNumber(e))}
             />
           ) : (
             <Input

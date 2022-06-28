@@ -7,6 +7,7 @@ import Checkbox from "components/Checkbox/Checkbox"
 import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
+import { calcSetPhoneNumber } from "utils"
 
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
@@ -150,11 +151,7 @@ const SignupPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) =>
-                [console.log(e),
-                console.log(e.input.substring(1)),
-                setOtpReceiver(`${e.select.value}${e.input.substring(1)}`)]
-              }
+              onChange={(e) => setOtpReceiver(calcSetPhoneNumber(e))}
             />
           ) : (
             <Input
