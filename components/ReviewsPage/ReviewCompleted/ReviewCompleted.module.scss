@@ -25,6 +25,11 @@
     .group_heading {
       display: flex;
       align-items: flex-start;
+      .header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
     }
 
     .children {
@@ -52,24 +57,24 @@
       font-weight: $font-bold;
       color: $bg-700;
     }
-  
+
     .status_date {
       display: flex;
       align-items: center;
       font-size: $text-sm;
-  
+
       .date {
         color: $bg-400;
         margin-left: 16px;
       }
-  
+
       .status {
         text-transform: capitalize;
         font-weight: $font-normal;
         height: 22px;
         padding: 0 12px;
         border-radius: 24px;
-        
+
         &.pending {
           background-color: $yellow-100;
           color: $yellow-700;
@@ -95,6 +100,16 @@
 
   &_summary {
     flex: 1;
+    .header {
+      display: flex;
+      justify-content: space-between;
+    }
+    .name {
+      font-size: $text-md;
+      font-weight: $font-bold;
+      color: $bg-700;
+      margin-bottom: 10px;
+    }
     padding-left: 70px;
     margin-top: -20px;
 
@@ -116,6 +131,7 @@
       font-size: $text-sm;
       color: $bg-500;
       margin-bottom: 16px;
+      text-align: left;
     }
 
     .image {
@@ -161,7 +177,6 @@
     &_summary {
       margin-top: 0;
       padding-left: 0;
-
     }
   }
 }

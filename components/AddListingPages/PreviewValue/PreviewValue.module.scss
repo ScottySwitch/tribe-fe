@@ -4,13 +4,18 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+
   &_value {
     font-weight: $font-light;
   }
+
   &_value_badge {
     font-weight: $font-light;
-    padding: 0 6px;
+    padding: 10 6px;
     height: 30px;
+    background-color: $bg-50;
+    color: $bg-600;
+    border: none;
   }
 }
 

@@ -24,6 +24,7 @@
     border-radius: $border-radius;
     transition: max-height 0.6s ease-in-out;
     max-height: 0;
+    font-size: $text-sm;
     overflow: hidden;
     z-index: 10;
 
