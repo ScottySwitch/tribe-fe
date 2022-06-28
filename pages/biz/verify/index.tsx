@@ -10,7 +10,7 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import { ChangeEvent, FormEvent, useState, useCallback, useEffect } from "react"
 import styles from "styles/BizUserVerify.module.scss"
-import { randomId } from "utils"
+import { randomId, calcSetPhoneNumber } from "utils"
 import AuthApi from "../../../services/auth"
 import UserApi from "../../../services/user"
 import BizInvoinceApi from "../../../services/biz-invoice"
@@ -232,17 +232,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     console.log("srcImages", srcImages)
   }, [])
 
-  const handleSetValuePhoneNumber = (e) => {
-    let phoneNumber = ''
-    if (e.input[0] == 0 ) {
-      phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
-    }
-    else {
-      phoneNumber = e.select.value + e.input
-    }
-    setPhoneNumber(phoneNumber)
-  }
-
   return (
     <div className={styles.biz_verify}>
       {verifyStep === VerifySteps.REQUEST_OTP && (
@@ -254,7 +243,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             selectPlaceholder="Area code"
             options={formattedAreaCodes}
             shouldControlShowValue
-            onChange={(e) => handleSetValuePhoneNumber(e)}
+            onChange={(e) => setPhoneNumber(calcSetPhoneNumber(e))}
           />
           <Button text="Receive OTP" onClick={handleRequestOTP} />
         </div>

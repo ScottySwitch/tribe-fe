@@ -4,6 +4,7 @@ import classNames from "classnames"
 import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
+import { calcSetPhoneNumber } from "utils"
 
 import AuthApi from "../../services/auth";
 
@@ -83,17 +84,6 @@ const ForgotPasswordPage = () => {
     }
   }
 
-  const handleSetValuePhoneNumber = (e) => {
-    let phoneNumber = ''
-    if (e.input[0] == 0 ) {
-      phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
-    }
-    else {
-      phoneNumber = e.select.value + e.input
-    }
-    setPhoneNumber(phoneNumber)
-  }
-
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
@@ -119,7 +109,7 @@ const ForgotPasswordPage = () => {
               options={formattedAreaCodes}
               shouldControlShowValue
               name="phone"
-              onChange={(e) => handleSetValuePhoneNumber(e)}
+              onChange={(e) => setPhoneNumber(calcSetPhoneNumber(e))}
             />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />

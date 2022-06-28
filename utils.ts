@@ -21,3 +21,14 @@ export const calcRateNumber = (reviews) => {
   }
   return rateNumber
 }
+
+export const calcSetPhoneNumber = (e) => {
+  let phoneNumber = ''
+  if (e.input[0] == 0 ) {
+    phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
+  }
+  else {
+    phoneNumber = e.select.value + e.input
+  }
+  return phoneNumber
+}
