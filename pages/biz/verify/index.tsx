@@ -197,8 +197,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     }
     userInfo.isVeriFy = false
-    const localLoginInfo = { tier: tier, token: userInfo.token, type: UsersTypes.BIZ_USER }
-    localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
+    // const localLoginInfo = { tier: tier, token: userInfo.token, type: UsersTypes.BIZ_USER }
+    // localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
     localStorage.setItem("user", JSON.stringify(userInfo))
     window.location.href = `/biz/home/${userInfo.biz_slug}/edit/`
     // localStorage.setItem("isVeriFy", "false")
