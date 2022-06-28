@@ -1,21 +1,18 @@
 import { useState } from "react"
 
-import Button from "components/Button/Button"
-import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
-import Heading from "../../Heading/Heading"
 import Icon from "components/Icon/Icon"
-import Link from "next/link"
-import { IOption } from "type"
 import OpenHours, { IOpenHours } from "components/OpenHours/OpenHours"
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 
 interface OpenHoursProps {
+  isViewPage?: boolean
   openHours: IOpenHours
   onSetOpenHours: (openHours: IOpenHours) => void
 }
 
 const HomeOpenHours = (props: OpenHoursProps) => {
-  const { openHours = [], onSetOpenHours } = props
+  const { isViewPage, openHours = [], onSetOpenHours } = props
   const [showOpenHoursModal, setShowOpenHoursModal] = useState(false)
   const [localOpenHours, setLocalOpenHours] = useState(openHours)
 
@@ -35,9 +32,10 @@ const HomeOpenHours = (props: OpenHoursProps) => {
           <Icon icon="clock" />
           Opening hours
         </div>
-        <a onClick={() => setShowOpenHoursModal(true)}>Add open hours</a>
+        {!isViewPage && <a onClick={() => setShowOpenHoursModal(true)}>Add open hours</a>}
       </div>
-      <div className="flex flex-wrap gap-y-2"></div>
+      <br />
+      <PreviewValue valueKey="openHours" value={openHours} />
       <Modal
         title="OpenHours"
         visible={showOpenHoursModal}

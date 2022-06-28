@@ -26,6 +26,7 @@ export interface SelectProps {
   closeMenuOnSelect?: boolean
   menuFooter?: ReactNode
   register?: UseFormRegisterReturn
+  width?: number | string
   menuWidth?: string | number
   onChange?: (value: any) => void
   variant?: "filled" | "outlined" | "no-outlined"
@@ -40,6 +41,7 @@ const Select = (props: SelectProps) => {
     className,
     helperText,
     id,
+    width,
     prefixIcon,
     disabled,
     isMulti = false,
@@ -165,7 +167,7 @@ const Select = (props: SelectProps) => {
   )
 
   return (
-    <div className={selectWrapperClassName}>
+    <div className={selectWrapperClassName} style={{ width }}>
       <div className={styles.container}>
         {label && <label htmlFor={id}>{label}</label>}
         <ReactSelect
