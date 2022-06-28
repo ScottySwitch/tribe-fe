@@ -33,9 +33,6 @@ import moment from "moment"
 import parseISO from "date-fns/parseISO"
 import Break from "components/Break/Break"
 import Contacts from "components/BizHomePage/Contacts/Contacts"
-import ReviewCard from "components/ReviewsPage/ReviewCard/ReviewCard"
-import { calcRateNumber } from "utils"
-import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews"
 
 const CenterIcon = () => (
@@ -56,6 +53,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [tagOptions, setTagOptions] = useState<IOption[]>([])
   const [openHours, setOpenHours] = useState([])
   const [reviews, setReviews] = useState([])
+  const [listingRate, setListingRate] = useState(1)
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
   const [socialInfo, setSocialInfo] = useState<any>("")
   const [phoneNumber, setPhoneNumber] = useState<any>("")
@@ -151,6 +149,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setItemList(listingArray)
         setMenuList(menuArray)
         setDealList(dealArray)
+        setListingRate(get(listing, "attributes.rate"))
         if (invoiceList.length > 0) {
           setIsPaid(true)
           setPhoneNumber(rawPhoneNumber)
@@ -381,6 +380,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           <div className={styles.body}>
             <div className={styles.right_col}>
               <EditAction
+                isOwned={true}
+                isViewPage={isViewPage}
                 isLoading={isLoading}
                 isPaid={isPaid}
                 action={action}
@@ -421,6 +422,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               <div>
                 <RenderTabs
                   isViewPage={isViewPage}
+                  isPaid={isPaid}
                   menuList={menuList}
                   category={category}
                   itemList={itemList}
@@ -431,6 +433,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               </div>
               <Break />
               <HomepageReviews
+                listingSlug={listingSlug}
+                listingRate={listingRate}
                 isPaid={isPaid}
                 isViewPage={isViewPage}
                 reviews={reviews}

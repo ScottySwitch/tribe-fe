@@ -81,6 +81,11 @@ export const bizInformationDefaultFormData = {
   ],
 }
 
+export const reviewSequenceOptions = [
+  { label: "Top reviews", value: "top" },
+  { label: "The lastest reviews", value: "latest" },
+]
+
 export const fakeAddlistingForm: IAddListingForm = {
   category: 1,
   relationship: "",

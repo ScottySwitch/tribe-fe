@@ -1,34 +1,70 @@
 import Break from "components/Break/Break"
 import Button from "components/Button/Button"
 import Heading from "components/Heading/Heading"
+import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
+import Rate from "components/Rate/Rate"
 import { ReviewForm } from "components/ReviewsPage/ReviewCard/ReviewCard"
 import ReviewCompleted from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
+import Select from "components/Select/Select"
+import { reviewSequenceOptions } from "constant"
 import { get } from "lodash"
 import Image from "next/image"
+import { useRouter } from "next/router"
 import { useState } from "react"
 
+import styles from "./HomepageReviews.module.scss"
 interface HomepageReviewsProps {
   isPaid?: boolean
+  listingSlug?: any
   isViewPage?: boolean
+  listingRate?: number
   reviews: any[]
   onSubmitReply?: (any) => void
 }
 
 const HomepageReviews = (props: HomepageReviewsProps) => {
-  const { reviews, isPaid, isViewPage, onSubmitReply } = props
+  const { listingSlug, reviews, listingRate, isPaid, isViewPage, onSubmitReply } = props
   const [showReplyModal, setShowReplyModal] = useState(false)
   const [selectedReview, setSelectedReview] = useState({})
+
+  const router = useRouter()
+
   return (
     <div>
       <Heading text="Reviews" />
-      <div className="mt-5">
+      <br />
+      <div className="flex gap-3 items-center">
+        <div className={styles.listing_rate}>{listingRate || 0}</div>
+        <Rate readonly={true} initialRating={listingRate || 0} />
+        <div className={styles.followers}>
+          | {Array.isArray(reviews) && reviews.length} review(s)
+        </div>
+      </div>
+      {isViewPage && (
+        <div className="flex justify-between items-center mt-3">
+          <Button
+            variant="outlined"
+            text="Add your review"
+            width={300}
+            prefix={<Icon icon="edit-color" />}
+            onClick={() => router.push(`/reviews/${listingSlug}`)}
+          />
+          <Select
+            width={200}
+            options={reviewSequenceOptions}
+            defaultValue={reviewSequenceOptions[0]}
+          />
+        </div>
+      )}
+      <br />
+      <div>
         {Array.isArray(reviews) && reviews.length > 0 ? (
           reviews.map((review, index) => (
             <div key={index}>
               <ReviewCompleted
-                isPaid={true}
+                isPaid={isPaid}
                 actions={!isViewPage}
                 user={get(review, "attributes.user.data.attributes")}
                 listImage={get(review, "attributes.images")}

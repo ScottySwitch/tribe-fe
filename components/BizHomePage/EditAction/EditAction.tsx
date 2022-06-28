@@ -8,15 +8,17 @@ import SelectInput from "components/SelectInput/SelectInput"
 import { formattedAreaCodes, phoneAreaCodes } from "constant"
 
 interface EditActionProps {
+  isOwned?: boolean
+  isViewPage?: boolean
   action: { label: string; value: string }
   onApplyAction: (action: string, value: string) => void
   onPublishPage: () => void
-  isPaid?: boolean,
-  isLoading?: boolean,
+  isPaid?: boolean
+  isLoading?: boolean
 }
 
 const EditAction = (props: EditActionProps) => {
-  const { action, isPaid, isLoading, onPublishPage, onApplyAction } = props
+  const { isViewPage, isOwned, action, isPaid, isLoading, onPublishPage, onApplyAction } = props
 
   const [showEditActionModal, setShowEditActionModal] = useState(false)
   const [showBuyNow, setShowBuyNow] = useState(false)
@@ -130,14 +132,50 @@ const EditAction = (props: EditActionProps) => {
 
   return (
     <React.Fragment>
-      <div className={styles.action_modal}>
-        <Button
-          text={action?.label || "Edit action button"}
-          size="small"
-          onClick={() => setShowEditActionModal(true)}
-        />
-        <Button isLoading={isLoading} variant={isLoading === false ? 'outlined' : ''} text="Publish page" size="small" onClick={onPublishPage} />
-      </div>
+      {isViewPage && isPaid && (
+        <div className={styles.action_modal}>
+          <Button
+            text={action?.label || "Edit action button"}
+            size="small"
+            onClick={() => setShowEditActionModal(true)}
+          />
+        </div>
+      )}
+      {isViewPage && !isOwned && (
+        <div className={styles.action_modal_not_owned}>
+          <Button text="Claim listing" size="small" variant="outlined" />
+          Own this business?
+        </div>
+      )}
+      {!isViewPage && (
+        <div className={styles.action_modal}>
+          <Button
+            disabled={!isPaid}
+            text={action?.label || "Edit action button"}
+            size="small"
+            onClick={() => setShowEditActionModal(true)}
+          />
+          <Button
+            isLoading={isLoading}
+            variant={isLoading === false ? "outlined" : ""}
+            text="Save change"
+            size="small"
+            onClick={onPublishPage}
+          />
+        </div>
+      )}
+      {!isViewPage && !isPaid && (
+        <div className={styles.action_modal}>
+          <div className="flex gap-3">
+            <Icon icon="Group-966" color="#653fff" />
+            <div>Upgrade plan</div>
+          </div>
+          <p className="text-left">
+            Upgrade to Basic Tier to access features that help grow your business!
+          </p>
+          <a>Upgrade now</a>
+        </div>
+      )}
       <Modal
         title="Edit action button"
         visible={showEditActionModal}

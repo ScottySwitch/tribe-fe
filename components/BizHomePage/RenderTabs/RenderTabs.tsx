@@ -111,6 +111,7 @@ const TabContent = ({
 }
 
 const RenderTabs = (props: {
+  isPaid?: boolean
   isViewPage?: boolean
   itemList: any[]
   dealList: any[]
@@ -119,7 +120,8 @@ const RenderTabs = (props: {
   onSetScreen: (e: ListingHomePageScreens) => void
   onDelete: (e: { [key: string]: any }) => void
 }) => {
-  const { isViewPage, itemList, dealList, menuList, category, onSetScreen, onDelete } = props
+  const { isPaid, isViewPage, itemList, dealList, menuList, category, onSetScreen, onDelete } =
+    props
   const [selectedTab, setSelectedTab] = useState<ListingTabs>(initSelectedTab(category).itemType)
 
   let tabContent
@@ -206,7 +208,9 @@ const RenderTabs = (props: {
               key={tab.text}
               selected={selectedTab === tab.value}
               text={tab.text}
-              onClick={() => setSelectedTab(tab.value)}
+              onClick={() =>
+                !(tab.value === ListingTabs.DEAL && !isPaid) && setSelectedTab(tab.value)
+              }
             />
           ))}
         </div>
