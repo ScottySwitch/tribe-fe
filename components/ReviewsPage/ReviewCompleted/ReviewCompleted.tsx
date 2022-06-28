@@ -109,7 +109,7 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
         )}
         {dateVisit && (
           <div className={styles.date_visit}>
-            <strong>Date of visit:</strong>
+            <strong>Date of visit: </strong>
             {dateVisit}
           </div>
         )}
