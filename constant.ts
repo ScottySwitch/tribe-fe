@@ -1,4 +1,11 @@
-import { Categories, InformationList, ListingHomePageScreens, ListingTabs, UserInformationList } from "enums"
+import { UserProps } from "components/UserProfilePage/PanelAbout/PanelAbout"
+import {
+  Categories,
+  InformationList,
+  ListingHomePageScreens,
+  ListingTabs,
+  UserInformationList,
+} from "enums"
 import { IAddListingForm } from "pages/add-listing"
 import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed"
 
@@ -1140,8 +1147,7 @@ export const dummySavedDeals = [
   },
 ]
 
-
-export const dummyUserInfo = {
+export const dummyUserInfo: UserProps = {
   email: "annabae@gmail.com",
   phoneNumber: "",
   country: "Singapore",
@@ -1154,7 +1160,8 @@ export const dummyUserInfo = {
 export const dummyPending = [
   {
     avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    content:
+      "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
     listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
     dateVisit: "March 2021",
     displayName: "Anna Nhun",
@@ -1169,12 +1176,13 @@ export const dummyPending = [
       followerNumber: 500,
       imgUrl: "https://picsum.photos/200",
       tags: ["Fast Food", "Desserts", "Beverages"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
+      location: "50 Bussorah St, Singapore 199466",
+    },
   },
   {
     avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    content:
+      "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
     listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
     dateVisit: "March 2021",
     displayName: "Anna Nhun",
@@ -1189,15 +1197,16 @@ export const dummyPending = [
       followerNumber: 500,
       imgUrl: "https://picsum.photos/200",
       tags: ["Fast Food", "Desserts"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  }
+      location: "50 Bussorah St, Singapore 199466",
+    },
+  },
 ]
 
 export const dummyApproved = [
   {
     avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    content:
+      "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
     listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
     dateVisit: "March 2021",
     displayName: "Anna Nhun",
@@ -1212,12 +1221,13 @@ export const dummyApproved = [
       followerNumber: 500,
       imgUrl: "https://picsum.photos/200",
       tags: ["Fast Food", "Desserts", "Beverages"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
+      location: "50 Bussorah St, Singapore 199466",
+    },
   },
   {
     avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    content:
+      "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
     listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
     dateVisit: "March 2021",
     displayName: "Anna Nhun",
@@ -1232,15 +1242,16 @@ export const dummyApproved = [
       followerNumber: 500,
       imgUrl: "https://picsum.photos/200",
       tags: ["Fast Food", "Desserts"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  }
+      location: "50 Bussorah St, Singapore 199466",
+    },
+  },
 ]
 
 export const dummyDenied = [
   {
     avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    content:
+      "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
     listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
     dateVisit: "March 2021",
     displayName: "Anna Nhun",
@@ -1255,12 +1266,13 @@ export const dummyDenied = [
       followerNumber: 500,
       imgUrl: "https://picsum.photos/200",
       tags: ["Fast Food", "Desserts", "Beverages"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
+      location: "50 Bussorah St, Singapore 199466",
+    },
   },
   {
     avatarUrl: "https://picsum.photos/100",
-    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    content:
+      "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
     listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
     dateVisit: "March 2021",
     displayName: "Anna Nhun",
@@ -1275,7 +1287,7 @@ export const dummyDenied = [
       followerNumber: 500,
       imgUrl: "https://picsum.photos/200",
       tags: ["Fast Food", "Desserts"],
-      location: "50 Bussorah St, Singapore 199466"
-    }
-  }
+      location: "50 Bussorah St, Singapore 199466",
+    },
+  },
 ]
