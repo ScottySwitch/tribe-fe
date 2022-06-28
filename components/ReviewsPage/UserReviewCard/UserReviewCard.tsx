@@ -75,7 +75,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           <div className={styles.header}>
             <h6 className={styles.name}>
               {/* <span>{displayName}</span> */}
-              <span>{user?.first_name + " " + user?.last_name}</span>
+              <span>{(user?.first_name || "") + " " + (user?.last_name || "")}</span>
               {censorshipLabel && <span className="font-normal ml-2">{censorshipLabel}</span>}
             </h6>
             {actions && (

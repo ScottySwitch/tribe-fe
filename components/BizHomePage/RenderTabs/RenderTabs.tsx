@@ -58,7 +58,6 @@ const TabContent = ({
   const isItem =
     selectedTab &&
     [ListingTabs.DISH, ListingTabs.PRODUCT, ListingTabs.SERVICE].includes(selectedTab)
-
   if (!(Array.isArray(list) && list.length)) {
     return (
       <div className="flex flex-col items-center justify-center">
@@ -129,6 +128,7 @@ const RenderTabs = (props: {
     case ListingTabs.SERVICE:
       tabContent = (
         <TabContent
+          selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
           onDelete={onDelete}
@@ -143,6 +143,7 @@ const RenderTabs = (props: {
     case ListingTabs.PRODUCT:
       tabContent = (
         <TabContent
+          selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
           onDelete={onDelete}
@@ -157,6 +158,7 @@ const RenderTabs = (props: {
     case ListingTabs.DISH:
       tabContent = (
         <TabContent
+          selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
           onDelete={onDelete}
@@ -171,6 +173,7 @@ const RenderTabs = (props: {
     case ListingTabs.MENU:
       tabContent = (
         <TabContent
+          selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={MenuCard}
           onDelete={onDelete}
@@ -185,8 +188,8 @@ const RenderTabs = (props: {
     case ListingTabs.DEAL:
       tabContent = (
         <TabContent
+          selectedTab={selectedTab}
           isViewPage={isViewPage}
-          selectedTab={ListingTabs.DEAL}
           cardItem={PromotionCard}
           onDelete={onDelete}
           list={dealList}
