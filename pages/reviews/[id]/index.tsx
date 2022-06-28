@@ -13,7 +13,7 @@ import ReviewApi from "../../../services/review"
 import { data } from "browserslist"
 import BizListingApi from "../../../services/biz-listing"
 import get from "lodash/get"
-import UserReviewCard from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
+import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard"
 
 const dummyKeywords = [
   "Fast Food",

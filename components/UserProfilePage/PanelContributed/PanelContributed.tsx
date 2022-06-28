@@ -5,7 +5,7 @@ import styles from "./PanelContributed.module.scss"
 import { dummyApproved, dummyDenied, dummyPending } from "constant"
 import UserReviewCard, {
   UserReviewCardProps,
-} from "components/ReviewsPage/ReviewCompleted/ReviewCompleted"
+} from "components/ReviewsPage/UserReviewCard/UserReviewCard"
 interface IBiz {
   title: string
   imgUrl: string
