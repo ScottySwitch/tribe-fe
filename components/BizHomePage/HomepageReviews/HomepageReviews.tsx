@@ -93,7 +93,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
       >
         <div className="p-[30px]">
           <ReviewCompleted
-            isPaid={true}
+            isPaid={isPaid}
             actions={!isViewPage}
             user={get(selectedReview, "attributes.user.data.attributes")}
             listImage={get(selectedReview, "attributes.images")}

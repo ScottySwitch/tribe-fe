@@ -19,7 +19,7 @@ export interface ReviewCompletedProps {
   displayName?: string
   rating?: number
   censorshipLabel?: string
-  status: "pending" | "approved" | "denied"
+  status?: "pending" | "approved" | "denied"
   date?: string
   isDivier?: boolean
   user?: any
