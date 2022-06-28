@@ -79,19 +79,23 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       value: item.attributes.value,
       id: item.id,
     }))
-
+    
   useEffect(() => {
     const getListingData = async (listingSlug) => {
-      const data = await BizListingApi.getBizListingBySlug(listingSlug)
+      const data = await BizListingApi.getOwnerBizListingBySlug(listingSlug)
+      if (get(data, 'data.data.length') == 0) {
+        window.location.href = '/'
+      }
+      // const data = await BizListingApi.getBizListingBySlug(listingSlug)
       const listing = get(data, "data.data[0]")
-
+      console.log('listing', listing);
       if (listing) {
         console.log(listing)
         const rawTags = get(listing, "attributes.tags.data") || []
         const rawFacilities = get(listing, "attributes.facilities.data") || []
         const invoiceList = get(listing, "attributes.biz_invoices.data") || []
         const rawPhoneNumber = get(listing, "attributes.phone_number")
-        const defaultPhone = rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7)
+        const defaultPhone = rawPhoneNumber ? rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7) : ''
         const rawListing = get(listing, "attributes.products.data") || []
         const listingArray = rawListing.map((item) => ({
           name: get(item, "attributes.name"),

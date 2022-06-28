@@ -85,7 +85,8 @@ const OtpPage = (context) => {
   }
 
   const requireOTP = async () => {
-    let phoneNumer = localStorage.getItem('phone_number')
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let phoneNumer = userInfo.phone_number
     if (phoneNumer) {
       await AuthApi.otpPhoneGenerate(phoneNumer)
       setTime(30)

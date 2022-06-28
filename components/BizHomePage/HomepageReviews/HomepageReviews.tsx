@@ -106,7 +106,9 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         </div>
         <div className="flex gap-3 justify-end p-[30px]">
           <Button text="Cancel" variant="secondary-no-outlined" />
-          <Button text="Send reply" />
+          <Button 
+            text="Send reply" 
+          />
         </div>
       </Modal>
     </div>

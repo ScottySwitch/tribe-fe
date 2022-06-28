@@ -13,6 +13,7 @@ import { ILoginInfor } from "pages/_app"
 import { UsersTypes } from "enums"
 import Break from "components/Break/Break"
 import { randomId } from "utils"
+import get from "lodash/get"
 
 export const Categories = (props: {
   currentCategory?: string
@@ -62,13 +63,19 @@ export const ContributeContent = () => {
 
 export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
   const router = useRouter()
-
+  const userInfo = JSON.parse(localStorage.getItem('user') || '{}')
+  const userOwnerListing = userInfo.owner_listings || []
+  const ownerListing = userOwnerListing.map((item) => item.attributes)
   return (
     <React.Fragment>
-      {switchAccountList.map((item) => (
-        <div key={item.name} className="cursor-pointer">
+      {ownerListing.map((item) => (
+        <div 
+          key={item.name} 
+          className="cursor-pointer"
+          onClick={() => router.push(`/biz/home/${item.slug}/edit`)}
+        >
           <Image
-            src={require("public/images/page-avatar.png")}
+            src={item.images[0] || require("public/images/page-avatar.png")}
             alt=""
             width={30}
             height={30}
@@ -86,7 +93,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
           onClick={() => router.push("/biz/information")}
         />
         <div>
-          <strong>Anna Nhung</strong>
+          <strong>{userInfo.first_name} {userInfo.last_name}</strong>
           <p className="text-xs">User account</p>
         </div>
       </div>
@@ -96,18 +103,23 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
 
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter()
-
   const handleSwitchToBizUser = () => {
-    // const localLoginInfo = { token: "asd", type: UsersTypes.BIZ_USER }
-    // localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
-    // const id = randomId()
-    // router.push(`/biz/home/${id}/edit`)
-    router.push("/claim")
+    let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
+    userInfo.type = UsersTypes.BIZ_USER 
+    localStorage.setItem('user', JSON.stringify(userInfo))
+    if (get(userInfo, 'owner_listings.length')> 0) {
+      router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
+    }
+    else {
+      router.push("/claim")
+    }
+    // router.push("/claim")
   }
 
   const handleSwitchToNormalUser = () => {
-    const localLoginInfo = { token: "asd", type: UsersTypes.NORMAL_USER }
-    localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
+    let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
+    userInfo.type = UsersTypes.NORMAL_USER 
+    localStorage.setItem('user', JSON.stringify(userInfo))
     router.pathname === "/" ? router.reload() : router.push("/")
   }
 

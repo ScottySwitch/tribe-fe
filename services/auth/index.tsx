@@ -9,9 +9,11 @@ import {
   AuthForgetPasswordByPhone
 } from "../../types/auth";
 import {UsersTypes} from "../../enums";
+import { userInfo } from "os";
+const qs = require('qs');
 
 const signUpByEmail = async (params: AuthEmailPayload) => {
-  localStorage.removeItem("token");
+  localStorage.removeItem('user')
   const url = `/api/auth/local/register`;
   return await Api.post(url, {
     username: params.email,
@@ -21,7 +23,7 @@ const signUpByEmail = async (params: AuthEmailPayload) => {
 }
 
 const signUpByPhone = async (params: AuthPhonePayload) => {
-  localStorage.removeItem("token");
+  localStorage.removeItem('user')
   const url = `/api/auth/local/register`;
   return await Api.post(url, {
     username: params.phone_number,
@@ -56,7 +58,7 @@ const otpPhoneConfirm = async (params: VerifyOTPPayload) => {
 }
 
 const loginByEmail = async (params: AuthEmailPayload) => {
-  localStorage.removeItem("token");
+  localStorage.removeItem('user')
   const url = `/api/auth/local`;
   return await Api.post(url, {
     identifier: params.email,
@@ -65,7 +67,7 @@ const loginByEmail = async (params: AuthEmailPayload) => {
 }
 
 const loginByPhone = async (params: AuthPhonePayload) => {
-  localStorage.removeItem("token");
+  localStorage.removeItem('user')
   const url = `/api/auth/local`;
   return await Api.post(url, {
     identifier: params.phone_number,
@@ -76,8 +78,9 @@ const loginByPhone = async (params: AuthPhonePayload) => {
 const getMe = async () => {
   const url = `/api/users/me`;
   const me = await Api.get(url);
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
   if (!me.data) {
-    localStorage.removeItem('token');
+    localStorage.removeItem('user')
     window.location.href = "/";
   }
   if (!me.data.avatar) {
@@ -85,10 +88,16 @@ const getMe = async () => {
   } else {
     me.data.avatar = me.data.avatar
   }
-  me.data.type = UsersTypes.NORMAL_USER // TODO: confirm this logic
-  me.data.token = localStorage.getItem('token');
+  if (localStorage.getItem("user")) {
+    if (!userInfo.type) {
+      me.data.type = UsersTypes.NORMAL_USER
+    }
+    else {
+      me.data.type = userInfo.type
+    }
+  }
+  me.data.token = userInfo.token
   localStorage.setItem("user", JSON.stringify(me.data))
-  localStorage.setItem("user_id", me.data.id)
 }
 
 const forgetPasswordByEmail = async (params: AuthForgetPassword) => {
@@ -123,24 +132,28 @@ const resetPassword = async (params: ResetPassword) => {
 }
 
 const loginFacebookCallback = async (accessToken: any) => {
-  localStorage.removeItem('token');
+  localStorage.removeItem('user')
+  let userInfo;
   const url = `/api/auth/facebook/callback?access_token=${accessToken}`;
   let user = await Api.get(url);
   if (user.data) {
     let { jwt } = user.data;
-    localStorage.setItem("token", jwt)
+    userInfo.token = jwt
+    localStorage.setItem("user", JSON.stringify(userInfo))
     await getMe();
     window.location.href = '/signup/setup-profile';
   }
 }
 
 const loginGoogleCallback = async (accessToken: any) => {
-  localStorage.removeItem('token');
+  localStorage.removeItem('user')
+  let userInfo;
   const url = `/api/auth/google/callback?access_token=${accessToken}`;
   let user = await Api.get(url);
   if (user.data) {
     let { jwt } = user.data;
-    localStorage.setItem("token", jwt)
+    userInfo.token = jwt
+    localStorage.setItem("user", JSON.stringify(userInfo))
     await getMe();
     window.location.href = '/signup/setup-profile';
   }

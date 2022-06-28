@@ -14,6 +14,10 @@ import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar"
 import { loginInforItem } from "constant"
 import { Tiers, UsersTypes } from "enums"
 import AuthApi from "../services/auth"
+import BizApi from "services/biz-listing"
+import BizInvoice from "services/biz-invoice"
+import ClaimListingApi from "services/claim-listing"
+import get from "lodash/get"
 
 export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers; avatar?: string }
 
@@ -60,10 +64,32 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     const getMe = async () => {
       await AuthApi.getMe()
+      let ownerListings = []
+      if (userInfo) {
+        const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
+        const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
+        const dataClaimListing = await ClaimListingApi.getClaimListingByUserId(userInfo.id)
+        const dataListingRoles = await BizApi.getOwnerListingRoleByUserId(userInfo.id)
+        userInfo = {
+          ...userInfo,
+          biz_listings: dataBizlisting.data.data, 
+          biz_invoice: dataBizInvoice.data.data, 
+          claim_listings: dataClaimListing.data.data,
+          listing_roles: dataListingRoles.data.data,
+          owner_listings: []
+        }
+        ownerListings = userInfo.claim_listings.map((item) => get(item, 'attributes.biz_listings.data'))
+        get(dataListingRoles, 'data.data').map((item) => {
+          ownerListings = ownerListings.concat(get(item, 'attributes.biz_listing.data'))
+        })
+        userInfo={...userInfo, owner_listings: ownerListings}
+      }
+      localStorage.setItem("user", JSON.stringify(userInfo))
     }
-    if (localStorage.getItem("token")) {
+    if (userInfo.token) {
       getMe().catch((e) => console.log(e))
     }
 

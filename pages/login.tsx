@@ -14,6 +14,8 @@ import { useRouter } from "next/router"
 import { loginInforItem } from "constant"
 import { UsersTypes } from "enums"
 import AuthApi from "../services/auth"
+import BizApi from "services/biz-listing"
+import BizInvoice from "services/biz-invoice"
 import { formattedAreaCodes, phoneAreaCodes } from "constant"
 import SelectInput from "components/SelectInput/SelectInput"
 import { get } from "lodash"
@@ -47,11 +49,8 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     setIsLoading(true)
-    // localStorage.setItem(
-    //   loginInforItem,
-    //   JSON.stringify({ token: "sometoken", type: UsersTypes.NORMAL_USER })
-    // )
     // Email
     if (method === LoginMethod.EMAIL) {
       let result: any = null
@@ -69,7 +68,8 @@ const LoginPage = () => {
 
       if (result.data) {
         let { jwt } = result.data
-        localStorage.setItem("token", jwt)
+        userInfo.token = jwt
+        localStorage.setItem("user", JSON.stringify(userInfo))
         await AuthApi.getMe()
       }
     } else {
@@ -88,7 +88,8 @@ const LoginPage = () => {
 
       if (result.data) {
         let { jwt } = result.data
-        localStorage.setItem("token", jwt)
+        userInfo.token = jwt
+        localStorage.setItem("user", JSON.stringify(userInfo))
         await AuthApi.getMe()
       }
     }
