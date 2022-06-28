@@ -76,6 +76,18 @@ const EditListingHomepage = (context) => {
     }))
 
   useEffect(() => {
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
+    const ownerListing = userInfo.owner_listings
+    const isVisible = ownerListing.filter((item) => get(item, 'attributes.slug') === listingSlug) || []
+    if (isVisible.length == 0 ) {
+      window.location.href = "/"
+    }
+  }, [])
+
+  useEffect(() => {
     const getListingData = async (listingSlug) => {
       const data = await BizListingApi.getBizListingBySlug(listingSlug)
       const listing = get(data, "data.data[0]")

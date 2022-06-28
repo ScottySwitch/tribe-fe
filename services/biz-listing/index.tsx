@@ -100,9 +100,13 @@ const getBizListingById = async (bizListingId: any) => {
 
 const createListingRole = async (params: any) => {
   const url = `/api/listing-roles`;
+  let userInfo;
+  if (typeof localStorage.getItem('user') !== null) {
+    userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  }
   return await Api.post(url, {
     data: {
-      user: localStorage.getItem('user_id'),
+      user: userInfo.id,
       biz_listing: params.bizListingId,
       name: params.name
     }

@@ -66,7 +66,6 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
   const userInfo = JSON.parse(localStorage.getItem('user') || '')
   const userOwnerListing = userInfo.owner_listings || []
   const ownerListing = userOwnerListing.map((item) => item.attributes)
-  console.log(ownerListing);
   return (
     <React.Fragment>
       {ownerListing.map((item) => (
@@ -108,7 +107,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     let userInfo = JSON.parse(localStorage.getItem('user') || '')
     userInfo.type = UsersTypes.BIZ_USER 
     localStorage.setItem('user', JSON.stringify(userInfo))
-    if (userInfo.owner_listings.length > 0) {
+    if (get(userInfo, 'owner_listings.length')> 0) {
       router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
     }
     else {

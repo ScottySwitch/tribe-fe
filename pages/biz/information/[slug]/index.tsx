@@ -87,10 +87,11 @@ const BizInformation = () => {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem(loginInforItem)
-    localStorage.removeItem(user)
-    localStorage.removeItem(userId)
-    localStorage.removeItem(token)
+    localStorage.clear()
+    // localStorage.removeItem(loginInforItem)
+    // localStorage.removeItem(user)
+    // localStorage.removeItem(userId)
+    // localStorage.removeItem(token)
     window.location.href = "/"
   }
 

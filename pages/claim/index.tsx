@@ -35,6 +35,18 @@ const ClaimPage = () => {
     console.log('data', get(data, 'data.data'));
   }
 
+  const handleSetListing = (e) => {
+    console.log(e);
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
+    userInfo.biz_id = get(e, "id")
+    userInfo.biz_slug = get(e, "attributes.slug")
+    localStorage.setItem("user", JSON.stringify(userInfo))
+    setListing(e)
+  }
+
 
   const RightColumn = (props: { listing: { [key: string]: any } }) => {
     const { listing } = props
@@ -70,7 +82,7 @@ const ClaimPage = () => {
             <ListingSearchBox
               title="Claim Your Free Listing"
               listingOptions={bizListing}
-              onListingSearchChange={(e) => setListing(e)}
+              onListingSearchChange={(e) => handleSetListing(e)}
             />
           )}
         </SectionLayout>

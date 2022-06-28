@@ -64,16 +64,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     const getMe = async () => {
       await AuthApi.getMe()
-      let userInfo = JSON.parse(localStorage.getItem("user") || '')
-      console.log(userInfo);
-      // if (!userInfo.type) {
-      //   userInfo.type = UsersTypes.NORMAL_USER
-      // }
-      // else {
-      //   userInfo.type = userInfo.type
-      // }
       let ownerListing = []
       if (userInfo) {
         const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
@@ -83,8 +76,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         userInfo.biz_listings = dataBizlisting.data.data
         userInfo.biz_invoice = dataBizInvoice.data.data
         userInfo.claim_listings = dataClaimListing.data.data
-        ownerListing = get(dataClaimListing, 'data.data').map((item) => get(item, 'attributes.biz_listings.data'))
+        userInfo.owner_listings = []
         userInfo.listing_roles = dataListingRoles.data
+        ownerListing = get(dataClaimListing, 'data.data').map((item) => get(item, 'attributes.biz_listings.data'))
         get(dataListingRoles, 'data.data').map((item) => {
           let isVisible = ownerListing.filter((item1: any) => item1.id === get(item, 'attributes.biz_listing.data.id'))
           if (isVisible.length == 0) {
@@ -93,10 +87,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         })
         userInfo.owner_listings = ownerListing
       }
-      console.log(userInfo);
       localStorage.setItem("user", JSON.stringify(userInfo))
     }
-    if (localStorage.getItem("token")) {
+    if (userInfo.token) {
       getMe().catch((e) => console.log(e))
     }
 
@@ -106,7 +99,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     const stringyLoginInfo = localStorage.getItem("user")
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {}
     if (localLoginInfo.token) {
-      console.log(localLoginInfo);
       setLoginInfo(localLoginInfo)
       setShowAuthPopup(false)
     } else {

@@ -3,4 +3,3 @@ export const getIndex = (id, list) => {
 }
 
 export const randomId = () => Math.floor(Math.random() * 10000000)
-

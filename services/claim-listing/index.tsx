@@ -4,12 +4,16 @@ const qs = require('qs');
 
 const createClaimListing = async (params: any) => {
   const url = `/api/claim-listings`;
+  let userInfo;
+  if (typeof localStorage.getItem('user') !== null) {
+    userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  }
   return await Api.post(url, {
     data: {
-        user: localStorage.getItem('user_id'),
+        user: userInfo.id,
         payment_method: params.paymentMethod,
         transaction_id: params.transaction_id,
-        biz_listings: localStorage.getItem('biz_id'),
+        biz_listings: userInfo.biz_id,
         publishedAt: null
       }
   });

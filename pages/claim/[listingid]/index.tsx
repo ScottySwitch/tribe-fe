@@ -35,12 +35,17 @@ const ClaimListing = (context) => {
   } = useRouter()
 
   useEffect(() => {
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
     const getListingData = async (listingId) => {
       const data = await BizListingApi.getBizListingById(listingId)
       setListing(data.data.data)
     }
     if (listingId) {
-      localStorage.setItem("biz_id", listingId.toString())
+      userInfo.biz_id = listingId.toString()
+      localStorage.setItem("user", JSON.stringify(userInfo))
       getListingData(listingId)
     }
   }, [listingId])
@@ -59,6 +64,10 @@ const ClaimListing = (context) => {
   )
 
   const onSubmit = async (form) => {
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
     console.log(form)
     let role = get(form, "role.value")
 
@@ -71,7 +80,8 @@ const ClaimListing = (context) => {
       role,
     })
     setClaimStep(ClaimStep.CHOOSE_TIER)
-    localStorage.setItem("pay_price", "600")
+    userInfo.pay_price = "600"
+    localStorage.setItem("user", JSON.stringify(userInfo))
   }
 
   const handleDirectToVerification = (tier: Tiers) => {

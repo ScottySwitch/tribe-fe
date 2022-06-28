@@ -48,7 +48,7 @@ const SearchListing = ({
   listing,
   bizListing,
   setListing,
-}: {
+}: { 
   setListing: (e: listingTypes) => void
   listing: any
   bizListing: any
@@ -57,8 +57,13 @@ const SearchListing = ({
   console.log("bizListing", bizListing)
 
   if (listing) {
-    localStorage.setItem("biz_id", get(listing, "id"))
-    localStorage.setItem("biz_slug", get(listing, "attributes.slug"))
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
+    userInfo.biz_id = get(listing, "id")
+    userInfo.biz_slug = get(listing, "attributes.slug")
+    localStorage.setItem("user", JSON.stringify(userInfo))
   }
   
   const [showUpcomingFeature, setShowUpcomingFeature] = useState(false)

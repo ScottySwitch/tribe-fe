@@ -80,7 +80,11 @@ const StepOne = ({
 
   const onSubmit = async (data) => {
     setIsLoading(true)
-    const userId = parseInt(localStorage.getItem("user_id") || "0")
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
+    const userId = userInfo.id || '0'
     let dataSend: any = {
       first_name: data.name,
       gender: data.gender,

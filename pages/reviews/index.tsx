@@ -112,9 +112,13 @@ const ReviewsPage = () => {
   }
 
   const handleSubmit = async (dataSend: any) => {
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
     const bizListingId = get(listingSearchResult, "[0].id")
     const dataSendApi = {
-      user: localStorage.getItem('user_id'),
+      user: userInfo.id,
       biz_listing: bizListingId,
       rating: dataSend.rating,
       content: dataSend.content,

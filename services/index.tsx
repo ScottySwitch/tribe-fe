@@ -6,10 +6,19 @@ const Api = axios.create({
 });
 
 Api.interceptors.request.use((config) => {
-  if (localStorage.getItem("token")) {
-    const token = `Bearer ${localStorage.getItem("token")}`;
+  // if (localStorage.getItem("token")) {
+  //   const token = `Bearer ${localStorage.getItem("token")}`;
+  //   // @ts-ignore
+  //   config.headers.common["Authorization"] = token;
+  // }
+
+  if (localStorage.getItem("user")) {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    if ( userInfo.token ) {
+      const token = `Bearer ${userInfo.token}`;
     // @ts-ignore
-    config.headers.common["Authorization"] = token;
+      config.headers.common["Authorization"] = token;
+    }
   }
 
   return config;

@@ -3,7 +3,9 @@ import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import { useRouter } from "next/router"
+import { userInfo } from "os";
 import { useState, useEffect } from "react";
+import user from "services/user";
 
 import styles from "styles/Auth.module.scss";
 
@@ -37,10 +39,14 @@ const OtpPage = (context) => {
 
   const verifyOtp = async () => {
     let result: any = null;
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
     try {
       result = await AuthApi.otpEmailConfirmForgetPassword({
         otp: valueOTP,
-        userId: localStorage.getItem('user_id')
+        userId: userInfo.id
       });
     } catch (err) {
       // TODO: notify error (missing template)
@@ -58,7 +64,11 @@ const OtpPage = (context) => {
   }
 
   const requireOTP = async () => {
-    let phoneNumer = localStorage.getItem('phone_number')
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
+    let phoneNumer = userInfo.phone_number
     if (phoneNumer) {
       const result = await AuthApi.forgetPasswordByPhone({
         phone_number: phoneNumer,
