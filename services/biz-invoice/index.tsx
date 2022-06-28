@@ -5,10 +5,7 @@ const qs = require('qs');
 
 const createBizInvoice = async (params: any) => {
   const url = `/api/biz-invoices`;
-  let userInfo;
-  if (typeof localStorage.getItem('user') !== null) {
-    userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-  }
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
   return await Api.post(url, {
     data: {
         user: userInfo.id,

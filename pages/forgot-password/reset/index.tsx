@@ -62,10 +62,7 @@ const ResetPasswordPage = (props: ResetPasswordProps) => {
     console.log(data);
     if ( data.newPasswordValue === data.confirmPasswordValue ) {
       let result: any = null;
-      let userInfo;
-      if (typeof localStorage.getItem('user') !== null) {
-        userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-      }
+      let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
       try {
         result = await AuthApi.resetPassword({
           password: data.newPasswordValue,

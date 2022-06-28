@@ -3,7 +3,7 @@ import styles from "./PreviewValue.module.scss"
 
 const PreviewValue = ({ valueKey, value }: { valueKey: string; value: any }) => {
   let result = <div></div>
-  console.log(valueKey, value)
+  // console.log(valueKey, value)
   if (valueKey === "openHours") {
     return (
       <div>

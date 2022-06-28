@@ -23,9 +23,6 @@ const ClaimPage = () => {
   const [bizListing, setBizListing] = useState([])
 
   useEffect(() => {
-    // if (category && relationship === 'Yes') {
-    //   getBizListing(category).catch(console.error)
-    // }
     getBizListing()
   }, [])
 
@@ -37,12 +34,8 @@ const ClaimPage = () => {
 
   const handleSetListing = (e) => {
     console.log(e);
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
-    userInfo.biz_id = get(e, "id")
-    userInfo.biz_slug = get(e, "attributes.slug")
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    userInfo = {...userInfo, biz_id: get(e, "id"), biz_slug: get(e, "attributes.slug")}
     localStorage.setItem("user", JSON.stringify(userInfo))
     setListing(e)
   }
@@ -82,7 +75,7 @@ const ClaimPage = () => {
             <ListingSearchBox
               title="Claim Your Free Listing"
               listingOptions={bizListing}
-              onListingSearchChange={(e) => handleSetListing(e)}
+              onListingSearchChange={handleSetListing}
             />
           )}
         </SectionLayout>

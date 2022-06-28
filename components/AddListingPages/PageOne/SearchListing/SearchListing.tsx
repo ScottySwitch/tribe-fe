@@ -57,12 +57,8 @@ const SearchListing = ({
   console.log("bizListing", bizListing)
 
   if (listing) {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
-    userInfo.biz_id = get(listing, "id")
-    userInfo.biz_slug = get(listing, "attributes.slug")
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    userInfo = {...userInfo, biz_id: get(listing, "id"), biz_slug: get(listing, "attributes.slug")}
     localStorage.setItem("user", JSON.stringify(userInfo))
   }
   

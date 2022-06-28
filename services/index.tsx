@@ -6,12 +6,6 @@ const Api = axios.create({
 });
 
 Api.interceptors.request.use((config) => {
-  // if (localStorage.getItem("token")) {
-  //   const token = `Bearer ${localStorage.getItem("token")}`;
-  //   // @ts-ignore
-  //   config.headers.common["Authorization"] = token;
-  // }
-
   if (localStorage.getItem("user")) {
     let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     if ( userInfo.token ) {
@@ -31,7 +25,7 @@ Api.interceptors.response.use(
   function (err) {
     const status = err?.response?.status;
     if (status === 401) {
-      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       // window.location.href = "/sign-in"; // TODO
     }
     return Promise.reject(err);

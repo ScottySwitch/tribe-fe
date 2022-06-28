@@ -63,7 +63,7 @@ export const ContributeContent = () => {
 
 export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
   const router = useRouter()
-  const userInfo = JSON.parse(localStorage.getItem('user') || '')
+  const userInfo = JSON.parse(localStorage.getItem('user') || '{}')
   const userOwnerListing = userInfo.owner_listings || []
   const ownerListing = userOwnerListing.map((item) => item.attributes)
   return (
@@ -104,7 +104,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter()
   const handleSwitchToBizUser = () => {
-    let userInfo = JSON.parse(localStorage.getItem('user') || '')
+    let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
     userInfo.type = UsersTypes.BIZ_USER 
     localStorage.setItem('user', JSON.stringify(userInfo))
     if (get(userInfo, 'owner_listings.length')> 0) {
@@ -117,7 +117,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   }
 
   const handleSwitchToNormalUser = () => {
-    let userInfo = JSON.parse(localStorage.getItem('user') || '')
+    let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
     userInfo.type = UsersTypes.NORMAL_USER 
     localStorage.setItem('user', JSON.stringify(userInfo))
     router.pathname === "/" ? router.reload() : router.push("/")

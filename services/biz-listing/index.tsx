@@ -100,10 +100,7 @@ const getBizListingById = async (bizListingId: any) => {
 
 const createListingRole = async (params: any) => {
   const url = `/api/listing-roles`;
-  let userInfo;
-  if (typeof localStorage.getItem('user') !== null) {
-    userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-  }
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
   return await Api.post(url, {
     data: {
       user: userInfo.id,
@@ -136,6 +133,42 @@ const getBizListingBySlug = async (bizListingSlug: any) => {
   const query = qs.stringify({
     "filters": {
       "slug": bizListingSlug
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true
+  });
+
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
+const getOwnerBizListingBySlug = async (bizListingSlug: any) => {
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  const query = qs.stringify({
+    "filters": {
+      "slug": bizListingSlug,
+      $or: [
+        {
+          "claim_listings": {
+            "user": {
+              "id": {
+                "$eq": userInfo.id
+              }
+            }  
+          }
+        },
+        {
+          "listing_roles": {
+            "name": "owner",
+            "user": {
+              "id": {
+                "$eq": userInfo.id
+              }
+            } 
+          }
+        }
+      ] 
     },
     "populate": "*"
   }, {
@@ -211,6 +244,7 @@ export default {
   getBizListingById,
   createListingRole,
   getBizListingBySlug,
+  getOwnerBizListingBySlug,
   updateBizListing,
   createBizListing,
   getBizListingReviews,

@@ -35,10 +35,7 @@ const ClaimListing = (context) => {
   } = useRouter()
 
   useEffect(() => {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     const getListingData = async (listingId) => {
       const data = await BizListingApi.getBizListingById(listingId)
       setListing(data.data.data)

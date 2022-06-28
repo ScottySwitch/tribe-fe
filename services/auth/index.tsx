@@ -138,7 +138,6 @@ const loginFacebookCallback = async (accessToken: any) => {
   let user = await Api.get(url);
   if (user.data) {
     let { jwt } = user.data;
-    // localStorage.setItem("token", jwt)
     userInfo.token = jwt
     localStorage.setItem("user", JSON.stringify(userInfo))
     await getMe();
@@ -153,7 +152,6 @@ const loginGoogleCallback = async (accessToken: any) => {
   let user = await Api.get(url);
   if (user.data) {
     let { jwt } = user.data;
-    // localStorage.setItem("token", jwt)
     userInfo.token = jwt
     localStorage.setItem("user", JSON.stringify(userInfo))
     await getMe();

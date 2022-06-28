@@ -87,10 +87,7 @@ const AddListing = () => {
   }
 
   const handleSubmitFormData = async () => {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     ///do CRUD things here
     console.log("data", formData)
 

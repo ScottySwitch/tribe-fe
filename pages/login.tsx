@@ -48,10 +48,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     setIsLoading(true)
     // Email
     if (method === LoginMethod.EMAIL) {
@@ -71,7 +68,6 @@ const LoginPage = () => {
       if (result.data) {
         let { jwt } = result.data
         userInfo.token = jwt
-        // localStorage.setItem("token", jwt)
         localStorage.setItem("user", JSON.stringify(userInfo))
         await AuthApi.getMe()
       }
@@ -92,7 +88,6 @@ const LoginPage = () => {
       if (result.data) {
         let { jwt } = result.data
         userInfo.token = jwt
-        // localStorage.setItem("token", jwt)
         localStorage.setItem("user", JSON.stringify(userInfo))
         await AuthApi.getMe()
       }

@@ -52,10 +52,7 @@ const SignupPage = () => {
   } = useForm({ mode: "onChange" })
 
   const onSubmit = async (form: any) => {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     setIsLoading(true)
     const formData = {
       method: method,
@@ -72,7 +69,6 @@ const SignupPage = () => {
         })
         const { jwt } = result.data
         if (jwt) {
-          // localStorage.setItem("token", jwt)
           userInfo = result.data.user
           userInfo.token = jwt
           localStorage.setItem("user", JSON.stringify(userInfo))
@@ -109,8 +105,6 @@ const SignupPage = () => {
         })
         const { jwt } = result.data
         if (jwt) {
-          // localStorage.setItem("phone_number", formData.phone);
-          // localStorage.setItem("token", jwt)
           userInfo = result.data.user
           userInfo.token = jwt
           userInfo.phone_number = formData.phone

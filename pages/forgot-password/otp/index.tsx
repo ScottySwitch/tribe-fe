@@ -39,10 +39,7 @@ const OtpPage = (context) => {
 
   const verifyOtp = async () => {
     let result: any = null;
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     try {
       result = await AuthApi.otpEmailConfirmForgetPassword({
         otp: valueOTP,
@@ -64,10 +61,7 @@ const OtpPage = (context) => {
   }
 
   const requireOTP = async () => {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     let phoneNumer = userInfo.phone_number
     if (phoneNumer) {
       const result = await AuthApi.forgetPasswordByPhone({

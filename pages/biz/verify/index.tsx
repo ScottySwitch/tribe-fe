@@ -39,15 +39,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   useEffect(() => {
     const sessionId = router.query.sessionId
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     setPayPrice(userInfo.pay_price)
     if (sessionId && userInfo.isVeriFy != "true") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
       handleFinishVerifying("stripe")
-      // for storing product payment order in strapi
       const checkoutSessionId = sessionId
       console.log(checkoutSessionId)
       if (checkoutSessionId) {
@@ -55,7 +51,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       }
     }
 
-    //  storing product payment order in strapi logic
   }, [])
 
   const handleSubmit = () => {
@@ -65,17 +60,13 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   }
 
   function SS_ProductCheckout() {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     const strapiStripe = document.querySelector("#SS_ProductCheckout") as HTMLElement
     const productId = strapiStripe?.dataset.id
 
     const baseUrl = strapiStripe?.dataset.url || ""
     userInfo.strapiStripeUrl = baseUrl
     localStorage.setItem("user", JSON.stringify(userInfo))
-    // localStorage.setItem("strapiStripeUrl", baseUrl)
     const getProductApi = baseUrl + "/strapi-stripe/getProduct/" + productId
     const checkoutSessionUrl = baseUrl + "/strapi-stripe/createCheckoutSession/"
 
@@ -97,7 +88,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             productId: response.id,
             productName: response.title,
           }),
-          // mode: "cors",
           headers: new Headers({
             "Content-Type": "application/json",
           }),
@@ -112,10 +102,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   }
 
   function SS_GetProductPaymentDetails(checkoutSessionId) {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     const baseUrl = userInfo.strapiStripeUrl
     const retrieveCheckoutSessionUrl =
       baseUrl + "/strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId
@@ -192,23 +179,14 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   }
 
   const handleDirectToStorePage = () => {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     userInfo.isVeriFy = false
-    // const localLoginInfo = { tier: tier, token: userInfo.token, type: UsersTypes.BIZ_USER }
-    // localStorage.setItem(loginInforItem, JSON.stringify(localLoginInfo))
     localStorage.setItem("user", JSON.stringify(userInfo))
     window.location.href = `/biz/home/${userInfo.biz_slug}/edit/`
-    // localStorage.setItem("isVeriFy", "false")
   }
 
   const handleAddIdCard = async () => {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     if (frontImageIdentity != "" && backImageIdentity != "") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
       const userId = userInfo.id
@@ -226,10 +204,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   }
 
   const handleFinishVerifying = async (paymentMethodValue: string) => {
-    let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    }
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     let price = userInfo.pay_price
     let transaction_id
     if (router.query.sessionId) {
@@ -250,7 +225,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     }
     userInfo.isVeriFy = true
     localStorage.setItem("user", JSON.stringify(userInfo))
-    // localStorage.setItem("isVeriFy", "true")
     setShowResultModal(true)
   }
 

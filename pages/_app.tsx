@@ -67,25 +67,25 @@ function MyApp({ Component, pageProps }: AppProps) {
     let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     const getMe = async () => {
       await AuthApi.getMe()
-      let ownerListing = []
+      let ownerListings = []
       if (userInfo) {
         const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
         const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
         const dataClaimListing = await ClaimListingApi.getClaimListingByUserId(userInfo.id)
         const dataListingRoles = await BizApi.getOwnerListingRoleByUserId(userInfo.id)
-        userInfo.biz_listings = dataBizlisting.data.data
-        userInfo.biz_invoice = dataBizInvoice.data.data
-        userInfo.claim_listings = dataClaimListing.data.data
-        userInfo.owner_listings = []
-        userInfo.listing_roles = dataListingRoles.data
-        ownerListing = get(dataClaimListing, 'data.data').map((item) => get(item, 'attributes.biz_listings.data'))
+        userInfo = {
+          ...userInfo,
+          biz_listings: dataBizlisting.data.data, 
+          biz_invoice: dataBizInvoice.data.data, 
+          claim_listings: dataClaimListing.data.data,
+          listing_roles: dataListingRoles.data.data,
+          owner_listings: []
+        }
+        ownerListings = userInfo.claim_listings.map((item) => get(item, 'attributes.biz_listings.data'))
         get(dataListingRoles, 'data.data').map((item) => {
-          let isVisible = ownerListing.filter((item1: any) => item1.id === get(item, 'attributes.biz_listing.data.id'))
-          if (isVisible.length == 0) {
-            ownerListing = ownerListing.concat(get(item, 'attributes.biz_listing.data'))
-          }
+          ownerListings = ownerListings.concat(get(item, 'attributes.biz_listing.data'))
         })
-        userInfo.owner_listings = ownerListing
+        userInfo={...userInfo, owner_listings: ownerListings}
       }
       localStorage.setItem("user", JSON.stringify(userInfo))
     }
