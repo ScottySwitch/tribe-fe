@@ -18,6 +18,7 @@ export interface InforCardProps {
   description?: string
   width?: string | number
   validUntil?: any
+  isFavourited?: boolean
 }
 
 const InforCard = (props: InforCardProps) => {
@@ -35,6 +36,7 @@ const InforCard = (props: InforCardProps) => {
     price,
     isVerified,
     width,
+    isFavourited,
   } = props
   // console.log('props', props)
   return (
@@ -45,6 +47,11 @@ const InforCard = (props: InforCardProps) => {
         </div>
       )}
       <div className={styles.cover}>
+        {isFavourited && (
+          <div className={styles.favourited}>
+            <Icon icon="like-solid" color="#e60112" />
+          </div>
+        )}
         {imgUrl && <Image src={imgUrl} alt="" layout="responsive" width="100%" height="100%" />}
       </div>
       <div className={styles.details}>

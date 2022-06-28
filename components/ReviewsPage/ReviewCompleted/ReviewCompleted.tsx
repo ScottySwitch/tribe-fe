@@ -1,24 +1,28 @@
-import Button from "components/Button/Button"
+import { ReactElement, ReactNode } from "react"
+import { rateType } from "../ReviewCard/ReviewCard"
+import classNames from "classnames"
 import Icon from "components/Icon/Icon"
-import Popover from "components/Popover/Popover"
 import Rate from "components/Rate/Rate"
 import Image from "next/image"
-import { ReactElement } from "react"
-import { rateType } from "../ReviewCard/ReviewCard"
-
 import styles from "./ReviewCompleted.module.scss"
-interface ReviewCompletedProps {
+import Popover from "components/Popover/Popover"
+import Button from "components/Button/Button"
+export interface ReviewCompletedProps {
   className?: string
   isPaid?: boolean
   actions?: boolean
-  children?: ReactElement
+  children?: ReactElement | ReactNode
   avatarUrl?: string
   content?: string
   listImage?: any[]
   dateVisit?: string
-  name?: string
+  displayName?: string
   rating?: number
-  user: any
+  censorshipLabel?: string
+  status: "pending" | "approved" | "denied"
+  date?: string
+  isDivier?: boolean
+  user?: any
   onReplyClick?(): void
 }
 
@@ -29,35 +33,64 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
     content,
     listImage,
     dateVisit,
+    displayName,
+    rating,
     isPaid,
     actions,
-    rating,
-    user = {},
+    user,
+    censorshipLabel,
+    status,
+    children,
+    date,
     onReplyClick,
+    isDivier = false,
   } = props
 
+  const reviewCompletedClassName = classNames(styles.review_completed, className, {
+    [styles.divider]: isDivier,
+  })
+
+  const statusClassName = classNames(styles.status, {
+    [styles.pending]: status === "pending",
+    [styles.approved]: status === "approved",
+    [styles.denied]: status === "denied",
+  })
+  const censoredStatusClassName = classNames(styles.censored_status, "flex", {
+    ["justify-end"]: status === "denied",
+  })
+
   return (
-    <div className={`${styles.review_completed} ${className}`}>
-      <div className={styles.review_avatar}>
-        {(user.avatar || avatarUrl) && (
+    <div className={reviewCompletedClassName}>
+      <div className={styles.group_heading}>
+        <div className={styles.review_avatar}>
           <Image
-            src={user.avatar || avatarUrl}
+            src={user?.avatar || avatarUrl}
             height={56}
             width={56}
             alt=""
             className="rounded-full"
           />
-        )}
-      </div>
-      <div className={styles.review_sumary}>
-        <div className={styles.header}>
-          <h6 className={styles.name}>{user.first_name + " " + user.last_name}</h6>
-          {actions && (
-            <Popover content={<div>Report review</div>} position="bottom-left">
-              <Icon icon="toolbar" />
-            </Popover>
-          )}
         </div>
+        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
+          <div className={styles.header}>
+            <h6 className={styles.name}>
+              {/* <span>{displayName}</span> */}
+              <span>{user?.first_name + " " + user?.last_name}</span>
+              {censorshipLabel && <span className="font-normal ml-2">{censorshipLabel}</span>}
+            </h6>
+            {actions && (
+              <Popover content={<div>Report review</div>} position="bottom-left">
+                <Icon icon="toolbar" />
+              </Popover>
+            )}
+          </div>
+          <div className={styles.status_date}>
+            {status && <div className={statusClassName}>{status}</div>}
+            {date && <div className={styles.date}>{date}</div>}
+          </div>
+        </div>
+      </div>
+      <div className={styles.review_summary}>
         {rating && (
           <div className={styles.rating_group}>
             <Rate readonly={true} initialRating={rating} />
@@ -76,7 +109,25 @@ const ReviewCompleted = (props: ReviewCompletedProps) => {
         )}
         {dateVisit && (
           <div className={styles.date_visit}>
-            <strong>Date of visit:</strong> {dateVisit}
+            <strong>Date of visit:</strong>
+            {dateVisit}
+          </div>
+        )}
+        {children && <div className={styles.children}>{children}</div>}
+
+        {status !== "pending" && (
+          <div className={censoredStatusClassName}>
+            {status === "approved" && (
+              <div className={styles.censored_status_approved}>
+                <Icon icon="checked-approved" className="mr-3" />
+                <span>Approved on {date}</span>
+              </div>
+            )}
+            {status === "denied" && (
+              <div className={styles.censored_status_denied}>
+                <span>Contact admin</span>
+              </div>
+            )}
           </div>
         )}
         {actions && (

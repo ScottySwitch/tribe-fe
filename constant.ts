@@ -1,5 +1,6 @@
-import { Categories, InformationList, ListingHomePageScreens, ListingTabs } from "enums"
+import { Categories, InformationList, ListingHomePageScreens, ListingTabs, UserInformationList } from "enums"
 import { IAddListingForm } from "pages/add-listing"
+import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed"
 
 export const loginInforItem = "login_infor"
 export const user = "user"
@@ -251,6 +252,17 @@ export const freeInformationList = [
   { label: InformationList.VERIFICATION, icon: "like-color-2" },
 ]
 
+export const userInformationList = [
+  { label: UserInformationList.USER_INFORMATION, icon: "user-color-2" },
+  { label: UserInformationList.CHANGE_PASSWORD, icon: "password" },
+  { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
+  { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
+  { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
+  { label: UserInformationList.TRIBES_FOR_BUSINESSES, icon: "user-color-2" },
+  { label: UserInformationList.SUPPORT, icon: "support-color" },
+  { label: UserInformationList.TERMS_CONDITIONS, icon: "user-color-2" },
+]
+
 export const eatTabList = [
   { text: "Dishes", value: ListingTabs.DISH, screen: ListingHomePageScreens.ADD_ITEMS },
   { text: "Menu", value: ListingTabs.MENU, screen: ListingHomePageScreens.ADD_MENU },
@@ -270,6 +282,7 @@ export const serviceTabList = [
 export const inforCardList = [
   {
     images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -281,6 +294,7 @@ export const inforCardList = [
   },
   {
     images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -292,6 +306,7 @@ export const inforCardList = [
   },
   {
     images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -303,6 +318,7 @@ export const inforCardList = [
   },
   {
     images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -313,17 +329,7 @@ export const inforCardList = [
   },
   {
     images: ["https://picsum.photos/300/600"],
-    title: "Evertop Hainanese Boneless Chicken",
-    rate: 4.5,
-    rateNumber: 25,
-    followerNumber: 500,
-    price: "$37.35",
-    categories: ["Fast food", "Desserts"],
-    tags: ["Hot deals", "Best sellers"],
-    isVerified: true,
-  },
-  {
-    images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -335,6 +341,7 @@ export const inforCardList = [
   },
   {
     images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -346,6 +353,7 @@ export const inforCardList = [
   },
   {
     images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -357,6 +365,31 @@ export const inforCardList = [
   },
   {
     images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
+    title: "Evertop Hainanese Boneless Chicken",
+    rate: 4.5,
+    rateNumber: 25,
+    followerNumber: 500,
+    price: "$37.35",
+    categories: ["Fast food", "Desserts"],
+    tags: ["Hot deals", "Best sellers"],
+    isVerified: true,
+  },
+  {
+    images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
+    title: "Evertop Hainanese Boneless Chicken",
+    rate: 4.5,
+    rateNumber: 25,
+    followerNumber: 500,
+    price: "$37.35",
+    categories: ["Fast food", "Desserts"],
+    tags: ["Hot deals", "Best sellers"],
+    isVerified: true,
+  },
+  {
+    images: ["https://picsum.photos/300/600"],
+    imgUrl: "https://picsum.photos/300/600",
     title: "Evertop Hainanese Boneless Chicken",
     rate: 4.5,
     rateNumber: 25,
@@ -1082,3 +1115,167 @@ export const getAddItemsFields = (category, isEdit?: boolean) => {
       }
   }
 }
+
+export const dummySavedDeals = [
+  {
+    imgUrl: "https://picsum.photos/300/600",
+    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    expiredAt: "April 17, 2022 - April 17, 2022",
+    type: 2,
+    favourite: true,
+  },
+  {
+    imgUrl: "https://picsum.photos/300/600",
+    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    expiredAt: "April 17, 2022 - April 30, 2022",
+    type: 2,
+    favourite: true,
+  },
+  {
+    imgUrl: "https://picsum.photos/300/600",
+    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    expiredAt: "April 17, 2022 - April 24, 2022",
+    type: 2,
+    favourite: true,
+  },
+]
+
+
+export const dummyUserInfo = {
+  email: "annabae@gmail.com",
+  phoneNumber: "",
+  country: "Singapore",
+  gender: "others",
+  educationLevel: "",
+  industry: "",
+  birthday: "",
+}
+
+export const dummyPending = [
+  {
+    avatarUrl: "https://picsum.photos/100",
+    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
+    dateVisit: "March 2021",
+    displayName: "Anna Nhun",
+    rating: 5,
+    censorshipLabel: "has created a new listing",
+    date: "24-2-2021",
+    status: "pending",
+    biz: {
+      title: "Evertop Hainanese Bonelele",
+      rate: 4,
+      rateNumber: 24,
+      followerNumber: 500,
+      imgUrl: "https://picsum.photos/200",
+      tags: ["Fast Food", "Desserts", "Beverages"],
+      location: "50 Bussorah St, Singapore 199466"
+    }
+  },
+  {
+    avatarUrl: "https://picsum.photos/100",
+    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
+    dateVisit: "March 2021",
+    displayName: "Anna Nhun",
+    rating: 5,
+    censorshipLabel: "has reviewed",
+    date: "24-2-2021",
+    status: "pending",
+    biz: {
+      title: "Evertop Hainanese Bonelele",
+      rate: 4,
+      rateNumber: 24,
+      followerNumber: 500,
+      imgUrl: "https://picsum.photos/200",
+      tags: ["Fast Food", "Desserts"],
+      location: "50 Bussorah St, Singapore 199466"
+    }
+  }
+]
+
+export const dummyApproved = [
+  {
+    avatarUrl: "https://picsum.photos/100",
+    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
+    dateVisit: "March 2021",
+    displayName: "Anna Nhun",
+    rating: 5,
+    censorshipLabel: "has created a new listing",
+    date: "24-2-2021",
+    status: "approved",
+    biz: {
+      title: "Evertop Hainanese Bonelele",
+      rate: 4,
+      rateNumber: 24,
+      followerNumber: 500,
+      imgUrl: "https://picsum.photos/200",
+      tags: ["Fast Food", "Desserts", "Beverages"],
+      location: "50 Bussorah St, Singapore 199466"
+    }
+  },
+  {
+    avatarUrl: "https://picsum.photos/100",
+    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
+    dateVisit: "March 2021",
+    displayName: "Anna Nhun",
+    rating: 5,
+    censorshipLabel: "has reviewed",
+    date: "24-2-2021",
+    status: "approved",
+    biz: {
+      title: "Evertop Hainanese Bonelele",
+      rate: 4,
+      rateNumber: 24,
+      followerNumber: 500,
+      imgUrl: "https://picsum.photos/200",
+      tags: ["Fast Food", "Desserts"],
+      location: "50 Bussorah St, Singapore 199466"
+    }
+  }
+]
+
+export const dummyDenied = [
+  {
+    avatarUrl: "https://picsum.photos/100",
+    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
+    dateVisit: "March 2021",
+    displayName: "Anna Nhun",
+    rating: 5,
+    censorshipLabel: "has created a new listing",
+    date: "24-2-2021",
+    status: "denied",
+    biz: {
+      title: "Evertop Hainanese Bonelele",
+      rate: 4,
+      rateNumber: 24,
+      followerNumber: 500,
+      imgUrl: "https://picsum.photos/200",
+      tags: ["Fast Food", "Desserts", "Beverages"],
+      location: "50 Bussorah St, Singapore 199466"
+    }
+  },
+  {
+    avatarUrl: "https://picsum.photos/100",
+    content: "Salam Alikoum, Excellente food. A must try specially lamb stew or chef signature couscous lamb. I go at least once a week !!! So Yammy.",
+    listImage: ["https://picsum.photos/106", "https://picsum.photos/106"],
+    dateVisit: "March 2021",
+    displayName: "Anna Nhun",
+    rating: 5,
+    censorshipLabel: "has reviewed",
+    date: "24-2-2021",
+    status: "denied",
+    biz: {
+      title: "Evertop Hainanese Bonelele",
+      rate: 4,
+      rateNumber: 24,
+      followerNumber: 500,
+      imgUrl: "https://picsum.photos/200",
+      tags: ["Fast Food", "Desserts"],
+      location: "50 Bussorah St, Singapore 199466"
+    }
+  }
+]
