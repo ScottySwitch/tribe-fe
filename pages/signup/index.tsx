@@ -53,6 +53,7 @@ const SignupPage = () => {
   } = useForm({ mode: "onChange" })
 
   const onSubmit = async (form: any) => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     setIsLoading(true)
     const formData = {
       method: method,
@@ -69,7 +70,10 @@ const SignupPage = () => {
         })
         const { jwt } = result.data
         if (jwt) {
-          localStorage.setItem("token", jwt)
+          userInfo = result.data.user
+          userInfo.token = jwt
+          localStorage.setItem("user", JSON.stringify(userInfo))
+  
           // OTP flow
           await AuthApi.otpEmailGenerate()
           router.push({
@@ -102,13 +106,14 @@ const SignupPage = () => {
         })
         const { jwt } = result.data
         if (jwt) {
-          localStorage.setItem("phone_number", formData.phone);
-          localStorage.setItem("token", jwt)
+          userInfo = result.data.user
+          userInfo.token = jwt
+          userInfo.phone_number = formData.phone
+          localStorage.setItem("user", JSON.stringify(userInfo))
           // OTP flow
           await AuthApi.otpPhoneGenerate(formData.phone)
           router.push({
             pathname: "/signup/otp",
-            //help otp page detect method and otp receiver
             query: {
               method: method,
               otpReceiver: otpReceiver,
@@ -116,7 +121,6 @@ const SignupPage = () => {
           })
         }
       } catch (err: any) {
-        // TODO: notify error (missing template)
         console.log(get(err, "response.data.error"))
         setIsLoading(false)
       }

@@ -87,6 +87,7 @@ const AddListing = () => {
   }
 
   const handleSubmitFormData = async () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     ///do CRUD things here
     console.log("data", formData)
 
@@ -95,7 +96,7 @@ const AddListing = () => {
       address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`
     }
     const dataSend = {
-      user: localStorage.getItem("user_id"),
+      user: userInfo.id,
       is_verified: false,
       categories: [formData.category],
       name: formData.businessName,

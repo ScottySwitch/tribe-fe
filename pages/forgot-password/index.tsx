@@ -29,6 +29,7 @@ const ForgotPasswordPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("")
 
   const handleSubmit = async (event: any) => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     event.preventDefault()
     const otpReceiver =
       method === LoginMethod.EMAIL ? event.target.email.value : event.target.phone.value
@@ -48,7 +49,8 @@ const ForgotPasswordPage = () => {
         console.log('result: ', result);
         if (result.data.ok) {
           check = true;
-          localStorage.setItem("user_id", result.data.id);
+          userInfo = {...userInfo, id: result.data.id}
+          localStorage.setItem("user", JSON.stringify(userInfo))
         }
       } catch (error: any) {
         console.log(error.response.data.error);
@@ -64,8 +66,8 @@ const ForgotPasswordPage = () => {
         console.log('result: ', result);
         if (result.data.ok) {
           check = true;
-          localStorage.setItem("user_id", result.data.id);
-          localStorage.setItem("phone_number", phoneNumber);
+          userInfo = {...userInfo, id: result.data.id, phone_number: phoneNumber}
+          localStorage.setItem("user", JSON.stringify(userInfo))
         }
       } catch (error: any) {
         console.log(error.response.data.error);

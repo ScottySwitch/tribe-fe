@@ -116,12 +116,14 @@ const DesktopTierTable = ({
     console.log(isPayYearly)
   })
   const handleChangePayPrice = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     setIsPayYearly?.(!isPayYearly)
-    if (localStorage.getItem("pay_price") == "600") {
-      localStorage.setItem("pay_price", "150")
+    if (userInfo.pay_price == "600") {
+      userInfo = {...userInfo, pay_price: "150"}
     } else {
-      localStorage.setItem("pay_price", "600")
+      userInfo = {...userInfo, pay_price: "600"}
     }
+    localStorage.setItem("user", JSON.stringify(userInfo))
   }
   return (
     <table>
@@ -204,14 +206,14 @@ const MobileTierTable = ({
 }) => {
   const [tierList, setTierList] = useState<string[]>([])
   const handleChangePayPrice = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     setIsPayYearly?.(!isPayYearly)
-    if (localStorage.getItem("pay_price") == "600") {
-      localStorage.setItem("pay_price", "150")
+    if (userInfo.pay_price == "600") {
+      userInfo = {...userInfo, pay_price: "150"}
     } else {
-      localStorage.setItem("pay_price", "600")
+      userInfo = {...userInfo, pay_price: "600"}
     }
-    console.log(localStorage.getItem("pay_price"))
-    console.log(isPayYearly)
+    localStorage.setItem("user", JSON.stringify(userInfo))
   }
   return (
     <div className={styles.tier_mobile}>

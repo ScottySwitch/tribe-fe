@@ -58,6 +58,24 @@ const getBizListingsByCategoryId = async (categoryId: number) => {
   return await Api.get(url);
 }
 
+const getBizListingByUserId = async (userId: number) => {
+  const query = qs.stringify({
+    "filters": {
+      "user": {
+        "id": {
+          "$eq": userId
+        }
+      }    
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true, 
+  });
+
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
 const getBizListingById = async (bizListingId: any) => {
   const query = qs.stringify({
     "populate": {
@@ -82,19 +100,75 @@ const getBizListingById = async (bizListingId: any) => {
 
 const createListingRole = async (params: any) => {
   const url = `/api/listing-roles`;
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
   return await Api.post(url, {
     data: {
-      user: localStorage.getItem('user_id'),
+      user: userInfo.id,
       biz_listing: params.bizListingId,
       name: params.name
     }
   });
 }
 
+const getOwnerListingRoleByUserId = async (userId: any) => {
+  const query = qs.stringify({
+    "filters": {
+      "name": "owner",
+      "user": {
+        "id": {
+          "$eq": userId
+        }
+      }    
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true, 
+  });
+
+  const url = `/api/listing-roles?${query}`;
+  return await Api.get(url);
+}
+
 const getBizListingBySlug = async (bizListingSlug: any) => {
   const query = qs.stringify({
     "filters": {
       "slug": bizListingSlug
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true
+  });
+
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
+const getOwnerBizListingBySlug = async (bizListingSlug: any) => {
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  const query = qs.stringify({
+    "filters": {
+      "slug": bizListingSlug,
+      $or: [
+        {
+          "claim_listings": {
+            "user": {
+              "id": {
+                "$eq": userInfo.id
+              }
+            }  
+          }
+        },
+        {
+          "listing_roles": {
+            "name": "owner",
+            "user": {
+              "id": {
+                "$eq": userInfo.id
+              }
+            } 
+          }
+        }
+      ] 
     },
     "populate": "*"
   }, {
@@ -164,10 +238,13 @@ const getBizListingByCountry = async (country: string) => {
 
 export default {
   getBizListing,
+  getOwnerListingRoleByUserId,
+  getBizListingByUserId,
   getBizListingsByCategoryId,
   getBizListingById,
   createListingRole,
   getBizListingBySlug,
+  getOwnerBizListingBySlug,
   updateBizListing,
   createBizListing,
   getBizListingReviews,
