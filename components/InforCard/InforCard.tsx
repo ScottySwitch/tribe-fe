@@ -19,6 +19,7 @@ export interface InforCardProps {
   width?: string | number
   validUntil?: any
   isFavourited?: boolean
+  onClick?: () => void
 }
 
 const InforCard = (props: InforCardProps) => {

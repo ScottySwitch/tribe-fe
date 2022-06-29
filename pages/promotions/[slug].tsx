@@ -1,5 +1,7 @@
 import { useState } from "react"
 import { inforCardList } from "constant"
+import DealsDetailsModal, { IDealsDetails } from "components/DealsDetailsModal/DealsDetailsModal"
+import ProductDetailsModal from "components/ProductDetailsModal/ProductDetailsModal"
 import InforCard from "components/InforCard/InforCard"
 import PromotionCard from "components/PromotionCard/PromotionCard"
 import Image from "next/image"
@@ -8,7 +10,6 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import DividerSection from "components/DividerSection/DividerSection"
 import ScrollingBox from "components/ScrollingBox/ScrollingBox"
 import styles from "styles/Promotions.module.scss"
-import DealsDetailsModal, { IDealsDetails } from "components/DealsDetailsModal/DealsDetailsModal"
 
 const dummyPromotion = [
   {
@@ -94,6 +95,7 @@ const dummyDealsDetails: IDealsDetails = {
 const PromotionsPage = () => {
   const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>()
   const [dealsDetails, setDealsDetails] = useState<IDealsDetails>({} as IDealsDetails)
+  const [showModalProductDetails, setShowModaProductDetails] = useState<any>()
 
   const handleDealsDeatails = (value: boolean) => {
     setShowModalDealsDetails(value)
@@ -181,6 +183,7 @@ const PromotionsPage = () => {
               iconTag={true}
               isVerified={card.isVerified}
               className="w-full"
+              onClick={() => setShowModaProductDetails("[id]", true)}
             />
           ))}
         </div>
@@ -337,6 +340,10 @@ const PromotionsPage = () => {
         onClose={() => handleDealsDeatails(false)}
         onShare={() => handleShare()}
         onFavourite={() => handleFavourite()}
+      />
+
+      <ProductDetailsModal
+        visible={showModalProductDetails}
       />
     </div>
   )
