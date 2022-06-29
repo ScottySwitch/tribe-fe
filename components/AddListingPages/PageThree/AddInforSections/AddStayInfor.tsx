@@ -25,6 +25,8 @@ import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import Upload from "components/Upload/Upload"
 import { IAddListingForm } from "pages/add-listing"
 import Icon from "components/Icon/Icon"
+import Select from "components/Select/Select"
+import { currencyOptions } from "constant"
 
 interface AddStayInforProps {
   isEdit?: boolean
@@ -137,7 +139,12 @@ const AddStayInfor = (props: AddStayInforProps) => {
           </Question>
           <Question question="What’s the average price range of this service?" optional>
             <div className="w-3/5">
-              <Input placeholder="Select a currency" register={register("currency")} />
+              <Select
+                placeholder="Select a currency"
+                options={currencyOptions}
+                value={getValues("currency")}
+                onChange={(e) => setValue("currency", e)}
+              />
               <br />
               <div className="flex gap-5">
                 <Input
@@ -209,8 +216,14 @@ const AddStayInfor = (props: AddStayInforProps) => {
               ))}
             </div>
           </Question>
-          <Question question="Do you have photos or videos to share? " show={!isEdit} optional>
+          <Question
+            question="Do you have photos or videos to share?"
+            instruction="Add images/ videos ( up to 3 )"
+            show={!isEdit}
+            optional
+          >
             <Upload
+              isPaid={false}
               multiple={true}
               accept="images"
               fileList={getValues("images")}

@@ -19,6 +19,8 @@ import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import { buyAssociatedCategories, productTypes, decribePlaceList } from "../constant"
 import { IOption } from "type"
 import { IAddListingForm } from "pages/add-listing"
+import Select from "components/Select/Select"
+import { currencyOptions } from "constant"
 
 interface AddBuyInforProps {
   isEdit?: boolean
@@ -141,16 +143,35 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           </Question>
           <Question question="What’s the average price range of this service?" optional>
             <div className="w-3/5">
-              <Input placeholder="Select a currency" register={register("currency")} />
+              <Select
+                placeholder="Select a currency"
+                options={currencyOptions}
+                value={getValues("currency")}
+                onChange={(e) => setValue("currency", e)}
+              />
               <br />
               <div className="flex gap-5">
-                <Input placeholder="Minimum Price" register={register("minPrice")} />
-                <Input placeholder="Maximum Price" register={register("maxPrice")} />
+                <Input
+                  placeholder="Minimum Price"
+                  register={register("minPrice")}
+                  className="w-full sm:w-1/2"
+                />
+                <Input
+                  placeholder="Maximum Price"
+                  register={register("maxPrice")}
+                  className="w-full sm:w-1/2"
+                />
               </div>
             </div>
           </Question>
-          <Question question="Do you have photos or videos to share? " show={!isEdit} optional>
+          <Question
+            question="Do you have photos or videos to share?"
+            instruction="Add images/ videos ( up to 3 )"
+            show={!isEdit}
+            optional
+          >
             <Upload
+              isPaid={false}
               multiple={true}
               accept="images"
               fileList={getValues("images")}

@@ -37,7 +37,7 @@ export interface IAddListingForm {
   contact: string
   email: string
   socialMedia: string
-  currency: string
+  currency?: { label: string; value: string }
   minPrice: string
   maxPrice: string
 
@@ -87,7 +87,7 @@ const AddListing = () => {
   }
 
   const handleSubmitFormData = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     ///do CRUD things here
     console.log("data", formData)
 
@@ -108,7 +108,7 @@ const AddListing = () => {
       email: formData.email === "" ? null : formData.email,
       tags: formData.tags,
       price_range: {
-        currency: formData.currency,
+        currency: formData.currency?.value,
         min: formData.minPrice,
         max: formData.maxPrice,
       },
@@ -203,14 +203,13 @@ const AddListing = () => {
       <Modal
         visible={showPreviewModal}
         title="Does everything look correct?"
-        subTitle="Please review this information before submiting!"
+        subTitle="Please review this information before submitting!"
         width={780}
         mobileFullHeight
         onClose={() => setShowPreviewModal(false)}
       >
         <div className="px-[30px] gap-6 flex flex-col">
           {previewInfo.map((row) => {
-            console.log("aaa", row.valueKey)
             return (
               <div key={row.question} className="flex gap-20">
                 <div className="flex flex-wrap w-3/5">{row.question}</div>

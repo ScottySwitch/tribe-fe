@@ -10,7 +10,7 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 import { ChangeEvent, FormEvent, useState, useCallback, useEffect } from "react"
 import styles from "styles/BizUserVerify.module.scss"
-import { randomId, calcSetPhoneNumber } from "utils"
+import { randomId, removeZeroInPhoneNumber } from "utils"
 import AuthApi from "../../../services/auth"
 import UserApi from "../../../services/user"
 import BizInvoinceApi from "../../../services/biz-invoice"
@@ -31,7 +31,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [showResultModal, setShowResultModal] = useState(false)
   const [frontImageIdentity, setFrontImageIdentity] = useState<string>("")
   const [backImageIdentity, setBackImageIdentity] = useState<string>("")
-  const [payPrice, setPayPrice] = useState<string>('')
+  const [payPrice, setPayPrice] = useState<string>("")
   const router = useRouter()
   let baseURL = process.env.NEXT_PUBLIC_API_URL
 
@@ -39,7 +39,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   useEffect(() => {
     const sessionId = router.query.sessionId
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     setPayPrice(userInfo.pay_price)
     if (sessionId && userInfo.isVeriFy != "true") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
@@ -50,7 +50,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         SS_GetProductPaymentDetails(checkoutSessionId)
       }
     }
-
   }, [])
 
   const handleSubmit = () => {
@@ -60,7 +59,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   }
 
   function SS_ProductCheckout() {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     const strapiStripe = document.querySelector("#SS_ProductCheckout") as HTMLElement
     const productId = strapiStripe?.dataset.id
 
@@ -102,7 +101,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   }
 
   function SS_GetProductPaymentDetails(checkoutSessionId) {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     const baseUrl = userInfo.strapiStripeUrl
     const retrieveCheckoutSessionUrl =
       baseUrl + "/strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId
@@ -179,14 +178,14 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   }
 
   const handleDirectToStorePage = () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     userInfo.isVeriFy = false
     localStorage.setItem("user", JSON.stringify(userInfo))
     window.location.href = `/biz/home/${userInfo.biz_slug}/edit/`
   }
 
   const handleAddIdCard = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     if (frontImageIdentity != "" && backImageIdentity != "") {
       setVerifyStep(VerifySteps.ADD_PAYMENT)
       const userId = userInfo.id
@@ -204,7 +203,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   }
 
   const handleFinishVerifying = async (paymentMethodValue: string) => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     let price = userInfo.pay_price
     let transaction_id
     if (router.query.sessionId) {
@@ -249,7 +248,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             selectPlaceholder="Area code"
             options={formattedAreaCodes}
             shouldControlShowValue
-            onChange={(e) => setPhoneNumber(calcSetPhoneNumber(e))}
+            onChange={(e) => setPhoneNumber(removeZeroInPhoneNumber(e))}
           />
           <Button text="Receive OTP" onClick={handleRequestOTP} />
         </div>

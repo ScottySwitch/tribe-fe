@@ -1,29 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react"
+import { Controller, useForm } from "react-hook-form"
 
-import SectionLayout from "components/SectionLayout/SectionLayout";
-import Button from "components/Button/Button";
-import Question from "components/Question/Question";
-import Input from "components/Input/Input";
-import Checkbox from "components/Checkbox/Checkbox";
-import Icon from "components/Icon/Icon";
-import Select from "components/Select/Select";
-import { roleList } from "constant";
-import { IAddListingForm } from "pages/add-listing";
+import SectionLayout from "components/SectionLayout/SectionLayout"
+import Button from "components/Button/Button"
+import Question from "components/Question/Question"
+import Input from "components/Input/Input"
+import Checkbox from "components/Checkbox/Checkbox"
+import Icon from "components/Icon/Icon"
+import Select from "components/Select/Select"
+import {
+  countryList,
+  formattedAreaCodes,
+  phoneAreaCodes,
+  roleList,
+  socialMediaOptions,
+} from "constant"
+import { IAddListingForm } from "pages/add-listing"
+import { setValues } from "framer-motion/types/render/utils/setters"
+import SelectInput from "components/SelectInput/SelectInput"
+import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils"
+import { IOption } from "type"
+import Image from "next/image"
 
 interface AddListingProps {
-  onPrevPage: () => void;
-  onNextPage: () => void;
-  onUpdateFormData: (data: { [key: string]: any }) => void;
-  show: boolean;
-  data: IAddListingForm;
+  onPrevPage: () => void
+  onNextPage: () => void
+  onUpdateFormData: (data: { [key: string]: any }) => void
+  show: boolean
+  data: IAddListingForm
 }
 
 const AddListingPageTwo = (props: AddListingProps) => {
-  const { data, show, onUpdateFormData, onNextPage, onPrevPage } = props;
+  const { data, show, onUpdateFormData, onNextPage, onPrevPage } = props
   const [isOnlineLocation, setIsOnlineLocation] = useState(false)
 
-  const { register, handleSubmit, getValues } = useForm({
+  const { register, handleSubmit, getValues, setValue } = useForm({
     defaultValues: {
       businessName: data.businessName,
       description: data.description,
@@ -36,16 +47,25 @@ const AddListingPageTwo = (props: AddListingProps) => {
       email: data.email,
       socialMedia: data.socialMedia,
     },
-  });
+  })
 
   if (!show) {
-    return null;
+    return null
   }
 
   const onSubmit = (form) => {
-    onUpdateFormData(form);
-    onNextPage();
-  };
+    onUpdateFormData(form)
+    onNextPage()
+  }
+
+  const formattedSocialMediaOptions = socialMediaOptions.map((item) => ({
+    label: (
+      <div className="flex gap-2 items-center">
+        <Image src={item.icon} width={20} alt="" layout="fixed" /> {item.label}
+      </div>
+    ),
+    value: item.value,
+  }))
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -74,7 +94,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
             onChange={() => setIsOnlineLocation(!isOnlineLocation)}
           />
           <br />
-          { !isOnlineLocation && (
+          {!isOnlineLocation && (
             <>
               <Input
                 register={register("city")}
@@ -82,10 +102,12 @@ const AddListingPageTwo = (props: AddListingProps) => {
                 placeholder="50 Bussorah St, Singapore 199466"
               />
               <br />
-              <Input
-                register={register("country")}
-                label="Country (optional)"
+              <Select
+                label="Country"
                 placeholder="Singapore"
+                options={countryList}
+                value={getValues("country")}
+                onChange={(e) => setValue("country", e.value)}
               />
               <br />
               <Input
@@ -103,35 +125,25 @@ const AddListingPageTwo = (props: AddListingProps) => {
           )}
         </Question>
         <Question show question="Contact">
-          <Input
-            register={register("contact")}
+          <SelectInput
             label="Phone number ( optional )"
-            placeholder="335 657 8878"
-            prefix="+65"
+            selectPlaceholder="Area code"
+            placeholder="Your phone number"
+            shouldControlShowValue
+            options={formattedAreaCodes}
+            value={formatSelectInputValue(getValues("contact"), formattedAreaCodes)}
+            onChange={(e) => setValue("contact", removeZeroInPhoneNumber(e))}
           />
           <br />
-          <Input
-            register={register("email")}
-            size="large"
-            placeholder="Email (optional)"
-          />
+          <Input register={register("email")} size="large" placeholder="Email (optional)" />
         </Question>
-        {/* <Question show question="What is your role?">
-          <Select
-            prefixIcon="search"
-            options={roleList}
-            value={getValues("role")}
-            onChange={(e) => {
-              setValue("role", e);
-            }}
-          />
-        </Question> */}
         <Question show question="Social media">
-          <Input
-            register={register("socialMedia")}
-            label="Social media( optional )"
+          <SelectInput
+            label="Social media (optional )"
             placeholder="https://www.facebook.com/YourFacebook"
-            prefix={<Icon icon="twitter-logo" size={20} />}
+            onChange={(e) => setValue("socialMedia", e.input)}
+            options={formattedSocialMediaOptions}
+            value={formatSelectInputValue(getValues("socialMedia"), formattedSocialMediaOptions)}
           />
         </Question>
         <br />
@@ -148,7 +160,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
         </div>
       </SectionLayout>
     </form>
-  );
-};
+  )
+}
 
-export default AddListingPageTwo;
+export default AddListingPageTwo

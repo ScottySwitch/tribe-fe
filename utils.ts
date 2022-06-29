@@ -1,4 +1,5 @@
 import { get } from "lodash"
+import { IOption } from "type"
 
 export const getIndex = (id, list) => {
   return list.findIndex((item) => item.id === id)
@@ -22,13 +23,23 @@ export const calcRateNumber = (reviews) => {
   return rateNumber
 }
 
-export const calcSetPhoneNumber = (e) => {
-  let phoneNumber = ''
-  if (e.input[0] == 0 ) {
+export const removeZeroInPhoneNumber = (e) => {
+  let phoneNumber = ""
+  if (e.input[0] == 0) {
     phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
-  }
-  else {
+  } else {
     phoneNumber = e.select.value + e.input
   }
   return phoneNumber
+}
+
+export const formatSelectInputValue = (e: string, selectOptions: IOption[]) => {
+  if (!e) {
+    return
+  }
+  const phoneCodeValueList = Object.values(selectOptions.map((item) => item.value))
+  const codeOptionIndex = phoneCodeValueList.findIndex((code) => e.includes(code))
+  const selectValue = selectOptions[codeOptionIndex]?.value
+  const inputValue = e.substring(selectValue?.length)
+  return { select: selectOptions[codeOptionIndex], input: inputValue }
 }

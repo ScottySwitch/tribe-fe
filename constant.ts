@@ -111,7 +111,7 @@ export const fakeAddlistingForm: IAddListingForm = {
   contact: "",
   email: "",
   socialMedia: "",
-  currency: "$",
+  currency: undefined,
   minPrice: "10",
   maxPrice: "100",
   categoryKind: "Restaurant",
@@ -169,7 +169,7 @@ export const defaultAddlistingForm: IAddListingForm = {
   contact: "",
   email: "",
   socialMedia: "",
-  currency: "",
+  currency: undefined,
   minPrice: "",
   maxPrice: "",
   categoryKind: "",
@@ -210,6 +210,13 @@ export const defaultAddlistingForm: IAddListingForm = {
   nonHalalActivities: [""],
 }
 
+export const currencyOptions = [
+  { label: "USD", value: "usd" },
+  { label: "MYR", value: "myr" },
+  { label: "SGD", value: "sgd" },
+  { label: "IDR", value: "idr" },
+]
+
 export const previewInfo = [
   { question: "What kind of place is this?", valueKey: "category" },
   {
@@ -233,7 +240,7 @@ export const previewInfo = [
   { question: "What is the category that best fits this place?", valueKey: "categoryKind" },
   { question: "What type of cuisine does this place serve?", valueKey: "tags" },
   { question: "Open hours", valueKey: "openHours" },
-  { question: "Select a currency", valueKey: "currency" },
+  { question: "Select a currency", valueKey: "currency.label" },
   { question: "Max price", valueKey: "maxPrice" },
   { question: "Min price", valueKey: "minPrice" },
 ]
@@ -1096,6 +1103,13 @@ export const phoneAreaCodes = [
   { label: "Yemen", value: "+967" },
   { label: "Zambia", value: "+260" },
   { label: "Zimbabwe", value: "+263" },
+]
+
+export const socialMediaOptions = [
+  { icon: require("public/icons/twitter-color.svg"), label: "Twitter", value: "twitter" },
+  { icon: require("public/icons/instagram-color.svg"), label: "Instagram", value: "instagram" },
+  { icon: require("public/icons/whatsapp-color.svg"), label: "WhatsApp", value: "whatsapp" },
+  { icon: require("public/icons/telegram-color.svg"), label: "Telegram", value: "telegram" },
 ]
 
 export const formattedAreaCodes = phoneAreaCodes.map((item) => ({

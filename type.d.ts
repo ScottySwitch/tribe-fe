@@ -1,1 +1,1 @@
-export type IOption = { label: string; value: string, id?: string }
+export type IOption = { label: string | JSX.Element; value: string; id?: string }
