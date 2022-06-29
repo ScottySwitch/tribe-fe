@@ -14,6 +14,99 @@ export const user = "user"
 export const userId = "user_id"
 export const token = "token"
 
+export const curatedList = [
+  {
+    title: "Find relevant and timely products and services to suit your needs",
+    content:
+      "Tribes is a curated platform for Muslims to be able to easily locate halal food purchase halal products, and more!",
+  },
+  {
+    title: "Great deals just a click away",
+    content:
+      "From discovering halal Japanese food to the best travel deals and family activities, experience endless possibilities with Tribes.",
+  },
+  {
+    title: "Be a part of an immersive and interactive community",
+    content:
+      "Gain insights about new brands through reviews  and ratings and get exclusive updates about the latest deals by community members.",
+  },
+]
+
+export const dummyTopSearchKeywords = [
+  "Fast Food",
+  "Desserts",
+  "Desserts",
+  "Desserts",
+  "Desserts",
+  "Desserts",
+  "Desserts",
+  "Fast Food",
+  "Desserts",
+  "Desserts",
+  "Desserts",
+  "Desserts",
+  "Fast Food",
+  "Desserts",
+  "Desserts",
+  "Desserts",
+  "Beverages",
+  "Desserts",
+  "Beverages",
+  "Fast Food",
+  "Desserts",
+  "Fast Food",
+  "Desserts",
+  "Beverages",
+  "Desserts",
+  "Beverages",
+  "Fast Food",
+  "Desserts",
+]
+
+export const homeCuratedResponsive = {
+  xsShow: 2,
+  xsScroll: 1,
+  smShow: 2,
+  smScroll: 2,
+  mdShow: 3,
+  mdScroll: 3,
+  lgShow: 4,
+  lgScroll: 3,
+  xlShow: 4,
+  xlScroll: 3,
+  show: 4,
+  scroll: 3,
+}
+export const infoCardResponsive = {
+  xsShow: 2,
+  xsScroll: 1,
+  smShow: 2,
+  smScroll: 2,
+  mdShow: 3,
+  mdScroll: 3,
+  lgShow: 4,
+  lgScroll: 3,
+  xlShow: 4,
+  xlScroll: 3,
+  show: 6,
+  scroll: 3,
+}
+
+export const homeBannerResponsive = {
+  xsShow: 1,
+  xsScroll: 1,
+  smShow: 2,
+  smScroll: 2,
+  mdShow: 2,
+  mdScroll: 2,
+  lgShow: 3,
+  lgScroll: 2,
+  xlShow: 3,
+  xlScroll: 2,
+  show: 3,
+  scroll: 2,
+}
+
 export const fakeSubCateList = [
   { label: "Subcate", value: "Subcate" },
   { label: "Subcate 1", value: "Subcate 1" },
@@ -291,6 +384,63 @@ export const productTabList = [
 export const serviceTabList = [
   { text: "Services", value: ListingTabs.SERVICE, screen: ListingHomePageScreens.ADD_ITEMS },
   { text: "Deals", value: ListingTabs.DEAL, screen: ListingHomePageScreens.ADD_DEALS },
+]
+
+export const homeCarousel = [
+  { imgUrl: "https://picsum.photos/600", url: "" },
+  { imgUrl: "https://picsum.photos/600", url: "" },
+  { imgUrl: "https://picsum.photos/600", url: "" },
+  { imgUrl: "https://picsum.photos/600", url: "" },
+]
+
+export const homeCuratedCarousel = [
+  { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
+  { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
+  { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
+  { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
+  { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
+  { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
+]
+
+export const homeArticleCarousel = [
+  {
+    imgUrl: "https://picsum.photos/600",
+    url: "",
+    title:
+      "This Halal Indonesian Eatery In SG’s Orchard Road Has A Spicy Challenge You Need To Beat In...",
+    time: "7 hours ago",
+  },
+  {
+    imgUrl: "https://picsum.photos/600",
+    url: "",
+    title: "5 Halal Supermarket Snacks In Malaysia That Make Us Miss Thailand",
+    time: "Last week",
+  },
+  {
+    imgUrl: "https://picsum.photos/600",
+    url: "",
+    title:
+      "This Halal Indonesian Eatery In SG’s Orchard Road Has A Spicy Challenge You Need To Beat In...",
+    time: "7 hours ago",
+  },
+  {
+    imgUrl: "https://picsum.photos/600",
+    url: "",
+    title: "Auntie Anne's In Singapore Is Now Halal-Certified!",
+    time: "7 hours ago",
+  },
+  {
+    imgUrl: "https://picsum.photos/600",
+    url: "",
+    title: "Auntie Anne's In Singapore Is Now Halal-Certified!",
+    time: "7 hours ago",
+  },
+  {
+    imgUrl: "https://picsum.photos/600",
+    url: "",
+    title: "Auntie Anne's In Singapore Is Now Halal-Certified!",
+    time: "7 hours ago",
+  },
 ]
 
 export const inforCardList = [

@@ -13,6 +13,7 @@ export interface SectionLayoutProps {
   backgroundColor?: boolean
   containerClassName?: string
   titleContainerClassName?: string
+  transparent?: boolean
 }
 const SectionLayout = (props: SectionLayoutProps) => {
   const {
@@ -23,12 +24,14 @@ const SectionLayout = (props: SectionLayoutProps) => {
     childrenClassName,
     backgroundColor,
     children,
+    transparent,
     containerClassName,
     titleContainerClassName,
   } = props
 
   const sectionlayoutClassName = classNames(className, styles.section_layout, {
     [styles.colored_background]: backgroundColor,
+    [styles.transparent]: transparent,
   })
 
   const titleContainerClassNames = classNames(styles.title_container, titleContainerClassName)

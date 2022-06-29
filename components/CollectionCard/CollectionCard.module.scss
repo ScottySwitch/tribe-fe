@@ -1,0 +1,43 @@
+@import "styles/variables.scss";
+
+.collection_card {
+  position: relative;
+  height: 400px;
+  overflow: auto;
+  position: relative;
+  cursor: pointer;
+  width: 270px;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+
+  &::after {
+    content: "";
+    border-radius: $border-radius;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(249, 253, 254, 0) 100%
+    );
+  }
+
+  .title {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    font-weight: $font-semi-bold;
+    z-index: 10;
+  }
+
+  img {
+    border-radius: $border-radius;
+  }
+}

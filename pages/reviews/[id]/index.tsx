@@ -14,37 +14,7 @@ import { data } from "browserslist"
 import BizListingApi from "../../../services/biz-listing"
 import get from "lodash/get"
 import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard"
-
-const dummyKeywords = [
-  "Fast Food",
-  "Desserts",
-  "Desserts",
-  "Desserts",
-  "Desserts",
-  "Desserts",
-  "Desserts",
-  "Fast Food",
-  "Desserts",
-  "Desserts",
-  "Desserts",
-  "Desserts",
-  "Fast Food",
-  "Desserts",
-  "Desserts",
-  "Desserts",
-  "Beverages",
-  "Desserts",
-  "Beverages",
-  "Fast Food",
-  "Desserts",
-  "Fast Food",
-  "Desserts",
-  "Beverages",
-  "Desserts",
-  "Beverages",
-  "Fast Food",
-  "Desserts",
-]
+import { dummyTopSearchKeywords } from "constant"
 
 const AddReviewPage = () => {
   const router = useRouter()
@@ -91,7 +61,7 @@ const AddReviewPage = () => {
   }
 
   const handleSubmit = async (dataSend) => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     const dataSendApi = {
       user: userInfo.id,
       biz_listing: bizListing.id,
@@ -172,7 +142,7 @@ const AddReviewPage = () => {
         </SectionLayout>
 
         <SectionLayout>
-          <TopSearches keywords={dummyKeywords} />
+          <TopSearches keywords={dummyTopSearchKeywords} />
         </SectionLayout>
 
         <ResultModal visible={isShowResultModal} isSuccess={isSuccess} onClose={handleCloseModal} />
