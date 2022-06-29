@@ -55,13 +55,14 @@ const SliderSyncing = (props) => {
     dots: false,
     arrows: false,
     infinite: true,
+    fade: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     cssEase: "linear",
     asNavFor: navGallery
   }
-
+  
   const configGallery: Settings = {
     className: styles.slider_gallery_item,
     dots: false,
@@ -73,6 +74,7 @@ const SliderSyncing = (props) => {
     cssEase: "linear",
     focusOnSelect: true,
     asNavFor: navThumbnail,
+    adaptiveHeight: true
   }
 
   return (
