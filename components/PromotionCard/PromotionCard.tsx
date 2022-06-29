@@ -13,10 +13,11 @@ export interface PromotionProps {
   favourite?: boolean
   width?: string | number
   size?: "medium" | "large"
+  onClick?: () => void
 }
 
 const PromotionCard = (props: PromotionProps) => {
-  const { imgUrl, width, title, expiredAt, type, favourite, size = "medium" } = props
+  const { imgUrl, width, title, expiredAt, type, favourite, size = "medium", onClick} = props
 
   const buttonClasses = classNames({
     [styles.promotion_cta_primary]: PromotionType.VIEW_DETAIL === type || PromotionType.USE_NOW === type,
@@ -55,7 +56,7 @@ const PromotionCard = (props: PromotionProps) => {
           <h3 className={styles.promotion_title}>{title}</h3>
           <div className={styles.promotion_date}>{expiredAt}</div>
         </div>
-        {type && <Button className={buttonClasses} text={types[type]} width="max-content" />}
+        {type && <Button className={buttonClasses} text={types[type]} onClick={onClick} width="max-content" />}
       </div>
     </div>
   )
