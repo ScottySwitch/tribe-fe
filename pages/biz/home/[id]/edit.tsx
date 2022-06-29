@@ -83,13 +83,18 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
-      const data = await BizListingApi.getOwnerBizListingBySlug(listingSlug)
-      if (get(data, "data.data.length") == 0) {
-        window.location.href = "/"
+      let data
+      if (isViewPage) {
+        //if normal user go to normal listing homepage
+        data = await BizListingApi.getBizListingBySlug(listingSlug)
+      } else {
+        //if normal users go to edit listing homepage
+        data = await BizListingApi.getOwnerBizListingBySlug(listingSlug)
+        //they will be redirected to home if do not own the listing
+        get(data, "data.data.length") === 0 && (window.location.href = "/")
       }
-      // const data = await BizListingApi.getBizListingBySlug(listingSlug)
+
       const listing = get(data, "data.data[0]")
-      console.log("listing", listing)
       if (listing) {
         console.log(listing)
         const rawTags = get(listing, "attributes.tags.data") || []
@@ -170,8 +175,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       getListingData(listingSlug)
       getTags()
       getFacilities()
+      getBizListingReviews(listingSlug, "rating:desc")
     }
-  }, [listingSlug])
+  }, [listingSlug, isViewPage])
 
   const getBizListingReviews = async (listingSlug, sortBy) => {
     const data = await ReviewApi.getReviewsByBizListingSlugWithSort(listingSlug, sortBy)
@@ -180,11 +186,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       setReviews(reviewsData)
     }
   }
-  useEffect(() => {
-    if (listingSlug) {
-      getBizListingReviews(listingSlug, "rating:desc")
-    }
-  }, [listingSlug])
 
   const handleChangeReviewsSequence = async ({ value }: IOption) => {
     if (value === "top") {

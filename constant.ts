@@ -88,8 +88,8 @@ export const infoCardResponsive = {
   lgScroll: 3,
   xlShow: 4,
   xlScroll: 3,
-  show: 6,
-  scroll: 3,
+  show: 5,
+  scroll: 4,
 }
 
 export const homeBannerResponsive = {

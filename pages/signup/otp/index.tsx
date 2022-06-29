@@ -4,7 +4,7 @@ import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import classNames from "classnames";
+import classNames from "classnames"
 
 import styles from "styles/Auth.module.scss"
 import { useEffect, useState } from "react"
@@ -17,7 +17,7 @@ const OtpPage = (context) => {
   const [isLoading, setIsLoading] = useState(false)
   const [time, setTime] = useState<number>(30)
   const returnTime = (time) => {
-    if (time == 0) {
+    if (time === 0) {
       return "00"
     } else if (time < 10) {
       return "0" + time
@@ -40,7 +40,7 @@ const OtpPage = (context) => {
   const verifyOtp = async () => {
     setIsLoading(true)
     let result: any = null
-    if (method == "email") {
+    if (method === "email") {
       try {
         result = await AuthApi.otpEmailConfirm({
           otp: valueOtp,
@@ -85,7 +85,7 @@ const OtpPage = (context) => {
   }
 
   const requireOTP = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     let phoneNumer = userInfo.phone_number
     if (phoneNumer) {
       await AuthApi.otpPhoneGenerate(phoneNumer)
@@ -113,7 +113,7 @@ const OtpPage = (context) => {
           <div className="flex justify-between">
             <div>00:{time}</div>
             <div>
-              <Button 
+              <Button
                 text="Resend"
                 disabled={time != 0 ? true : false}
                 variant="secondary-no-outlined"
