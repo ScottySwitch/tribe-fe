@@ -11,7 +11,7 @@ import Modal from "components/Modal/Modal"
 import Question from "components/Question/Question"
 import Radio from "components/Radio/Radio"
 import SectionLayout from "components/SectionLayout/SectionLayout"
-import { categories } from "constant"
+import { categories, currencyOptions } from "constant"
 import {
   additionalFeatures,
   atmosphere,
@@ -29,6 +29,7 @@ import { IOption } from "type"
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import TagsSelection from "components/TagsSelection/TagsSelection"
 import { IAddListingForm } from "pages/add-listing"
+import Select from "components/Select/Select"
 
 interface AddEatInforProps {
   isEdit?: boolean
@@ -102,8 +103,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
                 />
               ))}
             </div>
-            <br />
-            <Input placeholder="Please tell us the listing type" />
           </Question>
           <Question
             question="What type of cuisine does this place serve?"
@@ -113,7 +112,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             <PreviewValue valueKey="tags" value={getValues("tags")} />
             <br />
             <Button
-              text="Edit cruisines"
+              text="Edit cuisines"
               width="fit-content"
               size="small"
               onClick={() => setShowTagsModal(true)}
@@ -146,9 +145,14 @@ const AddEatInfor = (props: AddEatInforProps) => {
           </Question>
           <Question question="What’s the general price range of a meal?" optional>
             <div className="w-3/5">
-              <Input placeholder="Select a currency" register={register("currency")} />
+              <Select
+                placeholder="Select a currency"
+                options={currencyOptions}
+                value={getValues("currency")}
+                onChange={(e) => setValue("currency", e)}
+              />
               <br />
-              <div className="flex gap-10">
+              <div className="flex gap-5">
                 <Input
                   placeholder="Minimum price (optional)"
                   className="w-full sm:w-1/2"
@@ -245,8 +249,14 @@ const AddEatInfor = (props: AddEatInforProps) => {
               ))}
             </div>
           </Question>
-          <Question question="Do you have photos or videos to share? " show={!isEdit} optional>
+          <Question
+            question="Do you have photos or videos to share?"
+            instruction="Add images/ videos ( up to 3 )"
+            show={!isEdit}
+            optional
+          >
             <Upload
+              isPaid={false}
               multiple={true}
               accept="images"
               fileList={getValues("images")}

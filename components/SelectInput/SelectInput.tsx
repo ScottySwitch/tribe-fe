@@ -7,8 +7,12 @@ import SelectField from "./SelectField"
 import styles from "./SelectInput.module.scss"
 
 export interface SelectInputProps
-  extends Omit<React.HTMLProps<HTMLInputElement>, "onChange" | "size" | "prefix" | "className"> {
+  extends Omit<
+    React.HTMLProps<HTMLInputElement>,
+    "onChange" | "size" | "prefix" | "className" | "value"
+  > {
   label?: string
+  value?: { select?: string | IOption; input: string }
   register?: UseFormRegisterReturn
   className?: string
   prefix?: ReactNode
@@ -50,6 +54,7 @@ const SelectInput = (props: SelectInputProps) => {
     selectDefaultValue,
     selectWidth,
     shouldControlShowValue,
+    value,
     onChange,
     ...rest
   } = props
@@ -77,9 +82,15 @@ const SelectInput = (props: SelectInputProps) => {
         <div className={styles.content}>
           {prefix && <div>{prefix}</div>}
           {selectPosition === "suffix" && (
-            <input id={id} onChange={(e) => handleChange("input", e.target.value)} {...rest} />
+            <input
+              id={id}
+              onChange={(e) => handleChange("input", e.target.value)}
+              value={value?.input}
+              {...rest}
+            />
           )}
           <SelectField
+            value={value?.select}
             isSearchable={isSearchable}
             selectWidth={selectWidth}
             menuWidth={menuWidth}
@@ -90,7 +101,12 @@ const SelectInput = (props: SelectInputProps) => {
             defaultValue={selectDefaultValue}
           />
           {selectPosition === "prefix" && (
-            <input id={id} onChange={(e) => handleChange("input", e.target.value)} {...rest} />
+            <input
+              id={id}
+              onChange={(e) => handleChange("input", e.target.value)}
+              value={value?.input}
+              {...rest}
+            />
           )}
           {suffix && <div>{suffix}</div>}
         </div>

@@ -4,9 +4,9 @@ import classNames from "classnames"
 import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
-import { calcSetPhoneNumber } from "utils"
+import { removeZeroInPhoneNumber } from "utils"
 
-import AuthApi from "../../services/auth";
+import AuthApi from "../../services/auth"
 
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
@@ -29,7 +29,7 @@ const ForgotPasswordPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("")
 
   const handleSubmit = async (event: any) => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     event.preventDefault()
     const otpReceiver =
       method === LoginMethod.EMAIL ? event.target.email.value : event.target.phone.value
@@ -38,43 +38,42 @@ const ForgotPasswordPage = () => {
       [method]: otpReceiver,
     }
     console.log(formData)
-    let check = false;
-    if ( method === LoginMethod.EMAIL ) {
+    let check = false
+    if (method === LoginMethod.EMAIL) {
       try {
-        console.log('forget password');
-        console.log('Email: ', formData.email);
+        console.log("forget password")
+        console.log("Email: ", formData.email)
         const result = await AuthApi.forgetPasswordByEmail({
           email: formData.email,
-        });
-        console.log('result: ', result);
+        })
+        console.log("result: ", result)
         if (result.data.ok) {
-          check = true;
-          userInfo = {...userInfo, id: result.data.id}
+          check = true
+          userInfo = { ...userInfo, id: result.data.id }
           localStorage.setItem("user", JSON.stringify(userInfo))
         }
       } catch (error: any) {
-        console.log(error.response.data.error);
+        console.log(error.response.data.error)
       }
-    }
-    else {
+    } else {
       try {
-        console.log('forget password');
-        console.log('Phone: ', phoneNumber);
+        console.log("forget password")
+        console.log("Phone: ", phoneNumber)
         const result = await AuthApi.forgetPasswordByPhone({
           phone_number: phoneNumber,
-        });
-        console.log('result: ', result);
+        })
+        console.log("result: ", result)
         if (result.data.ok) {
-          check = true;
-          userInfo = {...userInfo, id: result.data.id, phone_number: phoneNumber}
+          check = true
+          userInfo = { ...userInfo, id: result.data.id, phone_number: phoneNumber }
           localStorage.setItem("user", JSON.stringify(userInfo))
         }
       } catch (error: any) {
-        console.log(error.response.data.error);
+        console.log(error.response.data.error)
       }
     }
 
-    if ( check == true ) {
+    if (check == true) {
       router.push({
         pathname: "/forgot-password/otp",
         //help otp page detect method and otp receiver
@@ -111,7 +110,7 @@ const ForgotPasswordPage = () => {
               options={formattedAreaCodes}
               shouldControlShowValue
               name="phone"
-              onChange={(e) => setPhoneNumber(calcSetPhoneNumber(e))}
+              onChange={(e) => setPhoneNumber(removeZeroInPhoneNumber(e))}
             />
           ) : (
             <Input label="Email" placeholder="Your email" name="email" />

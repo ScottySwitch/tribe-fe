@@ -7,7 +7,7 @@ import Checkbox from "components/Checkbox/Checkbox"
 import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
-import { calcSetPhoneNumber } from "utils"
+import { removeZeroInPhoneNumber } from "utils"
 
 import styles from "styles/Auth.module.scss"
 import { useRouter } from "next/router"
@@ -49,7 +49,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     setIsLoading(true)
     // Email
     if (method === LoginMethod.EMAIL) {
@@ -124,7 +124,7 @@ const LoginPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) => setValuePhoneNumber(calcSetPhoneNumber(e))}
+              onChange={(e) => setValuePhoneNumber(removeZeroInPhoneNumber(e))}
             />
           ) : (
             <Input

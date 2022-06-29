@@ -73,7 +73,7 @@ const SelectField = (props: SelectProps) => {
     option: (styles, { isSelected }) => {
       return {
         ...styles,
-        width: "fit-content",
+        width: "100%",
         padding: "10px 20px",
         maxWidth: 400,
         cursor: isSelected ? "default" : "pointer",

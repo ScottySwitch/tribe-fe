@@ -19,6 +19,8 @@ import { seeDoAssociatedCategories, seeDoTags } from "../constant"
 import Upload from "components/Upload/Upload"
 import Icon from "components/Icon/Icon"
 import { IAddListingForm } from "pages/add-listing"
+import Select from "components/Select/Select"
+import { currencyOptions } from "constant"
 
 interface AddSeeAndDoInforProps {
   isEdit?: boolean
@@ -126,7 +128,12 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
           </Question>
           <Question question="What’s the average price range of this service?" optional>
             <div className="w-3/5">
-              <Input placeholder="Select a currency" register={register("currency")} />
+              <Select
+                placeholder="Select a currency"
+                options={currencyOptions}
+                value={getValues("currency")}
+                onChange={(e) => setValue("currency", e)}
+              />
               <br />
               <div className="flex gap-5">
                 <Input
@@ -142,8 +149,14 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
               </div>
             </div>
           </Question>
-          <Question question="Do you have photos or videos to share? " show={!isEdit} optional>
+          <Question
+            question="Do you have photos or videos to share?"
+            instruction="Add images/ videos ( up to 3 )"
+            show={!isEdit}
+            optional
+          >
             <Upload
+              isPaid={false}
               multiple={true}
               accept="images"
               fileList={getValues("images")}
