@@ -21,11 +21,12 @@ interface HomepageReviewsProps {
   isViewPage?: boolean
   listingRate?: number
   reviews: any[]
-  onSubmitReply?: (any) => void
+  onSubmitReply?: (any) => void,
+  onReviewSequenceOptions: any,
 }
 
 const HomepageReviews = (props: HomepageReviewsProps) => {
-  const { listingSlug, reviews, listingRate, isPaid, isViewPage, onSubmitReply } = props
+  const { listingSlug, reviews, listingRate, isPaid, isViewPage, onSubmitReply, onReviewSequenceOptions } = props
   const [showReplyModal, setShowReplyModal] = useState(false)
   const [selectedReview, setSelectedReview] = useState({})
 
@@ -55,6 +56,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             width={200}
             options={reviewSequenceOptions}
             defaultValue={reviewSequenceOptions[0]}
+            onChange={onReviewSequenceOptions}
           />
         </div>
       )}

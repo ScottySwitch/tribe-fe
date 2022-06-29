@@ -18,6 +18,7 @@ import AddItems from "components/BizInformationPage/TabContentComponents/AddItem
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
 import TagApi from "services/tag"
 import FacilityApi from "services/facility"
+import ReviewApi from "services/review"
 
 import styles from "styles/BizHomepage.module.scss"
 import Facilities from "components/BizHomePage/Facilities/Facilities"
@@ -144,7 +145,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(get(listing, "attributes.open_hours"))
         setPriceRange(get(listing, "attributes.price_range"))
         setSocialInfo(get(listing, "attributes.social_info"))
-        setReviews(get(listing, "attributes.reviews.data"))
+        // setReviews(get(listing, "attributes.reviews.data"))
         // setItemList(get(listing, "attributes.products.data"))
         setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
@@ -169,6 +170,27 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       getFacilities()
     }
   }, [listingSlug])
+
+  const getBizListingReviews = async (listingSlug, sortBy) => {
+    const data = await ReviewApi.getReviewsByBizListingSlugWithSort(listingSlug, sortBy)
+    const reviewsData = get(data, "data.data")
+    if (reviewsData.length > 0) {
+      setReviews(reviewsData)
+    }
+  }
+  useEffect(() => {
+    if (listingSlug) {
+      getBizListingReviews(listingSlug, 'rating:desc')
+    }
+  }, [listingSlug])
+
+  const handleOnReviewSequenceOptions = async ({value}: any) => {
+    if (value === 'top') {
+      await getBizListingReviews(listingSlug, 'rating:desc')
+    } else {
+      await getBizListingReviews(listingSlug, 'id:desc')
+    }
+  }
 
   //Get tags
   const getTags = async () => {
@@ -443,6 +465,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 isViewPage={isViewPage}
                 reviews={reviews}
                 onSubmitReply={handleSubmitReply}
+                onReviewSequenceOptions={handleOnReviewSequenceOptions}
               />
               <Break />
               <Contacts />
