@@ -13,6 +13,7 @@ import { get } from "lodash"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import { IOption } from "type"
 
 import styles from "./HomepageReviews.module.scss"
 interface HomepageReviewsProps {
@@ -21,12 +22,20 @@ interface HomepageReviewsProps {
   isViewPage?: boolean
   listingRate?: number
   reviews: any[]
-  onSubmitReply?: (any) => void,
-  onReviewSequenceOptions: any,
+  onSubmitReply?: (any) => void
+  onChangeReviewsSequence: (e: IOption) => void
 }
 
 const HomepageReviews = (props: HomepageReviewsProps) => {
-  const { listingSlug, reviews, listingRate, isPaid, isViewPage, onSubmitReply, onReviewSequenceOptions } = props
+  const {
+    listingSlug,
+    reviews,
+    listingRate,
+    isPaid,
+    isViewPage,
+    onSubmitReply,
+    onChangeReviewsSequence,
+  } = props
   const [showReplyModal, setShowReplyModal] = useState(false)
   const [selectedReview, setSelectedReview] = useState({})
 
@@ -56,7 +65,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             width={200}
             options={reviewSequenceOptions}
             defaultValue={reviewSequenceOptions[0]}
-            onChange={onReviewSequenceOptions}
+            onChange={onChangeReviewsSequence}
           />
         </div>
       )}
@@ -108,9 +117,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         </div>
         <div className="flex gap-3 justify-end p-[30px]">
           <Button text="Cancel" variant="secondary-no-outlined" />
-          <Button 
-            text="Send reply" 
-          />
+          <Button text="Send reply" />
         </div>
       </Modal>
     </div>
