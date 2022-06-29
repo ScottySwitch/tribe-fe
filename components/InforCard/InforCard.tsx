@@ -38,10 +38,11 @@ const InforCard = (props: InforCardProps) => {
     isVerified,
     width,
     isFavourited,
+    onClick
   } = props
   // console.log('props', props)
   return (
-    <div className={`${styles.infor_card} ${className}`} style={{ width }}>
+    <div className={`${styles.infor_card} ${className}`} style={{ width }} onClick={onClick}>
       {isVerified && (
         <div className={styles.verified}>
           <Icon icon="verified-tag" className={styles.verified_icon} />
