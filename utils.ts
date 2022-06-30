@@ -25,7 +25,7 @@ export const calcRateNumber = (reviews) => {
 
 export const removeZeroInPhoneNumber = (e) => {
   let phoneNumber = ""
-  if (e.input[0] === 0) {
+  if (e.input[0] == 0) {
     phoneNumber = e.select.value + e.input.substr(1, e.input.length - 1)
   } else {
     phoneNumber = e.select.value + e.input
