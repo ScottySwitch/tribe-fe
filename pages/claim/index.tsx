@@ -27,8 +27,7 @@ const ClaimPage = () => {
 
   const getBizListing = async () => {
     const data = await BizListingApi.getBizListing()
-    setBizListing(get(data, "data.data"))
-    console.log("data", get(data, "data.data"))
+    setBizListing(get(data, 'data.data'));
   }
 
   const handleSetListing = (e) => {
@@ -39,18 +38,29 @@ const ClaimPage = () => {
     setListing(e)
   }
 
-  const RightColumn = (props: { listing: { [key: string]: any } }) => {
+  const RightColumn = (props: { listing: { [key: string]: any }}) => {
     const { listing } = props
-    // console.log('listing', listing);
+    const [isDisabled, setIsDisabled] = useState<boolean>(false)
+    useEffect(() => {
+      const listingRolesArray = get(listing, 'attributes.listing_roles.data') || []
+      const isBeingClaimed = get(listing, 'attributes.claim_listings.data.length') > 0
+      const doesHasOwners = listingRolesArray.some((item) => get(item, 'attributes.name') === 'owner')
+      if(isBeingClaimed || doesHasOwners) setIsDisabled(true)
+    }, [])
     const router = useRouter()
     const handleClick = () => router.push(`/claim/${listing.id}`)
     return (
       <>
-        <Button text="Claim free listing" onClick={handleClick} />
+        <Button 
+          text="Claim free listing" 
+          onClick={handleClick} 
+          disabled={isDisabled}        
+        />
         <span>Not your business?</span>
       </>
     )
   }
+  
 
   return (
     <div className={styles.claim}>

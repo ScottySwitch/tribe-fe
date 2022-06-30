@@ -16,6 +16,7 @@ import { UsersTypes } from "enums"
 import AuthApi from "../services/auth"
 import BizApi from "services/biz-listing"
 import BizInvoice from "services/biz-invoice"
+import ClaimListingApi from "services/claim-listing"
 import { formattedAreaCodes, phoneAreaCodes } from "constant"
 import SelectInput from "components/SelectInput/SelectInput"
 import { get } from "lodash"
@@ -49,7 +50,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
+    let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}")
     setIsLoading(true)
     // Email
     if (method === LoginMethod.EMAIL) {
@@ -68,8 +69,8 @@ const LoginPage = () => {
 
       if (result.data) {
         let { jwt } = result.data
-        userInfo.token = jwt
-        localStorage.setItem("user", JSON.stringify(userInfo))
+        userInfoLogin.token = jwt
+        localStorage.setItem("user", JSON.stringify(userInfoLogin))
         await AuthApi.getMe()
       }
     } else {
@@ -88,12 +89,28 @@ const LoginPage = () => {
 
       if (result.data) {
         let { jwt } = result.data
-        userInfo.token = jwt
-        localStorage.setItem("user", JSON.stringify(userInfo))
+        userInfoLogin.token = jwt
+        localStorage.setItem("user", JSON.stringify(userInfoLogin))
         await AuthApi.getMe()
       }
     }
-
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
+    if (userInfo) {
+      const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id)
+      const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
+      const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
+      const dataClaimListing = await ClaimListingApi.getClaimListingByUserId(userInfo.id)
+      const dataListingRoles = await BizApi.getOwnerListingRoleByUserId(userInfo.id)
+      userInfo = {
+        ...userInfo,
+        biz_listings: dataBizlisting.data.data, 
+        biz_invoice: dataBizInvoice.data.data, 
+        claim_listings: dataClaimListing.data.data,
+        listing_roles: dataListingRoles.data.data,
+        owner_listings: dataOwnerListing.data.data
+      }
+    }
+    localStorage.setItem("user", JSON.stringify(userInfo))
     window.location.href = "/"
   }
 

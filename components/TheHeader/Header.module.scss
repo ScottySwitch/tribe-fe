@@ -45,8 +45,20 @@
         .avatar {
           border-radius: 50%;
         }
+
+        .name {
+          display: flex;
+          align-items: center;
+          width: calc(100% - 40px);
+        }
+
+        .wrapper_content {
+          align-items: unset !important;
+        }
+
       }
     }
+
   }
 
   .header_bottom {
@@ -111,6 +123,7 @@
     }
   }
 }
+
 
 @media screen and (max-width: $mobile) {
   .header {

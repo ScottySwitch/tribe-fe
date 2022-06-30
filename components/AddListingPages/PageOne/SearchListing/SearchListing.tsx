@@ -10,7 +10,8 @@ import { ClaimStep, YesNo } from "enums"
 import { get } from "lodash"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import BizListingApi from "services/biz-listing"
 
 import styles from "./SearchListing.module.scss"
 
@@ -23,9 +24,21 @@ const RightColumn = (props: {
 }) => {
   const { listing, isRelationship, onShowUpcomingFeature } = props
   const router = useRouter()
+  const [isDisabled, setIsDisabled] = useState<boolean>(false)
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+
+  useEffect(() => {
+    console.log('listing',listing);
+    const listingRolesArray = get(listing, 'attributes.listing_roles.data') || []
+    const isBeingClaimed = get(listing, 'attributes.claim_listings.data.length') > 0
+    const doesHasOwners = listingRolesArray.some((item) => get(item, 'attributes.name') === 'owner')
+    if(isBeingClaimed || doesHasOwners) setIsDisabled(true)
+  }, [])
+
   return (
     <>
       <Button
+        disabled={isDisabled}
         text={isRelationship ? "Claim free listing" : "Improve this listing"}
         size="small"
         variant={isRelationship ? "primary" : "outlined"}
@@ -54,8 +67,6 @@ const SearchListing = ({
   bizListing: any
   relationship?: string
 }) => {
-  console.log("bizListing", bizListing)
-
   if (listing) {
     let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     userInfo = {...userInfo, biz_id: get(listing, "id"), biz_slug: get(listing, "attributes.slug")}
