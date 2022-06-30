@@ -10,7 +10,8 @@ import { ClaimStep, YesNo } from "enums"
 import { get } from "lodash"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import BizListingApi from "services/biz-listing"
 
 import styles from "./SearchListing.module.scss"
 
@@ -23,9 +24,30 @@ const RightColumn = (props: {
 }) => {
   const { listing, isRelationship, onShowUpcomingFeature } = props
   const router = useRouter()
+  const [isdisabled, setIsDisabled] = useState<boolean>(false)
+  const [isLoading, setIsloading] = useState<boolean>(true)
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+
+  useEffect(() => {
+    checkListingHaveOwner()    
+  }, [])
+
+  const checkListingHaveOwner = async () => {
+    const data = await BizListingApi.checkListingHaveOwner(userInfo.biz_slug)
+    const data1 = await BizListingApi.getBizListingBySlug(userInfo.biz_slug)
+    const haveOwner = get(data, 'data.data') || []
+    const haveClaims = get(data1, 'data.data[0].attributes.claim_listings.data') || []
+    if (haveOwner.length > 0 || haveClaims.length > 0) {
+      setIsDisabled(true)
+    } 
+    setIsloading(false)
+  }
+
   return (
     <>
       <Button
+        isLoading={isLoading}
+        disabled={isdisabled}
         text={isRelationship ? "Claim free listing" : "Improve this listing"}
         size="small"
         variant={isRelationship ? "primary" : "outlined"}
@@ -54,8 +76,6 @@ const SearchListing = ({
   bizListing: any
   relationship?: string
 }) => {
-  console.log("bizListing", bizListing)
-
   if (listing) {
     let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     userInfo = {...userInfo, biz_id: get(listing, "id"), biz_slug: get(listing, "attributes.slug")}

@@ -97,6 +97,11 @@ const getMe = async () => {
     }
   }
   me.data.token = userInfo.token
+  me.data.owner_listings = userInfo.owner_listings || []
+  me.data.biz_listings =  userInfo.biz_listings || []
+  me.data.biz_invoice =  userInfo.biz_invoice || []
+  me.data.claim_listings =  userInfo.claim_listings || [] 
+  me.data.listing_roles =  userInfo.listing_roles || []
   localStorage.setItem("user", JSON.stringify(me.data))
 }
 

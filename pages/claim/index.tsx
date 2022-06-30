@@ -21,6 +21,8 @@ import get from "lodash/get"
 const ClaimPage = () => {
   const [listing, setListing] = useState<{ [key: string]: any }>()
   const [bizListing, setBizListing] = useState([])
+  const [isDisabled, setIsDisabled] = useState<boolean>(false)
+  const [isLoading, setIsloading] = useState<boolean>(true)
 
   useEffect(() => {
     getBizListing()
@@ -33,26 +35,49 @@ const ClaimPage = () => {
   }
 
   const handleSetListing = (e) => {
+    setIsDisabled(false)
+    setIsloading(true)
     console.log(e);
     let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     userInfo = {...userInfo, biz_id: get(e, "id"), biz_slug: get(e, "attributes.slug")}
     localStorage.setItem("user", JSON.stringify(userInfo))
     setListing(e)
+    checkListingHaveOwner()
   }
 
+  const checkListingHaveOwner = async () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    const data = await BizListingApi.checkListingHaveOwner(userInfo.biz_slug)
+    const data1 = await BizListingApi.getBizListingBySlug(userInfo.biz_slug)
+    const haveOwner = get(data, 'data.data') || []
+    const haveClaims = get(data1, 'data.data[0].attributes.claim_listings.data') || []
+    if (haveOwner.length > 0 || haveClaims.length > 0) {
+      setIsDisabled(true)
+    } 
+    else {
+      setIsDisabled(false)
+    }
+    setIsloading(false)
+  }
 
-  const RightColumn = (props: { listing: { [key: string]: any } }) => {
-    const { listing } = props
-    // console.log('listing', listing);
+  const RightColumn = (props: { listing: { [key: string]: any }, isDisabled: boolean, isLoading: boolean }) => {
+    const { listing, isDisabled, isLoading } = props
+    console.log('listing', listing);
     const router = useRouter()
     const handleClick = () => router.push(`/claim/${listing.id}`)
     return (
       <>
-        <Button text="Claim free listing" onClick={handleClick} />
+        <Button 
+          text="Claim free listing" 
+          onClick={handleClick} 
+          isLoading={isLoading}
+          disabled={isDisabled}        
+        />
         <span>Not your business?</span>
       </>
     )
   }
+  
 
   return (
     <div className={styles.claim}>
@@ -69,7 +94,7 @@ const ClaimPage = () => {
             <ListingCard
               listing={listing}
               onClose={() => setListing(undefined)}
-              rightColumn={<RightColumn listing={listing} />}
+              rightColumn={<RightColumn listing={listing} isDisabled={isDisabled} isLoading={isLoading}/>}
             />
           ) : (
             <ListingSearchBox
