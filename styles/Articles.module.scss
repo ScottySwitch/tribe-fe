@@ -1,5 +1,11 @@
 @use "styles/variables.scss" as *;
 
+.articles {
+  &_container {
+    max-width: 75%;
+    margin: 0 auto;
+  }
+}
 .breadcrumb {
   &s {
     display: flex;
@@ -19,6 +25,7 @@
   position: relative;
   overflow: hidden;
   padding-top: 360px;
+
   &::before {
     position: absolute;
     content: "";
@@ -54,12 +61,114 @@
     font-size: 28px;
     font-weight: $font-bold;
     color: $bg-0;
-    max-width: 80%;
     margin-bottom: 10px;
   }
   
   .date {
     font-size: $text-sm;
     color: $bg-100;
+  }
+}
+
+.content {
+  color: $bg-500;
+  .excerpt {
+    font-size: $text-md;
+    margin-bottom: 32px;
+  }
+}
+
+
+.call_to_action {
+  display: none;
+
+  &_fixed {
+    position: absolute;
+    top: 0;
+    right: 0;
+    .cta {      
+      &_item {
+        margin-bottom: 24px;
+        display: grid;
+        place-content: center;
+        width: 41px;
+        height: 41px;
+        border-radius: 50%;
+        background-color: $bg-0;
+        box-shadow: $box-shadow;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+}
+.section_layout_container {
+  position: relative;
+}
+@media screen and (max-width: $tablet) {
+  .articles {
+    &_container {
+      max-width: 95%;
+    }
+  }
+
+  .cover {
+    .title {
+      font-size: $text-xl;
+    }
+  }
+
+  .call_to_action {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    &_fixed {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .section_layout_container {
+    width: 100% !important;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .breadcrumbs {
+    display: none;
+  }
+
+  .articles {
+    &_container {
+      max-width: 100%;
+    }
+  }
+
+  .cover {
+    padding-top: 211px;
+
+    &_heading {
+      padding: 14px 0;
+    }
+    .title {
+      font-size: $text-lg;
+    }
+    .date {
+      font-size: $text-xs;
+    }
+  }
+
+  .content {
+    .excerpt {
+      font-size: $text-sm;
+    }
+    p {
+      font-size: $text-sm;
+    }
   }
 }
