@@ -71,17 +71,16 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
       {ownerListing.map((item) => (
         <div 
           key={item.name} 
-          className="cursor-pointer"
-          onClick={() => router.push(`/biz/home/${item.slug}/edit`)}
+          className={`${styles.wrapper_content} cursor-pointer`}
         >
           <Image
             src={item.images[0] || require("public/images/page-avatar.png")}
             alt=""
             width={30}
             height={30}
-            onClick={() => router.push("/biz/information")}
+            onClick={() => router.push(`/biz/information/${item.slug}`)}
           />
-          {item.name}
+          <div className={styles.name} onClick={() => router.push(`/biz/home/${item.slug}/edit`)}>{item.name}</div>
         </div>
       ))}
       <div className="cursor-pointer flex" onClick={onSwitchToNormalUser}>
@@ -103,6 +102,11 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
 
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter()
+  const { query } = router
+  const { id: listingSlug } = query
+    console.log(listingSlug);
+    
+
   const handleSwitchToBizUser = () => {
     let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
     userInfo.type = UsersTypes.BIZ_USER 
@@ -167,7 +171,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           alt=""
           width={40}
           height={40}
-          onClick={() => router.push("/biz/information")}
+          onClick={() => router.push(`/biz/information/${listingSlug}`)}
           className={styles.avatar}
         />
       </>

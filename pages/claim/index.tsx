@@ -21,8 +21,6 @@ import get from "lodash/get"
 const ClaimPage = () => {
   const [listing, setListing] = useState<{ [key: string]: any }>()
   const [bizListing, setBizListing] = useState([])
-  const [isDisabled, setIsDisabled] = useState<boolean>(false)
-  const [isLoading, setIsloading] = useState<boolean>(true)
 
   useEffect(() => {
     getBizListing()
@@ -31,38 +29,29 @@ const ClaimPage = () => {
   const getBizListing = async () => {
     const data = await BizListingApi.getBizListing()
     setBizListing(get(data, 'data.data'));
-    console.log('data', get(data, 'data.data'));
   }
 
   const handleSetListing = (e) => {
-    setIsDisabled(false)
-    setIsloading(true)
     console.log(e);
     let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     userInfo = {...userInfo, biz_id: get(e, "id"), biz_slug: get(e, "attributes.slug")}
     localStorage.setItem("user", JSON.stringify(userInfo))
     setListing(e)
-    checkListingHaveOwner()
   }
 
-  const checkListingHaveOwner = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    const data = await BizListingApi.checkListingHaveOwner(userInfo.biz_slug)
-    const data1 = await BizListingApi.getBizListingBySlug(userInfo.biz_slug)
-    const haveOwner = get(data, 'data.data') || []
-    const haveClaims = get(data1, 'data.data[0].attributes.claim_listings.data') || []
-    if (haveOwner.length > 0 || haveClaims.length > 0) {
-      setIsDisabled(true)
-    } 
-    else {
-      setIsDisabled(false)
-    }
-    setIsloading(false)
-  }
-
-  const RightColumn = (props: { listing: { [key: string]: any }, isDisabled: boolean, isLoading: boolean }) => {
-    const { listing, isDisabled, isLoading } = props
-    console.log('listing', listing);
+  const RightColumn = (props: { listing: { [key: string]: any }}) => {
+    const { listing } = props
+    const [isDisabled, setIsDisabled] = useState<boolean>(false)
+    useEffect(() => {
+      const listingRolesArray = get(listing, 'attributes.listing_roles.data') || []
+      const haveClaims = get(listing, 'attributes.claim_listings.data') || []
+      const haveOwners = listingRolesArray.filter((item) => get(item, 'attributes.name') === 'owner')
+      // console.log('haveClaims', haveClaims);
+      // console.log('haveOwners', haveOwners);
+      if ( haveClaims.length > 0 || haveOwners.length > 0 ) {
+        setIsDisabled(true)
+      }
+    }, [])
     const router = useRouter()
     const handleClick = () => router.push(`/claim/${listing.id}`)
     return (
@@ -70,7 +59,6 @@ const ClaimPage = () => {
         <Button 
           text="Claim free listing" 
           onClick={handleClick} 
-          isLoading={isLoading}
           disabled={isDisabled}        
         />
         <span>Not your business?</span>
@@ -94,7 +82,7 @@ const ClaimPage = () => {
             <ListingCard
               listing={listing}
               onClose={() => setListing(undefined)}
-              rightColumn={<RightColumn listing={listing} isDisabled={isDisabled} isLoading={isLoading}/>}
+              rightColumn={<RightColumn listing={listing} />}
             />
           ) : (
             <ListingSearchBox

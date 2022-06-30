@@ -20,6 +20,18 @@ const getBizListing = async () => {
           "id",
           "attributes"
         ]
+      },
+      "listing_roles": {
+        "data": [
+          "id",
+          "attributes"
+        ]
+      },
+      "claim_listings": {
+        "data": [
+          "id",
+          "attributes"
+        ]
       }
     }
   }, {
@@ -47,6 +59,18 @@ const getBizListingsByCategoryId = async (categoryId: number) => {
       "reviews": {
         "fields": [
           "id"
+        ]
+      },
+      "listing_roles": {
+        "data": [
+          "id",
+          "attributes"
+        ]
+      },
+      "claim_listings": {
+        "data": [
+          "id",
+          "attributes"
         ]
       }
     }

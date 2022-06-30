@@ -24,30 +24,25 @@ const RightColumn = (props: {
 }) => {
   const { listing, isRelationship, onShowUpcomingFeature } = props
   const router = useRouter()
-  const [isdisabled, setIsDisabled] = useState<boolean>(false)
-  const [isLoading, setIsloading] = useState<boolean>(true)
+  const [isDisabled, setIsDisabled] = useState<boolean>(false)
   let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
 
   useEffect(() => {
-    checkListingHaveOwner()    
-  }, [])
-
-  const checkListingHaveOwner = async () => {
-    const data = await BizListingApi.checkListingHaveOwner(userInfo.biz_slug)
-    const data1 = await BizListingApi.getBizListingBySlug(userInfo.biz_slug)
-    const haveOwner = get(data, 'data.data') || []
-    const haveClaims = get(data1, 'data.data[0].attributes.claim_listings.data') || []
-    if (haveOwner.length > 0 || haveClaims.length > 0) {
+    console.log('listing',listing);
+    const listingRolesArray = get(listing, 'attributes.listing_roles.data') || []
+    const haveClaims = get(listing, 'attributes.claim_listings.data') || []
+    const haveOwners = listingRolesArray.filter((item) => get(item, 'attributes.name') === 'owner')
+    // console.log('haveClaims', haveClaims);
+    // console.log('haveOwners', haveOwners);
+    if ( haveClaims.length > 0 || haveOwners.length > 0 ) {
       setIsDisabled(true)
-    } 
-    setIsloading(false)
-  }
+    }
+  }, [])
 
   return (
     <>
       <Button
-        isLoading={isLoading}
-        disabled={isdisabled}
+        disabled={isDisabled}
         text={isRelationship ? "Claim free listing" : "Improve this listing"}
         size="small"
         variant={isRelationship ? "primary" : "outlined"}
