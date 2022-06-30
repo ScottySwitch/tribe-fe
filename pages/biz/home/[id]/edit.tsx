@@ -63,7 +63,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [menuList, setMenuList] = useState<{ [key: string]: any }[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
-  // const [listingImages, setListingImages] = useState<string[]>([])
   const [listingImages, setListingImages] = useState<any>([])
   const [logo, setLogo] = useState<any>([])
 
@@ -152,8 +151,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(get(listing, "attributes.open_hours"))
         setPriceRange(get(listing, "attributes.price_range"))
         setSocialInfo(get(listing, "attributes.social_info"))
-        // setReviews(get(listing, "attributes.reviews.data"))
-        // setItemList(get(listing, "attributes.products.data"))
         setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
         setTags(tagArray)
@@ -162,7 +159,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setMenuList(menuArray)
         setDealList(dealArray)
         setListingRate(get(listing, "attributes.rate"))
-        if (invoiceList.length > 0) {
+        if (invoiceList.length > 0) { 
           setIsPaid(true)
           setPhoneNumber(rawPhoneNumber)
         } else {

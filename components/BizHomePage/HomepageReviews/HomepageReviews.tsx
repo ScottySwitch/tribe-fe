@@ -38,8 +38,18 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   } = props
   const [showReplyModal, setShowReplyModal] = useState(false)
   const [selectedReview, setSelectedReview] = useState({})
-
   const router = useRouter()
+  const [replyReview, setReplyReview] = useState<string>('')
+
+  const handleSetReplyReview = (value) => {
+    console.log(value);
+    if (value.length <= 100) {
+      setReplyReview(value)
+    }
+    else {
+      alert('Reply cannot over 100 character')
+    }    
+  }
 
   return (
     <div>
@@ -82,7 +92,10 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
                 content={get(review, "attributes.content")}
                 dateVisit={get(review, "attributes.visited_date")}
                 rating={get(review, "attributes.rating")}
+                reply_reviews={get(review, "attributes.reply_reviews")}
+                date_create_reply={get(review, "attributes.date_create_reply")}
                 onReplyClick={() => {
+                  console.log('setSelectedReview', review)
                   setSelectedReview(review)
                   setShowReplyModal(true)
                 }}
@@ -111,13 +124,21 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             content={get(selectedReview, "attributes.content")}
             dateVisit={get(selectedReview, "attributes.visited_date")}
             rating={get(selectedReview, "attributes.rating")}
+            reply_reviews={get(selectedReview, "attributes.reply_reviews")}
             onReplyClick={() => setShowReplyModal(true)}
           />
-          <Input placeholder="Reply ( 100 character minumum )" />
+          <Input 
+            placeholder="Reply ( 100 character maximum )" 
+            value={replyReview}
+            onChange={(e: any) => handleSetReplyReview(e.target.value)}
+          />
         </div>
         <div className="flex gap-3 justify-end p-[30px]">
           <Button text="Cancel" variant="secondary-no-outlined" />
-          <Button text="Send reply" />
+          <Button 
+            text="Send reply" 
+            onClick={onSubmitReply}  
+          />
         </div>
       </Modal>
     </div>

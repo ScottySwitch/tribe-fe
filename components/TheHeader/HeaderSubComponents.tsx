@@ -104,8 +104,6 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter()
   const { query } = router
   const { id: listingSlug } = query
-    console.log(listingSlug);
-    
 
   const handleSwitchToBizUser = () => {
     let userInfo = JSON.parse(localStorage.getItem('user') || '{}')

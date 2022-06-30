@@ -147,6 +147,34 @@
     .date_visit {
       font-size: $text-sm;
     }
+
+    .reply_review {
+      padding: 12px 12px 12px 16px;
+      background-color: $bg-50;
+      border-radius: 8px;
+      font-size: $text-sm;
+      .head_review {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 2px;
+        .title {
+          color: $bg-600;
+          font-weight: $font-bold;
+        }
+
+        .time_date {
+          color: $bg-400;
+        }
+      }
+
+      .description_review{
+        color: $bg-500;
+        white-space: pre-wrap
+      }
+    }
   }
 
   @media screen and (max-width: $mobile) {

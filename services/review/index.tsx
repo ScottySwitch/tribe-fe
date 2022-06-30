@@ -15,7 +15,7 @@ const getReviewsByBizListingSlug = async (bizListingSlug: any) => {
           "id"
         ]
       },
-      "user": "*"
+      "user": "*",
     }
   }, {
     encodeValuesOnly: true
@@ -45,7 +45,8 @@ const getReviewsByBizListingSlugWithSort = async (bizListingSlug: any, sortBy: s
           "id"
         ]
       },
-      "user": "*"
+      "user": "*",
+      "review_replies": "*"
     }
   }
   if (sortBy !== '') {
