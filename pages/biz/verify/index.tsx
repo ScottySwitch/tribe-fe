@@ -354,13 +354,13 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           </div>
           <div className="flex justify-center gap-5 w-full">
             <Button width="30%" variant="no-outlined" text="Change tier" />
-            {paymentMethod == "stripe" ? (
+            {paymentMethod === "stripe" ? (
               <Button
                 width="80%"
                 className="css style"
                 type="button"
                 id="SS_ProductCheckout"
-                data-id={payPrice == "600" ? 2 : 1}
+                data-id={payPrice === "600" ? 2 : 1}
                 data-url={baseURL}
                 text="Next"
                 onClick={handleSubmit}

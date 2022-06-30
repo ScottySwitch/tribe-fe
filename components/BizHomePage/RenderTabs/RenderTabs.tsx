@@ -8,22 +8,11 @@ import { eatTabList, productTabList, serviceTabList } from "constant"
 import { Categories, ListingHomePageScreens, ListingTabs } from "enums"
 import { get } from "lodash"
 import Image from "next/image"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import Heading from "../../Heading/Heading"
 
 import styles from "./RenderTabs.module.scss"
-
-interface TabContentProps {
-  isViewPage?: boolean
-  selectedTab?: ListingTabs
-  cardItem?: any
-  list: any[]
-  blankImg: string
-  blankText: string
-  buttonText: string
-  onClick: () => void
-  onDelete: (item: any) => void
-}
 
 const initSelectedTab = (category) => {
   switch (category) {
@@ -42,6 +31,18 @@ const EditList = ({ category, selectedTab, onSetScreen }) => {
   return <a onClick={() => onSetScreen(tabScreen)}>Edit {selectedTab}</a>
 }
 
+interface TabContentProps {
+  isViewPage?: boolean
+  selectedTab?: ListingTabs
+  cardItem?: any
+  list: any[]
+  blankImg: string
+  blankText: string
+  buttonText: string
+  onClick: () => void
+  onDelete: (item: any) => void
+}
+
 const TabContent = ({
   isViewPage,
   selectedTab,
@@ -53,11 +54,15 @@ const TabContent = ({
   onClick,
   onDelete,
 }: TabContentProps) => {
-  const CardItem = cardItem
+  const router = useRouter()
+  const { query } = router
+  const { id: listingSlug } = query
+
   const isDeal = selectedTab === ListingTabs.DEAL
-  const isItem =
-    selectedTab &&
-    [ListingTabs.DISH, ListingTabs.PRODUCT, ListingTabs.SERVICE].includes(selectedTab)
+  const itemArray = [ListingTabs.DISH, ListingTabs.PRODUCT, ListingTabs.SERVICE]
+  const isItem = selectedTab && itemArray.includes(selectedTab)
+  const CardItem = cardItem
+
   if (!(Array.isArray(list) && list.length)) {
     return (
       <div className="flex flex-col items-center justify-center">
@@ -71,40 +76,48 @@ const TabContent = ({
   }
 
   return (
-    <div className={styles.items_container}>
-      <div className="w-full flex justify-center">
+    <div className={styles.tab_content_container}>
+      <div className="w-full flex justify-center p-[16px]">
         <Input placeholder="search" width="100%" prefix={<Icon icon="search" />} />
       </div>
-      {list.map((item) => {
-        const id = get(item, "attributes.id") || item.id
-        const images = item.images || []
-        const firstImage = item.imgUrl || images[0]
-        const name = get(item, "attributes.name") || item.name || ""
-        const price = get(item, "attributes.price") || item.price || ""
-        const description =
-          get(item, "attributes.description") || item.information || item.description || ""
-        const expiredAt = get(item, "attributes.expire_at") || item.expireAt || ""
-        return (
-          <div
-            key={id}
-            className={styles.info_card_container}
-            style={{ width: isDeal ? "50%" : "" }}
-          >
-            <CardItem
-              imgUrl={firstImage || "https://picsum.photos/200/300"}
-              title={name}
-              price={price}
-              description={description}
-              expiredAt={expiredAt}
-            />
-            {isItem && (
-              <div className={styles.delete} onClick={() => onDelete(item)}>
-                <Icon icon="delete" />
-              </div>
-            )}
-          </div>
-        )
-      })}
+      <div className={styles.items_container}>
+        {list.map((item) => {
+          const id = get(item, "attributes.id") || item.id
+          const images = item.images || []
+          const firstImage = item.imgUrl || images[0]
+          const name = get(item, "attributes.name") || item.name || ""
+          const price = get(item, "attributes.price") || item.price || ""
+          const description =
+            get(item, "attributes.description") || item.information || item.description || ""
+          const expiredAt = get(item, "attributes.expire_at") || item.expireAt || ""
+          return (
+            <div
+              key={id}
+              className={styles.info_card_container}
+              style={{ width: isDeal ? "50%" : "" }}
+            >
+              <CardItem
+                imgUrl={firstImage || "https://picsum.photos/200/300"}
+                title={name}
+                price={price}
+                description={description}
+                expiredAt={expiredAt}
+              />
+              {isItem && (
+                <div className={styles.delete} onClick={() => onDelete(item)}>
+                  <Icon icon="delete" />
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+      <div
+        className={styles.see_all}
+        onClick={() => router.push(`/biz/${selectedTab}/${listingSlug}`)}
+      >
+        See all
+      </div>
     </div>
   )
 }

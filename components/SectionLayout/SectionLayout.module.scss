@@ -34,6 +34,10 @@
   &.colored_background {
     background-color: $bg-50;
   }
+
+  &.transparent {
+    background-color: transparent;
+  }
 }
 
 @media screen and (max-width: $mobile) {

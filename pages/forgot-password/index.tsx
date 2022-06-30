@@ -73,7 +73,7 @@ const ForgotPasswordPage = () => {
       }
     }
 
-    if (check == true) {
+    if (check === true) {
       router.push({
         pathname: "/forgot-password/otp",
         //help otp page detect method and otp receiver

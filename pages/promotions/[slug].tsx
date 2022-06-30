@@ -1,4 +1,7 @@
+import { useState } from "react"
 import { inforCardList } from "constant"
+import DealsDetailsModal, { IDealsDetails } from "components/DealDetailModal/DealDetailModal"
+import ProductDetailsModal, { IProduct } from "components/ProductDetailModal/ProductDetailModal"
 import InforCard from "components/InforCard/InforCard"
 import PromotionCard from "components/PromotionCard/PromotionCard"
 import Image from "next/image"
@@ -81,7 +84,62 @@ const dummyBanner = [
   "https://picsum.photos/1185/255/",
 ]
 
+const dummyDealsDetails: IDealsDetails = {
+  name: "Evertop Hainanese Boneless Chicken",
+  imgUrl: "https://picsum.photos/678/169",
+  offers: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased.",
+  valid: "April 17, 2022 - April 17, 2022",
+  conditions: "A valid tribe listing pass must be presented upon payment to enjoy the offer.",
+}
+
+const dummyProductDetails: IProduct = {
+  id: 678,
+  name: "Evertop Hainanese Boneless Chicken / Evertop Hainanese Boneless Chicken Evertop Hainanese Boneless Chicken ",
+  images: [
+    "https://picsum.photos/300/301",
+    "https://picsum.photos/200/311",
+    "https://picsum.photos/200/299",
+    "https://picsum.photos/200/312",
+    "https://picsum.photos/300/301",
+    "https://picsum.photos/200/311",
+    "https://picsum.photos/201/302",
+    "https://picsum.photos/202/310",
+    "https://picsum.photos/221/302",
+    "https://picsum.photos/252/310",
+  ],
+  price: 40.35,
+  priceSale: 37.35,
+  discount: 40,
+  description: `
+    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
+    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
+    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
+    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
+    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
+    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
+    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
+  `,
+  type: "paid",
+}
+
 const PromotionsPage = () => {
+  const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>()
+  const [dealsDetails, setDealsDetails] = useState<IDealsDetails>({} as IDealsDetails)
+  const [showModalProductDetails, setShowModalProductDetails] = useState<boolean>()
+
+  const handleDealsDeatails = (value: boolean) => {
+    setShowModalDealsDetails(value)
+    setDealsDetails(dummyDealsDetails)
+  }
+
+  const handleShare = () => {
+    console.log("handleShare")
+  }
+
+  const handleFavourite = () => {
+    console.log("handleFavourite")
+  }
+
   return (
     <div className={styles.wrapper_promotions}>
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}>
@@ -110,6 +168,7 @@ const PromotionsPage = () => {
                 type={promotion.type}
                 favourite={promotion.favourite}
                 size="large"
+                onClick={() => handleDealsDeatails(true)}
               />
             ))}
           </div>
@@ -154,6 +213,7 @@ const PromotionsPage = () => {
               iconTag={true}
               isVerified={card.isVerified}
               className="w-full"
+              onClick={() => setShowModalProductDetails(true)}
             />
           ))}
         </div>
@@ -303,6 +363,20 @@ const PromotionsPage = () => {
         </div>
       </SectionLayout>
       {/* End Shop more deals */}
+
+      <DealsDetailsModal
+        visible={showModalDealsDetails}
+        data={dealsDetails}
+        onClose={() => handleDealsDeatails(false)}
+        onShare={() => handleShare()}
+        onFavourite={() => handleFavourite()}
+      />
+
+      <ProductDetailsModal
+        visible={showModalProductDetails}
+        data={dummyProductDetails}
+        onClose={() => setShowModalProductDetails(false)}
+      />
     </div>
   )
 }

@@ -18,6 +18,7 @@ import AddItems from "components/BizInformationPage/TabContentComponents/AddItem
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
 import TagApi from "services/tag"
 import FacilityApi from "services/facility"
+import ReviewApi from "services/review"
 
 import styles from "styles/BizHomepage.module.scss"
 import Facilities from "components/BizHomePage/Facilities/Facilities"
@@ -79,23 +80,30 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       value: item.attributes.value,
       id: item.id,
     }))
-    
+
   useEffect(() => {
     const getListingData = async (listingSlug) => {
-      const data = await BizListingApi.getOwnerBizListingBySlug(listingSlug)
-      if (get(data, 'data.data.length') == 0) {
-        window.location.href = '/'
+      let data
+      if (isViewPage) {
+        //if normal user go to normal listing homepage
+        data = await BizListingApi.getBizListingBySlug(listingSlug)
+      } else {
+        //if normal users go to edit listing homepage
+        data = await BizListingApi.getOwnerBizListingBySlug(listingSlug)
+        //they will be redirected to home if do not own the listing
+        get(data, "data.data.length") === 0 && (window.location.href = "/")
       }
-      // const data = await BizListingApi.getBizListingBySlug(listingSlug)
+
       const listing = get(data, "data.data[0]")
-      console.log('listing', listing);
       if (listing) {
         console.log(listing)
         const rawTags = get(listing, "attributes.tags.data") || []
         const rawFacilities = get(listing, "attributes.facilities.data") || []
         const invoiceList = get(listing, "attributes.biz_invoices.data") || []
         const rawPhoneNumber = get(listing, "attributes.phone_number")
-        const defaultPhone = rawPhoneNumber ? rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7) : ''
+        const defaultPhone = rawPhoneNumber
+          ? rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7)
+          : ""
         const rawListing = get(listing, "attributes.products.data") || []
         const listingArray = rawListing.map((item) => ({
           name: get(item, "attributes.name"),
@@ -144,7 +152,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(get(listing, "attributes.open_hours"))
         setPriceRange(get(listing, "attributes.price_range"))
         setSocialInfo(get(listing, "attributes.social_info"))
-        setReviews(get(listing, "attributes.reviews.data"))
+        // setReviews(get(listing, "attributes.reviews.data"))
         // setItemList(get(listing, "attributes.products.data"))
         setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
@@ -167,8 +175,25 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       getListingData(listingSlug)
       getTags()
       getFacilities()
+      getBizListingReviews(listingSlug, "rating:desc")
     }
-  }, [listingSlug])
+  }, [listingSlug, isViewPage])
+
+  const getBizListingReviews = async (listingSlug, sortBy) => {
+    const data = await ReviewApi.getReviewsByBizListingSlugWithSort(listingSlug, sortBy)
+    const reviewsData = get(data, "data.data")
+    if (reviewsData.length > 0) {
+      setReviews(reviewsData)
+    }
+  }
+
+  const handleChangeReviewsSequence = async ({ value }: IOption) => {
+    if (value === "top") {
+      await getBizListingReviews(listingSlug, "rating:desc")
+    } else {
+      await getBizListingReviews(listingSlug, "id:desc")
+    }
+  }
 
   //Get tags
   const getTags = async () => {
@@ -443,6 +468,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 isViewPage={isViewPage}
                 reviews={reviews}
                 onSubmitReply={handleSubmitReply}
+                onChangeReviewsSequence={handleChangeReviewsSequence}
               />
               <Break />
               <Contacts />

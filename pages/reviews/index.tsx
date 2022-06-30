@@ -112,7 +112,7 @@ const ReviewsPage = () => {
   }
 
   const handleSubmit = async (dataSend: any) => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     const bizListingId = get(listingSearchResult, "[0].id")
     const dataSendApi = {
       user: userInfo.id,
@@ -181,7 +181,7 @@ const ReviewsPage = () => {
       </SectionLayout>
 
       <SectionLayout className={styles.top_search} containerClassName={styles.top_search_container}>
-        <TopSearches keywords={dummyKeywords} />
+        <TopSearches />
       </SectionLayout>
 
       <ResultModal visible={isShowResultModal} isSuccess={isSuccess} onClose={handleCloseModal} />

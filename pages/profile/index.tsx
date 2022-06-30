@@ -15,7 +15,7 @@ import { useRouter } from "next/router"
 import React from "react"
 import styles from "styles/Profile.module.scss"
 
-const GroupHeadingOne = (props: {name: string, imageUrl: string}) => {
+const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props
 
   return (
@@ -29,7 +29,7 @@ const GroupHeadingOne = (props: {name: string, imageUrl: string}) => {
             height="100%"
             layout="responsive"
             alt="avatar"
-            />
+          />
         </div>
         <h2 className={styles.name}>{name}</h2>
       </div>
@@ -43,7 +43,7 @@ const GroupHeadingOne = (props: {name: string, imageUrl: string}) => {
   )
 }
 
-const GroupHeadingTwo = (props: {contributions: number, following: number, points: number}) => {
+const GroupHeadingTwo = (props: { contributions: number; following: number; points: number }) => {
   const { contributions, following, points } = props
   const router = useRouter()
   return (
@@ -68,7 +68,9 @@ const GroupHeadingTwo = (props: {contributions: number, following: number, point
           variant="secondary"
           text="Edit profile"
           width={164}
-          onClick={() => {router.push("/profile/information")}}
+          onClick={() => {
+            router.push("/profile/information")
+          }}
         />
       </div>
       <CompleteProfileCard
@@ -81,32 +83,43 @@ const GroupHeadingTwo = (props: {contributions: number, following: number, point
   )
 }
 
-
 const ProfilePage = () => {
   const TabList: ITab[] = [
-    { label: ProfileTabs.FAVOURITED, value: ProfileTabs.FAVOURITED, content: <FavouriedPanel/> },
-    { label: ProfileTabs.SAVED_DEALS, value: ProfileTabs.SAVED_DEALS, content: <SavedDealsPanel data={dummySavedDeals}/> },
-    { label: ProfileTabs.CONTRIBUTED, value: ProfileTabs.CONTRIBUTED, content: <ContributedPanel/> },
-    { label: ProfileTabs.ABOUT, value: ProfileTabs.ABOUT, content: <PanelAbout data={dummyUserInfo}/> },
+    { label: ProfileTabs.FAVOURITED, value: ProfileTabs.FAVOURITED, content: <FavouriedPanel /> },
+    {
+      label: ProfileTabs.SAVED_DEALS,
+      value: ProfileTabs.SAVED_DEALS,
+      content: <SavedDealsPanel data={dummySavedDeals} />,
+    },
+    {
+      label: ProfileTabs.CONTRIBUTED,
+      value: ProfileTabs.CONTRIBUTED,
+      content: <ContributedPanel />,
+    },
+    {
+      label: ProfileTabs.ABOUT,
+      value: ProfileTabs.ABOUT,
+      content: <PanelAbout data={dummyUserInfo} />,
+    },
   ]
 
   return (
     <div className="wrapper-profile">
       <div className={styles.section_cover_image}>
-        <CoverImage imageUrl="https://picsum.photos/1440/360"/>
+        <CoverImage imageUrl="https://picsum.photos/1440/360" />
       </div>
-      <SectionLayout className={styles.section_profile} containerClassName={styles.section_profile_container}>
-        <GroupHeadingOne
-          name="Anna Nhun"
-          imageUrl="https://picsum.photos/218"
+      <SectionLayout
+        className={styles.section_profile}
+        containerClassName={styles.section_profile_container}
+      >
+        <GroupHeadingOne name="Anna Nhun" imageUrl="https://picsum.photos/218" />
+        <GroupHeadingTwo contributions={20} following={100} points={32} />
+        <TabsHorizontal
+          tablist={TabList}
+          type="secondary-no-outline"
+          className={styles.profile_tab}
         />
-        <GroupHeadingTwo
-          contributions={20}
-          following={100}
-          points={32}
-        />
-        <TabsHorizontal tablist={TabList} type="secondary-no-outline" className={styles.profile_tab} />
-        <TopSearches keywords={dummyKeywords} className={styles.top_searches}/>
+        <TopSearches className={styles.top_searches} />
       </SectionLayout>
     </div>
   )

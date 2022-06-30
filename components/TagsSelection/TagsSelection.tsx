@@ -21,7 +21,6 @@ const TagsSelection = (props: TagsSelectionProps) => {
   const { category, selectedList, options, className, onSubmit, onCancel } = props
 
   const [localSelectedList, setLocalSelectedList] = useState<IOption[]>(selectedList || [])
-  
 
   const selectedValues = localSelectedList.map((item) => item.value)
 
@@ -49,7 +48,7 @@ const TagsSelection = (props: TagsSelectionProps) => {
     <React.Fragment>
       <div className={styles.selected_container}>
         {localSelectedList.map((item) => (
-          <div key={item.label} className="w-1/2 sm:w-[23%]">
+          <div key={item.value} className="w-1/2 sm:w-[23%]">
             <div className={styles.tag} onClick={() => handleChange(item)}>
               {item.label}
             </div>
@@ -60,9 +59,9 @@ const TagsSelection = (props: TagsSelectionProps) => {
       <div className={wrapperClassName}>
         {options.map((opt) => (
           <Checkbox
-            key={opt.label}
+            key={opt.value}
             label={opt.label}
-            id={opt.label}
+            id={opt.value}
             className="w-1/2 sm:w-[23%]"
             checked={selectedValues.includes(opt.value)}
             onClick={() => handleChange(opt)}

@@ -9,12 +9,14 @@
     padding: $p-md;
     width: 100%;
     margin-bottom: 32px;
+    box-shadow: $box-shadow;
+    cursor: pointer;
   }
 
   &_avatar {
     position: relative;
     margin-right: 24px;
-    
+
     &.medium {
       min-width: 100px;
       max-width: 100px;
