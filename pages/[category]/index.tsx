@@ -2,7 +2,6 @@ import ArticleCard from "components/ArticleCard/ArticleCard"
 import Button from "components/Button/Button"
 import Carousel from "components/Carousel/Carousel"
 import CollectionCard from "components/CollectionCard/CollectionCard"
-import Filter from "components/Filter/Filter"
 import Icon from "components/Icon/Icon"
 import InforCard from "components/InforCard/InforCard"
 import SectionLayout from "components/SectionLayout/SectionLayout"
@@ -10,7 +9,6 @@ import TopSearches from "components/TopSearches/TopSearches"
 import {
   categories,
   curatedList,
-  dummyTopSearchKeywords,
   homeArticleCarousel,
   homeBannerResponsive,
   homeCarousel,
@@ -19,22 +17,75 @@ import {
   infoCardResponsive,
   inforCardList,
 } from "constant"
+import { CategoryText } from "enums"
 import useTrans from "hooks/useTrans"
 import type { NextPage } from "next"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import styles from "styles/Home.module.scss"
 
-const Home: NextPage = () => {
-  const [showFilter, setShowFilter] = useState(false)
+const dummySubCategories = [
+  { label: "Dessert", value: "dessert", slug: "dessert", icon: "https://picsum.photos/200/300" },
+  { label: "Bakeries", value: "bakeries", slug: "bakeries", icon: "https://picsum.photos/200/300" },
+  {
+    label: "Quick bites",
+    value: "quick-bites",
+    slug: "quick-bites",
+    icon: "https://picsum.photos/200/300",
+  },
+  {
+    label: "Coffee & Tea",
+    value: "coffee-tea",
+    slug: "coffee-tea",
+    icon: "https://picsum.photos/200/300",
+  },
+  {
+    label: "Restaurant",
+    value: "restaurant",
+    slug: "restaurant",
+    icon: "https://picsum.photos/200/300",
+  },
+]
+
+const Category = () => {
   const trans = useTrans()
   const router = useRouter()
+  const {
+    query: { category },
+  } = router
+
+  const [subCategories, setSubCategories] = useState<{ [key: string]: string }[]>([])
+
+  useEffect(() => {
+    setSubCategories(dummySubCategories)
+  }, [])
+
+  let bannerSrc
+  switch (category) {
+    case CategoryText.BUY:
+      bannerSrc = "/images/buy-banner.svg"
+      break
+    case CategoryText.EAT:
+      bannerSrc = "/images/eat-banner.svg"
+      break
+    case CategoryText.SEE_AND_DO:
+      bannerSrc = "/images/see-and-do-banner.svg"
+      break
+    case CategoryText.STAY:
+      bannerSrc = "/images/stay-banner.svg"
+      break
+    case CategoryText.TRANSPORT:
+      bannerSrc = "/images/transport-banner.svg"
+      break
+  }
 
   return (
     <div>
-      <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
+      <SectionLayout className={styles.banner}>
+        {bannerSrc && <Image src={bannerSrc} alt="" layout="fill" />}
+      </SectionLayout>
       <SectionLayout>
         <Carousel responsive={homeBannerResponsive}>
           {homeCarousel?.map((img, index) => (
@@ -44,24 +95,24 @@ const Home: NextPage = () => {
           ))}
         </Carousel>
       </SectionLayout>
-      <SectionLayout title="Explore BESTS" childrenClassName={styles.bests}>
-        {categories.map((item, index) => (
-          <div key={index} className={styles.category} onClick={() => router.push(item.slug)}>
-            <div className={styles.category_icon}>
-              <Icon size={60} icon={item.icon} />
+      <SectionLayout
+        title="Explore by Top Categories"
+        childrenClassName="flex gap-[100px] flex-wrap"
+      >
+        {subCategories.map((item, index) => (
+          <div
+            key={index}
+            className={styles.sub_category}
+            onClick={() => router.push(`${category}/${item.slug}`)}
+          >
+            <div className={styles.sub_category_icon}>
+              <Image src={item.icon} alt="" layout="fill" />
             </div>
-            <div className={styles.category_label}>{item.label}</div>
+            <div className={styles.sub_category_label}>{item.label}</div>
           </div>
         ))}
       </SectionLayout>
       <SectionLayout title="Exclusive deals">
-        <Button
-          size="small"
-          text={trans.filter}
-          variant="secondary"
-          onClick={() => setShowFilter(true)}
-          className="w-[50px] mb-5"
-        />
         <Carousel responsive={infoCardResponsive}>
           {inforCardList?.map((card) => (
             <div key={card.title} className="pb-5">
@@ -182,4 +233,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Category

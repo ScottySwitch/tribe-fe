@@ -7,6 +7,15 @@ export enum Categories {
   OTHER = "Other",
 }
 
+export enum CategoryText {
+  BUY = "buy",
+  EAT = "eat",
+  SEE_AND_DO = "see-and-do",
+  TRANSPORT = "transport",
+  STAY = "stay",
+  OTHER = "Other",
+}
+
 export enum YesNo {
   YES = "Yes",
   NO = "No",
@@ -63,8 +72,6 @@ export enum UserInformationList {
   TERMS_CONDITIONS = "Terms & Conditions",
   LOGOUT = "Log out",
 }
-
-
 
 export enum ClaimStep {
   CLAIM_FREE_LISTING = "claim_free_listing",

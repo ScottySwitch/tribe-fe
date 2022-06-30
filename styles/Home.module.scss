@@ -1,5 +1,11 @@
 @import "styles/variables.scss";
 
+.banner {
+  height: 166px;
+  display: block;
+  position: relative;
+}
+
 .banner_card {
   z-index: 10;
   position: relative;
@@ -49,6 +55,39 @@
         color: $primary-500;
       }
     }
+  }
+}
+
+.sub_category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+
+  &:hover {
+    .sub_category_label {
+      color: $primary-500;
+    }
+  }
+
+  &_icon {
+    position: relative;
+    border-radius: 50%;
+    padding: 10px;
+    width: 100px;
+    height: 100px;
+    background-color: $primary-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      border-radius: 50%;
+    }
+  }
+  &_label {
+    font-weight: $font-normal;
   }
 }
 

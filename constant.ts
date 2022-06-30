@@ -1,3 +1,4 @@
+import { CategoryText } from "./enums"
 import { UserProps } from "components/UserProfilePage/PanelAbout/PanelAbout"
 import {
   Categories,
@@ -604,6 +605,7 @@ export const categories = [
     icon: "buy-color",
     label: "Buy",
     value: Categories.BUY,
+    slug: CategoryText.BUY,
     options: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Coffee & Tea", value: "coffee-tea" },
@@ -617,6 +619,7 @@ export const categories = [
     icon: "eat-color",
     label: "Eat",
     value: Categories.EAT,
+    slug: CategoryText.EAT,
     options: [
       { label: "Quick bites", value: "quick-bites" },
       { label: "Restaurant", value: "restaurant" },
@@ -630,6 +633,7 @@ export const categories = [
     icon: "camera-color",
     label: "See & Do",
     value: Categories.SEE_AND_DO,
+    slug: CategoryText.SEE_AND_DO,
     options: [
       { label: "Coffee & Tea", value: "coffee-tea" },
       { label: "Restaurant", value: "restaurant" },
@@ -643,6 +647,7 @@ export const categories = [
     icon: "car-color",
     label: "Transport",
     value: Categories.TRANSPORT,
+    slug: CategoryText.TRANSPORT,
     options: [
       { label: "Dessert", value: "dessert" },
       { label: "Bakeries", value: "bakeries" },
@@ -656,6 +661,7 @@ export const categories = [
     icon: "bed-color",
     label: "Stay",
     value: Categories.STAY,
+    slug: CategoryText.STAY,
     options: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Quick bites", value: "quick-bites" },
