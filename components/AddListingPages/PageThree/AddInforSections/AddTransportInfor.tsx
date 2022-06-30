@@ -143,7 +143,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
             optional
           >
             <Upload
-              isPaid={false}
+              isPaid
               multiple={true}
               accept="images"
               fileList={getValues("images")}
