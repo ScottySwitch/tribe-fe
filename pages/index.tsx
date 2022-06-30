@@ -44,10 +44,11 @@ const Home: NextPage = () => {
       </SectionLayout>
       <SectionLayout title="Explore BESTS" childrenClassName={styles.bests}>
         {categories.map((item, index) => (
-          <div key={index}>
-            <div className={styles.category}>
+          <div key={index} className={styles.category}>
+            <div className={styles.category_icon}>
               <Icon size={60} icon={item.icon} />
             </div>
+            <div className={styles.category_label}>{item.label}</div>
           </div>
         ))}
       </SectionLayout>
@@ -173,7 +174,7 @@ const Home: NextPage = () => {
         </SectionLayout>
       </div>
       <SectionLayout>
-        <TopSearches keywords={dummyTopSearchKeywords} />
+        <TopSearches />
       </SectionLayout>
     </div>
   )

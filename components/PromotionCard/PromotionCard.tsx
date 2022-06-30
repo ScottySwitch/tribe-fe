@@ -13,14 +13,26 @@ export interface PromotionProps {
   favourite?: boolean
   width?: string | number
   size?: "medium" | "large"
+  onCardClick?: () => void
   onClick?: () => void
 }
 
 const PromotionCard = (props: PromotionProps) => {
-  const { imgUrl, width, title, expiredAt, type, favourite, size = "medium", onClick} = props
+  const {
+    imgUrl,
+    width,
+    title,
+    expiredAt,
+    type,
+    favourite,
+    size = "medium",
+    onCardClick,
+    onClick,
+  } = props
 
   const buttonClasses = classNames({
-    [styles.promotion_cta_primary]: PromotionType.VIEW_DETAIL === type || PromotionType.USE_NOW === type,
+    [styles.promotion_cta_primary]:
+      PromotionType.VIEW_DETAIL === type || PromotionType.USE_NOW === type,
   })
   const avatarClassName = classNames(styles.promotion_avatar, {
     [styles.medium]: size === "medium",
@@ -33,7 +45,7 @@ const PromotionCard = (props: PromotionProps) => {
   }
 
   return (
-    <div style={{ width }} className={styles.promotion_card}>
+    <div style={{ width }} className={styles.promotion_card} onClick={onCardClick}>
       <div className={avatarClassName}>
         {imgUrl && (
           <Image
@@ -56,7 +68,14 @@ const PromotionCard = (props: PromotionProps) => {
           <h3 className={styles.promotion_title}>{title}</h3>
           <div className={styles.promotion_date}>{expiredAt}</div>
         </div>
-        {type && <Button className={buttonClasses} text={types[type]} onClick={onClick} width="max-content" />}
+        {type && (
+          <Button
+            className={buttonClasses}
+            text={types[type]}
+            onClick={onClick}
+            width="max-content"
+          />
+        )}
       </div>
     </div>
   )

@@ -1,50 +1,47 @@
-import Modal, { ModalProps } from "components/Modal/Modal"
-import Icon from "components/Icon/Icon"
-import styles from "./DealsDetailsModal.module.scss"
-import Button from "components/Button/Button"
 import Image from "next/image"
 
+import Modal, { ModalProps } from "components/Modal/Modal"
+import Icon from "components/Icon/Icon"
+import Button from "components/Button/Button"
+
+import styles from "./DealDetailModal.module.scss"
+
 export interface IDealsDetails {
-  title: string
+  name: string
   imgUrl: string
   offers?: string
   valid?: string
   conditions?: string
 }
-interface DealsDetailsModalProps extends ModalProps {
+interface DealDetailModalProps extends ModalProps {
   data: IDealsDetails
   onShare?: () => void
   onFavourite?: () => void
 }
 
-const DealsDetailsModal = (props: DealsDetailsModalProps) => {
-  const {
-    data,
-    visible,
-    onClose,
-    onShare,
-    onFavourite,
-  } = props
+const DealDetailModal = (props: DealDetailModalProps) => {
+  const { data, visible, onClose, onShare, onFavourite } = props
   return (
-    <Modal
-      visible={visible}
-      width="100%"
-      maxWidth={678}
-      mobilePosition="center"
-    >
+    <Modal visible={visible} width="100%" maxWidth={678} mobilePosition="center" onClose={onClose}>
       <div className={styles.header}>
         <div className="flex items-center min-w-0">
           <div className={styles.icon}>
-            <Icon icon="deals-color" size={22}/>
+            <Icon icon="deals-color" size={22} />
           </div>
-          <div className={`${styles.title} truncate`}>{data.title}</div>
+          <div className={`${styles.title} truncate`}>{data.name}</div>
         </div>
         <div className={styles.close} onClick={onClose}>
-          <Icon icon="cancel-mobile"/>
+          <Icon icon="cancel-mobile" />
         </div>
       </div>
       <div className={styles.cover_image}>
-        <Image src={data.imgUrl || "https://picsum.photos/678/169"} alt={data.title} width="100%" height="100%" layout="responsive"/>
+        <Image
+          src={data.imgUrl || "https://picsum.photos/678/169"}
+          alt={data.name}
+          width="100%"
+          height="100%"
+          layout="responsive"
+        />
       </div>
       <div className={styles.content}>
         {data.offers && (
@@ -68,20 +65,20 @@ const DealsDetailsModal = (props: DealsDetailsModalProps) => {
       </div>
       <div className={styles.footer}>
         <div className="flex">
-          <Button 
+          <Button
             variant="secondary"
-            text="Share" 
-            className="text-sm	font-bold mr-[17px]" 
-            width={115} 
-            prefix={<Icon icon="share"/>}
+            text="Share"
+            className="text-sm	font-bold mr-[17px]"
+            width={115}
+            prefix={<Icon icon="share" />}
             onClick={onShare}
           />
           <Button
-            variant="primary" 
-            text="Add to favourite" 
-            className="text-sm	font-bold" 
-            width="max-content" 
-            prefix={<Icon icon="like-stroke" color="#ffffff"/>}
+            variant="primary"
+            text="Add to favourite"
+            className="text-sm	font-bold"
+            width="max-content"
+            prefix={<Icon icon="like-stroke" color="#ffffff" />}
             onClick={onFavourite}
           />
         </div>
@@ -97,4 +94,4 @@ const DealsDetailsModal = (props: DealsDetailsModalProps) => {
   )
 }
 
-export default DealsDetailsModal
+export default DealDetailModal

@@ -142,7 +142,7 @@ const AddReviewPage = () => {
         </SectionLayout>
 
         <SectionLayout>
-          <TopSearches keywords={dummyTopSearchKeywords} />
+          <TopSearches />
         </SectionLayout>
 
         <ResultModal visible={isShowResultModal} isSuccess={isSuccess} onClose={handleCloseModal} />

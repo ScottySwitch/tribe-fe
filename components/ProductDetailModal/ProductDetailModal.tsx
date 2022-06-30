@@ -5,11 +5,11 @@ import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
 import ScrollingBox from "components/ScrollingBox/ScrollingBox"
 import Image from "next/image"
-import styles from "./ProductDetailsModal.module.scss"
+import styles from "./ProductDetailModal.module.scss"
 
 export interface IProduct {
   id: number
-  title: string
+  name: string
   images?: any[]
   price?: string | number
   priceSale?: string | number
@@ -26,29 +26,28 @@ interface ProductDetailsModalProps extends ModalProps {
 }
 
 const SliderSyncing = (props) => {
-  
   const { images } = props
-  
-  const [navThumbnail, setNavThumbnail] = useState<any>();
-  const [navGallery, setNavGallery] = useState<any>();
 
-  const refSlider1 = useRef<any>(null);
-  const refSlider2 = useRef<any>(null);
+  const [navThumbnail, setNavThumbnail] = useState<any>()
+  const [navGallery, setNavGallery] = useState<any>()
+
+  const refSlider1 = useRef<any>(null)
+  const refSlider2 = useRef<any>(null)
 
   const handlePrev = () => {
     if (refSlider2 && refSlider2.current) {
-      refSlider2.current.slickPrev();
+      refSlider2.current.slickPrev()
     }
   }
   const handleNext = () => {
     if (refSlider2 && refSlider2.current) {
-      refSlider2.current.slickNext();
+      refSlider2.current.slickNext()
     }
   }
 
   useEffect(() => {
-    setNavThumbnail(refSlider1.current);
-    setNavGallery(refSlider2.current);
+    setNavThumbnail(refSlider1.current)
+    setNavGallery(refSlider2.current)
   }, [])
 
   const configThumbnail: Settings = {
@@ -60,9 +59,9 @@ const SliderSyncing = (props) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     cssEase: "linear",
-    asNavFor: navGallery
+    asNavFor: navGallery,
   }
-  
+
   const configGallery: Settings = {
     className: styles.slider_gallery_item,
     dots: false,
@@ -74,7 +73,7 @@ const SliderSyncing = (props) => {
     cssEase: "linear",
     focusOnSelect: true,
     asNavFor: navThumbnail,
-    adaptiveHeight: true
+    adaptiveHeight: true,
   }
 
   return (
@@ -82,54 +81,55 @@ const SliderSyncing = (props) => {
       <Slider ref={refSlider1} {...configThumbnail} className={styles.slider_thumbnail}>
         {images?.map((image, index) => (
           <div key={index}>
-            <Image src={image} height="100%" width="100%" layout="responsive" alt={`thumbnail-${index}`}/>
+            <Image
+              src={image}
+              height="100%"
+              width="100%"
+              layout="responsive"
+              alt={`thumbnail-${index}`}
+            />
           </div>
         ))}
       </Slider>
       <div className={styles.slider_gallery_container}>
         <div onClick={handlePrev} className={styles.btn_prev}>
-          <Icon icon="carret-left" size={20} color="#FFFFFF"/>
+          <Icon icon="carret-left" size={20} color="#FFFFFF" />
         </div>
         <Slider ref={refSlider2} {...configGallery} className={styles.slider_gallery}>
           {images?.map((image, index) => (
             <div key={index}>
-              <Image src={image} height="100%" width="100%" layout="responsive" alt={`gallery-${index}`}/>
+              <Image
+                src={image}
+                height="100%"
+                width="100%"
+                layout="responsive"
+                alt={`gallery-${index}`}
+              />
             </div>
           ))}
         </Slider>
         <div onClick={handleNext} className={styles.btn_next}>
-          <Icon icon="carret-right" size={20} color="#FFFFFF"/>
+          <Icon icon="carret-right" size={20} color="#FFFFFF" />
         </div>
       </div>
     </div>
   )
 }
 
-
-const ProductDetailsModal = (props: ProductDetailsModalProps) => {
-  const {
-    data,
-    visible,
-    onClose,
-    onShare,
-    onKlook,
-    onBookNow,
-  } = props
-
-  useEffect
-
+const ProductDetailModal = (props: ProductDetailsModalProps) => {
+  const { data, visible, onClose, onShare, onKlook, onBookNow } = props
   return (
-    <Modal visible={visible} width="100%" maxWidth={1028}>
+    <Modal visible={visible} width="100%" maxWidth={1028} onClose={onClose}>
       <div className={styles.container}>
         <div className={styles.close} onClick={onClose}>
-          <Icon icon="cancel-mobile"/>
+          <Icon icon="cancel-mobile" />
         </div>
         <div className={styles.container_gallery}>
-          <SliderSyncing images={data.images}/>
+          <SliderSyncing images={data.images} />
         </div>
 
         <div className={styles.container_info}>
-          <h2 className={styles.title}>{data.title}</h2>
+          <h2 className={styles.title}>{data.name}</h2>
           <div className="flex items-center justify-between mb-[10px]">
             <div className="flex items-center gap-[16px]">
               <div className={styles.price_sale}>
@@ -141,27 +141,44 @@ const ProductDetailsModal = (props: ProductDetailsModalProps) => {
                 <span>{data.price}</span>
               </div>
               <div className={styles.discount}>
-                <div className={`${styles.badge} ${styles.badge_warning}`}>{data.discount}% OFF</div>
+                <div className={`${styles.badge} ${styles.badge_warning}`}>
+                  {data.discount}% OFF
+                </div>
               </div>
             </div>
             <Button
               className={styles.btn_share}
               variant="underlined"
               text="Share"
-              prefix={<Icon icon="share" color="#7F859F" size={14}/>}
+              prefix={<Icon icon="share" color="#7F859F" size={14} />}
               onClick={onShare}
-              />
+            />
           </div>
-          {
-            data?.description && (
+          {data?.description && (
             <ScrollingBox>
-              <div className={styles.description} dangerouslySetInnerHTML={{__html: data.description}}></div>
+              <div
+                className={styles.description}
+                dangerouslySetInnerHTML={{ __html: data.description }}
+              />
             </ScrollingBox>
-            )
-          }
+          )}
           <div className={styles.call_to_action}>
-            {(data?.type && data?.type !== "free") && (<Button text="Book on KLOOK" backgroundColor="#FF5B02" className="text-sm" onClick={onKlook}/>)}
-            {data?.type === "paid" && (<Button text="Book now" backgroundColor="#E60112" className="text-sm" onClick={onBookNow}/>)}
+            {data?.type && data?.type !== "free" && (
+              <Button
+                text="Book on KLOOK"
+                backgroundColor="#FF5B02"
+                className="text-sm"
+                onClick={onKlook}
+              />
+            )}
+            {data?.type === "paid" && (
+              <Button
+                text="Book now"
+                backgroundColor="#E60112"
+                className="text-sm"
+                onClick={onBookNow}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -169,4 +186,4 @@ const ProductDetailsModal = (props: ProductDetailsModalProps) => {
   )
 }
 
-export default ProductDetailsModal
+export default ProductDetailModal
