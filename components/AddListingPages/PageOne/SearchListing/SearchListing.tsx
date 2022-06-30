@@ -30,13 +30,9 @@ const RightColumn = (props: {
   useEffect(() => {
     console.log('listing',listing);
     const listingRolesArray = get(listing, 'attributes.listing_roles.data') || []
-    const haveClaims = get(listing, 'attributes.claim_listings.data') || []
-    const haveOwners = listingRolesArray.filter((item) => get(item, 'attributes.name') === 'owner')
-    // console.log('haveClaims', haveClaims);
-    // console.log('haveOwners', haveOwners);
-    if ( haveClaims.length > 0 || haveOwners.length > 0 ) {
-      setIsDisabled(true)
-    }
+    const isBeingClaimed = get(listing, 'attributes.claim_listings.data.length') > 0
+    const doesHasOwners = listingRolesArray.some((item) => get(item, 'attributes.name') === 'owner')
+    if(isBeingClaimed || doesHasOwners) setIsDisabled(true)
   }, [])
 
   return (
