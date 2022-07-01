@@ -22,7 +22,7 @@ interface HomepageReviewsProps {
   isViewPage?: boolean
   listingRate?: number
   reviews: any[]
-  onSubmitReply?: (any) => void
+  onSubmitReply: (value, id) => void
   onChangeReviewsSequence: (e: IOption) => void
 }
 
@@ -39,8 +39,16 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   const [showReplyModal, setShowReplyModal] = useState(false)
   const [showReportModal, setShowReportModal] = useState(false)
   const [selectedReview, setSelectedReview] = useState({})
-
   const router = useRouter()
+  const [reply, setReply ] = useState<string>('')
+  // const handleSetReplyReview = (value) => {
+  //   if (value.length <= 100) {
+  //     setReplyReview(value)
+  //   }
+  //   else {
+  //     alert('Reply cannot over 100 character')
+  //   }    
+  // }
 
   const handleSubmitReportReview = () => {
     setShowReportModal(false)
@@ -82,12 +90,15 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
               <UserReviewCard
                 isPaid={isPaid}
                 actions={!isViewPage}
-                user={get(review, "attributes.user.data.attributes")}
-                listImage={get(review, "attributes.images")}
-                content={get(review, "attributes.content")}
-                dateVisit={get(review, "attributes.visited_date")}
-                rating={get(review, "attributes.rating")}
+                user={get(review, "user.data.attributes")}
+                listImage={get(review, "images")}
+                content={get(review, "content")}
+                dateVisit={get(review, "visited_date")}
+                rating={get(review, "rating")}
+                reply={get(review, "reply_reviews")}
+                replyAt={get(review, "date_create_reply")}
                 onReplyClick={() => {
+                  console.log('setSelectedReview', review)
                   setSelectedReview(review)
                   setShowReplyModal(true)
                 }}
@@ -118,19 +129,39 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         <div className="p-[30px]">
           <UserReviewCard
             isPaid={isPaid}
-            actions={!isViewPage}
-            user={get(selectedReview, "attributes.user.data.attributes")}
-            listImage={get(selectedReview, "attributes.images")}
-            content={get(selectedReview, "attributes.content")}
-            dateVisit={get(selectedReview, "attributes.visited_date")}
-            rating={get(selectedReview, "attributes.rating")}
-            onReplyClick={() => setShowReplyModal(true)}
+            actions={false}
+            user={get(selectedReview, "user.data.attributes")}
+            listImage={get(selectedReview, "images")}
+            content={get(selectedReview, "content")}
+            dateVisit={get(selectedReview, "visited_date")}
+            rating={get(selectedReview, "rating")}
+            reply={get(selectedReview, "reply_reviews")}
+            replyAt={get(selectedReview, "date_create_reply")}
+            onReplyClick={() => setShowReplyModal(false)}
           />
-          <Input placeholder="Reply ( 100 character minumum )" />
+          {!get(selectedReview, "reply_reviews") &&
+              <Input 
+                placeholder="Reply ( 100 character maximum )" 
+                value={reply}
+                maxLength={100}
+                onChange={(e: any) => setReply(e.target.value)}
+              />
+          }
         </div>
         <div className="flex gap-3 justify-end p-[30px]">
-          <Button text="Cancel" variant="secondary-no-outlined" />
-          <Button text="Send reply" />
+          <Button 
+            text="Cancel" 
+            variant="secondary-no-outlined" 
+            onClick={() => setShowReplyModal(false)} 
+          />
+          <Button 
+            text="Send reply"  
+            onClick={() => {
+              setShowReplyModal(false)
+              // setReply (get(selectedReview, "reply_reviews") || '')
+              onSubmitReply(reply, selectedReview)
+            }}  
+          />
         </div>
       </Modal>
     </div>

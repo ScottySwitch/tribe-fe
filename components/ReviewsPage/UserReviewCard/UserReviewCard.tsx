@@ -7,7 +7,11 @@ import Image from "next/image"
 import styles from "./UserReviewCard.module.scss"
 import Popover from "components/Popover/Popover"
 import Button from "components/Button/Button"
+import { calcDistanceFromNow } from "utils"
 export interface UserReviewCardProps {
+  reply?: string
+  replyAt?: string
+  idReview?: string
   className?: string
   isPaid?: boolean
   actions?: boolean
@@ -29,6 +33,8 @@ export interface UserReviewCardProps {
 
 const UserReviewCard = (props: UserReviewCardProps) => {
   const {
+    reply,
+    replyAt,
     className = "",
     avatarUrl = "https://picsum.photos/200",
     content,
@@ -116,7 +122,6 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {children && <div className={styles.children}>{children}</div>}
-
         {status !== "pending" && (
           <div className={censoredStatusClassName}>
             {status === "approved" && (
@@ -130,6 +135,17 @@ const UserReviewCard = (props: UserReviewCardProps) => {
                 <span>Contact admin</span>
               </div>
             )}
+          </div>
+        )}
+        {reply && (
+          <div className={styles.reply_review}>
+            <div className={styles.head_review}>
+              <p className={styles.title}>Response from the owner</p>
+              <div className={styles.time_date}>
+                {calcDistanceFromNow(replyAt)}
+              </div>
+            </div>
+            <div className={styles.description_review}>{reply}</div>
           </div>
         )}
         {actions && (

@@ -1,5 +1,7 @@
 import { get } from "lodash"
 import { IOption } from "type"
+import moment from "moment"
+import parseISO from "date-fns/parseISO"
 
 export const getIndex = (id, list) => {
   return list.findIndex((item) => item.id === id)
@@ -42,4 +44,52 @@ export const formatSelectInputValue = (e: string, selectOptions: IOption[]) => {
   const selectValue = selectOptions[codeOptionIndex]?.value
   const inputValue = e.substring(selectValue?.length)
   return { select: selectOptions[codeOptionIndex], input: inputValue }
+}
+
+export const calcDistanceFromNow = (time) => {
+  const timeCalcDistance = parseISO(moment(time).format("YYYY-MM-DD HH:mm:ss"))
+  let diff_in_minutes = moment().diff(moment(timeCalcDistance), 'minutes')
+  let diff_in_hours = Math.floor(diff_in_minutes / 60); 
+  let diff_in_days = Math.floor(diff_in_minutes / 1440);
+  if ( diff_in_hours < diff_in_minutes/60 ) {
+    diff_in_hours = diff_in_hours + 1;
+  }
+  if (diff_in_days < diff_in_minutes / 1440 ) {
+    diff_in_days = diff_in_days + 1;
+  }
+  if ( diff_in_minutes == 0 ) {
+    return (
+      'few second ago'
+    )
+  }
+  else if ( diff_in_minutes < 60 && diff_in_minutes == 1 ) {
+    return (
+      '1 minute ago'
+    )
+  }
+  else if ( diff_in_minutes < 60 && diff_in_minutes != 1 ) {
+    return (
+      `${diff_in_minutes} minutes ago`
+    )
+  }
+  else if ( diff_in_hours < 24 && diff_in_hours == 1 ) {
+    return (
+      '1 hour ago'
+    )
+  }
+  else if ( diff_in_hours < 24 && diff_in_hours != 1 ) {
+    return (
+      `${diff_in_hours} hours ago`
+    )
+  }
+  else if ( diff_in_days == 1 ) {
+    return (
+      '1 day ago'
+    )
+  }
+  else {
+    return (
+      `${diff_in_days} days ago`
+    )
+  }
 }

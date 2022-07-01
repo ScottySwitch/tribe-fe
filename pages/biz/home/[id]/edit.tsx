@@ -35,6 +35,7 @@ import parseISO from "date-fns/parseISO"
 import Break from "components/Break/Break"
 import Contacts from "components/BizHomePage/Contacts/Contacts"
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews"
+import { now } from "lodash"
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
@@ -53,7 +54,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [tags, setTags] = useState<IOption[]>([])
   const [tagOptions, setTagOptions] = useState<IOption[]>([])
   const [openHours, setOpenHours] = useState([])
-  const [reviews, setReviews] = useState([])
+  const [reviews, setReviews] = useState<{ [key: string]: any }[]>([])
   const [listingRate, setListingRate] = useState(1)
   const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
   const [socialInfo, setSocialInfo] = useState<any>("")
@@ -63,7 +64,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [menuList, setMenuList] = useState<{ [key: string]: any }[]>([])
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
   const [bizListing, setBizListing] = useState<any>({})
-  // const [listingImages, setListingImages] = useState<string[]>([])
   const [listingImages, setListingImages] = useState<any>([])
   const [logo, setLogo] = useState<any>([])
 
@@ -152,8 +152,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(get(listing, "attributes.open_hours"))
         setPriceRange(get(listing, "attributes.price_range"))
         setSocialInfo(get(listing, "attributes.social_info"))
-        // setReviews(get(listing, "attributes.reviews.data"))
-        // setItemList(get(listing, "attributes.products.data"))
         setDealList(get(listing, "attributes.deals.data"))
         setLogo(listing.attributes.logo)
         setTags(tagArray)
@@ -162,7 +160,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setMenuList(menuArray)
         setDealList(dealArray)
         setListingRate(get(listing, "attributes.rate"))
-        if (invoiceList.length > 0) {
+        if (invoiceList.length > 0) { 
           setIsPaid(true)
           setPhoneNumber(rawPhoneNumber)
         } else {
@@ -181,10 +179,19 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const getBizListingReviews = async (listingSlug, sortBy) => {
     const data = await ReviewApi.getReviewsByBizListingSlugWithSort(listingSlug, sortBy)
-    const reviewsData = get(data, "data.data")
-    if (reviewsData.length > 0) {
-      setReviews(reviewsData)
-    }
+    const rawReview = get(data, "data.data") || []
+    const reviewArray = rawReview.map((item) => ({
+      id: item.id,
+      biz_listing: get(item, "attributes.biz_listing"),
+      content: get(item, "attributes.content"),
+      rating: get(item, "attributes.rating"),
+      images: get(item, "attributes.images"),
+      reply_reviews: get(item, "attributes.reply_reviews"),
+      date_create_reply: get(item, "attributes.date_create_reply"),
+      user: get(item, "attributes.user"),
+      visited_date: get(item, "attributes.visited_date")
+    }))
+    setReviews(reviewArray)
   }
 
   const handleChangeReviewsSequence = async ({ value }: IOption) => {
@@ -246,8 +253,14 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   }
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
-  const handleSubmitReply = (values) => {
-    console.log(values)
+  const handleSubmitReply = (reply, review) => {
+    const newReviewArray: { [key: string]: any }[] = reviews;
+    const indexReviewSelected = newReviewArray.findIndex((item: any) => item.id === review.id);
+    console.log('reviewSelected', indexReviewSelected);
+    newReviewArray[indexReviewSelected].reply_reviews = reply
+    newReviewArray[indexReviewSelected].date_create_reply = new Date  
+    console.log('newReviewArray', newReviewArray);
+    setReviews(newReviewArray)
   }
 
   const handleSubmit = async () => {
@@ -375,6 +388,22 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         })
       )
     }
+
+    if (reviews.length > 0) {
+        await Promise.all(
+          reviews.map(async (item) => {
+            const dataUpdate = {
+              images: item.images,
+              visited_date: item.visited_date,
+              rating: item.rating,
+              content: item.content,
+              reply_reviews: item.reply_reviews,
+              date_create_reply: item.date_create_reply
+            }
+            await ReviewApi.updateReviews(item.id, dataUpdate)
+          })
+        )
+    }
     window.location.reload()
   }
 
@@ -467,7 +496,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 isPaid={isPaid}
                 isViewPage={isViewPage}
                 reviews={reviews}
-                onSubmitReply={handleSubmitReply}
+                onSubmitReply={(value, id) => handleSubmitReply(value, id)}
                 onChangeReviewsSequence={handleChangeReviewsSequence}
               />
               <Break />

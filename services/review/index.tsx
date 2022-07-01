@@ -15,7 +15,7 @@ const getReviewsByBizListingSlug = async (bizListingSlug: any) => {
           "id"
         ]
       },
-      "user": "*"
+      "user": "*",
     }
   }, {
     encodeValuesOnly: true
@@ -45,7 +45,8 @@ const getReviewsByBizListingSlugWithSort = async (bizListingSlug: any, sortBy: s
           "id"
         ]
       },
-      "user": "*"
+      "user": "*",
+      "review_replies": "*"
     }
   }
   if (sortBy !== '') {
@@ -59,9 +60,16 @@ const getReviewsByBizListingSlugWithSort = async (bizListingSlug: any, sortBy: s
   return await Api.get(url);
 }
 
+const updateReviews = async (reviewId: number, params: any) => {
+  const url = `/api/reviews/${reviewId}`;
+  return await Api.put(url, {
+    data: params
+  });
+}
 
 export default {
   getReviewsByBizListingSlug,
   addReview,
+  updateReviews,
   getReviewsByBizListingSlugWithSort
 }
