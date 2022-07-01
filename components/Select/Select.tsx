@@ -33,6 +33,8 @@ export interface SelectProps {
   size?: "small" | "medium" | "large"
   inputRef?: any
   shouldControlShowValue?: boolean
+  controlStyle?: any
+  placeholderStyle?: any
 }
 
 const Select = (props: SelectProps) => {
@@ -58,6 +60,8 @@ const Select = (props: SelectProps) => {
     size = "medium",
     menuFooter,
     inputRef,
+    controlStyle,
+    placeholderStyle,
   } = props
 
   const [selected, setSelected] = useState<IOption[] | IOption | string | undefined>(
@@ -89,6 +93,7 @@ const Select = (props: SelectProps) => {
       minHeight: "min-content",
       backgroundColor: "transparent",
       fontWeight: 300,
+      ...controlStyle,
     }),
     option: (styles, { isSelected }) => {
       return {
@@ -117,6 +122,7 @@ const Select = (props: SelectProps) => {
       margin: 0,
       width: "max-content",
       fontWeight: 300,
+      ...placeholderStyle,
     }),
     valueContainer: (styles) => ({
       ...styles,

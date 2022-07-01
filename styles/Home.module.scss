@@ -1,9 +1,34 @@
 @import "styles/variables.scss";
 
+.breadcrumbs {
+  padding-top: 20px;
+  display: flex;
+  gap: 6px;
+  color: $bg-400;
+  font-size: $text-sm;
+  align-items: center;
+}
+
 .banner {
   height: 166px;
   display: block;
   position: relative;
+}
+
+.tab_filter {
+  position: sticky;
+  top: 120px;
+  background-color: white;
+  z-index: 3;
+  left: 0;
+  padding: 0;
+
+  &_container {
+    padding: 6px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 }
 
 .banner_card {
@@ -86,6 +111,7 @@
       border-radius: 50%;
     }
   }
+
   &_label {
     font-weight: $font-normal;
   }
