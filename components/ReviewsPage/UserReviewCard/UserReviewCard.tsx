@@ -9,8 +9,8 @@ import Popover from "components/Popover/Popover"
 import Button from "components/Button/Button"
 import { calcDistanceFromNow } from "utils"
 export interface UserReviewCardProps {
-  reply_reviews?: string
-  date_create_reply?: string
+  reply?: string
+  replyAt?: string
   idReview?: string
   className?: string
   isPaid?: boolean
@@ -26,15 +26,14 @@ export interface UserReviewCardProps {
   status?: "pending" | "approved" | "denied"
   date?: string
   isDivier?: boolean
-  isModal?: boolean
   user?: any
   onReplyClick?(): void
 }
 
 const UserReviewCard = (props: UserReviewCardProps) => {
   const {
-    reply_reviews,
-    date_create_reply,
+    reply,
+    replyAt,
     className = "",
     avatarUrl = "https://picsum.photos/200",
     content,
@@ -51,7 +50,6 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     date,
     onReplyClick,
     isDivier = false,
-    isModal = false,
   } = props
 
   const userReviewCardClassName = classNames(styles.review_completed, className, {
@@ -137,29 +135,27 @@ const UserReviewCard = (props: UserReviewCardProps) => {
             )}
           </div>
         )}
-        {reply_reviews && (
+        {reply && (
           <div className={styles.reply_review}>
             <div className={styles.head_review}>
               <p className={styles.title}>Response from the owner</p>
               <div className={styles.time_date}>
-                {calcDistanceFromNow(date_create_reply)}
+                {calcDistanceFromNow(replyAt)}
               </div>
             </div>
-            <div className={styles.description_review}>{reply_reviews}</div>
+            <div className={styles.description_review}>{reply}</div>
           </div>
         )}
         {actions && (
           <div className="flex gap-3">
-            {!isModal &&
-              <Button
-                variant="secondary"
-                text="Reply review"
-                width={150}
-                className="mt-4"
-                disabled={!isPaid}
-                onClick={onReplyClick}
-              />
-            }
+            <Button
+              variant="secondary"
+              text="Reply review"
+              width={150}
+              className="mt-4"
+              disabled={!isPaid}
+              onClick={onReplyClick}
+            />
             {!isPaid && (
               <Button
                 text="Upgrade to reply reviews"

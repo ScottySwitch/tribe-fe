@@ -253,11 +253,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   }
   const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
 
-  const handleSubmitReply = (replyReview, review) => {
+  const handleSubmitReply = (reply, review) => {
     const newReviewArray: { [key: string]: any }[] = reviews;
     const indexReviewSelected = newReviewArray.findIndex((item: any) => item.id === review.id);
     console.log('reviewSelected', indexReviewSelected);
-    newReviewArray[indexReviewSelected].reply_reviews = replyReview
+    newReviewArray[indexReviewSelected].reply_reviews = reply
     newReviewArray[indexReviewSelected].date_create_reply = new Date  
     console.log('newReviewArray', newReviewArray);
     setReviews(newReviewArray)

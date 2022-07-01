@@ -39,15 +39,15 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   const [showReplyModal, setShowReplyModal] = useState(false)
   const [selectedReview, setSelectedReview] = useState({})
   const router = useRouter()
-  const [replyReview, setReplyReview] = useState<string>('')
-  const handleSetReplyReview = (value) => {
-    if (value.length <= 100) {
-      setReplyReview(value)
-    }
-    else {
-      alert('Reply cannot over 100 character')
-    }    
-  }
+  const [reply, setReply ] = useState<string>('')
+  // const handleSetReplyReview = (value) => {
+  //   if (value.length <= 100) {
+  //     setReplyReview(value)
+  //   }
+  //   else {
+  //     alert('Reply cannot over 100 character')
+  //   }    
+  // }
 
   return (
     <div>
@@ -90,8 +90,8 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
                 content={get(review, "content")}
                 dateVisit={get(review, "visited_date")}
                 rating={get(review, "rating")}
-                reply_reviews={get(review, "reply_reviews")}
-                date_create_reply={get(review, "date_create_reply")}
+                reply={get(review, "reply_reviews")}
+                replyAt={get(review, "date_create_reply")}
                 onReplyClick={() => {
                   console.log('setSelectedReview', review)
                   setSelectedReview(review)
@@ -115,23 +115,23 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
       >
         <div className="p-[30px]">
           <UserReviewCard
-            isModal
             isPaid={isPaid}
-            actions={!isViewPage}
+            actions={false}
             user={get(selectedReview, "user.data.attributes")}
             listImage={get(selectedReview, "images")}
             content={get(selectedReview, "content")}
             dateVisit={get(selectedReview, "visited_date")}
             rating={get(selectedReview, "rating")}
-            reply_reviews={get(selectedReview, "reply_reviews")}
-            date_create_reply={get(selectedReview, "date_create_reply")}
+            reply={get(selectedReview, "reply_reviews")}
+            replyAt={get(selectedReview, "date_create_reply")}
             onReplyClick={() => setShowReplyModal(false)}
           />
           {!get(selectedReview, "reply_reviews") &&
               <Input 
                 placeholder="Reply ( 100 character maximum )" 
-                value={replyReview}
-                onChange={(e: any) => handleSetReplyReview(e.target.value)}
+                value={reply}
+                maxLength={100}
+                onChange={(e: any) => setReply(e.target.value)}
               />
           }
         </div>
@@ -145,8 +145,8 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             text="Send reply"  
             onClick={() => {
               setShowReplyModal(false)
-              setReplyReview(get(selectedReview, "reply_reviews") || '')
-              onSubmitReply(replyReview, selectedReview)
+              // setReply (get(selectedReview, "reply_reviews") || '')
+              onSubmitReply(reply, selectedReview)
             }}  
           />
         </div>
