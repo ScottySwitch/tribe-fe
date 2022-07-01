@@ -75,7 +75,7 @@ export const homeCuratedResponsive = {
   lgScroll: 3,
   xlShow: 4,
   xlScroll: 3,
-  show: 4,
+  show: 5,
   scroll: 3,
 }
 export const infoCardResponsive = {
