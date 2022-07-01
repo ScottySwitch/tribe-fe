@@ -119,7 +119,7 @@ const AddListing = () => {
       category_links: formData.categoryKind,
       product_types: formData.placeGoodFor,
       product_brands: map(formData.tags, 'value'),
-      tags: formData.describeTags ?? [],
+      tags: formData.describeTags || [],
       facilities_data: {
         additionalServices: formData.additionalServices,
         atmosphere: formData.atmosphere,

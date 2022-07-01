@@ -3,7 +3,7 @@ import Break from "components/Break/Break"
 import Button from "components/Button/Button"
 import Checkbox from "components/Checkbox/Checkbox"
 import { Categories } from "enums"
-import React, { useState } from "react"
+import React, {useEffect, useState} from "react"
 import { IOption } from "type"
 
 import styles from "./TagsSelection.module.scss"
@@ -22,6 +22,9 @@ const TagsSelection = (props: TagsSelectionProps) => {
 
   const [localSelectedList, setLocalSelectedList] = useState<IOption[]>(selectedList || [])
 
+  useEffect(() => {
+    setLocalSelectedList(selectedList || [])
+  }, [selectedList])
   const selectedValues = localSelectedList.map((item) => item.value)
 
   const handleChange = (option: IOption) => {
@@ -29,6 +32,10 @@ const TagsSelection = (props: TagsSelectionProps) => {
       const newList = localSelectedList.filter((item) => item.value !== option.value)
       setLocalSelectedList(newList)
     } else {
+      if (selectedValues.length === 5) {
+        alert("Select max 5")
+        return false;
+      }
       setLocalSelectedList([...localSelectedList, option])
     }
   }

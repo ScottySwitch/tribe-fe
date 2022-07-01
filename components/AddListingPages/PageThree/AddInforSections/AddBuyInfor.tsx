@@ -84,6 +84,8 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
   }, [categoryKind])
 
   const handleSelectProductType = (option: any) => {
+    setValue("tags", [])
+    setProductBrands([])
     if (selectedProductTypes.includes(option)) {
       const newList = selectedProductTypes.filter((item) => item !== option)
       setSelectedProductTypes(newList)
