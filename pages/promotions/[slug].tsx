@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { inforCardList } from "constant"
-import DealsDetailsModal, { IDealsDetails } from "components/DealsDetailsModal/DealsDetailsModal"
-import ProductDetailsModal, { IProduct } from "components/ProductDetailsModal/ProductDetailsModal"
+import DealsDetailsModal, { IDealsDetails } from "components/DealDetailModal/DealDetailModal"
+import ProductDetailsModal, { IProduct } from "components/ProductDetailModal/ProductDetailModal"
 import InforCard from "components/InforCard/InforCard"
 import PromotionCard from "components/PromotionCard/PromotionCard"
 import Image from "next/image"
@@ -85,7 +85,7 @@ const dummyBanner = [
 ]
 
 const dummyDealsDetails: IDealsDetails = {
-  title: "Evertop Hainanese Boneless Chicken",
+  name: "Evertop Hainanese Boneless Chicken",
   imgUrl: "https://picsum.photos/678/169",
   offers: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased.",
   valid: "April 17, 2022 - April 17, 2022",
@@ -94,13 +94,18 @@ const dummyDealsDetails: IDealsDetails = {
 
 const dummyProductDetails: IProduct = {
   id: 678,
-  title: "Evertop Hainanese Boneless Chicken / Evertop Hainanese Boneless Chicken Evertop Hainanese Boneless Chicken ",
+  name: "Evertop Hainanese Boneless Chicken / Evertop Hainanese Boneless Chicken Evertop Hainanese Boneless Chicken ",
   images: [
-    "https://picsum.photos/300/301", "https://picsum.photos/200/311",
-    "https://picsum.photos/200/299", "https://picsum.photos/200/312",
-    "https://picsum.photos/300/301", "https://picsum.photos/200/311",
-    "https://picsum.photos/201/302", "https://picsum.photos/202/310",
-    "https://picsum.photos/221/302", "https://picsum.photos/252/310",
+    "https://picsum.photos/300/301",
+    "https://picsum.photos/200/311",
+    "https://picsum.photos/200/299",
+    "https://picsum.photos/200/312",
+    "https://picsum.photos/300/301",
+    "https://picsum.photos/200/311",
+    "https://picsum.photos/201/302",
+    "https://picsum.photos/202/310",
+    "https://picsum.photos/221/302",
+    "https://picsum.photos/252/310",
   ],
   price: 40.35,
   priceSale: 37.35,
@@ -128,13 +133,13 @@ const PromotionsPage = () => {
   }
 
   const handleShare = () => {
-    console.log("handleShare");
+    console.log("handleShare")
   }
 
   const handleFavourite = () => {
-    console.log("handleFavourite");
+    console.log("handleFavourite")
   }
-  
+
   return (
     <div className={styles.wrapper_promotions}>
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}>

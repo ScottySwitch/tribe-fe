@@ -1,5 +1,11 @@
 @import "styles/variables.scss";
 
+.banner {
+  height: 166px;
+  display: block;
+  position: relative;
+}
+
 .banner_card {
   z-index: 10;
   position: relative;
@@ -14,10 +20,59 @@
 
 .bests {
   display: flex;
-  gap: 50px;
+  gap: 100px;
   justify-content: center;
   align-items: center;
+
   .category {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+
+    &_label {
+      font-weight: $font-bold;
+    }
+
+    &_icon {
+      border-radius: 50%;
+      padding: 10px;
+      width: 100px;
+      height: 100px;
+      background-color: $primary-50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &:hover {
+      .category_icon {
+        background-color: $yellow-100;
+      }
+
+      .category_label {
+        color: $primary-500;
+      }
+    }
+  }
+}
+
+.sub_category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+
+  &:hover {
+    .sub_category_label {
+      color: $primary-500;
+    }
+  }
+
+  &_icon {
+    position: relative;
     border-radius: 50%;
     padding: 10px;
     width: 100px;
@@ -26,10 +81,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+
+    img {
+      border-radius: 50%;
+    }
+  }
+  &_label {
+    font-weight: $font-normal;
   }
 }
-
 
 .introduction {
   width: 100%;

@@ -7,7 +7,7 @@ export interface SectionLayoutProps {
   title?: string
   className?: string
   childrenClassName?: string
-  children: any
+  children?: any
   subTitle?: string
   show?: boolean
   backgroundColor?: boolean

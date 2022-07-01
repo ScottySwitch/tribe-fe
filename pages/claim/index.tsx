@@ -17,7 +17,6 @@ import SearchListing, {
 } from "components/AddListingPages/PageOne/SearchListing/SearchListing"
 import get from "lodash/get"
 
-
 const ClaimPage = () => {
   const [listing, setListing] = useState<{ [key: string]: any }>()
   const [bizListing, setBizListing] = useState([])
@@ -32,9 +31,9 @@ const ClaimPage = () => {
   }
 
   const handleSetListing = (e) => {
-    console.log(e);
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
-    userInfo = {...userInfo, biz_id: get(e, "id"), biz_slug: get(e, "attributes.slug")}
+    console.log(e)
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
+    userInfo = { ...userInfo, biz_id: get(e, "id"), biz_slug: get(e, "attributes.slug") }
     localStorage.setItem("user", JSON.stringify(userInfo))
     setListing(e)
   }
@@ -124,7 +123,7 @@ const ClaimPage = () => {
         </div>
       </SectionLayout>
       <SectionLayout className={styles.top_search} containerClassName={styles.top_search_container}>
-        <TopSearches keywords={dummyKeywords} />
+        <TopSearches />
       </SectionLayout>
     </div>
   )

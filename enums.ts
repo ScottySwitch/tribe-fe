@@ -7,6 +7,15 @@ export enum Categories {
   OTHER = "Other",
 }
 
+export enum CategoryText {
+  BUY = "buy",
+  EAT = "eat",
+  SEE_AND_DO = "see-and-do",
+  TRANSPORT = "transport",
+  STAY = "stay",
+  OTHER = "Other",
+}
+
 export enum YesNo {
   YES = "Yes",
   NO = "No",
@@ -64,8 +73,6 @@ export enum UserInformationList {
   LOGOUT = "Log out",
 }
 
-
-
 export enum ClaimStep {
   CLAIM_FREE_LISTING = "claim_free_listing",
   CHOOSE_TIER = "choose_tierr",
@@ -84,7 +91,7 @@ export enum ProfileTabs {
 }
 
 export enum ProfileTabFavourited {
-  EAT = "Eat",
+  EAT = "eat",
   BUY = "buy",
   SEE_DO = "see-do",
   TRANSPORT = "transport",

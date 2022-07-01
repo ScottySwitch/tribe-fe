@@ -9,6 +9,7 @@ import Modal from "components/Modal/Modal"
 import Upload from "components/Upload/Upload"
 
 import styles from "./ListingInforCard.module.scss"
+import { get } from "lodash"
 
 interface ListingInforCardProps {
   isViewPage?: boolean
@@ -16,19 +17,19 @@ interface ListingInforCardProps {
   priceRange: { min: string; max: string; currency: string }
   socialInfo: string
   phoneNumber: string
-  logo: any
-  handleChangeLogo: (srcImages: string[]) => void
-  onSetPriceRange: (value: { min: string; max: string; currency: string }) => void
-  onSetSocialInfo: (value: string) => void
-  onSetPhoneNumber: (value: string | number) => void
+  logo?: any
+  handleChangeLogo?: (srcImages: string[]) => void
+  onSetPriceRange?: (value: { min: string; max: string; currency: string }) => void
+  onSetSocialInfo?: (value: string) => void
+  onSetPhoneNumber?: (value: string | number) => void
 }
 
 const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; bizListing: any }) => {
   const { isViewPage, className, bizListing } = props
   const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
 
-  const bizListingReviewCount = bizListing.reviews.data.length
-  const bizListingFollowerCount = bizListing.user_listing_follows.data.length
+  const bizListingReviewCount = get(bizListing, "reviews.data.length") || 0
+  const bizListingFollowerCount = get(bizListing, "user_listing_follows.data.length") || 0
   return (
     <div>
       {isViewPage && (
@@ -158,18 +159,17 @@ const ListingInforCard = (props: ListingInforCardProps) => {
       <Icon icon="camera-color" size={40} />
     </div>
   )
-
   return (
     <div className={styles.listing_infor_card}>
       <div className={styles.listing_infor_container}>
         <div className="flex justify-between items-center">
           <div className={styles.box_avatar}>
-            {/* <Image src={require("public/logo.svg")} layout="fill" alt="" /> */}
             <Upload
               type="avatar"
               className={styles.small_avatar}
               centerIcon={<CenterIcon />}
               fileList={logo}
+              disabled={isViewPage}
               onChange={handleChangeLogo}
             />
           </div>
@@ -268,7 +268,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             text="Submit"
             size="small"
             onClick={() => {
-              onSetPriceRange(newPriceRange)
+              onSetPriceRange?.(newPriceRange)
               setShowPriceRangeModal(false)
             }}
           />
@@ -295,7 +295,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             text="Submit"
             size="small"
             onClick={() => {
-              onSetSocialInfo(newSocialInfo)
+              onSetSocialInfo?.(newSocialInfo)
               setShowSocialInfoModal(false)
             }}
           />
@@ -322,7 +322,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             text="Submit"
             size="small"
             onClick={() => {
-              onSetPhoneNumber(newPhoneNumber)
+              onSetPhoneNumber?.(newPhoneNumber)
               setPhoneNumberModal(false)
             }}
           />
