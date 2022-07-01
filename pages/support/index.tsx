@@ -63,6 +63,7 @@ const SupportPage = () => {
     <div className={styles.support}>
       <SectionLayout>
         <Breadcrumbs data={breadcrumbs} />
+        <h1 className={styles.title}>Support</h1>
         <div className={styles.tab_support}>
           <TabsHorizontal
             tablist={TabList}
