@@ -1,0 +1,22 @@
+@use "styles/variables.scss" as *;
+
+.title {
+  font-size: 40px;
+  font-weight: $font-bold;
+  margin-bottom: 30px;
+}
+
+.content {
+  h6 {
+    margin-bottom: 16px;
+  }
+  p {
+    margin-bottom: 16px;
+  }
+
+  ol {
+    padding-left: 20px;
+    list-style-type: decimal;
+    margin-bottom: 16px;
+  }
+}
