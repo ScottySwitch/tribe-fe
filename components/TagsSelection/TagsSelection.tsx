@@ -64,7 +64,7 @@ const TagsSelection = (props: TagsSelectionProps) => {
             id={opt.value}
             className="w-1/2 sm:w-[23%]"
             checked={selectedValues.includes(opt.value)}
-            onClick={() => handleChange(opt)}
+            onChange={() => handleChange(opt)}
           />
         ))}
       </div>

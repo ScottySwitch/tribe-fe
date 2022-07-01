@@ -1,4 +1,4 @@
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import get from "lodash/get"
 import { useForm } from "react-hook-form"
 
@@ -21,6 +21,10 @@ import { IOption } from "type"
 import { IAddListingForm } from "pages/add-listing"
 import Select from "components/Select/Select"
 import { currencyOptions } from "constant"
+import CategoryLinkApi from "services/category-link"
+import ProductTypeApi from "services/product-type"
+import ProductBrandApi from "services/product-brand"
+import TagApi from "services/tag"
 
 interface AddBuyInforProps {
   isEdit?: boolean
@@ -40,6 +44,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       categoryKind: data.categoryKind,
       placeGoodFor: data.placeGoodFor,
       tags: data.tags,
+      describeTags: data.describeTags,
       currency: data.currency,
       minPrice: data.minPrice,
       images: data.images,
@@ -52,6 +57,69 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
   const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
   const [showTagsModal, setShowTagsModal] = useState(false)
+  const [categoryLinks, setCategoryLinks] = useState<any>([])
+  const [productTypes, setProductTypes] = useState<any>([])
+  const [selectedProductTypes, setSelectedProductTypes] = useState<any>([])
+  const [productBrands, setProductBrands] = useState<any>([])
+  const [describeTags, setDescribeTags] = useState<any>([])
+
+  useEffect(() => {
+    const getCategoryLinks = async () => {
+      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(1);
+      const categoryLinks = get(data, "data.data")
+      setCategoryLinks(categoryLinks)
+    }
+    getCategoryLinks().catch((e) => console.log(e))
+  }, [])
+
+  useEffect(() => {
+    const getProductTypes = async () => {
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(categoryKind);
+      const productTypes = get(data, "data.data")
+      setProductTypes(productTypes)
+    }
+    if (categoryKind) {
+      getProductTypes().catch((e) => console.log(e))
+    }
+  }, [categoryKind])
+
+  const handleSelectProductType = (option: any) => {
+    if (selectedProductTypes.includes(option)) {
+      const newList = selectedProductTypes.filter((item) => item !== option)
+      setSelectedProductTypes(newList)
+    } else {
+      setSelectedProductTypes([...selectedProductTypes, option])
+    }
+  }
+
+  useEffect(() => {
+    const getProductBrands = async () => {
+      const data = await ProductBrandApi.getProductBrandByProductTypeId(selectedProductTypes);
+      const productBrands = get(data, "data.data")
+      const mapProductBrands: any = []
+      productBrands.map(productBrand => {
+        mapProductBrands.push({
+          value: productBrand.id,
+          label: productBrand.attributes.label
+        })
+      })
+      setProductBrands(mapProductBrands)
+    }
+    if (selectedProductTypes.length > 0) {
+      getProductBrands().catch((e) => console.log(e))
+    } else {
+      setProductBrands([])
+    }
+  }, [selectedProductTypes])
+
+  useEffect(() => {
+    const getTags = async () => {
+      const data = await TagApi.getTags();
+      const tags = get(data, "data.data")
+      setDescribeTags(tags)
+    }
+    getTags().catch((e) => console.log(e))
+  }, [])
 
   const onSubmit = (data) => {
     onPreview?.(data)
@@ -77,14 +145,14 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question question="What is the category best associated with this store?">
             <div className="flex flex-wrap gap-2">
-              {buyAssociatedCategories.map((opt) => (
+              {categoryLinks.map((opt) => (
                 <Badge
-                  key={opt.label}
-                  text={opt.label}
-                  selected={categoryKind === opt.label}
+                  key={opt.id}
+                  text={opt.attributes.label}
+                  selected={categoryKind === opt.id}
                   onClick={() => {
-                    setValue("categoryKind", opt.label)
-                    setCategoryKind(opt.label)
+                    setValue("categoryKind", opt.id)
+                    setCategoryKind(opt.id)
                   }}
                 />
               ))}
@@ -94,11 +162,12 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             <div className="flex flex-wrap gap-y-5 w-3/5">
               {productTypes.map((item) => (
                 <Checkbox
-                  key={item.label}
-                  label={item.label}
-                  value={item.label}
+                  key={item.id}
+                  label={item.attributes.label}
+                  value={item.id}
                   className="w-full sm:w-1/2"
                   register={register("placeGoodFor")}
+                  onChange={() => handleSelectProductType(item.id)}
                 />
               ))}
             </div>
@@ -130,13 +199,13 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           </Question>
           <Question question="What tags best describe this place?" optional>
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {decribePlaceList.map((item) => (
+              {describeTags.map((item) => (
                 <Checkbox
-                  key={item.label}
-                  label={item.label}
+                  key={item.id}
+                  label={item.attributes.label}
                   className="w-1/2"
-                  value={item.label}
-                  register={register("tags")}
+                  value={item.id}
+                  register={register("describeTags")}
                 />
               ))}
             </div>
@@ -224,7 +293,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
         onClose={() => setShowTagsModal(false)}
       >
         <TagsSelection
-          options={subCateList}
+          options={productBrands}
           selectedList={getValues("tags")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
