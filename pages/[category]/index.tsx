@@ -9,6 +9,7 @@ import TopSearches from "components/TopSearches/TopSearches"
 import {
   categories,
   curatedList,
+  dummySubCategories,
   homeArticleCarousel,
   homeBannerResponsive,
   homeCarousel,
@@ -25,29 +26,6 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
 import styles from "styles/Home.module.scss"
-
-const dummySubCategories = [
-  { label: "Dessert", value: "dessert", slug: "dessert", icon: "https://picsum.photos/200/300" },
-  { label: "Bakeries", value: "bakeries", slug: "bakeries", icon: "https://picsum.photos/200/300" },
-  {
-    label: "Quick bites",
-    value: "quick-bites",
-    slug: "quick-bites",
-    icon: "https://picsum.photos/200/300",
-  },
-  {
-    label: "Coffee & Tea",
-    value: "coffee-tea",
-    slug: "coffee-tea",
-    icon: "https://picsum.photos/200/300",
-  },
-  {
-    label: "Restaurant",
-    value: "restaurant",
-    slug: "restaurant",
-    icon: "https://picsum.photos/200/300",
-  },
-]
 
 const Category = () => {
   const trans = useTrans()
@@ -81,6 +59,11 @@ const Category = () => {
       break
   }
 
+  const handleSelectSubCategory = (slug) =>
+    router.push({
+      pathname: `${category}/${slug}`,
+    })
+
   return (
     <div>
       <SectionLayout className={styles.banner}>
@@ -103,7 +86,7 @@ const Category = () => {
           <div
             key={index}
             className={styles.sub_category}
-            onClick={() => router.push(`${category}/${item.slug}`)}
+            onClick={() => handleSelectSubCategory(item.slug)}
           >
             <div className={styles.sub_category_icon}>
               <Image src={item.icon} alt="" layout="fill" />

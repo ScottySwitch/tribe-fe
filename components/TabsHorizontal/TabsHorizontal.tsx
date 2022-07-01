@@ -13,27 +13,18 @@ export interface ITab {
 }
 
 const TabNav = (props: ITab) => {
-  const {
-    className,
-    label,
-    value,
-    currentTab,
-    onSelectedTab = () => "",
-  } = props
+  const { className, label, value, currentTab, onSelectedTab = () => "" } = props
 
   const selectedClassNames = classNames(styles.tab_nav, className, {
     [styles.selected]: currentTab === value,
-  });
+  })
 
   const formatLabel = (value: string) => {
     return value.replace("-", " ")
   }
- 
+
   return (
-    <div
-      className={selectedClassNames}
-      onClick={() => (onSelectedTab(value))}
-    >
+    <div className={selectedClassNames} onClick={() => onSelectedTab(value)}>
       <span className="capitalize">{formatLabel(label)}</span>
     </div>
   )
@@ -42,22 +33,24 @@ const TabNav = (props: ITab) => {
 interface TabsHorizontalProps {
   className?: string
   type?: "secondary-no-outline" | "secondary-outline" | "primary-no-outline" | "primary-outline"
-  tablist?: ITab[],
+  tablist?: ITab[]
+  selectedTab?: string
   onCurrentTab?: (e: string) => void
 }
 
 const TabsHorizontal = (props: TabsHorizontalProps) => {
   const {
     className = "",
+    selectedTab,
     type = "secondary-no-outline",
     tablist = [],
-    onCurrentTab = () => ""
+    onCurrentTab = () => "",
   } = props
-  
-  const [currentTab, setCurrentTab] = useState<string>(tablist[0]?.value)
-  
+
+  const [currentTab, setCurrentTab] = useState<string>(selectedTab || tablist[0]?.value)
+
   const getCurrentTabIndex = tablist.findIndex((item) => item.value === currentTab)
-    
+
   const typeClassName = classNames({
     [styles.secondary_outline]: type === "secondary-outline",
     [styles.secondary_no_outline]: type === "secondary-no-outline",

@@ -11,13 +11,8 @@ import HamModal from "components/HamModal/HamModal"
 import styles from "styles/App.module.scss"
 import "../styles/globals.css"
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar"
-import { loginInforItem } from "constant"
 import { Tiers, UsersTypes } from "enums"
 import AuthApi from "../services/auth"
-import BizApi from "services/biz-listing"
-import BizInvoice from "services/biz-invoice"
-import ClaimListingApi from "services/claim-listing"
-import get from "lodash/get"
 
 export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers; avatar?: string }
 
@@ -45,7 +40,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     var prevScrollpos = window.pageYOffset
     const header = document.getElementById("header") as any
-
     const handleScroll = function () {
       var currentScrollPos = window.pageYOffset
       if (prevScrollpos < currentScrollPos && !showHamModal && isAuthPage) {
@@ -62,9 +56,21 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [showHamModal, isMobile, isAuthPage])
 
+  useEffect(() => {
+    const stringyLoginInfo = localStorage.getItem("user")
+    const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {}
+    if (localLoginInfo.token) {
+      setLoginInfo(localLoginInfo)
+      setShowAuthPopup(false)
+    } else {
+      setLoginInfo({})
+      setShowAuthPopup(true)
+    }
+  }, [])
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     const getMe = async () => {
       await AuthApi.getMe()
       localStorage.setItem("user", JSON.stringify(userInfo))
@@ -75,15 +81,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     if (screen.width < 501) {
       setIsMobile(true)
-    }
-    const stringyLoginInfo = localStorage.getItem("user")
-    const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {}
-    if (localLoginInfo.token) {
-      setLoginInfo(localLoginInfo)
-      setShowAuthPopup(false)
-    } else {
-      setLoginInfo({})
-      setShowAuthPopup(true)
     }
   }, [router])
 
