@@ -22,7 +22,7 @@ interface HomepageReviewsProps {
   isViewPage?: boolean
   listingRate?: number
   reviews: any[]
-  onSubmitReply?: (any) => void
+  onSubmitReply: (value, id) => void
   onChangeReviewsSequence: (e: IOption) => void
 }
 
@@ -40,9 +40,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   const [selectedReview, setSelectedReview] = useState({})
   const router = useRouter()
   const [replyReview, setReplyReview] = useState<string>('')
-
   const handleSetReplyReview = (value) => {
-    console.log(value);
     if (value.length <= 100) {
       setReplyReview(value)
     }
@@ -87,13 +85,13 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
               <UserReviewCard
                 isPaid={isPaid}
                 actions={!isViewPage}
-                user={get(review, "attributes.user.data.attributes")}
-                listImage={get(review, "attributes.images")}
-                content={get(review, "attributes.content")}
-                dateVisit={get(review, "attributes.visited_date")}
-                rating={get(review, "attributes.rating")}
-                reply_reviews={get(review, "attributes.reply_reviews")}
-                date_create_reply={get(review, "attributes.date_create_reply")}
+                user={get(review, "user.data.attributes")}
+                listImage={get(review, "images")}
+                content={get(review, "content")}
+                dateVisit={get(review, "visited_date")}
+                rating={get(review, "rating")}
+                reply_reviews={get(review, "reply_reviews")}
+                date_create_reply={get(review, "date_create_reply")}
                 onReplyClick={() => {
                   console.log('setSelectedReview', review)
                   setSelectedReview(review)
@@ -117,27 +115,39 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
       >
         <div className="p-[30px]">
           <UserReviewCard
+            isModal
             isPaid={isPaid}
             actions={!isViewPage}
-            user={get(selectedReview, "attributes.user.data.attributes")}
-            listImage={get(selectedReview, "attributes.images")}
-            content={get(selectedReview, "attributes.content")}
-            dateVisit={get(selectedReview, "attributes.visited_date")}
-            rating={get(selectedReview, "attributes.rating")}
-            reply_reviews={get(selectedReview, "attributes.reply_reviews")}
-            onReplyClick={() => setShowReplyModal(true)}
+            user={get(selectedReview, "user.data.attributes")}
+            listImage={get(selectedReview, "images")}
+            content={get(selectedReview, "content")}
+            dateVisit={get(selectedReview, "visited_date")}
+            rating={get(selectedReview, "rating")}
+            reply_reviews={get(selectedReview, "reply_reviews")}
+            date_create_reply={get(selectedReview, "date_create_reply")}
+            onReplyClick={() => setShowReplyModal(false)}
           />
-          <Input 
-            placeholder="Reply ( 100 character maximum )" 
-            value={replyReview}
-            onChange={(e: any) => handleSetReplyReview(e.target.value)}
-          />
+          {!get(selectedReview, "reply_reviews") &&
+              <Input 
+                placeholder="Reply ( 100 character maximum )" 
+                value={replyReview}
+                onChange={(e: any) => handleSetReplyReview(e.target.value)}
+              />
+          }
         </div>
         <div className="flex gap-3 justify-end p-[30px]">
-          <Button text="Cancel" variant="secondary-no-outlined" />
           <Button 
-            text="Send reply" 
-            onClick={onSubmitReply}  
+            text="Cancel" 
+            variant="secondary-no-outlined" 
+            onClick={() => setShowReplyModal(false)} 
+          />
+          <Button 
+            text="Send reply"  
+            onClick={() => {
+              setShowReplyModal(false)
+              setReplyReview(get(selectedReview, "reply_reviews") || '')
+              onSubmitReply(replyReview, selectedReview)
+            }}  
           />
         </div>
       </Modal>

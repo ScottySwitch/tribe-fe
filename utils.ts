@@ -57,7 +57,12 @@ export const calcDistanceFromNow = (time) => {
   if (diff_in_days < diff_in_minutes / 1440 ) {
     diff_in_days = diff_in_days + 1;
   }
-  if ( diff_in_minutes < 60 && diff_in_minutes == 1 ) {
+  if ( diff_in_minutes == 0 ) {
+    return (
+      'few second ago'
+    )
+  }
+  else if ( diff_in_minutes < 60 && diff_in_minutes == 1 ) {
     return (
       '1 minute ago'
     )

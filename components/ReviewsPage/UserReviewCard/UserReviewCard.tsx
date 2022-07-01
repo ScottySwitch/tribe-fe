@@ -26,6 +26,7 @@ export interface UserReviewCardProps {
   status?: "pending" | "approved" | "denied"
   date?: string
   isDivier?: boolean
+  isModal?: boolean
   user?: any
   onReplyClick?(): void
 }
@@ -50,6 +51,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     date,
     onReplyClick,
     isDivier = false,
+    isModal = false,
   } = props
 
   const userReviewCardClassName = classNames(styles.review_completed, className, {
@@ -148,14 +150,16 @@ const UserReviewCard = (props: UserReviewCardProps) => {
         )}
         {actions && (
           <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              text="Reply review"
-              width={150}
-              className="mt-4"
-              disabled={!isPaid}
-              onClick={onReplyClick}
-            />
+            {!isModal &&
+              <Button
+                variant="secondary"
+                text="Reply review"
+                width={150}
+                className="mt-4"
+                disabled={!isPaid}
+                onClick={onReplyClick}
+              />
+            }
             {!isPaid && (
               <Button
                 text="Upgrade to reply reviews"

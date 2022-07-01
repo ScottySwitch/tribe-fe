@@ -60,9 +60,16 @@ const getReviewsByBizListingSlugWithSort = async (bizListingSlug: any, sortBy: s
   return await Api.get(url);
 }
 
+const updateReviews = async (reviewId: number, params: any) => {
+  const url = `/api/reviews/${reviewId}`;
+  return await Api.put(url, {
+    data: params
+  });
+}
 
 export default {
   getReviewsByBizListingSlug,
   addReview,
+  updateReviews,
   getReviewsByBizListingSlugWithSort
 }
