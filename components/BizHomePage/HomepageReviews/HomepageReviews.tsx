@@ -5,10 +5,10 @@ import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
 import Rate from "components/Rate/Rate"
-import { ReviewForm } from "components/ReviewsPage/ReviewCard/ReviewCard"
+import ReportModal from "components/ReportModal/ReportModal"
 import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard"
 import Select from "components/Select/Select"
-import { reviewSequenceOptions } from "constant"
+import { optionsReportReview, reviewSequenceOptions } from "constant"
 import { get } from "lodash"
 import Image from "next/image"
 import { useRouter } from "next/router"
@@ -37,9 +37,14 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     onChangeReviewsSequence,
   } = props
   const [showReplyModal, setShowReplyModal] = useState(false)
+  const [showReportModal, setShowReportModal] = useState(false)
   const [selectedReview, setSelectedReview] = useState({})
 
   const router = useRouter()
+
+  const handleSubmitReportReview = () => {
+    setShowReportModal(false)
+  }
 
   return (
     <div>
@@ -73,7 +78,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
       <div>
         {Array.isArray(reviews) && reviews.length > 0 ? (
           reviews.map((review, index) => (
-            <div key={index}>
+            <div key={index} className="mb-10">
               <UserReviewCard
                 isPaid={isPaid}
                 actions={!isViewPage}
@@ -86,6 +91,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
                   setSelectedReview(review)
                   setShowReplyModal(true)
                 }}
+                onReportClick={() => setShowReportModal(true)}
               />
             </div>
           ))
@@ -96,6 +102,13 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
           </div>
         )}
       </div>
+      <ReportModal
+        title="Why are you reporting this comment?"
+        visible={showReportModal}
+        options={optionsReportReview}
+        onClose={() => setShowReportModal(false)}
+        onSubmit={handleSubmitReportReview}
+      />
       <Modal
         visible={showReplyModal}
         title="Reply Review"

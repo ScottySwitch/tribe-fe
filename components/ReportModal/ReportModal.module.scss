@@ -15,6 +15,7 @@
   .close {
     @extend .title;
     margin-left: 15px;
+    cursor: pointer;
   }
 }
 
