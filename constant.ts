@@ -1461,3 +1461,30 @@ export const dummyDenied = [
     },
   },
 ]
+
+export const optionsReportPhoto = [
+  { id: "photo-1", label: "Offensive, hateful or sexually explicit" },
+  { id: "photo-2", label: "Legal issue" },
+  { id: "photo-3", label: "Privacy concern" },
+  { id: "photo-4", label: "Poor quality" },
+  { id: "photo-5", label: "Not a photo of the place" },
+  { id: "other", label: "Other" },
+]
+
+export const optionsReportReview = [
+  { id: "review-1", label: "Digress" },
+  { id: "review-2", label: "Not suitable" },
+  { id: "review-3", label: "Causing a conflict of interest" },
+  { id: "review-4", label: "Impolite" },
+  { id: "review-5", label: "Bullying or harassing" },
+  { id: "review-6", label: "Discrimination or hate speech" },
+  { id: "review-7", label: "Personal information" },
+  { id: "review-8", label: "Not helpful" },
+  { id: "other", label: "Other" },
+]
+
+export const optionsReportListing = [
+  { id: "listing-1", label: "Content that is dishonest or inaccurate" },
+  { id: "listing-2", label: "This place is not real" },
+  { id: "other", label: "Other" },
+]
