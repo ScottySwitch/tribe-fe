@@ -24,6 +24,7 @@ export interface UserReviewCardProps {
   isDivier?: boolean
   user?: any
   onReplyClick?(): void
+  onReportClick?(): void
 }
 
 const UserReviewCard = (props: UserReviewCardProps) => {
@@ -43,6 +44,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     children,
     date,
     onReplyClick,
+    onReportClick,
     isDivier = false,
   } = props
 
@@ -79,7 +81,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
               {censorshipLabel && <span className="font-normal ml-2">{censorshipLabel}</span>}
             </h6>
             {actions && (
-              <Popover content={<div>Report review</div>} position="bottom-left">
+              <Popover content={<div onClick={onReportClick}>Report review</div>} position="bottom-left">
                 <Icon icon="toolbar" />
               </Popover>
             )}
