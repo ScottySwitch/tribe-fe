@@ -54,7 +54,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
     },
   })
 
-  const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryLinks"))
+  const [selectCategoryLink, setSelectCategoryLink] = useState<string | undefined>(getValues("categoryLinks"))
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
   const [showTagsModal, setShowTagsModal] = useState(false)
   const [categoryLinks, setCategoryLinks] = useState<any>([])
@@ -83,17 +83,17 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
 
   useEffect(() => {
     const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(categoryKind);
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink);
       const productTypes = get(data, "data.data")
       setProductTypes(productTypes)
     }
-    if (categoryKind) {
+    if (selectCategoryLink) {
       getProductTypes().catch((e) => console.log(e))
       setValue("productTypes", [])
       setValue("productBrands", [])
       setProductBrands([])
     }
-  }, [categoryKind])
+  }, [selectCategoryLink])
 
   const handleSelectProductType = (option: any) => {
     setValue("productBrands", [])
@@ -154,10 +154,10 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
                 <Badge
                   key={opt.id}
                   text={opt.attributes.label}
-                  selected={categoryKind === opt.id}
+                  selected={selectCategoryLink === opt.id}
                   onClick={() => {
                     setValue("categoryLinks", opt.id)
-                    setCategoryKind(opt.id)
+                    setSelectCategoryLink(opt.id)
                   }}
                 />
               ))}
