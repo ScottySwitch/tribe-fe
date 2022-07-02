@@ -22,7 +22,7 @@ import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import BizListingApi from "../../services/biz-listing"
 export interface IAddListingForm {
   category: Categories
-  categoryKind: string
+  categoryLinks: string
   relationship: string
   listing: string
   role: string
@@ -50,14 +50,14 @@ export interface IAddListingForm {
   nonHalalActivities?: any[]
 
   images?: string[]
-  tags?: any[]
+  productBrands?: any[]
   mealsKind?: any[]
   openHours?: IOpenHours
   payment?: any[]
   additionalServices?: any[]
   media?: any[]
   agreePolicies: string
-  placeGoodFor?: any[]
+  productTypes?: any[]
   atmosphere?: any[]
   parking?: any[]
   describeTags?: any[]
@@ -116,9 +116,9 @@ const AddListing = () => {
       },
       images: formData.images,
       open_hours: formData.openHours,
-      category_links: formData.categoryKind,
-      product_types: formData.placeGoodFor,
-      product_brands: map(formData.tags, 'value'),
+      category_links: formData.categoryLinks,
+      product_types: formData.productTypes,
+      product_brands: map(formData.productBrands, 'value'),
       tags: formData.describeTags || [],
       facilities_data: {
         additionalServices: formData.additionalServices,

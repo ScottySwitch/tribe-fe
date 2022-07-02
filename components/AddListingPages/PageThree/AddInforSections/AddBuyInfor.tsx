@@ -41,9 +41,9 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      categoryKind: data.categoryKind,
-      placeGoodFor: data.placeGoodFor,
-      tags: data.tags,
+      categoryLinks: data.categoryLinks,
+      productTypes: data.productTypes,
+      productBrands: data.productBrands,
       describeTags: data.describeTags,
       currency: data.currency,
       minPrice: data.minPrice,
@@ -54,7 +54,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
     },
   })
 
-  const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
+  const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryLinks"))
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
   const [showTagsModal, setShowTagsModal] = useState(false)
   const [categoryLinks, setCategoryLinks] = useState<any>([])
@@ -64,12 +64,21 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
   const [describeTags, setDescribeTags] = useState<any>([])
 
   useEffect(() => {
+    // Category links
     const getCategoryLinks = async () => {
       const data = await CategoryLinkApi.getCategoryLinksByCategoryId(1);
       const categoryLinks = get(data, "data.data")
       setCategoryLinks(categoryLinks)
     }
     getCategoryLinks().catch((e) => console.log(e))
+
+    // Tags
+    const getTags = async () => {
+      const data = await TagApi.getTags();
+      const tags = get(data, "data.data")
+      setDescribeTags(tags)
+    }
+    getTags().catch((e) => console.log(e))
   }, [])
 
   useEffect(() => {
@@ -84,7 +93,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
   }, [categoryKind])
 
   const handleSelectProductType = (option: any) => {
-    setValue("tags", [])
+    setValue("productBrands", [])
     setProductBrands([])
     if (selectedProductTypes.includes(option)) {
       const newList = selectedProductTypes.filter((item) => item !== option)
@@ -113,15 +122,6 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       setProductBrands([])
     }
   }, [selectedProductTypes])
-
-  useEffect(() => {
-    const getTags = async () => {
-      const data = await TagApi.getTags();
-      const tags = get(data, "data.data")
-      setDescribeTags(tags)
-    }
-    getTags().catch((e) => console.log(e))
-  }, [])
 
   const onSubmit = (data) => {
     onPreview?.(data)
@@ -153,7 +153,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
                   text={opt.attributes.label}
                   selected={categoryKind === opt.id}
                   onClick={() => {
-                    setValue("categoryKind", opt.id)
+                    setValue("categoryLinks", opt.id)
                     setCategoryKind(opt.id)
                   }}
                 />
@@ -168,7 +168,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
                   label={item.attributes.label}
                   value={item.id}
                   className="w-full sm:w-1/2"
-                  register={register("placeGoodFor")}
+                  register={register("productTypes")}
                   onChange={() => handleSelectProductType(item.id)}
                 />
               ))}
@@ -179,7 +179,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             instruction="Select 5 max"
             optional
           >
-            <PreviewValue valueKey="tags" value={getValues("tags")} />
+            <PreviewValue valueKey="tags" value={getValues("productBrands")} />
             <br />
             <Button
               text="Edit product"
@@ -296,10 +296,10 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       >
         <TagsSelection
           options={productBrands}
-          selectedList={getValues("tags")}
+          selectedList={getValues("productBrands")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
-            setValue("tags", list)
+            setValue("productBrands", list)
             setShowTagsModal(false)
           }}
         />
