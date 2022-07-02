@@ -10,6 +10,10 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import DividerSection from "components/DividerSection/DividerSection"
 import ScrollingBox from "components/ScrollingBox/ScrollingBox"
 import styles from "styles/Promotions.module.scss"
+import {useEffect, useState} from "react";
+import PromotionApi from "services/promotion";
+import get from "lodash/get";
+import {useRouter} from "next/router";
 
 const dummyPromotion = [
   {
@@ -140,12 +144,55 @@ const PromotionsPage = () => {
     console.log("handleFavourite")
   }
 
+
+  const [bizListings, setBizListings] = useState<any>([])
+  // const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false)
+  // const [isSuccess, setIsSuccess] = useState<boolean>(false)
+  // const [locationList, setLocationList] = useState<any>([])
+  // const [listingOptions, setListingOptions] = useState<any>([])
+  // const [listingSearchResult, setListingSearchResult] = useState<any>()
+
+  const {
+    query: { id: slug },
+  } = useRouter()
+
+  const [promotion, setPromotion] = useState<any>([])
+
+  useEffect(() => {
+    const getPromotionBySlug = async (slug) => {
+      const data = await PromotionApi.getPromotionBySlug(slug)
+      const promotionData = get(data, "data.data")
+      if (promotionData.length === 0) {
+        window.location.href = "/"
+      }
+      setPromotion(get(promotionData, "[0].attributes"))
+      setBizListings(get(promotionData, "[0].attributes.microsite_biz_listings"))
+    }
+    if (slug) {
+      getPromotionBySlug(slug).catch((e) => console.log(e))
+    }
+  }, [slug])
+
+  const calcRateNumber = (reviews) => {
+    let rateNumber: any = 0
+    if (reviews.length > 0) {
+      let sum = 0
+      reviews.map((review) => {
+        sum += get(review, "attributes.rating") || 0
+      })
+      rateNumber = (sum / reviews.length).toFixed(1)
+    } else {
+      rateNumber = 0
+    }
+    return rateNumber
+  }
+
   return (
     <div className={styles.wrapper_promotions}>
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}>
         <div>
           <Image
-            src="https://picsum.photos/1188/400"
+            src={get(promotion, "main_banner.data.attributes.url") || "https://picsum.photos/1188/400"}
             width={1188}
             height={400}
             layout="responsive"
@@ -180,11 +227,11 @@ const PromotionsPage = () => {
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
         <DividerSection title="BANNERS" className="mb-5 md:mb-8" />
         <CarouselBanner>
-          {dummyBanner?.map((banner: string) => (
+          {get(promotion, "banners.data")?.map((banner: any) => (
             <Image
               key={banner}
               alt={banner}
-              src={banner}
+              src={get(banner, "attributes.url")}
               width={1185}
               height={225}
               layout="responsive"
@@ -220,124 +267,56 @@ const PromotionsPage = () => {
       </SectionLayout>
       {/* End HOT DEALS */}
 
-      {/* Start POPULAR IN BUY */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in Buy" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End POPULAR IN BUY */}
+      {/* Start loop biz_listing components */}
+      {bizListings.map((bizListing, index) => (
+        <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`} key={index}>
+          <DividerSection title={bizListing.title} className="mb-5 md:mb-8"/>
+          <div
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
+            {get(bizListing, "biz_listings.data")?.map((card, index) => (
+              <InforCard
+                key={index}
+                imgUrl={get(card, "attributes.images") ? card.attributes.images[0] : "https://picsum.photos/200/300"}
+                title={get(card, "attributes.name")}
+                rate={calcRateNumber(get(card, "attributes.reviews.data"))}
+                rateNumber={get(card, "attributes.reviews.data") ?
+                  (get(card, "attributes.reviews.data")).length : 0}
+                followerNumber={get(card, "attributes.user_listing_follows.data") ?
+                  get(card, "attributes.user_listing_follows.data").length : 0}
+                price={get(card, "attributes.price_range.min")}
+                categories={card.categories}
+                tags={get(card, "attributes.tags.data")}
+                iconTag={true}
+                isVerified={get(card, "attributes.is_verified")}
+                className="w-full"
+              />
+            ))}
+          </div>
+        </SectionLayout>
+      ))}
 
-      {/* Start POPULAR IN EAT */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in EAT" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End POPULAR IN EAT */}
-
-      {/* Start Popular in SEE & DO */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in SEE & DO" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End Popular in SEE & DO */}
-
-      {/* Start Popular in TRANSPORT */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in TRANSPORT" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End Popular in TRANSPORT */}
-
-      {/* Start Popular in STAY */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in STAY" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
+      {/* Start Popular in STAY  (TODO: remove) */}
+      {/*<SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>*/}
+      {/*  <DividerSection title="Popular in STAY 13123" className="mb-5 md:mb-8" />*/}
+      {/*  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">*/}
+      {/*    {inforCardList?.map((card, index) => (*/}
+      {/*      <InforCard*/}
+      {/*        key={index}*/}
+      {/*        imgUrl={card.images[0]}*/}
+      {/*        title={card.title}*/}
+      {/*        rate={card.rate}*/}
+      {/*        rateNumber={card.rateNumber}*/}
+      {/*        followerNumber={card.followerNumber}*/}
+      {/*        price={card.price}*/}
+      {/*        categories={card.categories}*/}
+      {/*        tags={card.tags}*/}
+      {/*        iconTag={true}*/}
+      {/*        isVerified={card.isVerified}*/}
+      {/*        className="w-full"*/}
+      {/*      />*/}
+      {/*    ))}*/}
+      {/*  </div>*/}
+      {/*</SectionLayout>*/}
       {/* End Popular in STAY */}
 
       {/* Start Shop more deals */}
