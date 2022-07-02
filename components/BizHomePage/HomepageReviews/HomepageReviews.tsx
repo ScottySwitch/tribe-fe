@@ -41,15 +41,6 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   const [selectedReview, setSelectedReview] = useState({})
   const router = useRouter()
   const [reply, setReply ] = useState<string>('')
-  // const handleSetReplyReview = (value) => {
-  //   if (value.length <= 100) {
-  //     setReplyReview(value)
-  //   }
-  //   else {
-  //     alert('Reply cannot over 100 character')
-  //   }    
-  // }
-
   const handleSubmitReportReview = () => {
     setShowReportModal(false)
   }
@@ -158,7 +149,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             text="Send reply"  
             onClick={() => {
               setShowReplyModal(false)
-              // setReply (get(selectedReview, "reply_reviews") || '')
+              setReply (get(selectedReview, "reply_reviews") || '')
               onSubmitReply(reply, selectedReview)
             }}  
           />
