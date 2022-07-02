@@ -50,6 +50,21 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   //   }    
   // }
 
+  const calcRateNumber = (reviews) => {
+    const reviewsData = reviews
+    let rateNumber = 0
+    if (reviewsData.length > 0) {
+      let sum = 0
+      reviewsData.map((review) => {
+        sum += get(review, "rating") || 0
+      })
+      rateNumber = Math.ceil(sum / reviewsData.length)
+    } else {
+      rateNumber = 0
+    }
+    return rateNumber
+  }
+
   const handleSubmitReportReview = () => {
     setShowReportModal(false)
   }
@@ -59,8 +74,8 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
       <Heading text="Reviews" />
       <br />
       <div className="flex gap-3 items-center">
-        <div className={styles.listing_rate}>{listingRate || 0}</div>
-        <Rate readonly={true} initialRating={listingRate || 0} />
+        <div className={styles.listing_rate}>{calcRateNumber(reviews)}</div>
+        <Rate readonly={true} initialRating={calcRateNumber(reviews)} />
         <div className={styles.followers}>
           | {Array.isArray(reviews) && reviews.length} review(s)
         </div>
