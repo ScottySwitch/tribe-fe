@@ -21,10 +21,6 @@ const TagsSelection = (props: TagsSelectionProps) => {
   const { category, selectedList, options, className, onSubmit, onCancel } = props
 
   const [localSelectedList, setLocalSelectedList] = useState<IOption[]>(selectedList || [])
-
-  useEffect(() => {
-    setLocalSelectedList(selectedList || [])
-  }, [selectedList])
   const selectedValues = localSelectedList.map((item) => item.value)
 
   const handleChange = (option: IOption) => {

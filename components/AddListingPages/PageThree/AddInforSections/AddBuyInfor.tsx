@@ -89,6 +89,9 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
     }
     if (categoryKind) {
       getProductTypes().catch((e) => console.log(e))
+      setValue("productTypes", [])
+      setValue("productBrands", [])
+      setProductBrands([])
     }
   }, [categoryKind])
 
@@ -295,6 +298,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
         onClose={() => setShowTagsModal(false)}
       >
         <TagsSelection
+          key={getValues("productBrands")}
           options={productBrands}
           selectedList={getValues("productBrands")}
           onCancel={() => setShowTagsModal(false)}
