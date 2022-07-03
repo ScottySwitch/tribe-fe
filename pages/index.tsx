@@ -1,12 +1,12 @@
-import ArticleCard from "components/ArticleCard/ArticleCard"
-import Button from "components/Button/Button"
-import Carousel from "components/Carousel/Carousel"
-import CollectionCard from "components/CollectionCard/CollectionCard"
-import Filter from "components/Filter/Filter"
-import Icon from "components/Icon/Icon"
-import InforCard from "components/InforCard/InforCard"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import TopSearches from "components/TopSearches/TopSearches"
+import ArticleCard from "components/ArticleCard/ArticleCard";
+import Button from "components/Button/Button";
+import Carousel from "components/Carousel/Carousel";
+import CollectionCard from "components/CollectionCard/CollectionCard";
+import Filter from "components/Filter/Filter";
+import Icon from "components/Icon/Icon";
+import InforCard from "components/InforCard/InforCard";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import TopSearches from "components/TopSearches/TopSearches";
 import {
   categories,
   curatedList,
@@ -18,19 +18,19 @@ import {
   homeCuratedResponsive,
   infoCardResponsive,
   inforCardList,
-} from "constant"
-import useTrans from "hooks/useTrans"
-import type { NextPage } from "next"
-import Image from "next/image"
-import { useRouter } from "next/router"
-import { useState } from "react"
+} from "constant";
+import useTrans from "hooks/useTrans";
+import type { NextPage } from "next";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
-import styles from "styles/Home.module.scss"
+import styles from "styles/Home.module.scss";
 
 const Home: NextPage = () => {
-  const [showFilter, setShowFilter] = useState(false)
-  const trans = useTrans()
-  const router = useRouter()
+  const [showFilter, setShowFilter] = useState(false);
+  const trans = useTrans();
+  const router = useRouter();
 
   return (
     <div>
@@ -46,7 +46,11 @@ const Home: NextPage = () => {
       </SectionLayout>
       <SectionLayout title="Explore BESTS" childrenClassName={styles.bests}>
         {categories.map((item, index) => (
-          <div key={index} className={styles.category} onClick={() => router.push(item.slug)}>
+          <div
+            key={index}
+            className={styles.category}
+            onClick={() => router.push(item.slug)}
+          >
             <div className={styles.category_icon}>
               <Icon size={60} icon={item.icon} />
             </div>
@@ -131,7 +135,11 @@ const Home: NextPage = () => {
         <Carousel responsive={homeCuratedResponsive}>
           {homeArticleCarousel?.map((item, index) => (
             <div key={index} className="pb-5">
-              <ArticleCard title={item.title} imgUrl={item.imgUrl} time={item.time} />
+              <ArticleCard
+                title={item.title}
+                imgUrl={item.imgUrl}
+                time={item.time}
+              />
             </div>
           ))}
         </Carousel>
@@ -155,29 +163,35 @@ const Home: NextPage = () => {
           ))}
         </Carousel>
       </SectionLayout>
-      <SectionLayout className={styles.for_you}>
-        <div className={styles.for_you_tag}>
-          <Icon icon="user-stroke-1" />
-          <div></div>
-        </div>
-      </SectionLayout>
-      <SectionLayout childrenClassName={styles.for_you_container}>
-        {inforCardList?.map((card) => (
-          <div key={card.title} className="pb-5">
-            <InforCard
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              isVerified={card.isVerified}
+      <div>
+        <SectionLayout className={styles.for_you}>
+          <div className={styles.for_you_tag}>
+            <Icon
+              icon="user-fill-1"
+              size={30}
+              className={styles.for_you_icon}
             />
+            <div>For you</div>
           </div>
-        ))}
-      </SectionLayout>
+        </SectionLayout>
+        <SectionLayout childrenClassName={styles.for_you_container}>
+          {inforCardList?.map((card) => (
+            <div key={card.title} className="pb-5">
+              <InforCard
+                imgUrl={card.images[0]}
+                title={card.title}
+                rate={card.rate}
+                rateNumber={card.rateNumber}
+                followerNumber={card.followerNumber}
+                price={card.price}
+                categories={card.categories}
+                tags={card.tags}
+                isVerified={card.isVerified}
+              />
+            </div>
+          ))}
+        </SectionLayout>
+      </div>
       <SectionLayout childrenClassName="flex justify-center">
         <Button variant="outlined" text="Load more" width={400} />
       </SectionLayout>
@@ -202,7 +216,7 @@ const Home: NextPage = () => {
         <TopSearches />
       </SectionLayout>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
