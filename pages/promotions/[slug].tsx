@@ -13,6 +13,7 @@ import {useEffect, useState} from "react";
 import PromotionApi from "services/promotion";
 import get from "lodash/get";
 import {useRouter} from "next/router";
+import { calcRateNumber } from "utils"
 
 const dummyPromotion = [
   {
@@ -169,20 +170,6 @@ const PromotionsPage = () => {
     }
   }, [slug])
 
-  const calcRateNumber = (reviews) => {
-    let rateNumber: any = 0
-    if (reviews.length > 0) {
-      let sum = 0
-      reviews.map((review) => {
-        sum += get(review, "attributes.rating") || 0
-      })
-      rateNumber = (sum / reviews.length).toFixed(1)
-    } else {
-      rateNumber = 0
-    }
-    return rateNumber
-  }
-
   return (
     <div className={styles.wrapper_promotions}>
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}>
@@ -202,7 +189,8 @@ const PromotionsPage = () => {
         <DividerSection title="FEATURED VOUCHERS" className="mb-5 md:mb-8" />
         <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
           <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
-            {get(promotion, "deals.data")?.map((promotion, index) => (
+            {Array.isArray(get(promotion, "deals.data"))
+              && get(promotion, "deals.data")?.map((promotion, index) => (
               <PromotionCard
                 key={index}
                 title={get(promotion, "attributes.name")}
@@ -223,7 +211,8 @@ const PromotionsPage = () => {
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
         <DividerSection title="BANNERS" className="mb-5 md:mb-8" />
         <CarouselBanner>
-          {get(promotion, "banners.data")?.map((banner: any) => (
+          {Array.isArray(get(promotion, "banners.data"))
+            && get(promotion, "banners.data")?.map((banner: any) => (
             <Image
               key={banner}
               alt={banner}
@@ -243,7 +232,8 @@ const PromotionsPage = () => {
         <DividerSection title="HOT DEALS" className="mb-5 md:mb-8" />
         <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
           <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
-            {get(promotion, "hot_deals.data")?.map((promotion, index) => (
+            {Array.isArray(get(promotion, "hot_deals.data"))
+              && get(promotion, "hot_deals.data")?.map((promotion, index) => (
               <PromotionCard
                 key={index}
                 title={get(promotion, "attributes.name")}
@@ -266,7 +256,8 @@ const PromotionsPage = () => {
           <DividerSection title={bizListing.title} className="mb-5 md:mb-8"/>
           <div
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-            {get(bizListing, "biz_listings.data")?.map((card, index) => (
+            {Array.isArray(get(bizListing, "biz_listings.data"))
+              && get(bizListing, "biz_listings.data")?.map((card, index) => (
               <InforCard
                 key={index}
                 imgUrl={get(card, "attributes.images") ? card.attributes.images[0] : "https://picsum.photos/200/300"}
@@ -293,7 +284,8 @@ const PromotionsPage = () => {
         <DividerSection title="Shop more deals" className="mb-5 md:mb-8" />
         <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
           <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
-            {get(promotion, "more_deals.data")?.map((promotion, index) => (
+            {Array.isArray(get(promotion, "more_deals.data"))
+              && get(promotion, "more_deals.data")?.map((promotion, index) => (
               <PromotionCard
                 key={index}
                 title={get(promotion, "attributes.name")}
