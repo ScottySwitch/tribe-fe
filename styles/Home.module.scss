@@ -15,7 +15,8 @@
   position: relative;
 }
 
-.tab_filter {
+.tab_filter,
+.for_you {
   position: sticky;
   top: 120px;
   background-color: white;
@@ -29,6 +30,27 @@
     flex-wrap: wrap;
     justify-content: space-between;
   }
+}
+
+.for_you {
+  padding: 10px 0;
+
+  &_tag {
+    border-top: 5px solid $primary-500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90px;
+    width: 190px;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+  }
+}
+.for_you_container {
+  padding: 6px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
 }
 
 .banner_card {
