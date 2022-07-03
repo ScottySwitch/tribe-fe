@@ -221,9 +221,10 @@ const SetupProfilePage = () => {
     setStep(ProfileSteps.STEP_TWO)
   }
 
-  const handleSubmit = (form) => {
+  const handleSubmit = async (form) => {
     console.log({ ...formData, ...form })
-    router.push("/")
+    await AuthApi.getMe()
+    window.location.href = "/"
   }
 
   const handleBackStep = () => {
