@@ -155,6 +155,29 @@ const Home: NextPage = () => {
           ))}
         </Carousel>
       </SectionLayout>
+      <SectionLayout className={styles.for_you}>
+        <div className={styles.for_you_tag}>
+          <Icon icon="user-stroke-1" />
+          <div></div>
+        </div>
+      </SectionLayout>
+      <SectionLayout childrenClassName={styles.for_you_container}>
+        {inforCardList?.map((card) => (
+          <div key={card.title} className="pb-5">
+            <InforCard
+              imgUrl={card.images[0]}
+              title={card.title}
+              rate={card.rate}
+              rateNumber={card.rateNumber}
+              followerNumber={card.followerNumber}
+              price={card.price}
+              categories={card.categories}
+              tags={card.tags}
+              isVerified={card.isVerified}
+            />
+          </div>
+        ))}
+      </SectionLayout>
       <SectionLayout childrenClassName="flex justify-center">
         <Button variant="outlined" text="Load more" width={400} />
       </SectionLayout>
