@@ -14,7 +14,6 @@ import { UsersTypes } from "enums"
 import Break from "components/Break/Break"
 import { randomId } from "utils"
 import get from "lodash/get"
-import { userInfo } from "os"
 
 export const Categories = (props: {
   currentCategory?: string
