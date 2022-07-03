@@ -173,7 +173,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             text="Send reply"  
             onClick={() => {
               setShowReplyModal(false)
-              // setReply (get(selectedReview, "reply_reviews") || '')
+              setReply (get(selectedReview, "reply_reviews") || '')
               onSubmitReply(reply, selectedReview)
             }}  
           />

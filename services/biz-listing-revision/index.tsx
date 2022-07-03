@@ -144,9 +144,9 @@ const getOwnerListingRevisionRoleByUserId = async (userId: any) => {
 const getBizListingRevisionBySlug = async (bizListingSlug: any) => {
   const query = qs.stringify({
     "filters": {
-      "slug": bizListingSlug
+      "slug": bizListingSlug,
     },
-    "populate": "*"
+    "populate": "*",
   }, {
     encodeValuesOnly: true
   });
@@ -160,27 +160,6 @@ const getOwnerBizListingRevisionBySlug = async (bizListingSlug: any) => {
   const query = qs.stringify({
     "filters": {
       "slug": bizListingSlug,
-      $or: [
-        {
-          "claim_listings": {
-            "user": {
-              "id": {
-                "$eq": userInfo.id
-              }
-            }  
-          }
-        },
-        {
-          "listing_roles": {
-            "name": "owner",
-            "user": {
-              "id": {
-                "$eq": userInfo.id
-              }
-            } 
-          }
-        }
-      ] 
     },
     "populate": "*"
   }, {
