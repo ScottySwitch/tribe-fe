@@ -364,15 +364,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     )
     await Promise.all(
       editedItemList.map(async (item) => {
-        let parent_id = ''
-        if (item.is_revision === true) {
-            if (item.parent_id) {
-            parent_id = item.parent_id
-            }
-        }
-        else {
-          parent_id = item.id.toString()
-        }
+        const parent_id = !item.is_revision ? item.id : item.parent_id ? item.parent_id : ''
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
           name: item.name,
@@ -404,15 +396,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     )
     await Promise.all(
       editedMenuList.map(async (item) => {
-        let parent_id = ''
-        if (item.is_revision === true) {
-            if (item.parent_id) {
-            parent_id = item.parent_id
-            }
-        }
-        else {
-          parent_id = item.id.toString()
-        }
+        const parent_id = !item.is_revision ? item.id : item.parent_id ? item.parent_id : ''
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
           name: item.name,
@@ -443,15 +427,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     )
     await Promise.all(
       editedDealList.map(async (item) => {
-        let parent_id = ''
-        if (item.is_revision === true) {
-            if (item.parent_id) {
-            parent_id = item.parent_id
-            }
-        }
-        else {
-          parent_id = item.id.toString()
-        }
+        const parent_id = !item.is_revision ? item.id : item.parent_id ? item.parent_id : ''
         let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
