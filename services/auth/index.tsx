@@ -102,6 +102,7 @@ const getMe = async () => {
   me.data.biz_invoice =  userInfo.biz_invoice || []
   me.data.claim_listings =  userInfo.claim_listings || [] 
   me.data.listing_roles =  userInfo.listing_roles || []
+  me.data.now_biz_listing = userInfo.now_biz_listing || {}
   localStorage.setItem("user", JSON.stringify(me.data))
 }
 

@@ -89,6 +89,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     const getListingData = async (listingSlug) => {
       let data
       let bizListingRevisionData
+      let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
       if (isViewPage) {
         //if normal user go to normal listing homepage
         data = await BizListingApi.getBizListingBySlug(listingSlug)
@@ -107,6 +108,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       const listing = get(bizListingRevisionData, "data.data[0]") || get(data, "data.data[0]")
       if (listing) {
         console.log(listing)
+        userInfo.now_biz_listing = listing
+        localStorage.setItem('user', JSON.stringify(userInfo))
         const rawTags = get(listing, "attributes.tags.data") || []
         const rawFacilities = get(listing, "attributes.facilities.data") || []
         const invoiceList = get(listing, "attributes.biz_invoices.data") || []
