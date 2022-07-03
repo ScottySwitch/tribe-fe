@@ -1,101 +1,105 @@
-import Image from "next/image"
-import get from "lodash/get"
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
-import map from "lodash/map"
+import Image from "next/image";
+import get from "lodash/get";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import map from "lodash/map";
 
-import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne"
-import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor"
-import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPageTwo"
-import Button from "components/Button/Button"
-import Modal from "components/Modal/Modal"
-import { Categories, ClaimStep, YesNo } from "enums"
-import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/AddBuyInfor"
-import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
-import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor"
-import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor"
-import { IOpenHours } from "components/OpenHours/OpenHours"
+import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne";
+import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor";
+import AddListingPageTwo from "components/AddListingPages/PageTwo/AddListingPageTwo";
+import Button from "components/Button/Button";
+import Modal from "components/Modal/Modal";
+import { Categories, ClaimStep, YesNo } from "enums";
+import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/AddBuyInfor";
+import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor";
+import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor";
+import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor";
+import { IOpenHours } from "components/OpenHours/OpenHours";
 
-import styles from "styles/AddListing.module.scss"
-import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant"
-import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
-import BizListingApi from "../../services/biz-listing"
+import styles from "styles/AddListing.module.scss";
+import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant";
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
+import BizListingApi from "../../services/biz-listing";
 export interface IAddListingForm {
-  category: Categories
-  categoryLinks: string
-  relationship: string
-  listing: string
-  role: string
-  isOpen: string
-  openDate: string
-  businessName: string
-  description: string
-  isOnline: string
-  city: string
-  country: string
-  address: string
-  additionalAddress: string
-  contact: string
-  email: string
-  socialMedia: string
-  currency?: { label: string; value: string }
-  minPrice: string
-  maxPrice: string
+  category: Categories;
+  categoryLinks?: string;
+  relationship: string;
+  listing: string;
+  role: string;
+  isOpen: string;
+  openDate: string;
+  businessName: string;
+  description: string;
+  isOnline: string;
+  city: string;
+  country: string;
+  address: string;
+  additionalAddress: string;
+  contact: string;
+  email: string;
+  socialMedia: string;
+  currency?: { label: string; value: string };
+  minPrice: string;
+  maxPrice: string;
 
-  describePlace?: any[]
+  describePlace?: any[];
 
-  foodOptions?: any[]
-  paryerFacilities?: any[]
-  foodOptionsRamadan?: any[]
-  nonHalalActivities?: any[]
+  foodOptions?: any[];
+  paryerFacilities?: any[];
+  foodOptionsRamadan?: any[];
+  nonHalalActivities?: any[];
 
-  images?: string[]
-  productBrands?: any[]
-  mealsKind?: any[]
-  openHours?: IOpenHours
-  payment?: any[]
-  additionalServices?: any[]
-  media?: any[]
-  agreePolicies: string
-  productTypes?: any[]
-  atmosphere?: any[]
-  parking?: any[]
-  describeTags?: any[]
+  images?: string[];
+  productBrands?: any[];
+  mealsKind?: any[];
+  openHours?: IOpenHours;
+  payment?: any[];
+  additionalServices?: any[];
+  media?: any[];
+  agreePolicies: string;
+  productTypes?: any[];
+  atmosphere?: any[];
+  parking?: any[];
+  describeTags?: any[];
+
+  categoryKind?: string;
+  tags?: any[];
+  placeGoodFor?: string[];
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(1)
-  const [formData, setFormData] = useState(defaultAddlistingForm)
-  const [showPreviewModal, setShowPreviewModal] = useState(false)
-  const [showSubmitResult, setShowSubmitResult] = useState(false)
+  const [pageNumber, setPageNumber] = useState(1);
+  const [formData, setFormData] = useState(defaultAddlistingForm);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showSubmitResult, setShowSubmitResult] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     //call api
-  }, [])
+  }, []);
 
   const handlePrevPage = () => {
-    setPageNumber(pageNumber - 1)
-  }
+    setPageNumber(pageNumber - 1);
+  };
 
   const handleNextPage = () => {
-    setPageNumber(pageNumber + 1)
-  }
+    setPageNumber(pageNumber + 1);
+  };
 
   const handleUpdateFormData = (data) => {
-    console.log("handleUpdateFormData", data)
-    setFormData({ ...formData, ...data })
-  }
+    console.log("handleUpdateFormData", data);
+    setFormData({ ...formData, ...data });
+  };
 
   const handleSubmitFormData = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     ///do CRUD things here
-    console.log("data", formData)
+    console.log("data", formData);
 
-    let address = "Online Business"
+    let address = "Online Business";
     if (!formData.isOnline) {
-      address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`
+      address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`;
     }
     const dataSend = {
       user: userInfo.id,
@@ -118,7 +122,7 @@ const AddListing = () => {
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,
       product_types: formData.productTypes,
-      product_brands: map(formData.productBrands, 'value'),
+      product_brands: map(formData.productBrands, "value"),
       tags: formData.describeTags || [],
       facilities_data: {
         additionalServices: formData.additionalServices,
@@ -131,26 +135,26 @@ const AddListing = () => {
         paryerFacilities: formData.paryerFacilities,
         payment: formData.payment,
       },
-    }
-    const result = await BizListingApi.createBizListing(dataSend)
-    console.log("result", result)
+    };
+    const result = await BizListingApi.createBizListing(dataSend);
+    console.log("result", result);
 
     // const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
-      setShowSubmitResult(true)
+      setShowSubmitResult(true);
     } else {
-      const listingId = result.data?.data?.id
+      const listingId = result.data?.data?.id;
       router.push({
         pathname: `/claim/${listingId}`,
         query: { firstStep: ClaimStep.CHOOSE_TIER },
-      })
+      });
     }
-  }
+  };
 
   const handlePreview = (data) => {
-    setFormData({ ...formData, ...data })
-    setShowPreviewModal(true)
-  }
+    setFormData({ ...formData, ...data });
+    setShowPreviewModal(true);
+  };
 
   return (
     <div className={styles.add_listing}>
@@ -218,10 +222,13 @@ const AddListing = () => {
               <div key={row.question} className="flex gap-20">
                 <div className="flex flex-wrap w-3/5">{row.question}</div>
                 <div className="w-2/5">
-                  <PreviewValue valueKey={row.valueKey} value={get(formData, row.valueKey)} />
+                  <PreviewValue
+                    valueKey={row.valueKey}
+                    value={get(formData, row.valueKey)}
+                  />
                 </div>
               </div>
-            )
+            );
           })}
           <div className="flex justify-end px-[30px] py-3">
             <Button
@@ -231,7 +238,12 @@ const AddListing = () => {
               width="fit-content"
               onClick={() => setShowPreviewModal(false)}
             />
-            <Button text="Continue" size="small" width={270} onClick={handleSubmitFormData} />
+            <Button
+              text="Continue"
+              size="small"
+              width={270}
+              onClick={handleSubmitFormData}
+            />
           </div>
         </div>
       </Modal>
@@ -257,7 +269,7 @@ const AddListing = () => {
         </div>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default AddListing
+export default AddListing;
