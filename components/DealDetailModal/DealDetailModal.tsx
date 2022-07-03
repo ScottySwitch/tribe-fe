@@ -5,6 +5,7 @@ import Icon from "components/Icon/Icon"
 import Button from "components/Button/Button"
 
 import styles from "./DealDetailModal.module.scss"
+import get from "lodash/get";
 
 export interface IDealsDetails {
   name: string
@@ -14,7 +15,7 @@ export interface IDealsDetails {
   conditions?: string
 }
 interface DealDetailModalProps extends ModalProps {
-  data: IDealsDetails
+  data: any
   onShare?: () => void
   onFavourite?: () => void
 }
@@ -28,7 +29,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
           <div className={styles.icon}>
             <Icon icon="deals-color" size={22} />
           </div>
-          <div className={`${styles.title} truncate`}>{data.name}</div>
+          <div className={`${styles.title} truncate`}>{get(data, "attributes.name")}</div>
         </div>
         <div className={styles.close} onClick={onClose}>
           <Icon icon="cancel-mobile" />
@@ -36,30 +37,30 @@ const DealDetailModal = (props: DealDetailModalProps) => {
       </div>
       <div className={styles.cover_image}>
         <Image
-          src={data.imgUrl || "https://picsum.photos/678/169"}
-          alt={data.name}
+          src={get(data, "attributes.images") ? data.attributes.images[0] : "https://picsum.photos/678/169"}
+          alt={get(data, "attributes.name")}
           width="100%"
           height="100%"
           layout="responsive"
         />
       </div>
       <div className={styles.content}>
-        {data.offers && (
+        {get(data, "attributes.description") && (
           <div className={styles.item}>
             <h6 className={styles.label}>Offers</h6>
-            <p>{data.offers}</p>
+            <p>{get(data, "attributes.description")}</p>
           </div>
         )}
-        {data.valid && (
+        {get(data, "attributes.end_date") && (
           <div className={styles.item}>
             <h6 className={styles.label}>Valid</h6>
-            <p>{data.valid}</p>
+            <p>{`${get(data, "attributes.start_date")} - ${get(data, "attributes.end_date")}`}</p>
           </div>
         )}
-        {data.conditions && (
+        {get(data, "attributes.terms_conditions") && (
           <div className={styles.item}>
             <h6 className={styles.label}>Terms & Conditions</h6>
-            <p>{data.conditions}</p>
+            <p>{get(data, "attributes.terms_conditions")}</p>
           </div>
         )}
       </div>

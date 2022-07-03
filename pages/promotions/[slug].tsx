@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { inforCardList } from "constant"
 import DealsDetailsModal, { IDealsDetails } from "components/DealDetailModal/DealDetailModal"
 import ProductDetailsModal, { IProduct } from "components/ProductDetailModal/ProductDetailModal"
@@ -131,9 +130,11 @@ const PromotionsPage = () => {
   const [dealsDetails, setDealsDetails] = useState<IDealsDetails>({} as IDealsDetails)
   const [showModalProductDetails, setShowModalProductDetails] = useState<boolean>()
 
-  const handleDealsDeatails = (value: boolean) => {
+  const handleDealsDetails = (value: boolean, dealInfo?: any) => {
     setShowModalDealsDetails(value)
-    setDealsDetails(dummyDealsDetails)
+    if (dealInfo) {
+      setDealsDetails(dealInfo)
+    }
   }
 
   const handleShare = () => {
@@ -146,14 +147,9 @@ const PromotionsPage = () => {
 
 
   const [bizListings, setBizListings] = useState<any>([])
-  // const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false)
-  // const [isSuccess, setIsSuccess] = useState<boolean>(false)
-  // const [locationList, setLocationList] = useState<any>([])
-  // const [listingOptions, setListingOptions] = useState<any>([])
-  // const [listingSearchResult, setListingSearchResult] = useState<any>()
 
   const {
-    query: { id: slug },
+    query: { slug },
   } = useRouter()
 
   const [promotion, setPromotion] = useState<any>([])
@@ -206,16 +202,16 @@ const PromotionsPage = () => {
         <DividerSection title="FEATURED VOUCHERS" className="mb-5 md:mb-8" />
         <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
           <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
-            {dummyPromotion?.map((promotion, index) => (
+            {get(promotion, "deals.data")?.map((promotion, index) => (
               <PromotionCard
                 key={index}
-                title={promotion.title}
-                imgUrl={promotion.images[0]}
-                expiredAt={promotion.expiredAt}
-                type={promotion.type}
-                favourite={promotion.favourite}
+                title={get(promotion, "attributes.name")}
+                imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
+                expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                type={1}
+                favourite={false}
                 size="large"
-                onClick={() => handleDealsDeatails(true)}
+                onClick={() => handleDealsDetails(true, promotion)}
               />
             ))}
           </div>
@@ -243,27 +239,24 @@ const PromotionsPage = () => {
       {/* End BANNERS */}
 
       {/* Start HOT DEALS */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
+      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-10`}>
         <DividerSection title="HOT DEALS" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-              onClick={() => setShowModalProductDetails(true)}
-            />
-          ))}
-        </div>
+        <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
+          <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
+            {get(promotion, "hot_deals.data")?.map((promotion, index) => (
+              <PromotionCard
+                key={index}
+                title={get(promotion, "attributes.name")}
+                imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
+                expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                type={1}
+                favourite={false}
+                size="large"
+                onClick={() => handleDealsDetails(true, promotion)}
+              />
+            ))}
+          </div>
+        </ScrollingBox>
       </SectionLayout>
       {/* End HOT DEALS */}
 
@@ -295,58 +288,31 @@ const PromotionsPage = () => {
         </SectionLayout>
       ))}
 
-      {/* Start Popular in STAY  (TODO: remove) */}
-      {/*<SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>*/}
-      {/*  <DividerSection title="Popular in STAY 13123" className="mb-5 md:mb-8" />*/}
-      {/*  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">*/}
-      {/*    {inforCardList?.map((card, index) => (*/}
-      {/*      <InforCard*/}
-      {/*        key={index}*/}
-      {/*        imgUrl={card.images[0]}*/}
-      {/*        title={card.title}*/}
-      {/*        rate={card.rate}*/}
-      {/*        rateNumber={card.rateNumber}*/}
-      {/*        followerNumber={card.followerNumber}*/}
-      {/*        price={card.price}*/}
-      {/*        categories={card.categories}*/}
-      {/*        tags={card.tags}*/}
-      {/*        iconTag={true}*/}
-      {/*        isVerified={card.isVerified}*/}
-      {/*        className="w-full"*/}
-      {/*      />*/}
-      {/*    ))}*/}
-      {/*  </div>*/}
-      {/*</SectionLayout>*/}
-      {/* End Popular in STAY */}
-
       {/* Start Shop more deals */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
+      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-10`}>
         <DividerSection title="Shop more deals" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
+        <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
+          <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
+            {get(promotion, "more_deals.data")?.map((promotion, index) => (
+              <PromotionCard
+                key={index}
+                title={get(promotion, "attributes.name")}
+                imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
+                expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                type={1}
+                favourite={false}
+                size="large"
+                onClick={() => handleDealsDetails(true, promotion)}
+              />
+            ))}
+          </div>
+        </ScrollingBox>
       </SectionLayout>
-      {/* End Shop more deals */}
 
       <DealsDetailsModal
         visible={showModalDealsDetails}
         data={dealsDetails}
-        onClose={() => handleDealsDeatails(false)}
+        onClose={() => handleDealsDetails(false)}
         onShare={() => handleShare()}
         onFavourite={() => handleFavourite()}
       />
