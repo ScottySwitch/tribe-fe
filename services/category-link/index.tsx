@@ -1,0 +1,22 @@
+import Api from "../index";
+const qs = require('qs');
+
+const getCategoryLinksByCategoryId = async (categoryId: number) => {
+  const query = qs.stringify({
+    "filters": {
+      "category": {
+        "id": categoryId
+      }
+    }
+  }, {
+    encodeValuesOnly: true
+  });
+
+  const url = `/api/category-links?${query}`;
+  return await Api.get(url);
+}
+
+
+export default {
+  getCategoryLinksByCategoryId
+}

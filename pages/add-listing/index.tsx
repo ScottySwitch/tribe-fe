@@ -2,6 +2,7 @@ import Image from "next/image"
 import get from "lodash/get"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
+import map from "lodash/map"
 
 import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne"
 import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor"
@@ -21,7 +22,7 @@ import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
 import BizListingApi from "../../services/biz-listing"
 export interface IAddListingForm {
   category: Categories
-  categoryKind: string
+  categoryLinks: string
   relationship: string
   listing: string
   role: string
@@ -49,16 +50,17 @@ export interface IAddListingForm {
   nonHalalActivities?: any[]
 
   images?: string[]
-  tags?: any[]
+  productBrands?: any[]
   mealsKind?: any[]
   openHours?: IOpenHours
   payment?: any[]
   additionalServices?: any[]
   media?: any[]
   agreePolicies: string
-  placeGoodFor?: any[]
+  productTypes?: any[]
   atmosphere?: any[]
   parking?: any[]
+  describeTags?: any[]
 }
 
 const AddListing = () => {
@@ -98,6 +100,7 @@ const AddListing = () => {
     const dataSend = {
       user: userInfo.id,
       is_verified: false,
+      is_online_store: !!formData.isOnline,
       categories: [formData.category],
       name: formData.businessName,
       description: formData.description,
@@ -106,7 +109,6 @@ const AddListing = () => {
       social_info: formData.socialMedia,
       phone_number: formData.contact,
       email: formData.email === "" ? null : formData.email,
-      tags: formData.tags,
       price_range: {
         currency: formData.currency?.value,
         min: formData.minPrice,
@@ -114,7 +116,10 @@ const AddListing = () => {
       },
       images: formData.images,
       open_hours: formData.openHours,
-      category_kind: formData.categoryKind,
+      category_links: formData.categoryLinks,
+      product_types: formData.productTypes,
+      product_brands: map(formData.productBrands, 'value'),
+      tags: formData.describeTags || [],
       facilities_data: {
         additionalServices: formData.additionalServices,
         atmosphere: formData.atmosphere,
@@ -125,7 +130,6 @@ const AddListing = () => {
         parking: formData.parking,
         paryerFacilities: formData.paryerFacilities,
         payment: formData.payment,
-        placeGoodFor: formData.placeGoodFor,
       },
     }
     const result = await BizListingApi.createBizListing(dataSend)

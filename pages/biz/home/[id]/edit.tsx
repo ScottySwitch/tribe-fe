@@ -88,23 +88,23 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   useEffect(() => {
     const getListingData = async (listingSlug) => {
       let data
-      let dataBizListingRevision
+      let bizListingRevisionData
       if (isViewPage) {
         //if normal user go to normal listing homepage
         data = await BizListingApi.getBizListingBySlug(listingSlug)
       } else {
         //if normal users go to edit listing homepage
         data = await BizListingApi.getOwnerBizListingBySlug(listingSlug)
-        dataBizListingRevision = await BizListingRevision.getOwnerBizListingRevisionBySlug(listingSlug)
-        console.log(dataBizListingRevision);
-        if (get(dataBizListingRevision, "data.data.length") !== 0) {
+        bizListingRevisionData = await BizListingRevision.getOwnerBizListingRevisionBySlug(listingSlug)
+        console.log(bizListingRevisionData);
+        if (get(bizListingRevisionData, "data.data.length") !== 0) {
           setIsRevision(true)
         }
         //they will be redirected to home if do not own the listing
         get(data, "data.data.length") === 0 && (window.location.href = "/")
       }
 
-      const listing = get(dataBizListingRevision, "data.data[0]") || get(data, "data.data[0]")
+      const listing = get(bizListingRevisionData, "data.data[0]") || get(data, "data.data[0]")
       if (listing) {
         console.log(listing)
         const rawTags = get(listing, "attributes.tags.data") || []
@@ -283,10 +283,10 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const handleSubmit = async () => {
     setIsLoading(true)
-    let IdBizListingRevisionCreate
-    const currentItemList = [...itemList].filter((item) => item.isNew !== true && item.isEdited !== true)
-    const currentMenuList = [...menuList].filter((item) => item.isNew !== true && item.isEdited !== true)
-    const currentDealList = [...dealList].filter((item) => item.isNew !== true && item.isEdited !== true)
+    let bizListingRevisionCreateId
+    const currentItemList = [...itemList].filter((item) => !item.isNew && !item.isEdited)
+    const currentMenuList = [...menuList].filter((item) => !item.isNew && !item.isEdited)
+    const currentDealList = [...dealList].filter((item) => !item.isNew && !item.isEdited)
     const newItemList = itemList.filter((item) => item.isNew)
     const editedItemList = itemList.filter((item) => !item.isNew && item.isEdited)
     const newMenuList = menuList.filter((item) => item.isNew)
@@ -340,172 +340,147 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         categories: get(bizListing, "attributes.categories.data").map((item) => item.id) || []    
       }).then((response) => {
         console.log(response)
-        IdBizListingRevisionCreate = response.data.data.id
+        bizListingRevisionCreateId = response.data.data.id
       })
     }
 
-    if (newItemList.length > 0) {
-      await Promise.all(
-        newItemList.map(async (item) => {
-          const dataSend = {
-            biz_listing_revision: IdBizListingRevisionCreate || bizListing.id,
-            name: item.name,
-            description: item.description,
-            price: item.price,
-            discount_percent: item.discount,
-            tags: item.tags,
-            images: item.images,
-            website_url: item.websiteUrl,
-            klook_url: item.klookUrl,
-            is_revision: true,
-          }
-          await ProductApi.createProduct(dataSend)
-        })
-      )
-    }
-    if (editedItemList.length > 0) {
-      await Promise.all(
-        editedItemList.map(async (item) => {
-          let parent_id = ''
-          if (item.is_revision === true) {
-             if (item.parent_id) {
-              parent_id = item.parent_id
-             }
-          }
-          else {
-            parent_id = item.id.toString()
-          }
-          const dataUpdate = {
-            biz_listing_revision: IdBizListingRevisionCreate || bizListing.id,
-            name: item.name,
-            description: item.description,
-            price: item.price,
-            discount_percent: item.discount,
-            tags: item.tags,
-            images: item.images,
-            website_url: item.websiteUrl,
-            klook_url: item.klookUrl,
-            is_revision: true,
-            parent_id: parent_id
-          }
-          if (item.is_revision === true) {
-            await ProductApi.updateProduct(item.id, dataUpdate)
-          }
-          else {
-            await ProductApi.createProduct(dataUpdate)
-          }
-        })
-      )
-    }
-
-    if (newMenuList.length > 0) {
-      await Promise.all(
-        newMenuList.map(async (item) => {
-          const dataSend = {
-            biz_listing_revision: IdBizListingRevisionCreate || bizListing.id,
-            name: item.name,
-            menu_file: item.images,
-            is_revision: true,
-          }
-          await MenuApi.createMenu(dataSend)
-        })
-      )
-    }
-    if (editedMenuList.length > 0) {
-      await Promise.all(
-        editedMenuList.map(async (item) => {
-          let parent_id = ''
-          if (item.is_revision === true) {
-             if (item.parent_id) {
-              parent_id = item.parent_id
-             }
-          }
-          else {
-            parent_id = item.id.toString()
-          }
-          const dataUpdate = {
-            biz_listing_revision: IdBizListingRevisionCreate || bizListing.id,
-            name: item.name,
-            menu_file: item.images,
-            is_revision: true,
-            parent_id: parent_id
-          }
-          if (item.is_revision === true) {
-            await MenuApi.updateMenu(item.id, dataUpdate)
-          }
-          else {
-            await MenuApi.createMenu(dataUpdate)
-          }
-        })
-      )
-    }
-
-    if (newDealList.length > 0) {
-      await Promise.all(
-        newDealList.map(async (item) => {
-          let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
-          const dataSend = {
-            biz_listing_revision: IdBizListingRevisionCreate || bizListing.id,
-            name: item.name,
-            description: item.information,
-            images: item.images,
-            terms_conditions: item.termsConditions,
-            start_date: item.validUntil,
-            end_date: convertEndDate,
-            is_revision: true,
-          }
-          await DealApi.createDeal(dataSend)
-        })
-      )
-    }
-    if (editedDealList.length > 0) {
-      await Promise.all(
-        editedDealList.map(async (item) => {
-          let parent_id = ''
-          if (item.is_revision === true) {
-             if (item.parent_id) {
-              parent_id = item.parent_id
-             }
-          }
-          else {
-            parent_id = item.id.toString()
-          }
-          let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
-          const dataUpdate = {
-            biz_listing_revision: IdBizListingRevisionCreate || bizListing.id,
-            name: item.name,
-            description: item.information,
-            images: item.images,
-            terms_conditions: item.termsConditions,
-            end_date: convertEndDate,
-            is_revision: true,
-            parent_id: parent_id
-          }
-          if (item.is_revision === true) {
-            await DealApi.updateDeal(item.id, dataUpdate)
-          }
-          else {
-            await DealApi.createDeal(dataUpdate)
-          }
-        })
-      )
-    }
-
-    if (reviews.length > 0) {
-        await Promise.all(
-          reviews.map(async (item) => {
-            const dataUpdate = {
-              images: item.images,
-              visited_date: item.visited_date,
-              rating: item.rating,
-              content: item.content,
-              reply_reviews: item.reply_reviews,
-              date_create_reply: item.date_create_reply,
+    //API ItemList
+    await Promise.all(
+      newItemList.map(async (item) => {
+        const CreateData = {
+          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          discount_percent: item.discount,
+          tags: item.tags,
+          images: item.images,
+          website_url: item.websiteUrl,
+          klook_url: item.klookUrl,
+          is_revision: true,
+        }
+        await ProductApi.createProduct(CreateData)
+      })
+    )
+    await Promise.all(
+      editedItemList.map(async (item) => {
+        let parent_id = ''
+        if (item.is_revision === true) {
+            if (item.parent_id) {
+            parent_id = item.parent_id
             }
-            await ReviewApi.updateReviews(item.id, dataUpdate)
-          })
-        )
-    }
+        }
+        else {
+          parent_id = item.id.toString()
+        }
+        const updateData = {
+          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          discount_percent: item.discount,
+          tags: item.tags,
+          images: item.images,
+          website_url: item.websiteUrl,
+          klook_url: item.klookUrl,
+          is_revision: true,
+          parent_id: parent_id
+        }
+        item.is_revision ? await ProductApi.updateProduct(item.id, updateData) : await ProductApi.createProduct(updateData)
+      })
+    )
+
+    //API MenuList
+    await Promise.all(
+      newMenuList.map(async (item) => {
+        const CreateData = {
+          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
+          name: item.name,
+          menu_file: item.images,
+          is_revision: true,
+        }
+        await MenuApi.createMenu(CreateData)
+      })
+    )
+    await Promise.all(
+      editedMenuList.map(async (item) => {
+        let parent_id = ''
+        if (item.is_revision === true) {
+            if (item.parent_id) {
+            parent_id = item.parent_id
+            }
+        }
+        else {
+          parent_id = item.id.toString()
+        }
+        const updateData = {
+          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
+          name: item.name,
+          menu_file: item.images,
+          is_revision: true,
+          parent_id: parent_id
+        }
+        item.is_revision ? await MenuApi.updateMenu(item.id, updateData) : await MenuApi.createMenu(updateData)
+      })
+    )
+
+    //API DealList
+    await Promise.all(
+      newDealList.map(async (item) => {
+        let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
+        const CreateData = {
+          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
+          name: item.name,
+          description: item.information,
+          images: item.images,
+          terms_conditions: item.termsConditions,
+          start_date: item.validUntil,
+          end_date: convertEndDate,
+          is_revision: true,
+        }
+        await DealApi.createDeal(CreateData)
+      })
+    )
+    await Promise.all(
+      editedDealList.map(async (item) => {
+        let parent_id = ''
+        if (item.is_revision === true) {
+            if (item.parent_id) {
+            parent_id = item.parent_id
+            }
+        }
+        else {
+          parent_id = item.id.toString()
+        }
+        let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
+        const updateData = {
+          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
+          name: item.name,
+          description: item.information,
+          images: item.images,
+          terms_conditions: item.termsConditions,
+          end_date: convertEndDate,
+          is_revision: true,
+          parent_id: parent_id
+        }
+        item.is_revision ? await DealApi.updateDeal(item.id, updateData) : await DealApi.createDeal(updateData)
+      })
+    )
+
+    //API Reviews
+     await Promise.all(
+      reviews.map(async (item) => {
+        const updateData = {
+          images: item.images,
+          visited_date: item.visited_date,
+          rating: item.rating,
+          content: item.content,
+          reply_reviews: item.reply_reviews,
+          date_create_reply: item.date_create_reply,
+        }
+        await ReviewApi.updateReviews(item.id, updateData)
+      })
+    )
     window.location.reload()
   }
 
