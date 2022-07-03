@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/router"
 
@@ -14,6 +14,7 @@ import { UsersTypes } from "enums"
 import Break from "components/Break/Break"
 import { randomId } from "utils"
 import get from "lodash/get"
+import { userInfo } from "os"
 
 export const Categories = (props: {
   currentCategory?: string
@@ -85,7 +86,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
       ))}
       <div className="cursor-pointer flex" onClick={onSwitchToNormalUser}>
         <Image
-          src={require("public/images/avatar.png")}
+          src={userInfo.avatar || require("public/images/avatar.png")}
           alt=""
           width={30}
           height={30}
@@ -110,19 +111,20 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     userInfo.type = UsersTypes.BIZ_USER 
     localStorage.setItem('user', JSON.stringify(userInfo))
     if (get(userInfo, 'owner_listings.length')> 0) {
-      router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
+      window.location.href = `/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`
+      // router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
     }
     else {
       router.push("/claim")
     }
-    // router.push("/claim")
   }
 
   const handleSwitchToNormalUser = () => {
     let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
     userInfo.type = UsersTypes.NORMAL_USER 
     localStorage.setItem('user', JSON.stringify(userInfo))
-    router.pathname === "/" ? router.reload() : router.push("/")
+    // router.pathname === "/" ? router.reload() : router.push("/")
+    router.reload()
   }
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {
@@ -165,12 +167,12 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           </div>
         </Popover>
         <Image
-          src={loginInfor.avatar || require("public/images/page-avatar.png")}
+          src={get(JSON.parse(localStorage.getItem('user') || '{}'), 'now_biz_listing.attributes.logo[0]') || require("public/images/page-avatar.png")}
           alt=""
           width={40}
           height={40}
-          onClick={() => router.push(`/biz/information/${listingSlug}`)}
-          className={styles.avatar}
+          onClick={() => router.push(`/biz/information/${get(JSON.parse(localStorage.getItem('user') || '{}'), 'now_biz_listing.attributes.slug')}`)}
+          className={`${styles.avatar} cursor-pointer`}
         />
       </>
     )
