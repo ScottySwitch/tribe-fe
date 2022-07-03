@@ -258,7 +258,7 @@ const AddListing = () => {
           <div>
             <strong>Thank you</strong>
           </div>
-          <p>Thank you for helping to improve this listing!</p>
+          <p>Thank you for contributing to our listings!</p>
           <Button
             className="mt-5"
             text="Continue"
