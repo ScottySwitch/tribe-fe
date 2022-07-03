@@ -9,9 +9,7 @@ export const getIndex = (id, list) => {
 
 export const randomId = () => Math.floor(Math.random() * 10000000)
 
-export const calcRateNumber = (reviews) => {
-  // TODO: rateNumber not work on FE
-  const reviewsData = get(reviews, "data")
+export const calcRateNumber = (reviewsData) => {
   let rateNumber = 0
   if (reviewsData.length > 0) {
     let sum = 0

@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { inforCardList } from "constant"
 import DealsDetailsModal, { IDealsDetails } from "components/DealDetailModal/DealDetailModal"
 import ProductDetailsModal, { IProduct } from "components/ProductDetailModal/ProductDetailModal"
@@ -10,6 +9,11 @@ import SectionLayout from "components/SectionLayout/SectionLayout"
 import DividerSection from "components/DividerSection/DividerSection"
 import ScrollingBox from "components/ScrollingBox/ScrollingBox"
 import styles from "styles/Promotions.module.scss"
+import {useEffect, useState} from "react";
+import PromotionApi from "services/promotion";
+import get from "lodash/get";
+import {useRouter} from "next/router";
+import { calcRateNumber } from "utils"
 
 const dummyPromotion = [
   {
@@ -127,9 +131,11 @@ const PromotionsPage = () => {
   const [dealsDetails, setDealsDetails] = useState<IDealsDetails>({} as IDealsDetails)
   const [showModalProductDetails, setShowModalProductDetails] = useState<boolean>()
 
-  const handleDealsDeatails = (value: boolean) => {
+  const handleDealsDetails = (value: boolean, dealInfo?: any) => {
     setShowModalDealsDetails(value)
-    setDealsDetails(dummyDealsDetails)
+    if (dealInfo) {
+      setDealsDetails(dealInfo)
+    }
   }
 
   const handleShare = () => {
@@ -140,12 +146,36 @@ const PromotionsPage = () => {
     console.log("handleFavourite")
   }
 
+
+  const [bizListings, setBizListings] = useState<any>([])
+
+  const {
+    query: { slug },
+  } = useRouter()
+
+  const [promotion, setPromotion] = useState<any>([])
+
+  useEffect(() => {
+    const getPromotionBySlug = async (slug) => {
+      const data = await PromotionApi.getPromotionBySlug(slug)
+      const promotionData = get(data, "data.data")
+      if (promotionData.length === 0) {
+        window.location.href = "/"
+      }
+      setPromotion(get(promotionData, "[0].attributes"))
+      setBizListings(get(promotionData, "[0].attributes.microsite_biz_listings"))
+    }
+    if (slug) {
+      getPromotionBySlug(slug).catch((e) => console.log(e))
+    }
+  }, [slug])
+
   return (
     <div className={styles.wrapper_promotions}>
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}>
         <div>
           <Image
-            src="https://picsum.photos/1188/400"
+            src={get(promotion, "main_banner.data.attributes.url") || "https://picsum.photos/1188/400"}
             width={1188}
             height={400}
             layout="responsive"
@@ -159,16 +189,17 @@ const PromotionsPage = () => {
         <DividerSection title="FEATURED VOUCHERS" className="mb-5 md:mb-8" />
         <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
           <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
-            {dummyPromotion?.map((promotion, index) => (
+            {Array.isArray(get(promotion, "deals.data"))
+              && get(promotion, "deals.data")?.map((promotion, index) => (
               <PromotionCard
                 key={index}
-                title={promotion.title}
-                imgUrl={promotion.images[0]}
-                expiredAt={promotion.expiredAt}
-                type={promotion.type}
-                favourite={promotion.favourite}
+                title={get(promotion, "attributes.name")}
+                imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
+                expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                type={1}
+                favourite={false}
                 size="large"
-                onClick={() => handleDealsDeatails(true)}
+                onClick={() => handleDealsDetails(true, promotion)}
               />
             ))}
           </div>
@@ -180,11 +211,12 @@ const PromotionsPage = () => {
       <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
         <DividerSection title="BANNERS" className="mb-5 md:mb-8" />
         <CarouselBanner>
-          {dummyBanner?.map((banner: string) => (
+          {Array.isArray(get(promotion, "banners.data"))
+            && get(promotion, "banners.data")?.map((banner: any) => (
             <Image
               key={banner}
               alt={banner}
-              src={banner}
+              src={get(banner, "attributes.url")}
               width={1185}
               height={225}
               layout="responsive"
@@ -196,178 +228,83 @@ const PromotionsPage = () => {
       {/* End BANNERS */}
 
       {/* Start HOT DEALS */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
+      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-10`}>
         <DividerSection title="HOT DEALS" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-              onClick={() => setShowModalProductDetails(true)}
-            />
-          ))}
-        </div>
+        <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
+          <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
+            {Array.isArray(get(promotion, "hot_deals.data"))
+              && get(promotion, "hot_deals.data")?.map((promotion, index) => (
+              <PromotionCard
+                key={index}
+                title={get(promotion, "attributes.name")}
+                imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
+                expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                type={1}
+                favourite={false}
+                size="large"
+                onClick={() => handleDealsDetails(true, promotion)}
+              />
+            ))}
+          </div>
+        </ScrollingBox>
       </SectionLayout>
       {/* End HOT DEALS */}
 
-      {/* Start POPULAR IN BUY */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in Buy" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End POPULAR IN BUY */}
-
-      {/* Start POPULAR IN EAT */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in EAT" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End POPULAR IN EAT */}
-
-      {/* Start Popular in SEE & DO */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in SEE & DO" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End Popular in SEE & DO */}
-
-      {/* Start Popular in TRANSPORT */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in TRANSPORT" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End Popular in TRANSPORT */}
-
-      {/* Start Popular in STAY */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-        <DividerSection title="Popular in STAY" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
-      </SectionLayout>
-      {/* End Popular in STAY */}
+      {/* Start loop biz_listing components */}
+      {bizListings.map((bizListing, index) => (
+        <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`} key={index}>
+          <DividerSection title={bizListing.title} className="mb-5 md:mb-8"/>
+          <div
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
+            {Array.isArray(get(bizListing, "biz_listings.data"))
+              && get(bizListing, "biz_listings.data")?.map((card, index) => (
+              <InforCard
+                key={index}
+                imgUrl={get(card, "attributes.images") ? card.attributes.images[0] : "https://picsum.photos/200/300"}
+                title={get(card, "attributes.name")}
+                rate={calcRateNumber(get(card, "attributes.reviews.data"))}
+                rateNumber={get(card, "attributes.reviews.data") ?
+                  (get(card, "attributes.reviews.data")).length : 0}
+                followerNumber={get(card, "attributes.user_listing_follows.data") ?
+                  get(card, "attributes.user_listing_follows.data").length : 0}
+                price={get(card, "attributes.price_range.min")}
+                categories={card.categories}
+                tags={get(card, "attributes.tags.data")}
+                iconTag={true}
+                isVerified={get(card, "attributes.is_verified")}
+                className="w-full"
+              />
+            ))}
+          </div>
+        </SectionLayout>
+      ))}
 
       {/* Start Shop more deals */}
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
+      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-10`}>
         <DividerSection title="Shop more deals" className="mb-5 md:mb-8" />
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-          {inforCardList?.map((card, index) => (
-            <InforCard
-              key={index}
-              imgUrl={card.images[0]}
-              title={card.title}
-              rate={card.rate}
-              rateNumber={card.rateNumber}
-              followerNumber={card.followerNumber}
-              price={card.price}
-              categories={card.categories}
-              tags={card.tags}
-              iconTag={true}
-              isVerified={card.isVerified}
-              className="w-full"
-            />
-          ))}
-        </div>
+        <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
+          <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
+            {Array.isArray(get(promotion, "more_deals.data"))
+              && get(promotion, "more_deals.data")?.map((promotion, index) => (
+              <PromotionCard
+                key={index}
+                title={get(promotion, "attributes.name")}
+                imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
+                expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                type={1}
+                favourite={false}
+                size="large"
+                onClick={() => handleDealsDetails(true, promotion)}
+              />
+            ))}
+          </div>
+        </ScrollingBox>
       </SectionLayout>
-      {/* End Shop more deals */}
 
       <DealsDetailsModal
         visible={showModalDealsDetails}
         data={dealsDetails}
-        onClose={() => handleDealsDeatails(false)}
+        onClose={() => handleDealsDetails(false)}
         onShare={() => handleShare()}
         onFavourite={() => handleFavourite()}
       />
