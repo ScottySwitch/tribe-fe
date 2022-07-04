@@ -19,7 +19,8 @@ import { IOpenHours } from "components/OpenHours/OpenHours";
 import styles from "styles/AddListing.module.scss";
 import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
-import BizListingApi from "../../services/biz-listing";
+import BizListingApi from "../../services/biz-listing"
+import BizListingRevisionApi from "services/biz-listing-revision"
 export interface IAddListingForm {
   category: Categories;
   categoryLinks?: string;
@@ -93,15 +94,14 @@ const AddListing = () => {
   };
 
   const handleSubmitFormData = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     ///do CRUD things here
     console.log("data", formData);
-
     let address = "Online Business";
     if (!formData.isOnline) {
       address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`;
     }
-    const dataSend = {
+    let dataSend = {
       user: userInfo.id,
       is_verified: false,
       is_online_store: !!formData.isOnline,
@@ -135,10 +135,23 @@ const AddListing = () => {
         paryerFacilities: formData.paryerFacilities,
         payment: formData.payment,
       },
-    };
-    const result = await BizListingApi.createBizListing(dataSend);
-    console.log("result", result);
-
+      is_accepted: false
+    }
+    const result = get(formData, "role.label") === 'Owner' ? await BizListingApi.createBizListing(dataSend) : await BizListingRevisionApi.createBizListingRevision(dataSend)
+    if (get(formData, "role.label") === 'Owner') {
+      const roleCreate = await BizListingApi.createListingRole({
+        bizListingId: get(result, "data.data.id"),
+        name: get(formData, "role.label")
+      })
+    }
+    userInfo = {
+      ...userInfo,
+      pay_price: "600",
+      biz_id: get(result, "data.data.id"),
+      biz_slug: get(result, "data.data.attributes.slug"),
+      role_choose: get(formData, "role.label") === 'Owner' ? 'Owner' : ''
+    }
+    localStorage.setItem("user", JSON.stringify(userInfo))
     // const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true);

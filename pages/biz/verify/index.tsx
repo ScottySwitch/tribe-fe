@@ -181,7 +181,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     userInfo.isVeriFy = false
     localStorage.setItem("user", JSON.stringify(userInfo))
-    window.location.href = `/biz/home/${userInfo.biz_slug}/edit/`
+    if (userInfo.role_choose === 'Owner') {
+      window.location.href = `/biz/home/${userInfo.biz_slug}/edit/`
+    }
+    else {
+      window.location.href = `/`
+    }
   }
 
   const handleAddIdCard = async () => {

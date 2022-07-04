@@ -7,7 +7,9 @@ import AuthPopup from "components/AuthPopup/AuthPopup"
 import Footer from "components/Footer/Footer"
 import Header from "components/TheHeader/Header"
 import HamModal from "components/HamModal/HamModal"
-
+import BizApi from "services/biz-listing"
+import BizInvoice from "services/biz-invoice"
+import ClaimListingApi from "services/claim-listing"
 import styles from "styles/App.module.scss"
 import "../styles/globals.css"
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar"
@@ -73,6 +75,21 @@ function MyApp({ Component, pageProps }: AppProps) {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
     const getMe = async () => {
       await AuthApi.getMe()
+      if (userInfo) {
+        const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id)
+        // const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
+        // const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
+        // const dataClaimListing = await ClaimListingApi.getClaimListingByUserId(userInfo.id)
+        // const dataListingRoles = await BizApi.getOwnerListingRoleByUserId(userInfo.id)
+        userInfo = {
+          ...userInfo,
+          // // biz_listings: dataBizlisting.data.data, 
+          // biz_invoice: dataBizInvoice.data.data, 
+          // claim_listings: dataClaimListing.data.data,
+          // listing_roles: dataListingRoles.data.data,
+          owner_listings: dataOwnerListing.data.data
+        }
+      }
       localStorage.setItem("user", JSON.stringify(userInfo))
     }
     if (userInfo.token) {
