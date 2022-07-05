@@ -1,51 +1,61 @@
-import classNames from "classnames"
-import Break from "components/Break/Break"
-import Button from "components/Button/Button"
-import Checkbox from "components/Checkbox/Checkbox"
-import { Categories } from "enums"
-import React, {useEffect, useState} from "react"
-import { IOption } from "type"
+import classNames from "classnames";
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import Checkbox from "components/Checkbox/Checkbox";
+import { Categories } from "enums";
+import React, { useEffect, useState } from "react";
+import { IOption } from "type";
 
-import styles from "./TagsSelection.module.scss"
+import styles from "./TagsSelection.module.scss";
 
 interface TagsSelectionProps {
-  className?: string
-  category?: Categories
-  onCancel?: () => void
-  onSubmit?: (list: IOption[]) => void
-  options: IOption[]
-  selectedList?: IOption[]
+  className?: string;
+  category?: Categories;
+  onCancel?: () => void;
+  onSubmit?: (list: IOption[]) => void;
+  options: IOption[];
+  selectedList?: IOption[];
 }
 
 const TagsSelection = (props: TagsSelectionProps) => {
-  const { category, selectedList, options, className, onSubmit, onCancel } = props
+  const { category, selectedList, options, className, onSubmit, onCancel } =
+    props;
 
-  const [localSelectedList, setLocalSelectedList] = useState<IOption[]>(selectedList || [])
-  const selectedValues = localSelectedList.map((item) => item.value)
+  const [localSelectedList, setLocalSelectedList] = useState<IOption[]>(
+    selectedList || []
+  );
+
+  useEffect(() => {
+    setLocalSelectedList(selectedList || []);
+  }, [selectedList]);
+
+  const selectedValues = localSelectedList.map((item) => item.value);
 
   const handleChange = (option: IOption) => {
     if (selectedValues.includes(option.value)) {
-      const newList = localSelectedList.filter((item) => item.value !== option.value)
-      setLocalSelectedList(newList)
+      const newList = localSelectedList.filter(
+        (item) => item.value !== option.value
+      );
+      setLocalSelectedList(newList);
     } else {
       if (selectedValues.length === 5) {
-        alert("Select max 5")
+        alert("Select max 5");
         return false;
       }
-      setLocalSelectedList([...localSelectedList, option])
+      setLocalSelectedList([...localSelectedList, option]);
     }
-  }
+  };
 
   const handleSubmit = () => {
-    onSubmit?.(localSelectedList)
-  }
+    onSubmit?.(localSelectedList);
+  };
 
   const handleCancel = () => {
-    onCancel?.()
-    setLocalSelectedList(selectedList || [])
-  }
+    onCancel?.();
+    setLocalSelectedList(selectedList || []);
+  };
 
-  const wrapperClassName = classNames(styles.tags_selection, className)
+  const wrapperClassName = classNames(styles.tags_selection, className);
 
   return (
     <React.Fragment>
@@ -80,10 +90,15 @@ const TagsSelection = (props: TagsSelectionProps) => {
           size="small"
           onClick={handleCancel}
         />
-        <Button text="Continue" width={280} size="small" onClick={handleSubmit} />
+        <Button
+          text="Continue"
+          width={280}
+          size="small"
+          onClick={handleSubmit}
+        />
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default TagsSelection
+export default TagsSelection;

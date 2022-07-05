@@ -1,22 +1,142 @@
-import { useState } from "react"
+import React, { useState } from "react";
 
-import Modal from "components/Modal/Modal"
-import Icon from "components/Icon/Icon"
-import TagsSelection from "components/TagsSelection/TagsSelection"
-import { IOption } from "type"
-import Button from "components/Button/Button"
+import Modal from "components/Modal/Modal";
+import Icon from "components/Icon/Icon";
+import Button from "components/Button/Button";
+import { fakeSubCateList } from "constant";
+import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor";
+import { IAddListingForm } from "pages/add-listing";
+import { Categories } from "enums";
+import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor";
+import _, { get } from "lodash";
 
 interface FacilitiesProps {
-  isViewPage?: boolean
-  facilities: IOption[]
-  facilityOptions: IOption[]
-  onSetFacilities: (facilities: IOption[]) => void
+  category: Categories;
+  isViewPage?: boolean;
+  facilities?: IAddListingForm;
+  onSetFacilities: (data: any) => void;
 }
 
 const Facilities = (props: FacilitiesProps) => {
-  const { isViewPage, facilities = [], facilityOptions, onSetFacilities } = props
-  const [showFacilitiesModal, setShowFacilitiesModal] = useState(false)
-  const showFacilitiesNumber = 10
+  const { category, isViewPage, facilities, onSetFacilities } = props;
+  const [showFacilitiesModal, setShowFacilitiesModal] = useState(false);
+
+  const showNumber = 6;
+
+  //flat all facilities into array of string
+  const facilityArray: string[] | undefined = facilities
+    ? Object.values(facilities).flat()
+    : [];
+
+  //remove null, undefined, blank items
+  const filteredArray = _.filter(facilityArray, Boolean).slice(0, showNumber);
+  const showMoreButton = get(facilityArray, "length") > showNumber;
+
+  const HomepageViewFacilities = () => {
+    const facilityClassName =
+      "flex gap-2 items-center px-3 w-full md:w-1/2 lg:w-1/3";
+    return (
+      <React.Fragment>
+        {filteredArray.map((item) => (
+          <FacilityItem key={item} item={item} className={facilityClassName} />
+        ))}
+      </React.Fragment>
+    );
+  };
+
+  const FacilityItem = ({ item, className }) => (
+    <div key={item} className={className}>
+      <Icon icon="checked-circle" size={14} />
+      {item}
+    </div>
+  );
+
+  const getFacilityDepartmentLabel = (facilitySlug: string) => {
+    const facilityObject = {
+      atmosphere: "Describe this place’s atmosphere:",
+      additionalServices: "Additional features/ services that are available:",
+      paryerFacilities: "Prayer facilities available:",
+      foodOptionsRamadan: "Food options available during Ramadan:",
+      nonHalalActivities: "Non-Halal activities in the hotel:",
+      mealsKind: "Kind of meals does this place serve:",
+      parking: "Parking available nearby:",
+      payment: "Type of payment method is available:",
+    };
+    return facilityObject[facilitySlug];
+  };
+
+  const ModalViewFacilities = () => {
+    const facilityClassName =
+      "flex gap-2 items-center px-3 w-full md:w-1/2 lg:w-1/3";
+    const facilityDepartments = facilities ? Object.keys(facilities) : [];
+    return (
+      <div className="px-[30px] pb-[30px]">
+        {facilityDepartments.map((item) => {
+          const facilitiesStringArray: string[] =
+            facilities && facilities?.[item];
+          if (
+            Array.isArray(facilitiesStringArray) &&
+            facilitiesStringArray.every((item) => !item)
+          ) {
+            return null;
+          }
+
+          return (
+            <div key={item} className="mt-3">
+              <strong>{getFacilityDepartmentLabel(item)}</strong>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {Array.isArray(facilitiesStringArray) ? (
+                  facilitiesStringArray.map(
+                    (item) =>
+                      item && (
+                        <FacilityItem
+                          item={item}
+                          className={facilityClassName}
+                        />
+                      )
+                  )
+                ) : (
+                  <FacilityItem item={item} className={facilityClassName} />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const EditFacilities = ({ onSetFacilities }) => {
+    let result = <div />;
+    switch (category) {
+      case Categories.EAT:
+        result = (
+          <AddEatInfor
+            isEdit
+            facilityMode
+            subCateList={fakeSubCateList}
+            data={facilities}
+            onEdit={(data) => onSetFacilities?.(data)}
+          />
+        );
+        break;
+      case Categories.STAY:
+        result = (
+          <AddStayInfor
+            isEdit
+            facilityMode
+            subCateList={fakeSubCateList}
+            data={facilities}
+            onEdit={(data) => onSetFacilities?.(data)}
+          />
+        );
+        break;
+    }
+    return result;
+  };
+
+  const handleOpenFacilitiesModal = () => setShowFacilitiesModal(true);
+  const handleCloseFacilitiesModal = () => setShowFacilitiesModal(false);
 
   return (
     <div>
@@ -25,63 +145,42 @@ const Facilities = (props: FacilitiesProps) => {
           <Icon icon="like-color" />
           Facilities
         </div>
-        {!isViewPage && <a onClick={() => setShowFacilitiesModal(true)}>Add facilities</a>}
+        {!isViewPage && (
+          <a onClick={handleOpenFacilitiesModal}>Add facilities</a>
+        )}
       </div>
       <div className="flex flex-wrap mt-5 gap-y-5">
-        {Array.isArray(facilities) &&
-          facilities.slice(0, showFacilitiesNumber).map((item) => (
-            <div key={item.value} className="flex gap-2 items-center w-full md:w-1/2 lg:w-1/3 pr-1">
-              <Icon icon="checked-circle" size={14} /> {item.label}
-            </div>
-          ))}
+        <HomepageViewFacilities />
       </div>
-      {isViewPage && Array.isArray(facilities) && facilities.length > showFacilitiesNumber && (
+      {isViewPage && showMoreButton && (
         <Button
           className="mt-3"
           variant="secondary"
           text="See all facilities"
           width={250}
-          onClick={() => setShowFacilitiesModal(true)}
+          onClick={handleOpenFacilitiesModal}
         />
       )}
       <Modal
         title="Facilities"
-        subTitle={isViewPage ? "" : "Select 5 max"}
         visible={showFacilitiesModal}
-        width={750}
-        mobilePosition="center"
-        onClose={() => {
-          setShowFacilitiesModal(false)
-        }}
+        width={800}
+        mobileFullHeight
+        onClose={handleCloseFacilitiesModal}
       >
         {isViewPage ? (
-          <div className="p-[30px] pt-0 flex gap-3">
-            {Array.isArray(facilities) &&
-              facilities.slice(0, showFacilitiesNumber).map((item) => (
-                <div
-                  key={item.value}
-                  className="flex gap-2 items-center w-full md:w-1/2 lg:w-1/3 pr-1"
-                >
-                  <Icon icon="checked-circle" size={14} /> {item.label}
-                </div>
-              ))}
-          </div>
+          <ModalViewFacilities />
         ) : (
-          <TagsSelection
-            selectedList={facilities}
-            options={facilityOptions}
-            onCancel={() => {
-              setShowFacilitiesModal(false)
-            }}
-            onSubmit={(localFacilities) => {
-              onSetFacilities(localFacilities)
-              setShowFacilitiesModal(false)
+          <EditFacilities
+            onSetFacilities={(data) => {
+              onSetFacilities(data);
+              handleCloseFacilitiesModal();
             }}
           />
         )}
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default Facilities
+export default Facilities;

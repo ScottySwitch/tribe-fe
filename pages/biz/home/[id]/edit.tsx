@@ -1,123 +1,135 @@
-import { useRouter } from "next/router"
-import Image from "next/image"
-import Link from "next/link"
-import React, { useCallback, useEffect, useState } from "react"
+import { useRouter } from "next/router";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useCallback, useEffect, useState } from "react";
 
-import Icon from "components/Icon/Icon"
-import Details from "components/BizHomePage/Details/Details"
-import EditAction from "components/BizHomePage/EditAction/EditAction"
-import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard"
-import OnboardChecklist from "components/BizHomePage/OnboardChecklist/OnboardChecklist"
-import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import Upload from "components/Upload/Upload"
-import { Categories, ListingHomePageScreens } from "enums"
-import BizListingApi from "../../../../services/biz-listing"
-import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu"
-import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems"
-import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals"
-import TagApi from "services/tag"
-import FacilityApi from "services/facility"
-import ReviewApi from "services/review"
+import Icon from "components/Icon/Icon";
+import Details from "components/BizHomePage/Details/Details";
+import EditAction from "components/BizHomePage/EditAction/EditAction";
+import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard";
+import OnboardChecklist from "components/BizHomePage/OnboardChecklist/OnboardChecklist";
+import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import Upload from "components/Upload/Upload";
+import { Categories, ListingHomePageScreens } from "enums";
+import BizListingApi from "../../../../services/biz-listing";
+import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu";
+import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems";
+import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals";
+import TagApi from "services/tag";
+import FacilityApi from "services/facility";
+import ReviewApi from "services/review";
 
-import styles from "styles/BizHomepage.module.scss"
-import Facilities from "components/BizHomePage/Facilities/Facilities"
-import { IOption } from "type"
-import Tags from "components/BizHomePage/Tags/Tags"
-import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours"
-import { getAddItemsFields } from "constant"
-import ProductApi from "../../../../services/product"
-import MenuApi from "../../../../services/menu"
-import DealApi from "../../../../services/deal"
-import BizListingRevision from "services/biz-listing-revision"
-import get from "lodash/get"
-import moment from "moment"
-import parseISO from "date-fns/parseISO"
-import Break from "components/Break/Break"
-import Contacts from "components/BizHomePage/Contacts/Contacts"
-import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews"
-import { now } from "lodash"
+import styles from "styles/BizHomepage.module.scss";
+import Facilities from "components/BizHomePage/Facilities/Facilities";
+import { IOption } from "type";
+import Tags from "components/BizHomePage/Tags/Tags";
+import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours";
+import { getAddItemsFields } from "constant";
+import ProductApi from "../../../../services/product";
+import MenuApi from "../../../../services/menu";
+import DealApi from "../../../../services/deal";
+import BizListingRevision from "services/biz-listing-revision";
+import get from "lodash/get";
+import moment from "moment";
+import parseISO from "date-fns/parseISO";
+import Break from "components/Break/Break";
+import Contacts from "components/BizHomePage/Contacts/Contacts";
+import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
+import { now } from "lodash";
+import { IAddListingForm } from "pages/add-listing";
 
 const CenterIcon = () => (
   <div className="flex flex-col items-center gap-1">
     <Icon icon="camera-color" size={40} />
     <p>Add photos/ videos</p>
   </div>
-)
+);
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
-  const { isViewPage } = props
-  const [category, setCategory] = useState(Categories.EAT)
-  const [screen, setScreen] = useState(ListingHomePageScreens.HOME)
-  const [description, setDescription] = useState<string>("")
-  const [facilities, setFacilities] = useState<IOption[]>([])
-  const [facilityOptions, setFacilityOptions] = useState<IOption[]>([])
-  const [tags, setTags] = useState<IOption[]>([])
-  const [tagOptions, setTagOptions] = useState<IOption[]>([])
-  const [openHours, setOpenHours] = useState([])
-  const [reviews, setReviews] = useState<{ [key: string]: any }[]>([])
-  const [listingRate, setListingRate] = useState(1)
-  const [priceRange, setPriceRange] = useState({ min: "", max: "", currency: "" })
-  const [socialInfo, setSocialInfo] = useState<any>("")
-  const [phoneNumber, setPhoneNumber] = useState<any>("")
-  const [action, setAction] = useState({ label: "", value: "" })
-  const [itemList, setItemList] = useState<{ [key: string]: any }[]>([])
-  const [menuList, setMenuList] = useState<{ [key: string]: any }[]>([])
-  const [dealList, setDealList] = useState<{ [key: string]: any }[]>([])
-  const [bizInvoices, setBizInvoices] = useState<{ [key: string]: any }[]>([])
+  const { isViewPage } = props;
+  const [category, setCategory] = useState(Categories.EAT);
+  const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
+  const [description, setDescription] = useState<string>("");
+  const [facilities, setFacilities] = useState<IAddListingForm | undefined>();
+  const [facilityOptions, setFacilityOptions] = useState<IOption[]>([]);
+  const [tags, setTags] = useState<IOption[]>([]);
+  const [tagOptions, setTagOptions] = useState<IOption[]>([]);
+  const [openHours, setOpenHours] = useState([]);
+  const [reviews, setReviews] = useState<{ [key: string]: any }[]>([]);
+  const [listingRate, setListingRate] = useState(1);
+  const [priceRange, setPriceRange] = useState({
+    min: "",
+    max: "",
+    currency: "",
+  });
+  const [socialInfo, setSocialInfo] = useState<any>("");
+  const [phoneNumber, setPhoneNumber] = useState<any>("");
+  const [action, setAction] = useState({ label: "", value: "" });
+  const [itemList, setItemList] = useState<{ [key: string]: any }[]>([]);
+  const [menuList, setMenuList] = useState<{ [key: string]: any }[]>([]);
+  const [dealList, setDealList] = useState<{ [key: string]: any }[]>([]);
+  const [bizInvoices, setBizInvoices] = useState<{ [key: string]: any }[]>([]);
 
-  const [bizListing, setBizListing] = useState<any>({})
-  const [listingImages, setListingImages] = useState<any>([])
-  const [logo, setLogo] = useState<any>([])
+  const [bizListing, setBizListing] = useState<any>({});
+  const [listingImages, setListingImages] = useState<any>([]);
+  const [logo, setLogo] = useState<any>([]);
 
-  const [isPaid, setIsPaid] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isRevision, setIsRevision] = useState<boolean>(false)
+  const [isPaid, setIsPaid] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRevision, setIsRevision] = useState<boolean>(false);
 
-  const router = useRouter()
-  const { query } = router
-  const { id: listingSlug } = query
+  const router = useRouter();
+  const { query } = router;
+  const { id: listingSlug } = query;
 
   const formatOptions = (list) =>
     list.map((item: any) => ({
       label: item.attributes.label,
       value: item.attributes.value,
       id: item.id,
-    }))
+    }));
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
-      let data
-      let bizListingRevisionData
-      let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
+      let data;
+      let bizListingRevisionData;
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (isViewPage) {
         //if normal user go to normal listing homepage
-        data = await BizListingApi.getBizListingBySlug(listingSlug)
+        data = await BizListingApi.getBizListingBySlug(listingSlug);
       } else {
         //if normal users go to edit listing homepage
-        data = await BizListingApi.getOwnerBizListingBySlug(listingSlug)
-        bizListingRevisionData = await BizListingRevision.getOwnerBizListingRevisionBySlug(listingSlug)
+        data = await BizListingApi.getOwnerBizListingBySlug(listingSlug);
+        bizListingRevisionData =
+          await BizListingRevision.getOwnerBizListingRevisionBySlug(
+            listingSlug
+          );
         console.log(bizListingRevisionData);
         if (get(bizListingRevisionData, "data.data.length") !== 0) {
-          setIsRevision(true)
+          setIsRevision(true);
         }
         //they will be redirected to home if do not own the listing
-        get(data, "data.data.length") === 0 && (window.location.href = "/")
+        get(data, "data.data.length") === 0 && (window.location.href = "/");
       }
 
-      const listing = get(bizListingRevisionData, "data.data[0]") || get(data, "data.data[0]")
+      const listing =
+        get(bizListingRevisionData, "data.data[0]") ||
+        get(data, "data.data[0]");
       if (listing) {
-        console.log(listing)
-        userInfo.now_biz_listing = listing
-        localStorage.setItem('user', JSON.stringify(userInfo))
-        const rawTags = get(listing, "attributes.tags.data") || []
-        const rawFacilities = get(listing, "attributes.facilities.data") || []
-        const invoiceList = get(listing, "attributes.biz_invoices.data") || []
-        const rawPhoneNumber = get(listing, "attributes.phone_number")
+        console.log(listing);
+        userInfo.now_biz_listing = listing;
+        localStorage.setItem("user", JSON.stringify(userInfo));
+        const rawTags = get(listing, "attributes.tags.data") || [];
+        const rawFacilities = get(listing, "attributes.facilities_data") || [];
+        const invoiceList = get(listing, "attributes.biz_invoices.data") || [];
+        const rawPhoneNumber = get(listing, "attributes.phone_number");
         const defaultPhone = rawPhoneNumber
-          ? rawPhoneNumber.substring(0, 2) + "XXXXXX" + rawPhoneNumber.substring(7)
-          : ""
-        const rawListing = get(listing, "attributes.products.data") || []
+          ? rawPhoneNumber.substring(0, 2) +
+            "XXXXXX" +
+            rawPhoneNumber.substring(7)
+          : "";
+        const rawListing = get(listing, "attributes.products.data") || [];
         const listingArray = rawListing.map((item) => ({
           name: get(item, "attributes.name"),
           is_revision: get(item, "attributes.is_revision"),
@@ -132,8 +144,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           websiteUrl: get(item, "attributes.website_url"),
           klookUrl: get(item, "attributes.klook_url"),
           isEdited: false,
-        }))
-        const rawMenu = get(listing, "attributes.menus.data") || []
+        }));
+        const rawMenu = get(listing, "attributes.menus.data") || [];
         const menuArray = rawMenu.map((item) => ({
           id: item.id,
           is_revision: get(item, "attributes.is_revision"),
@@ -142,8 +154,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           images: get(item, "attributes.menu_file"),
           imgUrl: get(item, "attributes.menu_file[0]"),
           isChange: false,
-        }))
-        const rawDeal = get(listing, "attributes.deals.data") || []
+        }));
+        const rawDeal = get(listing, "attributes.deals.data") || [];
         const dealArray = rawDeal.map((item) => ({
           id: item.id,
           is_revision: get(item, "attributes.is_revision"),
@@ -156,54 +168,62 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           // start_date: item.attributes.start_date,
           // end_date: moment(get(item,'attributes.end_date')).format("YYYY-MM-DD HH:mm:ss"),
           validUntil: parseISO(
-            moment(get(item, "attributes.end_date")).format("YYYY-MM-DD HH:mm:ss")
+            moment(get(item, "attributes.end_date")).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )
           ),
           isChange: false,
-        }))
-        const rawBizInvoices = get(listing, "attributes.biz_invoices.data") || []
+        }));
+        const rawBizInvoices =
+          get(listing, "attributes.biz_invoices.data") || [];
         const bizInvoicesArray = rawBizInvoices.map((item) => ({
           id: item.id,
-        }))
-        const tagArray = formatOptions(rawTags)
-        const arrayFacilities = formatOptions(rawFacilities)
+        }));
+        const tagArray = formatOptions(rawTags);
+        // const arrayFacilities = formatOptions(rawFacilities);
 
-        setBizListing(listing)
-        setAction(get(listing, "attributes.action"))
-        setListingImages(get(listing, "attributes.images"))
-        setCategory(get(listing, "attributes.categories.data[0].id") || Categories.BUY)
-        setDescription(get(listing, "attributes.description"))
-        setOpenHours(get(listing, "attributes.open_hours"))
-        setPriceRange(get(listing, "attributes.price_range"))
-        setSocialInfo(get(listing, "attributes.social_info"))
-        setDealList(get(listing, "attributes.deals.data"))
-        setLogo(listing.attributes.logo)
-        setTags(tagArray)
-        setFacilities(arrayFacilities)
-        setItemList(listingArray)
-        setMenuList(menuArray)
-        setDealList(dealArray)
-        setBizInvoices(bizInvoicesArray)
-        setListingRate(get(listing, "attributes.rate"))
-        if (invoiceList.length > 0) { 
-          setIsPaid(true)
-          setPhoneNumber(rawPhoneNumber)
+        setBizListing(listing);
+        setAction(get(listing, "attributes.action"));
+        setListingImages(get(listing, "attributes.images"));
+        setCategory(
+          get(listing, "attributes.categories.data[0].id") || Categories.BUY
+        );
+        setDescription(get(listing, "attributes.description"));
+        setOpenHours(get(listing, "attributes.open_hours"));
+        setPriceRange(get(listing, "attributes.price_range"));
+        setSocialInfo(get(listing, "attributes.social_info"));
+        setDealList(get(listing, "attributes.deals.data"));
+        setLogo(listing.attributes.logo);
+        setTags(tagArray);
+        setFacilities(rawFacilities);
+        setItemList(listingArray);
+        setMenuList(menuArray);
+        setDealList(dealArray);
+        setBizInvoices(bizInvoicesArray);
+        setListingRate(get(listing, "attributes.rate"));
+        if (invoiceList.length > 0) {
+          setIsPaid(true);
+          setPhoneNumber(rawPhoneNumber);
         } else {
-          setPhoneNumber(defaultPhone)
+          setPhoneNumber(defaultPhone);
         }
       }
-    }
+    };
 
     if (listingSlug) {
-      getListingData(listingSlug)
-      getTags()
-      getFacilities()
-      getBizListingReviews(listingSlug, "rating:desc")
+      getListingData(listingSlug);
+      getTags();
+      getFacilities();
+      getBizListingReviews(listingSlug, "rating:desc");
     }
-  }, [listingSlug, isViewPage])
+  }, [listingSlug, isViewPage]);
 
   const getBizListingReviews = async (listingSlug, sortBy) => {
-    const data = await ReviewApi.getReviewsByBizListingSlugWithSort(listingSlug, sortBy)
-    const rawReview = get(data, "data.data") || []
+    const data = await ReviewApi.getReviewsByBizListingSlugWithSort(
+      listingSlug,
+      sortBy
+    );
+    const rawReview = get(data, "data.data") || [];
     const reviewArray = rawReview.map((item) => ({
       id: item.id,
       biz_listing: get(item, "attributes.biz_listing"),
@@ -213,89 +233,103 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       reply_reviews: get(item, "attributes.reply_reviews"),
       date_create_reply: get(item, "attributes.date_create_reply"),
       user: get(item, "attributes.user"),
-      visited_date: get(item, "attributes.visited_date")
-    }))
-    setReviews(reviewArray)
-  }
+      visited_date: get(item, "attributes.visited_date"),
+    }));
+    setReviews(reviewArray);
+  };
 
   const handleChangeReviewsSequence = async ({ value }: IOption) => {
     if (value === "top") {
-      await getBizListingReviews(listingSlug, "rating:desc")
+      await getBizListingReviews(listingSlug, "rating:desc");
     } else {
-      await getBizListingReviews(listingSlug, "id:desc")
+      await getBizListingReviews(listingSlug, "id:desc");
     }
-  }
+  };
 
   //Get tags
   const getTags = async () => {
-    const data = await TagApi.getTags()
-    const tagsList = get(data, "data.data") || []
+    const data = await TagApi.getTags();
+    const tagsList = get(data, "data.data") || [];
     const tagArray = tagsList.map((item) => ({
       label: item.attributes.label,
       value: item.attributes.value,
       id: item.id,
-    }))
-    setTagOptions(tagArray)
-  }
+    }));
+    setTagOptions(tagArray);
+  };
 
   //Get Facility
   const getFacilities = async () => {
-    const data = await FacilityApi.getFacility()
-    const facilitiesList = get(data, "data.data") || []
+    const data = await FacilityApi.getFacility();
+    const facilitiesList = get(data, "data.data") || [];
     const facilitiesArray = facilitiesList.map((item) => ({
       label: item.attributes.label,
       value: item.attributes.value,
       id: item.id,
-    }))
-    setFacilityOptions(facilitiesArray)
-  }
+    }));
+    setFacilityOptions(facilitiesArray);
+  };
 
   // TODO: check function upload multiple images
-  const handleChangeImages = (srcImages) => setListingImages(srcImages)
-  const handleChangeLogo = (srcImages) => setLogo(srcImages)
-  const handleSetPriceRange = (priceRange) => setPriceRange(priceRange)
-  const handleSetSocialInfo = (socialInfo) => setSocialInfo(socialInfo)
-  const handleSetPhoneNumber = (phoneNumber) => setPhoneNumber(phoneNumber)
-  const handleSetDescription = (description) => setDescription(description)
-  const handleSetFacilities = (facilities) => setFacilities(facilities)
-  const handleSetTags = (tags) => setTags(tags)
-  const handleSetOpenHours = (openHours) => setOpenHours(openHours)
+  const handleChangeImages = (srcImages) => setListingImages(srcImages);
+  const handleChangeLogo = (srcImages) => setLogo(srcImages);
+  const handleSetPriceRange = (priceRange) => setPriceRange(priceRange);
+  const handleSetSocialInfo = (socialInfo) => setSocialInfo(socialInfo);
+  const handleSetPhoneNumber = (phoneNumber) => setPhoneNumber(phoneNumber);
+  const handleSetDescription = (description) => setDescription(description);
+  const handleSetFacilities = (facilities) => setFacilities(facilities);
+  const handleSetTags = (tags) => setTags(tags);
+  const handleSetOpenHours = (openHours) => setOpenHours(openHours);
   const handleSetAction = (action: string, value: string) =>
-    setAction({ label: action, value: value })
+    setAction({ label: action, value: value });
   const handleSetItemList = (list: { [key: string]: string }[]) => {
-    setItemList(list)
-    setScreen(ListingHomePageScreens.HOME)
-  }
+    setItemList(list);
+    setScreen(ListingHomePageScreens.HOME);
+  };
   const handleSetDealList = (dealList: { [key: string]: string }[]) => {
-    setDealList(dealList)
-    setScreen(ListingHomePageScreens.HOME)
-  }
+    setDealList(dealList);
+    setScreen(ListingHomePageScreens.HOME);
+  };
   const handleSetMenu = (menu) => {
-    setMenuList(menu)
-    setScreen(ListingHomePageScreens.HOME)
-  }
-  const handleCancel = () => setScreen(ListingHomePageScreens.HOME)
+    setMenuList(menu);
+    setScreen(ListingHomePageScreens.HOME);
+  };
+  const handleCancel = () => setScreen(ListingHomePageScreens.HOME);
 
   const handleSubmitReply = (reply, review) => {
     const newReviewArray: { [key: string]: any }[] = reviews;
-    const indexReviewSelected = newReviewArray.findIndex((item: any) => item.id === review.id);
-    newReviewArray[indexReviewSelected].reply_reviews = reply
-    newReviewArray[indexReviewSelected].date_create_reply = new Date  
-    setReviews(newReviewArray)
-  }
+    const indexReviewSelected = newReviewArray.findIndex(
+      (item: any) => item.id === review.id
+    );
+    newReviewArray[indexReviewSelected].reply_reviews = reply;
+    newReviewArray[indexReviewSelected].date_create_reply = new Date();
+    setReviews(newReviewArray);
+  };
 
   const handleSubmit = async () => {
-    setIsLoading(true)
-    let bizListingRevisionCreateId
-    const currentItemList = [...itemList].filter((item) => !item.isNew && !item.isEdited)
-    const currentMenuList = [...menuList].filter((item) => !item.isNew && !item.isEdited)
-    const currentDealList = [...dealList].filter((item) => !item.isNew && !item.isEdited)
-    const newItemList = itemList.filter((item) => item.isNew)
-    const editedItemList = itemList.filter((item) => !item.isNew && item.isEdited)
-    const newMenuList = menuList.filter((item) => item.isNew)
-    const editedMenuList = menuList.filter((item) => !item.isNew && item.isEdited)
-    const newDealList = dealList.filter((item) => item.isNew)
-    const editedDealList = dealList.filter((item) => !item.isNew && item.isEdited)
+    setIsLoading(true);
+    let bizListingRevisionCreateId;
+    const currentItemList = [...itemList].filter(
+      (item) => !item.isNew && !item.isEdited
+    );
+    const currentMenuList = [...menuList].filter(
+      (item) => !item.isNew && !item.isEdited
+    );
+    const currentDealList = [...dealList].filter(
+      (item) => !item.isNew && !item.isEdited
+    );
+    const newItemList = itemList.filter((item) => item.isNew);
+    const editedItemList = itemList.filter(
+      (item) => !item.isNew && item.isEdited
+    );
+    const newMenuList = menuList.filter((item) => item.isNew);
+    const editedMenuList = menuList.filter(
+      (item) => !item.isNew && item.isEdited
+    );
+    const newDealList = dealList.filter((item) => item.isNew);
+    const editedDealList = dealList.filter(
+      (item) => !item.isNew && item.isEdited
+    );
     console.log(isRevision);
     if (isRevision) {
       await BizListingRevision.updateBizListingRevision(bizListing.id, {
@@ -315,15 +349,14 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
       }).then((response) => {
-        console.log(response)
-      })
-    }
-    else {
+        console.log(response);
+      });
+    } else {
       await BizListingRevision.createBizListingRevision({
         name: get(bizListing, "attributes.name"),
         slug: get(bizListing, "attributes.slug"),
-        biz_listing: (bizListing.id).toString(),
-        parent_id: (bizListing.id).toString(),
+        biz_listing: bizListing.id.toString(),
+        parent_id: bizListing.id.toString(),
         description: description,
         price_range: priceRange,
         action: action,
@@ -340,11 +373,14 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
         biz_invoices: bizInvoices.map((item) => item.id) || [],
-        categories: get(bizListing, "attributes.categories.data").map((item) => item.id) || []    
+        categories:
+          get(bizListing, "attributes.categories.data").map(
+            (item) => item.id
+          ) || [],
       }).then((response) => {
-        console.log(response)
-        bizListingRevisionCreateId = response.data.data.id
-      })
+        console.log(response);
+        bizListingRevisionCreateId = response.data.data.id;
+      });
     }
 
     //API ItemList
@@ -361,13 +397,17 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           website_url: item.websiteUrl,
           klook_url: item.klookUrl,
           is_revision: true,
-        }
-        await ProductApi.createProduct(CreateData)
+        };
+        await ProductApi.createProduct(CreateData);
       })
-    )
+    );
     await Promise.all(
       editedItemList.map(async (item) => {
-        const parent_id = !item.is_revision ? item.id : item.parent_id ? item.parent_id : ''
+        const parent_id = !item.is_revision
+          ? item.id
+          : item.parent_id
+          ? item.parent_id
+          : "";
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
           name: item.name,
@@ -379,11 +419,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           website_url: item.websiteUrl,
           klook_url: item.klookUrl,
           is_revision: true,
-          parent_id: parent_id
-        }
-        item.is_revision ? await ProductApi.updateProduct(item.id, updateData) : await ProductApi.createProduct(updateData)
+          parent_id: parent_id,
+        };
+        item.is_revision
+          ? await ProductApi.updateProduct(item.id, updateData)
+          : await ProductApi.createProduct(updateData);
       })
-    )
+    );
 
     //API MenuList
     await Promise.all(
@@ -393,28 +435,35 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           name: item.name,
           menu_file: item.images,
           is_revision: true,
-        }
-        await MenuApi.createMenu(CreateData)
+        };
+        await MenuApi.createMenu(CreateData);
       })
-    )
+    );
     await Promise.all(
       editedMenuList.map(async (item) => {
-        const parent_id = !item.is_revision ? item.id : item.parent_id ? item.parent_id : ''
+        const parent_id = !item.is_revision
+          ? item.id
+          : item.parent_id
+          ? item.parent_id
+          : "";
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
           name: item.name,
           menu_file: item.images,
           is_revision: true,
-          parent_id: parent_id
-        }
-        item.is_revision ? await MenuApi.updateMenu(item.id, updateData) : await MenuApi.createMenu(updateData)
+          parent_id: parent_id,
+        };
+        item.is_revision
+          ? await MenuApi.updateMenu(item.id, updateData)
+          : await MenuApi.createMenu(updateData);
       })
-    )
+    );
 
     //API DealList
     await Promise.all(
       newDealList.map(async (item) => {
-        let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
+        let convertEndDate =
+          moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z";
         const CreateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
           name: item.name,
@@ -424,14 +473,19 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           start_date: item.validUntil,
           end_date: convertEndDate,
           is_revision: true,
-        }
-        await DealApi.createDeal(CreateData)
+        };
+        await DealApi.createDeal(CreateData);
       })
-    )
+    );
     await Promise.all(
       editedDealList.map(async (item) => {
-        const parent_id = !item.is_revision ? item.id : item.parent_id ? item.parent_id : ''
-        let convertEndDate = moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z"
+        const parent_id = !item.is_revision
+          ? item.id
+          : item.parent_id
+          ? item.parent_id
+          : "";
+        let convertEndDate =
+          moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z";
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
           name: item.name,
@@ -440,14 +494,16 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           terms_conditions: item.termsConditions,
           end_date: convertEndDate,
           is_revision: true,
-          parent_id: parent_id
-        }
-        item.is_revision ? await DealApi.updateDeal(item.id, updateData) : await DealApi.createDeal(updateData)
+          parent_id: parent_id,
+        };
+        item.is_revision
+          ? await DealApi.updateDeal(item.id, updateData)
+          : await DealApi.createDeal(updateData);
       })
-    )
+    );
 
     //API Reviews
-     await Promise.all(
+    await Promise.all(
       reviews.map(async (item) => {
         const updateData = {
           images: item.images,
@@ -456,12 +512,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           content: item.content,
           reply_reviews: item.reply_reviews,
           date_create_reply: item.date_create_reply,
-        }
-        await ReviewApi.updateReviews(item.id, updateData)
+        };
+        await ReviewApi.updateReviews(item.id, updateData);
       })
-    )
-    window.location.reload()
-  }
+    );
+    window.location.reload();
+  };
 
   return (
     bizListing.attributes && (
@@ -514,10 +570,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               />
               <Break show={!isViewPage} />
               <Facilities
+                category={category}
                 isViewPage={isViewPage}
                 facilities={facilities}
                 onSetFacilities={handleSetFacilities}
-                facilityOptions={facilityOptions}
+                // facilityOptions={facilityOptions}
               />
               <Break show={!isViewPage} />
               <Tags
@@ -602,14 +659,14 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         </SectionLayout>
       </div>
     )
-  )
-}
+  );
+};
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
   return {
     props: {},
-  }
+  };
 }
 
-export default EditListingHomepage
+export default EditListingHomepage;

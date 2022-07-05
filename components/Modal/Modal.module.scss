@@ -7,13 +7,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 101vh;
+  height: 0;
   width: 100vw;
   background-color: #3c4467a1;
   transition: all 0.001s;
+  overflow: hidden;
   z-index: -1;
 
   &.show {
+    overflow: auto;
+    height: 101vh;
     z-index: 4;
 
     .container {
@@ -174,7 +177,7 @@
 
   .full_height {
     &.show {
-      z-index: 4;
+      z-index: 5;
     }
     .container {
       height: 100%;

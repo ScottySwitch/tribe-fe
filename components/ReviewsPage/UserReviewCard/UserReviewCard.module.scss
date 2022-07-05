@@ -28,6 +28,7 @@
       .header {
         display: flex;
         justify-content: space-between;
+        width: 100%;
       }
     }
 
@@ -170,9 +171,9 @@
         }
       }
 
-      .description_review{
+      .description_review {
         color: $bg-500;
-        white-space: pre-wrap
+        white-space: pre-wrap;
       }
     }
   }

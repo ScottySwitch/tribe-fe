@@ -1,36 +1,41 @@
-import React, { useEffect, useState } from "react"
-import Image from "next/image"
-import { useRouter } from "next/router"
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
-import { categories, contributePopOverList, loginInforItem, switchAccountList } from "constant"
-import Popover from "components/Popover/Popover"
-import Icon from "components/Icon/Icon"
-import Button from "components/Button/Button"
-import Menu from "components/Menu/Menu"
+import {
+  categories,
+  contributePopOverList,
+  loginInforItem,
+  switchAccountList,
+} from "constant";
+import Popover from "components/Popover/Popover";
+import Icon from "components/Icon/Icon";
+import Button from "components/Button/Button";
+import Menu from "components/Menu/Menu";
 
-import styles from "./Header.module.scss"
-import { ILoginInfor } from "pages/_app"
-import { UsersTypes } from "enums"
-import Break from "components/Break/Break"
-import { randomId } from "utils"
-import get from "lodash/get"
+import styles from "./Header.module.scss";
+import { ILoginInfor } from "pages/_app";
+import { UsersTypes } from "enums";
+import Break from "components/Break/Break";
+import { randomId } from "utils";
+import get from "lodash/get";
 
 export const Categories = (props: {
-  currentCategory?: string
-  onSetCurrentCategory: (e: string) => void
+  currentCategory?: string;
+  onSetCurrentCategory: (e: string) => void;
 }) => {
-  const { onSetCurrentCategory, currentCategory } = props
+  const { onSetCurrentCategory, currentCategory } = props;
   return (
     <React.Fragment>
       {categories.map((cat) => {
-        const isSelected = currentCategory === cat.label
+        const isSelected = currentCategory === cat.label;
         const categoryContent = (
           <React.Fragment>
             {cat.options.map((value) => (
               <div key={value.value}>{value.value}</div>
             ))}
           </React.Fragment>
-        )
+        );
         return (
           <Popover key={cat.label} content={categoryContent}>
             <div
@@ -41,14 +46,14 @@ export const Categories = (props: {
               <div className={cat.width}>{cat.label}</div>
             </div>
           </Popover>
-        )
+        );
       })}
     </React.Fragment>
-  )
-}
+  );
+};
 
 export const ContributeContent = () => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <React.Fragment>
       {contributePopOverList.map((item) => (
@@ -58,29 +63,33 @@ export const ContributeContent = () => {
         </div>
       ))}
     </React.Fragment>
-  )
-}
+  );
+};
 
 export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
-  const router = useRouter()
-  const userInfo = JSON.parse(localStorage.getItem('user') || '{}')
-  const userOwnerListing = userInfo.owner_listings || []
-  const ownerListing = userOwnerListing.map((item) => item.attributes)
+  const router = useRouter();
+  const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+  const userOwnerListing = userInfo.owner_listings || [];
+  const ownerListing = userOwnerListing.map((item) => item.attributes);
+  const {
+    query: { id: currentHomeSlug },
+  } = router;
   return (
     <React.Fragment>
       {ownerListing.map((item) => (
-        <div 
-          key={item.name} 
+        <div
+          key={item.name}
           className={`${styles.wrapper_content} cursor-pointer`}
+          onClick={() => (window.location.href = `/biz/home/${item.slug}/edit`)}
         >
           <Image
             src={item.images[0] || require("public/images/page-avatar.png")}
             alt=""
             width={30}
             height={30}
-            onClick={() => router.push(`/biz/information/${item.slug}`)}
+            style={{ borderRadius: "50%" }}
           />
-          <div className={styles.name} onClick={() => router.push(`/biz/home/${item.slug}/edit`)}>{item.name}</div>
+          <div className={styles.name}>{item.name}</div>
         </div>
       ))}
       <div className="cursor-pointer flex" onClick={onSwitchToNormalUser}>
@@ -89,47 +98,55 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
           alt=""
           width={30}
           height={30}
-          onClick={() => router.push("/biz/information")}
+          onClick={() => router.push(`/biz/information/${currentHomeSlug}`)}
+          style={{ borderRadius: "50%" }}
         />
         <div>
-          <strong>{userInfo.first_name} {userInfo.last_name}</strong>
+          <strong>
+            {userInfo.first_name} {userInfo.last_name}
+          </strong>
           <p className="text-xs">User account</p>
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
-  const router = useRouter()
-  const { query } = router
-  const { id: listingSlug } = query
+  const router = useRouter();
+  const { query } = router;
+  const { id: listingSlug } = query;
 
   const handleSwitchToBizUser = () => {
-    let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
-    userInfo.type = UsersTypes.BIZ_USER 
-    localStorage.setItem('user', JSON.stringify(userInfo))
-    if (get(userInfo, 'owner_listings.length')> 0) {
-      window.location.href = `/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.type = UsersTypes.BIZ_USER;
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    if (get(userInfo, "owner_listings.length") > 0) {
+      window.location.href = `/biz/home/${get(
+        userInfo,
+        "owner_listings[0].attributes.slug"
+      )}/edit`;
       // router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
+    } else {
+      router.push("/claim");
     }
-    else {
-      router.push("/claim")
-    }
-  }
+  };
 
   const handleSwitchToNormalUser = () => {
-    let userInfo = JSON.parse(localStorage.getItem('user') || '{}')
-    userInfo.type = UsersTypes.NORMAL_USER 
-    localStorage.setItem('user', JSON.stringify(userInfo))
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.type = UsersTypes.NORMAL_USER;
+    localStorage.setItem("user", JSON.stringify(userInfo));
     // router.pathname === "/" ? router.reload() : router.push("/")
-    router.reload()
-  }
+    router.reload();
+  };
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {
     return (
       <>
-        <div className="flex gap-2 cursor-pointer mr-[32px]" onClick={handleSwitchToBizUser}>
+        <div
+          className="flex gap-2 cursor-pointer mr-[32px]"
+          onClick={handleSwitchToBizUser}
+        >
           <Icon icon="business" size={20} />
           Business
         </div>
@@ -141,7 +158,10 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           />
         </Popover>
         {/* <Icon icon="noti-color" size={20} /> */}
-        <Popover content={<Menu loginInfor={loginInfor} />} position="bottom-left">
+        <Popover
+          content={<Menu loginInfor={loginInfor} />}
+          position="bottom-left"
+        >
           <Image
             src={loginInfor.avatar || require("public/images/avatar.png")}
             alt=""
@@ -151,35 +171,55 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           />
         </Popover>
       </>
-    )
+    );
   }
   if (!!loginInfor.token && loginInfor.type === UsersTypes.BIZ_USER) {
     return (
       <>
         <Popover
-          content={<SwitchAccountsContent onSwitchToNormalUser={handleSwitchToNormalUser} />}
+          content={
+            <SwitchAccountsContent
+              onSwitchToNormalUser={handleSwitchToNormalUser}
+            />
+          }
           position="bottom-left"
         >
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <Icon icon="user-color" size={20} />
             Switch accounts
           </div>
         </Popover>
         <Image
-          src={get(JSON.parse(localStorage.getItem('user') || '{}'), 'now_biz_listing.attributes.logo[0]') || require("public/images/page-avatar.png")}
+          src={
+            get(
+              JSON.parse(localStorage.getItem("user") || "{}"),
+              "now_biz_listing.attributes.logo[0]"
+            ) || require("public/images/page-avatar.png")
+          }
           alt=""
           width={40}
           height={40}
-          onClick={() => router.push(`/biz/information/${get(JSON.parse(localStorage.getItem('user') || '{}'), 'now_biz_listing.attributes.slug')}`)}
+          onClick={() =>
+            router.push(
+              `/biz/information/${get(
+                JSON.parse(localStorage.getItem("user") || "{}"),
+                "now_biz_listing.attributes.slug"
+              )}`
+            )
+          }
           className={`${styles.avatar} cursor-pointer`}
         />
       </>
-    )
+    );
   }
   return (
     <>
-      <Button text="Sign up" variant="outlined" onClick={() => router.push("/signup")} />
+      <Button
+        text="Sign up"
+        variant="outlined"
+        onClick={() => router.push("/signup")}
+      />
       <Button text="Login" onClick={() => router.push("/login")} />
     </>
-  )
-}
+  );
+};

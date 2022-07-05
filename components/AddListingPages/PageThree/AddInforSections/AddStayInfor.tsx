@@ -1,16 +1,16 @@
-import { useForm } from "react-hook-form"
-import { useState } from "react"
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 
-import Badge from "components/Badge/Badge"
-import Button from "components/Button/Button"
-import Input from "components/Input/Input"
-import Question from "components/Question/Question"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import Checkbox from "components/Checkbox/Checkbox"
-import Break from "components/Break/Break"
-import Modal from "components/Modal/Modal"
-import OpenHours from "components/OpenHours/OpenHours"
-import { YesNo } from "enums"
+import Badge from "components/Badge/Badge";
+import Button from "components/Button/Button";
+import Input from "components/Input/Input";
+import Question from "components/Question/Question";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import Checkbox from "components/Checkbox/Checkbox";
+import Break from "components/Break/Break";
+import Modal from "components/Modal/Modal";
+import OpenHours from "components/OpenHours/OpenHours";
+import { YesNo } from "enums";
 import {
   accommodation,
   areas,
@@ -18,72 +18,99 @@ import {
   foodOptions,
   nonHalalActivities,
   prayerFacilities,
-} from "../constant"
-import TagsSelection from "components/TagsSelection/TagsSelection"
-import { IOption } from "type"
-import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
-import Upload from "components/Upload/Upload"
-import { IAddListingForm } from "pages/add-listing"
-import Icon from "components/Icon/Icon"
-import Select from "components/Select/Select"
-import { currencyOptions } from "constant"
+} from "../constant";
+import TagsSelection from "components/TagsSelection/TagsSelection";
+import { IOption } from "type";
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
+import Upload from "components/Upload/Upload";
+import { IAddListingForm } from "pages/add-listing";
+import Icon from "components/Icon/Icon";
+import Select from "components/Select/Select";
+import { currencyOptions } from "constant";
 
 interface AddStayInforProps {
-  isEdit?: boolean
-  subCateList: IOption[]
-  data: { [key: string]: any }
-  show?: boolean
-  onPrevPage?: () => void
-  onPreview?: (data: { [key: string]: any }) => void
-  onEdit?: (data: IAddListingForm) => void
+  isEdit?: boolean;
+  facilityMode?: boolean;
+  subCateList: IOption[];
+  data?: IAddListingForm;
+  show?: boolean;
+  onPrevPage?: () => void;
+  onPreview?: (data: IAddListingForm) => void;
+  onEdit?: (data: IAddListingForm) => void;
 }
 
 const AddStayInfor = (props: AddStayInforProps) => {
-  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } = props
+  const {
+    isEdit,
+    facilityMode,
+    data,
+    show,
+    subCateList,
+    onEdit,
+    onPrevPage,
+    onPreview,
+  } = props;
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      categoryKind: data.categoryKind,
-      tags: data.tags,
-      currency: data.currency,
-      minPrice: data.minPrice,
-      images: data.images,
-      maxPrice: data.maxPrice,
-      foodOptions: data.foodOptions,
-      paryerFacilities: data.paryerFacilities,
-      foodOptionsRamadan: data.foodOptionsRamadan,
-      nonHalalActivities: data.nonHalalActivities,
-      agreePolicies: data.agreePolicies,
-      openHours: data.openHours,
+      categoryKind: data?.categoryKind,
+      tags: data?.tags,
+      currency: data?.currency,
+      minPrice: data?.minPrice,
+      images: data?.images,
+      maxPrice: data?.maxPrice,
+      foodOptions: data?.foodOptions,
+      paryerFacilities: data?.paryerFacilities,
+      foodOptionsRamadan: data?.foodOptionsRamadan,
+      nonHalalActivities: data?.nonHalalActivities,
+      agreePolicies: data?.agreePolicies,
+      openHours: data?.openHours,
     },
-  })
+  });
 
-  const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
-  const [showTagsModal, setShowTagsModal] = useState(false)
-  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
+  const [showTagsModal, setShowTagsModal] = useState(false);
+  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
+  const [categoryKind, setCategoryKind] = useState<string | undefined>(
+    getValues("categoryKind")
+  );
 
   const onSubmit = (data) => {
-    onPreview?.(data)
-    onEdit?.(data)
-  }
+    onPreview?.(data);
+    onEdit?.(data);
+  };
 
   if (!show) {
-    return null
+    return null;
   }
+
+  const title = facilityMode
+    ? undefined
+    : isEdit
+    ? "Business Detail"
+    : "Add a place to stay";
+
+  const subTitle = facilityMode
+    ? undefined
+    : isEdit
+    ? undefined
+    : "After you complete this form, you'll be able to make changes before submitting.";
+
+  const sectionContainer = facilityMode ? "pt-0" : undefined;
+
   return (
     <>
       <SectionLayout
-        title={isEdit ? "Business Detail" : "Add a place to stay"}
-        subTitle={
-          isEdit
-            ? undefined
-            : "After you complete this form, you'll be able to make changes before submitting."
-        }
+        title={title}
+        subTitle={subTitle}
+        className={sectionContainer}
         containerClassName={isEdit ? "w-full px-[30px]" : ""}
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Question question="What is the category best associated with this accommodation?">
+          <Question
+            show={!facilityMode}
+            question="What is the category best associated with this accommodation?"
+          >
             <div className="flex flex-wrap gap-2">
               {associatedCategories.map((opt) => (
                 <Badge
@@ -91,8 +118,8 @@ const AddStayInfor = (props: AddStayInforProps) => {
                   text={opt.label}
                   selected={categoryKind === opt.label}
                   onClick={() => {
-                    setValue("categoryKind", opt.label)
-                    setCategoryKind(opt.label)
+                    setValue("categoryKind", opt.label);
+                    setCategoryKind(opt.label);
                   }}
                 />
               ))}
@@ -100,6 +127,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
             <p>A hotel, motel, or bed and breakfast.</p>
           </Question>
           <Question
+            show={!facilityMode}
             question="What type of property best describe this accommodation?"
             instruction="Select 5 max"
             optional
@@ -113,7 +141,11 @@ const AddStayInfor = (props: AddStayInforProps) => {
               onClick={() => setShowTagsModal(true)}
             />
           </Question>
-          <Question question="What are the opening hours?" optional>
+          <Question
+            show={!facilityMode}
+            question="What are the opening hours?"
+            optional
+          >
             <PreviewValue valueKey="openHours" value={getValues("openHours")} />
             <br />
             <Button
@@ -124,7 +156,11 @@ const AddStayInfor = (props: AddStayInforProps) => {
               onClick={() => setShowOpenHoursModal(true)}
             />
           </Question>
-          <Question question="What tags best describe this place? " optional>
+          <Question
+            show={!facilityMode}
+            question="What tags best describe this place? "
+            optional
+          >
             <div className="flex flex-col gap-y-5">
               {accommodation.map((item) => (
                 <Checkbox
@@ -137,7 +173,11 @@ const AddStayInfor = (props: AddStayInforProps) => {
               ))}
             </div>
           </Question>
-          <Question question="What’s the average price range of this service?" optional>
+          <Question
+            show={!facilityMode}
+            question="What’s the average price range of this service?"
+            optional
+          >
             <div className="w-3/5">
               <Select
                 placeholder="Select a currency"
@@ -160,7 +200,10 @@ const AddStayInfor = (props: AddStayInforProps) => {
               </div>
             </div>
           </Question>
-          <Question question="What are the Halal food options available?" optional>
+          <Question
+            question="What are the Halal food options available?"
+            optional
+          >
             <div className="flex flex-col gap-3">
               {foodOptions.map((item) => (
                 <Checkbox
@@ -173,7 +216,10 @@ const AddStayInfor = (props: AddStayInforProps) => {
               ))}
             </div>
           </Question>
-          <Question question="What are the prayer facilities available?" optional>
+          <Question
+            question="What are the prayer facilities available?"
+            optional
+          >
             <div className="flex flex-col gap-y-5">
               {prayerFacilities.map((item) => (
                 <Checkbox
@@ -203,7 +249,10 @@ const AddStayInfor = (props: AddStayInforProps) => {
               ))}
             </div>
           </Question>
-          <Question question="What are the non-Halal activities in the hotel?" optional>
+          <Question
+            question="What are the non-Halal activities in the hotel?"
+            optional
+          >
             <div className="flex flex-col gap-y-5">
               {nonHalalActivities.map((item) => (
                 <Checkbox
@@ -229,7 +278,9 @@ const AddStayInfor = (props: AddStayInforProps) => {
               fileList={getValues("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) => setValue("images", [...(getValues("images") || []), ...urls])}
+              onChange={(urls) =>
+                setValue("images", [...(getValues("images") || []), ...urls])
+              }
             />
           </Question>
           <Question show={!isEdit}>
@@ -237,7 +288,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
             <Checkbox
               register={register("agreePolicies")}
               label={
-                data.relationship === YesNo.NO
+                data?.relationship === YesNo.NO
                   ? "I certify that this is a genuine attraction  "
                   : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
               }
@@ -245,7 +296,12 @@ const AddStayInfor = (props: AddStayInforProps) => {
           </Question>
           <br /> <Break /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
-            <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
+            <Button
+              text="Go back"
+              variant="underlined"
+              width="fit-content"
+              onClick={onPrevPage}
+            />
             <Button text="Continue" size="small" width={270} type="submit" />
           </div>
         </form>
@@ -258,12 +314,12 @@ const AddStayInfor = (props: AddStayInforProps) => {
         onClose={() => setShowOpenHoursModal(false)}
       >
         <OpenHours
-          data={getValues("openHours")}
+          data={getValues("openHours") || []}
           onCancel={() => setShowOpenHoursModal(false)}
           onSubmit={(openHours) => {
-            setShowOpenHoursModal(false)
-            console.log(openHours)
-            setValue("openHours", openHours)
+            setShowOpenHoursModal(false);
+            console.log(openHours);
+            setValue("openHours", openHours);
           }}
         />
       </Modal>
@@ -280,13 +336,13 @@ const AddStayInfor = (props: AddStayInforProps) => {
           selectedList={getValues("tags")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
-            setValue("tags", list)
-            setShowTagsModal(false)
+            setValue("tags", list);
+            setShowTagsModal(false);
           }}
         />
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default AddStayInfor
+export default AddStayInfor;
