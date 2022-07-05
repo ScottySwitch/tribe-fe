@@ -27,7 +27,7 @@ const Upload = (props: UploadProps) => {
     centerIcon = <Icon icon="camera" size={40} />,
     multiple,
     disabled,
-    accept = "image/*",
+    accept = "image/*, video/*",
     fileList = [],
     type = "media",
     isPaid,
