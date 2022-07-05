@@ -1,6 +1,7 @@
 import axios from "axios";
 import classNames from "classnames";
 import Icon from "components/Icon/Icon";
+import { get } from "lodash";
 import Image from "next/image";
 import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./Upload.module.scss";
@@ -35,16 +36,32 @@ const Upload = (props: UploadProps) => {
   const initFileList = multiple ? fileList : lastItemArray;
 
   const [srcList, setSrcList] = useState<string[]>(initFileList);
+  const [localFileList, setLocalFileList] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  const handleChange = (event: any) => {
-    const file = event.target.files[0];
-    const src = URL.createObjectURL(file);
-    const newFileList = multiple ? [...srcList, src] : [src];
+  const handleChange = (event: any, src?: any) => {
+    const imgIndex: any = srcList.indexOf(src);
+    console.log(imgIndex);
+
+    const files: Blob[] = Object.values(event.target.files);
+    const srces = files?.map((file) => URL.createObjectURL(file));
+    let newFileList = [...srcList];
+
+    if (!multiple) {
+      newFileList = [...srces];
+    } else if (imgIndex !== -1) {
+      newFileList[imgIndex] = srces[0];
+    } else {
+      newFileList = [...newFileList, ...srces];
+    }
+
     setSrcList(newFileList);
+
     setIsUploading(true);
     let data = new FormData();
-    data.append("files", file);
+    files.forEach((file) => {
+      data.append("files", file);
+    });
 
     axios
       .post(
@@ -58,7 +75,8 @@ const Upload = (props: UploadProps) => {
         }
       )
       .then((res) => {
-        if (Array.isArray(res.data.urls) && res.data.urls.length > 0) {
+        if (get(res, "data.urls.length") > 0) {
+          setLocalFileList([...fileList, ...res.data.urls]);
           onChange?.([...fileList, ...res.data.urls]);
         }
       })
@@ -77,19 +95,27 @@ const Upload = (props: UploadProps) => {
     [styles.disabled]: disabled,
   });
 
-  const Input = () => (
-    <React.Fragment>
-      <div className={styles.add_icon}>{centerIcon}</div>
-      <input
-        disabled={disabled || isUploading}
-        type="file"
-        name={name}
-        onChange={handleChange}
-        accept={accept}
-        multiple={multiple}
-      />
-    </React.Fragment>
+  const Input = ({ onChange }) => (
+    <input
+      disabled={disabled || isUploading}
+      type="file"
+      name={name}
+      accept={accept}
+      multiple={multiple}
+      onChange={onChange}
+    />
   );
+
+  const handleRemoveItem = (src) => {
+    const imgIndex: any = srcList.indexOf(src);
+    const newSrcList = [...srcList].filter((item) => item !== src);
+    const newFileList = [...localFileList].filter(
+      (item, index) => imgIndex !== index
+    );
+    setSrcList(newSrcList);
+    setLocalFileList(newFileList);
+    onChange?.(newFileList);
+  };
 
   const imageClassName = classNames(styles.image, {
     [styles.uploading]: isUploading,
@@ -98,22 +124,26 @@ const Upload = (props: UploadProps) => {
   return (
     <div className={containerClassName}>
       {Array.isArray(srcList) &&
-        srcList.length > 0 &&
-        srcList.map((src, index) => (
-          <div className={imageClassName} key={src}>
+        srcList.map((src) => (
+          <div key={src} className={imageClassName}>
+            <div className={styles.close} onClick={() => handleRemoveItem(src)}>
+              <Icon icon="cancel" size={25} />
+            </div>
+            <div className={styles.add_icon}>{centerIcon}</div>
             <div className={styles.loader} />
             <Image src={src} alt="" layout="fill" />
-            <Input />
+            <Input onChange={(e) => handleChange(e, src)} />
           </div>
         ))}
 
       {showInput && !isUploading && (
         <div className={classNames(styles.input)}>
-          <Input />
+          <div className={styles.add_icon}>{centerIcon}</div>
+          <Input onChange={handleChange} />
         </div>
       )}
 
-      {!["avatar", "banner", "cover"].includes(type) && (
+      {type === "media" && !isPaid && get(srcList, "length") > 2 && (
         <div className={styles.upgrade_now}>
           <div className={styles.tips}>
             <Icon icon="Group-966" color="#653fff" /> Tips
