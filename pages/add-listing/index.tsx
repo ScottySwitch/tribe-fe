@@ -69,7 +69,7 @@ export interface IAddListingForm {
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(3); // TODO: remove
+  const [pageNumber, setPageNumber] = useState(1); // TODO: remove
   const [formData, setFormData] = useState(defaultAddlistingForm);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showSubmitResult, setShowSubmitResult] = useState(false);
@@ -121,8 +121,8 @@ const AddListing = () => {
       images: formData.images,
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,
-      product_types: formData.productTypes,
-      product_brands: map(formData.productBrands, "value"),
+      product_types: formData.category === 1 ? formData.productTypes : map(formData.productTypes, "value"),
+      product_brands: formData.category === 1 ? map(formData.productBrands, "value") : null,
       tags: formData.describeTags || [],
       facilities_data: {
         additionalServices: formData.additionalServices,
@@ -134,6 +134,7 @@ const AddListing = () => {
         parking: formData.parking,
         paryerFacilities: formData.paryerFacilities,
         payment: formData.payment,
+        placeGoodFor: formData.placeGoodFor,
       },
       is_accepted: false
     }

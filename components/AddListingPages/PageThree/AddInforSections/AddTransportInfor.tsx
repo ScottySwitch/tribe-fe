@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import get from "lodash/get"
 
 import Badge from "components/Badge/Badge"
@@ -21,6 +21,9 @@ import Icon from "components/Icon/Icon"
 import { IAddListingForm } from "pages/add-listing"
 import Select from "components/Select/Select"
 import { currencyOptions } from "constant"
+import CategoryLinkApi from "../../../../services/category-link";
+import TagApi from "../../../../services/tag";
+import ProductTypeApi from "../../../../services/product-type";
 
 interface AddTransportInforProps {
   isEdit?: boolean
@@ -37,8 +40,8 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      categoryKind: data.categoryKind,
-      tags: data.tags,
+      categoryLinks: data.categoryLinks,
+      productTypes: data.productTypes,
       currency: data.currency,
       minPrice: data.minPrice,
       images: data.images,
@@ -48,9 +51,39 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
     },
   })
 
-  const [categoryKind, setCategoryKind] = useState<string | undefined>(getValues("categoryKind"))
   const [showTagsModal, setShowTagsModal] = useState(false)
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
+
+  const [categoryLinks, setCategoryLinks] = useState<any>([])
+  const [selectCategoryLink, setSelectCategoryLink] = useState<string | undefined>(getValues("categoryLinks"))
+  const [productTypes, setProductTypes] = useState<any>([])
+
+  useEffect(() => {
+    // Category links
+    const getCategoryLinks = async () => {
+      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(4);
+      const categoryLinks = get(data, "data.data")
+      setCategoryLinks(categoryLinks)
+    }
+    getCategoryLinks().catch((e) => console.log(e))
+  }, [])
+
+  useEffect(() => {
+    setValue("productTypes", [])
+    const getProductTypes = async () => {
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink);
+      const productTypes = get(data, "data.data")
+      const mapProductTypes: any = []
+      productTypes.map(mapProductType => {
+        mapProductTypes.push({
+          value: mapProductType.id,
+          label: mapProductType.attributes.label
+        })
+      })
+      setProductTypes(mapProductTypes)
+    }
+    getProductTypes().catch((e) => console.log(e))
+  }, [selectCategoryLink])
 
   const onSubmit = (data) => {
     onPreview?.(data)
@@ -75,14 +108,14 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question question="What is the category best associated with this service?">
             <div className="flex flex-wrap gap-2">
-              {transportAssociatedCategories.map((opt) => (
+              {categoryLinks.map((opt) => (
                 <Badge
-                  key={opt.label}
-                  text={opt.label}
-                  selected={categoryKind === opt.label}
+                  key={opt.id}
+                  text={opt.attributes.label}
+                  selected={selectCategoryLink === opt.id}
                   onClick={() => {
-                    setValue("categoryKind", opt.label)
-                    setCategoryKind(opt.label)
+                    setValue("categoryLinks", opt.id);
+                    setSelectCategoryLink(opt.id);
                   }}
                 />
               ))}
@@ -93,7 +126,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
             instruction="Select 5 max"
             optional
           >
-            <PreviewValue valueKey="tags" value={getValues("tags")} />
+            <PreviewValue valueKey="tags" value={getValues("productTypes")} />
             <br />
             <Button
               text="Edit service"
@@ -179,11 +212,11 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
         onClose={() => setShowTagsModal(false)}
       >
         <TagsSelection
-          options={subCateList}
-          selectedList={getValues("tags")}
+          options={productTypes}
+          selectedList={getValues("productTypes")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
-            setValue("tags", list)
+            setValue("productTypes", list);
             setShowTagsModal(false)
           }}
         />

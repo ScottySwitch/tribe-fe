@@ -60,7 +60,8 @@ const AddEatInfor = (props: AddEatInforProps) => {
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
       categoryLinks: data?.categoryLinks,
-      tags: data?.tags,
+      productTypes: data?.productTypes,
+      describeTags: data?.describeTags,
       minPrice: data?.minPrice,
       maxPrice: data?.maxPrice,
       mealsKind: data?.mealsKind,
@@ -79,11 +80,9 @@ const AddEatInfor = (props: AddEatInforProps) => {
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
 
-  // TODO: new
   const [categoryLinks, setCategoryLinks] = useState<any>([])
   const [selectCategoryLink, setSelectCategoryLink] = useState<string | undefined>(getValues("categoryLinks"))
   const [productTypes, setProductTypes] = useState<any>([])
-  const [selectedProductTypes, setSelectedProductTypes] = useState<any>([])
   const [describeTags, setDescribeTags] = useState<any>([])
 
   useEffect(() => {
@@ -107,19 +106,17 @@ const AddEatInfor = (props: AddEatInforProps) => {
     const getProductTypes = async () => {
       const data = await ProductTypeApi.getProductTypeByCategoryId(2);
       const productTypes = get(data, "data.data")
-      setProductTypes(productTypes)
+      const mapProductTypes: any = []
+      productTypes.map(mapProductType => {
+        mapProductTypes.push({
+          value: mapProductType.id,
+          label: mapProductType.attributes.label
+        })
+      })
+      setProductTypes(mapProductTypes)
     }
     getProductTypes().catch((e) => console.log(e))
   }, [])
-
-  useEffect(() => {
-    // TODO: test to remove
-    if (selectCategoryLink) {
-      // setValue("productTypes", [])
-      // setValue("productBrands", [])
-      // setProductBrands([])
-    }
-  }, [selectCategoryLink])
 
   const onSubmit = (data) => {
     onPreview?.(data);
@@ -177,7 +174,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             instruction="Select 5 max"
             optional
           >
-            <PreviewValue valueKey="tags" value={getValues("tags")} />
+            <PreviewValue valueKey="tags" value={getValues("productTypes")} />
             <br />
             <Button
               text="Edit cuisines"
@@ -207,14 +204,14 @@ const AddEatInfor = (props: AddEatInforProps) => {
             optional
           >
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {otherList.map((item) => (
+              {describeTags.map((item) => (
                 <Checkbox
-                  key={item.label}
-                  label={item.label}
+                  key={item.id}
+                  label={item.attributes.label}
                   // name="tags"
-                  value={item.label}
+                  value={item.id}
                   className="w-full sm:w-1/2"
-                  register={register("tags")}
+                  register={register("describeTags")}
                 />
               ))}
             </div>
@@ -390,11 +387,11 @@ const AddEatInfor = (props: AddEatInforProps) => {
         onClose={() => setShowTagsModal(false)}
       >
         <TagsSelection
-          options={subCateList}
-          selectedList={getValues("tags")}
+          options={productTypes}
+          selectedList={getValues("productTypes")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
-            setValue("tags", list);
+            setValue("productTypes", list);
             setShowTagsModal(false);
           }}
         />

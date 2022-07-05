@@ -22,6 +22,9 @@ const getProductTypeByCategoryId = async (categoryId: any) => {
       "category": {
         "id": categoryId
       }
+    },
+    "pagination": {
+      "limit": 500
     }
   }, {
     encodeValuesOnly: true
