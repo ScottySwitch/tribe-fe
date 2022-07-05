@@ -94,7 +94,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   useEffect(() => {
     const getListingData = async (listingSlug) => {
       let data;
-      let bizListingRevisionData;
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (isViewPage) {
         //if normal user go to normal listing homepage
@@ -106,12 +105,14 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           console.log('revision');
           setIsRevision(true)
         }
+        get(data, "data.biz_invoices.length") !== 0 && setIsPaid(true)
         //they will be redirected to home if do not own the listing
         get(data, "data.is_owner") !== true && (window.location.href = "/")
       }
 
       const listing = get(data, 'data.data[0]')
       if (listing) {
+        listing.biz_invoices.length !== 0
         console.log(listing);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
@@ -124,7 +125,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             "XXXXXX" +
             rawPhoneNumber.substring(7)
           : "";
-        const rawListing = listing.products.data || [];
+        const rawListing = listing.products || [];
         const listingArray = rawListing.map((item) => ({
           name: item.name,
           is_revision: item.is_revision,
@@ -186,7 +187,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
         setSocialInfo(listing.social_info);
-        setDealList(listing.deals.data);
+        setDealList(listing.deals.data);  
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
         setTags(tagArray);
@@ -197,10 +198,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
         if (invoiceList.length > 0) {
-          setIsPaid(true);
-          setPhoneNumber(rawPhoneNumber);
-        } else {
           setPhoneNumber(defaultPhone);
+        } else {
+          setPhoneNumber(rawPhoneNumber);
         }
       }
     };
@@ -517,7 +517,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   };
 
   return (
-    bizListing.attributes && (
+    bizListing && (
       <div className={styles.listing_homepage}>
         <SectionLayout show={screen === ListingHomePageScreens.HOME}>
           <Upload
