@@ -28,8 +28,8 @@ const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; biz
   const { isViewPage, className, bizListing } = props
   const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
 
-  const bizListingReviewCount = get(bizListing, "reviews.data.length") || 0
-  const bizListingFollowerCount = get(bizListing, "user_listing_follows.data.length") || 0
+  const bizListingReviewCount = get(bizListing, "reviews.length") || 0
+  const bizListingFollowerCount = get(bizListing, "user_listing_follows.length") || 0
   return (
     <div>
       {isViewPage && (
@@ -147,6 +147,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     max: string
     currency: string
   }>(priceRange || {})
+  console.log('bizListing', bizListing)
   const [newPhoneNumber, setNewPhoneNumber] = useState<string | number>(phoneNumber)
   const [newSocialInfo, setNewSocialInfo] = useState<string>(socialInfo)
 

@@ -213,6 +213,7 @@ const updateBizListingRevision = async (bizListingId: number, params: any) => {
 }
 
 const createBizListingRevision = async (params: any) => {
+  console.log(params);
   const url = `/api/biz-listing-revisions/`;
   return await Api.post(url, {
     data: params

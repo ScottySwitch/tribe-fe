@@ -72,7 +72,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [bizInvoices, setBizInvoices] = useState<{ [key: string]: any }[]>([]);
   const [facilitiesData, setFacilitiesData] = useState();
 
-  const [bizListing, setBizListing] = useState<any>({});
+  const [bizListing, setBizListing] = useState<any>();
   const [listingImages, setListingImages] = useState<any>([]);
   const [logo, setLogo] = useState<any>([]);
 
@@ -86,125 +86,135 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const formatOptions = (list) =>
     list.map((item: any) => ({
-      label: item.attributes.label,
-      value: item.attributes.value,
+      label: item.label,
+      value: item.value,
       id: item.id,
     }));
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
       let data;
-      let bizListingRevisionData;
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (isViewPage) {
         //if normal user go to normal listing homepage
-        data = await BizListingApi.getBizListingBySlug(listingSlug);
+        data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
       } else {
         //if normal users go to edit listing homepage
-        data = await BizListingApi.getOwnerBizListingBySlug(listingSlug);
-        bizListingRevisionData =
-          await BizListingRevision.getOwnerBizListingRevisionBySlug(
-            listingSlug
-          );
-        console.log(bizListingRevisionData);
-        if (get(bizListingRevisionData, "data.data.length") !== 0) {
-          setIsRevision(true);
+        data = await BizListingApi.getInfoOwnerBizListingBySlug(listingSlug)
+        if (get(data, "data.is_revision") === true) {
+          console.log('revision');
+          setIsRevision(true)
         }
         //they will be redirected to home if do not own the listing
-        get(data, "data.data.length") === 0 && (window.location.href = "/");
+        get(data, "data.is_owner") !== true && (window.location.href = "/")
       }
-
-      const listing =
-        get(bizListingRevisionData, "data.data[0]") ||
-        get(data, "data.data[0]");
+      const listing = get(data, 'data.data[0]')
       if (listing) {
         console.log(listing);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
-        const rawTags = get(listing, "attributes.tags.data") || [];
-        const rawFacilities = get(listing, "attributes.facilities_data") || [];
-        const invoiceList = get(listing, "attributes.biz_invoices.data") || [];
-        const rawPhoneNumber = get(listing, "attributes.phone_number");
+        const rawTags = listing.tags || [];
+        const rawFacilities = listing.facilities_data || [];
+        const rawPhoneNumber = listing.phone_number
         const defaultPhone = rawPhoneNumber
           ? rawPhoneNumber.substring(0, 2) +
             "XXXXXX" +
             rawPhoneNumber.substring(7)
           : "";
-        const rawListing = get(listing, "attributes.products.data") || [];
+        const rawListing = listing.products || [];
         const listingArray = rawListing.map((item) => ({
-          name: get(item, "attributes.name"),
-          is_revision: get(item, "attributes.is_revision"),
-          parent_id: get(item, "attributes.parent_id"),
-          price: get(item, "attributes.price"),
+          name: item.name,
+          is_revision: item.is_revision,
+          parent_id: item.parent_id,
+          price: item.price,
           id: item.id,
-          description: get(item, "attributes.description"),
-          images: get(item, "attributes.images"),
-          imgUrl: get(item, "attributes.images[0]"),
-          discount: get(item, "attributes.discount_percent"),
-          tags: get(item, "attributes.tags"),
-          websiteUrl: get(item, "attributes.website_url"),
-          klookUrl: get(item, "attributes.klook_url"),
+          description: item.description,
+          images: item.images,
+          imgUrl: item.images[0],
+          discount: item.discount_percent,
+          tags: item.tags,
+          websiteUrl: item.website_url,
+          klookUrl: item.klook_url,
           isEdited: false,
         }));
-        const rawMenu = get(listing, "attributes.menus.data") || [];
+        const rawMenu = listing.menus || [];
         const menuArray = rawMenu.map((item) => ({
           id: item.id,
-          is_revision: get(item, "attributes.is_revision"),
-          parent_id: get(item, "attributes.parent_id"),
-          name: get(item, "attributes.name"),
-          images: get(item, "attributes.menu_file"),
-          imgUrl: get(item, "attributes.menu_file[0]"),
+          is_revision: item.is_revision,
+          parent_id: item.parent_id,
+          name: item.name,
+          images: item.menu_file,
+          imgUrl: item.menu_file[0],
           isChange: false,
         }));
-        const rawDeal = get(listing, "attributes.deals.data") || [];
+        const rawDeal = listing.deals || [];
         const dealArray = rawDeal.map((item) => ({
           id: item.id,
-          is_revision: get(item, "attributes.is_revision"),
-          parent_id: get(item, "attributes.parent_id"),
-          name: get(item, "attributes.name"),
-          images: get(item, "attributes.images"),
-          imgUrl: get(item, "attributes.images[0]"),
-          information: get(item, "attributes.description"),
-          termsConditions: get(item, "attributes.terms_conditions"),
-          // start_date: item.attributes.start_date,
-          // end_date: moment(get(item,'attributes.end_date')).format("YYYY-MM-DD HH:mm:ss"),
+          is_revision: item.is_revision,
+          parent_id: item.parent_id,
+          name: item.name,
+          images: item.images,
+          imgUrl: item.images[0],
+          information: item.description,
+          termsConditions: item.terms_conditions,
+          // start_date: item.start_date,
+          // end_date: moment(item.nd_date')).format("YYYY-MM-DD HH:mm:ss,
           validUntil: parseISO(
-            moment(get(item, "attributes.end_date")).format(
+            moment(item.end_date).format(
               "YYYY-MM-DD HH:mm:ss"
             )
           ),
           isChange: false,
         }));
-        const rawBizInvoices =
-          get(listing, "attributes.biz_invoices.data") || [];
+        const rawBizInvoices = listing.biz_invoices || [];
         const bizInvoicesArray = rawBizInvoices.map((item) => ({
           id: item.id,
         }));
         const tagArray = formatOptions(rawTags);
-        // const arrayFacilities = formatOptions(rawFacilities);
 
+        const rawReview = listing.reviews || [];
+        const reviewArray = rawReview.map((item) => ({
+          id: item.id,
+          content: item.content,
+          rating: item.rating,
+          images: item.images,
+          reply_reviews: item.reply_reviews,
+          date_create_reply: item.date_create_reply,
+          user: item.user,
+          visited_date: item.visited_date,
+        }));
+
+        const rawTagOptions = listing.tag_options || []
+        const tagOptionsArray = rawTagOptions.map((item) => ({
+          label: item.label,
+          value: item.value,
+          id: item.id,
+        }));
+
+        setTagOptions(tagOptionsArray);
         setBizListing(listing);
-        setAction(get(listing, "attributes.action"));
-        setListingImages(get(listing, "attributes.images"));
+        setAction(listing.action);
+        setListingImages(listing.images);
         setCategory(
-          get(listing, "attributes.categories.data[0].id") || Categories.BUY
+          listing.categories[0].id || Categories.BUY
         );
-        setDescription(get(listing, "attributes.description"));
-        setOpenHours(get(listing, "attributes.open_hours"));
-        setPriceRange(get(listing, "attributes.price_range"));
-        setSocialInfo(get(listing, "attributes.social_info"));
-        setDealList(get(listing, "attributes.deals.data"));
-        setFacilitiesData(get(listing, "attributes.facilities_data"));
-        setLogo(listing.attributes.logo);
+        setDescription(listing.description);
+        setOpenHours(listing.open_hours);
+        setPriceRange(listing.price_range);
+        setSocialInfo(listing.social_info);
+        setDealList(listing.deals.data);  
+        setFacilitiesData(listing.facilities_data);
+        setLogo(listing.logo);
         setTags(tagArray);
+        setReviews(reviewArray);
         setFacilities(rawFacilities);
         setItemList(listingArray);
         setMenuList(menuArray);
         setDealList(dealArray);
         setBizInvoices(bizInvoicesArray);
-        setListingRate(get(listing, "attributes.rate"));
-        if (invoiceList.length > 0) {
-          setIsPaid(true);
+        setListingRate(listing.rate);
+        if (bizInvoicesArray.length > 0) {
+          setIsPaid(true)
           setPhoneNumber(rawPhoneNumber);
         } else {
           setPhoneNumber(defaultPhone);
@@ -214,63 +224,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
     if (listingSlug) {
       getListingData(listingSlug);
-      getTags();
-      getFacilities();
-      getBizListingReviews(listingSlug, "rating:desc");
     }
   }, [listingSlug, isViewPage]);
 
-  const getBizListingReviews = async (listingSlug, sortBy) => {
-    const data = await ReviewApi.getReviewsByBizListingSlugWithSort(
-      listingSlug,
-      sortBy
-    );
-    const rawReview = get(data, "data.data") || [];
-    const reviewArray = rawReview.map((item) => ({
-      id: item.id,
-      biz_listing: get(item, "attributes.biz_listing"),
-      content: get(item, "attributes.content"),
-      rating: get(item, "attributes.rating"),
-      images: get(item, "attributes.images"),
-      reply_reviews: get(item, "attributes.reply_reviews"),
-      date_create_reply: get(item, "attributes.date_create_reply"),
-      user: get(item, "attributes.user"),
-      visited_date: get(item, "attributes.visited_date"),
-    }));
-    setReviews(reviewArray);
-  };
-
-  const handleChangeReviewsSequence = async ({ value }: IOption) => {
-    if (value === "top") {
-      await getBizListingReviews(listingSlug, "rating:desc");
-    } else {
-      await getBizListingReviews(listingSlug, "id:desc");
-    }
-  };
-
-  //Get tags
-  const getTags = async () => {
-    const data = await TagApi.getTags();
-    const tagsList = get(data, "data.data") || [];
-    const tagArray = tagsList.map((item) => ({
-      label: item.attributes.label,
-      value: item.attributes.value,
-      id: item.id,
-    }));
-    setTagOptions(tagArray);
-  };
-
-  //Get Facility
-  const getFacilities = async () => {
-    const data = await FacilityApi.getFacility();
-    const facilitiesList = get(data, "data.data") || [];
-    const facilitiesArray = facilitiesList.map((item) => ({
-      label: item.attributes.label,
-      value: item.attributes.value,
-      id: item.id,
-    }));
-    setFacilityOptions(facilitiesArray);
-  };
 
   // TODO: check function upload multiple images
   const handleChangeImages = (srcImages) => setListingImages(srcImages);
@@ -279,7 +235,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const handleSetSocialInfo = (socialInfo) => setSocialInfo(socialInfo);
   const handleSetPhoneNumber = (phoneNumber) => setPhoneNumber(phoneNumber);
   const handleSetDescription = (description) => setDescription(description);
-  const handleSetFacilities = (facilities) => setFacilities(facilities);
+  const handleSetFacilities = (facilities) => setFacilitiesData(facilities);
   const handleSetTags = (tags) => setTags(tags);
   const handleSetOpenHours = (openHours) => setOpenHours(openHours);
   const handleSetAction = (action: string, value: string) =>
@@ -332,7 +288,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     const editedDealList = dealList.filter(
       (item) => !item.isNew && item.isEdited
     );
-    console.log(isRevision);
     if (isRevision) {
       await BizListingRevision.updateBizListingRevision(bizListing.id, {
         description: description,
@@ -342,7 +297,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         social_info: socialInfo,
         phone_number: phoneNumber,
         facilities_data: facilitiesData,
-        facilities: facilities,
         open_hours: openHours,
         tags: tags.map((item) => item.id),
         is_verified: false,
@@ -356,8 +310,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       });
     } else {
       await BizListingRevision.createBizListingRevision({
-        name: get(bizListing, "attributes.name"),
-        slug: get(bizListing, "attributes.slug"),
+        name: get(bizListing, "name"),
+        slug: get(bizListing, "slug"),
         biz_listing: bizListing.id.toString(),
         parent_id: bizListing.id.toString(),
         description: description,
@@ -367,7 +321,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         social_info: socialInfo,
         phone_number: phoneNumber,
         facilities_data: facilitiesData,
-        facilities: facilities,
         open_hours: openHours,
         tags: tags.map((item) => item.id),
         is_verified: false,
@@ -378,7 +331,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         deals: currentDealList.map((item) => item.id) || [],
         biz_invoices: bizInvoices.map((item) => item.id) || [],
         categories:
-          get(bizListing, "attributes.categories.data").map(
+        bizListing.categories.map(
             (item) => item.id
           ) || [],
       }).then((response) => {
@@ -408,9 +361,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedItemList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? item.id
+          ? (item.id).toString()
           : item.parent_id
-          ? item.parent_id
+          ? item.parent_id.toString()
           : "";
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
@@ -446,9 +399,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedMenuList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? item.id
+          ? (item.id).toString()
           : item.parent_id
-          ? item.parent_id
+          ? item.parent_id.toString()
           : "";
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
@@ -484,9 +437,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedDealList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? item.id
+          ? (item.id).toString()
           : item.parent_id
-          ? item.parent_id
+          ? item.parent_id.toString()
           : "";
         let convertEndDate =
           moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z";
@@ -524,7 +477,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   };
 
   return (
-    bizListing.attributes && (
+    bizListing && (
       <div className={styles.listing_homepage}>
         <SectionLayout show={screen === ListingHomePageScreens.HOME}>
           <Upload
@@ -537,13 +490,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           />
           <div className={styles.breadcrumbs}>
             Home <Icon icon="carret-right" size={14} color="#7F859F" />
-            {bizListing.attributes.name}
+            {bizListing.name}
           </div>
           <ListingInforCard
             isViewPage={isViewPage}
             logo={logo}
             handleChangeLogo={handleChangeLogo}
-            bizListing={bizListing.attributes}
+            bizListing={bizListing}
             priceRange={priceRange}
             socialInfo={socialInfo}
             phoneNumber={phoneNumber}
@@ -614,7 +567,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 isViewPage={isViewPage}
                 reviews={reviews}
                 onSubmitReply={(value, id) => handleSubmitReply(value, id)}
-                onChangeReviewsSequence={handleChangeReviewsSequence}
               />
               <Break />
               <Contacts />
