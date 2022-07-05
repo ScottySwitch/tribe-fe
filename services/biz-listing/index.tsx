@@ -203,6 +203,12 @@ const getOwnerBizListingBySlug = async (bizListingSlug: any) => {
   return await Api.get(url);
 }
 
+const getInfoOwnerBizListingBySlug = async (bizListingSlug: any) => {
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  const url = `/api/biz-listings/owner-bizlisting-information/?slug=${bizListingSlug}&userId=${userInfo.id}`
+  return await Api.get(url)
+}
+
 const getOwnerBizListing = async (bizListingSlug: any) => {
   let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
   const query = qs.stringify({
@@ -317,6 +323,7 @@ const checkListingHaveOwner = async (bizListingSlug: any) => {
 export default {
   getBizListing,
   getOwnerListingRoleByUserId,
+  getInfoOwnerBizListingBySlug,
   getBizListingByUserId,
   getBizListingsByCategoryId,
   getBizListingById,

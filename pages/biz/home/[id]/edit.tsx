@@ -86,8 +86,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const formatOptions = (list) =>
     list.map((item: any) => ({
-      label: item.attributes.label,
-      value: item.attributes.value,
+      label: item.label,
+      value: item.value,
       id: item.id,
     }));
 
@@ -101,82 +101,75 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         data = await BizListingApi.getBizListingBySlug(listingSlug);
       } else {
         //if normal users go to edit listing homepage
-        data = await BizListingApi.getOwnerBizListingBySlug(listingSlug);
-        bizListingRevisionData =
-          await BizListingRevision.getOwnerBizListingRevisionBySlug(
-            listingSlug
-          );
-        console.log(bizListingRevisionData);
-        if (get(bizListingRevisionData, "data.data.length") !== 0) {
-          setIsRevision(true);
+        data = await BizListingApi.getInfoOwnerBizListingBySlug(listingSlug)
+        if (get(data, "data.is_revision") === true) {
+          console.log('revision');
+          setIsRevision(true)
         }
         //they will be redirected to home if do not own the listing
-        get(data, "data.data.length") === 0 && (window.location.href = "/");
+        get(data, "data.is_owner") !== true && (window.location.href = "/")
       }
 
-      const listing =
-        get(bizListingRevisionData, "data.data[0]") ||
-        get(data, "data.data[0]");
+      const listing = get(data, 'data.data[0]')
       if (listing) {
         console.log(listing);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
-        const rawTags = get(listing, "attributes.tags.data") || [];
-        const rawFacilities = get(listing, "attributes.facilities_data") || [];
-        const invoiceList = get(listing, "attributes.biz_invoices.data") || [];
-        const rawPhoneNumber = get(listing, "attributes.phone_number");
+        const rawTags = listing.tags || [];
+        const rawFacilities = listing.facilities_data || [];
+        const invoiceList = listing.biz_invoices.data || [];
+        const rawPhoneNumber = listing.phone_number;
         const defaultPhone = rawPhoneNumber
           ? rawPhoneNumber.substring(0, 2) +
             "XXXXXX" +
             rawPhoneNumber.substring(7)
           : "";
-        const rawListing = get(listing, "attributes.products.data") || [];
+        const rawListing = listing.products.data || [];
         const listingArray = rawListing.map((item) => ({
-          name: get(item, "attributes.name"),
-          is_revision: get(item, "attributes.is_revision"),
-          parent_id: get(item, "attributes.parent_id"),
-          price: get(item, "attributes.price"),
+          name: item.name,
+          is_revision: item.is_revision,
+          parent_id: item.parent_id,
+          price: item.price,
           id: item.id,
-          description: get(item, "attributes.description"),
-          images: get(item, "attributes.images"),
-          imgUrl: get(item, "attributes.images[0]"),
-          discount: get(item, "attributes.discount_percent"),
-          tags: get(item, "attributes.tags"),
-          websiteUrl: get(item, "attributes.website_url"),
-          klookUrl: get(item, "attributes.klook_url"),
+          description: item.description,
+          images: item.images,
+          imgUrl: item.images[0],
+          discount: item.discount_percent,
+          tags: item.tags,
+          websiteUrl: item.website_url,
+          klookUrl: item.klook_url,
           isEdited: false,
         }));
-        const rawMenu = get(listing, "attributes.menus.data") || [];
+        const rawMenu = listing.menus || [];
         const menuArray = rawMenu.map((item) => ({
           id: item.id,
-          is_revision: get(item, "attributes.is_revision"),
-          parent_id: get(item, "attributes.parent_id"),
-          name: get(item, "attributes.name"),
-          images: get(item, "attributes.menu_file"),
-          imgUrl: get(item, "attributes.menu_file[0]"),
+          is_revision: item.is_revision,
+          parent_id: item.parent_id,
+          name: item.name,
+          images: item.menu_file,
+          imgUrl: item.menu_file[0],
           isChange: false,
         }));
-        const rawDeal = get(listing, "attributes.deals.data") || [];
+        const rawDeal = listing.deals || [];
         const dealArray = rawDeal.map((item) => ({
           id: item.id,
-          is_revision: get(item, "attributes.is_revision"),
-          parent_id: get(item, "attributes.parent_id"),
-          name: get(item, "attributes.name"),
-          images: get(item, "attributes.images"),
-          imgUrl: get(item, "attributes.images[0]"),
-          information: get(item, "attributes.description"),
-          termsConditions: get(item, "attributes.terms_conditions"),
-          // start_date: item.attributes.start_date,
-          // end_date: moment(get(item,'attributes.end_date')).format("YYYY-MM-DD HH:mm:ss"),
+          is_revision: item.is_revision,
+          parent_id: item.parent_id,
+          name: item.name,
+          images: item.images,
+          imgUrl: item.images[0],
+          information: item.description,
+          termsConditions: item.terms_conditions,
+          // start_date: item.start_date,
+          // end_date: moment(item.nd_date')).format("YYYY-MM-DD HH:mm:ss,
           validUntil: parseISO(
-            moment(get(item, "attributes.end_date")).format(
+            moment(item.end_date).format(
               "YYYY-MM-DD HH:mm:ss"
             )
           ),
           isChange: false,
         }));
-        const rawBizInvoices =
-          get(listing, "attributes.biz_invoices.data") || [];
+        const rawBizInvoices = listing.biz_invoices || [];
         const bizInvoicesArray = rawBizInvoices.map((item) => ({
           id: item.id,
         }));
@@ -184,25 +177,25 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         // const arrayFacilities = formatOptions(rawFacilities);
 
         setBizListing(listing);
-        setAction(get(listing, "attributes.action"));
-        setListingImages(get(listing, "attributes.images"));
+        setAction(listing.action);
+        setListingImages(listing.images);
         setCategory(
-          get(listing, "attributes.categories.data[0].id") || Categories.BUY
+          listing.categories[0].id || Categories.BUY
         );
-        setDescription(get(listing, "attributes.description"));
-        setOpenHours(get(listing, "attributes.open_hours"));
-        setPriceRange(get(listing, "attributes.price_range"));
-        setSocialInfo(get(listing, "attributes.social_info"));
-        setDealList(get(listing, "attributes.deals.data"));
-        setFacilitiesData(get(listing, "attributes.facilities_data"));
-        setLogo(listing.attributes.logo);
+        setDescription(listing.description);
+        setOpenHours(listing.open_hours);
+        setPriceRange(listing.price_range);
+        setSocialInfo(listing.social_info);
+        setDealList(listing.deals.data);
+        setFacilitiesData(listing.facilities_data);
+        setLogo(listing.logo);
         setTags(tagArray);
         setFacilities(rawFacilities);
         setItemList(listingArray);
         setMenuList(menuArray);
         setDealList(dealArray);
         setBizInvoices(bizInvoicesArray);
-        setListingRate(get(listing, "attributes.rate"));
+        setListingRate(listing.rate);
         if (invoiceList.length > 0) {
           setIsPaid(true);
           setPhoneNumber(rawPhoneNumber);
@@ -356,8 +349,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       });
     } else {
       await BizListingRevision.createBizListingRevision({
-        name: get(bizListing, "attributes.name"),
-        slug: get(bizListing, "attributes.slug"),
+        name: get(bizListing, "name"),
+        slug: get(bizListing, "slug"),
         biz_listing: bizListing.id.toString(),
         parent_id: bizListing.id.toString(),
         description: description,
@@ -378,7 +371,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         deals: currentDealList.map((item) => item.id) || [],
         biz_invoices: bizInvoices.map((item) => item.id) || [],
         categories:
-          get(bizListing, "attributes.categories.data").map(
+          get(bizListing, "categories.data").map(
             (item) => item.id
           ) || [],
       }).then((response) => {
@@ -537,13 +530,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           />
           <div className={styles.breadcrumbs}>
             Home <Icon icon="carret-right" size={14} color="#7F859F" />
-            {bizListing.attributes.name}
+            {bizListing.name}
           </div>
           <ListingInforCard
             isViewPage={isViewPage}
             logo={logo}
             handleChangeLogo={handleChangeLogo}
-            bizListing={bizListing.attributes}
+            bizListing={bizListing}
             priceRange={priceRange}
             socialInfo={socialInfo}
             phoneNumber={phoneNumber}
