@@ -72,7 +72,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [bizInvoices, setBizInvoices] = useState<{ [key: string]: any }[]>([]);
   const [facilitiesData, setFacilitiesData] = useState();
 
-  const [bizListing, setBizListing] = useState<any>({});
+  const [bizListing, setBizListing] = useState<any>();
   const [listingImages, setListingImages] = useState<any>([]);
   const [logo, setLogo] = useState<any>([]);
 
@@ -97,7 +97,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (isViewPage) {
         //if normal user go to normal listing homepage
-        data = await BizListingApi.getBizListingBySlug(listingSlug);
+        data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
       } else {
         //if normal users go to edit listing homepage
         data = await BizListingApi.getInfoOwnerBizListingBySlug(listingSlug)
@@ -110,7 +110,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       }
       const listing = get(data, 'data.data[0]')
       if (listing) {
-        listing.biz_invoices.length !== 0
         console.log(listing);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
@@ -236,7 +235,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const handleSetSocialInfo = (socialInfo) => setSocialInfo(socialInfo);
   const handleSetPhoneNumber = (phoneNumber) => setPhoneNumber(phoneNumber);
   const handleSetDescription = (description) => setDescription(description);
-  const handleSetFacilities = (facilities) => setFacilities(facilities);
+  const handleSetFacilities = (facilities) => setFacilitiesData(facilities);
   const handleSetTags = (tags) => setTags(tags);
   const handleSetOpenHours = (openHours) => setOpenHours(openHours);
   const handleSetAction = (action: string, value: string) =>
@@ -298,7 +297,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         social_info: socialInfo,
         phone_number: phoneNumber,
         facilities_data: facilitiesData,
-        facilities: facilities,
         open_hours: openHours,
         tags: tags.map((item) => item.id),
         is_verified: false,
@@ -323,7 +321,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         social_info: socialInfo,
         phone_number: phoneNumber,
         facilities_data: facilitiesData,
-        facilities: facilities,
         open_hours: openHours,
         tags: tags.map((item) => item.id),
         is_verified: false,
@@ -334,7 +331,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         deals: currentDealList.map((item) => item.id) || [],
         biz_invoices: bizInvoices.map((item) => item.id) || [],
         categories:
-          get(bizListing, "categories.data").map(
+        bizListing.categories.map(
             (item) => item.id
           ) || [],
       }).then((response) => {
@@ -364,9 +361,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedItemList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? item.id
+          ? (item.id).toString()
           : item.parent_id
-          ? item.parent_id
+          ? item.parent_id.toString()
           : "";
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
@@ -402,9 +399,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedMenuList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? item.id
+          ? (item.id).toString()
           : item.parent_id
-          ? item.parent_id
+          ? item.parent_id.toString()
           : "";
         const updateData = {
           biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
@@ -440,9 +437,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedDealList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? item.id
+          ? (item.id).toString()
           : item.parent_id
-          ? item.parent_id
+          ? item.parent_id.toString()
           : "";
         let convertEndDate =
           moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z";
