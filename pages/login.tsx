@@ -94,23 +94,6 @@ const LoginPage = () => {
         await AuthApi.getMe()
       }
     }
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-    if (userInfo) {
-      const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id)
-      const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
-      const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
-      const dataClaimListing = await ClaimListingApi.getClaimListingByUserId(userInfo.id)
-      const dataListingRoles = await BizApi.getOwnerListingRoleByUserId(userInfo.id)
-      userInfo = {
-        ...userInfo,
-        biz_listings: dataBizlisting.data.data, 
-        biz_invoice: dataBizInvoice.data.data, 
-        claim_listings: dataClaimListing.data.data,
-        listing_roles: dataListingRoles.data.data,
-        owner_listings: dataOwnerListing.data.data
-      }
-    }
-    localStorage.setItem("user", JSON.stringify(userInfo))
     window.location.href = "/"
   }
 

@@ -70,6 +70,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [menuList, setMenuList] = useState<{ [key: string]: any }[]>([]);
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([]);
   const [bizInvoices, setBizInvoices] = useState<{ [key: string]: any }[]>([]);
+  const [facilitiesData, setFacilitiesData] = useState();
 
   const [bizListing, setBizListing] = useState<any>({});
   const [listingImages, setListingImages] = useState<any>([]);
@@ -193,6 +194,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setPriceRange(get(listing, "attributes.price_range"));
         setSocialInfo(get(listing, "attributes.social_info"));
         setDealList(get(listing, "attributes.deals.data"));
+        setFacilitiesData(get(listing, "attributes.facilities_data"));
         setLogo(listing.attributes.logo);
         setTags(tagArray);
         setFacilities(rawFacilities);
@@ -339,6 +341,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         images: listingImages,
         social_info: socialInfo,
         phone_number: phoneNumber,
+        facilities_data: facilitiesData,
         facilities: facilities,
         open_hours: openHours,
         tags: tags.map((item) => item.id),
@@ -363,6 +366,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         images: listingImages,
         social_info: socialInfo,
         phone_number: phoneNumber,
+        facilities_data: facilitiesData,
         facilities: facilities,
         open_hours: openHours,
         tags: tags.map((item) => item.id),
@@ -572,7 +576,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               <Facilities
                 category={category}
                 isViewPage={isViewPage}
-                facilities={facilities}
+                facilities={facilitiesData}
                 onSetFacilities={handleSetFacilities}
                 // facilityOptions={facilityOptions}
               />
