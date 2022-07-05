@@ -202,8 +202,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setDescription(listing.description);
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
-        console.log('social_info');
-        console.log(listing.social_info);
         setSocialInfo(listing.social_info);
         setDealList(listing.deals.data);  
         setFacilitiesData(listing.facilities_data);
@@ -291,7 +289,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     const editedDealList = dealList.filter(
       (item) => !item.isNew && item.isEdited
     );
-    console.log(isRevision);
     if (isRevision) {
       await BizListingRevision.updateBizListingRevision(bizListing.id, {
         description: description,
