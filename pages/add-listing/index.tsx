@@ -69,7 +69,7 @@ export interface IAddListingForm {
 }
 
 const AddListing = () => {
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(3); // TODO: remove
   const [formData, setFormData] = useState(defaultAddlistingForm);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showSubmitResult, setShowSubmitResult] = useState(false);

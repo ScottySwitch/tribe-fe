@@ -30,6 +30,9 @@ import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
 import TagsSelection from "components/TagsSelection/TagsSelection";
 import { IAddListingForm } from "pages/add-listing";
 import Select from "components/Select/Select";
+import CategoryLinkApi from "../../../../services/category-link";
+import TagApi from "../../../../services/tag";
+import ProductTypeApi from "../../../../services/product-type";
 
 interface AddEatInforProps {
   isEdit?: boolean;
@@ -56,7 +59,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      categoryKind: data?.categoryKind,
+      categoryLinks: data?.categoryLinks,
       tags: data?.tags,
       minPrice: data?.minPrice,
       maxPrice: data?.maxPrice,
@@ -75,9 +78,48 @@ const AddEatInfor = (props: AddEatInforProps) => {
 
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
-  const [categoryKind, setCategoryKind] = useState<string | undefined>(
-    getValues("categoryKind")
-  );
+
+  // TODO: new
+  const [categoryLinks, setCategoryLinks] = useState<any>([])
+  const [selectCategoryLink, setSelectCategoryLink] = useState<string | undefined>(getValues("categoryLinks"))
+  const [productTypes, setProductTypes] = useState<any>([])
+  const [selectedProductTypes, setSelectedProductTypes] = useState<any>([])
+  const [describeTags, setDescribeTags] = useState<any>([])
+
+  useEffect(() => {
+    // Category links
+    const getCategoryLinks = async () => {
+      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(2);
+      const categoryLinks = get(data, "data.data")
+      setCategoryLinks(categoryLinks)
+    }
+    getCategoryLinks().catch((e) => console.log(e))
+
+    // Tags
+    const getTags = async () => {
+      const data = await TagApi.getTags();
+      const tags = get(data, "data.data")
+      setDescribeTags(tags)
+    }
+    getTags().catch((e) => console.log(e))
+
+    // Product type
+    const getProductTypes = async () => {
+      const data = await ProductTypeApi.getProductTypeByCategoryId(2);
+      const productTypes = get(data, "data.data")
+      setProductTypes(productTypes)
+    }
+    getProductTypes().catch((e) => console.log(e))
+  }, [])
+
+  useEffect(() => {
+    // TODO: test to remove
+    if (selectCategoryLink) {
+      // setValue("productTypes", [])
+      // setValue("productBrands", [])
+      // setProductBrands([])
+    }
+  }, [selectCategoryLink])
 
   const onSubmit = (data) => {
     onPreview?.(data);
@@ -116,14 +158,14 @@ const AddEatInfor = (props: AddEatInforProps) => {
             question="What is the category best associated with this place?"
           >
             <div className="flex flex-wrap gap-2">
-              {categories[0].options.map((opt) => (
+              {categoryLinks.map((opt) => (
                 <Badge
-                  key={opt.value}
-                  text={opt.label}
-                  selected={categoryKind === opt.label}
+                  key={opt.id}
+                  text={opt.attributes.label}
+                  selected={selectCategoryLink === opt.id}
                   onClick={() => {
-                    setValue("categoryKind", opt.label);
-                    setCategoryKind(opt.label);
+                    setValue("categoryLinks", opt.id);
+                    setSelectCategoryLink(opt.id);
                   }}
                 />
               ))}
