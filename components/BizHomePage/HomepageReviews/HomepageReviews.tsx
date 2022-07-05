@@ -23,7 +23,7 @@ interface HomepageReviewsProps {
   listingRate?: number
   reviews: any[]
   onSubmitReply: (value, id) => void
-  onChangeReviewsSequence: (e: IOption) => void
+  onChangeReviewsSequence?: (e: IOption) => void
 }
 
 const HomepageReviews = (props: HomepageReviewsProps) => {

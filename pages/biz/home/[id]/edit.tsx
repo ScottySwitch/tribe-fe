@@ -105,11 +105,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           console.log('revision');
           setIsRevision(true)
         }
-        get(data, "data.biz_invoices.length") !== 0 && setIsPaid(true)
         //they will be redirected to home if do not own the listing
         get(data, "data.is_owner") !== true && (window.location.href = "/")
       }
-
       const listing = get(data, 'data.data[0]')
       if (listing) {
         listing.biz_invoices.length !== 0
@@ -118,8 +116,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         localStorage.setItem("user", JSON.stringify(userInfo));
         const rawTags = listing.tags || [];
         const rawFacilities = listing.facilities_data || [];
-        const invoiceList = listing.biz_invoices.data || [];
-        const rawPhoneNumber = listing.phone_number;
+        const rawPhoneNumber = listing.phone_number
         const defaultPhone = rawPhoneNumber
           ? rawPhoneNumber.substring(0, 2) +
             "XXXXXX" +
@@ -175,8 +172,27 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           id: item.id,
         }));
         const tagArray = formatOptions(rawTags);
-        // const arrayFacilities = formatOptions(rawFacilities);
 
+        const rawReview = listing.reviews || [];
+        const reviewArray = rawReview.map((item) => ({
+          id: item.id,
+          content: item.content,
+          rating: item.rating,
+          images: item.images,
+          reply_reviews: item.reply_reviews,
+          date_create_reply: item.date_create_reply,
+          user: item.user,
+          visited_date: item.visited_date,
+        }));
+
+        const rawTagOptions = listing.tag_options || []
+        const tagOptionsArray = rawTagOptions.map((item) => ({
+          label: item.label,
+          value: item.value,
+          id: item.id,
+        }));
+
+        setTagOptions(tagOptionsArray);
         setBizListing(listing);
         setAction(listing.action);
         setListingImages(listing.images);
@@ -186,84 +202,34 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setDescription(listing.description);
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
+        console.log('social_info');
+        console.log(listing.social_info);
         setSocialInfo(listing.social_info);
         setDealList(listing.deals.data);  
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
         setTags(tagArray);
+        setReviews(reviewArray);
         setFacilities(rawFacilities);
         setItemList(listingArray);
         setMenuList(menuArray);
         setDealList(dealArray);
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
-        if (invoiceList.length > 0) {
-          setPhoneNumber(defaultPhone);
-        } else {
+        if (bizInvoicesArray.length > 0) {
+          setIsPaid(true)
           setPhoneNumber(rawPhoneNumber);
+        } else {
+          setPhoneNumber(defaultPhone);
         }
       }
     };
 
     if (listingSlug) {
       getListingData(listingSlug);
-      getTags();
-      getFacilities();
-      getBizListingReviews(listingSlug, "rating:desc");
     }
   }, [listingSlug, isViewPage]);
 
-  const getBizListingReviews = async (listingSlug, sortBy) => {
-    const data = await ReviewApi.getReviewsByBizListingSlugWithSort(
-      listingSlug,
-      sortBy
-    );
-    const rawReview = get(data, "data.data") || [];
-    const reviewArray = rawReview.map((item) => ({
-      id: item.id,
-      biz_listing: get(item, "attributes.biz_listing"),
-      content: get(item, "attributes.content"),
-      rating: get(item, "attributes.rating"),
-      images: get(item, "attributes.images"),
-      reply_reviews: get(item, "attributes.reply_reviews"),
-      date_create_reply: get(item, "attributes.date_create_reply"),
-      user: get(item, "attributes.user"),
-      visited_date: get(item, "attributes.visited_date"),
-    }));
-    setReviews(reviewArray);
-  };
-
-  const handleChangeReviewsSequence = async ({ value }: IOption) => {
-    if (value === "top") {
-      await getBizListingReviews(listingSlug, "rating:desc");
-    } else {
-      await getBizListingReviews(listingSlug, "id:desc");
-    }
-  };
-
-  //Get tags
-  const getTags = async () => {
-    const data = await TagApi.getTags();
-    const tagsList = get(data, "data.data") || [];
-    const tagArray = tagsList.map((item) => ({
-      label: item.attributes.label,
-      value: item.attributes.value,
-      id: item.id,
-    }));
-    setTagOptions(tagArray);
-  };
-
-  //Get Facility
-  const getFacilities = async () => {
-    const data = await FacilityApi.getFacility();
-    const facilitiesList = get(data, "data.data") || [];
-    const facilitiesArray = facilitiesList.map((item) => ({
-      label: item.attributes.label,
-      value: item.attributes.value,
-      id: item.id,
-    }));
-    setFacilityOptions(facilitiesArray);
-  };
 
   // TODO: check function upload multiple images
   const handleChangeImages = (srcImages) => setListingImages(srcImages);
@@ -607,7 +573,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 isViewPage={isViewPage}
                 reviews={reviews}
                 onSubmitReply={(value, id) => handleSubmitReply(value, id)}
-                onChangeReviewsSequence={handleChangeReviewsSequence}
               />
               <Break />
               <Contacts />
