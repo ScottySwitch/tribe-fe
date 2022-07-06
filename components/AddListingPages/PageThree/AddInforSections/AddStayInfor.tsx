@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 import Badge from "components/Badge/Badge";
 import Button from "components/Button/Button";
@@ -18,6 +18,7 @@ import {
   foodOptions,
   nonHalalActivities,
   prayerFacilities,
+
 } from "../constant";
 import TagsSelection from "components/TagsSelection/TagsSelection";
 import { IOption } from "type";
@@ -27,6 +28,10 @@ import { IAddListingForm } from "pages/add-listing";
 import Icon from "components/Icon/Icon";
 import Select from "components/Select/Select";
 import { currencyOptions } from "constant";
+import CategoryLinkApi from "../../../../services/category-link";
+import get from "lodash/get";
+import TagApi from "../../../../services/tag";
+import ProductTypeApi from "../../../../services/product-type";
 
 interface AddStayInforProps {
   isEdit?: boolean;
@@ -53,8 +58,9 @@ const AddStayInfor = (props: AddStayInforProps) => {
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      categoryKind: data?.categoryKind,
-      tags: data?.tags,
+      categoryLinks: data?.categoryLinks,
+      productTypes: data?.productTypes,
+      describeTags: data?.describeTags,
       currency: data?.currency,
       minPrice: data?.minPrice,
       images: data?.images,
@@ -70,9 +76,46 @@ const AddStayInfor = (props: AddStayInforProps) => {
 
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
-  const [categoryKind, setCategoryKind] = useState<string | undefined>(
-    getValues("categoryKind")
-  );
+
+  const [categoryLinks, setCategoryLinks] = useState<any>([])
+  const [selectCategoryLink, setSelectCategoryLink] = useState<string | undefined>(getValues("categoryLinks"))
+  const [productTypes, setProductTypes] = useState<any>([])
+  const [describeTags, setDescribeTags] = useState<any>([])
+
+  useEffect(() => {
+    // Category links
+    const getCategoryLinks = async () => {
+      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(5);
+      const categoryLinks = get(data, "data.data")
+      setCategoryLinks(categoryLinks)
+    }
+    getCategoryLinks().catch((e) => console.log(e))
+
+    // Tags
+    const getTags = async () => {
+      const data = await TagApi.getTags();
+      const tags = get(data, "data.data")
+      setDescribeTags(tags)
+    }
+    getTags().catch((e) => console.log(e))
+  }, [])
+
+  useEffect(() => {
+    setValue("productTypes", [])
+    const getProductTypes = async () => {
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink);
+      const productTypes = get(data, "data.data")
+      const mapProductTypes: any = []
+      productTypes.map(mapProductType => {
+        mapProductTypes.push({
+          value: mapProductType.id,
+          label: mapProductType.attributes.label
+        })
+      })
+      setProductTypes(mapProductTypes)
+    }
+    getProductTypes().catch((e) => console.log(e))
+  }, [selectCategoryLink])
 
   const onSubmit = (data) => {
     onPreview?.(data);
@@ -112,14 +155,14 @@ const AddStayInfor = (props: AddStayInforProps) => {
             question="What is the category best associated with this accommodation?"
           >
             <div className="flex flex-wrap gap-2">
-              {associatedCategories.map((opt) => (
+              {categoryLinks.map((opt) => (
                 <Badge
-                  key={opt.label}
-                  text={opt.label}
-                  selected={categoryKind === opt.label}
+                  key={opt.id}
+                  text={opt.attributes.label}
+                  selected={selectCategoryLink === opt.id}
                   onClick={() => {
-                    setValue("categoryKind", opt.label);
-                    setCategoryKind(opt.label);
+                    setValue("categoryLinks", opt.id);
+                    setSelectCategoryLink(opt.id);
                   }}
                 />
               ))}
@@ -132,7 +175,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
             instruction="Select 5 max"
             optional
           >
-            <PreviewValue valueKey="tags" value={getValues("tags")} />
+            <PreviewValue valueKey="tags" value={getValues("productTypes")} />
             <br />
             <Button
               text="Edit Property"
@@ -162,13 +205,14 @@ const AddStayInfor = (props: AddStayInforProps) => {
             optional
           >
             <div className="flex flex-col gap-y-5">
-              {accommodation.map((item) => (
+              {describeTags.map((item) => (
                 <Checkbox
-                  key={item.label}
-                  label={item.label}
-                  className="w-1/2"
-                  value={item.label}
-                  register={register("tags")}
+                  key={item.id}
+                  label={item.attributes.label}
+                  // name="tags"
+                  value={item.id}
+                  className="w-full sm:w-1/2"
+                  register={register("describeTags")}
                 />
               ))}
             </div>
@@ -332,12 +376,12 @@ const AddStayInfor = (props: AddStayInforProps) => {
         onClose={() => setShowTagsModal(false)}
       >
         <TagsSelection
-          options={subCateList}
-          selectedList={getValues("tags")}
+          options={productTypes}
+          selectedList={getValues("productTypes")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
-            setValue("tags", list);
-            setShowTagsModal(false);
+            setValue("productTypes", list);
+            setShowTagsModal(false)
           }}
         />
       </Modal>
