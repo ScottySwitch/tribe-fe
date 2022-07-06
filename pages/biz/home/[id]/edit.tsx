@@ -106,7 +106,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           setIsRevision(true)
         }
         //they will be redirected to home if do not own the listing
-        get(data, "data.is_owner") !== true && (window.location.href = "/")
+        // get(data, "data.is_owner") !== true && (window.location.href = "/")
       }
       const listing = get(data, 'data.data[0]')
       if (listing) {
@@ -196,13 +196,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setAction(listing.action);
         setListingImages(listing.images);
         setCategory(
-          listing.categories[0].id || Categories.BUY
+          get(listing, 'categories[0].id') || Categories.BUY
         );
         setDescription(listing.description);
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
         setSocialInfo(listing.social_info);
-        setDealList(listing.deals.data);  
+        setDealList(listing.deals);  
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
         setTags(tagArray);
