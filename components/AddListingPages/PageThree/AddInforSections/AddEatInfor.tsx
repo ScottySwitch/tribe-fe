@@ -30,6 +30,9 @@ import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
 import TagsSelection from "components/TagsSelection/TagsSelection";
 import { IAddListingForm } from "pages/add-listing";
 import Select from "components/Select/Select";
+import CategoryLinkApi from "../../../../services/category-link";
+import TagApi from "../../../../services/tag";
+import ProductTypeApi from "../../../../services/product-type";
 
 interface AddEatInforProps {
   isEdit?: boolean;
@@ -56,8 +59,9 @@ const AddEatInfor = (props: AddEatInforProps) => {
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      categoryKind: data?.categoryKind,
-      tags: data?.tags,
+      categoryLinks: data?.categoryLinks,
+      productTypes: data?.productTypes,
+      describeTags: data?.describeTags,
       minPrice: data?.minPrice,
       maxPrice: data?.maxPrice,
       mealsKind: data?.mealsKind,
@@ -75,9 +79,47 @@ const AddEatInfor = (props: AddEatInforProps) => {
 
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
-  const [categoryKind, setCategoryKind] = useState<string | undefined>(
-    getValues("categoryKind")
-  );
+
+  const [categoryLinks, setCategoryLinks] = useState<any>([]);
+  const [selectCategoryLink, setSelectCategoryLink] = useState<
+    string | undefined
+  >(getValues("categoryLinks"));
+  const [productTypes, setProductTypes] = useState<any>([]);
+  const [describeTags, setDescribeTags] = useState<any>([]);
+
+  useEffect(() => {
+    // Category links
+    const getCategoryLinks = async () => {
+      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(2);
+      const categoryLinks = get(data, "data.data");
+      setCategoryLinks(categoryLinks);
+    };
+    getCategoryLinks().catch((e) => console.log(e));
+
+    // Tags
+    const getTags = async () => {
+      const data = await TagApi.getTags();
+      const tags = get(data, "data.data");
+      setDescribeTags(tags);
+    };
+    getTags().catch((e) => console.log(e));
+
+    // Product type
+    const getProductTypes = async () => {
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(2);
+      const productTypes = get(data, "data.data");
+      const mapProductTypes: any = [];
+      Array.isArray(productTypes) &&
+        productTypes.map((mapProductType) => {
+          mapProductTypes.push({
+            value: mapProductType.id,
+            label: mapProductType.attributes.label,
+          });
+        });
+      setProductTypes(mapProductTypes);
+    };
+    getProductTypes().catch((e) => console.log(e));
+  }, []);
 
   const onSubmit = (data) => {
     onPreview?.(data);
@@ -116,17 +158,18 @@ const AddEatInfor = (props: AddEatInforProps) => {
             question="What is the category best associated with this place?"
           >
             <div className="flex flex-wrap gap-2">
-              {categories[0].options.map((opt) => (
-                <Badge
-                  key={opt.value}
-                  text={opt.label}
-                  selected={categoryKind === opt.label}
-                  onClick={() => {
-                    setValue("categoryKind", opt.label);
-                    setCategoryKind(opt.label);
-                  }}
-                />
-              ))}
+              {Array.isArray(categoryLinks) &&
+                categoryLinks.map((opt) => (
+                  <Badge
+                    key={opt.id}
+                    text={opt.attributes.label}
+                    selected={selectCategoryLink === opt.id}
+                    onClick={() => {
+                      setValue("categoryLinks", opt.id);
+                      setSelectCategoryLink(opt.id);
+                    }}
+                  />
+                ))}
             </div>
           </Question>
           <Question
@@ -135,7 +178,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             instruction="Select 5 max"
             optional
           >
-            <PreviewValue valueKey="tags" value={getValues("tags")} />
+            <PreviewValue valueKey="tags" value={getValues("productTypes")} />
             <br />
             <Button
               text="Edit cuisines"
@@ -165,16 +208,17 @@ const AddEatInfor = (props: AddEatInforProps) => {
             optional
           >
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {otherList.map((item) => (
-                <Checkbox
-                  key={item.label}
-                  label={item.label}
-                  // name="tags"
-                  value={item.label}
-                  className="w-full sm:w-1/2"
-                  register={register("tags")}
-                />
-              ))}
+              {Array.isArray(describeTags) &&
+                describeTags.map((item) => (
+                  <Checkbox
+                    key={item.id}
+                    label={item.attributes.label}
+                    // name="tags"
+                    value={item.id}
+                    className="w-full sm:w-1/2"
+                    register={register("describeTags")}
+                  />
+                ))}
             </div>
           </Question>
           <Question
@@ -348,11 +392,11 @@ const AddEatInfor = (props: AddEatInforProps) => {
         onClose={() => setShowTagsModal(false)}
       >
         <TagsSelection
-          options={subCateList}
-          selectedList={getValues("tags")}
+          options={productTypes}
+          selectedList={getValues("productTypes")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
-            setValue("tags", list);
+            setValue("productTypes", list);
             setShowTagsModal(false);
           }}
         />

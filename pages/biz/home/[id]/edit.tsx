@@ -1,7 +1,8 @@
+import get from "lodash/get";
+import moment from "moment";
+import parseISO from "date-fns/parseISO";
 import { useRouter } from "next/router";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Icon from "components/Icon/Icon";
 import Details from "components/BizHomePage/Details/Details";
@@ -19,8 +20,6 @@ import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal
 import TagApi from "services/tag";
 import FacilityApi from "services/facility";
 import ReviewApi from "services/review";
-
-import styles from "styles/BizHomepage.module.scss";
 import Facilities from "components/BizHomePage/Facilities/Facilities";
 import { IOption } from "type";
 import Tags from "components/BizHomePage/Tags/Tags";
@@ -30,21 +29,13 @@ import ProductApi from "../../../../services/product";
 import MenuApi from "../../../../services/menu";
 import DealApi from "../../../../services/deal";
 import BizListingRevision from "services/biz-listing-revision";
-import get from "lodash/get";
-import moment from "moment";
-import parseISO from "date-fns/parseISO";
 import Break from "components/Break/Break";
 import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
-import { now } from "lodash";
 import { IAddListingForm } from "pages/add-listing";
 
-const CenterIcon = () => (
-  <div className="flex flex-col items-center gap-1">
-    <Icon icon="camera-color" size={40} />
-    <p>Add photos/ videos</p>
-  </div>
-);
+import styles from "styles/BizHomepage.module.scss";
+import Banner from "components/BizHomePage/Banner/Banner";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
@@ -100,15 +91,15 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
       } else {
         //if normal users go to edit listing homepage
-        data = await BizListingApi.getInfoOwnerBizListingBySlug(listingSlug)
+        data = await BizListingApi.getInfoOwnerBizListingBySlug(listingSlug);
         if (get(data, "data.is_revision") === true) {
-          console.log('revision');
-          setIsRevision(true)
+          console.log("revision");
+          setIsRevision(true);
         }
         //they will be redirected to home if do not own the listing
-        // get(data, "data.is_owner") !== true && (window.location.href = "/")
+        get(data, "data.is_owner") !== true && (window.location.href = "/");
       }
-      const listing = get(data, 'data.data[0]')
+      const listing = get(data, "data.data[0]");
       if (listing) {
         console.log(listing);
         console.log('userInfo', userInfo)
@@ -116,7 +107,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         localStorage.setItem("user", JSON.stringify(userInfo));
         const rawTags = listing.tags || [];
         const rawFacilities = listing.facilities_data || [];
-        const rawPhoneNumber = listing.phone_number
+        const rawPhoneNumber = listing.phone_number;
         const defaultPhone = rawPhoneNumber
           ? rawPhoneNumber.substring(0, 2) +
             "XXXXXX" +
@@ -161,9 +152,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           // start_date: item.start_date,
           // end_date: moment(item.nd_date')).format("YYYY-MM-DD HH:mm:ss,
           validUntil: parseISO(
-            moment(item.end_date).format(
-              "YYYY-MM-DD HH:mm:ss"
-            )
+            moment(item.end_date).format("YYYY-MM-DD HH:mm:ss")
           ),
           isChange: false,
         }));
@@ -185,7 +174,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           visited_date: item.visited_date,
         }));
 
-        const rawTagOptions = listing.tag_options || []
+        const rawTagOptions = listing.tag_options || [];
         const tagOptionsArray = rawTagOptions.map((item) => ({
           label: item.label,
           value: item.value,
@@ -196,9 +185,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setBizListing(listing);
         setAction(listing.action);
         setListingImages(listing.images);
-        setCategory(
-          get(listing, 'categories[0].id') || Categories.BUY
-        );
+        setCategory(get(listing, "categories[0].id") || Categories.BUY);
         setDescription(listing.description);
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
@@ -215,7 +202,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
         if (bizInvoicesArray.length > 0) {
-          setIsPaid(true)
+          setIsPaid(true);
           setPhoneNumber(rawPhoneNumber);
         } else {
           setPhoneNumber(defaultPhone);
@@ -227,7 +214,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       getListingData(listingSlug);
     }
   }, [listingSlug, isViewPage]);
-
 
   // TODO: check function upload multiple images
   const handleChangeImages = (srcImages) => setListingImages(srcImages);
@@ -363,7 +349,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedItemList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? (item.id).toString()
+          ? item.id.toString()
           : item.parent_id
           ? item.parent_id.toString()
           : "";
@@ -401,7 +387,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedMenuList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? (item.id).toString()
+          ? item.id.toString()
           : item.parent_id
           ? item.parent_id.toString()
           : "";
@@ -439,7 +425,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     await Promise.all(
       editedDealList.map(async (item) => {
         const parent_id = !item.is_revision
-          ? (item.id).toString()
+          ? item.id.toString()
           : item.parent_id
           ? item.parent_id.toString()
           : "";
@@ -478,145 +464,146 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     window.location.reload();
   };
 
+  if (!bizListing) {
+    return null;
+  }
+
   return (
-    bizListing && (
-      <div className={styles.listing_homepage}>
-        <SectionLayout show={screen === ListingHomePageScreens.HOME}>
-          <Upload
-            className={styles.banner}
-            centerIcon={<CenterIcon />}
-            onChange={handleChangeImages}
-            type="banner"
-            isPaid
-            fileList={listingImages}
-          />
-          <div className={styles.breadcrumbs}>
-            Home <Icon icon="carret-right" size={14} color="#7F859F" />
-            {bizListing.name}
+    <div className={styles.listing_homepage}>
+      <SectionLayout show={screen === ListingHomePageScreens.HOME}>
+        <Banner
+          isViewPage={isViewPage}
+          isPaid={isPaid}
+          listingImages={listingImages}
+          onChangeImages={handleChangeImages}
+        />
+        <div className={styles.breadcrumbs}>
+          Home <Icon icon="carret-right" size={14} color="#7F859F" />
+          {bizListing.name}
+        </div>
+        <ListingInforCard
+          isViewPage={isViewPage}
+          logo={logo}
+          handleChangeLogo={handleChangeLogo}
+          bizListing={bizListing}
+          priceRange={priceRange}
+          socialInfo={socialInfo}
+          phoneNumber={phoneNumber}
+          onSetPriceRange={handleSetPriceRange}
+          onSetSocialInfo={handleSetSocialInfo}
+          onSetPhoneNumber={handleSetPhoneNumber}
+        />
+        <div className={styles.body}>
+          <div className={styles.right_col}>
+            <EditAction
+              isOwned={true}
+              isViewPage={isViewPage}
+              isLoading={isLoading}
+              isPaid={isPaid}
+              action={action}
+              onApplyAction={handleSetAction}
+              onPublishPage={handleSubmit}
+            />
           </div>
-          <ListingInforCard
-            isViewPage={isViewPage}
-            logo={logo}
-            handleChangeLogo={handleChangeLogo}
-            bizListing={bizListing}
-            priceRange={priceRange}
-            socialInfo={socialInfo}
-            phoneNumber={phoneNumber}
-            onSetPriceRange={handleSetPriceRange}
-            onSetSocialInfo={handleSetSocialInfo}
-            onSetPhoneNumber={handleSetPhoneNumber}
-          />
-          <div className={styles.body}>
-            <div className={styles.right_col}>
-              <EditAction
-                isOwned={true}
+          <div className={styles.left_col}>
+            <Break show={!isViewPage} />
+            {!isViewPage && <OnboardChecklist />}
+            <Break show={!isViewPage} />
+            <Details
+              isViewPage={isViewPage}
+              description={description}
+              onSetDescription={handleSetDescription}
+            />
+            <Break show={!isViewPage} />
+            <Facilities
+              category={category}
+              isViewPage={isViewPage}
+              facilities={facilitiesData}
+              onSetFacilities={handleSetFacilities}
+              // facilityOptions={facilityOptions}
+            />
+            <Break show={!isViewPage} />
+            <Tags
+              isViewPage={isViewPage}
+              tags={tags}
+              onSetTags={handleSetTags}
+              tagOptions={tagOptions}
+            />
+            <Break show={!isViewPage} />
+            <HomeOpenHours
+              isViewPage={isViewPage}
+              openHours={openHours}
+              onSetOpenHours={handleSetOpenHours}
+            />
+            <Break />
+            <div>
+              <RenderTabs
                 isViewPage={isViewPage}
-                isLoading={isLoading}
                 isPaid={isPaid}
-                action={action}
-                onApplyAction={handleSetAction}
-                onPublishPage={handleSubmit}
-              />
-            </div>
-            <div className={styles.left_col}>
-              <Break show={!isViewPage} />
-              {!isViewPage && <OnboardChecklist />}
-              <Break show={!isViewPage} />
-              <Details
-                isViewPage={isViewPage}
-                description={description}
-                onSetDescription={handleSetDescription}
-              />
-              <Break show={!isViewPage} />
-              <Facilities
+                menuList={menuList}
                 category={category}
-                isViewPage={isViewPage}
-                facilities={facilitiesData}
-                onSetFacilities={handleSetFacilities}
-                // facilityOptions={facilityOptions}
+                itemList={itemList}
+                dealList={dealList}
+                onSetScreen={(e) => setScreen(e)}
+                onDelete={(e) => console.log(e)}
               />
-              <Break show={!isViewPage} />
-              <Tags
-                isViewPage={isViewPage}
-                tags={tags}
-                onSetTags={handleSetTags}
-                tagOptions={tagOptions}
-              />
-              <Break show={!isViewPage} />
-              <HomeOpenHours
-                isViewPage={isViewPage}
-                openHours={openHours}
-                onSetOpenHours={handleSetOpenHours}
-              />
-              <Break />
-              <div>
-                <RenderTabs
-                  isViewPage={isViewPage}
-                  isPaid={isPaid}
-                  menuList={menuList}
-                  category={category}
-                  itemList={itemList}
-                  dealList={dealList}
-                  onSetScreen={(e) => setScreen(e)}
-                  onDelete={(e) => console.log(e)}
-                />
-              </div>
-              <Break />
-              <HomepageReviews
-                listingSlug={listingSlug}
-                listingRate={listingRate}
-                isPaid={isPaid}
-                isViewPage={isViewPage}
-                reviews={reviews}
-                onSubmitReply={(value, id) => handleSubmitReply(value, id)}
-              />
-              <Break />
-              <Contacts />
             </div>
+            <Break />
+            <HomepageReviews
+              listingSlug={listingSlug}
+              listingRate={listingRate}
+              isPaid={isPaid}
+              isViewPage={isViewPage}
+              reviews={reviews}
+              onSubmitReply={(value, id) => handleSubmitReply(value, id)}
+              // onChangeReviewsSequence={handleChangeReviewsSequence}
+            />
+            <Break />
+            <Contacts />
           </div>
-        </SectionLayout>
-        <SectionLayout
-          show={screen === ListingHomePageScreens.ADD_ITEMS}
-          title={getAddItemsFields(category).title}
-          childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
-        >
-          <AddItems
-            isPaid={isPaid}
-            multiple
-            onSubmit={handleSetItemList}
-            onCancel={handleCancel}
-            itemList={itemList}
-            placeholders={getAddItemsFields(category).placeholder}
-          />
-        </SectionLayout>
-        <SectionLayout
-          show={screen === ListingHomePageScreens.ADD_MENU}
-          title="Add a menu"
-          childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
-        >
-          <AddMenu
-            isPaid={isPaid}
-            multiple={true}
-            menuList={menuList}
-            onCancel={handleCancel}
-            onSubmit={handleSetMenu}
-          />
-        </SectionLayout>
-        <SectionLayout
-          show={screen === ListingHomePageScreens.ADD_DEALS}
-          title="Add deals"
-          childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
-        >
-          <AddDeals
-            isPaid={isPaid}
-            multiple
-            onCancel={handleCancel}
-            onSubmit={handleSetDealList}
-            dealList={dealList}
-          />
-        </SectionLayout>
-      </div>
-    )
+        </div>
+      </SectionLayout>
+      <SectionLayout
+        show={screen === ListingHomePageScreens.ADD_ITEMS}
+        title={getAddItemsFields(category).title}
+        childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
+      >
+        <AddItems
+          isPaid={isPaid}
+          multiple
+          onSubmit={handleSetItemList}
+          onCancel={handleCancel}
+          itemList={itemList}
+          placeholders={getAddItemsFields(category).placeholder}
+        />
+      </SectionLayout>
+      <SectionLayout
+        show={screen === ListingHomePageScreens.ADD_MENU}
+        title="Add a menu"
+        childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
+      >
+        <AddMenu
+          isPaid={isPaid}
+          multiple={true}
+          menuList={menuList}
+          onCancel={handleCancel}
+          onSubmit={handleSetMenu}
+        />
+      </SectionLayout>
+      <SectionLayout
+        show={screen === ListingHomePageScreens.ADD_DEALS}
+        title="Add deals"
+        childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
+      >
+        <AddDeals
+          isPaid={isPaid}
+          multiple
+          onCancel={handleCancel}
+          onSubmit={handleSetDealList}
+          dealList={dealList}
+        />
+      </SectionLayout>
+    </div>
   );
 };
 

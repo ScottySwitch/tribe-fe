@@ -10,10 +10,13 @@ export interface ModalProps {
   subTitle?: string;
   closable?: boolean;
   width?: string | number;
+  maxHeight?: string | number;
   maxWidth?: string | number;
   mobilePosition?: "center" | "bottom" | "top" | "left" | "right";
   backdrop?: boolean;
   mobileFullHeight?: boolean;
+  containerClassName?: string;
+  contentClassName?: string;
   onClose?: () => void;
 }
 
@@ -24,12 +27,15 @@ const Modal = (props: ModalProps) => {
     title,
     transparent,
     width,
+    maxHeight,
     maxWidth,
     closable = true,
     mobilePosition = "bottom",
     mobileFullHeight,
+    containerClassName,
+    contentClassName,
     backdrop = true,
-    
+
     subTitle,
     onClose,
   } = props;
@@ -41,13 +47,23 @@ const Modal = (props: ModalProps) => {
     [styles.full_height]: mobileFullHeight,
   });
 
+  const modalContainerClassName = classNames(
+    styles.container,
+    containerClassName
+  );
+
+  const modalContentClassName = classNames(styles.content, contentClassName);
+
   const handleOnBlurModal: MouseEventHandler<HTMLDivElement> = (e) => {
-    e.target === e.currentTarget && onClose?.();    
+    e.target === e.currentTarget && onClose?.();
   };
 
   return (
     <div className={modalClassName} onClick={handleOnBlurModal}>
-      <div style={{ width, maxWidth }} className={styles.container}>
+      <div
+        style={{ width, maxHeight, maxWidth }}
+        className={modalContainerClassName}
+      >
         {title && (
           <div className={styles.header}>
             <div>
@@ -61,7 +77,7 @@ const Modal = (props: ModalProps) => {
             )}
           </div>
         )}
-        <div className={styles.content}>{children}</div>
+        <div className={modalContentClassName}>{children}</div>
       </div>
     </div>
   );

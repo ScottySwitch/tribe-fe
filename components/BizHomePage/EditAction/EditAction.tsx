@@ -1,36 +1,48 @@
-import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import Modal from "components/Modal/Modal"
-import React, { useState } from "react"
-import styles from "./EditAction.module.scss"
-import SelectInput from "components/SelectInput/SelectInput"
-import { formattedAreaCodes, phoneAreaCodes } from "constant"
+import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import Modal from "components/Modal/Modal";
+import React, { useState } from "react";
+import styles from "./EditAction.module.scss";
+import SelectInput from "components/SelectInput/SelectInput";
+import { formattedAreaCodes, phoneAreaCodes } from "constant";
+import { useRouter } from "next/router";
+import { removeZeroInPhoneNumber } from "utils";
 
 interface EditActionProps {
-  isOwned?: boolean
-  isViewPage?: boolean
-  action: { label: string; value: string }
-  onApplyAction: (action: string, value: string) => void
-  onPublishPage: () => void
-  isPaid?: boolean
-  isLoading?: boolean
+  isOwned?: boolean;
+  isViewPage?: boolean;
+  action: { label: string; value: string };
+  onApplyAction: (action: string, value: string) => void;
+  onPublishPage: () => void;
+  isPaid?: boolean;
+  isLoading?: boolean;
 }
 
 const EditAction = (props: EditActionProps) => {
-  const { isViewPage, isOwned, action, isPaid, isLoading, onPublishPage, onApplyAction } = props
+  const {
+    isViewPage,
+    isOwned,
+    action,
+    isPaid,
+    isLoading,
+    onPublishPage,
+    onApplyAction,
+  } = props;
 
-  const [showEditActionModal, setShowEditActionModal] = useState(false)
-  const [showBuyNow, setShowBuyNow] = useState(false)
-  const [showContactUs, setShowContactUs] = useState(false)
-  const [showGiftCard, setShowGiftCard] = useState(false)
-  const [showBookNow, setShowBookNow] = useState(false)
-  const [showStartOrder, setShowStartOrder] = useState(false)
-  const [showWhatsApp, setShowWhatsApp] = useState(false)
-  const [showLearnMore, setShowLearnMore] = useState(false)
-  const [showWatchVideo, setShowWatchVideo] = useState(false)
-  const [showShopOnWebsite, setShowShopOnWebWebsite] = useState(false)
-  const [actionValue, setActionValue] = useState("")
+  const [showEditActionModal, setShowEditActionModal] = useState(false);
+  const [showBuyNow, setShowBuyNow] = useState(false);
+  const [showContactUs, setShowContactUs] = useState(false);
+  const [showGiftCard, setShowGiftCard] = useState(false);
+  const [showBookNow, setShowBookNow] = useState(false);
+  const [showStartOrder, setShowStartOrder] = useState(false);
+  const [showWhatsApp, setShowWhatsApp] = useState(false);
+  const [showLearnMore, setShowLearnMore] = useState(false);
+  const [showWatchVideo, setShowWatchVideo] = useState(false);
+  const [showShopOnWebsite, setShowShopOnWebWebsite] = useState(false);
+  const [actionValue, setActionValue] = useState("");
+
+  const router = useRouter();
 
   const actionList = [
     {
@@ -97,7 +109,8 @@ const EditAction = (props: EditActionProps) => {
     {
       icon: "info-circle-color",
       label: "Learn more",
-      subLabel: "Choose a website where people can learn more about what you do",
+      subLabel:
+        "Choose a website where people can learn more about what you do",
       showModalState: showLearnMore,
       type: "url",
       open: () => setShowLearnMore(true),
@@ -124,20 +137,32 @@ const EditAction = (props: EditActionProps) => {
       close: () => setShowShopOnWebWebsite(false),
       apply: () => {},
     },
-  ]
+  ];
 
   const handleApply = (action: string) => {
-    onApplyAction(action, actionValue)
-  }
+    onApplyAction(action, actionValue);
+  };
+
+  const handleOpenNewWindow = (action) => {
+    const { label, value } = action;
+    if (["Contact us", "Send WhatApps message"].includes(label)) {
+      let phoneNumber = value;
+      window.open(`tel:${phoneNumber}`);
+    } else {
+      let url = value;
+      if (url.indexOf("//") < 0) url = "https://" + url;
+      window.open(url, "_blank")?.focus();
+    }
+  };
 
   return (
     <React.Fragment>
-      {isViewPage && isPaid && (
+      {isViewPage && isPaid && action?.value && (
         <div className={styles.action_modal}>
           <Button
-            text={action?.label || "Edit action button"}
+            text={action.label}
             size="small"
-            onClick={() => setShowEditActionModal(true)}
+            onClick={() => handleOpenNewWindow(action)}
           />
         </div>
       )}
@@ -171,7 +196,8 @@ const EditAction = (props: EditActionProps) => {
             <div>Upgrade plan</div>
           </div>
           <p className="text-left">
-            Upgrade to Basic Tier to access features that help grow your business!
+            Upgrade to Basic Tier to access features that help grow your
+            business!
           </p>
           <a>Upgrade now</a>
         </div>
@@ -182,7 +208,7 @@ const EditAction = (props: EditActionProps) => {
         mobileFullHeight
         width={600}
         onClose={() => {
-          setShowEditActionModal(false)
+          setShowEditActionModal(false);
         }}
       >
         <div className={styles.content}>
@@ -191,8 +217,13 @@ const EditAction = (props: EditActionProps) => {
               Choose the action you want your visitor to take
             </div>
             {actionList.map((action) =>
-              isPaid === false && action.label === "Send WhatApps message" ? null : (
-                <div key={action.label} className={styles.action} onClick={action.open}>
+              isPaid === false &&
+              action.label === "Send WhatApps message" ? null : (
+                <div
+                  key={action.label}
+                  className={styles.action}
+                  onClick={action.open}
+                >
                   <div className={styles.icon_container}>
                     <Icon icon={action.icon} size={25} />
                   </div>
@@ -215,6 +246,8 @@ const EditAction = (props: EditActionProps) => {
             width={400}
             mobilePosition="center"
             onClose={action.close}
+            containerClassName="overflow-visible"
+            contentClassName="overflow-visible"
           >
             <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">
               {action.type === "phone" ? (
@@ -225,9 +258,7 @@ const EditAction = (props: EditActionProps) => {
                   selectPlaceholder="Area code"
                   options={formattedAreaCodes}
                   shouldControlShowValue
-                  onChange={(e) =>
-                    setActionValue(`${e.select.value}${e.input.substr(1, e.input.length - 1)}`)
-                  }
+                  onChange={(e) => setActionValue(removeZeroInPhoneNumber(e))}
                 />
               ) : (
                 <Input
@@ -240,9 +271,9 @@ const EditAction = (props: EditActionProps) => {
                 text="Apply"
                 width="100%"
                 onClick={() => {
-                  action.close()
-                  setShowEditActionModal(false)
-                  handleApply(action.label)
+                  action.close();
+                  setShowEditActionModal(false);
+                  handleApply(action.label);
                 }}
               />
             </div>
@@ -250,7 +281,7 @@ const EditAction = (props: EditActionProps) => {
         )
       )}
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default EditAction
+export default EditAction;

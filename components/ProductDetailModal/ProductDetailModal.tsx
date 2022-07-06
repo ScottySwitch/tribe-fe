@@ -1,10 +1,10 @@
 import { ReactElement, useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import Slider, { Settings } from "react-slick"
 import Modal, { ModalProps } from "components/Modal/Modal"
 import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
 import ScrollingBox from "components/ScrollingBox/ScrollingBox"
-import Image from "next/image"
 import styles from "./ProductDetailModal.module.scss"
 
 export interface IProduct {

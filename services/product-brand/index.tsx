@@ -5,11 +5,14 @@ const qs = require('qs');
 const getProductBrandByProductTypeId = async (productTypeIds: []) => {
   const query = qs.stringify({
     "filters": {
-      "product_type": {
+      "product_types": {
         "id": {
           "$in": productTypeIds
         }
       }
+    },
+    "pagination": {
+      "limit": 500
     }
   }, {
     encodeValuesOnly: true
