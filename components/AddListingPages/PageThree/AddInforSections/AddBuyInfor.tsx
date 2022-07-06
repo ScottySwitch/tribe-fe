@@ -91,6 +91,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       getProductTypes().catch((e) => console.log(e))
       setValue("productTypes", [])
       setValue("productBrands", [])
+      setSelectedProductTypes([])
       setProductBrands([])
     }
   }, [selectCategoryLink])

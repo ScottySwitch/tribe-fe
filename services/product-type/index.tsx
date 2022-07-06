@@ -4,9 +4,12 @@ const qs = require('qs');
 const getProductTypeByCategoryLinkId = async (categoryLinkId: any) => {
   const query = qs.stringify({
     "filters": {
-      "category_link": {
+      "category_links": {
         "id": categoryLinkId
       }
+    },
+    "pagination": {
+      "limit": 500
     }
   }, {
     encodeValuesOnly: true
@@ -19,9 +22,7 @@ const getProductTypeByCategoryLinkId = async (categoryLinkId: any) => {
 const getProductTypeByCategoryId = async (categoryId: any) => {
   const query = qs.stringify({
     "filters": {
-      "category": {
-        "id": categoryId
-      }
+      "category_id": categoryId
     },
     "pagination": {
       "limit": 500
