@@ -18,6 +18,22 @@ const createBizInvoice = async (params: any) => {
   });
 }
 
+const createBizRevisionInvoice = async (params: any) => {
+  const url = `/api/biz-invoices`;
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  return await Api.post(url, {
+    data: {
+        user: userInfo.id,
+        value: params.value,
+        payment_method: params.paymentMethod,
+        transaction_id: params.transaction_id,
+        biz_listing_revision: userInfo.biz_id,
+        publishedAt: null
+    }
+  });
+}
+
+
 const getBizInvoiceByUserId = async (userId: number) => {
   const query = qs.stringify({
     "filters": {
@@ -38,5 +54,6 @@ const getBizInvoiceByUserId = async (userId: number) => {
 
 export default {
     createBizInvoice,
+    createBizRevisionInvoice,
     getBizInvoiceByUserId
 }

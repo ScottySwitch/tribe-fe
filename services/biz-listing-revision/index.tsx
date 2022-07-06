@@ -170,6 +170,18 @@ const getOwnerBizListingRevisionBySlug = async (bizListingSlug: any) => {
   return await Api.get(url);
 }
 
+const createListingRoleRevison = async (params: any) => {
+  const url = `/api/listing-roles`;
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  return await Api.post(url, {
+    data: {
+      user: userInfo.id,
+      biz_listing_revision: params.bizListingId,
+      name: params.name
+    }
+  });
+}
+
 const getOwnerBizListingRevision = async (bizListingSlug: any) => {
   let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
   const query = qs.stringify({
@@ -296,5 +308,6 @@ export default {
   getBizListingRevisionReviews,
   getBizListingRevisionCountries,
   getBizListingRevisionByCountry,
-  checkListingHaveOwner
+  checkListingHaveOwner,
+  createListingRoleRevison
 }

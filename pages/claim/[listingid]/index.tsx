@@ -14,6 +14,7 @@ import Router, { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import BizListingApi from "../../../services/biz-listing"
+import BizListingRevisionApi from "services/biz-listing-revision"
 
 const defaultListing = listingSearchResult[0]
 
@@ -37,7 +38,10 @@ const ClaimListing = (context) => {
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     const getListingData = async (listingId) => {
-      const data = await BizListingApi.getBizListingById(listingId)
+      let data = userInfo.role_choose === 'Owner' ? 
+      await BizListingApi.getBizListingById(listingId) 
+      : 
+      await BizListingRevisionApi.getBizListingRevisionById(listingId)
       setListing(data.data.data)
     }
     if (listingId) {

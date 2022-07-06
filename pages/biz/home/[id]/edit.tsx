@@ -111,6 +111,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       const listing = get(data, 'data.data[0]')
       if (listing) {
         console.log(listing);
+        console.log('userInfo', userInfo)
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
         const rawTags = listing.tags || [];
@@ -330,6 +331,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
         biz_invoices: bizInvoices.map((item) => item.id) || [],
+        reviews: reviews.map((item) => item.id) || [],
         categories:
         bizListing.categories.map(
             (item) => item.id

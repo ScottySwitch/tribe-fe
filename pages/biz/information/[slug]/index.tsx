@@ -41,9 +41,12 @@ const BizInformation = () => {
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
-      const data = await BizListingApi.getBizListingBySlug(listingSlug)
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const data = await BizListingApi.getInfoBizListingBySlug(listingSlug)
       if (data.data.data.length > 0) {
         const listing = get(data, "data.data[0]") || {}
+        userInfo.now_biz_listing = listing;
+        localStorage.setItem("user", JSON.stringify(userInfo));
         setListing(listing)
       }
     }

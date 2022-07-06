@@ -80,16 +80,16 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
         <div
           key={item.name}
           className={`${styles.wrapper_content} cursor-pointer`}
-          onClick={() => (window.location.href = `/biz/home/${item.slug}/edit`)}
         >
           <Image
             src={item.images[0] || require("public/images/page-avatar.png")}
             alt=""
             width={30}
             height={30}
+            onClick={() => router.push(`/biz/information/${item.slug}`)}
             style={{ borderRadius: "50%" }}
           />
-          <div className={styles.name}>{item.name}</div>
+          <div onClick={() => (window.location.href = `/biz/home/${item.slug}/edit`)} className={styles.name}>{item.name}</div>
         </div>
       ))}
       <div className="cursor-pointer flex" onClick={onSwitchToNormalUser}>
@@ -98,7 +98,6 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
           alt=""
           width={30}
           height={30}
-          onClick={() => router.push(`/biz/information/${currentHomeSlug}`)}
           style={{ borderRadius: "50%" }}
         />
         <div>
@@ -136,8 +135,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.type = UsersTypes.NORMAL_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    // router.pathname === "/" ? router.reload() : router.push("/")
-    router.reload();
+    router.pathname === "/" ? router.reload() : router.push("/")
   };
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {
@@ -193,7 +191,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           src={
             get(
               JSON.parse(localStorage.getItem("user") || "{}"),
-              "now_biz_listing.attributes.logo[0]"
+              "now_biz_listing.logo[0]"
             ) || require("public/images/page-avatar.png")
           }
           alt=""
@@ -203,7 +201,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
             router.push(
               `/biz/information/${get(
                 JSON.parse(localStorage.getItem("user") || "{}"),
-                "now_biz_listing.attributes.slug"
+                "now_biz_listing.slug"
               )}`
             )
           }

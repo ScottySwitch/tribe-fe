@@ -140,8 +140,15 @@ const AddListing = () => {
     console.log('Role', get(formData, "role.label"));
     
     const result = get(formData, "role.label") === 'Owner' ? await BizListingApi.createBizListing(dataSend) : await BizListingRevisionApi.createBizListingRevision(dataSend)
+    console.log('result', result)
     if (get(formData, "role.label")) {
-      const roleCreate = await BizListingApi.createListingRole({
+      const roleCreate = get(formData, "role.label") === 'Owner' ?
+      await BizListingApi.createListingRole({
+        bizListingId: get(result, "data.data.id"),
+        name: get(formData, "role.label")
+      })
+      :
+      await BizListingRevisionApi.createListingRoleRevison({
         bizListingId: get(result, "data.data.id"),
         name: get(formData, "role.label")
       })
