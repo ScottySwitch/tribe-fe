@@ -247,7 +247,7 @@ export const fakeAddlistingForm: IAddListingForm = {
 }
 
 export const defaultAddlistingForm: IAddListingForm = {
-  category: Categories.BUY,
+  category: Categories.EAT, // TODO: remove
   relationship: "",
   listing: "",
   role: "",
