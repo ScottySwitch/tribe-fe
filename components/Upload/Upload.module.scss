@@ -10,7 +10,8 @@
   background-color: white;
 
   .image,
-  .input {
+  .input,
+  .edit_banner_add_more_btn {
     min-width: 110px;
     min-height: 110px;
     width: 100%;
@@ -40,6 +41,7 @@
     }
 
     .add_icon {
+      z-index: 2;
       display: none;
       position: absolute;
       top: 50%;
@@ -48,6 +50,7 @@
     }
 
     &:hover {
+      .close,
       .add_icon {
         display: block;
       }
@@ -100,12 +103,6 @@
   }
 }
 
-.banner {
-  background-color: $bg-50;
-  border: none;
-  height: 400px;
-}
-
 .cover {
   overflow: hidden;
 
@@ -156,7 +153,284 @@
   }
 }
 
+.view_page {
+  input {
+    display: none;
+  }
+}
+
 .disabled_upload {
   opacity: 0.5;
   pointer-events: none;
+}
+
+.disabled {
+  .image,
+  .input {
+    &:hover {
+      .add_icon,
+      .close {
+        display: none;
+      }
+    }
+  }
+}
+
+.uploading {
+  .loader {
+    display: block;
+  }
+
+  .close,
+  .add_icon {
+    display: none !important;
+  }
+}
+
+.loader {
+  display: none;
+  z-index: 4;
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid $bg-500; /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+.close {
+  display: none;
+  z-index: 3;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: min-content;
+  background-color: $bg-500;
+  fill: white;
+  border-radius: 4px;
+  font-weight: $font-light;
+  cursor: pointer;
+
+  &:hover {
+    fill: $primary-500;
+    background-color: white;
+  }
+}
+
+.banner {
+  background-color: $bg-50;
+  border: none;
+  height: 400px;
+  position: relative;
+
+  .edit_banner_add_more_btn {
+    z-index: 4;
+    display: block;
+    border-radius: 10px;
+    width: max-content;
+    height: 30px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 10px;
+    right: 10px;
+    min-height: unset;
+    padding: 20px;
+    overflow: visible;
+    cursor: pointer;
+
+    span {
+      color: white;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      opacity: 0.5;
+      left: 0;
+      background-color: $bg-600;
+      z-index: -1;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  }
+
+  .image {
+    min-width: unset;
+  }
+
+  .first_pic {
+    width: 65%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 0;
+  }
+
+  .second_pic {
+    width: 34%;
+    height: 49%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 0;
+  }
+
+  .third_pic {
+    width: 17%;
+    height: 49%;
+    position: absolute;
+    bottom: 0;
+    right: 17%;
+    border-radius: 0;
+  }
+
+  .third_pic_free {
+    width: 34%;
+    height: 49%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+  }
+
+  .fourth_pic {
+    width: 16%;
+    height: 49%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+
+  /// styles for add more button in case:
+  .one_pic {
+    width: 34%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 0;
+  }
+  .two_pics {
+    width: 34%;
+    height: 49%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+  .three_pics {
+    width: 16%;
+    height: 49%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+  .more_than_three_pics {
+    display: none;
+  }
+
+  // styles for view page
+  .view_first_one_pic {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 0;
+  }
+  .view_first_two_pics {
+    width: 65%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 0;
+  }
+  .view_second_two_pics {
+    width: 34%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 0;
+  }
+  .view_second_three_pics {
+    width: 34%;
+    height: 49%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 0;
+  }
+  .view_third_three_pics {
+    width: 34%;
+    height: 49%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+  .view_second_four_pics {
+    width: 34%;
+    height: 49%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 0;
+  }
+  .view_third_four_pics {
+    width: 17%;
+    height: 49%;
+    position: absolute;
+    right: 17%;
+    bottom: 0;
+    border-radius: 0;
+  }
+  .view_fourth_four_pics {
+    width: 16%;
+    height: 49%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+  }
+  .see_more {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: $bg-700;
+      opacity: 0.6;
+      z-index: 4;
+    }
+    &::after {
+      content: "See more";
+      font-size: $text-lg;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      z-index: 4;
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
