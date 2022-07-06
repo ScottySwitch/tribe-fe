@@ -184,12 +184,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setBizListing(listing);
         setAction(listing.action);
         setListingImages(listing.images);
-        setCategory(listing.categories[0].id || Categories.BUY);
+        setCategory(get(listing, "categories[0].id") || Categories.BUY);
         setDescription(listing.description);
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
         setSocialInfo(listing.social_info);
-        setDealList(listing.deals.data);
+        setDealList(get(listing, "deals.data"));
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
         setTags(tagArray);
