@@ -1,42 +1,43 @@
-import { useForm } from "react-hook-form"
-import {useEffect, useState} from "react"
-import get from "lodash/get"
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import get from "lodash/get";
 
-import Badge from "components/Badge/Badge"
-import Button from "components/Button/Button"
-import Checkbox from "components/Checkbox/Checkbox"
-import Input from "components/Input/Input"
-import Question from "components/Question/Question"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import Modal from "components/Modal/Modal"
-import Break from "components/Break/Break"
-import OpenHours from "components/OpenHours/OpenHours"
-import { YesNo } from "enums"
-import TagsSelection from "components/TagsSelection/TagsSelection"
-import { IOption } from "type"
-import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
-import { seeDoAssociatedCategories, seeDoTags } from "../constant"
-import Upload from "components/Upload/Upload"
-import Icon from "components/Icon/Icon"
-import { IAddListingForm } from "pages/add-listing"
-import Select from "components/Select/Select"
-import { currencyOptions } from "constant"
+import Badge from "components/Badge/Badge";
+import Button from "components/Button/Button";
+import Checkbox from "components/Checkbox/Checkbox";
+import Input from "components/Input/Input";
+import Question from "components/Question/Question";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import Modal from "components/Modal/Modal";
+import Break from "components/Break/Break";
+import OpenHours from "components/OpenHours/OpenHours";
+import { YesNo } from "enums";
+import TagsSelection from "components/TagsSelection/TagsSelection";
+import { IOption } from "type";
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
+import { seeDoAssociatedCategories, seeDoTags } from "../constant";
+import Upload from "components/Upload/Upload";
+import Icon from "components/Icon/Icon";
+import { IAddListingForm } from "pages/add-listing";
+import Select from "components/Select/Select";
+import { currencyOptions } from "constant";
 import CategoryLinkApi from "../../../../services/category-link";
 import TagApi from "../../../../services/tag";
 import ProductTypeApi from "../../../../services/product-type";
 
 interface AddSeeAndDoInforProps {
-  isEdit?: boolean
-  subCateList: IOption[]
-  data: { [key: string]: any }
-  show?: boolean
-  onPrevPage?: () => void
-  onPreview?: (data: { [key: string]: any }) => void
-  onEdit?: (data: IAddListingForm) => void
+  isEdit?: boolean;
+  subCateList: IOption[];
+  data: { [key: string]: any };
+  show?: boolean;
+  onPrevPage?: () => void;
+  onPreview?: (data: { [key: string]: any }) => void;
+  onEdit?: (data: IAddListingForm) => void;
 }
 
 const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
-  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } = props
+  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } =
+    props;
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -50,58 +51,63 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
       agreePolicies: data.agreePolicies,
       openHours: data.openHours,
     },
-  })
+  });
 
-  const [showTagsModal, setShowTagsModal] = useState(false)
-  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
+  const [showTagsModal, setShowTagsModal] = useState(false);
+  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
 
-  const [categoryLinks, setCategoryLinks] = useState<any>([])
-  const [selectCategoryLink, setSelectCategoryLink] = useState<string | undefined>(getValues("categoryLinks"))
-  const [productTypes, setProductTypes] = useState<any>([])
-  const [describeTags, setDescribeTags] = useState<any>([])
+  const [categoryLinks, setCategoryLinks] = useState<any>([]);
+  const [selectCategoryLink, setSelectCategoryLink] = useState<
+    string | undefined
+  >(getValues("categoryLinks"));
+  const [productTypes, setProductTypes] = useState<any>([]);
+  const [describeTags, setDescribeTags] = useState<any>([]);
 
   useEffect(() => {
     // Category links
     const getCategoryLinks = async () => {
       const data = await CategoryLinkApi.getCategoryLinksByCategoryId(3);
-      const categoryLinks = get(data, "data.data")
-      setCategoryLinks(categoryLinks)
-    }
-    getCategoryLinks().catch((e) => console.log(e))
+      const categoryLinks = get(data, "data.data");
+      setCategoryLinks(categoryLinks);
+    };
+    getCategoryLinks().catch((e) => console.log(e));
 
     // Tags
     const getTags = async () => {
       const data = await TagApi.getTags();
-      const tags = get(data, "data.data")
-      setDescribeTags(tags)
-    }
-    getTags().catch((e) => console.log(e))
-  }, [])
+      const tags = get(data, "data.data");
+      setDescribeTags(tags);
+    };
+    getTags().catch((e) => console.log(e));
+  }, []);
 
   useEffect(() => {
-    setValue("productTypes", [])
+    setValue("productTypes", []);
     const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink);
-      const productTypes = get(data, "data.data")
-      const mapProductTypes: any = []
-      productTypes.map(mapProductType => {
-        mapProductTypes.push({
-          value: mapProductType.id,
-          label: mapProductType.attributes.label
-        })
-      })
-      setProductTypes(mapProductTypes)
-    }
-    getProductTypes().catch((e) => console.log(e))
-  }, [selectCategoryLink])
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
+        selectCategoryLink
+      );
+      const productTypes = get(data, "data.data");
+      const mapProductTypes: any = [];
+      Array.isArray(productTypes) &&
+        productTypes.map((mapProductType) => {
+          mapProductTypes.push({
+            value: mapProductType.id,
+            label: mapProductType.attributes.label,
+          });
+        });
+      setProductTypes(mapProductTypes);
+    };
+    getProductTypes().catch((e) => console.log(e));
+  }, [selectCategoryLink]);
 
   const onSubmit = (data) => {
-    onPreview?.(data)
-    onEdit?.(data)
-  }
+    onPreview?.(data);
+    onEdit?.(data);
+  };
 
   if (!show) {
-    return null
+    return null;
   }
   return (
     <>
@@ -118,17 +124,18 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question question="What is the category best associated with this service?">
             <div className="flex flex-wrap gap-2">
-              {categoryLinks.map((opt) => (
-                <Badge
-                  key={opt.id}
-                  text={opt.attributes.label}
-                  selected={selectCategoryLink === opt.id}
-                  onClick={() => {
-                    setValue("categoryLinks", opt.id);
-                    setSelectCategoryLink(opt.id);
-                  }}
-                />
-              ))}
+              {Array.isArray(categoryLinks) &&
+                categoryLinks.map((opt) => (
+                  <Badge
+                    key={opt.id}
+                    text={opt.attributes.label}
+                    selected={selectCategoryLink === opt.id}
+                    onClick={() => {
+                      setValue("categoryLinks", opt.id);
+                      setSelectCategoryLink(opt.id);
+                    }}
+                  />
+                ))}
             </div>
           </Question>
           <Question
@@ -158,19 +165,23 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
           </Question>
           <Question question="What tags best describe this place? " optional>
             <div className="flex flex-wrap gap-y-5">
-              {describeTags.map((item) => (
-                <Checkbox
-                  key={item.id}
-                  label={item.attributes.label}
-                  // name="tags"
-                  value={item.id}
-                  className="w-full sm:w-1/2"
-                  register={register("describeTags")}
-                />
-              ))}
+              {Array.isArray(describeTags) &&
+                describeTags.map((item) => (
+                  <Checkbox
+                    key={item.id}
+                    label={item.attributes.label}
+                    // name="tags"
+                    value={item.id}
+                    className="w-full sm:w-1/2"
+                    register={register("describeTags")}
+                  />
+                ))}
             </div>
           </Question>
-          <Question question="What’s the average price range of this service?" optional>
+          <Question
+            question="What’s the average price range of this service?"
+            optional
+          >
             <div className="w-3/5">
               <Select
                 placeholder="Select a currency"
@@ -206,7 +217,9 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
               fileList={getValues("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) => setValue("images", [...(getValues("images") || []), ...urls])}
+              onChange={(urls) =>
+                setValue("images", [...(getValues("images") || []), ...urls])
+              }
             />
           </Question>
           <Question show={!isEdit}>
@@ -222,7 +235,12 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
           </Question>
           <br /> <Break /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
-            <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
+            <Button
+              text="Go back"
+              variant="underlined"
+              width="fit-content"
+              onClick={onPrevPage}
+            />
             <Button text="Continue" size="small" width={270} type="submit" />
           </div>
         </form>
@@ -241,7 +259,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
             setValue("productTypes", list);
-            setShowTagsModal(false)
+            setShowTagsModal(false);
           }}
         />
       </Modal>
@@ -256,14 +274,14 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
           data={getValues("openHours")}
           onCancel={() => setShowOpenHoursModal(false)}
           onSubmit={(openHours) => {
-            setShowOpenHoursModal(false)
-            console.log(openHours)
-            setValue("openHours", openHours)
+            setShowOpenHoursModal(false);
+            console.log(openHours);
+            setValue("openHours", openHours);
           }}
         />
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default AddSeeAndDoInfor
+export default AddSeeAndDoInfor;

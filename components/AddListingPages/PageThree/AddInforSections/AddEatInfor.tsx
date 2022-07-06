@@ -80,43 +80,46 @@ const AddEatInfor = (props: AddEatInforProps) => {
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
 
-  const [categoryLinks, setCategoryLinks] = useState<any>([])
-  const [selectCategoryLink, setSelectCategoryLink] = useState<string | undefined>(getValues("categoryLinks"))
-  const [productTypes, setProductTypes] = useState<any>([])
-  const [describeTags, setDescribeTags] = useState<any>([])
+  const [categoryLinks, setCategoryLinks] = useState<any>([]);
+  const [selectCategoryLink, setSelectCategoryLink] = useState<
+    string | undefined
+  >(getValues("categoryLinks"));
+  const [productTypes, setProductTypes] = useState<any>([]);
+  const [describeTags, setDescribeTags] = useState<any>([]);
 
   useEffect(() => {
     // Category links
     const getCategoryLinks = async () => {
       const data = await CategoryLinkApi.getCategoryLinksByCategoryId(2);
-      const categoryLinks = get(data, "data.data")
-      setCategoryLinks(categoryLinks)
-    }
-    getCategoryLinks().catch((e) => console.log(e))
+      const categoryLinks = get(data, "data.data");
+      setCategoryLinks(categoryLinks);
+    };
+    getCategoryLinks().catch((e) => console.log(e));
 
     // Tags
     const getTags = async () => {
       const data = await TagApi.getTags();
-      const tags = get(data, "data.data")
-      setDescribeTags(tags)
-    }
-    getTags().catch((e) => console.log(e))
+      const tags = get(data, "data.data");
+      setDescribeTags(tags);
+    };
+    getTags().catch((e) => console.log(e));
 
     // Product type
     const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryId(2);
-      const productTypes = get(data, "data.data")
-      const mapProductTypes: any = []
-      productTypes.map(mapProductType => {
-        mapProductTypes.push({
-          value: mapProductType.id,
-          label: mapProductType.attributes.label
-        })
-      })
-      setProductTypes(mapProductTypes)
-    }
-    getProductTypes().catch((e) => console.log(e))
-  }, [])
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(2);
+      const productTypes = get(data, "data.data");
+      const mapProductTypes: any = [];
+      Array.isArray(productTypes) &&
+        productTypes.map((mapProductType) => {
+          mapProductTypes.push({
+            value: mapProductType.id,
+            label: mapProductType.attributes.label,
+          });
+        });
+      setProductTypes(mapProductTypes);
+    };
+    getProductTypes().catch((e) => console.log(e));
+  }, []);
 
   const onSubmit = (data) => {
     onPreview?.(data);
@@ -155,17 +158,18 @@ const AddEatInfor = (props: AddEatInforProps) => {
             question="What is the category best associated with this place?"
           >
             <div className="flex flex-wrap gap-2">
-              {categoryLinks.map((opt) => (
-                <Badge
-                  key={opt.id}
-                  text={opt.attributes.label}
-                  selected={selectCategoryLink === opt.id}
-                  onClick={() => {
-                    setValue("categoryLinks", opt.id);
-                    setSelectCategoryLink(opt.id);
-                  }}
-                />
-              ))}
+              {Array.isArray(categoryLinks) &&
+                categoryLinks.map((opt) => (
+                  <Badge
+                    key={opt.id}
+                    text={opt.attributes.label}
+                    selected={selectCategoryLink === opt.id}
+                    onClick={() => {
+                      setValue("categoryLinks", opt.id);
+                      setSelectCategoryLink(opt.id);
+                    }}
+                  />
+                ))}
             </div>
           </Question>
           <Question
@@ -204,16 +208,17 @@ const AddEatInfor = (props: AddEatInforProps) => {
             optional
           >
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {describeTags.map((item) => (
-                <Checkbox
-                  key={item.id}
-                  label={item.attributes.label}
-                  // name="tags"
-                  value={item.id}
-                  className="w-full sm:w-1/2"
-                  register={register("describeTags")}
-                />
-              ))}
+              {Array.isArray(describeTags) &&
+                describeTags.map((item) => (
+                  <Checkbox
+                    key={item.id}
+                    label={item.attributes.label}
+                    // name="tags"
+                    value={item.id}
+                    className="w-full sm:w-1/2"
+                    register={register("describeTags")}
+                  />
+                ))}
             </div>
           </Question>
           <Question

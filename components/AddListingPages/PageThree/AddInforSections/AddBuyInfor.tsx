@@ -1,43 +1,48 @@
-import {useEffect, useState} from "react"
-import get from "lodash/get"
-import { useForm } from "react-hook-form"
+import { useEffect, useState } from "react";
+import get from "lodash/get";
+import { useForm } from "react-hook-form";
 
-import Badge from "components/Badge/Badge"
-import Button from "components/Button/Button"
-import Checkbox from "components/Checkbox/Checkbox"
-import Input from "components/Input/Input"
-import Question from "components/Question/Question"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import Modal from "components/Modal/Modal"
-import Break from "components/Break/Break"
-import Upload from "components/Upload/Upload"
-import Icon from "components/Icon/Icon"
-import OpenHours from "components/OpenHours/OpenHours"
-import { YesNo } from "enums"
-import TagsSelection from "components/TagsSelection/TagsSelection"
-import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
-import { buyAssociatedCategories, productTypes, decribePlaceList } from "../constant"
-import { IOption } from "type"
-import { IAddListingForm } from "pages/add-listing"
-import Select from "components/Select/Select"
-import { currencyOptions } from "constant"
-import CategoryLinkApi from "services/category-link"
-import ProductTypeApi from "services/product-type"
-import ProductBrandApi from "services/product-brand"
-import TagApi from "services/tag"
+import Badge from "components/Badge/Badge";
+import Button from "components/Button/Button";
+import Checkbox from "components/Checkbox/Checkbox";
+import Input from "components/Input/Input";
+import Question from "components/Question/Question";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import Modal from "components/Modal/Modal";
+import Break from "components/Break/Break";
+import Upload from "components/Upload/Upload";
+import Icon from "components/Icon/Icon";
+import OpenHours from "components/OpenHours/OpenHours";
+import { YesNo } from "enums";
+import TagsSelection from "components/TagsSelection/TagsSelection";
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
+import {
+  buyAssociatedCategories,
+  productTypes,
+  decribePlaceList,
+} from "../constant";
+import { IOption } from "type";
+import { IAddListingForm } from "pages/add-listing";
+import Select from "components/Select/Select";
+import { currencyOptions } from "constant";
+import CategoryLinkApi from "services/category-link";
+import ProductTypeApi from "services/product-type";
+import ProductBrandApi from "services/product-brand";
+import TagApi from "services/tag";
 
 interface AddBuyInforProps {
-  isEdit?: boolean
-  subCateList: IOption[]
-  data: { [key: string]: any }
-  show?: boolean
-  onPrevPage?: () => void
-  onPreview?: (data: { [key: string]: any }) => void
-  onEdit?: (data: IAddListingForm) => void
+  isEdit?: boolean;
+  subCateList: IOption[];
+  data: { [key: string]: any };
+  show?: boolean;
+  onPrevPage?: () => void;
+  onPreview?: (data: { [key: string]: any }) => void;
+  onEdit?: (data: IAddListingForm) => void;
 }
 
 const AddBuyInfor = (props: AddBuyInforProps) => {
-  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } = props
+  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } =
+    props;
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -52,88 +57,92 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       agreePolicies: data.agreePolicies,
       openHours: data.openHours,
     },
-  })
+  });
 
-  const [selectCategoryLink, setSelectCategoryLink] = useState<string | undefined>(getValues("categoryLinks"))
-  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false)
-  const [showTagsModal, setShowTagsModal] = useState(false)
-  const [categoryLinks, setCategoryLinks] = useState<any>([])
-  const [productTypes, setProductTypes] = useState<any>([])
-  const [selectedProductTypes, setSelectedProductTypes] = useState<any>([])
-  const [productBrands, setProductBrands] = useState<any>([])
-  const [describeTags, setDescribeTags] = useState<any>([])
+  const [selectCategoryLink, setSelectCategoryLink] = useState<
+    string | undefined
+  >(getValues("categoryLinks"));
+  const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
+  const [showTagsModal, setShowTagsModal] = useState(false);
+  const [categoryLinks, setCategoryLinks] = useState<any>([]);
+  const [productTypes, setProductTypes] = useState<any>([]);
+  const [selectedProductTypes, setSelectedProductTypes] = useState<any>([]);
+  const [productBrands, setProductBrands] = useState<any>([]);
+  const [describeTags, setDescribeTags] = useState<any>([]);
 
   useEffect(() => {
     // Category links
     const getCategoryLinks = async () => {
       const data = await CategoryLinkApi.getCategoryLinksByCategoryId(1);
-      const categoryLinks = get(data, "data.data")
-      setCategoryLinks(categoryLinks)
-    }
-    getCategoryLinks().catch((e) => console.log(e))
+      const categoryLinks = get(data, "data.data");
+      setCategoryLinks(categoryLinks);
+    };
+    getCategoryLinks().catch((e) => console.log(e));
 
     // Tags
     const getTags = async () => {
       const data = await TagApi.getTags();
-      const tags = get(data, "data.data")
-      setDescribeTags(tags)
-    }
-    getTags().catch((e) => console.log(e))
-  }, [])
+      const tags = get(data, "data.data");
+      setDescribeTags(tags);
+    };
+    getTags().catch((e) => console.log(e));
+  }, []);
 
   useEffect(() => {
     const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink);
-      const productTypes = get(data, "data.data")
-      setProductTypes(productTypes)
-    }
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
+        selectCategoryLink
+      );
+      const productTypes = get(data, "data.data");
+      setProductTypes(productTypes);
+    };
     if (selectCategoryLink) {
-      getProductTypes().catch((e) => console.log(e))
-      setValue("productTypes", [])
-      setValue("productBrands", [])
-      setSelectedProductTypes([])
-      setProductBrands([])
+      getProductTypes().catch((e) => console.log(e));
+      setValue("productTypes", []);
+      setValue("productBrands", []);
+      setSelectedProductTypes([]);
+      setProductBrands([]);
     }
-  }, [selectCategoryLink])
+  }, [selectCategoryLink]);
 
   const handleSelectProductType = (option: any) => {
-    setValue("productBrands", [])
-    setProductBrands([])
+    setValue("productBrands", []);
+    setProductBrands([]);
     if (selectedProductTypes.includes(option)) {
-      const newList = selectedProductTypes.filter((item) => item !== option)
-      setSelectedProductTypes(newList)
+      const newList = selectedProductTypes.filter((item) => item !== option);
+      setSelectedProductTypes(newList);
     } else {
-      setSelectedProductTypes([...selectedProductTypes, option])
+      setSelectedProductTypes([...selectedProductTypes, option]);
     }
-  }
+  };
 
   useEffect(() => {
     const getProductBrands = async () => {
-      const data = await ProductBrandApi.getProductBrandByProductTypeId(selectedProductTypes);
-      const productBrands = get(data, "data.data")
-      const mapProductBrands: any = []
-      productBrands.map(productBrand => {
-        mapProductBrands.push({
-          value: productBrand.id,
-          label: productBrand.attributes.label
-        })
-      })
-      setProductBrands(mapProductBrands)
-    }
+      const data = await ProductBrandApi.getProductBrandByProductTypeId(
+        selectedProductTypes
+      );
+      const productBrands = get(data, "data.data");
+      const mapProductBrands = productBrands.map((productBrand) => ({
+        value: productBrand.id,
+        label: productBrand.attributes.label,
+      }));
+
+      setProductBrands(mapProductBrands);
+    };
     if (selectedProductTypes.length > 0) {
-      getProductBrands().catch((e) => console.log(e))
+      getProductBrands().catch((e) => console.log(e));
     } else {
-      setProductBrands([])
+      setProductBrands([]);
     }
-  }, [selectedProductTypes])
+  }, [selectedProductTypes]);
 
   const onSubmit = (data) => {
-    onPreview?.(data)
-    onEdit?.(data)
-  }
+    onPreview?.(data);
+    onEdit?.(data);
+  };
 
   if (!show) {
-    return null
+    return null;
   }
 
   return (
@@ -151,31 +160,36 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question question="What is the category best associated with this store?">
             <div className="flex flex-wrap gap-2">
-              {categoryLinks.map((opt) => (
-                <Badge
-                  key={opt.id}
-                  text={opt.attributes.label}
-                  selected={selectCategoryLink === opt.id}
-                  onClick={() => {
-                    setValue("categoryLinks", opt.id)
-                    setSelectCategoryLink(opt.id)
-                  }}
-                />
-              ))}
+              {Array.isArray(categoryLinks) &&
+                categoryLinks.map((opt) => (
+                  <Badge
+                    key={opt.id}
+                    text={opt.attributes.label}
+                    selected={selectCategoryLink === opt.id}
+                    onClick={() => {
+                      setValue("categoryLinks", opt.id);
+                      setSelectCategoryLink(opt.id);
+                    }}
+                  />
+                ))}
             </div>
           </Question>
-          <Question question="What type of products does this store offer?" optional>
+          <Question
+            question="What type of products does this store offer?"
+            optional
+          >
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {productTypes.map((item) => (
-                <Checkbox
-                  key={item.id}
-                  label={item.attributes.label}
-                  value={item.id}
-                  className="w-full sm:w-1/2"
-                  register={register("productTypes")}
-                  onChange={() => handleSelectProductType(item.id)}
-                />
-              ))}
+              {Array.isArray(productTypes) &&
+                productTypes.map((item) => (
+                  <Checkbox
+                    key={item.id}
+                    label={item.attributes.label}
+                    value={item.id}
+                    className="w-full sm:w-1/2"
+                    register={register("productTypes")}
+                    onChange={() => handleSelectProductType(item.id)}
+                  />
+                ))}
             </div>
           </Question>
           <Question
@@ -205,18 +219,22 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           </Question>
           <Question question="What tags best describe this place?" optional>
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {describeTags.map((item) => (
-                <Checkbox
-                  key={item.id}
-                  label={item.attributes.label}
-                  className="w-1/2"
-                  value={item.id}
-                  register={register("describeTags")}
-                />
-              ))}
+              {Array.isArray(describeTags) &&
+                describeTags.map((item) => (
+                  <Checkbox
+                    key={item.id}
+                    label={item.attributes.label}
+                    className="w-1/2"
+                    value={item.id}
+                    register={register("describeTags")}
+                  />
+                ))}
             </div>
           </Question>
-          <Question question="What’s the average price range of this service?" optional>
+          <Question
+            question="What’s the average price range of this service?"
+            optional
+          >
             <div className="w-3/5">
               <Select
                 placeholder="Select a currency"
@@ -252,7 +270,9 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
               fileList={getValues("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) => setValue("images", [...(getValues("images") || []), ...urls])}
+              onChange={(urls) =>
+                setValue("images", [...(getValues("images") || []), ...urls])
+              }
             />
           </Question>
           <Question show={!isEdit}>
@@ -268,7 +288,12 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           </Question>
           <br /> <Break /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
-            <Button text="Go back" variant="underlined" width="fit-content" onClick={onPrevPage} />
+            <Button
+              text="Go back"
+              variant="underlined"
+              width="fit-content"
+              onClick={onPrevPage}
+            />
             <Button text="Continue" size="small" width={270} type="submit" />
           </div>
         </form>
@@ -284,9 +309,9 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           data={getValues("openHours")}
           onCancel={() => setShowOpenHoursModal(false)}
           onSubmit={(openHours) => {
-            setShowOpenHoursModal(false)
-            console.log(openHours)
-            setValue("openHours", openHours)
+            setShowOpenHoursModal(false);
+            console.log(openHours);
+            setValue("openHours", openHours);
           }}
         />
       </Modal>
@@ -304,13 +329,13 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           selectedList={getValues("productBrands")}
           onCancel={() => setShowTagsModal(false)}
           onSubmit={(list) => {
-            setValue("productBrands", list)
-            setShowTagsModal(false)
+            setValue("productBrands", list);
+            setShowTagsModal(false);
           }}
         />
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default AddBuyInfor
+export default AddBuyInfor;
