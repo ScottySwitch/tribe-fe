@@ -3,6 +3,7 @@ import classNames from "classnames";
 import Icon from "components/Icon/Icon";
 import { get } from "lodash";
 import Image from "next/image";
+import VideoThumbnail from "react-video-thumbnail";
 import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./Upload.module.scss";
 
@@ -17,6 +18,7 @@ export interface UploadProps {
   centerIcon?: ReactNode;
   type?: "avatar" | "cover" | "upload" | "media" | "banner";
   isPaid?: boolean;
+  isViewPage?: boolean;
 }
 
 const Upload = (props: UploadProps) => {
@@ -31,13 +33,28 @@ const Upload = (props: UploadProps) => {
     fileList = [],
     type = "media",
     isPaid,
+    isViewPage,
   } = props;
+
   const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : [];
   const initFileList = multiple ? fileList : lastItemArray;
 
   const [srcList, setSrcList] = useState<string[]>(initFileList);
   const [localFileList, setLocalFileList] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const showedImages = type === "banner" ? srcList.slice(0, 4) : srcList;
+  const showInput =
+    ((!multiple && !srcList?.length) || multiple) &&
+    (isPaid || (!isPaid && srcList.length < 3));
+
+  const hasOnePic = get(srcList, "length") == 1;
+  const hasTwoPics = get(srcList, "length") == 2;
+  const hasThreePics = get(srcList, "length") == 3;
+  const hasFourPics = get(srcList, "length") == 4;
+  const hasMoreThanTwoPics = get(srcList, "length") > 2;
+  const hasMoreThanThreePics = get(srcList, "length") > 3;
+  const hasMoreThanFourPics = get(srcList, "length") > 4;
 
   const handleChange = (event: any, src?: any) => {
     const imgIndex: any = srcList.indexOf(src);
@@ -83,18 +100,6 @@ const Upload = (props: UploadProps) => {
       .finally(() => setIsUploading(false));
   };
 
-  const showInput =
-    ((!multiple && !srcList?.length) || multiple) &&
-    (isPaid || (!isPaid && srcList.length < 3));
-
-  const containerClassName = classNames(styles.upload, className, {
-    [styles.avatar]: type === "avatar",
-    [styles.cover]: type === "cover",
-    [styles.media]: type === "media",
-    [styles.banner]: type === "banner",
-    [styles.disabled]: disabled,
-  });
-
   const Input = ({ onChange }) => (
     <input
       disabled={disabled || isUploading}
@@ -117,33 +122,83 @@ const Upload = (props: UploadProps) => {
     onChange?.(newFileList);
   };
 
-  const imageClassName = classNames(styles.image, {
-    [styles.uploading]: isUploading,
+  const containerClassName = classNames(styles.upload, className, {
+    [styles.avatar]: type === "avatar",
+    [styles.cover]: type === "cover",
+    [styles.media]: type === "media",
+    [styles.banner]: type === "banner",
+    [styles.disabled]: disabled,
   });
+
+  const mediaClassName = (index) => {
+    const viewBanner = isViewPage && type === "banner";
+    const editBanner = !isViewPage && type === "banner";
+    const firstPic = index == 0;
+    const secondPic = index == 1;
+    const thirdPic = index == 2;
+    const fourthPic = index == 3;
+
+    return classNames(styles.image, {
+      [styles.uploading]: isUploading,
+      [styles.view_page]: isViewPage,
+      //images in edit
+      [styles.first_pic]: firstPic && editBanner,
+      [styles.second_pic]: secondPic && editBanner,
+      [styles.third_pic]: thirdPic && editBanner && isPaid,
+      [styles.third_pic_free]: thirdPic && editBanner && !isPaid,
+      [styles.fourth_pic]: index === 3 && editBanner,
+      //images in view
+      [styles.view_first_one_pic]: firstPic && hasOnePic && viewBanner,
+      [styles.view_first_two_pic]: firstPic && hasMoreThanTwoPics && viewBanner,
+      [styles.view_second_two_pic]: secondPic && hasTwoPics && viewBanner,
+      [styles.view_second_three_pic]: secondPic && hasThreePics && viewBanner,
+      [styles.view_third_three_pic]: thirdPic && hasThreePics && viewBanner,
+      [styles.view_second_four_pic]: secondPic && hasFourPics && viewBanner,
+      [styles.view_third_four_pic]: thirdPic && hasFourPics && viewBanner,
+      [styles.view_fourth_four_pic]: fourthPic && hasFourPics && viewBanner,
+    });
+  };
+
+  const addMoreButtonClassName = classNames(styles.input, {
+    [styles.one_pic]: type === "banner" && hasOnePic,
+    [styles.two_pics]: type === "banner" && hasTwoPics,
+    [styles.three_pics]: type === "banner" && hasThreePics,
+    [styles.more_than_three_pics]: type === "banner" && hasMoreThanThreePics,
+  });
+
+  const handleOpenPhotoAlbum = (e) => {
+    console.log(e);
+  };
 
   return (
     <div className={containerClassName}>
-      {Array.isArray(srcList) &&
-        srcList.map((src) => (
-          <div key={src} className={imageClassName}>
+      {showedImages.map((src, index) => {
+        return (
+          <div
+            key={src}
+            className={mediaClassName(index)}
+            onClick={() => isViewPage && handleOpenPhotoAlbum(src)}
+          >
             <div className={styles.close} onClick={() => handleRemoveItem(src)}>
               <Icon icon="cancel" size={25} />
             </div>
             <div className={styles.add_icon}>{centerIcon}</div>
             <div className={styles.loader} />
-            <Image src={src} alt="" layout="fill" />
             <Input onChange={(e) => handleChange(e, src)} />
+            <Image src={src} alt="" layout="fill" />
+            {/* <VideoThumbnail videoUrl={src} /> */}
           </div>
-        ))}
+        );
+      })}
 
-      {showInput && !isUploading && (
-        <div className={classNames(styles.input)}>
+      {showInput && !isUploading && !isViewPage && (
+        <div className={addMoreButtonClassName}>
           <div className={styles.add_icon}>{centerIcon}</div>
           <Input onChange={handleChange} />
         </div>
       )}
 
-      {type === "media" && !isPaid && get(srcList, "length") > 2 && (
+      {type === "media" && !isPaid && hasMoreThanTwoPics && (
         <div className={styles.upgrade_now}>
           <div className={styles.tips}>
             <Icon icon="Group-966" color="#653fff" /> Tips

@@ -24,8 +24,10 @@ const Banner = (props: BannerProps) => {
       onChange={onChangeImages}
       type="banner"
       isPaid={isPaid}
-      fileList={listingImages}
+      fileList={listingImages.slice(0, 4)}
       disabled={isViewPage}
+      isViewPage={isViewPage}
+      multiple
     />
   );
 };
