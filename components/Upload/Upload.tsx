@@ -6,6 +6,7 @@ import Image from "next/image";
 import VideoThumbnail from "react-video-thumbnail";
 import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./Upload.module.scss";
+import Popover from "components/Popover/Popover";
 
 export interface UploadProps {
   name?: string;
@@ -19,6 +20,7 @@ export interface UploadProps {
   type?: "avatar" | "cover" | "upload" | "media" | "banner";
   isPaid?: boolean;
   isViewPage?: boolean;
+  onImageClick?: ((value?: string) => void) | any;
 }
 
 const Upload = (props: UploadProps) => {
@@ -34,7 +36,12 @@ const Upload = (props: UploadProps) => {
     type = "media",
     isPaid,
     isViewPage,
+    onImageClick,
   } = props;
+
+  useEffect(() => {
+    setLocalFileList(fileList);
+  }, [fileList]);
 
   const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : [];
   const initFileList = multiple ? fileList : lastItemArray;
@@ -43,7 +50,13 @@ const Upload = (props: UploadProps) => {
   const [localFileList, setLocalFileList] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  const showedImages = type === "banner" ? srcList.slice(0, 4) : srcList;
+  const showedImages =
+    type === "banner"
+      ? isPaid
+        ? srcList.slice(0, 4)
+        : srcList.slice(0, 3)
+      : srcList;
+
   const showInput =
     ((!multiple && !srcList?.length) || multiple) &&
     (isPaid || (!isPaid && srcList.length < 3));
@@ -51,7 +64,7 @@ const Upload = (props: UploadProps) => {
   const hasOnePic = get(srcList, "length") == 1;
   const hasTwoPics = get(srcList, "length") == 2;
   const hasThreePics = get(srcList, "length") == 3;
-  const hasFourPics = get(srcList, "length") == 4;
+  const hasMoreThanOnePic = get(srcList, "length") > 1;
   const hasMoreThanTwoPics = get(srcList, "length") > 2;
   const hasMoreThanThreePics = get(srcList, "length") > 3;
   const hasMoreThanFourPics = get(srcList, "length") > 4;
@@ -62,17 +75,17 @@ const Upload = (props: UploadProps) => {
 
     const files: Blob[] = Object.values(event.target.files);
     const srces = files?.map((file) => URL.createObjectURL(file));
-    let newFileList = [...srcList];
+    let newSrcList = [...srcList];
 
     if (!multiple) {
-      newFileList = [...srces];
+      newSrcList = [...srces];
     } else if (imgIndex !== -1) {
-      newFileList[imgIndex] = srces[0];
+      newSrcList[imgIndex] = srces[0];
     } else {
-      newFileList = [...newFileList, ...srces];
+      newSrcList = [...newSrcList, ...srces];
     }
 
-    setSrcList(newFileList);
+    setSrcList(newSrcList);
 
     setIsUploading(true);
     let data = new FormData();
@@ -92,16 +105,26 @@ const Upload = (props: UploadProps) => {
         }
       )
       .then((res) => {
-        if (get(res, "data.urls.length") > 0) {
-          setLocalFileList([...fileList, ...res.data.urls]);
-          onChange?.([...fileList, ...res.data.urls]);
+        const responseUrls = get(res, "data.urls") || [];
+        if (responseUrls.length > 0) {
+          let newFileList = [...fileList];
+          if (!multiple) {
+            newFileList = [...responseUrls];
+          } else if (imgIndex !== -1) {
+            newFileList[imgIndex] = responseUrls[0];
+          } else {
+            newFileList = [...newFileList, ...responseUrls];
+          }
+          setLocalFileList(newFileList);
+          onChange?.(newFileList);
         }
       })
       .finally(() => setIsUploading(false));
   };
 
-  const Input = ({ onChange }) => (
+  const Input = ({ onChange, multiple }) => (
     <input
+      id="upload-input-btn"
       disabled={disabled || isUploading}
       type="file"
       name={name}
@@ -114,12 +137,16 @@ const Upload = (props: UploadProps) => {
   const handleRemoveItem = (src) => {
     const imgIndex: any = srcList.indexOf(src);
     const newSrcList = [...srcList].filter((item) => item !== src);
+    console.log("newFileList", localFileList);
+
     const newFileList = [...localFileList].filter(
       (item, index) => imgIndex !== index
     );
+
     setSrcList(newSrcList);
     setLocalFileList(newFileList);
     onChange?.(newFileList);
+    console.log("newFileList", newFileList);
   };
 
   const containerClassName = classNames(styles.upload, className, {
@@ -149,13 +176,17 @@ const Upload = (props: UploadProps) => {
       [styles.fourth_pic]: index === 3 && editBanner,
       //images in view
       [styles.view_first_one_pic]: firstPic && hasOnePic && viewBanner,
-      [styles.view_first_two_pic]: firstPic && hasMoreThanTwoPics && viewBanner,
-      [styles.view_second_two_pic]: secondPic && hasTwoPics && viewBanner,
-      [styles.view_second_three_pic]: secondPic && hasThreePics && viewBanner,
-      [styles.view_third_three_pic]: thirdPic && hasThreePics && viewBanner,
-      [styles.view_second_four_pic]: secondPic && hasFourPics && viewBanner,
-      [styles.view_third_four_pic]: thirdPic && hasFourPics && viewBanner,
-      [styles.view_fourth_four_pic]: fourthPic && hasFourPics && viewBanner,
+      [styles.view_first_two_pics]: firstPic && hasMoreThanOnePic && viewBanner,
+      [styles.view_second_two_pics]: secondPic && hasTwoPics && viewBanner,
+      [styles.view_second_three_pics]: secondPic && hasThreePics && viewBanner,
+      [styles.view_third_three_pics]: thirdPic && hasThreePics && viewBanner,
+      [styles.view_second_four_pics]:
+        secondPic && hasMoreThanThreePics && viewBanner,
+      [styles.view_third_four_pics]:
+        thirdPic && hasMoreThanThreePics && viewBanner,
+      [styles.view_fourth_four_pics]:
+        fourthPic && hasMoreThanThreePics && viewBanner,
+      [styles.see_more]: fourthPic && hasMoreThanFourPics && viewBanner,
     });
   };
 
@@ -166,9 +197,16 @@ const Upload = (props: UploadProps) => {
     [styles.more_than_three_pics]: type === "banner" && hasMoreThanThreePics,
   });
 
-  const handleOpenPhotoAlbum = (e) => {
-    console.log(e);
+  const handleOpenFileModal = () => {
+    document.getElementById("upload-input-btn")?.click();
   };
+
+  const manageMedia = (
+    <React.Fragment>
+      <div onClick={handleOpenFileModal}>Add photos/videos</div>
+      <div onClick={onImageClick}>Manage photos/videos</div>
+    </React.Fragment>
+  );
 
   return (
     <div className={containerClassName}>
@@ -177,15 +215,15 @@ const Upload = (props: UploadProps) => {
           <div
             key={src}
             className={mediaClassName(index)}
-            onClick={() => isViewPage && handleOpenPhotoAlbum(src)}
+            onClick={() => isViewPage && onImageClick?.(src)}
           >
             <div className={styles.close} onClick={() => handleRemoveItem(src)}>
               <Icon icon="cancel" size={25} />
             </div>
             <div className={styles.add_icon}>{centerIcon}</div>
             <div className={styles.loader} />
-            <Input onChange={(e) => handleChange(e, src)} />
-            <Image src={src} alt="" layout="fill" />
+            <Input onChange={(e) => handleChange(e, src)} multiple={false} />
+            <Image src={src} alt="" layout="fill" objectFit="cover" />
             {/* <VideoThumbnail videoUrl={src} /> */}
           </div>
         );
@@ -194,7 +232,7 @@ const Upload = (props: UploadProps) => {
       {showInput && !isUploading && !isViewPage && (
         <div className={addMoreButtonClassName}>
           <div className={styles.add_icon}>{centerIcon}</div>
-          <Input onChange={handleChange} />
+          <Input onChange={handleChange} multiple={multiple} />
         </div>
       )}
 
@@ -207,6 +245,15 @@ const Upload = (props: UploadProps) => {
             Upgrade to Basic Tier to upload more photos and video
           </div>
           <a>Upgrade now</a>
+        </div>
+      )}
+
+      {type === "banner" && get(srcList, "length") > 3 && (
+        <div className={styles.edit_banner_add_more_btn}>
+          <Popover content={manageMedia} contentClassName="mt-3">
+            <Icon icon="plus" />
+            <span>Manage photos/videos</span>
+          </Popover>
         </div>
       )}
     </div>
