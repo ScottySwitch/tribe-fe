@@ -61,7 +61,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
 
   const [selectCategoryLink, setSelectCategoryLink] = useState<
     string | undefined
-  >(getValues("categoryLinks"));
+  >(get(data, "categoryLinks.id"));
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [categoryLinks, setCategoryLinks] = useState<any>([]);

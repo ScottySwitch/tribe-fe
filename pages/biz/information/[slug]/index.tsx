@@ -56,18 +56,8 @@ const BizInformation = (props) => {
   const onSubmit = async (data) => {
     listing.id &&
       (await BizListing.updateBizListing(listing.id, {
-        name: data.name,
-        description: data.description,
-        phone_number: data.contact,
-        logo: data.logo,
-        email: data.email,
-        address: data.address,
-        city: data.city,
-        country: data.country,
-        social_info: data.socialInfo,
-        // products: currentItemList.map((item) => item.id) || [],
-        // menus: currentMenuList.map((item) => item.id) || [],
-        // deals: currentDealList.map((item) => item.id) || [],
+        ...listing,
+        ...data,
       }).then(() => setLoading(true)));
   };
 
@@ -82,7 +72,13 @@ const BizInformation = (props) => {
           />
         );
       case InformationList.BUSINESS_DETAIL:
-        return <BusinessDetail isPaid={isPaid} />;
+        return (
+          <BusinessDetail
+            listing={listing}
+            loading={loading}
+            onSubmit={onSubmit}
+          />
+        );
       case InformationList.PRODUCT_LISTING:
         return <ProductListing isPaid={isPaid} bizListingId={listing.id} />;
       case InformationList.PHOTOS_VIDEOS:

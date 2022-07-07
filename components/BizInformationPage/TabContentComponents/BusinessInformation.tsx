@@ -45,7 +45,17 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   };
 
   const onSubmitForm = (data) => {
-    onSubmit(data);
+    onSubmit({
+      name: data.name,
+      description: data.description,
+      phone_number: data.contact,
+      logo: data.logo,
+      email: data.email,
+      address: data.address,
+      city: data.city,
+      country: data.country,
+      social_info: data.socialInfo,
+    });
     setIsEdit(false);
   };
 
