@@ -10,7 +10,7 @@ import BizApi from "services/biz-listing";
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
 import { Tiers, UsersTypes } from "enums";
 import AuthApi from "../services/auth";
-import { UserInforContext } from "Context/UserInforContext";
+import { IUser, UserInforContext } from "Context/UserInforContext";
 
 import styles from "styles/App.module.scss";
 import "../styles/globals.css";
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
 
   const [loginInfor, setLoginInfo] = useState<ILoginInfor>({});
-  const [userInfor, setUserInfor] = useState(defaultUserInformation);
+  const [user, setUser] = useState<IUser>(defaultUserInformation);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [showHamModal, setShowHamModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -111,24 +111,29 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router]);
 
   const contextDefaultValue = {
-    userInfor: userInfor,
-    deleteUserInfor: () => setUserInfor({}),
-    updateUserInfor: (infor) => {
-      setUserInfor(infor);
+    user: user,
+    deleteUser: () => setUser({}),
+    updateUser: (infor) => {
+      setUser({ ...user, ...infor });
     },
   };
 
   return (
     <UserInforContext.Provider value={contextDefaultValue}>
       <UserInforContext.Consumer>
-        {({ userInfor, updateUserInfor, deleteUserInfor }) => (
+        {({ user, updateUser, deleteUser }) => (
           <div className={styles.app}>
             <Header
               id="header"
               loginInfor={loginInfor}
               onOpenHamModal={() => setShowHamModal(!showHamModal)}
             />
-            <Component {...pageProps} />
+            <Component
+              user={user}
+              updateUser={updateUser}
+              deleteUser={deleteUser}
+              {...pageProps}
+            />
             <AuthPopup
               onClose={() => setShowAuthPopup(false)}
               visible={isAuthPage && showAuthPopup && !loginInfor.token}

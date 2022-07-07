@@ -1,7 +1,11 @@
 import React from "react";
 
+export interface IUser {
+  [key: string]: any;
+}
+
 export const UserInforContext = React.createContext({
-  userInfor: {},
-  updateUserInfor: (infor: any) => {},
-  deleteUserInfor: () => {},
+  user: {},
+  updateUser: (infor: IUser) => {},
+  deleteUser: () => {},
 });
