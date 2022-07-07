@@ -39,7 +39,7 @@ const Home: NextPage = () => {
         <Carousel responsive={homeBannerResponsive}>
           {homeCarousel?.map((img, index) => (
             <div key={index} className={styles.banner_card}>
-              <Image alt="" layout="fill" src={img.imgUrl} />
+              <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
             </div>
           ))}
         </Carousel>
