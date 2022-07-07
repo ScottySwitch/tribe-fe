@@ -32,6 +32,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [frontImageIdentity, setFrontImageIdentity] = useState<string>("")
   const [backImageIdentity, setBackImageIdentity] = useState<string>("")
   const [payPrice, setPayPrice] = useState<string>("")
+  const [time, setTime] = useState<number>(30)
+
   const router = useRouter()
   let baseURL = process.env.NEXT_PUBLIC_API_URL
 
@@ -51,6 +53,29 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (verifyStep === VerifySteps.CONFIRM_OTP) {
+      let timer = setTimeout(() => {
+        if (time > 0) {
+          setTime(returnTime(time - 1))
+        }
+      }, 1000)
+      return () => {
+        clearTimeout(timer)
+      }
+    }
+  })
+
+  const returnTime = (time) => {
+    if (time === 0) {
+      return "00"
+    } else if (time < 10) {
+      return "0" + time
+    } else {
+      return time
+    }
+  }
 
   const handleSubmit = () => {
     const ssProduct = document.getElementById("SS_ProductCheckout")
@@ -217,15 +242,28 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       transaction_id = ""
     }
     if (price != null) {
-      const result = BizInvoinceApi.createBizInvoice({
-        value: parseInt(price),
-        paymentMethod: paymentMethodValue,
-        transaction_id: transaction_id,
-      })
-      const result1 = ClaimListingApi.createClaimListing({
-        paymentMethod: paymentMethodValue,
-        transaction_id: transaction_id,
-      })
+      if (userInfo.role_choose === 'Owner') {
+        const result = await BizInvoinceApi.createBizInvoice({
+          value: parseInt(price),
+          paymentMethod: paymentMethodValue,
+          transaction_id: transaction_id,
+        })
+        const result1 = await ClaimListingApi.createClaimListing({
+          paymentMethod: paymentMethodValue,
+          transaction_id: transaction_id,
+        })
+      }
+      else {
+        const result = await BizInvoinceApi.createBizRevisionInvoice({
+          value: parseInt(price),
+          paymentMethod: paymentMethodValue,
+          transaction_id: transaction_id,
+        })
+        const result1 = await ClaimListingApi.createClaimListingRevision({
+          paymentMethod: paymentMethodValue,
+          transaction_id: transaction_id,
+        })
+      }
     }
     userInfo.isVeriFy = true
     localStorage.setItem("user", JSON.stringify(userInfo))
@@ -242,6 +280,13 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     console.log("srcImages", srcImages)
   }, [])
 
+  const requireOTP = async () => {
+    const result = await AuthApi.forgetPasswordByPhone({
+      phone_number: phoneNumber,
+    })
+    setTime(30)
+  }
+
   return (
     <div className={styles.biz_verify}>
       {verifyStep === VerifySteps.REQUEST_OTP && (
@@ -255,7 +300,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             shouldControlShowValue
             onChange={(e) => setPhoneNumber(removeZeroInPhoneNumber(e))}
           />
-          <Button text="Receive OTP" onClick={handleRequestOTP} />
+          <Button 
+            text="Receive OTP" 
+            onClick={handleRequestOTP} 
+            disabled={phoneNumber.length >= 10 ? false : true}
+          />
         </div>
       )}
       {verifyStep === VerifySteps.CONFIRM_OTP && (
@@ -271,17 +320,22 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setOtp(e.target.value)}
           />
           <div className="flex justify-between w-full">
-            <p className={styles.time}>00:39</p>
-            <p className="cursor-pointer" onClick={() => setVerifyStep(VerifySteps.REQUEST_OTP)}>
-              Resend
-            </p>
+            <div className={styles.time}>00:{time}</div>
+            <div>
+              <Button
+                text="Resend"
+                disabled={time != 0 ? true : false}
+                variant="secondary-no-outlined"
+                onClick={() => requireOTP()}
+              />
+            </div>
           </div>
           <Button text="Receive OTP" onClick={handleConfirmOTP} disabled={!otp} />
         </div>
       )}
       {verifyStep === VerifySteps.ADD_ID_CARD && (
         <div className={styles.form}>
-          <div className={styles.header}>Add ID Card / Driving Licence photo</div>
+          <div className={styles.header}>Add ID Card / Driving License photo</div>
           <p>We need this to verify the information you’ve provided.</p>
           <div className={styles.field_group}>
             <label>ID Type</label>

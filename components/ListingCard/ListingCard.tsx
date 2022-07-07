@@ -13,9 +13,9 @@ const ListingCard = (props: ListingCardProps) => {
   // console.log(listing);
   let avatar = null
   let imageNumber = 0
-  if (listing.attributes?.images !== null) {
-    avatar = listing.attributes?.images?.[0]
-    imageNumber = Array.isArray(listing.attributes?.images) ? listing.attributes?.images.length : 0
+  if (listing.attributes?.logo !== null) {
+    avatar = listing.attributes?.logo?.[0]
+    imageNumber = Array.isArray(listing.attributes?.logo) ? listing.attributes?.logo.length : 0
   }
   const reviewNumber = Array.isArray(listing.attributes?.reviews?.data)
     ? listing.attributes?.reviews?.data.length
