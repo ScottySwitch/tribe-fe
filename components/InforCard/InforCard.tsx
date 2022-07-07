@@ -8,8 +8,8 @@ export interface InforCardProps {
   imgUrl: string
   title?: string
   rate?: number
-  categories?: string[]
-  tags?: string[]
+  categories?: {[key: string]: any} []
+  tags?: {[key: string]: any} []
   iconTag?: boolean
   price?: string | number
   isVerified?: boolean
@@ -74,8 +74,8 @@ const InforCard = (props: InforCardProps) => {
         {Array.isArray(categories) && (
           <div className={styles.categories}>
             {categories.map((cate) => (
-              <div key={cate} className={styles.category}>
-                {cate}
+              <div key={cate.name} className={styles.category}>
+                {cate.name}
               </div>
             ))}
           </div>
@@ -89,9 +89,9 @@ const InforCard = (props: InforCardProps) => {
         {Array.isArray(tags) && (
           <div className={styles.tags}>
             {tags.map((tag) => (
-              <div key={tag} className={`${styles.tag} flex items-center`}>
-                { (iconTag && tag === "Hot deals") && <Icon icon="hot-deal" className="mr-2" /> }
-                {tag}
+              <div key={tag.label} className={`${styles.tag} flex items-center`}>
+                { (iconTag && tag.label === "Hot deals") && <Icon icon="hot-deal" className="mr-2" /> }
+                {tag.label}
               </div>
             ))}
           </div>

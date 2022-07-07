@@ -76,7 +76,7 @@ const loginByPhone = async (params: AuthPhonePayload) => {
 }
 
 const getMe = async () => {
-  const url = `/api/users/me`;
+  const url = `/api/users/me`
   const me = await Api.get(url);
   let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
   if (!me.data) {
