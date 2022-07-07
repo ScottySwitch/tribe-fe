@@ -7,10 +7,17 @@ import Question from "components/Question/Question"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import Table, { IColumn } from "components/Table/Table"
 import { bizInformationDefaultFormData } from "constant"
-import React, { useState } from "react"
+import React, {useEffect, useState} from "react"
 import AddDeals from "./AddDeal/AddDeals"
+import get from 'lodash/get'
 
 import styles from "./TabContent.module.scss"
+import DealApi from "services/deal";
+import Modal, {ModalFooter} from "../../Modal/Modal";
+
+interface ManageDealProps {
+  bizListingId: number
+}
 
 enum ManageDealsScreens {
   LIST = "list",
@@ -18,26 +25,81 @@ enum ManageDealsScreens {
   EDIT = "edit",
 }
 
-const ManageDeals = () => {
+const ManageDeals = (props: ManageDealProps) => {
+  const { bizListingId } = props
+
   const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
   const [selectedDeal, setSelectedDeal] = useState<any[]>([])
   const [screen, setScreen] = useState<ManageDealsScreens>(ManageDealsScreens.LIST)
   const { activeDeals, pastDeals } = formData
+  const [activeDealList, setActiveDealList] = useState<any>()
+  const [pastDealList, setPastDealList] = useState<any>([])
+  const [isShowModalDelete, setIsShowModalDelete] = useState<boolean>(false)
+  const [modalDeleteDealId, setModalDeleteDealId] = useState<number>(0)
 
-  const submitDeal = (e) => console.log(e)
-
-  const handleDelete = (e) => {
-    console.log(e)
+  const getDealsByBizListingId = async (bizListingId: number) => {
+    const result = await DealApi.getDealsByBizListingId(bizListingId, 'is_pinned:desc')
+    const currentDate = new Date()
+    const activeDeals: any = []
+    const pastDeals: any = []
+    result.data.data.map((deal: any) => {
+      if (new Date(deal.attributes.start_date) <= currentDate
+        && currentDate <= new Date(deal.attributes.end_date)) {
+        activeDeals.push(deal)
+      } else {
+        pastDeals.push(deal)
+      }
+    })
+    setActiveDealList(activeDeals)
+    setPastDealList(pastDeals)
   }
 
-  const columns: IColumn[] = [
+  useEffect(() => {
+    getDealsByBizListingId(bizListingId)
+  }, [bizListingId])
+
+  const submitDeal = async (e) => {
+    if (e[0].isEdited) {
+      const dataSend = {...e[0].attributes}
+      await DealApi.updateDeal(e[0].id, dataSend)
+    } else {
+      const newDeal = e[0]
+      const dataSend = {
+        biz_listing: bizListingId,
+        start_date: new Date(),
+        end_date: newDeal.end_date || new Date(),
+        ...newDeal
+      }
+      await DealApi.createDeal(dataSend).then((result) => {
+        getDealsByBizListingId(bizListingId)
+      })
+    }
+  }
+
+  const handleDelete = async () => {
+    const newDealList = activeDealList.filter((deal) => {
+      return deal.id !== modalDeleteDealId
+    })
+    setActiveDealList(newDealList)
+    await DealApi.deleteDeal(modalDeleteDealId)
+    setIsShowModalDelete(false)
+  }
+
+  const handlePinToTop = async (e) => {
+    await DealApi.updateDeal(e.id, {
+      is_pinned: !e.attributes.is_pinned
+    })
+    await getDealsByBizListingId(bizListingId)
+  }
+
+  const activeDealColumns: IColumn[] = [
     {
       key: "name",
       title: "DEALS",
       render: (item: any) => (
         <div>
-          <div className={styles.name}>{item.name}</div>
-          <div className={styles.deal_information}>{item.information}</div>
+          <div className={styles.name}>{get(item, "attributes.name")}</div>
+          <div className={styles.deal_information}>{get(item, "attributes.description")}</div>
         </div>
       ),
       width: "35%",
@@ -45,13 +107,13 @@ const ManageDeals = () => {
     {
       key: "date",
       title: "DATE",
-      render: (item: any) => item.date,
+      render: (item: any) => `${get(item, "attributes.start_date")} - ${get(item, "attributes.end_date")}`,
       width: "45%",
     },
     {
       key: "clicks",
       title: "CLICKS",
-      render: (item: any) => <div className={styles.click}>{item.clicks}</div>,
+      render: (item: any) => <div className={styles.click}>{get(item, "attributes.click_counts") || 0}</div>,
       width: "10%",
       textAlign: "right",
     },
@@ -61,6 +123,33 @@ const ManageDeals = () => {
       render: (item: any) => <TableAction item={item} />,
       width: "10%",
     },
+  ]
+
+  const pastDealColumns: IColumn[] = [
+    {
+      key: "name",
+      title: "DEALS",
+      render: (item: any) => (
+        <div>
+          <div className={styles.name}>{get(item, "attributes.name")}</div>
+          <div className={styles.deal_information}>{get(item, "attributes.description")}</div>
+        </div>
+      ),
+      width: "35%",
+    },
+    {
+      key: "date",
+      title: "DATE",
+      render: () => <span className="text-gray-500">Ended</span>,
+      width: "45%",
+    },
+    {
+      key: "clicks",
+      title: "CLICKS",
+      render: (item: any) => <div className={styles.click}>{get(item, "attributes.click_counts") || 0}</div>,
+      width: "10%",
+      textAlign: "right",
+    }
   ]
 
   const TableAction = (props) => {
@@ -75,14 +164,19 @@ const ManageDeals = () => {
         >
           Edit deal
         </div>
-        <div className={styles.delete_action} onClick={() => handleDelete(item)}>
+        <div className={styles.delete_action} onClick={() => {
+          setModalDeleteDealId(item.id)
+          setIsShowModalDelete(true)
+        }}>
           Delete deal
         </div>
       </React.Fragment>
     )
     return (
       <div className="flex gap-1">
-        <Icon icon="pin" />
+        <div className={styles.pin} onClick={() => handlePinToTop(item)}>
+          <Icon icon="pin" color={item.attributes.is_pinned ? undefined : "gray"} />
+        </div>
         <Popover content={content} position="bottom-left">
           <Icon icon="toolbar" />
         </Popover>
@@ -100,7 +194,7 @@ const ManageDeals = () => {
       >
         <div className={styles.tips_button}>
           <div className={styles.tips}>
-            <strong>Tips:</strong> Click the pin icon to put 5 products on the top.
+            <strong>Tips:</strong> Click the pin icon to put 5 deals on the top.
           </div>
           <Button
             text="Create deal"
@@ -112,13 +206,13 @@ const ManageDeals = () => {
           />
         </div>
         <Question
-          question={`Active deals (${Array.isArray(activeDeals) ? activeDeals.length : 0})`}
+          question={`Active deals (${Array.isArray(activeDealList) ? activeDealList.length : 0})`}
         >
-          <Table columns={columns} data={activeDeals} />
+          <Table columns={activeDealColumns} data={activeDealList} />
         </Question>
 
-        <Question question={`Past deals (${Array.isArray(pastDeals) ? pastDeals.length : 0})`}>
-          <Table columns={columns} data={pastDeals} />
+        <Question question={`Past deals (${Array.isArray(pastDealList) ? pastDealList.length : 0})`}>
+          <Table columns={pastDealColumns} data={pastDealList} />
         </Question>
       </SectionLayout>
       <SectionLayout
@@ -126,6 +220,7 @@ const ManageDeals = () => {
         title={screen === ManageDealsScreens.EDIT ? "Edit deal" : "Add deal"}
       >
         <AddDeals
+          isEdit={screen === ManageDealsScreens.EDIT}
           isPaid={true}
           dealList={selectedDeal}
           onCancel={() => setScreen(ManageDealsScreens.LIST)}
@@ -135,7 +230,29 @@ const ManageDeals = () => {
           }}
         />
       </SectionLayout>
+      <ModalDelete visible={isShowModalDelete}
+                   onClose={() => setIsShowModalDelete(false)}
+                   onSubmit={() => handleDelete()}
+      />
     </React.Fragment>
+  )
+}
+
+const ModalDelete = (props) => {
+  const {visible, onClose, onSubmit} = props
+  return (
+    <Modal visible={visible} width={579} title="Delete deal?" onClose={onClose}>
+      <div className="p-7">
+        <div className="text-sm max-w-sm mx-auto text-center mb-7">
+          <p>You are about to delete this deal.</p>
+          <p>This action <span className="font-bold">cannot</span> be undone. Are you sure?</p>
+        </div>
+        <ModalFooter>
+          <Button className="text-sm bg-transparent text-black border mr-2" text="Do not delete" onClick={onClose}/>
+          <Button className="text-sm" text="Delete" onClick={() => onSubmit()}/>
+        </ModalFooter>
+      </div>
+    </Modal>
   )
 }
 

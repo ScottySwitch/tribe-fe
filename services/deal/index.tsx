@@ -21,9 +21,28 @@ const deleteDeal = async (dealId: any) => {
   return await Api.delete(url);
 }
 
+const getDealsByBizListingId = async (bizListingId: any, sortBy: string) => {
+  let dataSend: any = {
+    "filters": {
+      "biz_listing": {
+        "id": bizListingId
+      }
+    }
+  }
+  if (sortBy !== '') {
+    dataSend = {...dataSend, "sort": [sortBy]}
+  }
+  const query = qs.stringify(dataSend, {
+    encodeValuesOnly: true
+  });
+
+  const url = `/api/deals?${query}`;
+  return await Api.get(url);
+}
 
 export default {
   createDeal,
   updateDeal,
   deleteDeal,
+  getDealsByBizListingId
 }

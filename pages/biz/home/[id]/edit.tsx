@@ -66,7 +66,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [listingImages, setListingImages] = useState<any>([]);
   const [logo, setLogo] = useState<any>([]);
 
-  const [isPaid, setIsPaid] = useState<boolean>(false);
+  const [isPaid, setIsPaid] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
 
@@ -143,14 +143,15 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           imgUrl: item.menu_file[0],
           isChange: false,
         }));
-        const rawDeal = listing.deals || [];
+        let rawDeal = listing.deals || [];
+        rawDeal = orderBy(rawDeal, ['is_pinned'], ['desc'])
         const dealArray = rawDeal.map((item) => ({
           id: item.id,
           is_revision: item.is_revision,
           parent_id: item.parent_id,
           name: item.name,
           images: item.images,
-          imgUrl: get(item, "images[0]"),
+          imgUrl: get(item, "images[0]") || "https://picsum.photos/200/300",
           information: item.description,
           termsConditions: item.terms_conditions,
           // start_date: item.start_date,

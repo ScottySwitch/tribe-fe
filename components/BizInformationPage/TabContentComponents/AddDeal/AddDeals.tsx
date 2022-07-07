@@ -11,8 +11,10 @@ import moment from "moment"
 import parseISO from 'date-fns/parseISO'
 
 import styles from "./AddDeal.module.scss"
+import get from "lodash/get";
 
 interface AddDealsProps {
+  isEdit?: boolean
   isPaid?: boolean
   multiple?: boolean
   dealList: { [key: string]: any }[]
@@ -21,7 +23,7 @@ interface AddDealsProps {
 }
 
 const AddDeals = (props: AddDealsProps) => {
-  const { dealList, isPaid, multiple, onCancel, onSubmit } = props
+  const { isEdit, dealList, isPaid, multiple, onCancel, onSubmit } = props
   const [localDealList, setLocalDeaList] = useState(dealList || [])
 
   const handleRemoveDeal = (id: number) => {
@@ -32,13 +34,17 @@ const AddDeals = (props: AddDealsProps) => {
   const handleChangeDeal = (id: number, type: string, value: string | number | string[]) => {
     const index = getIndex(id, localDealList)
     const newArray = [...localDealList]
-    newArray[index][type] = value
-    newArray[index].isEdited = true
+    if (isEdit) {
+      newArray[index]['attributes'][type] = value
+      newArray[index].isEdited = true
+    } else {
+      newArray[index][type] = value
+    }
     setLocalDeaList(newArray)
   }
 
   const handleAddDeal = () => {
-    setLocalDeaList([...localDealList, { id: randomId(), isNew: true, validUntil: new Date() }])
+    setLocalDeaList([...localDealList, { id: randomId(), isNew: true, start_date: new Date(), end_date: new Date() }])
   }
 
   const AddDealButton = () => (
@@ -72,7 +78,7 @@ const AddDeals = (props: AddDealsProps) => {
             <div key={deal.id} className={styles.add_deals_container}>
               <div className={styles.break} />
               <div className={styles.header}>
-                <p className="text-left">Add images</p>
+                <p className="text-left">{isEdit ? 'Edit' : 'Add'} images</p>
                 {multiple && (
                   <div className={styles.close} onClick={() => handleRemoveDeal(deal.id)}>
                     <Icon icon="cancel" />
@@ -83,30 +89,30 @@ const AddDeals = (props: AddDealsProps) => {
                 multiple 
                 isPaid={isPaid} 
                 centerIcon={<Icon icon="plus" size={20} />} 
-                fileList={deal.images || []}
+                fileList={get(deal, "attributes.images") || []}
                 onChange={(e) => handleChangeDeal(deal.id, "images", e)}
               />
               <Input
-                value={deal.name}
+                value={get(deal, "attributes.name")}
                 placeholder="Deal name"
                 onChange={(e: any) => handleChangeDeal(deal.id, "name", e.target.value)}
               />
               <Input
-                value={deal.information}
+                value={get(deal, "attributes.description")}
                 placeholder="Deal information"
-                onChange={(e: any) => handleChangeDeal(deal.id, "information", e.target.value)}
+                onChange={(e: any) => handleChangeDeal(deal.id, "description", e.target.value)}
               />
               <DatePicker
-                value={deal.validUntil || new Date()}
-                onChange={(e: any) => handleChangeDeal(deal.id, "validUntil", e)}
+                value={get(deal, "attributes.end_date") ? new Date(get(deal, "attributes.end_date")) : new Date()}
+                onChange={(e: any) => handleChangeDeal(deal.id, "end_date", e)}
                 suffixIcon
                 label="Valid until"
               />
               <Input
-                value={deal.termsConditions}
+                value={get(deal, "attributes.terms_conditions")}
                 label="Terms and Conditions"
                 placeholder="A valid tribe listing pass must be presented upon payment to enjoy the offer."
-                onChange={(e: any) => handleChangeDeal(deal.id, "termsConditions", e.target.value)}
+                onChange={(e: any) => handleChangeDeal(deal.id, "terms_conditions", e.target.value)}
               />
               {multiple && <AddDealButton />}
               <Break />
