@@ -11,6 +11,7 @@ import AddItems from "./AddItems/AddItems";
 import styles from "./TabContent.module.scss";
 import ProductApi from "../../../services/product";
 import { get } from "lodash";
+import Modal, {ModalFooter} from "../../Modal/Modal";
 
 interface ProductListingProps {
   bizListingId?: number | string;
@@ -31,43 +32,50 @@ const ProductListing = (props: ProductListingProps) => {
     ProductListingScreens.LIST
   );
   const { category } = formData;
-
+  const [isShowModalDelete, setIsShowModalDelete] = useState<boolean>(false)
+  const [modalDeleteProductId, setModalDeleteProductId] = useState<number>(0)
   const [productList, setProductList] = useState<any>();
+
+  const getProductsByBizListingId = async (bizListingId: number | string | undefined) => {
+    const result = await ProductApi.getProductsByBizListingId(bizListingId, 'is_pinned:desc')
+    setProductList(result.data.data)
+  }
+
   useEffect(() => {
-    const getProductsByBizListingId = async (bizListingId: number | string) => {
-      const result = await ProductApi.getProductsByBizListingId(bizListingId);
-      setProductList(result.data.data);
-    };
-    bizListingId && getProductsByBizListingId(bizListingId);
-  }, [bizListingId]);
+    getProductsByBizListingId(bizListingId)
+  }, [bizListingId])
 
   const submitProduct = async (e: any) => {
-    // console.log('newProduct', e[0]);
-    const newProduct = e[0];
-    const dataSend = {
-      biz_listing: bizListingId,
-      name: newProduct.name,
-      description: newProduct.description,
-      price: newProduct.price,
-      tags: newProduct.tags,
-      images: newProduct.images,
-    };
-    await ProductApi.createProduct(dataSend).then((result) => {
-      setProductList([...productList, result.data.data]);
-    });
-  };
+    if (e[0].isEdited) {
+      const dataSend = {...e[0].attributes}
+      await ProductApi.updateProduct(e[0].id, dataSend)
+    } else {
+      const newProduct = e[0]
+      const dataSend = {
+        biz_listing: bizListingId,
+        ...newProduct
+      }
+      await ProductApi.createProduct(dataSend).then((result) => {
+        setProductList([...productList, result.data.data])
+      })
+    }
+  }
 
-  const handleDelete = async (e) => {
+  const handleDelete = async () => {
     const newProductList = productList.filter((product) => {
-      return product.id !== e;
-    });
-    setProductList(newProductList);
-    await ProductApi.deleteProduct(e);
-  };
+      return product.id !== modalDeleteProductId
+    })
+    setProductList(newProductList)
+    await ProductApi.deleteProduct(modalDeleteProductId)
+    setIsShowModalDelete(false)
+  }
 
-  const handlePinToTop = (e) => {
-    console.log(e);
-  };
+  const handlePinToTop = async (e) => {
+    await ProductApi.updateProduct(e.id, {
+      is_pinned: !e.attributes.is_pinned
+    })
+    await getProductsByBizListingId(bizListingId)
+  }
 
   const PopoverContent = ({ item }) => (
     <React.Fragment>
@@ -79,10 +87,10 @@ const ProductListing = (props: ProductListingProps) => {
       >
         Edit
       </div>
-      <div
-        className={styles.delete_action}
-        onClick={() => handleDelete(item.id)}
-      >
+      <div className={styles.delete_action} onClick={() => {
+        setModalDeleteProductId(item.id)
+        setIsShowModalDelete(true)
+      }}>
         Delete
       </div>
     </React.Fragment>
@@ -102,7 +110,7 @@ const ProductListing = (props: ProductListingProps) => {
             top.
           </div>
           <div className="flex gap-2">
-            {!isPaid && productList.length > 2 && (
+            {!isPaid && Array.isArray(productList) && productList.length > 2 && (
               <Button
                 prefix={<Icon icon="star-2" color="#653fff" />}
                 variant="secondary"
@@ -145,11 +153,8 @@ const ProductListing = (props: ProductListingProps) => {
                       <Icon icon="toolbar" color="white" />
                     </Popover>
                   </div>
-                  <div
-                    className={styles.pin}
-                    onClick={() => handlePinToTop(item)}
-                  >
-                    <Icon icon="pin" color={index < 6 ? undefined : "white"} />
+                  <div className={styles.pin} onClick={() => handlePinToTop(item)}>
+                    <Icon icon="pin" color={item.attributes.is_pinned ? undefined : "white"} />
                   </div>
                 </div>
               );
@@ -159,11 +164,10 @@ const ProductListing = (props: ProductListingProps) => {
       </SectionLayout>
       <SectionLayout
         show={screen !== ProductListingScreens.LIST}
-        title={
-          screen === ProductListingScreens.EDIT ? "Edit product" : "Add deal"
-        }
+        title={screen === ProductListingScreens.EDIT ? "Edit product" : "Add product"}
       >
         <AddItems
+          isEdit={screen === ProductListingScreens.EDIT}
           isPaid={isPaid}
           itemList={selectedItem}
           placeholders={getAddItemsFields(category).placeholder}
@@ -174,8 +178,30 @@ const ProductListing = (props: ProductListingProps) => {
           }}
         />
       </SectionLayout>
+      <ModalDelete visible={isShowModalDelete}
+                   onClose={() => setIsShowModalDelete(false)}
+                   onSubmit={() => handleDelete()}
+      />
     </React.Fragment>
   );
 };
+
+const ModalDelete = (props) => {
+  const {visible, onClose, onSubmit} = props
+  return (
+    <Modal visible={visible} width={579} title="Delete Product?" onClose={onClose}>
+      <div className="p-7">
+        <div className="text-sm max-w-sm mx-auto text-center mb-7">
+          <p>You are about to delete this product.</p>
+          <p>This action <span className="font-bold">cannot</span> be undone. Are you sure?</p>
+        </div>
+        <ModalFooter>
+          <Button className="text-sm bg-transparent text-black border mr-2" text="Do not delete" onClick={onClose}/>
+          <Button className="text-sm" text="Delete" onClick={() => onSubmit()}/>
+        </ModalFooter>
+      </div>
+    </Modal>
+  )
+}
 
 export default ProductListing;
