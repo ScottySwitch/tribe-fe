@@ -75,10 +75,10 @@ const Properties = () => {
       userInfo.now_biz_listing = listingDetail;
       localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo)
-      let propertiesData = get(data, `data.data[0].attributes.${property}.data`)
       userInfo.now_biz_listing = listingDetail;
       localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo)
+      let propertiesData = get(data, `data.data[0].attributes.${property}.data`)
       setListingInformation(listingDetail)
       console.log("listing", listingDetail)
       console.log("userInfo", userInfo)
