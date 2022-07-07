@@ -1,26 +1,30 @@
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import type { AppProps } from "next/app"
-import AuthPopup from "components/AuthPopup/AuthPopup"
+import type { AppProps } from "next/app";
+import AuthPopup from "components/AuthPopup/AuthPopup";
+import Footer from "components/Footer/Footer";
+import Header from "components/TheHeader/Header";
+import HamModal from "components/HamModal/HamModal";
+import BizApi from "services/biz-listing";
+import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
+import { Tiers, UsersTypes } from "enums";
+import AuthApi from "../services/auth";
+import { UserInforContext } from "Context/UserInforContext";
 
-import Footer from "components/Footer/Footer"
-import Header from "components/TheHeader/Header"
-import HamModal from "components/HamModal/HamModal"
-import BizApi from "services/biz-listing"
-import BizInvoice from "services/biz-invoice"
-import ClaimListingApi from "services/claim-listing"
-import styles from "styles/App.module.scss"
-import "../styles/globals.css"
-import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar"
-import { Tiers, UsersTypes } from "enums"
-import AuthApi from "../services/auth"
+import styles from "styles/App.module.scss";
+import "../styles/globals.css";
 
-export type ILoginInfor = { token?: string; type?: UsersTypes; tier?: Tiers; avatar?: string }
+export type ILoginInfor = {
+  token?: string;
+  type?: UsersTypes;
+  tier?: Tiers;
+  avatar?: string;
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter()
-  const pathname = router.pathname
+  const router = useRouter();
+  const pathname = router.pathname;
   const notAuthPages = [
     "/login",
     "/signup",
@@ -30,99 +34,122 @@ function MyApp({ Component, pageProps }: AppProps) {
     "/signup/otp",
     "/signup/setup-profile",
     "/biz/verify",
-  ]
-  const isAuthPage = !notAuthPages.includes(pathname)
+  ];
+  const isAuthPage = !notAuthPages.includes(pathname);
+  const defaultUserInformation: { [key: string]: any } = {
+    token: undefined,
+    avatar: undefined,
+  };
 
-  const [loginInfor, setLoginInfo] = useState<ILoginInfor>({})
-  const [showAuthPopup, setShowAuthPopup] = useState(false)
-  const [showHamModal, setShowHamModal] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const [loginInfor, setLoginInfo] = useState<ILoginInfor>({});
+  const [userInfor, setUserInfor] = useState(defaultUserInformation);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [showHamModal, setShowHamModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const stringyLoginInfo = localStorage.getItem("user");
+    const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
+    if (localLoginInfo.token) {
+      setLoginInfo(localLoginInfo);
+      setShowAuthPopup(false);
+    } else {
+      setLoginInfo({});
+      setShowAuthPopup(true);
+    }
+  }, []);
 
   //handle logic hide header when scroll, not hide when in desktop || when setShowOpenHoursModal ham modal || in unAuthPages
   useEffect(() => {
-    var prevScrollpos = window.pageYOffset
-    const header = document.getElementById("header") as any
+    var prevScrollpos = window.pageYOffset;
+    const header = document.getElementById("header") as any;
     const handleScroll = function () {
-      var currentScrollPos = window.pageYOffset
+      var currentScrollPos = window.pageYOffset;
       if (prevScrollpos < currentScrollPos && !showHamModal && isAuthPage) {
-        header.style.top = "-120px"
+        header.style.top = "-120px";
       } else {
-        header.style.top = "0"
+        header.style.top = "0";
       }
-      prevScrollpos = currentScrollPos
-    }
+      prevScrollpos = currentScrollPos;
+    };
 
     if (header && isMobile) {
-      window.addEventListener("scroll", handleScroll, { passive: true })
-      return () => window.removeEventListener("scroll", handleScroll)
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, [showHamModal, isMobile, isAuthPage])
-
-  useEffect(() => {
-    const stringyLoginInfo = localStorage.getItem("user")
-    const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {}
-    if (localLoginInfo.token) {
-      setLoginInfo(localLoginInfo)
-      setShowAuthPopup(false)
-    } else {
-      setLoginInfo({})
-      setShowAuthPopup(true)
-    }
-  }, [])
+  }, [showHamModal, isMobile, isAuthPage]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
-      await AuthApi.getMe()
+      await AuthApi.getMe();
       if (userInfo) {
-        const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id)
+        const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
         // const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
         // const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
         // const dataClaimListing = await ClaimListingApi.getClaimListingByUserId(userInfo.id)
         // const dataListingRoles = await BizApi.getOwnerListingRoleByUserId(userInfo.id)
         userInfo = {
           ...userInfo,
-          // // biz_listings: dataBizlisting.data.data, 
-          // biz_invoice: dataBizInvoice.data.data, 
+          // // biz_listings: dataBizlisting.data.data,
+          // biz_invoice: dataBizInvoice.data.data,
           // claim_listings: dataClaimListing.data.data,
           // listing_roles: dataListingRoles.data.data,
-          owner_listings: dataOwnerListing.data.data
-        }
+          owner_listings: dataOwnerListing.data.data,
+        };
       }
-      localStorage.setItem("user", JSON.stringify(userInfo))
-    }
+      localStorage.setItem("user", JSON.stringify(userInfo));
+    };
     if (userInfo.token) {
-      getMe().catch((e) => console.log(e))
+      getMe().catch((e) => console.log(e));
     }
 
     if (screen.width < 501) {
-      setIsMobile(true)
+      setIsMobile(true);
     }
-  }, [router])
+  }, [router]);
+
+  const contextDefaultValue = {
+    userInfor: userInfor,
+    deleteUserInfor: () => setUserInfor({}),
+    updateUserInfor: (infor) => {
+      setUserInfor(infor);
+    },
+  };
 
   return (
-    <div className={styles.app}>
-      <Header
-        id="header"
-        loginInfor={loginInfor}
-        onOpenHamModal={() => setShowHamModal(!showHamModal)}
-      />
-      <Component {...pageProps} />
-      <AuthPopup
-        onClose={() => setShowAuthPopup(false)}
-        visible={isAuthPage && showAuthPopup && !loginInfor.token}
-      />
-      <HamModal
-        loginInfor={loginInfor}
-        showHamModal={showHamModal}
-        onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
-      />
-      <Footer visible={isAuthPage} backgroundColor={pathname !== "/biz/information"} />
-
-      <ContributeTabBar visible={!showHamModal && isAuthPage && isMobile} />
-    </div>
-  )
+    <UserInforContext.Provider value={contextDefaultValue}>
+      <UserInforContext.Consumer>
+        {({ userInfor, updateUserInfor, deleteUserInfor }) => (
+          <div className={styles.app}>
+            <Header
+              id="header"
+              loginInfor={loginInfor}
+              onOpenHamModal={() => setShowHamModal(!showHamModal)}
+            />
+            <Component {...pageProps} />
+            <AuthPopup
+              onClose={() => setShowAuthPopup(false)}
+              visible={isAuthPage && showAuthPopup && !loginInfor.token}
+            />
+            <HamModal
+              loginInfor={loginInfor}
+              showHamModal={showHamModal}
+              onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
+            />
+            <Footer
+              visible={isAuthPage}
+              backgroundColor={pathname !== "/biz/information"}
+            />
+            <ContributeTabBar
+              visible={!showHamModal && isAuthPage && isMobile}
+            />
+          </div>
+        )}
+      </UserInforContext.Consumer>
+    </UserInforContext.Provider>
+  );
 }
 
-export default MyApp
+export default MyApp;
