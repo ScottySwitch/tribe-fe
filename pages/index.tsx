@@ -59,6 +59,7 @@ const Home: NextPage = () => {
         categories: item.categories,
         price: item.price_range.min,
         rate: item.rate,
+        rateNumber: item.rate_number,
       })))
       console.log('listingArray', listingArray)
       setListingForYou(listingArray)
@@ -111,8 +112,8 @@ const Home: NextPage = () => {
                 rateNumber={card.rateNumber}
                 followerNumber={card.followerNumber}
                 price={card.price}
-                // categories={card.categories}
-                // tags={card.tags}
+                categories={card.categories}
+                tags={card.tags}
                 isVerified={card.isVerified}
               />
             </div>

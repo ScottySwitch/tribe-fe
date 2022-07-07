@@ -8,8 +8,8 @@ export interface InforCardProps {
   imgUrl: string
   title?: string
   rate?: number
-  categories?: {[key: string]: any} []
-  tags?: {[key: string]: any} []
+  categories?: string[]
+  tags?: string[]
   iconTag?: boolean
   price?: string | number
   isVerified?: boolean
@@ -58,7 +58,7 @@ const InforCard = (props: InforCardProps) => {
       </div>
       <div className={styles.details}>
         <div className={styles.title}>{title}</div>
-        {rate && (
+        {!!rate && (
           <div className={styles.reviews}>
             <Icon icon="red-star" size={14} />
             <div className={styles.rate}>{rate}</div>
@@ -69,13 +69,12 @@ const InforCard = (props: InforCardProps) => {
         )}
         {description && <div className={styles.description}>
           {description}
-          {/* {description.length > 50 ? description.substr(0, 50) : description} */}
         </div>}
         {Array.isArray(categories) && (
           <div className={styles.categories}>
             {categories.map((cate) => (
-              <div key={cate.name} className={styles.category}>
-                {cate.name}
+              <div key={cate} className={styles.category}>
+                {cate}
               </div>
             ))}
           </div>
@@ -89,9 +88,9 @@ const InforCard = (props: InforCardProps) => {
         {Array.isArray(tags) && (
           <div className={styles.tags}>
             {tags.map((tag) => (
-              <div key={tag.label} className={`${styles.tag} flex items-center`}>
-                { (iconTag && tag.label === "Hot deals") && <Icon icon="hot-deal" className="mr-2" /> }
-                {tag.label}
+              <div key={tag} className={`${styles.tag} flex items-center`}>
+                { (iconTag && tag === "Hot deals") && <Icon icon="hot-deal" className="mr-2" /> }
+                {tag}
               </div>
             ))}
           </div>
