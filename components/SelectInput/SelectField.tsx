@@ -1,26 +1,30 @@
-import React, { ReactNode, useState } from "react"
-import ReactSelect, { ControlProps, components, StylesConfig } from "react-select"
+import React, { ReactNode, useState } from "react";
+import ReactSelect, {
+  ControlProps,
+  components,
+  StylesConfig,
+} from "react-select";
 
 interface IOption {
-  label: string | ReactNode
-  value: string | number
+  label: string | ReactNode;
+  value: string | number;
 }
 
 export interface SelectProps {
-  id?: string
-  defaultValue?: IOption[] | IOption
-  value?: IOption[] | IOption | string
-  options?: IOption[]
-  disabled?: boolean
-  placeholder?: string
-  isMulti?: boolean
-  closeMenuOnSelect?: boolean
-  menuWidth?: string | number
-  onChange?: (value: any) => void
-  inputRef?: any
-  selectWidth?: string | number
-  isSearchable?: boolean
-  shouldControlShowValue?: boolean
+  id?: string;
+  defaultValue?: IOption[] | IOption | string;
+  value?: IOption[] | IOption | string;
+  options?: IOption[];
+  disabled?: boolean;
+  placeholder?: string;
+  isMulti?: boolean;
+  closeMenuOnSelect?: boolean;
+  menuWidth?: string | number;
+  onChange?: (value: any) => void;
+  inputRef?: any;
+  selectWidth?: string | number;
+  isSearchable?: boolean;
+  shouldControlShowValue?: boolean;
 }
 
 const SelectField = (props: SelectProps) => {
@@ -39,14 +43,14 @@ const SelectField = (props: SelectProps) => {
     shouldControlShowValue,
     isSearchable = true,
     inputRef,
-  } = props
+  } = props;
 
-  const [selected, setSelected] = useState<IOption[] | IOption | string | undefined>(
-    value || defaultValue
-  )
+  const [selected, setSelected] = useState<
+    IOption[] | IOption | string | undefined
+  >(value || defaultValue);
 
-  const primary500 = "#E60112"
-  const primary20 = "#FEF1F2"
+  const primary500 = "#E60112";
+  const primary20 = "#FEF1F2";
 
   const customStyles: StylesConfig = {
     container: (styles) => ({
@@ -86,7 +90,7 @@ const SelectField = (props: SelectProps) => {
           backgroundColor: isSelected ? primary500 : primary20,
         },
         backgroundColor: isSelected ? primary500 : "white",
-      }
+      };
     },
     dropdownIndicator: (styles) => ({ ...styles, padding: 0 }),
     input: (styles) => ({ ...styles, padding: 0, margin: 0, fontWeight: 300 }),
@@ -104,30 +108,30 @@ const SelectField = (props: SelectProps) => {
     }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
     indicatorsContainer: (styles) => ({ ...styles, alignItems: "center" }),
-  }
+  };
 
   const handleChange = (dropdownValues: any) => {
-    onChange?.(dropdownValues)
-    setSelected(dropdownValues)
-  }
+    onChange?.(dropdownValues);
+    setSelected(dropdownValues);
+  };
 
   const Control = ({ children, ...props }: ControlProps<any, false>) => {
-    return <components.Control {...props}>{children}</components.Control>
-  }
+    return <components.Control {...props}>{children}</components.Control>;
+  };
 
   const Option = (props: any) => {
     return (
       <React.Fragment>
         <components.Option {...props}>{props.children}</components.Option>
       </React.Fragment>
-    )
-  }
+    );
+  };
 
   const SingleValue = (props) => (
     <components.SingleValue {...props}>
       {shouldControlShowValue ? props.data.value : props.data.label}
     </components.SingleValue>
-  )
+  );
 
   return (
     <ReactSelect
@@ -135,6 +139,7 @@ const SelectField = (props: SelectProps) => {
       inputRef={inputRef}
       options={options}
       value={selected}
+      defaultValue={defaultValue}
       onChange={handleChange}
       placeholder={placeholder}
       isClearable={false}
@@ -147,7 +152,7 @@ const SelectField = (props: SelectProps) => {
       isSearchable={isSearchable}
       components={{ Control, Option, SingleValue }}
     />
-  )
-}
+  );
+};
 
-export default SelectField
+export default SelectField;

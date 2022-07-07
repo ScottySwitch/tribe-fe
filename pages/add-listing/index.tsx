@@ -19,9 +19,11 @@ import { IOpenHours } from "components/OpenHours/OpenHours";
 import styles from "styles/AddListing.module.scss";
 import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
-import BizListingApi from "../../services/biz-listing"
-import BizListingRevisionApi from "services/biz-listing-revision"
+import BizListingApi from "../../services/biz-listing";
+import BizListingRevisionApi from "services/biz-listing-revision";
 export interface IAddListingForm {
+  id?: number;
+  name?: string;
   category: Categories;
   categoryLinks?: string;
   relationship: string;
@@ -94,7 +96,7 @@ const AddListing = () => {
   };
 
   const handleSubmitFormData = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     ///do CRUD things here
     console.log("data", formData);
     let address = "Online Business";
@@ -121,8 +123,12 @@ const AddListing = () => {
       images: formData.images,
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,
-      product_types: formData.category === 1 ? formData.productTypes : map(formData.productTypes, "value"),
-      product_brands: formData.category === 1 ? map(formData.productBrands, "value") : null,
+      product_types:
+        formData.category === 1
+          ? formData.productTypes
+          : map(formData.productTypes, "value"),
+      product_brands:
+        formData.category === 1 ? map(formData.productBrands, "value") : null,
       tags: formData.describeTags || [],
       facilities_data: {
         additionalServices: formData.additionalServices,
@@ -136,32 +142,35 @@ const AddListing = () => {
         payment: formData.payment,
         placeGoodFor: formData.placeGoodFor,
       },
-      is_accepted: false
-    }
-    console.log('Role', get(formData, "role.label"));
-    
-    const result = get(formData, "role.label") === 'Owner' ? await BizListingApi.createBizListing(dataSend) : await BizListingRevisionApi.createBizListingRevision(dataSend)
-    console.log('result', result)
+      is_accepted: false,
+    };
+    console.log("Role", get(formData, "role.label"));
+
+    const result =
+      get(formData, "role.label") === "Owner"
+        ? await BizListingApi.createBizListing(dataSend)
+        : await BizListingRevisionApi.createBizListingRevision(dataSend);
+    console.log("result", result);
     if (get(formData, "role.label")) {
-      const roleCreate = get(formData, "role.label") === 'Owner' ?
-      await BizListingApi.createListingRole({
-        bizListingId: get(result, "data.data.id"),
-        name: get(formData, "role.label")
-      })
-      :
-      await BizListingRevisionApi.createListingRoleRevison({
-        bizListingId: get(result, "data.data.id"),
-        name: get(formData, "role.label")
-      })
+      const roleCreate =
+        get(formData, "role.label") === "Owner"
+          ? await BizListingApi.createListingRole({
+              bizListingId: get(result, "data.data.id"),
+              name: get(formData, "role.label"),
+            })
+          : await BizListingRevisionApi.createListingRoleRevison({
+              bizListingId: get(result, "data.data.id"),
+              name: get(formData, "role.label"),
+            });
     }
     userInfo = {
       ...userInfo,
       pay_price: "600",
       biz_id: get(result, "data.data.id"),
       biz_slug: get(result, "data.data.attributes.slug"),
-      role_choose: get(formData, "role.label") === 'Owner' ? 'Owner' : ''
-    }
-    localStorage.setItem("user", JSON.stringify(userInfo))
+      role_choose: get(formData, "role.label") === "Owner" ? "Owner" : "",
+    };
+    localStorage.setItem("user", JSON.stringify(userInfo));
     // const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true);
