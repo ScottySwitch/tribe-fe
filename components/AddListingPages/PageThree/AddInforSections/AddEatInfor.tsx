@@ -253,43 +253,46 @@ const AddEatInfor = (props: AddEatInforProps) => {
             optional
           >
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {mealOptions.map((item) => (
-                <Checkbox
-                  key={item.label}
-                  label={item.label}
-                  value={item.label}
-                  className="w-full sm:w-1/2"
-                  name="mealsKind"
-                  register={register("mealsKind")}
-                />
-              ))}
+              {Array.isArray(mealOptions) &&
+                mealOptions.map((item) => (
+                  <Checkbox
+                    key={item.label}
+                    label={item.label}
+                    value={item.label}
+                    className="w-full sm:w-1/2"
+                    name="mealsKind"
+                    register={register("mealsKind")}
+                  />
+                ))}
             </div>
           </Question>
           <Question question="What is this place good for? " optional>
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {placeGoodFor.map((item) => (
-                <Checkbox
-                  key={item.label}
-                  label={item.label}
-                  // name="placeGoodFor"
-                  value={item.label}
-                  className="w-full sm:w-1/2"
-                  register={register("placeGoodFor")}
-                />
-              ))}
+              {Array.isArray(placeGoodFor) &&
+                placeGoodFor.map((item) => (
+                  <Checkbox
+                    key={item.label}
+                    label={item.label}
+                    // name="placeGoodFor"
+                    value={item.label}
+                    className="w-full sm:w-1/2"
+                    register={register("placeGoodFor")}
+                  />
+                ))}
             </div>
           </Question>
           <Question question="Is parking available nearby?" optional>
             <div className="flex flex-col gap-y-5">
-              {parkingNearby.map((item) => (
-                <Radio
-                  key={item.label}
-                  label={item.label}
-                  value={item.label}
-                  name="parking"
-                  register={register("parking")}
-                />
-              ))}
+              {Array.isArray(parkingNearby) &&
+                parkingNearby.map((item) => (
+                  <Radio
+                    key={item.label}
+                    label={item.label}
+                    value={item.label}
+                    name="parking"
+                    register={register("parking")}
+                  />
+                ))}
             </div>
           </Question>
           <Question
@@ -297,16 +300,17 @@ const AddEatInfor = (props: AddEatInforProps) => {
             optional
           >
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {atmosphere.map((item) => (
-                <Checkbox
-                  key={item.label}
-                  // name="atmosphere"
-                  value={item.label}
-                  label={item.label}
-                  className="w-full sm:w-1/2"
-                  register={register("atmosphere")}
-                />
-              ))}
+              {Array.isArray(atmosphere) &&
+                atmosphere.map((item) => (
+                  <Checkbox
+                    key={item.label}
+                    // name="atmosphere"
+                    value={item.label}
+                    label={item.label}
+                    className="w-full sm:w-1/2"
+                    register={register("atmosphere")}
+                  />
+                ))}
             </div>
           </Question>
           <Question
@@ -314,16 +318,17 @@ const AddEatInfor = (props: AddEatInforProps) => {
             optional
           >
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {paymentMethods.map((item) => (
-                <Checkbox
-                  key={item.label}
-                  // name="payment"
-                  label={item.label}
-                  value={item.label}
-                  className="w-full sm:w-1/2"
-                  register={register("payment")}
-                />
-              ))}
+              {Array.isArray(paymentMethods) &&
+                paymentMethods.map((item) => (
+                  <Checkbox
+                    key={item.label}
+                    // name="payment"
+                    label={item.label}
+                    value={item.label}
+                    className="w-full sm:w-1/2"
+                    register={register("payment")}
+                  />
+                ))}
             </div>
           </Question>
           <Question
@@ -331,16 +336,17 @@ const AddEatInfor = (props: AddEatInforProps) => {
             optional
           >
             <div className="flex flex-wrap gap-y-5 w-3/5">
-              {additionalFeatures.map((item) => (
-                <Checkbox
-                  key={item.label}
-                  // name="additionalServices"
-                  label={item.label}
-                  value={item.label}
-                  className="w-full sm:w-1/2"
-                  register={register("additionalServices")}
-                />
-              ))}
+              {Array.isArray(additionalFeatures) &&
+                additionalFeatures.map((item) => (
+                  <Checkbox
+                    key={item.label}
+                    // name="additionalServices"
+                    label={item.label}
+                    value={item.label}
+                    className="w-full sm:w-1/2"
+                    register={register("additionalServices")}
+                  />
+                ))}
             </div>
           </Question>
           <Question

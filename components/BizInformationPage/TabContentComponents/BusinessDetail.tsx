@@ -19,23 +19,38 @@ interface BusinessDetailProps {
 
 const BusinessDetail = (props: BusinessDetailProps) => {
   const { listing, loading, onSubmit } = props;
+
   const viewBusinessDetailData = {
     categoryLinks: get(listing, "category_links[0]"),
     productTypes: get(listing, "product_types"),
     productBrands: get(listing, "product_brands"),
-    openHours: get(listing, "facilities_data.open_hours"),
-    minPrice: get(listing, "price_range.max"),
-    maxPrice: get(listing, "price_range.min"),
+    openHours: get(listing, "open_hours"),
+    minPrice: get(listing, "price_range.min"),
+    maxPrice: get(listing, "price_range.max"),
     currency: get(listing, "price_range.currency"),
-    describeTags: get(listing, "tags").map((item) => item.id),
+    describeTags: get(listing, "tags").map((item) => item.id?.toString()),
     describeTagLabels: get(listing, "tags").map((item) => item.label),
+
+    additionalServices: get(listing, "facilities_data.additionalServices"),
+    atmosphere: get(listing, "facilities_data.atmosphere"),
+    foodOptions: get(listing, "facilities_data.foodOptions"),
+    foodOptionsRamadan: get(listing, "facilities_data.foodOptionsRamadan"),
+    mealsKind: get(listing, "facilities_data.mealsKind"),
+    nonHalalActivities: get(listing, "facilities_data.nonHalalActivities"),
+    parking: get(listing, "facilities_data.parking"),
+    paryerFacilities: get(listing, "facilities_data.paryerFacilities"),
+    payment: get(listing, "facilities_data.payment"),
+    placeGoodFor: get(listing, "facilities_data.placeGoodFor"),
   };
 
+  console.log("viewBusinessDetailData", viewBusinessDetailData);
+
   const submitFormData = (formData) => {
+    console.log("aaasasdasdasdas", formData);
     const businessDetailFormattedData = {
       category_links: formData.categoryLinks,
       price_range: {
-        currency: formData.currency?.value,
+        currency: formData.currency?.value || formData.currency,
         min: formData.minPrice,
         max: formData.maxPrice,
       },
@@ -57,13 +72,11 @@ const BusinessDetail = (props: BusinessDetailProps) => {
         paryerFacilities: formData.paryerFacilities,
         payment: formData.payment,
         placeGoodFor: formData.placeGoodFor,
-        open_hours: formData.openHours,
       },
+      open_hours: formData.openHours,
     };
     onSubmit(businessDetailFormattedData);
   };
-
-  console.log("listing", listing);
 
   const renderBusinessDetail = () => {
     let detail;
@@ -76,14 +89,14 @@ const BusinessDetail = (props: BusinessDetailProps) => {
           />
         );
         break;
-      // case Categories.EAT:
-      //   detail = (
-      //     <BusinessDetailEat
-      //       formData={formData}
-      //       submitFormData={submitFormData}
-      //     />
-      //   );
-      //   break;
+      case Categories.EAT:
+        detail = (
+          <BusinessDetailEat
+            formData={viewBusinessDetailData}
+            submitFormData={submitFormData}
+          />
+        );
+        break;
       // case Categories.SEE_AND_DO:
       //   detail = (
       //     <BusinessDetailSeeAndDo

@@ -55,10 +55,7 @@ const BusinessDetailBuy = (props: BusinessDetailProps) => {
           <PreviewValue valueKey="openHours" value={openHours} />
         </Question>
         <Question question="What’s the average price range of a meal?">
-          {currency &&
-            minPrice &&
-            maxPrice &&
-            `${currency}${minPrice} - ${currency}${maxPrice}`}
+          {`${currency}${minPrice} - ${currency}${maxPrice}`}
         </Question>
         <Break />
         <div>
