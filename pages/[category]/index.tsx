@@ -1,11 +1,11 @@
-import ArticleCard from "components/ArticleCard/ArticleCard"
-import Button from "components/Button/Button"
-import Carousel from "components/Carousel/Carousel"
-import CollectionCard from "components/CollectionCard/CollectionCard"
-import Icon from "components/Icon/Icon"
-import InforCard from "components/InforCard/InforCard"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import TopSearches from "components/TopSearches/TopSearches"
+import ArticleCard from "components/ArticleCard/ArticleCard";
+import Button from "components/Button/Button";
+import Carousel from "components/Carousel/Carousel";
+import CollectionCard from "components/CollectionCard/CollectionCard";
+import Icon from "components/Icon/Icon";
+import InforCard from "components/InforCard/InforCard";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import TopSearches from "components/TopSearches/TopSearches";
 import {
   categories,
   curatedList,
@@ -17,52 +17,54 @@ import {
   homeCuratedResponsive,
   infoCardResponsive,
   inforCardList,
-} from "constant"
-import { CategoryText } from "enums"
-import useTrans from "hooks/useTrans"
-import type { NextPage } from "next"
-import Image from "next/image"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+} from "constant";
+import { CategoryText } from "enums";
+import useTrans from "hooks/useTrans";
+import type { NextPage } from "next";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import styles from "styles/Home.module.scss"
+import styles from "styles/Home.module.scss";
 
 const Category = () => {
-  const trans = useTrans()
-  const router = useRouter()
+  const trans = useTrans();
+  const router = useRouter();
   const {
     query: { category },
-  } = router
+  } = router;
 
-  const [subCategories, setSubCategories] = useState<{ [key: string]: string }[]>([])
+  const [subCategories, setSubCategories] = useState<
+    { [key: string]: string }[]
+  >([]);
 
   useEffect(() => {
-    setSubCategories(dummySubCategories)
-  }, [])
+    setSubCategories(dummySubCategories);
+  }, []);
 
-  let bannerSrc
+  let bannerSrc;
   switch (category) {
     case CategoryText.BUY:
-      bannerSrc = "/images/buy-banner.svg"
-      break
+      bannerSrc = "/images/buy-banner.svg";
+      break;
     case CategoryText.EAT:
-      bannerSrc = "/images/eat-banner.svg"
-      break
+      bannerSrc = "/images/eat-banner.svg";
+      break;
     case CategoryText.SEE_AND_DO:
-      bannerSrc = "/images/see-and-do-banner.svg"
-      break
+      bannerSrc = "/images/see-and-do-banner.svg";
+      break;
     case CategoryText.STAY:
-      bannerSrc = "/images/stay-banner.svg"
-      break
+      bannerSrc = "/images/stay-banner.svg";
+      break;
     case CategoryText.TRANSPORT:
-      bannerSrc = "/images/transport-banner.svg"
-      break
+      bannerSrc = "/images/transport-banner.svg";
+      break;
   }
 
   const handleSelectSubCategory = (slug) =>
     router.push({
       pathname: `${category}/${slug}`,
-    })
+    });
 
   return (
     <div>
@@ -73,7 +75,7 @@ const Category = () => {
         <Carousel responsive={homeBannerResponsive}>
           {homeCarousel?.map((img, index) => (
             <div key={index} className={styles.banner_card}>
-              <Image alt="" layout="fill" src={img.imgUrl} />
+              <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
             </div>
           ))}
         </Carousel>
@@ -165,7 +167,11 @@ const Category = () => {
         <Carousel responsive={homeCuratedResponsive}>
           {homeArticleCarousel?.map((item, index) => (
             <div key={index} className="pb-5">
-              <ArticleCard title={item.title} imgUrl={item.imgUrl} time={item.time} />
+              <ArticleCard
+                title={item.title}
+                imgUrl={item.imgUrl}
+                time={item.time}
+              />
             </div>
           ))}
         </Carousel>
@@ -213,7 +219,7 @@ const Category = () => {
         <TopSearches />
       </SectionLayout>
     </div>
-  )
-}
+  );
+};
 
-export default Category
+export default Category;

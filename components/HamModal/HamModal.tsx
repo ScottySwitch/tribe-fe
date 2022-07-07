@@ -1,24 +1,24 @@
-import { useState } from "react"
-import Image from "next/image"
-import { useRouter } from "next/router"
+import { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
-import Button from "components/Button/Button"
-import Menu from "components/Menu/Menu"
-import Modal from "components/Modal/Modal"
-import Tabs from "components/Tabs/Tabs"
-import { categories } from "constant"
-import { ILoginInfor } from "pages/_app"
+import Button from "components/Button/Button";
+import Menu from "components/Menu/Menu";
+import Modal from "components/Modal/Modal";
+import Tabs from "components/Tabs/Tabs";
+import { categories } from "constant";
+import { ILoginInfor } from "pages/_app";
 
-import styles from "./HamModal.module.scss"
+import styles from "./HamModal.module.scss";
 
 const HamModalHeader = ({
   loginInfor,
   gotoLogin,
   gotoSignup,
 }: {
-  loginInfor: ILoginInfor
-  gotoLogin: () => void
-  gotoSignup: () => void
+  loginInfor: ILoginInfor;
+  gotoLogin: () => void;
+  gotoSignup: () => void;
 }) => {
   return !!loginInfor.token ? (
     <div className={styles.user_profile}>
@@ -28,6 +28,7 @@ const HamModalHeader = ({
         layout="fixed"
         width={50}
         height={50}
+        objectFit="cover"
       />
       <div className={styles.user_infor}>
         <div className={styles.name}>Anna Nhun</div>
@@ -42,31 +43,31 @@ const HamModalHeader = ({
         <Button text="Login" onClick={gotoLogin} />
       </div>
     </>
-  )
-}
+  );
+};
 
 export interface HamModalProps {
-  loginInfor: ILoginInfor
-  showHamModal: boolean
-  onSetShowHamModal: (e: boolean) => void
+  loginInfor: ILoginInfor;
+  showHamModal: boolean;
+  onSetShowHamModal: (e: boolean) => void;
 }
 
 const HamModal = (props: HamModalProps) => {
-  const { onSetShowHamModal, loginInfor, showHamModal } = props
+  const { onSetShowHamModal, loginInfor, showHamModal } = props;
 
-  const [showCategoriesModal, setShowCategoriesModal] = useState(false)
+  const [showCategoriesModal, setShowCategoriesModal] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const gotoLogin = () => {
-    onSetShowHamModal(false)
-    router.push("/login")
-  }
+    onSetShowHamModal(false);
+    router.push("/login");
+  };
 
   const gotoSignup = () => {
-    onSetShowHamModal(false)
-    router.push("/signup")
-  }
+    onSetShowHamModal(false);
+    router.push("/signup");
+  };
 
   const categoriesTabs = [
     {
@@ -78,7 +79,11 @@ const HamModal = (props: HamModalProps) => {
           {categories[0].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div className={styles.category_item_icon}>
-                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fill"
+                />
               </div>
               <div>{item.label}</div>
             </div>
@@ -95,7 +100,11 @@ const HamModal = (props: HamModalProps) => {
           {categories[1].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div className={styles.category_item_icon}>
-                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fill"
+                />
               </div>
               <div>{item.label}</div>
             </div>
@@ -112,7 +121,11 @@ const HamModal = (props: HamModalProps) => {
           {categories[2].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div className={styles.category_item_icon}>
-                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fill"
+                />
               </div>
               <div>{item.label}</div>
             </div>
@@ -129,7 +142,11 @@ const HamModal = (props: HamModalProps) => {
           {categories[3].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div className={styles.category_item_icon}>
-                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fill"
+                />
               </div>
               <div>{item.label}</div>
             </div>
@@ -146,7 +163,11 @@ const HamModal = (props: HamModalProps) => {
           {categories[4].options.map((item) => (
             <div key={item.value} className="flex flex-col flex-wrap w-[28%]">
               <div className={styles.category_item_icon}>
-                <Image src={"https://picsum.photos/200/300"} alt="" layout="fill" />
+                <Image
+                  src={"https://picsum.photos/200/300"}
+                  alt=""
+                  layout="fill"
+                />
               </div>
               <div>{item.label}</div>
             </div>
@@ -154,7 +175,7 @@ const HamModal = (props: HamModalProps) => {
         </div>
       ),
     },
-  ]
+  ];
 
   return (
     <>
@@ -165,7 +186,11 @@ const HamModal = (props: HamModalProps) => {
         onClose={() => onSetShowHamModal(false)}
       >
         <div className={styles.ham_modal}>
-          <HamModalHeader loginInfor={loginInfor} gotoLogin={gotoLogin} gotoSignup={gotoSignup} />
+          <HamModalHeader
+            loginInfor={loginInfor}
+            gotoLogin={gotoLogin}
+            gotoSignup={gotoSignup}
+          />
           <Menu
             loginInfor={loginInfor}
             mobile
@@ -184,7 +209,7 @@ const HamModal = (props: HamModalProps) => {
         <Tabs tabList={categoriesTabs} />
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default HamModal
+export default HamModal;

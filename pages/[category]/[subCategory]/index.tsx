@@ -1,52 +1,62 @@
-import Button from "components/Button/Button"
-import Carousel from "components/Carousel/Carousel"
-import Filter from "components/Filter/Filter"
-import Icon from "components/Icon/Icon"
-import InforCard from "components/InforCard/InforCard"
-import Pagination from "components/Pagination/Pagination"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import Select from "components/Select/Select"
-import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal"
-import TopSearches from "components/TopSearches/TopSearches"
-import { dummySubCategories, homeBannerResponsive, homeCarousel, inforCardList } from "constant"
-import useTrans from "hooks/useTrans"
-import type { NextPage } from "next"
-import Image from "next/image"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import ReactPaginate from "react-paginate"
+import Button from "components/Button/Button";
+import Carousel from "components/Carousel/Carousel";
+import Filter from "components/Filter/Filter";
+import Icon from "components/Icon/Icon";
+import InforCard from "components/InforCard/InforCard";
+import Pagination from "components/Pagination/Pagination";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import Select from "components/Select/Select";
+import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
+import TopSearches from "components/TopSearches/TopSearches";
+import {
+  dummySubCategories,
+  homeBannerResponsive,
+  homeCarousel,
+  inforCardList,
+} from "constant";
+import useTrans from "hooks/useTrans";
+import type { NextPage } from "next";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 
-import styles from "styles/Home.module.scss"
+import styles from "styles/Home.module.scss";
 
 const SubCategoryPage = () => {
-  const trans = useTrans()
-  const router = useRouter()
-  const { query } = router
-  const { category, subCategory }: any = query
-  const [subCategoryData, setSubCategoryData] = useState<any[]>([])
-  const [currentSubCategory, setCurrentSubCategory] = useState(subCategory)
-  const [showFilter, setShowFilter] = useState(false)
-  const [page, setPage] = useState<number | undefined>(1)
+  const trans = useTrans();
+  const router = useRouter();
+  const { query } = router;
+  const { category, subCategory }: any = query;
+  const [subCategoryData, setSubCategoryData] = useState<any[]>([]);
+  const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
+  const [showFilter, setShowFilter] = useState(false);
+  const [page, setPage] = useState<number | undefined>(1);
   useEffect(() => {
     //get subCategory data
-    setSubCategoryData(inforCardList)
-  }, [currentSubCategory, page])
+    setSubCategoryData(inforCardList);
+  }, [currentSubCategory, page]);
 
   const handleChangeSubCategory = (e) => {
-    setCurrentSubCategory(e)
+    setCurrentSubCategory(e);
     router.push(
       {
         pathname: `/${category}/${e}`,
       },
       undefined,
       { shallow: true }
-    )
-  }
+    );
+  };
 
   const formatDummySubCategories = [
-    { label: "All", value: "all", slug: "all", icon: "https://picsum.photos/200/300" },
+    {
+      label: "All",
+      value: "all",
+      slug: "all",
+      icon: "https://picsum.photos/200/300",
+    },
     ...dummySubCategories,
-  ]
+  ];
 
   return (
     <div>
@@ -60,7 +70,7 @@ const SubCategoryPage = () => {
         <Carousel responsive={homeBannerResponsive}>
           {homeCarousel?.map((img, index) => (
             <div key={index} className={styles.banner_card}>
-              <Image alt="" layout="fill" src={img.imgUrl} />
+              <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
             </div>
           ))}
         </Carousel>
@@ -84,7 +94,11 @@ const SubCategoryPage = () => {
               size="small"
               options={formatDummySubCategories.slice(5)}
               controlStyle={{ fontWeight: "bold", fontSize: "16px" }}
-              placeholderStyle={{ fontWeight: "bold", fontSize: "16px", color: "#a4a8b7" }}
+              placeholderStyle={{
+                fontWeight: "bold",
+                fontSize: "16px",
+                color: "#a4a8b7",
+              }}
               onChange={(e) => handleChangeSubCategory(e.value)}
             />
           </div>
@@ -122,7 +136,7 @@ const SubCategoryPage = () => {
       </SectionLayout>
       <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
     </div>
-  )
-}
+  );
+};
 
-export default SubCategoryPage
+export default SubCategoryPage;
