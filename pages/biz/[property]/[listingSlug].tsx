@@ -7,7 +7,7 @@ import PromotionCard from "components/PromotionCard/PromotionCard"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import TopSearches from "components/TopSearches/TopSearches"
 import { ListingTabs } from "enums"
-import { get } from "lodash"
+import {get, orderBy} from "lodash"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import BizListingApi from "services/biz-listing"
@@ -72,13 +72,16 @@ const Properties = () => {
       data = await BizListingApi.getBizListingBySlug(listingSlug)
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       const listingDetail = get(data, `data.data[0].attributes`)
-      const propertiesData = get(data, `data.data[0].attributes.${property}.data`)
       userInfo.now_biz_listing = listingDetail;
       localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo)
+      let propertiesData = get(data, `data.data[0].attributes.${property}.data`)
       setListingInformation(listingDetail)
       console.log("listing", listingDetail)
       console.log("userInfo", userInfo)
+      if (property === 'products') {
+        propertiesData = orderBy(propertiesData, ['attributes.is_pinned'], ['desc'])
+      }
       setProperties(propertiesData)
     }
     listingSlug && getProperties()

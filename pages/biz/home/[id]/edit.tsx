@@ -31,6 +31,7 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
+import {orderBy} from "lodash";
 
 import styles from "styles/BizHomepage.module.scss";
 
@@ -114,7 +115,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             "XXXXXX" +
             rawPhoneNumber.substring(7)
           : "";
-        const rawListing = listing.products || [];
+        let rawListing = listing.products || [];
+        rawListing = orderBy(rawListing, ['is_pinned'], ['desc'])
         const listingArray = rawListing.map((item) => ({
           name: item.name,
           is_revision: item.is_revision,
