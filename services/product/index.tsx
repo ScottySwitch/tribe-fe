@@ -2,14 +2,18 @@ import Api from "../index";
 
 const qs = require('qs');
 
-const getProductsByBizListingId = async (bizListingId: any) => {
-  const query = qs.stringify({
+const getProductsByBizListingId = async (bizListingId: any, sortBy: string) => {
+  let dataSend: any = {
     "filters": {
       "biz_listing": {
         "id": bizListingId
       }
     }
-  }, {
+  }
+  if (sortBy !== '') {
+    dataSend = {...dataSend, "sort": [sortBy]}
+  }
+  const query = qs.stringify(dataSend, {
     encodeValuesOnly: true
   });
 

@@ -123,7 +123,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           id: item.id,
           description: item.description,
           images: item.images,
-          imgUrl: item.images[0],
+          imgUrl: get(item, "images[0]") || "https://picsum.photos/200/300",
           discount: item.discount_percent,
           tags: item.tags,
           websiteUrl: item.website_url,
