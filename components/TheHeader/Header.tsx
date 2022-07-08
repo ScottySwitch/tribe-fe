@@ -34,10 +34,11 @@ export interface HeaderProps {
   loginInfor: any
   id: string
   onOpenHamModal: () => void
+  navList: {[key: string]: any} []
 }
 
 const Header = (props: HeaderProps) => {
-  const { id, loginInfor = {}, onOpenHamModal } = props
+  const { id, loginInfor = {}, onOpenHamModal, navList } = props
   const [currentCategory, setCurrentCategory] = useState<string | undefined>()
   const router = useRouter()
   const { locale } = router
@@ -103,6 +104,7 @@ const Header = (props: HeaderProps) => {
             <Categories
               currentCategory={currentCategory}
               onSetCurrentCategory={(e) => setCurrentCategory(e)}
+              navList={navList}
             />
           </div>
           <div className={styles.mobile}>

@@ -11,6 +11,9 @@ import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
 import { Tiers, UsersTypes } from "enums";
 import AuthApi from "../services/auth";
 import { IUser, UserInforContext } from "Context/UserInforContext";
+import CategoryApi from "services/category"
+import CategoryLinkApi from "services/category-link"
+import {get} from "lodash"
 
 import styles from "styles/App.module.scss";
 import "../styles/globals.css";
@@ -46,6 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [showHamModal, setShowHamModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [navList, setNavList] = useState<{[key: string]: any} []>([])
 
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
@@ -101,6 +105,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
       localStorage.setItem("user", JSON.stringify(userInfo));
     };
+    getMenuList()
     if (userInfo.token) {
       getMe().catch((e) => console.log(e));
     }
@@ -109,6 +114,22 @@ function MyApp({ Component, pageProps }: AppProps) {
       setIsMobile(true);
     }
   }, [router]);
+
+  const getMenuList = async () => {
+    const dataCategories = await CategoryApi.getItemCategory()
+    const rawCategories = get(dataCategories, 'data.data')
+    const categoryArray = await rawCategories.map((item) => ({
+      category: get(item, 'attributes.name'),
+      icon: get(item, 'attributes.icon'),
+      slug: get(item, 'attributes.slug'),
+      id: item.id,
+      items: get(item, 'attributes.category_links.data').map((navItem) => ({
+        label: get(navItem, 'attributes.label'),
+        value: get(navItem, 'attributes.value'),
+      })),
+    }))
+    setNavList(categoryArray)
+  }
 
   const contextDefaultValue = {
     user: user,
@@ -126,6 +147,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Header
               id="header"
               loginInfor={loginInfor}
+              navList={navList}
               onOpenHamModal={() => setShowHamModal(!showHamModal)}
             />
             <Component
@@ -144,6 +166,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
             />
             <Footer
+              navList={navList}
               visible={isAuthPage}
               backgroundColor={pathname !== "/biz/information"}
             />

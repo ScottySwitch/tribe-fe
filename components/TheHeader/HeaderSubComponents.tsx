@@ -23,27 +23,35 @@ import get from "lodash/get";
 export const Categories = (props: {
   currentCategory?: string;
   onSetCurrentCategory: (e: string) => void;
+  navList: {[key: string]: any} []
 }) => {
-  const { onSetCurrentCategory, currentCategory } = props;
+  const { onSetCurrentCategory, currentCategory, navList } = props;
+  const router = useRouter()
+
   return (
     <React.Fragment>
-      {categories.map((cat) => {
-        const isSelected = currentCategory === cat.label;
+      {navList.map((cat) => {
+        const isSelected = currentCategory === cat.category;
         const categoryContent = (
           <React.Fragment>
-            {cat.options.map((value) => (
-              <div key={value.value}>{value.value}</div>
+            {cat.items.map((value) => (
+              <div 
+                key={value.value}
+                onClick={() => router.push(`/${cat.slug}/${value.value}`)}
+              >
+                {value.label}
+              </div>
             ))}
           </React.Fragment>
         );
         return (
-          <Popover key={cat.label} content={categoryContent}>
+          <Popover key={cat.category} content={categoryContent}>
             <div
               className={`${styles.category} ${isSelected && styles.selected}`}
-              onClick={() => onSetCurrentCategory(cat.label)}
+              onClick={() => onSetCurrentCategory(cat.category)}
             >
               <Icon icon={cat.icon} size={20} className={styles.icon} />
-              <div className={cat.width}>{cat.label}</div>
+              <div className={cat.width}>{cat.category}</div>
             </div>
           </Popover>
         );
