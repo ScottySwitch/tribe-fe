@@ -242,7 +242,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       transaction_id = ""
     }
     if (price != null) {
-      if (userInfo.role_choose === 'Owner') {
+      if (userInfo.type_handle === 'Claim') {
         const result = await BizInvoinceApi.createBizInvoice({
           value: parseInt(price),
           paymentMethod: paymentMethodValue,
@@ -254,15 +254,28 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         })
       }
       else {
-        const result = await BizInvoinceApi.createBizRevisionInvoice({
-          value: parseInt(price),
-          paymentMethod: paymentMethodValue,
-          transaction_id: transaction_id,
-        })
-        const result1 = await ClaimListingApi.createClaimListingRevision({
-          paymentMethod: paymentMethodValue,
-          transaction_id: transaction_id,
-        })
+        if (userInfo.role_choose === 'Owner') {
+          const result = await BizInvoinceApi.createBizInvoice({
+            value: parseInt(price),
+            paymentMethod: paymentMethodValue,
+            transaction_id: transaction_id,
+          })
+          const result1 = await ClaimListingApi.createClaimListing({
+            paymentMethod: paymentMethodValue,
+            transaction_id: transaction_id,
+          })
+        }
+        else {
+          const result = await BizInvoinceApi.createBizRevisionInvoice({
+            value: parseInt(price),
+            paymentMethod: paymentMethodValue,
+            transaction_id: transaction_id,
+          })
+          const result1 = await ClaimListingApi.createClaimListingRevision({
+            paymentMethod: paymentMethodValue,
+            transaction_id: transaction_id,
+          })
+        }
       }
     }
     userInfo.isVeriFy = true
