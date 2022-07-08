@@ -308,7 +308,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                     value={item.label}
                     label={item.label}
                     className="w-full sm:w-1/2"
-                    register={register("atmosphere")}
+                    register={register("atmosphere")}image.png
                   />
                 ))}
             </div>

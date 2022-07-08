@@ -91,6 +91,10 @@ const OtpPage = (context) => {
       await AuthApi.otpPhoneGenerate(phoneNumer)
       setTime(30)
     }
+    else {
+      await AuthApi.otpEmailGenerate()
+      setTime(30)
+    }
   }
 
   return (

@@ -76,11 +76,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { id: listingSlug } = query;
 
   const formatOptions = (list) =>
-    list.map((item: any) => ({
-      label: item.label,
-      value: item.value,
-      id: item.id,
-    }));
+    Array.isArray(list)
+      ? list.map((item: any) => ({
+          label: item.label,
+          value: item.value,
+          id: item.id,
+        }))
+      : [];
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
@@ -102,7 +104,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       const listing = get(data, "data.data[0]");
       if (listing) {
         console.log(listing);
-        console.log('userInfo', userInfo)
+        console.log("userInfo", userInfo);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
         const rawTags = listing.tags || [];
@@ -190,7 +192,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
         setSocialInfo(listing.social_info);
-        setDealList(listing.deals);  
+        setDealList(listing.deals);
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
         setTags(tagArray);
@@ -318,10 +320,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         deals: currentDealList.map((item) => item.id) || [],
         biz_invoices: bizInvoices.map((item) => item.id) || [],
         reviews: reviews.map((item) => item.id) || [],
-        categories:
-        bizListing.categories.map(
-            (item) => item.id
-          ) || [],
+        categories: bizListing.categories.map((item) => item.id) || [],
       }).then((response) => {
         console.log(response);
         bizListingRevisionCreateId = response.data.data.id;

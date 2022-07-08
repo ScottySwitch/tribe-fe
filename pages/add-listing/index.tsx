@@ -168,9 +168,10 @@ const AddListing = () => {
       pay_price: "600",
       biz_id: get(result, "data.data.id"),
       biz_slug: get(result, "data.data.attributes.slug"),
-      role_choose: get(formData, "role.label") === "Owner" ? "Owner" : "",
-    };
-    localStorage.setItem("user", JSON.stringify(userInfo));
+      role_choose: get(formData, "role.label") === 'Owner' ? 'Owner' : '',
+      type_handle: 'Create'
+    }
+    localStorage.setItem("user", JSON.stringify(userInfo))
     // const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true);
