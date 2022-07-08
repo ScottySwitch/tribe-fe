@@ -28,6 +28,7 @@ import { useEffect, useState } from "react";
 import BizListingApi from "services/biz-listing"
 import BannerApi from "services/banner"
 import CollectionApi from "services/collection"
+import CategoryLinkApi from "services/category-link"
 import styles from "styles/Home.module.scss";
 import {get} from "lodash"
 import { getEnvironmentData } from "worker_threads";
@@ -48,9 +49,12 @@ const Category = (props: any) => {
     listingEat,
     listingExclusiveDeal,
     listingBanners,
-    listCollections
+    listCollections,
+    listCategoryLink
   } 
   = props
+
+  console.log('listCategoryLink', listCategoryLink)
 
   useEffect(() => {
     setSubCategories(dummySubCategories);
@@ -104,14 +108,14 @@ const Category = (props: any) => {
         title="Explore by Top Categories"
         childrenClassName="flex gap-[100px] flex-wrap"
       >
-        {subCategories.map((item, index) => (
+        {listCategoryLink.map((item, index) => (
           <div
             key={index}
             className={styles.sub_category}
             onClick={() => handleSelectSubCategory(item.slug)}
           >
             <div className={styles.sub_category_icon}>
-              <Image src={item.icon} alt="" layout="fill" />
+              <Image src={item.icon || 'https://picsum.photos/200/300'} alt="" layout="fill" />
             </div>
             <div className={styles.sub_category_label}>{item.label}</div>
           </div>
@@ -261,12 +265,14 @@ export async function getServerSideProps(context) {
     const dataExclusiveDeal = await BizListingApi.getExclusiveDealByCategory(category)
     const dataBanners = await BannerApi.getBannerByCategory(category)
     const dataCollections = await CollectionApi.getCollectionByCategory(category)
+    const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category)
     let listingBuyArray: any = []
     let listingSeeArray: any = []
     let listingEatArray: any = []
     let listBannerArray: any = []
     let listingExclusiveDealArray: any = []
     let listCollectionArray: any = []
+    let ListCategoryLinkArray: any = []
     if(get(data, 'data.data')) {
       const rawListingBuyArray = get(data, 'data.data[0]')
       const rawListingSeeArray = get(data, 'data.data[1]')
@@ -350,6 +356,14 @@ export async function getServerSideProps(context) {
         title: item.name
       }))
     }
+    if (get(dataCategoryLinks, 'data.data')) {
+      const rawListCategory = get(dataCategoryLinks, 'data.data')
+      ListCategoryLinkArray = rawListCategory.map((item) => ({
+        icon: get(item, 'attributes.logo.url') || null,
+        label: get(item, 'attributes.label'),
+        slug: get(item, 'attributes.value')
+      }))
+    }
   return {
     props: {
       listingBuy: listingBuyArray,
@@ -357,7 +371,8 @@ export async function getServerSideProps(context) {
       listingSee: listingSeeArray,
       listingExclusiveDeal: listingExclusiveDealArray,
       listingBanners: listBannerArray,
-      listCollections: listCollectionArray
+      listCollections: listCollectionArray,
+      listCategoryLink: ListCategoryLinkArray
     },
   };
 }
