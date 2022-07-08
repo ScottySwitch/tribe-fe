@@ -32,6 +32,7 @@ import DealApi from "services/deal"
 import CollectionApi from "services/collection"
 import BannerApi from  "services/banner"
 import styles from "styles/Home.module.scss";
+import CategoryApi from "services/category"
 
 const Home: NextPage = (props: any) => {
   const [showFilter, setShowFilter] = useState(false);
@@ -44,7 +45,8 @@ const Home: NextPage = (props: any) => {
     listingEat,
     listingExclusiveDeal,
     listBanners,
-    listCollections
+    listCollections,
+    listCategories
   } 
   = props
   const [limit, setLimit] = useState<number>(16)
@@ -99,7 +101,7 @@ const Home: NextPage = (props: any) => {
         </Carousel>
       </SectionLayout>
       <SectionLayout title="Explore BESTS" childrenClassName={styles.bests}>
-        {categories.map((item, index) => (
+        {listCategories.map((item, index) => (
           <div
             key={index}
             className={styles.category}
@@ -307,12 +309,14 @@ export async function getServerSideProps(context) {
     const dataExclusiveDeal = await BizListingApi.getAllBizListingsHaveExclusiveDeal()
     const dataBanners = await BannerApi.getBanner()
     const dataCollections = await CollectionApi.getCollection()
+    const dataCategories = await CategoryApi.getCategories()
     let listingBuyArray: any = []
     let listingSeeArray: any = []
     let listingEatArray: any = []
     let listingExclusiveDealArray: any = []
     let listBannerArray: any = []
     let listCollectionArray: any = []
+    let categoryArray: any = []
     if(get(data, 'data.data')) {
       const rawListingBuyArray = get(data, 'data.data[0]')
       const rawListingSeeArray = get(data, 'data.data[1]')
@@ -396,6 +400,14 @@ export async function getServerSideProps(context) {
         title: item.name
       }))
     }
+    if(get(dataCategories, 'data.data')) {
+      const rawCategories = get(dataCategories, 'data.data')
+      categoryArray = rawCategories.map((item) => ({
+        label: get(item, 'attributes.name'),
+        slug: get(item, 'attributes.slug'),
+        icon: get(item, 'attributes.icon')
+      }))
+    }
   return {
     props: {
       listingBuy: listingBuyArray,
@@ -403,7 +415,8 @@ export async function getServerSideProps(context) {
       listingSee: listingSeeArray,
       listingExclusiveDeal: listingExclusiveDealArray,
       listBanners: listBannerArray,
-      listCollections: listCollectionArray
+      listCollections: listCollectionArray,
+      listCategories: categoryArray
     },
   };
 }

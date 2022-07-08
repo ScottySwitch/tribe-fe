@@ -1,6 +1,9 @@
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import Image from "next/image";
+import { useEffect } from "react";
 import styles from "./Footer.module.scss";
+import CategoryApi from "services/category"
+import {get} from "lodash"
 
 const navList = [
   {
@@ -76,6 +79,23 @@ const navList = [
 
 const Footer = (props: { backgroundColor?: boolean; visible: boolean }) => {
   const { visible, backgroundColor = true } = props;
+  
+  // useEffect(() => {
+  //   getMenuList()
+  // }, [])
+  
+  // const getMenuList = async () => {
+  //   const dataCategories = await CategoryApi.getCategories()
+  //   console.log('data Category', dataCategories)
+  //   const rawCategories = get(dataCategories, 'data.data')
+  //   const categoryArray = rawCategories.map((item) => ({
+  //     name: get(item, 'attributes.name'),
+  //     slug: get(item, 'attributes.slug'),
+  //     icon_url: get(item, 'attributes.icon_url')
+  //   }))
+  //   console.log(categoryArray);
+  // }
+
   if (!visible) return null;
   return (
     <SectionLayout backgroundColor={backgroundColor}>
