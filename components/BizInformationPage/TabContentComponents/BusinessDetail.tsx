@@ -10,6 +10,8 @@ import BusinessDetailStay from "./BusinessDetailCategories/BusinessDetailStay";
 import { useState } from "react";
 import { bizInformationDefaultFormData } from "constant";
 import { get, map } from "lodash";
+import productBrand from "services/product-brand";
+import Loader from "components/Loader/Loader";
 
 interface BusinessDetailProps {
   listing: any;
@@ -20,16 +22,27 @@ interface BusinessDetailProps {
 const BusinessDetail = (props: BusinessDetailProps) => {
   const { listing, loading, onSubmit } = props;
 
+  const rawProductBrands = get(listing, "product_brands");
+  const rawProductTypes = get(listing, "product_types");
+
   const viewBusinessDetailData = {
     categoryLinks: get(listing, "category_links[0]"),
-    productTypes: get(listing, "product_types"),
-    productBrands: get(listing, "product_brands"),
+    viewProductTypes: get(listing, "product_types"),
     openHours: get(listing, "open_hours"),
     minPrice: get(listing, "price_range.min"),
     maxPrice: get(listing, "price_range.max"),
     currency: get(listing, "price_range.currency"),
     describeTags: get(listing, "tags").map((item) => item.id?.toString()),
     describeTagLabels: get(listing, "tags").map((item) => item.label),
+    productTypes:
+      Array.isArray(rawProductTypes) &&
+      rawProductTypes.map((type) => type.id.toString()),
+    productBrands:
+      Array.isArray(rawProductBrands) &&
+      rawProductBrands.map((brand) => ({
+        label: brand.label,
+        value: brand.id,
+      })),
 
     additionalServices: get(listing, "facilities_data.additionalServices"),
     atmosphere: get(listing, "facilities_data.atmosphere"),
@@ -46,7 +59,6 @@ const BusinessDetail = (props: BusinessDetailProps) => {
   console.log("viewBusinessDetailData", viewBusinessDetailData);
 
   const submitFormData = (formData) => {
-    console.log("aaasasdasdasdas", formData);
     const businessDetailFormattedData = {
       category_links: formData.categoryLinks,
       price_range: {
@@ -55,11 +67,13 @@ const BusinessDetail = (props: BusinessDetailProps) => {
         max: formData.maxPrice,
       },
       product_types:
-        formData.category === 1
+        get(listing, "categories[0].id") === Categories.BUY
           ? formData.productTypes
           : map(formData.productTypes, "value"),
       product_brands:
-        formData.category === 1 ? map(formData.productBrands, "value") : null,
+        get(listing, "categories[0].id") === Categories.BUY
+          ? map(formData.productBrands, "value")
+          : null,
       tags: formData.describeTags || [],
       facilities_data: {
         additionalServices: formData.additionalServices,
@@ -128,7 +142,7 @@ const BusinessDetail = (props: BusinessDetailProps) => {
     return detail;
   };
 
-  return renderBusinessDetail();
+  return loading ? <Loader /> : renderBusinessDetail();
 };
 
 export default BusinessDetail;

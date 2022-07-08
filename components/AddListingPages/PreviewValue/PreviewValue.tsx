@@ -1,9 +1,15 @@
-import Badge from "components/Badge/Badge"
-import styles from "./PreviewValue.module.scss"
+import Badge from "components/Badge/Badge";
+import styles from "./PreviewValue.module.scss";
 
-const PreviewValue = ({ valueKey, value }: { valueKey: string; value: any }) => {
-  let result = <div></div>
-  // console.log(valueKey, value)
+const PreviewValue = ({
+  valueKey,
+  value,
+}: {
+  valueKey: string;
+  value: any;
+}) => {
+  let result = <div></div>;
+  console.log("aaaaaaaa", valueKey, value);
   if (valueKey === "openHours") {
     return (
       <div>
@@ -17,16 +23,16 @@ const PreviewValue = ({ valueKey, value }: { valueKey: string; value: any }) => 
                   <div key={hour.id}>
                     {hour.from} - {hour.to}
                   </div>
-                ))
+                ));
             return (
               <div key={day.name} className={styles.open_hours_container}>
                 <div className={styles.day_name}>{day.name}</div>
                 <div className={styles.open_hour}>{openHours}</div>
               </div>
-            )
+            );
           })}
       </div>
-    )
+    );
   }
   if (valueKey === "tags") {
     return (
@@ -38,12 +44,12 @@ const PreviewValue = ({ valueKey, value }: { valueKey: string; value: any }) => 
             </Badge>
           ))}
       </div>
-    )
+    );
   }
   if (typeof value === "string") {
-    return <div className={styles.preview_value}>{value}</div>
+    return <div className={styles.preview_value}>{value}</div>;
   }
-  return result
-}
+  return result;
+};
 
-export default PreviewValue
+export default PreviewValue;

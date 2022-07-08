@@ -54,6 +54,7 @@ const BizInformation = (props) => {
   }, [listingSlug, loading]);
 
   const onSubmit = async (data) => {
+    console.log("submitData", data);
     listing.id &&
       (await BizListing.updateBizListing(listing.id, {
         ...listing,

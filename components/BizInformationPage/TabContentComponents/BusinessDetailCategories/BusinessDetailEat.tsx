@@ -44,14 +44,18 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
           question="What category best describes this place?"
           childrenClassName="flex"
         >
-          {categoryLinks && <Badge>{categoryLinks.label}</Badge>}
+          {categoryLinks && (
+            <Badge variant="no-outlined">{categoryLinks.label}</Badge>
+          )}
         </Question>
         <Question
           question="What cuisines would you use to describe this place?"
           childrenClassName="flex flex-wrap gap-3"
         >
           {Array.isArray(tags) &&
-            tags.map((item) => <Badge key={item} text={item} />)}
+            tags.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question question="What are the opening hours?" optional>
           <PreviewValue valueKey="openHours" value={openHours} />
@@ -67,34 +71,42 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
           childrenClassName="flex flex-wrap gap-3"
         >
           {Array.isArray(mealsKind) &&
-            mealsKind.map((item) => <Badge key={item} text={item} />)}
+            mealsKind.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question
           question="What is this place good for?"
           childrenClassName="flex flex-wrap gap-3"
         >
           {Array.isArray(placeGoodFor) &&
-            placeGoodFor.map((item) => <Badge key={item} text={item} />)}
+            placeGoodFor.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question
           question="What best describe this place’s atmosphere?"
           childrenClassName="flex flex-wrap gap-3"
         >
           {Array.isArray(atmosphere) &&
-            atmosphere?.map((item) => <Badge key={item} text={item} />)}
+            atmosphere?.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question
           question="Are there parking area?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {parking && <Badge text={parking} />}
+          {parking && <Badge variant="no-outlined" text={parking} />}
         </Question>
         <Question
           question="What Features and amneties does this restaurant have?"
           childrenClassName="flex flex-wrap gap-3"
         >
           {Array.isArray(payment) &&
-            payment.map((item) => <Badge key={item} text={item} />)}
+            payment.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question
           question="Additional?"
@@ -102,7 +114,9 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
           childrenClassName="flex flex-wrap gap-3"
         >
           {Array.isArray(additionalServices) &&
-            additionalServices.map((item) => <Badge key={item} text={item} />)}
+            additionalServices.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Break />
         <div>
@@ -120,6 +134,7 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
         show={isEdit}
         isEdit={true}
         onEdit={(data) => submitFormData?.(data)}
+        onPrevPage={() => setIsEdit(false)}
       />
     </React.Fragment>
   );

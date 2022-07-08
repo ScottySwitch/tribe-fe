@@ -25,7 +25,8 @@ const BusinessDetailBuy = (props: BusinessDetailProps) => {
     minPrice,
     maxPrice,
     currency,
-    describeTagLabels,
+    productBrands,
+    viewProductTypes,
   } = formData;
 
   const [isEdit, setIsEdit] = useState(false);
@@ -41,14 +42,24 @@ const BusinessDetailBuy = (props: BusinessDetailProps) => {
           question="What is the category best associated with this store?"
           childrenClassName="flex"
         >
-          {categoryLinks && <Badge>{categoryLinks.label}</Badge>}
+          {categoryLinks && (
+            <Badge variant="no-outlined">{categoryLinks.label}</Badge>
+          )}
         </Question>
         <Question
           question="What type of products does this store offer?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {describeTagLabels?.map((item) => (
-            <Badge key={item} text={item} />
+          {viewProductTypes?.map((item) => (
+            <Badge variant="no-outlined" key={item} text={item.label} />
+          ))}
+        </Question>
+        <Question
+          question="What brands of products does this store offer?"
+          childrenClassName="flex flex-wrap gap-3"
+        >
+          {productBrands?.map((item) => (
+            <Badge variant="no-outlined" key={item} text={item.label} />
           ))}
         </Question>
         <Question question="What are the opening hours?" optional>
@@ -73,6 +84,7 @@ const BusinessDetailBuy = (props: BusinessDetailProps) => {
         show={isEdit}
         isEdit={true}
         onEdit={(data) => submitFormData?.(data)}
+        onPrevPage={() => setIsEdit(false)}
       />
     </React.Fragment>
   );

@@ -124,11 +124,13 @@ const AddListing = () => {
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,
       product_types:
-        formData.category === 1
+        formData.category === Categories.BUY
           ? formData.productTypes
           : map(formData.productTypes, "value"),
       product_brands:
-        formData.category === 1 ? map(formData.productBrands, "value") : null,
+        formData.category === Categories.BUY
+          ? map(formData.productBrands, "value")
+          : null,
       tags: formData.describeTags || [],
       facilities_data: {
         additionalServices: formData.additionalServices,
@@ -168,10 +170,10 @@ const AddListing = () => {
       pay_price: "600",
       biz_id: get(result, "data.data.id"),
       biz_slug: get(result, "data.data.attributes.slug"),
-      role_choose: get(formData, "role.label") === 'Owner' ? 'Owner' : '',
-      type_handle: 'Create'
-    }
-    localStorage.setItem("user", JSON.stringify(userInfo))
+      role_choose: get(formData, "role.label") === "Owner" ? "Owner" : "",
+      type_handle: "Create",
+    };
+    localStorage.setItem("user", JSON.stringify(userInfo));
     // const random = Math.floor(Math.random() * 10000)
     if (formData.relationship === YesNo.NO) {
       setShowSubmitResult(true);

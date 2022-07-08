@@ -308,7 +308,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                     value={item.label}
                     label={item.label}
                     className="w-full sm:w-1/2"
-                    register={register("atmosphere")}image.png
+                    register={register("atmosphere")}
                   />
                 ))}
             </div>
@@ -381,12 +381,17 @@ const AddEatInfor = (props: AddEatInforProps) => {
           <br /> <Break /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
             <Button
-              text="Go back"
+              text={isEdit ? "Cancel" : "Go back"}
               variant="underlined"
               width="fit-content"
               onClick={onPrevPage}
             />
-            <Button text="Continue" size="small" width={270} type="submit" />
+            <Button
+              text={isEdit ? "Apply change" : "Continue"}
+              size="small"
+              width={270}
+              type="submit"
+            />
           </div>
         </form>
       </SectionLayout>
