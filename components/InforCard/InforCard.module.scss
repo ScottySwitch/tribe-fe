@@ -133,7 +133,7 @@
     .tags {
       margin-top: 12px;
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 6px;
 
       .tag {

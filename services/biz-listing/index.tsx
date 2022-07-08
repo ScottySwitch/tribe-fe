@@ -332,6 +332,11 @@ const getBizListingForYou = async (limit) => {
   }
 }
 
+const getAllBizListingsByCategory = async () => {
+    const url = `/api/biz-listings/bizlisting-by-category/`
+    return await Api.get(url)
+}
+
 export default {
   getBizListing,
   getOwnerListingRoleByUserId,
@@ -350,5 +355,6 @@ export default {
   getBizListingCountries,
   getBizListingByCountry,
   checkListingHaveOwner,
-  getBizListingForYou
+  getBizListingForYou,
+  getAllBizListingsByCategory
 }

@@ -30,11 +30,17 @@ import { useEffect, useState } from "react";
 import BizListingApi from "services/biz-listing"
 import styles from "styles/Home.module.scss";
 
-const Home: NextPage = () => {
+const Home: NextPage = (props: any) => {
   const [showFilter, setShowFilter] = useState(false);
-  const trans = useTrans();
-  const router = useRouter();
+  const trans = useTrans()
+  const router = useRouter()
   const [listingForYou, setListingForYou] = useState<{[key: string]: any} []>([])
+  const {
+    listingBuy,
+    listingSee,
+    listingEat
+  } 
+  = props
   const [limit, setLimit] = useState<number>(16)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -48,7 +54,7 @@ const Home: NextPage = () => {
     if (get(dataListing, 'data.data')) {
       const rawDataListing = get(dataListing, 'data.data')
       const listingArray = listingForYou.concat(rawDataListing.map((item) => ({
-        images: item.images,
+        images: item.images || [],
         title: item.name,
         isVerified: item.is_verified,
         address: item.address,
@@ -57,11 +63,10 @@ const Home: NextPage = () => {
         followerNumber: item.user_listing_follows.length,
         tags: item.tags,
         categories: item.categories,
-        price: item.price_range.min,
+        price: get(item, 'price_range.min') || '',
         rate: item.rate,
         rateNumber: item.rate_number,
       })))
-      console.log('listingArray', listingArray)
       setListingForYou(listingArray)
       setLimit(limit + 16)
       setIsLoading(false)
@@ -131,18 +136,19 @@ const Home: NextPage = () => {
       </SectionLayout>
       <SectionLayout title="Where to BUY">
         <Carousel responsive={infoCardResponsive}>
-          {inforCardList?.map((card) => (
+          {listingBuy?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
-                imgUrl={card.images[0]}
+                imgUrl={get(card, 'images[0]')}
                 title={card.title}
                 rate={card.rate}
                 rateNumber={card.rateNumber}
                 followerNumber={card.followerNumber}
                 price={card.price}
-                // categories={card.categories}
-                // tags={card.tags}
+                categories={card.categories}
+                tags={card.tags}
                 isVerified={card.isVerified}
+                description={card.description}
               />
             </div>
           ))}
@@ -150,18 +156,19 @@ const Home: NextPage = () => {
       </SectionLayout>
       <SectionLayout title="What to SEE">
         <Carousel responsive={infoCardResponsive}>
-          {inforCardList?.map((card) => (
+          {listingSee?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
-                imgUrl={card.images[0]}
+                imgUrl={get(card, 'images[0]')}
                 title={card.title}
                 rate={card.rate}
                 rateNumber={card.rateNumber}
                 followerNumber={card.followerNumber}
                 price={card.price}
-                // categories={card.categories}
-                // tags={card.tags}
+                categories={card.categories}
+                tags={card.tags}
                 isVerified={card.isVerified}
+                description={card.description}
               />
             </div>
           ))}
@@ -182,18 +189,19 @@ const Home: NextPage = () => {
       </SectionLayout>
       <SectionLayout title="What to EAT">
         <Carousel responsive={infoCardResponsive}>
-          {inforCardList?.map((card) => (
+          {listingEat?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
-                imgUrl={card.images[0]}
+                imgUrl={get(card, 'images[0]')}
                 title={card.title}
                 rate={card.rate}
                 rateNumber={card.rateNumber}
                 followerNumber={card.followerNumber}
                 price={card.price}
-                // categories={card.categories}
-                // tags={card.tags}
+                categories={card.categories}
+                tags={card.tags}
                 isVerified={card.isVerified}
+                description={card.description}
               />
             </div>
           ))}
@@ -266,9 +274,63 @@ const Home: NextPage = () => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-
+    const data = await BizListingApi.getAllBizListingsByCategory()
+    let listingBuyArray: any = []
+    let listingSeeArray: any = []
+    let listingEatArray: any = []
+    if(get(data, 'data.data')) {
+      const rawListingBuyArray = get(data, 'data.data[0]')
+      const rawListingSeeArray = get(data, 'data.data[1]')
+      const rawListingEatAray = get(data, 'data.data[2]')
+      listingBuyArray = rawListingBuyArray.map((item) => ({
+        images: item.images || [],
+        title: item.name,
+        isVerified: item.is_verified,
+        address: item.address,
+        country: item.country,
+        description: item.description,
+        followerNumber: item.user_listing_follows.length,
+        tags: item.tags,
+        categories: item.categories,
+        price: get(item, 'price_range.min') || '',
+        rate: item.rate,
+        rateNumber: item.rate_number,
+      }))
+      listingSeeArray = rawListingSeeArray.map((item) => ({
+        images: item.images || [],
+        title: item.name,
+        isVerified: item.is_verified,
+        address: item.address,
+        country: item.country,
+        description: item.description,
+        followerNumber: item.user_listing_follows.length,
+        tags: item.tags,
+        categories: item.categories,
+        price: get(item, 'price_range.min') || '',
+        rate: item.rate,
+        rateNumber: item.rate_number,
+      }))
+      listingEatArray = rawListingEatAray.map((item) => ({
+        images: item.images || [],
+        title: item.name,
+        isVerified: item.is_verified,
+        address: item.address,
+        country: item.country,
+        description: item.description,
+        followerNumber: item.user_listing_follows.length,
+        tags: item.tags,
+        categories: item.categories,
+        price: get(item, 'price_range.min') || '',
+        rate: item.rate,
+        rateNumber: item.rate_number,
+      }))
+    }
   return {
-    props: {},
+    props: {
+      listingBuy: listingBuyArray,
+      listingEat: listingEatArray,
+      listingSee: listingSeeArray
+    },
   };
 }
 

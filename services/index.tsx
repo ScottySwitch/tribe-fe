@@ -6,15 +6,14 @@ const Api = axios.create({
 });
 
 Api.interceptors.request.use((config) => {
-  if (localStorage.getItem("user")) {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  if (typeof window !== 'undefined') {
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     if ( userInfo.token ) {
       const token = `Bearer ${userInfo.token}`;
     // @ts-ignore
       config.headers.common["Authorization"] = token;
     }
   }
-
   return config;
 });
 

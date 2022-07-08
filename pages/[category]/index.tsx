@@ -25,9 +25,11 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import BizListingApi from "services/biz-listing"
 import styles from "styles/Home.module.scss";
+import {get} from "lodash"
 
-const Category = () => {
+const Category = (props: any) => {
   const trans = useTrans();
   const router = useRouter();
   const {
@@ -37,6 +39,12 @@ const Category = () => {
   const [subCategories, setSubCategories] = useState<
     { [key: string]: string }[]
   >([]);
+  const {
+    listingBuy,
+    listingSee,
+    listingEat
+  } 
+  = props
 
   useEffect(() => {
     setSubCategories(dummySubCategories);
@@ -127,7 +135,7 @@ const Category = () => {
       </SectionLayout>
       <SectionLayout title="Where to BUY">
         <Carousel responsive={infoCardResponsive}>
-          {inforCardList?.map((card) => (
+          {listingBuy?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -146,7 +154,7 @@ const Category = () => {
       </SectionLayout>
       <SectionLayout title="What to SEE">
         <Carousel responsive={infoCardResponsive}>
-          {inforCardList?.map((card) => (
+          {listingSee?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -178,7 +186,7 @@ const Category = () => {
       </SectionLayout>
       <SectionLayout title="What to EAT">
         <Carousel responsive={infoCardResponsive}>
-          {inforCardList?.map((card) => (
+          {listingEat?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -195,9 +203,9 @@ const Category = () => {
           ))}
         </Carousel>
       </SectionLayout>
-      <SectionLayout childrenClassName="flex justify-center">
+      {/* <SectionLayout childrenClassName="flex justify-center">
         <Button variant="outlined" text="Load more" width={400} />
-      </SectionLayout>
+      </SectionLayout> */}
       <div className={styles.introduction}>
         <SectionLayout transparent>
           <div className={styles.header}>
@@ -221,5 +229,67 @@ const Category = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  // Pass data to the page via props
+    const data = await BizListingApi.getAllBizListingsByCategory()
+    let listingBuyArray: any = []
+    let listingSeeArray: any = []
+    let listingEatArray: any = []
+    if(get(data, 'data.data')) {
+      const rawListingBuyArray = get(data, 'data.data[0]')
+      const rawListingSeeArray = get(data, 'data.data[1]')
+      const rawListingEatAray = get(data, 'data.data[2]')
+      listingBuyArray = rawListingBuyArray.map((item) => ({
+        images: item.images || [],
+        title: item.name,
+        isVerified: item.is_verified,
+        address: item.address,
+        country: item.country,
+        description: item.description,
+        followerNumber: item.user_listing_follows.length,
+        tags: item.tags,
+        categories: item.categories,
+        price: get(item, 'price_range.min') || '',
+        rate: item.rate,
+        rateNumber: item.rate_number,
+      }))
+      listingSeeArray = rawListingSeeArray.map((item) => ({
+        images: item.images || [],
+        title: item.name,
+        isVerified: item.is_verified,
+        address: item.address,
+        country: item.country,
+        description: item.description,
+        followerNumber: item.user_listing_follows.length,
+        tags: item.tags,
+        categories: item.categories,
+        price: get(item, 'price_range.min') || '',
+        rate: item.rate,
+        rateNumber: item.rate_number,
+      }))
+      listingEatArray = rawListingEatAray.map((item) => ({
+        images: item.images || [],
+        title: item.name,
+        isVerified: item.is_verified,
+        address: item.address,
+        country: item.country,
+        description: item.description,
+        followerNumber: item.user_listing_follows.length,
+        tags: item.tags,
+        categories: item.categories,
+        price: get(item, 'price_range.min') || '',
+        rate: item.rate,
+        rateNumber: item.rate_number,
+      }))
+    }
+  return {
+    props: {
+      listingBuy: listingBuyArray,
+      listingEat: listingEatArray,
+      listingSee: listingSeeArray
+    },
+  };
+}
 
 export default Category;
