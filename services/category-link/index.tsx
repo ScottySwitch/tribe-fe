@@ -16,7 +16,19 @@ const getCategoryLinksByCategoryId = async (categoryId: number) => {
   return await Api.get(url);
 }
 
+const getCategoryLinks = async () => {
+  const query = qs.stringify({
+    "populate": [
+      'logo',
+    ]
+  }, {
+    encodeValuesOnly: true, 
+  });
+  const url = `/api/category-links?${query}`
+  return await Api.get(url)
+}
 
 export default {
-  getCategoryLinksByCategoryId
+  getCategoryLinksByCategoryId,
+  getCategoryLinks
 }

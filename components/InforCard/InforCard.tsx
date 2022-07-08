@@ -71,7 +71,7 @@ const InforCard = (props: InforCardProps) => {
       </div>
       <div className={styles.details}>
         <div className={styles.title}>{title}</div>
-        {rate && (
+        {!!rate && (
           <div className={styles.reviews}>
             <Icon icon="red-star" size={14} />
             <div className={styles.rate}>{rate}</div>
@@ -80,12 +80,9 @@ const InforCard = (props: InforCardProps) => {
             <div>{followerNumber} followers</div>
           </div>
         )}
-        {description && (
-          <div className={styles.description}>
-            {description}
-            {/* {description.length > 50 ? description.substr(0, 50) : description} */}
-          </div>
-        )}
+        {description && <div className={styles.description}>
+          {description}
+        </div>}
         {Array.isArray(categories) && (
           <div className={styles.categories}>
             {categories.map((cate) => (

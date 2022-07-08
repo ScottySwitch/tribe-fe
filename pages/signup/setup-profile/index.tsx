@@ -9,13 +9,16 @@ import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import Radio from "components/Radio/Radio"
 import Select from "components/Select/Select"
-import { countryList, educationLevels, industryList, interestingList } from "constant"
+import { countryList, educationLevels, industryList } from "constant"
 
 import styles from "styles/Auth.module.scss"
 import DatePicker from "components/DatePicker/DatePicker"
 import { useForm } from "react-hook-form"
 import UserApi from "../../../services/user"
 import AuthApi from "../../../services/auth"
+import CategoryLinkAPi from "services/category-link"
+import { get } from "lodash"
+import categoryLink from "services/category-link"
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
@@ -75,7 +78,8 @@ const StepOne = ({
   }, [socialUser])
 
   const handleUploadAvatar = useCallback((srcAvatar) => {
-    setUploadAvatar(srcAvatar[1])
+    console.log('srcAvatar',srcAvatar);
+    setUploadAvatar(srcAvatar[0])
   }, [])
 
   const onSubmit = async (data) => {
@@ -91,6 +95,7 @@ const StepOne = ({
       birthday: data.birthday,
       country: data.country?.value || null,
     }
+    console.log('uploadAvatar', uploadAvatar)
     if (uploadAvatar !== "") {
       dataSend = {...dataSend, avatar: uploadAvatar}
     }
@@ -134,13 +139,13 @@ const StepOne = ({
           value={getValues("birthday")}
         />
         <Select
-          placeholder="Education level"
+          placeholder="Education level (Optional)"
           options={educationLevels}
           value={getValues("education")}
           onChange={(e) => setValue("education", e)}
         />
         <Select
-          placeholder="Industry"
+          placeholder="Industry (Optional)"
           options={industryList}
           value={getValues("industry")}
           onChange={(e) => setValue("industry", e)}
@@ -157,14 +162,35 @@ const StepOne = ({
 }
 
 const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
-  const [interest, setInterest] = useState<string[]>([])
+  const [interest, setInterest] = useState<{[key: string]: any} []>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [interestingList, setInterestingList] = useState<{[key: string]: any} []>([])
+
+  useEffect(() => {
+    getCategoryLinks()
+  }, [])
+
+  const getCategoryLinks = async () => {
+    const data = await CategoryLinkAPi.getCategoryLinks()
+    console.log(data)
+    if (get(data, 'data.data')) {
+      const rawInterestingList = get(data, "data.data") || []
+      const interestListingArray  = rawInterestingList.map((item) => ({
+        id: item.id,
+        label: get(item, 'attributes.label'),
+        avatar: get(item, 'attributes.logo.data.attributes.url') || "https://picsum.photos/200/300"
+      }))
+      setInterestingList(interestListingArray)
+    }
+  }
 
   const handleSubmit = () => {
     setIsLoading(true)
+    // console.log(interest)
     onSubmit(interest)
     setIsLoading(false)
   }
+
   return (
     <div>
       <ModalHeader alignTitle="left">
@@ -179,18 +205,18 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
           than 1.
         </p>
         <p>
-          Selected: {interest?.length} / {interestingList.length}
+          Selected: {interest?.length} / 50
         </p>
         <div className={styles.interesting}>
           {interestingList.map((item: any) => {
             const itemClass = classNames(styles.interesting_item, {
-              [styles.selected]: interest.includes(item.label),
+              [styles.selected]: interest.some((ItemIterest) => item.label === ItemIterest.label),
             })
             return (
               <div
                 key={item.value}
                 className={itemClass}
-                onClick={() => setInterest([...interest, item.label])}
+                onClick={() => setInterest([...interest, {label: item.label, id: item.id}])}
               >
                 <div className={styles.avatar}>
                   <Image src={item.avatar} alt="" layout="fixed" width={50} height={50} />
@@ -222,8 +248,16 @@ const SetupProfilePage = () => {
   }
 
   const handleSubmit = async (form) => {
-    console.log({ ...formData, ...form })
-    await AuthApi.getMe()
+    const categoryLinkIds = form.map((item) => item.id)
+    let dataSend = {
+      category_links: categoryLinkIds
+    }
+    let userInfo;
+    if (typeof localStorage.getItem('user') !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    }
+    const userId = userInfo.id || '0'
+    await UserApi.updateUser(userId, dataSend)
     window.location.href = "/"
   }
 

@@ -324,6 +324,13 @@ const checkListingHaveOwner = async (bizListingSlug: any) => {
   return await Api.get(url);
 }
 
+const getBizListingForYou = async (limit) => {
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  if (userInfo.id) {
+    const url = `/api/biz-listings/bizlisting-for-you/?userId=${userInfo.id}&limit=${limit}`
+    return await Api.get(url)
+  }
+}
 
 export default {
   getBizListing,
@@ -342,5 +349,6 @@ export default {
   getBizListingReviews,
   getBizListingCountries,
   getBizListingByCountry,
-  checkListingHaveOwner
+  checkListingHaveOwner,
+  getBizListingForYou
 }
