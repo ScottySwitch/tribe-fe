@@ -54,8 +54,6 @@ const Category = (props: any) => {
   } 
   = props
 
-  console.log('listCategoryLink', listCategoryLink)
-
   useEffect(() => {
     setSubCategories(dummySubCategories);
   }, []);
