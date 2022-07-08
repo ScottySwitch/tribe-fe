@@ -21,8 +21,9 @@ const deleteDeal = async (dealId: any) => {
   return await Api.delete(url);
 }
 
+
 export default {
   createDeal,
   updateDeal,
-  deleteDeal
+  deleteDeal,
 }

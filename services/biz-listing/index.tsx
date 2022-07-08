@@ -337,6 +337,17 @@ const getAllBizListingsByCategory = async () => {
     return await Api.get(url)
 }
 
+const getAllBizListingsHaveExclusiveDeal = async () => {
+  const url = `/api/biz-listings/exclusive-deal/`
+  return await Api.get(url)
+}
+
+const getExclusiveDealByCategory = async (category) => {
+  const url = `/api/biz-listings/exclusive-deal-by-category/?category=${category}`
+  return await Api.get(url)
+}
+
+
 export default {
   getBizListing,
   getOwnerListingRoleByUserId,
@@ -356,5 +367,7 @@ export default {
   getBizListingByCountry,
   checkListingHaveOwner,
   getBizListingForYou,
-  getAllBizListingsByCategory
+  getAllBizListingsByCategory,
+  getAllBizListingsHaveExclusiveDeal,
+  getExclusiveDealByCategory
 }

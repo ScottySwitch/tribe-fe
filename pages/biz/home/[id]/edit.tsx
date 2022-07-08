@@ -146,7 +146,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           parent_id: item.parent_id,
           name: item.name,
           images: item.images,
-          imgUrl: item.images[0],
+          imgUrl: get(item, 'images[0]'),
           information: item.description,
           termsConditions: item.terms_conditions,
           // start_date: item.start_date,
@@ -418,6 +418,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           start_date: item.validUntil,
           end_date: convertEndDate,
           is_revision: true,
+          category: get(bizListing, 'categories[0].id'),
         };
         await DealApi.createDeal(CreateData);
       })
@@ -440,6 +441,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           end_date: convertEndDate,
           is_revision: true,
           parent_id: parent_id,
+          category: get(bizListing, 'categories[0].id')
         };
         item.is_revision
           ? await DealApi.updateDeal(item.id, updateData)
