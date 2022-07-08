@@ -29,7 +29,7 @@ import BizListingApi from "services/biz-listing"
 import styles from "styles/Home.module.scss";
 import {get} from "lodash"
 
-const Category = (props) => {
+const Category = (props: any) => {
   const trans = useTrans();
   const router = useRouter();
   const {
@@ -39,10 +39,12 @@ const Category = (props) => {
   const [subCategories, setSubCategories] = useState<
     { [key: string]: string }[]
   >([]);
-
-  const [listingBuy, setListingBuy] = useState<{[key: string]: any} []>(get(props, 'listingBuyArray'))
-  const [listingSee, setListingSee] = useState<{[key: string]: any} []>(get(props, 'listingSeeArray'))
-  const [listingEat, setListingEat] = useState<{[key: string]: any} []>(get(props, 'listingEatArray'))
+  const {
+    listingBuy,
+    listingSee,
+    listingEat
+  } 
+  = props
 
   useEffect(() => {
     setSubCategories(dummySubCategories);
@@ -283,9 +285,9 @@ export async function getServerSideProps(context) {
     }
   return {
     props: {
-      listingBuyArray: listingBuyArray,
-      listingEatArray: listingEatArray,
-      listingSeeArray: listingSeeArray
+      listingBuy: listingBuyArray,
+      listingEat: listingEatArray,
+      listingSee: listingSeeArray
     },
   };
 }

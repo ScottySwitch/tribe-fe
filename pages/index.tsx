@@ -30,14 +30,17 @@ import { useEffect, useState } from "react";
 import BizListingApi from "services/biz-listing"
 import styles from "styles/Home.module.scss";
 
-const Home: NextPage = (props) => {
+const Home: NextPage = (props: any) => {
   const [showFilter, setShowFilter] = useState(false);
   const trans = useTrans()
   const router = useRouter()
   const [listingForYou, setListingForYou] = useState<{[key: string]: any} []>([])
-  const [listingBuy, setListingBuy] = useState<{[key: string]: any} []>(get(props, 'listingBuyArray'))
-  const [listingSee, setListingSee] = useState<{[key: string]: any} []>(get(props, 'listingSeeArray'))
-  const [listingEat, setListingEat] = useState<{[key: string]: any} []>(get(props, 'listingEatArray'))
+  const {
+    listingBuy,
+    listingSee,
+    listingEat
+  } 
+  = props
   const [limit, setLimit] = useState<number>(16)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -324,9 +327,9 @@ export async function getServerSideProps(context) {
     }
   return {
     props: {
-      listingBuyArray: listingBuyArray,
-      listingEatArray: listingEatArray,
-      listingSeeArray: listingSeeArray
+      listingBuy: listingBuyArray,
+      listingEat: listingEatArray,
+      listingSee: listingSeeArray
     },
   };
 }

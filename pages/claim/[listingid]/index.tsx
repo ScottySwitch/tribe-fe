@@ -38,7 +38,14 @@ const ClaimListing = (context) => {
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
     const getListingData = async (listingId) => {
-      let data = userInfo.role_choose === await BizListingApi.getBizListingById(listingId) 
+      let data = userInfo.type_handle === 'Claim' ? 
+      await BizListingApi.getBizListingById(listingId) 
+      : 
+      userInfo.role_choose === 'Owner' ? 
+      await BizListingApi.getBizListingById(listingId) 
+      : 
+      await BizListingRevisionApi.getBizListingRevisionById(listingId)
+      setListing(data.data.data)
     }
     if (listingId) {
       userInfo.biz_id = listingId.toString()

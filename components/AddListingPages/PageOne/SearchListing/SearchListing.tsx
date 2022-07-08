@@ -77,6 +77,7 @@ const SearchListing = ({
       ...userInfo,
       biz_id: get(listing, "id"),
       biz_slug: get(listing, "attributes.slug"),
+      type_handle: 'Claim'
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
   }
