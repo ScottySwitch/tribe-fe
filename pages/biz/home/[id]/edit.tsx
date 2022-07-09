@@ -21,7 +21,7 @@ import Facilities from "components/BizHomePage/Facilities/Facilities";
 import { IOption } from "type";
 import Tags from "components/BizHomePage/Tags/Tags";
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours";
-import { getAddItemsFields } from "constant";
+import { defaultAddlistingForm, getAddItemsFields } from "constant";
 import ProductApi from "../../../../services/product";
 import MenuApi from "../../../../services/menu";
 import DealApi from "../../../../services/deal";
@@ -36,7 +36,7 @@ import styles from "styles/BizHomepage.module.scss";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
-  const [userInfo, setUserInfo] = useState<any>({})
+  const [userInfo, setUserInfo] = useState<any>({});
   const [category, setCategory] = useState(Categories.EAT);
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
   const [description, setDescription] = useState<string>("");
@@ -59,7 +59,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [menuList, setMenuList] = useState<{ [key: string]: any }[]>([]);
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([]);
   const [bizInvoices, setBizInvoices] = useState<{ [key: string]: any }[]>([]);
-  const [facilitiesData, setFacilitiesData] = useState();
+  const [facilitiesData, setFacilitiesData] = useState(defaultAddlistingForm);
 
   const [bizListing, setBizListing] = useState<any>();
   const [listingImages, setListingImages] = useState<any>([]);
@@ -83,8 +83,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       : [];
 
   useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')  
-    setUserInfo(userInfo)
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    setUserInfo(userInfo);
     const getListingData = async (listingSlug) => {
       let data;
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -148,7 +148,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           parent_id: item.parent_id,
           name: item.name,
           images: item.images,
-          imgUrl: get(item, 'images[0]'),
+          imgUrl: get(item, "images[0]"),
           information: item.description,
           termsConditions: item.terms_conditions,
           // start_date: item.start_date,
@@ -417,7 +417,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           start_date: item.validUntil,
           end_date: convertEndDate,
           is_revision: true,
-          category: get(bizListing, 'categories[0].id'),
+          category: get(bizListing, "categories[0].id"),
         };
         await DealApi.createDeal(CreateData);
       })
@@ -440,7 +440,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           end_date: convertEndDate,
           is_revision: true,
           parent_id: parent_id,
-          category: get(bizListing, 'categories[0].id')
+          category: get(bizListing, "categories[0].id"),
         };
         item.is_revision
           ? await DealApi.updateDeal(item.id, updateData)

@@ -14,7 +14,7 @@ import { randomId } from "utils";
 interface FacilitiesProps {
   category: Categories;
   isViewPage?: boolean;
-  facilities?: IAddListingForm;
+  facilities: IAddListingForm;
   onSetFacilities: (data: any) => void;
 }
 
@@ -121,7 +121,6 @@ const Facilities = (props: FacilitiesProps) => {
           <AddEatInfor
             isEdit
             facilityMode
-            subCateList={fakeSubCateList}
             data={facilities}
             onEdit={(data) => onSetFacilities?.(data)}
           />
@@ -132,7 +131,6 @@ const Facilities = (props: FacilitiesProps) => {
           <AddStayInfor
             isEdit
             facilityMode
-            subCateList={fakeSubCateList}
             data={facilities}
             onEdit={(data) => onSetFacilities?.(data)}
           />
