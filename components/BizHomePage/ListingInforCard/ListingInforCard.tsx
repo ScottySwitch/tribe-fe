@@ -43,8 +43,6 @@ const ReviewsFollowers = (props: {
     styles.reviews_followers_container,
     className
   );
-  console.log("bizListing", bizListing);
-  console.log("userInfo", userInfo);
   const bizListingReviewCount = get(bizListing, "reviews.length") || 0;
   const bizListingFollowerCount =
     get(bizListing, "user_listing_follows.length") || 0;
@@ -57,7 +55,7 @@ const ReviewsFollowers = (props: {
       const userFavoriteList = userInfo.listing_favourite_ids;
       let checkIsFollow =
         Array.isArray(userFollowList) &&
-        userFollowList.some((item) => item == bizListing.id);
+        userFollowList.some((item) => item === bizListing.id);
       let checkIsFavourite =
         Array.isArray(userFavoriteList) &&
         userFavoriteList.some((item) => item === bizListing.id);

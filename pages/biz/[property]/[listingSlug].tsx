@@ -64,15 +64,21 @@ const Properties = () => {
   const [selectedItem, setSelectedItem] = useState<any>({})
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [listingInformation, setListingInformation] = useState<any>({})
+  const [userInfo, setUserInfo] = useState<any>({});
 
   useEffect(() => {
     const getProperties = async () => {
       let data
       data = await BizListingApi.getBizListingBySlug(listingSlug)
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       const listingDetail = get(data, `data.data[0].attributes`)
       const propertiesData = get(data, `data.data[0].attributes.${property}.data`)
+      userInfo.now_biz_listing = listingDetail;
+      localStorage.setItem("user", JSON.stringify(userInfo));
+      setUserInfo(userInfo)
       setListingInformation(listingDetail)
       console.log("listing", listingDetail)
+      console.log("userInfo", userInfo)
       setProperties(propertiesData)
     }
     listingSlug && getProperties()
@@ -140,6 +146,7 @@ const Properties = () => {
           socialInfo={listingInformation.social_info}
           priceRange={listingInformation.price_range}
           bizListing={listingInformation}
+          userInfo={userInfo}
         />
       </SectionLayout>
       <SectionLayout title={upperCaseTitle}>{renderProperties()}</SectionLayout>
