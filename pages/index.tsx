@@ -305,6 +305,7 @@ const Home: NextPage = (props: any) => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
+    const category = context.query.category
     const data = await BizListingApi.getAllBizListingsByCategory()
     const dataExclusiveDeal = await BizListingApi.getAllBizListingsHaveExclusiveDeal()
     const dataBanners = await BannerApi.getBanner()

@@ -1,3 +1,4 @@
+import category from "services/category";
 import Api from "../index";
 
 const qs = require('qs');
@@ -347,8 +348,14 @@ const getExclusiveDealByCategory = async (category) => {
   return await Api.get(url)
 }
 
+const getBizlistingByCategoryLink = async (category, categoryLinks, limit) => {
+  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&litmit=${limit}`
+  return await Api.get(url)
+}
+
 
 export default {
+  getBizlistingByCategoryLink,
   getBizListing,
   getOwnerListingRoleByUserId,
   getInfoOwnerBizListingBySlug,

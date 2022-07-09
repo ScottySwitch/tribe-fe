@@ -15,15 +15,20 @@ import {
   inforCardList,
 } from "constant";
 import useTrans from "hooks/useTrans";
+import BizlistingApi from "services/biz-listing"
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-
+import {get} from "lodash"
 import styles from "styles/Home.module.scss";
 
-const SubCategoryPage = () => {
+const SubCategoryPage = (props: any) => {
+  console.log(props)
+  const {
+    bizListings
+  } = props
   const trans = useTrans();
   const router = useRouter();
   const { query } = router;
@@ -32,6 +37,7 @@ const SubCategoryPage = () => {
   const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
   const [showFilter, setShowFilter] = useState(false);
   const [page, setPage] = useState<number | undefined>(1);
+  const [limit, setLimit] = useState<number>(30)
   useEffect(() => {
     //get subCategory data
     setSubCategoryData(inforCardList);
@@ -114,8 +120,8 @@ const SubCategoryPage = () => {
       </SectionLayout>
       <SectionLayout>
         <div className="flex flex-wrap gap-10">
-          {Array.isArray(subCategoryData) &&
-            subCategoryData.map((item) => (
+          {Array.isArray(bizListings) &&
+            bizListings.map((item) => (
               <div key={item.title} className="pb-5">
                 <InforCard
                   imgUrl={item.images[0]}
@@ -138,5 +144,39 @@ const SubCategoryPage = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  const category = context.query.category
+  const subCategory = context.query.subCategory
+
+  let limit = 30
+  const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, limit)
+  let listingArray: any = []
+
+  if(get(dataBizlisting, 'data.data')) {
+    const rawBizlistingArray = get(dataBizlisting, 'data.data')
+    listingArray = rawBizlistingArray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+  } 
+  return {
+    props: {
+      bizListings: listingArray,
+      limit: limit
+    },
+  };
+}
 
 export default SubCategoryPage;
