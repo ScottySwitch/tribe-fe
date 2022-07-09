@@ -189,9 +189,7 @@ export async function getServerSideProps(context) {
   const category = context.query.category
   const subCategory = context.query.subCategory
   const dataBanners = await BannerApi.getBannerByCategory(category)
-  // const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, 30)
   const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category)
-  let listingArray: any = []
   let listBannerArray: any = []
   let ListCategoryLinkArray: any = 
   [
@@ -202,42 +200,19 @@ export async function getServerSideProps(context) {
       icon: "https://picsum.photos/200/300",
     },
   ]
-
-  // if(get(dataBizlisting, 'data.data')) {
-  //   const rawBizlistingArray = get(dataBizlisting, 'data.data')
-  //   listingArray = rawBizlistingArray.map((item) => ({
-  //     images: item.images || [],
-  //     title: item.name,
-  //     slug: item.slug,
-  //     isVerified: item.is_verified,
-  //     address: item.address,
-  //     country: item.country,
-  //     description: item.description,
-  //     followerNumber: item.user_listing_follows.length,
-  //     tags: item.tags,
-  //     categories: item.categories,
-  //     price: get(item, 'price_range.min') || '',
-  //     rate: item.rate,
-  //     rateNumber: item.rate_number,
-  //   }))
-  // } 
-  if (get(dataBanners, 'data.data') && Array.isArray(get(dataBanners, 'data.data'))) {
-    const rawListBanners = get(dataBanners, 'data.data')
-    listBannerArray = rawListBanners.map((item) => ({
-      imgUrl: item.image_url,
-      linkActive: item.link_active
-    }))
-  }
-  if (get(dataCategoryLinks, 'data.data')  && Array.isArray(get(dataCategoryLinks, 'data.data'))) {
-    const rawListCategory = get(dataCategoryLinks, 'data.data')
-    let arrayRawListCategoryLink = rawListCategory.map((item) => ({
-      icon: get(item, 'attributes.logo.url') || null,
-      label: get(item, 'attributes.label'),
-      value: get(item, 'attributes.value'),
-      slug: get(item, 'attributes.value')
-    }))
-    ListCategoryLinkArray = ListCategoryLinkArray.concat(arrayRawListCategoryLink)
-  }
+  const rawListBanners = get(dataBanners, 'data.data')
+  const rawListCategory = get(dataCategoryLinks, 'data.data')
+  listBannerArray = Array.isArray(rawListBanners) && rawListBanners.map((item) => ({
+    imgUrl: item.image_url,
+    linkActive: item.link_active
+  }))
+  let arrayRawListCategoryLink = Array.isArray(rawListCategory) && rawListCategory.map((item) => ({
+    icon: get(item, 'attributes.logo.url') || null,
+    label: get(item, 'attributes.label'),
+    value: get(item, 'attributes.value'),
+    slug: get(item, 'attributes.value')
+  }))
+  ListCategoryLinkArray = Array.isArray(arrayRawListCategoryLink) && ListCategoryLinkArray.concat(arrayRawListCategoryLink)
   return {
     props: {
       // bizListings: listingArray,

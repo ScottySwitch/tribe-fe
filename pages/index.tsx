@@ -318,97 +318,87 @@ export async function getServerSideProps(context) {
     let listBannerArray: any = []
     let listCollectionArray: any = []
     let categoryArray: any = []
-    if(get(data, 'data.data') && Array.isArray(get(data, 'data.data'))) {
-      const rawListingBuyArray = get(data, 'data.data[0]')
-      const rawListingSeeArray = get(data, 'data.data[1]')
-      const rawListingEatAray = get(data, 'data.data[2]')
-      listingBuyArray = rawListingBuyArray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, 'price_range.min') || '',
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }))
-      listingSeeArray = rawListingSeeArray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, 'price_range.min') || '',
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }))
-      listingEatArray = rawListingEatAray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, 'price_range.min') || '',
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }))
-    }
-    if(get(dataExclusiveDeal, 'data.data') && Array.isArray(get(dataExclusiveDeal, 'data.data'))) {
-      const rawListingExclusiveArray = get(dataExclusiveDeal, 'data.data')
-      listingExclusiveDealArray = rawListingExclusiveArray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, 'price_range.min') || '',
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }))
-    }
-    if (get(dataBanners, 'data.data') && Array.isArray(get(dataBanners, 'data.data'))) {
-      const rawListBanners = get(dataBanners, 'data.data')
-      listBannerArray = rawListBanners.map((item) => ({
-        imgUrl: item.image_url,
-        linkActive: item.link_active
-      }))
-    }
-    if (get(dataCollections, 'data.data') && Array.isArray(get(dataCollections, 'data.data'))) {
-      const rawListCollections = get(dataCollections, 'data.data')
-      listCollectionArray = rawListCollections.map((item) => ({
-        imgUrl: item.thumbnail || null,
-        slug: item.slug,
-        title: item.name
-      }))
-    }
-    if(get(dataCategories, 'data.data') && Array.isArray(get(dataCategories, 'data.data'))) {
-      const rawCategories = get(dataCategories, 'data.data')
-      categoryArray = rawCategories.map((item) => ({
-        label: get(item, 'attributes.name'),
-        slug: get(item, 'attributes.slug'),
-        icon: get(item, 'attributes.icon')
-      }))
-    }
+    const rawListingBuyArray = get(data, 'data.data[0]')
+    const rawListingSeeArray = get(data, 'data.data[1]')
+    const rawListingEatAray = get(data, 'data.data[2]')
+    const rawListingExclusiveArray = get(dataExclusiveDeal, 'data.data')
+    const rawListBanners = get(dataBanners, 'data.data')
+    const rawListCollections = get(dataCollections, 'data.data')
+    const rawCategories = get(dataCategories, 'data.data')
+    listingBuyArray = Array.isArray(rawListingBuyArray) && rawListingBuyArray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+    listingSeeArray = Array.isArray(rawListingSeeArray) && rawListingSeeArray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+    listingEatArray = Array.isArray(rawListingEatAray) && rawListingEatAray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+    listingExclusiveDealArray = Array.isArray(rawListingExclusiveArray) && rawListingExclusiveArray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+    listBannerArray = Array.isArray(rawListBanners) && rawListBanners.map((item) => ({
+      imgUrl: item.image_url,
+      linkActive: item.link_active
+    }))
+    listCollectionArray = Array.isArray(rawListCollections) && rawListCollections.map((item) => ({
+      imgUrl: item.thumbnail || null,
+      slug: item.slug,
+      title: item.name
+    }))
+    categoryArray = Array.isArray(rawCategories) && rawCategories.map((item) => ({
+      label: get(item, 'attributes.name'),
+      slug: get(item, 'attributes.slug'),
+      icon: get(item, 'attributes.icon')
+    }))
   return {
     props: {
       listingBuy: listingBuyArray,
