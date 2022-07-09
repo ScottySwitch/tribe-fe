@@ -13,14 +13,9 @@ import Break from "components/Break/Break";
 import Upload from "components/Upload/Upload";
 import Icon from "components/Icon/Icon";
 import OpenHours from "components/OpenHours/OpenHours";
-import { YesNo } from "enums";
+import { Categories, YesNo } from "enums";
 import TagsSelection from "components/TagsSelection/TagsSelection";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
-import {
-  buyAssociatedCategories,
-  productTypes,
-  decribePlaceList,
-} from "../constant";
 import { IOption } from "type";
 import { IAddListingForm } from "pages/add-listing";
 import Select from "components/Select/Select";
@@ -29,6 +24,7 @@ import CategoryLinkApi from "services/category-link";
 import ProductTypeApi from "services/product-type";
 import ProductBrandApi from "services/product-brand";
 import TagApi from "services/tag";
+import { getOptionsMappedFromResponse } from "utils";
 
 interface AddBuyInforProps {
   isEdit?: boolean;
@@ -41,8 +37,7 @@ interface AddBuyInforProps {
 }
 
 const AddBuyInfor = (props: AddBuyInforProps) => {
-  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } =
-    props;
+  const { isEdit, data, show, onEdit, onPrevPage, onPreview } = props;
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -59,82 +54,71 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
     },
   });
 
-  const [selectCategoryLink, setSelectCategoryLink] = useState<
-    string | undefined
-  >(getValues("categoryLinks"));
+  const initCategoryLink = get(data, "categoryLinks.id") || "";
+
+  const [selectCategoryLink, setSelectCategoryLink] =
+    useState<string>(initCategoryLink);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [categoryLinks, setCategoryLinks] = useState<any>([]);
   const [productTypes, setProductTypes] = useState<any>([]);
-  const [selectedProductTypes, setSelectedProductTypes] = useState<any>([]);
+  const [selectedProductTypes, setSelectedProductTypes] = useState<any>(
+    get(data, "productTypes")
+  );
   const [productBrands, setProductBrands] = useState<any>([]);
   const [describeTags, setDescribeTags] = useState<any>([]);
 
   useEffect(() => {
     // Category links
-    const getCategoryLinks = async () => {
-      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(1);
-      const categoryLinks = get(data, "data.data");
-      setCategoryLinks(categoryLinks);
-    };
-    getCategoryLinks().catch((e) => console.log(e));
+    CategoryLinkApi.getCategoryLinksByCategoryId(Categories.BUY)
+      .then((res) => setCategoryLinks(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+
+    //Product types
+    ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink)
+      .then((res) => setProductTypes(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+
+    //Product brands
+    get(selectedProductTypes, "length") > 0 &&
+      ProductBrandApi.getProductBrandByProductTypeId(selectedProductTypes)
+        .then((res) => setProductBrands(getOptionsMappedFromResponse(res)))
+        .catch((error) => console.log(error));
 
     // Tags
-    const getTags = async () => {
-      const data = await TagApi.getTags();
-      const tags = get(data, "data.data");
-      setDescribeTags(tags);
-    };
-    getTags().catch((e) => console.log(e));
+    TagApi.getTags()
+      .then((res) => setDescribeTags(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
-        selectCategoryLink
-      );
-      const productTypes = get(data, "data.data");
-      setProductTypes(productTypes);
-    };
-    if (selectCategoryLink) {
-      getProductTypes().catch((e) => console.log(e));
-      setValue("productTypes", []);
-      setValue("productBrands", []);
-      setSelectedProductTypes([]);
-      setProductBrands([]);
-    }
-  }, [selectCategoryLink]);
+  const handleSelectCategoryLink = async (opt) => {
+    setValue("categoryLinks", opt.id);
+    setSelectCategoryLink(opt.id);
+
+    const data = await ProductTypeApi.getProductTypeByCategoryLinkId(opt.id);
+    const productTypes = get(data, "data.data");
+
+    setProductTypes(productTypes);
+    setValue("productTypes", []);
+    setValue("productBrands", []);
+    setSelectedProductTypes([]);
+    setProductBrands([]);
+  };
 
   const handleSelectProductType = (option: any) => {
     setValue("productBrands", []);
     setProductBrands([]);
-    if (selectedProductTypes.includes(option)) {
-      const newList = selectedProductTypes.filter((item) => item !== option);
-      setSelectedProductTypes(newList);
-    } else {
-      setSelectedProductTypes([...selectedProductTypes, option]);
-    }
+
+    const newProductTypes = selectedProductTypes.some((item) => item == option)
+      ? selectedProductTypes.filter((item) => !(item == option))
+      : [...selectedProductTypes, option];
+    setSelectedProductTypes(newProductTypes);
+
+    ProductBrandApi.getProductBrandByProductTypeId(newProductTypes)
+      .then((res) => setProductBrands(getOptionsMappedFromResponse(res)))
+      .catch((error) => console.log(error));
   };
-
-  useEffect(() => {
-    const getProductBrands = async () => {
-      const data = await ProductBrandApi.getProductBrandByProductTypeId(
-        selectedProductTypes
-      );
-      const productBrands = get(data, "data.data");
-      const mapProductBrands = productBrands.map((productBrand) => ({
-        value: productBrand.id,
-        label: productBrand.attributes.label,
-      }));
-
-      setProductBrands(mapProductBrands);
-    };
-    if (selectedProductTypes.length > 0) {
-      getProductBrands().catch((e) => console.log(e));
-    } else {
-      setProductBrands([]);
-    }
-  }, [selectedProductTypes]);
 
   const onSubmit = (data) => {
     onPreview?.(data);
@@ -166,10 +150,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
                     key={opt.id}
                     text={opt.attributes.label}
                     selected={selectCategoryLink === opt.id}
-                    onClick={() => {
-                      setValue("categoryLinks", opt.id);
-                      setSelectCategoryLink(opt.id);
-                    }}
+                    onClick={() => handleSelectCategoryLink(opt)}
                   />
                 ))}
             </div>
@@ -289,12 +270,17 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           <br /> <Break /> <br />
           <div className="flex items-end gap-3 sm:gap-10text-sm">
             <Button
-              text="Go back"
+              text={isEdit ? "Cancel" : "Go back"}
               variant="underlined"
               width="fit-content"
               onClick={onPrevPage}
             />
-            <Button text="Continue" size="small" width={270} type="submit" />
+            <Button
+              text={isEdit ? "Apply change" : "Continue"}
+              size="small"
+              width={270}
+              type="submit"
+            />
           </div>
         </form>
       </SectionLayout>

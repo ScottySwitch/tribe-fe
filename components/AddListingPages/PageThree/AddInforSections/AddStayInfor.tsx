@@ -10,7 +10,7 @@ import Checkbox from "components/Checkbox/Checkbox";
 import Break from "components/Break/Break";
 import Modal from "components/Modal/Modal";
 import OpenHours from "components/OpenHours/OpenHours";
-import { YesNo } from "enums";
+import { Categories, YesNo } from "enums";
 import {
   accommodation,
   areas,
@@ -31,12 +31,12 @@ import CategoryLinkApi from "../../../../services/category-link";
 import get from "lodash/get";
 import TagApi from "../../../../services/tag";
 import ProductTypeApi from "../../../../services/product-type";
+import { getOptionsMappedFromResponse } from "utils";
 
 interface AddStayInforProps {
   isEdit?: boolean;
   facilityMode?: boolean;
-  subCateList: IOption[];
-  data?: IAddListingForm;
+  data: { [key: string]: any };
   show?: boolean;
   onPrevPage?: () => void;
   onPreview?: (data: IAddListingForm) => void;
@@ -44,16 +44,8 @@ interface AddStayInforProps {
 }
 
 const AddStayInfor = (props: AddStayInforProps) => {
-  const {
-    isEdit,
-    facilityMode,
-    data,
-    show,
-    subCateList,
-    onEdit,
-    onPrevPage,
-    onPreview,
-  } = props;
+  const { isEdit, facilityMode, data, show, onEdit, onPrevPage, onPreview } =
+    props;
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
@@ -73,62 +65,15 @@ const AddStayInfor = (props: AddStayInforProps) => {
     },
   });
 
+  const initCategoryLink = get(data, "categoryLinks.id") || "";
+
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
-
   const [categoryLinks, setCategoryLinks] = useState<any>([]);
-  const [selectCategoryLink, setSelectCategoryLink] = useState<
-    string | undefined
-  >(getValues("categoryLinks"));
   const [productTypes, setProductTypes] = useState<any>([]);
   const [describeTags, setDescribeTags] = useState<any>([]);
-
-  useEffect(() => {
-    // Category links
-    const getCategoryLinks = async () => {
-      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(5);
-      const categoryLinks = get(data, "data.data");
-      setCategoryLinks(categoryLinks);
-    };
-    getCategoryLinks().catch((e) => console.log(e));
-
-    // Tags
-    const getTags = async () => {
-      const data = await TagApi.getTags();
-      const tags = get(data, "data.data");
-      setDescribeTags(tags);
-    };
-    getTags().catch((e) => console.log(e));
-  }, []);
-
-  useEffect(() => {
-    setValue("productTypes", []);
-    const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
-        selectCategoryLink
-      );
-      const productTypes = get(data, "data.data");
-      const mapProductTypes: any = [];
-      Array.isArray(productTypes) &&
-        productTypes.map((mapProductType) => {
-          mapProductTypes.push({
-            value: mapProductType.id,
-            label: mapProductType.attributes.label,
-          });
-        });
-      setProductTypes(mapProductTypes);
-    };
-    getProductTypes().catch((e) => console.log(e));
-  }, [selectCategoryLink]);
-
-  const onSubmit = (data) => {
-    onPreview?.(data);
-    onEdit?.(data);
-  };
-
-  if (!show) {
-    return null;
-  }
+  const [selectCategoryLink, setSelectCategoryLink] =
+    useState<string>(initCategoryLink);
 
   const title = facilityMode
     ? undefined
@@ -143,6 +88,42 @@ const AddStayInfor = (props: AddStayInforProps) => {
     : "After you complete this form, you'll be able to make changes before submitting.";
 
   const sectionContainer = facilityMode ? "pt-0" : undefined;
+
+  useEffect(() => {
+    // Category links
+    CategoryLinkApi.getCategoryLinksByCategoryId(Categories.STAY)
+      .then((res) => setCategoryLinks(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+
+    //Product types
+    ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink)
+      .then((res) => setProductTypes(getOptionsMappedFromResponse(res)))
+      .catch((e) => console.log(e));
+
+    // Tags
+    TagApi.getTags()
+      .then((res) => setDescribeTags(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSelectCategoryLink = async (opt) => {
+    setValue("categoryLinks", opt.id);
+    setSelectCategoryLink(opt.id);
+
+    const data = await ProductTypeApi.getProductTypeByCategoryLinkId(opt.id);
+    setProductTypes(getOptionsMappedFromResponse(data));
+    setValue("productTypes", []);
+  };
+
+  const onSubmit = (data) => {
+    onPreview?.(data);
+    onEdit?.(data);
+  };
+
+  if (!show) {
+    return null;
+  }
 
   return (
     <>
@@ -165,10 +146,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
                     key={opt.id}
                     text={opt.attributes.label}
                     selected={selectCategoryLink === opt.id}
-                    onClick={() => {
-                      setValue("categoryLinks", opt.id);
-                      setSelectCategoryLink(opt.id);
-                    }}
+                    onClick={() => handleSelectCategoryLink(opt)}
                   />
                 ))}
             </div>
@@ -209,13 +187,12 @@ const AddStayInfor = (props: AddStayInforProps) => {
             question="What tags best describe this place? "
             optional
           >
-            <div className="flex flex-col gap-y-5">
+            <div className="flex flex-wrap gap-y-5">
               {Array.isArray(describeTags) &&
                 describeTags.map((item) => (
                   <Checkbox
                     key={item.id}
                     label={item.attributes.label}
-                    // name="tags"
                     value={item.id}
                     className="w-full sm:w-1/2"
                     register={register("describeTags")}
@@ -291,6 +268,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
               {prayerFacilities.map((item) => (
                 <Checkbox
                   key={item.label}
+                  id={`${item.label} - ramadan`}
                   label={item.label}
                   value={item.label}
                   className="w-full sm:w-1/2"

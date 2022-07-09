@@ -11,14 +11,11 @@ import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInf
 import OnboardChecklist from "components/BizHomePage/OnboardChecklist/OnboardChecklist";
 import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import Upload from "components/Upload/Upload";
 import { Categories, ListingHomePageScreens } from "enums";
 import BizListingApi from "../../../../services/biz-listing";
 import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu";
 import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems";
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals";
-import TagApi from "services/tag";
-import FacilityApi from "services/facility";
 import ReviewApi from "services/review";
 import Facilities from "components/BizHomePage/Facilities/Facilities";
 import { IOption } from "type";
@@ -33,9 +30,9 @@ import Break from "components/Break/Break";
 import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
+import Banner from "components/BizHomePage/Banner/Banner";
 
 import styles from "styles/BizHomepage.module.scss";
-import Banner from "components/BizHomePage/Banner/Banner";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
@@ -76,11 +73,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { id: listingSlug } = query;
 
   const formatOptions = (list) =>
-    list.map((item: any) => ({
-      label: item.label,
-      value: item.value,
-      id: item.id,
-    }));
+    Array.isArray(list)
+      ? list.map((item: any) => ({
+          label: item.label,
+          value: item.value,
+          id: item.id,
+        }))
+      : [];
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
@@ -102,7 +101,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       const listing = get(data, "data.data[0]");
       if (listing) {
         console.log(listing);
-        console.log('userInfo', userInfo)
+        console.log("userInfo", userInfo);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
         const rawTags = listing.tags || [];
@@ -190,7 +189,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
         setSocialInfo(listing.social_info);
-        setDealList(listing.deals);  
+        setDealList(listing.deals);
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
         setTags(tagArray);
@@ -318,10 +317,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         deals: currentDealList.map((item) => item.id) || [],
         biz_invoices: bizInvoices.map((item) => item.id) || [],
         reviews: reviews.map((item) => item.id) || [],
-        categories:
-        bizListing.categories.map(
-            (item) => item.id
-          ) || [],
+        categories: bizListing.categories.map((item) => item.id) || [],
       }).then((response) => {
         console.log(response);
         bizListingRevisionCreateId = response.data.data.id;

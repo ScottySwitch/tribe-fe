@@ -39,16 +39,17 @@ const Upload = (props: UploadProps) => {
     onImageClick,
   } = props;
 
-  useEffect(() => {
-    setLocalFileList(fileList);
-  }, [fileList]);
-
-  const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : [];
-  const initFileList = multiple ? fileList : lastItemArray;
-
-  const [srcList, setSrcList] = useState<string[]>(initFileList);
+  const [srcList, setSrcList] = useState<string[]>([]);
   const [localFileList, setLocalFileList] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const lastItemArray = Array.isArray(fileList)
+      ? [fileList[fileList.length - 1]]
+      : [];
+    const initFileList = multiple ? fileList : lastItemArray;
+    setSrcList(initFileList);
+  }, [fileList, multiple]);
 
   const showedImages =
     type === "banner"
@@ -59,7 +60,7 @@ const Upload = (props: UploadProps) => {
 
   const showInput =
     ((!multiple && !srcList?.length) || multiple) &&
-    (isPaid || (!isPaid && srcList.length < 3));
+    (isPaid || (!isPaid && srcList?.length < 3));
 
   const hasOnePic = get(srcList, "length") == 1;
   const hasTwoPics = get(srcList, "length") == 2;
@@ -71,7 +72,6 @@ const Upload = (props: UploadProps) => {
 
   const handleChange = (event: any, src?: any) => {
     const imgIndex: any = srcList.indexOf(src);
-    console.log(imgIndex);
 
     const files: Blob[] = Object.values(event.target.files);
     const srces = files?.map((file) => URL.createObjectURL(file));
@@ -107,7 +107,7 @@ const Upload = (props: UploadProps) => {
       .then((res) => {
         const responseUrls = get(res, "data.urls") || [];
         if (responseUrls.length > 0) {
-          let newFileList = [...fileList];
+          let newFileList = Array.isArray(fileList) ? [...fileList] : [];
           if (!multiple) {
             newFileList = [...responseUrls];
           } else if (imgIndex !== -1) {
@@ -137,7 +137,6 @@ const Upload = (props: UploadProps) => {
   const handleRemoveItem = (src) => {
     const imgIndex: any = srcList.indexOf(src);
     const newSrcList = [...srcList].filter((item) => item !== src);
-    console.log("newFileList", localFileList);
 
     const newFileList = [...localFileList].filter(
       (item, index) => imgIndex !== index
@@ -146,7 +145,6 @@ const Upload = (props: UploadProps) => {
     setSrcList(newSrcList);
     setLocalFileList(newFileList);
     onChange?.(newFileList);
-    console.log("newFileList", newFileList);
   };
 
   const containerClassName = classNames(styles.upload, className, {
@@ -210,24 +208,27 @@ const Upload = (props: UploadProps) => {
 
   return (
     <div className={containerClassName}>
-      {showedImages.map((src, index) => {
-        return (
-          <div
-            key={src}
-            className={mediaClassName(index)}
-            onClick={() => isViewPage && onImageClick?.(src)}
-          >
-            <div className={styles.close} onClick={() => handleRemoveItem(src)}>
-              <Icon icon="cancel" size={25} />
-            </div>
-            <div className={styles.add_icon}>{centerIcon}</div>
-            <div className={styles.loader} />
-            <Input onChange={(e) => handleChange(e, src)} multiple={false} />
-            <Image src={src} alt="" layout="fill" objectFit="cover" />
-            {/* <VideoThumbnail videoUrl={src} /> */}
+      {showedImages.map((src, index) => (
+        <div
+          key={src}
+          className={mediaClassName(index)}
+          onClick={() => isViewPage && onImageClick?.(src)}
+        >
+          <div className={styles.close} onClick={() => handleRemoveItem(src)}>
+            <Icon icon="cancel" size={25} />
           </div>
-        );
-      })}
+          <div className={styles.add_icon}>{centerIcon}</div>
+          <div className={styles.loader} />
+          <Input onChange={(e) => handleChange(e, src)} multiple={false} />
+          <Image
+            src={src || require("public/images/avatar.png")}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+          />
+          {/* <VideoThumbnail videoUrl={src} /> */}
+        </div>
+      ))}
 
       {showInput && !isUploading && !isViewPage && (
         <div className={addMoreButtonClassName}>

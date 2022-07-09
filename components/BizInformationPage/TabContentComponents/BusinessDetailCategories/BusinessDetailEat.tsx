@@ -1,24 +1,24 @@
-import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor"
-import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
-import Badge from "components/Badge/Badge"
-import Break from "components/Break/Break"
-import Button from "components/Button/Button"
-import Question from "components/Question/Question"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import { fakeSubCateList } from "constant"
-import { IAddListingForm } from "pages/add-listing"
-import React, { useState } from "react"
+import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor";
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
+import Badge from "components/Badge/Badge";
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import Question from "components/Question/Question";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import { fakeSubCateList } from "constant";
+import { IAddListingForm } from "pages/add-listing";
+import React, { useState } from "react";
 
 interface BusinessDetailProps {
-  formData: IAddListingForm
-  submitFormData?: (form: IAddListingForm) => void
+  formData: { [key: string]: any };
+  submitFormData?: (form: IAddListingForm) => void;
 }
 
 const BusinessDetailEat = (props: BusinessDetailProps) => {
-  const { formData, submitFormData } = props
+  const { formData, submitFormData } = props;
   const {
-    categoryKind,
-    tags,
+    categoryLinks,
+    viewProductTypes,
     openHours,
     minPrice,
     maxPrice,
@@ -29,68 +29,93 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
     atmosphere,
     payment,
     additionalServices,
-  } = formData
+  } = formData;
 
-  const [isEdit, setIsEdit] = useState(false)
+  const [isEdit, setIsEdit] = useState(false);
   return (
     <React.Fragment>
-      <SectionLayout title="Business detail" show={!isEdit} containerClassName="w-full px-[30px]">
+      <SectionLayout
+        title="Business detail"
+        show={!isEdit}
+        containerClassName="w-full px-[30px]"
+      >
         <Break />
-        <Question question="What category best describes this place?" childrenClassName="flex">
-          {categoryKind && <Badge>{categoryKind}</Badge>}
+        <Question
+          question="What category best describes this place?"
+          childrenClassName="flex"
+        >
+          {categoryLinks && (
+            <Badge variant="no-outlined">{categoryLinks.label}</Badge>
+          )}
         </Question>
         <Question
           question="What cuisines would you use to describe this place?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {tags?.map((item) => (
-            <Badge key={item} text={item} />
+          {viewProductTypes?.map((item) => (
+            <Badge variant="no-outlined" key={item} text={item.label} />
           ))}
         </Question>
         <Question question="What are the opening hours?" optional>
           <PreviewValue valueKey="openHours" value={openHours} />
         </Question>
         <Question question="What’s the average price range of a meal?">
-          {currency && minPrice && maxPrice && `${currency}${minPrice} - ${currency}${maxPrice}`}
+          {currency &&
+            minPrice &&
+            maxPrice &&
+            `${currency}${minPrice} - ${currency}${maxPrice}`}
         </Question>
         <Question
           question="What kind of meals does this place serve?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {mealsKind?.map((item) => (
-            <Badge key={item} text={item} />
-          ))}
+          {Array.isArray(mealsKind) &&
+            mealsKind.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
-        <Question question="What is this place good for?" childrenClassName="flex flex-wrap gap-3">
-          {placeGoodFor?.map((item) => (
-            <Badge key={item} text={item} />
-          ))}
+        <Question
+          question="What is this place good for?"
+          childrenClassName="flex flex-wrap gap-3"
+        >
+          {Array.isArray(placeGoodFor) &&
+            placeGoodFor.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question
           question="What best describe this place’s atmosphere?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {atmosphere?.map((item) => (
-            <Badge key={item} text={item} />
-          ))}
+          {Array.isArray(atmosphere) &&
+            atmosphere?.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
-        <Question question="Are there parking area?" childrenClassName="flex flex-wrap gap-3">
-          {parking?.map((item) => (
-            <Badge key={item} text={item} />
-          ))}
+        <Question
+          question="Are there parking area?"
+          childrenClassName="flex flex-wrap gap-3"
+        >
+          {parking && <Badge variant="no-outlined" text={parking} />}
         </Question>
         <Question
           question="What Features and amneties does this restaurant have?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {payment?.map((item) => (
-            <Badge key={item} text={item} />
-          ))}
+          {Array.isArray(payment) &&
+            payment.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
-        <Question question="Additional?" optional childrenClassName="flex flex-wrap gap-3">
-          {additionalServices?.map((item) => (
-            <Badge key={item} text={item} />
-          ))}
+        <Question
+          question="Additional?"
+          optional
+          childrenClassName="flex flex-wrap gap-3"
+        >
+          {Array.isArray(additionalServices) &&
+            additionalServices.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Break />
         <div>
@@ -103,14 +128,14 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
         </div>
       </SectionLayout>
       <AddEatInfor
-        subCateList={fakeSubCateList}
         data={formData}
         show={isEdit}
         isEdit={true}
         onEdit={(data) => submitFormData?.(data)}
+        onPrevPage={() => setIsEdit(false)}
       />
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default BusinessDetailEat
+export default BusinessDetailEat;

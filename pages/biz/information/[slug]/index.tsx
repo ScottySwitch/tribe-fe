@@ -1,78 +1,102 @@
-import { useEffect, useState } from "react"
+import { get } from "lodash";
+import { useEffect, useState } from "react";
 
-import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation"
-import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals"
-import ProductListing from "components/BizInformationPage/TabContentComponents/ProductListing"
-import Icon from "components/Icon/Icon"
-import Heading from "components/Heading/Heading"
-import SectionLayout from "components/SectionLayout/SectionLayout"
+import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation";
+import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals";
+import ProductListing from "components/BizInformationPage/TabContentComponents/ProductListing";
+import Icon from "components/Icon/Icon";
+import Heading from "components/Heading/Heading";
+import BizListing from "services/biz-listing";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import { InformationList } from "enums";
+import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail";
+import TierTable from "components/TierTable/TierTable";
+import Verification from "components/BizInformationPage/TabContentComponents/Verification";
+import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos";
+import BizListingApi from "../../../../services/biz-listing";
 import {
-  bizInformationDefaultFormData,
-  loginInforItem,
-  user,
-  userId,
-  token,
   paidInformationList,
   freeInformationList,
-} from "constant"
-import { Categories, InformationList, Tiers } from "enums"
+  defaultAddlistingForm,
+} from "constant";
 
-import styles from "styles/BizInformation.module.scss"
-import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail"
-import TierTable from "components/TierTable/TierTable"
-import Verification from "components/BizInformationPage/TabContentComponents/Verification"
-import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos"
-import { useRouter } from "next/router"
-import BizListingApi from "../../../../services/biz-listing"
-import { get } from "lodash"
+import styles from "styles/BizInformation.module.scss";
 
-const BizInformation = () => {
-  const [isPaid, setIsPaid] = useState(true)
-  const informationList = isPaid ? paidInformationList : freeInformationList
+const BizInformation = (props) => {
+  const { listingSlug } = props;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isPaid, setIsPaid] = useState(true);
+  const [listing, setListing] = useState(defaultAddlistingForm);
+  const [isPayYearly, setIsPayYearly] = useState(false);
 
-  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
-  const [isPayYearly, setIsPayYearly] = useState(false)
-  const [selectedTab, setSelectedTab] = useState<string>(informationList[0].label)
-
-  const [listing, setListing] = useState<any>({})
-  const {
-    query: { slug: listingSlug },
-  } = useRouter()
+  const informationList = isPaid ? paidInformationList : freeInformationList;
+  const [selectedTab, setSelectedTab] = useState(informationList[0].label);
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const data = await BizListingApi.getInfoBizListingBySlug(listingSlug)
+
+      const data = await BizListingApi.getInfoBizListingBySlug(
+        listingSlug
+      ).finally(() => setLoading(false));
+
       if (data.data.data.length > 0) {
-        const listing = get(data, "data.data[0]") || {}
+        const listing = get(data, "data.data[0]") || {};
+        console.log("business information", listing);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
-        setListing(listing)
+        const isPaidListing = get(listing, "biz_invoices.length") > 0;
+        setIsPaid(isPaidListing);
+        setListing(listing);
       }
-    }
-    if (listingSlug) {
-      getListingData(listingSlug)
-    }
-  }, [listingSlug])
+    };
+
+    listingSlug && getListingData(listingSlug);
+  }, [listingSlug, loading]);
+
+  const onSubmit = async (data) => {
+    console.log("submitData", data);
+    listing.id &&
+      (await BizListing.updateBizListing(listing.id, {
+        ...listing,
+        ...data,
+      }).then(() => setLoading(true)));
+  };
 
   const tabContent = () => {
     switch (selectedTab) {
       case InformationList.BUSINESS_INFORMATION:
-        return <BusinessInformation isPaid={isPaid} />
+        return (
+          <BusinessInformation
+            listing={listing}
+            loading={loading}
+            onSubmit={onSubmit}
+          />
+        );
       case InformationList.BUSINESS_DETAIL:
-        return <BusinessDetail isPaid={isPaid} />
+        return (
+          <BusinessDetail
+            listing={listing}
+            loading={loading}
+            onSubmit={onSubmit}
+          />
+        );
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing isPaid={isPaid} bizListingId={listing.id} />
+        return <ProductListing isPaid={isPaid} bizListingId={listing.id} />;
       case InformationList.PHOTOS_VIDEOS:
-        return <PhotosVideos isPaid={isPaid} />
+        return <PhotosVideos isPaid={isPaid} />;
       case InformationList.MANAGE_DEALS:
-        return <ManageDeals />
+        return <ManageDeals />;
       case InformationList.ANALYTICS:
         return (
-          <SectionLayout title="Analytics" className="px-[30px]" containerClassName="w-full">
+          <SectionLayout
+            title="Analytics"
+            className="px-[30px]"
+            containerClassName="w-full"
+          >
             <div />
           </SectionLayout>
-        )
+        );
       case InformationList.CHANGE_ACCOUNT_TIER:
         return (
           <TierTable
@@ -80,19 +104,19 @@ const BizInformation = () => {
             isPayYearly={isPayYearly}
             onSetIsPayYearly={(e) => setIsPayYearly(e)}
           />
-        )
+        );
       case InformationList.VERIFICATION:
-        return <Verification isPaid={isPaid} />
+        return <Verification isPaid={isPaid} />;
 
       default:
-        return <div />
+        return <div />;
     }
-  }
+  };
 
   const handleLogout = () => {
-    localStorage.clear()
-    window.location.href = "/"
-  }
+    localStorage.clear();
+    window.location.href = "/";
+  };
 
   return (
     <SectionLayout backgroundColor>
@@ -119,14 +143,23 @@ const BizInformation = () => {
               </div>
             ))}
             <div className="flex gap-3 justify-between" onClick={handleLogout}>
-              <Heading icon="logout" type="tab" text="Log out" selected={false} />
+              <Heading
+                icon="logout"
+                type="tab"
+                text="Log out"
+                selected={false}
+              />
             </div>
           </div>
         </div>
         <div className={styles.right_col}>{tabContent()}</div>
       </div>
     </SectionLayout>
-  )
-}
+  );
+};
+export const getServerSideProps = async (context) => {
+  const { slug } = context.query;
+  return { props: { listingSlug: slug } };
+};
 
-export default BizInformation
+export default BizInformation;
