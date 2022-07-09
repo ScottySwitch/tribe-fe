@@ -9,6 +9,7 @@ import Modal from "components/Modal/Modal"
 import Upload from "components/Upload/Upload"
 
 import UserFollowApi from "services/user-listing-follow"
+import UserFavouriteApi from "services/user-listing-favourite"
 
 import styles from "./ListingInforCard.module.scss"
 import { get } from "lodash"
@@ -31,13 +32,33 @@ const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; biz
   const { isViewPage, className, bizListing, userInfo } = props
   const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
   console.log('bizListing', bizListing)
+  console.log('userInfo', userInfo)
   const bizListingReviewCount = get(bizListing, "reviews.length") || 0
   const bizListingFollowerCount = get(bizListing, "user_listing_follows.length") || 0
-  const [isFollow, setIsFollow] = useState<boolean>(true)
+  const [isFollow, setIsFollow] = useState<boolean>(false)
+  const [isFavourite, setIsFavourite] = useState<boolean>(false)
 
-  const handleFollow = async () => {
-    console.log('add follow')
+  useEffect(() => {
+      if (userInfo) {
+        let checkIsFollow = userInfo.listing_follow_ids.some((item) => item === bizListing.id)
+        let checkIsFavourite = userInfo.listing_favourite_ids.some((item) => item === bizListing.id)
+        setIsFollow(checkIsFollow)
+        setIsFavourite(checkIsFavourite)
+      }
+  }, [])
+
+  const handleAddFollow = async () => {
     const data = await UserFollowApi.createFollowing()
+    if (get(data, 'data')) {
+      setIsFollow(true)
+    }
+  }
+
+  const handleAddFavorite = async () => {
+    const data = await UserFavouriteApi.createFavourite()
+    if (get(data, 'data')) {
+      setIsFavourite(true)
+    }
   }
 
   return (
@@ -46,7 +67,7 @@ const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; biz
         <div className="flex gap-3 mb-2">
           <Button 
             text="Follow" size="small" width={130} 
-            onClick={handleFollow}
+            onClick={handleAddFollow}
             disabled={isFollow}
           />
           <Button
@@ -54,6 +75,8 @@ const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; biz
             text="Add to favourite "
             size="small"
             variant="secondary"
+            disabled={isFavourite}
+            onClick={handleAddFavorite}
           />
         </div>
       )}
