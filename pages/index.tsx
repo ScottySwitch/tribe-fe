@@ -59,7 +59,7 @@ const Home: NextPage = (props: any) => {
   const getBizListingForYou = async () => {
     setIsLoading(true)
     const dataListing = await BizListingApi.getBizListingForYou(limit)
-    if (get(dataListing, 'data.data')) {
+    if (get(dataListing, 'data.data') && Array.isArray(get(dataListing, 'data.data'))) {
       const rawDataListing = get(dataListing, 'data.data')
       const listingArray = listingForYou.concat(rawDataListing.map((item) => ({
         images: item.images || [],
@@ -87,21 +87,21 @@ const Home: NextPage = (props: any) => {
       <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
       <SectionLayout>
         <Carousel responsive={homeBannerResponsive}>
-          {listBanners?.map((img, index) => (
-            <div 
-              key={index} 
-              className={styles.banner_card}
-              onClick={() => {
-                window.location.href = `${img.linkActive}`
-              }}
-            >
-              <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
-            </div>
-          ))}
+            {Array.isArray(listBanners) ? listBanners?.map((img, index) => (
+              <div 
+                key={index} 
+                className={styles.banner_card}
+                onClick={() => {
+                  window.location.href = `${img.linkActive}`
+                }}
+              >
+                <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
+              </div>
+            )) : <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout title="Explore BESTS" childrenClassName={styles.bests}>
-        {listCategories.map((item, index) => (
+        {Array.isArray(listCategories) && listCategories.map((item, index) => (
           <div
             key={index}
             className={styles.category}
@@ -123,62 +123,62 @@ const Home: NextPage = (props: any) => {
           className="w-[50px] mb-5"
         />
         <Carousel responsive={infoCardResponsive}>
-          {listingExclusiveDeal?.map((card) => (
-            <div key={card.name} className="pb-5">
-              <InforCard
-                imgUrl={get(card, 'images[0]')}
-                title={card.title}
-                rate={card.rate}
-                rateNumber={card.rateNumber}
-                followerNumber={card.followerNumber}
-                price={card.price}
-                categories={card.categories}
-                tags={card.tags}
-                isVerified={card.isVerified}
-                description={card.description}
-                onClick={() => {
-                  window.location.href = `/biz/home/${card.slug}`
-                }}
-              />
-            </div>
-          ))}
+            {Array.isArray(listingExclusiveDeal) ? listingExclusiveDeal?.map((card) => (
+              <div key={card.name} className="pb-5">
+                <InforCard
+                  imgUrl={get(card, 'images[0]')}
+                  title={card.title}
+                  rate={card.rate}
+                  rateNumber={card.rateNumber}
+                  followerNumber={card.followerNumber}
+                  price={card.price}
+                  categories={card.categories}
+                  tags={card.tags}
+                  isVerified={card.isVerified}
+                  description={card.description}
+                  onClick={() => {
+                    window.location.href = `/biz/home/${card.slug}`
+                  }}
+                />
+              </div>
+            )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout backgroundColor title="Specially Curated For You">
         <Carousel responsive={homeCuratedResponsive}>
-          {listCollections?.map((item, index) => (
-            <div key={index} className="pb-5">
-              <CollectionCard title={item.title} imgUrl={item.imgUrl} />
-            </div>
-          ))}
+            {Array.isArray(listCollections) ? listCollections?.map((item, index) => (
+              <div key={index} className="pb-5">
+                <CollectionCard title={item.title} imgUrl={item.imgUrl} />
+              </div>
+            )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout title="Where to BUY">
         <Carousel responsive={infoCardResponsive}>
-          {listingBuy?.map((card) => (
-            <div key={card.title} className="pb-5">
-              <InforCard
-                imgUrl={get(card, 'images[0]')}
-                title={card.title}
-                rate={card.rate}
-                rateNumber={card.rateNumber}
-                followerNumber={card.followerNumber}
-                price={card.price}
-                categories={card.categories}
-                tags={card.tags}
-                isVerified={card.isVerified}
-                description={card.description}
-                onClick={() => {
-                  window.location.href = `/biz/home/${card.slug}`
-                }}
-              />
-            </div>
-          ))}
+            {Array.isArray(listingBuy) ? listingBuy?.map((card) => (
+              <div key={card.title} className="pb-5">
+                <InforCard
+                  imgUrl={get(card, 'images[0]')}
+                  title={card.title}
+                  rate={card.rate}
+                  rateNumber={card.rateNumber}
+                  followerNumber={card.followerNumber}
+                  price={card.price}
+                  categories={card.categories}
+                  tags={card.tags}
+                  isVerified={card.isVerified}
+                  description={card.description}
+                  onClick={() => {
+                    window.location.href = `/biz/home/${card.slug}`
+                  }}
+                />
+              </div>
+            )) : <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout title="What to SEE">
         <Carousel responsive={infoCardResponsive}>
-          {listingSee?.map((card) => (
+            {Array.isArray(listingSee) ? listingSee?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={get(card, 'images[0]')}
@@ -196,7 +196,7 @@ const Home: NextPage = (props: any) => {
                 }}
               />
             </div>
-          ))}
+          )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout backgroundColor title="Featured Articles">
@@ -214,28 +214,28 @@ const Home: NextPage = (props: any) => {
       </SectionLayout>
       <SectionLayout title="What to EAT">
         <Carousel responsive={infoCardResponsive}>
-          {listingEat?.map((card) => (
-            <div key={card.title} className="pb-5">
-              <InforCard
-                imgUrl={get(card, 'images[0]')}
-                title={card.title}
-                rate={card.rate}
-                rateNumber={card.rateNumber}
-                followerNumber={card.followerNumber}
-                price={card.price}
-                categories={card.categories}
-                tags={card.tags}
-                isVerified={card.isVerified}
-                description={card.description}
-                onClick={() => {
-                  window.location.href = `/biz/home/${card.slug}`
-                }}
-              />
-            </div>
-          ))}
+            {Array.isArray(listingEat) ? listingEat?.map((card) => (
+              <div key={card.title} className="pb-5">
+                <InforCard
+                  imgUrl={get(card, 'images[0]')}
+                  title={card.title}
+                  rate={card.rate}
+                  rateNumber={card.rateNumber}
+                  followerNumber={card.followerNumber}
+                  price={card.price}
+                  categories={card.categories}
+                  tags={card.tags}
+                  isVerified={card.isVerified}
+                  description={card.description}
+                  onClick={() => {
+                    window.location.href = `/biz/home/${card.slug}`
+                  }}
+                />
+              </div>
+            )): <div></div>}
         </Carousel>
       </SectionLayout>
-      {listingForYou.length > 0 && 
+      {Array.isArray(listingForYou) && listingForYou.length > 0 && 
         <div>
           <SectionLayout className={styles.for_you}>
             <div className={styles.for_you_tag}>
@@ -318,7 +318,7 @@ export async function getServerSideProps(context) {
     let listBannerArray: any = []
     let listCollectionArray: any = []
     let categoryArray: any = []
-    if(get(data, 'data.data')) {
+    if(get(data, 'data.data') && Array.isArray(get(data, 'data.data'))) {
       const rawListingBuyArray = get(data, 'data.data[0]')
       const rawListingSeeArray = get(data, 'data.data[1]')
       const rawListingEatAray = get(data, 'data.data[2]')
@@ -368,7 +368,7 @@ export async function getServerSideProps(context) {
         rateNumber: item.rate_number,
       }))
     }
-    if(get(dataExclusiveDeal, 'data.data')) {
+    if(get(dataExclusiveDeal, 'data.data') && Array.isArray(get(dataExclusiveDeal, 'data.data'))) {
       const rawListingExclusiveArray = get(dataExclusiveDeal, 'data.data')
       listingExclusiveDealArray = rawListingExclusiveArray.map((item) => ({
         images: item.images || [],
@@ -386,14 +386,14 @@ export async function getServerSideProps(context) {
         rateNumber: item.rate_number,
       }))
     }
-    if (get(dataBanners, 'data.data')) {
+    if (get(dataBanners, 'data.data') && Array.isArray(get(dataBanners, 'data.data'))) {
       const rawListBanners = get(dataBanners, 'data.data')
       listBannerArray = rawListBanners.map((item) => ({
         imgUrl: item.image_url,
         linkActive: item.link_active
       }))
     }
-    if (get(dataCollections, 'data.data')) {
+    if (get(dataCollections, 'data.data') && Array.isArray(get(dataCollections, 'data.data'))) {
       const rawListCollections = get(dataCollections, 'data.data')
       listCollectionArray = rawListCollections.map((item) => ({
         imgUrl: item.thumbnail || null,
@@ -401,7 +401,7 @@ export async function getServerSideProps(context) {
         title: item.name
       }))
     }
-    if(get(dataCategories, 'data.data')) {
+    if(get(dataCategories, 'data.data') && Array.isArray(get(dataCategories, 'data.data'))) {
       const rawCategories = get(dataCategories, 'data.data')
       categoryArray = rawCategories.map((item) => ({
         label: get(item, 'attributes.name'),

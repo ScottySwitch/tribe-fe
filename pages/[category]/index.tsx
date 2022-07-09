@@ -89,24 +89,24 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout>
         <Carousel responsive={homeBannerResponsive}>
-          {listingBanners?.map((img, index) => (
-            <div 
-              key={index} 
-              className={styles.banner_card}
-              onClick={() => {
-                window.location.href = `${img.linkActive}`
-              }}
-            >
-              <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
-            </div>
-          ))}
+            {Array.isArray(listingBanners) ? listingBanners?.map((img, index) => (
+              <div 
+                key={index} 
+                className={styles.banner_card}
+                onClick={() => {
+                  window.location.href = `${img.linkActive}`
+                }}
+              >
+                <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
+              </div>
+            )) : <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout
         title="Explore by Top Categories"
         childrenClassName="flex gap-[100px] flex-wrap"
       >
-        {listCategoryLink.map((item, index) => (
+        {Array.isArray(listCategoryLink) && listCategoryLink.map((item, index) => (
           <div
             key={index}
             className={styles.sub_category}
@@ -121,38 +121,38 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout title="Exclusive deals">
         <Carousel responsive={infoCardResponsive}>
-          {listingExclusiveDeal?.map((card) => (
-            <div key={card.title} className="pb-5">
-              <InforCard
-                imgUrl={card.images[0]}
-                title={card.title}
-                rate={card.rate}
-                rateNumber={card.rateNumber}
-                followerNumber={card.followerNumber}
-                price={card.price}
-                categories={card.categories}
-                tags={card.tags}
-                isVerified={card.isVerified}
-                onClick={() => {
-                  window.location.href = `/biz/home/${card.slug}`
-                }}
-              />
-            </div>
-          ))}
+            {Array.isArray(listingExclusiveDeal) ? listingExclusiveDeal?.map((card) => (
+              <div key={card.title} className="pb-5">
+                <InforCard
+                  imgUrl={card.images[0]}
+                  title={card.title}
+                  rate={card.rate}
+                  rateNumber={card.rateNumber}
+                  followerNumber={card.followerNumber}
+                  price={card.price}
+                  categories={card.categories}
+                  tags={card.tags}
+                  isVerified={card.isVerified}
+                  onClick={() => {
+                    window.location.href = `/biz/home/${card.slug}`
+                  }}
+                />
+              </div>
+            )) : <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout backgroundColor title="Specially Curated For You">
         <Carousel responsive={homeCuratedResponsive}>
-          {listCollections?.map((item, index) => (
-            <div key={index} className="pb-5">
-              <CollectionCard title={item.title} imgUrl={item.imgUrl} />
-            </div>
-          ))}
+            {Array.isArray(listCollections) ? listCollections?.map((item, index) => (
+              <div key={index} className="pb-5">
+                <CollectionCard title={item.title} imgUrl={item.imgUrl} />
+              </div>
+            )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout title="Where to BUY">
         <Carousel responsive={infoCardResponsive}>
-          {listingBuy?.map((card) => (
+          {Array.isArray(listingBuy) ? listingBuy?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -169,12 +169,12 @@ const Category = (props: any) => {
                 }}
               />
             </div>
-          ))}
+          )) : <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout title="What to SEE">
         <Carousel responsive={infoCardResponsive}>
-          {listingSee?.map((card) => (
+          {Array.isArray(listingSee) ? listingSee?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -191,7 +191,7 @@ const Category = (props: any) => {
                 }}
               />
             </div>
-          ))}
+          )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout backgroundColor title="Featured Articles">
@@ -209,7 +209,7 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout title="What to EAT">
         <Carousel responsive={infoCardResponsive}>
-          {listingEat?.map((card) => (
+          {Array.isArray(listingEat) ? listingEat?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -226,7 +226,7 @@ const Category = (props: any) => {
                 }}
               />
             </div>
-          ))}
+          )): <div></div>}
         </Carousel>
       </SectionLayout>
       {/* <SectionLayout childrenClassName="flex justify-center">
@@ -271,7 +271,7 @@ export async function getServerSideProps(context) {
     let listingExclusiveDealArray: any = []
     let listCollectionArray: any = []
     let ListCategoryLinkArray: any = []
-    if(get(data, 'data.data')) {
+    if(get(data, 'data.data') && Array.isArray(get(data, 'data.data'))) {
       const rawListingBuyArray = get(data, 'data.data[0]')
       const rawListingSeeArray = get(data, 'data.data[1]')
       const rawListingEatAray = get(data, 'data.data[2]')
@@ -321,7 +321,7 @@ export async function getServerSideProps(context) {
         rateNumber: item.rate_number,
       }))
     }
-    if (get(dataExclusiveDeal, 'data.data')) {
+    if (get(dataExclusiveDeal, 'data.data') && Array.isArray(get(dataExclusiveDeal, 'data.data'))) {
       const rawListingExclusiveDealAray = get(dataExclusiveDeal, 'data.data')
       listingExclusiveDealArray = rawListingExclusiveDealAray.map((item) => ({
         images: item.images || [],
@@ -339,14 +339,14 @@ export async function getServerSideProps(context) {
         rateNumber: item.rate_number,
       }))
     }
-    if (get(dataBanners, 'data.data')) {
+    if (get(dataBanners, 'data.data') && Array.isArray(get(dataBanners, 'data.data'))) {
       const rawListBanners = get(dataBanners, 'data.data')
       listBannerArray = rawListBanners.map((item) => ({
         imgUrl: item.image_url,
         linkActive: item.link_active
       }))
     }
-    if (get(dataCollections, 'data.data')) {
+    if (get(dataCollections, 'data.data') && Array.isArray(get(dataCollections, 'data.data'))) {
       const rawListCollections = get(dataCollections, 'data.data')
       listCollectionArray = rawListCollections.map((item) => ({
         imgUrl: item.thumbnail || null,
@@ -354,7 +354,7 @@ export async function getServerSideProps(context) {
         title: item.name
       }))
     }
-    if (get(dataCategoryLinks, 'data.data')) {
+    if (get(dataCategoryLinks, 'data.data') && Array.isArray(get(dataCategoryLinks, 'data.data'))) {
       const rawListCategory = get(dataCategoryLinks, 'data.data')
       ListCategoryLinkArray = rawListCategory.map((item) => ({
         icon: get(item, 'attributes.logo.url') || null,

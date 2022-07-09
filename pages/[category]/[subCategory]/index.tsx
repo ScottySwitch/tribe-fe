@@ -71,7 +71,7 @@ const SubCategoryPage = (props: any) => {
     console.log('subCategoryQuery', subCategory)
 
     const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, page)
-    if(get(dataBizlisting, 'data.data')) {
+    if(get(dataBizlisting, 'data.data') && Array.isArray(get(dataBizlisting, 'data.data'))) {
       const rawBizlistingArray = get(dataBizlisting, 'data.data')
       let listingArray = rawBizlistingArray.map((item) => ({
         images: item.images || [],
@@ -103,18 +103,18 @@ const SubCategoryPage = (props: any) => {
           {subCategory}
         </div>
         <Carousel responsive={homeBannerResponsive}>
-          {listingBanners?.map((img, index) => (
-            <div key={index} className={styles.banner_card}>
-              <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
-            </div>
-          ))}
+            {Array.isArray(listingBanners) ? listingBanners?.map((img, index) => (
+              <div key={index} className={styles.banner_card}>
+                <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
+              </div>
+            )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
           <div className="flex">
             <TabsHorizontal
-              tablist={listCategoryLink.slice(0, 5)}
+              tablist={Array.isArray(listCategoryLink) ? listCategoryLink.slice(0, 5) : []}
               type="secondary-no-outline"
               selectedTab={currentSubCategory}
               className="pt-[6px]"
@@ -127,7 +127,7 @@ const SubCategoryPage = (props: any) => {
               className={styles.sub_category_more}
               variant="no-outlined"
               size="small"
-              options={listCategoryLink.slice(5)}
+              options={Array.isArray(listCategoryLink) ? listCategoryLink.slice(5) : []}
               controlStyle={{ fontWeight: "bold", fontSize: "16px" }}
               placeholderStyle={{
                 fontWeight: "bold",
@@ -220,14 +220,14 @@ export async function getServerSideProps(context) {
   //     rateNumber: item.rate_number,
   //   }))
   // } 
-  if (get(dataBanners, 'data.data')) {
+  if (get(dataBanners, 'data.data') && Array.isArray(get(dataBanners, 'data.data'))) {
     const rawListBanners = get(dataBanners, 'data.data')
     listBannerArray = rawListBanners.map((item) => ({
       imgUrl: item.image_url,
       linkActive: item.link_active
     }))
   }
-  if (get(dataCategoryLinks, 'data.data')) {
+  if (get(dataCategoryLinks, 'data.data')  && Array.isArray(get(dataCategoryLinks, 'data.data'))) {
     const rawListCategory = get(dataCategoryLinks, 'data.data')
     let arrayRawListCategoryLink = rawListCategory.map((item) => ({
       icon: get(item, 'attributes.logo.url') || null,
