@@ -47,8 +47,6 @@ const SubCategoryPage = (props: any) => {
   const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory)
   useEffect(() => {
     //get subCategory data
-    console.log('category', category)
-    console.log('subCategory', subCategory)
     setSubCategoryData(inforCardList)
     getDataBizlisting(category, currenCategoryLink, page)
   }, [currentSubCategory, page]);
@@ -71,6 +69,7 @@ const SubCategoryPage = (props: any) => {
     console.log('subCategoryQuery', subCategory)
 
     const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, page)
+    console.log('dataBizlisting', dataBizlisting)
     if(get(dataBizlisting, 'data.data') && Array.isArray(get(dataBizlisting, 'data.data'))) {
       const rawBizlistingArray = get(dataBizlisting, 'data.data')
       let listingArray = rawBizlistingArray.map((item) => ({
@@ -169,14 +168,16 @@ const SubCategoryPage = (props: any) => {
               </div>
             ))}
         </div>
-        <Pagination 
-          limit={30}
-          total={total}
-          onPageChange={(page) => {
-            getDataBizlisting(category, subCategory, page?.selected)
-            setPage(page?.selected)
-          }} 
-        />
+        {total > 0 &&
+          <Pagination 
+              limit={30}
+              total={total}
+              onPageChange={(page) => {
+                getDataBizlisting(category, subCategory, page?.selected)
+                setPage(page?.selected)
+              }} 
+            />
+        }
         <TopSearches />
       </SectionLayout>
       <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
