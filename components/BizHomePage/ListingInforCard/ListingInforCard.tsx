@@ -57,7 +57,7 @@ const ReviewsFollowers = (props: {
       const userFavoriteList = userInfo.listing_favourite_ids;
       let checkIsFollow =
         Array.isArray(userFollowList) &&
-        userFollowList.some((item) => item === bizListing.id);
+        userFollowList.some((item) => item == bizListing.id);
       let checkIsFavourite =
         Array.isArray(userFavoriteList) &&
         userFavoriteList.some((item) => item === bizListing.id);
@@ -67,14 +67,14 @@ const ReviewsFollowers = (props: {
   }, []);
 
   const handleAddFollow = async () => {
-    const data = await UserFollowApi.createFollowing();
+    const data = await UserFollowApi.createFollowing(bizListing.id);
     if (get(data, "data")) {
-      setIsFavourite(true);
+      setIsFollow(true);
     }
   };
 
   const handleAddFavorite = async () => {
-    const data = await UserFavouriteApi.createFavourite();
+    const data = await UserFavouriteApi.createFavourite(bizListing.id);
     if (get(data, "data")) {
       setIsFavourite(true);
     }
