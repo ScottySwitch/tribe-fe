@@ -124,10 +124,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       icon: get(item, 'attributes.icon'),
       slug: get(item, 'attributes.slug'),
       id: item.id,
-      items: get(item, 'attributes.category_links.data').map((navItem) => ({
+      items: Array.isArray(get(item, 'attributes.category_links.data'))
+      ?
+      get(item, 'attributes.category_links.data').map((navItem) => ({
         label: get(navItem, 'attributes.label'),
         value: get(navItem, 'attributes.value'),
-      })),
+      }))
+      :
+      [],
     }))
     setNavList(categoryArray)
   }

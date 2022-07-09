@@ -47,8 +47,6 @@ const SubCategoryPage = (props: any) => {
   const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory)
   useEffect(() => {
     //get subCategory data
-    console.log('category', category)
-    console.log('subCategory', subCategory)
     setSubCategoryData(inforCardList)
     getDataBizlisting(category, currenCategoryLink, page)
   }, [currentSubCategory, page]);
@@ -71,7 +69,8 @@ const SubCategoryPage = (props: any) => {
     console.log('subCategoryQuery', subCategory)
 
     const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, page)
-    if(get(dataBizlisting, 'data.data')) {
+    console.log('dataBizlisting', dataBizlisting)
+    if(get(dataBizlisting, 'data.data') && Array.isArray(get(dataBizlisting, 'data.data'))) {
       const rawBizlistingArray = get(dataBizlisting, 'data.data')
       let listingArray = rawBizlistingArray.map((item) => ({
         images: item.images || [],
@@ -103,18 +102,18 @@ const SubCategoryPage = (props: any) => {
           {subCategory}
         </div>
         <Carousel responsive={homeBannerResponsive}>
-          {listingBanners?.map((img, index) => (
-            <div key={index} className={styles.banner_card}>
-              <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
-            </div>
-          ))}
+            {Array.isArray(listingBanners) ? listingBanners?.map((img, index) => (
+              <div key={index} className={styles.banner_card}>
+                <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
+              </div>
+            )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
           <div className="flex">
             <TabsHorizontal
-              tablist={listCategoryLink.slice(0, 5)}
+              tablist={Array.isArray(listCategoryLink) ? listCategoryLink.slice(0, 5) : []}
               type="secondary-no-outline"
               selectedTab={currentSubCategory}
               className="pt-[6px]"
@@ -127,7 +126,7 @@ const SubCategoryPage = (props: any) => {
               className={styles.sub_category_more}
               variant="no-outlined"
               size="small"
-              options={listCategoryLink.slice(5)}
+              options={Array.isArray(listCategoryLink) ? listCategoryLink.slice(5) : []}
               controlStyle={{ fontWeight: "bold", fontSize: "16px" }}
               placeholderStyle={{
                 fontWeight: "bold",
@@ -169,14 +168,16 @@ const SubCategoryPage = (props: any) => {
               </div>
             ))}
         </div>
-        <Pagination 
-          limit={30}
-          total={total}
-          onPageChange={(page) => {
-            getDataBizlisting(category, subCategory, page?.selected)
-            setPage(page?.selected)
-          }} 
-        />
+        {total > 0 &&
+          <Pagination 
+              limit={30}
+              total={total}
+              onPageChange={(page) => {
+                getDataBizlisting(category, subCategory, page?.selected)
+                setPage(page?.selected)
+              }} 
+            />
+        }
         <TopSearches />
       </SectionLayout>
       <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
@@ -188,9 +189,7 @@ export async function getServerSideProps(context) {
   const category = context.query.category
   const subCategory = context.query.subCategory
   const dataBanners = await BannerApi.getBannerByCategory(category)
-  // const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, 30)
   const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category)
-  let listingArray: any = []
   let listBannerArray: any = []
   let ListCategoryLinkArray: any = 
   [
@@ -201,42 +200,19 @@ export async function getServerSideProps(context) {
       icon: "https://picsum.photos/200/300",
     },
   ]
-
-  // if(get(dataBizlisting, 'data.data')) {
-  //   const rawBizlistingArray = get(dataBizlisting, 'data.data')
-  //   listingArray = rawBizlistingArray.map((item) => ({
-  //     images: item.images || [],
-  //     title: item.name,
-  //     slug: item.slug,
-  //     isVerified: item.is_verified,
-  //     address: item.address,
-  //     country: item.country,
-  //     description: item.description,
-  //     followerNumber: item.user_listing_follows.length,
-  //     tags: item.tags,
-  //     categories: item.categories,
-  //     price: get(item, 'price_range.min') || '',
-  //     rate: item.rate,
-  //     rateNumber: item.rate_number,
-  //   }))
-  // } 
-  if (get(dataBanners, 'data.data')) {
-    const rawListBanners = get(dataBanners, 'data.data')
-    listBannerArray = rawListBanners.map((item) => ({
-      imgUrl: item.image_url,
-      linkActive: item.link_active
-    }))
-  }
-  if (get(dataCategoryLinks, 'data.data')) {
-    const rawListCategory = get(dataCategoryLinks, 'data.data')
-    let arrayRawListCategoryLink = rawListCategory.map((item) => ({
-      icon: get(item, 'attributes.logo.url') || null,
-      label: get(item, 'attributes.label'),
-      value: get(item, 'attributes.value'),
-      slug: get(item, 'attributes.value')
-    }))
-    ListCategoryLinkArray = ListCategoryLinkArray.concat(arrayRawListCategoryLink)
-  }
+  const rawListBanners = get(dataBanners, 'data.data')
+  const rawListCategory = get(dataCategoryLinks, 'data.data')
+  listBannerArray = Array.isArray(rawListBanners) && rawListBanners.map((item) => ({
+    imgUrl: item.image_url,
+    linkActive: item.link_active
+  }))
+  let arrayRawListCategoryLink = Array.isArray(rawListCategory) && rawListCategory.map((item) => ({
+    icon: get(item, 'attributes.logo.url') || null,
+    label: get(item, 'attributes.label'),
+    value: get(item, 'attributes.value'),
+    slug: get(item, 'attributes.value')
+  }))
+  ListCategoryLinkArray = Array.isArray(arrayRawListCategoryLink) && ListCategoryLinkArray.concat(arrayRawListCategoryLink)
   return {
     props: {
       // bizListings: listingArray,

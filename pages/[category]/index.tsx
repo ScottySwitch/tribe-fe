@@ -89,24 +89,24 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout>
         <Carousel responsive={homeBannerResponsive}>
-          {listingBanners?.map((img, index) => (
-            <div 
-              key={index} 
-              className={styles.banner_card}
-              onClick={() => {
-                window.location.href = `${img.linkActive}`
-              }}
-            >
-              <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
-            </div>
-          ))}
+            {Array.isArray(listingBanners) ? listingBanners?.map((img, index) => (
+              <div 
+                key={index} 
+                className={styles.banner_card}
+                onClick={() => {
+                  window.location.href = `${img.linkActive}`
+                }}
+              >
+                <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
+              </div>
+            )) : <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout
         title="Explore by Top Categories"
         childrenClassName="flex gap-[100px] flex-wrap"
       >
-        {listCategoryLink.map((item, index) => (
+        {Array.isArray(listCategoryLink) && listCategoryLink.map((item, index) => (
           <div
             key={index}
             className={styles.sub_category}
@@ -121,38 +121,38 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout title="Exclusive deals">
         <Carousel responsive={infoCardResponsive}>
-          {listingExclusiveDeal?.map((card) => (
-            <div key={card.title} className="pb-5">
-              <InforCard
-                imgUrl={card.images[0]}
-                title={card.title}
-                rate={card.rate}
-                rateNumber={card.rateNumber}
-                followerNumber={card.followerNumber}
-                price={card.price}
-                categories={card.categories}
-                tags={card.tags}
-                isVerified={card.isVerified}
-                onClick={() => {
-                  window.location.href = `/biz/home/${card.slug}`
-                }}
-              />
-            </div>
-          ))}
+            {Array.isArray(listingExclusiveDeal) ? listingExclusiveDeal?.map((card) => (
+              <div key={card.title} className="pb-5">
+                <InforCard
+                  imgUrl={card.images[0]}
+                  title={card.title}
+                  rate={card.rate}
+                  rateNumber={card.rateNumber}
+                  followerNumber={card.followerNumber}
+                  price={card.price}
+                  categories={card.categories}
+                  tags={card.tags}
+                  isVerified={card.isVerified}
+                  onClick={() => {
+                    window.location.href = `/biz/home/${card.slug}`
+                  }}
+                />
+              </div>
+            )) : <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout backgroundColor title="Specially Curated For You">
         <Carousel responsive={homeCuratedResponsive}>
-          {listCollections?.map((item, index) => (
-            <div key={index} className="pb-5">
-              <CollectionCard title={item.title} imgUrl={item.imgUrl} />
-            </div>
-          ))}
+            {Array.isArray(listCollections) ? listCollections?.map((item, index) => (
+              <div key={index} className="pb-5">
+                <CollectionCard title={item.title} imgUrl={item.imgUrl} />
+              </div>
+            )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout title="Where to BUY">
         <Carousel responsive={infoCardResponsive}>
-          {listingBuy?.map((card) => (
+          {Array.isArray(listingBuy) ? listingBuy?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -169,12 +169,12 @@ const Category = (props: any) => {
                 }}
               />
             </div>
-          ))}
+          )) : <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout title="What to SEE">
         <Carousel responsive={infoCardResponsive}>
-          {listingSee?.map((card) => (
+          {Array.isArray(listingSee) ? listingSee?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -191,7 +191,7 @@ const Category = (props: any) => {
                 }}
               />
             </div>
-          ))}
+          )): <div></div>}
         </Carousel>
       </SectionLayout>
       <SectionLayout backgroundColor title="Featured Articles">
@@ -209,7 +209,7 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout title="What to EAT">
         <Carousel responsive={infoCardResponsive}>
-          {listingEat?.map((card) => (
+          {Array.isArray(listingEat) ? listingEat?.map((card) => (
             <div key={card.title} className="pb-5">
               <InforCard
                 imgUrl={card.images[0]}
@@ -226,7 +226,7 @@ const Category = (props: any) => {
                 }}
               />
             </div>
-          ))}
+          )): <div></div>}
         </Carousel>
       </SectionLayout>
       {/* <SectionLayout childrenClassName="flex justify-center">
@@ -271,97 +271,87 @@ export async function getServerSideProps(context) {
     let listingExclusiveDealArray: any = []
     let listCollectionArray: any = []
     let ListCategoryLinkArray: any = []
-    if(get(data, 'data.data')) {
-      const rawListingBuyArray = get(data, 'data.data[0]')
-      const rawListingSeeArray = get(data, 'data.data[1]')
-      const rawListingEatAray = get(data, 'data.data[2]')
-      listingBuyArray = rawListingBuyArray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, 'price_range.min') || '',
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }))
-      listingSeeArray = rawListingSeeArray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, 'price_range.min') || '',
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }))
-      listingEatArray = rawListingEatAray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, 'price_range.min') || '',
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }))
-    }
-    if (get(dataExclusiveDeal, 'data.data')) {
-      const rawListingExclusiveDealAray = get(dataExclusiveDeal, 'data.data')
-      listingExclusiveDealArray = rawListingExclusiveDealAray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, 'price_range.min') || '',
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }))
-    }
-    if (get(dataBanners, 'data.data')) {
-      const rawListBanners = get(dataBanners, 'data.data')
-      listBannerArray = rawListBanners.map((item) => ({
-        imgUrl: item.image_url,
-        linkActive: item.link_active
-      }))
-    }
-    if (get(dataCollections, 'data.data')) {
-      const rawListCollections = get(dataCollections, 'data.data')
-      listCollectionArray = rawListCollections.map((item) => ({
-        imgUrl: item.thumbnail || null,
-        slug: item.slug,
-        title: item.name
-      }))
-    }
-    if (get(dataCategoryLinks, 'data.data')) {
-      const rawListCategory = get(dataCategoryLinks, 'data.data')
-      ListCategoryLinkArray = rawListCategory.map((item) => ({
-        icon: get(item, 'attributes.logo.url') || null,
-        label: get(item, 'attributes.label'),
-        slug: get(item, 'attributes.value')
-      }))
-    }
+    const rawListingBuyArray = get(data, 'data.data[0]')
+    const rawListingSeeArray = get(data, 'data.data[1]')
+    const rawListingEatAray = get(data, 'data.data[2]')
+    const rawListingExclusiveDealAray = get(dataExclusiveDeal, 'data.data')
+    const rawListBanners = get(dataBanners, 'data.data')
+    const rawListCollections = get(dataCollections, 'data.data')
+    const rawListCategory = get(dataCategoryLinks, 'data.data')
+    listingBuyArray = Array.isArray(rawListingBuyArray) &&  rawListingBuyArray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+    listingSeeArray = Array.isArray(rawListingSeeArray) && rawListingSeeArray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+    listingEatArray = Array.isArray(rawListingEatAray) && rawListingEatAray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+    listingExclusiveDealArray = Array.isArray(rawListingExclusiveDealAray) && rawListingExclusiveDealAray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, 'price_range.min') || '',
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }))
+    listBannerArray = Array.isArray(rawListBanners) && rawListBanners.map((item) => ({
+      imgUrl: item.image_url,
+      linkActive: item.link_active
+    }))
+    listCollectionArray = Array.isArray(rawListCollections) && rawListCollections.map((item) => ({
+      imgUrl: item.thumbnail || null,
+      slug: item.slug,
+      title: item.name
+    }))
+    ListCategoryLinkArray = Array.isArray(rawListCategory) && rawListCategory.map((item) => ({
+      icon: get(item, 'attributes.logo.url') || null,
+      label: get(item, 'attributes.label'),
+      slug: get(item, 'attributes.value')
+    }))
   return {
     props: {
       listingBuy: listingBuyArray,
