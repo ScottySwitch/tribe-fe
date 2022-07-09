@@ -1,72 +1,93 @@
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import classNames from "classnames"
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import classNames from "classnames";
 
-import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import Modal from "components/Modal/Modal"
-import Upload from "components/Upload/Upload"
+import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import Modal from "components/Modal/Modal";
+import Upload from "components/Upload/Upload";
 
-import UserFollowApi from "services/user-listing-follow"
-import UserFavouriteApi from "services/user-listing-favourite"
+import UserFollowApi from "services/user-listing-follow";
+import UserFavouriteApi from "services/user-listing-favourite";
 
-import styles from "./ListingInforCard.module.scss"
-import { get } from "lodash"
+import styles from "./ListingInforCard.module.scss";
+import { get } from "lodash";
 
 interface ListingInforCardProps {
-  isViewPage?: boolean
-  bizListing: { [key: string]: any }
-  priceRange: { min: string; max: string; currency: string }
-  socialInfo: string
-  phoneNumber: string
-  logo?: any
-  userInfo?: any,
-  handleChangeLogo?: (srcImages: string[]) => void
-  onSetPriceRange?: (value: { min: string; max: string; currency: string }) => void
-  onSetSocialInfo?: (value: string) => void
-  onSetPhoneNumber?: (value: string | number) => void
+  isViewPage?: boolean;
+  bizListing: { [key: string]: any };
+  priceRange: { min: string; max: string; currency: string };
+  socialInfo: string;
+  phoneNumber: string;
+  logo?: any;
+  userInfo?: any;
+  handleChangeLogo?: (srcImages: string[]) => void;
+  onSetPriceRange?: (value: {
+    min: string;
+    max: string;
+    currency: string;
+  }) => void;
+  onSetSocialInfo?: (value: string) => void;
+  onSetPhoneNumber?: (value: string | number) => void;
 }
 
-const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; bizListing: any; userInfo?: any }) => {
-  const { isViewPage, className, bizListing, userInfo } = props
-  const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
-  console.log('bizListing', bizListing)
-  console.log('userInfo', userInfo)
-  const bizListingReviewCount = get(bizListing, "reviews.length") || 0
-  const bizListingFollowerCount = get(bizListing, "user_listing_follows.length") || 0
-  const [isFollow, setIsFollow] = useState<boolean>(false)
-  const [isFavourite, setIsFavourite] = useState<boolean>(false)
+const ReviewsFollowers = (props: {
+  isViewPage?: boolean;
+  className?: string;
+  bizListing: any;
+  userInfo?: any;
+}) => {
+  const { isViewPage, className, bizListing, userInfo } = props;
+  const reviewsFollowersClassName = classNames(
+    styles.reviews_followers_container,
+    className
+  );
+  console.log("bizListing", bizListing);
+  console.log("userInfo", userInfo);
+  const bizListingReviewCount = get(bizListing, "reviews.length") || 0;
+  const bizListingFollowerCount =
+    get(bizListing, "user_listing_follows.length") || 0;
+  const [isFollow, setIsFollow] = useState<boolean>(false);
+  const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
   useEffect(() => {
-      if (userInfo) {
-        let checkIsFollow = userInfo.listing_follow_ids.some((item) => item === bizListing.id)
-        let checkIsFavourite = userInfo.listing_favourite_ids.some((item) => item === bizListing.id)
-        setIsFollow(checkIsFollow)
-        setIsFavourite(checkIsFavourite)
-      }
-  }, [])
+    if (userInfo) {
+      const userFollowList = userInfo.listing_follow_ids;
+      const userFavoriteList = userInfo.listing_favourite_ids;
+      let checkIsFollow =
+        Array.isArray(userFollowList) &&
+        userFollowList.some((item) => item === bizListing.id);
+      let checkIsFavourite =
+        Array.isArray(userFavoriteList) &&
+        userFavoriteList.some((item) => item === bizListing.id);
+      setIsFollow(checkIsFollow);
+      setIsFavourite(checkIsFavourite);
+    }
+  }, []);
 
   const handleAddFollow = async () => {
-    const data = await UserFollowApi.createFollowing()
-    if (get(data, 'data')) {
-      setIsFavourite(true)
+    const data = await UserFollowApi.createFollowing();
+    if (get(data, "data")) {
+      setIsFavourite(true);
     }
-  }
+  };
 
   const handleAddFavorite = async () => {
-    const data = await UserFavouriteApi.createFavourite()
-    if (get(data, 'data')) {
-      setIsFavourite(true)
+    const data = await UserFavouriteApi.createFavourite();
+    if (get(data, "data")) {
+      setIsFavourite(true);
     }
-  }
+  };
 
   return (
     <div>
       {isViewPage && (
         <div className="flex gap-3 mb-2">
-          <Button 
-            text="Follow" size="small" width={130} 
+          <Button
+            text="Follow"
+            size="small"
+            width={130}
             onClick={handleAddFollow}
             disabled={isFollow}
           />
@@ -83,28 +104,37 @@ const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; biz
       <div className={reviewsFollowersClassName}>
         <div className={styles.reviews}>
           {/*// TODO: currently review star is image*/}
-          <Image src={require("public/images/no-review-star.svg")} width={80} height={40} alt="" />
+          <Image
+            src={require("public/images/no-review-star.svg")}
+            width={80}
+            height={40}
+            alt=""
+          />
           <p>
-            ({bizListingReviewCount} review{bizListingReviewCount > 1 ? "s" : ""})
+            ({bizListingReviewCount} review
+            {bizListingReviewCount > 1 ? "s" : ""})
           </p>
         </div>
         <div className={styles.followers}>
-          <div className="h-[40px] flex items-center">{bizListingFollowerCount}</div>
+          <div className="h-[40px] flex items-center">
+            {bizListingFollowerCount}
+          </div>
           <p>follower{bizListingFollowerCount > 1 ? "s" : ""}</p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Price = ({ isViewPage, newPriceRange, onSetShowPriceRangeModal }) => {
-  const isDataAvailable = newPriceRange?.currency && newPriceRange.min && newPriceRange.max
+  const isDataAvailable =
+    newPriceRange?.currency && newPriceRange.min && newPriceRange.max;
   if (isViewPage) {
     return isDataAvailable ? (
       <div>{`${newPriceRange.min} ${newPriceRange?.currency} - ${newPriceRange.max}  ${newPriceRange?.currency}`}</div>
     ) : (
       <div>Not provided</div>
-    )
+    );
   }
   return isDataAvailable ? (
     <div className="flex gap-5">
@@ -115,10 +145,14 @@ const Price = ({ isViewPage, newPriceRange, onSetShowPriceRangeModal }) => {
     </div>
   ) : (
     <a onClick={() => onSetShowPriceRangeModal(true)}>Add price range</a>
-  )
-}
+  );
+};
 
-const SocialInfo = ({ isViewPage, newSocialInfo, onSetShowSocialInfoModal }) => {
+const SocialInfo = ({
+  isViewPage,
+  newSocialInfo,
+  onSetShowSocialInfoModal,
+}) => {
   if (isViewPage) {
     return newSocialInfo ? (
       <a target="_blank" rel="noreferrer" href={newSocialInfo}>
@@ -126,7 +160,7 @@ const SocialInfo = ({ isViewPage, newSocialInfo, onSetShowSocialInfoModal }) => 
       </a>
     ) : (
       <div>Not provided</div>
-    )
+    );
   }
   return newSocialInfo ? (
     <div className="flex gap-5">
@@ -139,8 +173,8 @@ const SocialInfo = ({ isViewPage, newSocialInfo, onSetShowSocialInfoModal }) => 
     </div>
   ) : (
     <a onClick={() => onSetShowSocialInfoModal(true)}>Add social media</a>
-  )
-}
+  );
+};
 
 const PhoneNumber = ({ isViewPage, phoneNumber, onSetPhoneNumberModal }) => {
   if (isViewPage) {
@@ -150,7 +184,7 @@ const PhoneNumber = ({ isViewPage, phoneNumber, onSetPhoneNumberModal }) => {
       </a>
     ) : (
       <div>Not provided</div>
-    )
+    );
   }
   return phoneNumber ? (
     <div className="flex gap-5">
@@ -163,8 +197,8 @@ const PhoneNumber = ({ isViewPage, phoneNumber, onSetPhoneNumberModal }) => {
     </div>
   ) : (
     <a onClick={() => onSetPhoneNumberModal(true)}>Add phone number</a>
-  )
-}
+  );
+};
 
 const ListingInforCard = (props: ListingInforCardProps) => {
   const {
@@ -179,24 +213,26 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     onSetSocialInfo,
     onSetPhoneNumber,
     onSetPriceRange,
-  } = props
+  } = props;
   const [newPriceRange, setNewPriceRange] = useState<{
-    min: string
-    max: string
-    currency: string
-  }>(priceRange || {})
-  const [newPhoneNumber, setNewPhoneNumber] = useState<string | number>(phoneNumber)
-  const [newSocialInfo, setNewSocialInfo] = useState<string>(socialInfo)
+    min: string;
+    max: string;
+    currency: string;
+  }>(priceRange || {});
+  const [newPhoneNumber, setNewPhoneNumber] = useState<string | number>(
+    phoneNumber
+  );
+  const [newSocialInfo, setNewSocialInfo] = useState<string>(socialInfo);
 
-  const [showPriceRangeModal, setShowPriceRangeModal] = useState(false)
-  const [showSocialInfoModal, setShowSocialInfoModal] = useState(false)
-  const [showPhoneNumberModal, setPhoneNumberModal] = useState(false)
+  const [showPriceRangeModal, setShowPriceRangeModal] = useState(false);
+  const [showSocialInfoModal, setShowSocialInfoModal] = useState(false);
+  const [showPhoneNumberModal, setPhoneNumberModal] = useState(false);
 
   const CenterIcon = () => (
     <div className="flex flex-col justify-center items-center gap-1">
       <Icon icon="camera-color" size={40} />
     </div>
-  )
+  );
   return (
     <div className={styles.listing_infor_card}>
       <div className={styles.listing_infor_container}>
@@ -212,7 +248,10 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             />
           </div>
           {bizListing && (
-            <ReviewsFollowers className={styles.reviews_followers_mobile} bizListing={bizListing} />
+            <ReviewsFollowers
+              className={styles.reviews_followers_mobile}
+              bizListing={bizListing}
+            />
           )}
         </div>
         <div className={styles.detail}>
@@ -220,7 +259,11 @@ const ListingInforCard = (props: ListingInforCardProps) => {
           <div className={styles.contact}>
             <div className={styles.contact_left}>
               <Icon icon="map" size={20} />
-              {isViewPage ? bizListing.address : <div>{bizListing.address}</div>}
+              {isViewPage ? (
+                bizListing.address
+              ) : (
+                <div>{bizListing.address}</div>
+              )}
             </div>
             <div className={styles.contact_right}>
               <Icon icon="phone-color" size={20} />
@@ -263,8 +306,8 @@ const ListingInforCard = (props: ListingInforCardProps) => {
         mobilePosition="center"
         width={600}
         onClose={() => {
-          setNewPriceRange(priceRange)
-          setShowPriceRangeModal(false)
+          setNewPriceRange(priceRange);
+          setShowPriceRangeModal(false);
         }}
       >
         <div className="px-[30px] py-5">
@@ -307,8 +350,8 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             text="Submit"
             size="small"
             onClick={() => {
-              onSetPriceRange?.(newPriceRange)
-              setShowPriceRangeModal(false)
+              onSetPriceRange?.(newPriceRange);
+              setShowPriceRangeModal(false);
             }}
           />
         </div>
@@ -319,8 +362,8 @@ const ListingInforCard = (props: ListingInforCardProps) => {
         mobilePosition="center"
         width={600}
         onClose={() => {
-          setNewSocialInfo(socialInfo)
-          setShowSocialInfoModal(false)
+          setNewSocialInfo(socialInfo);
+          setShowSocialInfoModal(false);
         }}
       >
         <div className="px-[30px] py-5">
@@ -334,8 +377,8 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             text="Submit"
             size="small"
             onClick={() => {
-              onSetSocialInfo?.(newSocialInfo)
-              setShowSocialInfoModal(false)
+              onSetSocialInfo?.(newSocialInfo);
+              setShowSocialInfoModal(false);
             }}
           />
         </div>
@@ -346,8 +389,8 @@ const ListingInforCard = (props: ListingInforCardProps) => {
         mobilePosition="center"
         width={600}
         onClose={() => {
-          setNewPhoneNumber(phoneNumber)
-          setPhoneNumberModal(false)
+          setNewPhoneNumber(phoneNumber);
+          setPhoneNumberModal(false);
         }}
       >
         <div className="px-[30px] py-5">
@@ -361,14 +404,14 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             text="Submit"
             size="small"
             onClick={() => {
-              onSetPhoneNumber?.(newPhoneNumber)
-              setPhoneNumberModal(false)
+              onSetPhoneNumber?.(newPhoneNumber);
+              setPhoneNumberModal(false);
             }}
           />
         </div>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default ListingInforCard
+export default ListingInforCard;
