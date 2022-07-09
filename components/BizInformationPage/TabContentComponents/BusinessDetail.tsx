@@ -21,9 +21,13 @@ interface BusinessDetailProps {
 
 const BusinessDetail = (props: BusinessDetailProps) => {
   const { listing, loading, onSubmit } = props;
-
+  const category = get(listing, "categories[0].order");
   const rawProductBrands = get(listing, "product_brands");
   const rawProductTypes = get(listing, "product_types");
+  const generateOption = (item) => ({
+    label: item.label,
+    value: item.id,
+  });
 
   const viewBusinessDetailData = {
     categoryLinks: get(listing, "category_links[0]"),
@@ -32,17 +36,17 @@ const BusinessDetail = (props: BusinessDetailProps) => {
     minPrice: get(listing, "price_range.min"),
     maxPrice: get(listing, "price_range.max"),
     currency: get(listing, "price_range.currency"),
-    describeTags: get(listing, "tags").map((item) => item.id?.toString()),
-    describeTagLabels: get(listing, "tags").map((item) => item.label),
+    describeTags: get(listing, "tags").map((item) => item.id.toString()),
+    viewDescribeTags: get(listing, "tags").map((item) => item.label),
     productTypes:
       Array.isArray(rawProductTypes) &&
-      rawProductTypes.map((type) => type.id.toString()),
+      rawProductTypes.map((type) =>
+        //in category BUY productTypes require array of product type ids when others need object[]
+        category === Categories.BUY ? type.id.toString() : generateOption(type)
+      ),
     productBrands:
       Array.isArray(rawProductBrands) &&
-      rawProductBrands.map((brand) => ({
-        label: brand.label,
-        value: brand.id,
-      })),
+      rawProductBrands.map((brand) => generateOption(brand)),
 
     additionalServices: get(listing, "facilities_data.additionalServices"),
     atmosphere: get(listing, "facilities_data.atmosphere"),
@@ -111,14 +115,14 @@ const BusinessDetail = (props: BusinessDetailProps) => {
           />
         );
         break;
-      // case Categories.SEE_AND_DO:
-      //   detail = (
-      //     <BusinessDetailSeeAndDo
-      //       formData={formData}
-      //       submitFormData={submitFormData}
-      //     />
-      //   );
-      //   break;
+      case Categories.SEE_AND_DO:
+        detail = (
+          <BusinessDetailSeeAndDo
+            formData={viewBusinessDetailData}
+            submitFormData={submitFormData}
+          />
+        );
+        break;
       // case Categories.TRANSPORT:
       //   detail = (
       //     <BusinessDetailTransport

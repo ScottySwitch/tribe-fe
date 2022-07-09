@@ -24,7 +24,7 @@ import Break from "components/Break/Break";
 import Upload from "components/Upload/Upload";
 import Icon from "components/Icon/Icon";
 import OpenHours from "components/OpenHours/OpenHours";
-import { YesNo } from "enums";
+import { Categories, YesNo } from "enums";
 import { IOption } from "type";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
 import TagsSelection from "components/TagsSelection/TagsSelection";
@@ -36,9 +36,8 @@ import ProductTypeApi from "../../../../services/product-type";
 
 interface AddEatInforProps {
   isEdit?: boolean;
-  subCateList: IOption[];
   facilityMode?: boolean;
-  data?: IAddListingForm;
+  data: { [key: string]: any };
   show?: boolean;
   onPrevPage?: () => void;
   onPreview?: (data: IAddListingForm) => void;
@@ -49,7 +48,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
   const {
     data,
     isEdit,
-    subCateList,
     facilityMode,
     show = true,
     onPrevPage,
@@ -59,38 +57,44 @@ const AddEatInfor = (props: AddEatInforProps) => {
 
   const { register, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
-      categoryLinks: data?.categoryLinks,
-      productTypes: data?.productTypes,
-      describeTags: data?.describeTags,
-      minPrice: data?.minPrice,
-      maxPrice: data?.maxPrice,
-      mealsKind: data?.mealsKind,
-      images: data?.images,
-      placeGoodFor: data?.placeGoodFor,
-      parking: data?.parking,
-      atmosphere: data?.atmosphere,
-      payment: data?.payment,
-      additionalServices: data?.additionalServices,
-      agreePolicies: data?.agreePolicies,
-      currency: data?.currency,
-      openHours: data?.openHours,
+      categoryLinks: data.categoryLinks,
+      productTypes: data.productTypes,
+      describeTags: data.describeTags,
+      minPrice: data.minPrice,
+      maxPrice: data.maxPrice,
+      mealsKind: data.mealsKind,
+      images: data.images,
+      placeGoodFor: data.placeGoodFor,
+      parking: data.parking,
+      atmosphere: data.atmosphere,
+      payment: data.payment,
+      additionalServices: data.additionalServices,
+      agreePolicies: data.agreePolicies,
+      currency: data.currency,
+      openHours: data.openHours,
     },
   });
 
+  useEffect(() => {
+    console.log(data.mealsKind);
+  }, [data]);
+
+  const initCategoryLink = get(data, "categoryLinks.id") || "";
+
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
-
   const [categoryLinks, setCategoryLinks] = useState<any>([]);
-  const [selectCategoryLink, setSelectCategoryLink] = useState<
-    string | undefined
-  >(getValues("categoryLinks"));
+  const [selectCategoryLink, setSelectCategoryLink] =
+    useState<string>(initCategoryLink);
   const [productTypes, setProductTypes] = useState<any>([]);
   const [describeTags, setDescribeTags] = useState<any>([]);
 
   useEffect(() => {
     // Category links
     const getCategoryLinks = async () => {
-      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(2);
+      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(
+        Categories.EAT
+      );
       const categoryLinks = get(data, "data.data");
       setCategoryLinks(categoryLinks);
     };
@@ -100,24 +104,26 @@ const AddEatInfor = (props: AddEatInforProps) => {
     const getTags = async () => {
       const data = await TagApi.getTags();
       const tags = get(data, "data.data");
+      console.log('tags------',tags)
       setDescribeTags(tags);
     };
     getTags().catch((e) => console.log(e));
 
     // Product type
     const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(2);
+      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
+        selectCategoryLink
+      );
       const productTypes = get(data, "data.data");
-      const mapProductTypes: any = [];
-      Array.isArray(productTypes) &&
-        productTypes.map((mapProductType) => {
-          mapProductTypes.push({
-            value: mapProductType.id,
-            label: mapProductType.attributes.label,
-          });
-        });
+      const mapProductTypes =
+        Array.isArray(productTypes) &&
+        productTypes.map((type) => ({
+          value: type.id,
+          label: get(type, "attributes.label"),
+        }));
       setProductTypes(mapProductTypes);
     };
+
     getProductTypes().catch((e) => console.log(e));
   }, []);
 
@@ -125,10 +131,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
     onPreview?.(data);
     onEdit?.(data);
   };
-
-  if (!show) {
-    return null;
-  }
 
   const title = facilityMode
     ? undefined
@@ -143,6 +145,26 @@ const AddEatInfor = (props: AddEatInforProps) => {
     : "After you complete this form, you will be able to make changes before submitting.";
 
   const sectionContainer = facilityMode ? "pt-0" : undefined;
+
+  const handleSelectCategoryLink = async (opt) => {
+    setValue("categoryLinks", opt.id);
+    setSelectCategoryLink(opt.id);
+
+    const data = await ProductTypeApi.getProductTypeByCategoryLinkId(opt.id);
+    const productTypes = get(data, "data.data");
+    const mapProductTypes =
+      Array.isArray(productTypes) &&
+      productTypes.map((type) => ({
+        value: type.id,
+        label: get(type, "attributes.label"),
+      }));
+    setProductTypes(mapProductTypes);
+    setValue("productTypes", []);
+  };
+
+  if (!show) {
+    return null;
+  }
 
   return (
     <>
@@ -162,12 +184,9 @@ const AddEatInfor = (props: AddEatInforProps) => {
                 categoryLinks.map((opt) => (
                   <Badge
                     key={opt.id}
-                    text={opt.attributes.label}
+                    text={get(opt, "attributes.label")}
                     selected={selectCategoryLink === opt.id}
-                    onClick={() => {
-                      setValue("categoryLinks", opt.id);
-                      setSelectCategoryLink(opt.id);
-                    }}
+                    onClick={() => handleSelectCategoryLink(opt)}
                   />
                 ))}
             </div>
@@ -212,7 +231,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                 describeTags.map((item) => (
                   <Checkbox
                     key={item.id}
-                    label={item.attributes.label}
+                    label={get(item, "attributes.label")}
                     // name="tags"
                     value={item.id}
                     className="w-full sm:w-1/2"
@@ -403,6 +422,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
         onClose={() => setShowTagsModal(false)}
       >
         <TagsSelection
+          key={getValues("productTypes")}
           options={productTypes}
           selectedList={getValues("productTypes")}
           onCancel={() => setShowTagsModal(false)}
@@ -423,7 +443,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
           onCancel={() => setShowOpenHoursModal(false)}
           onSubmit={(openHours) => {
             setShowOpenHoursModal(false);
-            console.log(openHours);
             setValue("openHours", openHours);
           }}
         />

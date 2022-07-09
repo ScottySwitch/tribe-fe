@@ -16,11 +16,6 @@ import OpenHours from "components/OpenHours/OpenHours";
 import { Categories, YesNo } from "enums";
 import TagsSelection from "components/TagsSelection/TagsSelection";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
-import {
-  buyAssociatedCategories,
-  productTypes,
-  decribePlaceList,
-} from "../constant";
 import { IOption } from "type";
 import { IAddListingForm } from "pages/add-listing";
 import Select from "components/Select/Select";
@@ -57,9 +52,11 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       openHours: data.openHours,
     },
   });
-  const [selectCategoryLink, setSelectCategoryLink] = useState<string>(
-    get(data, "categoryLinks.id")
-  );
+
+  const initCategoryLink = get(data, "categoryLinks.id") || "";
+
+  const [selectCategoryLink, setSelectCategoryLink] =
+    useState<string>(initCategoryLink);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [categoryLinks, setCategoryLinks] = useState<any>([]);
@@ -125,12 +122,10 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
     setValue("productBrands", []);
     setProductBrands([]);
 
-    const newProductTypes = selectedProductTypes.includes(option)
+    const newProductTypes = selectedProductTypes.some((item) => item == option)
       ? selectedProductTypes.filter((item) => !(item == option))
       : [...selectedProductTypes, option];
     setSelectedProductTypes(newProductTypes);
-
-    console.log(newProductTypes);
 
     ProductBrandApi.getProductBrandByProductTypeId(newProductTypes)
       .then((res) => {

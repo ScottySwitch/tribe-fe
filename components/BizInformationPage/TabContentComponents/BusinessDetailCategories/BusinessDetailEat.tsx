@@ -18,7 +18,7 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
   const { formData, submitFormData } = props;
   const {
     categoryLinks,
-    tags,
+    viewProductTypes,
     openHours,
     minPrice,
     maxPrice,
@@ -52,10 +52,9 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
           question="What cuisines would you use to describe this place?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {Array.isArray(tags) &&
-            tags.map((item) => (
-              <Badge variant="no-outlined" key={item} text={item} />
-            ))}
+          {viewProductTypes?.map((item) => (
+            <Badge variant="no-outlined" key={item} text={item.label} />
+          ))}
         </Question>
         <Question question="What are the opening hours?" optional>
           <PreviewValue valueKey="openHours" value={openHours} />
@@ -129,7 +128,6 @@ const BusinessDetailEat = (props: BusinessDetailProps) => {
         </div>
       </SectionLayout>
       <AddEatInfor
-        subCateList={fakeSubCateList}
         data={formData}
         show={isEdit}
         isEdit={true}

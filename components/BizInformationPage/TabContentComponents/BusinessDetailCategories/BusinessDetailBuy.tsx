@@ -11,7 +11,7 @@ import { IAddListingForm } from "pages/add-listing";
 import React, { useState } from "react";
 
 interface BusinessDetailProps {
-  formData: any;
+  formData: { [key: string]: any };
   submitFormData?: (form: IAddListingForm) => void;
 }
 
@@ -19,8 +19,6 @@ const BusinessDetailBuy = (props: BusinessDetailProps) => {
   const { formData, submitFormData } = props;
   const {
     categoryLinks,
-    tags,
-    describePlace,
     openHours,
     minPrice,
     maxPrice,

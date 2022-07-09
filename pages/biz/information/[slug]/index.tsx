@@ -42,6 +42,7 @@ const BizInformation = (props) => {
 
       if (data.data.data.length > 0) {
         const listing = get(data, "data.data[0]") || {};
+        console.log("business information", listing);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
         const isPaidListing = get(listing, "biz_invoices.length") > 0;

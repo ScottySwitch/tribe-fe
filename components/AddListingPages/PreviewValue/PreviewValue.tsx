@@ -9,7 +9,6 @@ const PreviewValue = ({
   value: any;
 }) => {
   let result = <div></div>;
-  console.log("aaaaaaaa", valueKey, value);
   if (valueKey === "openHours") {
     return (
       <div>
