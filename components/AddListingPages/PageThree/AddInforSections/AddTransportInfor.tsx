@@ -24,6 +24,7 @@ import { currencyOptions } from "constant";
 import CategoryLinkApi from "../../../../services/category-link";
 import TagApi from "../../../../services/tag";
 import ProductTypeApi from "../../../../services/product-type";
+import { getOptionsMappedFromResponse } from "utils";
 
 interface AddTransportInforProps {
   isEdit?: boolean;
@@ -77,31 +78,16 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
 
   useEffect(() => {
     // Category links
-    const getCategoryLinks = async () => {
-      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(
-        Categories.TRANSPORT
-      );
-      const categoryLinks = get(data, "data.data");
-      setCategoryLinks(categoryLinks);
-    };
-    getCategoryLinks().catch((e) => console.log(e));
+    CategoryLinkApi.getCategoryLinksByCategoryId(Categories.TRANSPORT)
+      .then((res) => setCategoryLinks(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
 
-    // Product type
-    const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
-        selectCategoryLink
-      );
-      const productTypes = get(data, "data.data");
-      const mapProductTypes =
-        Array.isArray(productTypes) &&
-        productTypes.map((type) => ({
-          value: type.id,
-          label: get(type, "attributes.label"),
-        }));
-      setProductTypes(mapProductTypes);
-    };
+    //Product types
+    ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink)
+      .then((res) => setProductTypes(getOptionsMappedFromResponse(res)))
+      .catch((e) => console.log(e));
 
-    getProductTypes().catch((e) => console.log(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectCategoryLink = async (opt) => {
@@ -109,15 +95,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
     setSelectCategoryLink(opt.id);
 
     const data = await ProductTypeApi.getProductTypeByCategoryLinkId(opt.id);
-    const productTypes = get(data, "data.data");
-    const mapProductTypes =
-      Array.isArray(productTypes) &&
-      productTypes.map((type) => ({
-        value: type.id,
-        label: get(type, "attributes.label"),
-      }));
-
-    setProductTypes(mapProductTypes);
+    setProductTypes(getOptionsMappedFromResponse(data));
     setValue("productTypes", []);
   };
 

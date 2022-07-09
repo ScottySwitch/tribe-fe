@@ -10,7 +10,7 @@ import Checkbox from "components/Checkbox/Checkbox";
 import Break from "components/Break/Break";
 import Modal from "components/Modal/Modal";
 import OpenHours from "components/OpenHours/OpenHours";
-import { YesNo } from "enums";
+import { Categories, YesNo } from "enums";
 import {
   accommodation,
   areas,
@@ -31,6 +31,7 @@ import CategoryLinkApi from "../../../../services/category-link";
 import get from "lodash/get";
 import TagApi from "../../../../services/tag";
 import ProductTypeApi from "../../../../services/product-type";
+import { getOptionsMappedFromResponse } from "utils";
 
 interface AddStayInforProps {
   isEdit?: boolean;
@@ -90,36 +91,20 @@ const AddStayInfor = (props: AddStayInforProps) => {
 
   useEffect(() => {
     // Category links
-    const getCategoryLinks = async () => {
-      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(5);
-      const categoryLinks = get(data, "data.data");
-      setCategoryLinks(categoryLinks);
-    };
-    getCategoryLinks().catch((e) => console.log(e));
+    CategoryLinkApi.getCategoryLinksByCategoryId(Categories.STAY)
+      .then((res) => setCategoryLinks(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
 
-    // Product type
-    const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
-        selectCategoryLink
-      );
-      const productTypes = get(data, "data.data");
-      const mapProductTypes =
-        Array.isArray(productTypes) &&
-        productTypes.map((type) => ({
-          value: type.id,
-          label: get(type, "attributes.label"),
-        }));
-      setProductTypes(mapProductTypes);
-    };
-    getProductTypes().catch((e) => console.log(e));
+    //Product types
+    ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink)
+      .then((res) => setProductTypes(getOptionsMappedFromResponse(res)))
+      .catch((e) => console.log(e));
 
     // Tags
-    const getTags = async () => {
-      const data = await TagApi.getTags();
-      const tags = get(data, "data.data");
-      setDescribeTags(tags);
-    };
-    getTags().catch((e) => console.log(e));
+    TagApi.getTags()
+      .then((res) => setDescribeTags(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectCategoryLink = async (opt) => {
@@ -127,15 +112,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
     setSelectCategoryLink(opt.id);
 
     const data = await ProductTypeApi.getProductTypeByCategoryLinkId(opt.id);
-    const productTypes = get(data, "data.data");
-    const mapProductTypes =
-      Array.isArray(productTypes) &&
-      productTypes.map((type) => ({
-        value: type.id,
-        label: get(type, "attributes.label"),
-      }));
-
-    setProductTypes(mapProductTypes);
+    setProductTypes(getOptionsMappedFromResponse(data));
     setValue("productTypes", []);
   };
 

@@ -60,7 +60,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <SectionLayout title="Add a place to buy">
+      <SectionLayout title="Add a new listing">
         <p>How can we find this place</p>
         <br />
         <Question show question="Name & Description">

@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import Badge from "components/Badge/Badge";
 import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
-import { otherList } from "components/Filter/Filter";
 import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Question from "components/Question/Question";
@@ -25,7 +24,6 @@ import Upload from "components/Upload/Upload";
 import Icon from "components/Icon/Icon";
 import OpenHours from "components/OpenHours/OpenHours";
 import { Categories, YesNo } from "enums";
-import { IOption } from "type";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
 import TagsSelection from "components/TagsSelection/TagsSelection";
 import { IAddListingForm } from "pages/add-listing";
@@ -33,6 +31,7 @@ import Select from "components/Select/Select";
 import CategoryLinkApi from "../../../../services/category-link";
 import TagApi from "../../../../services/tag";
 import ProductTypeApi from "../../../../services/product-type";
+import { getOptionsMappedFromResponse } from "utils";
 
 interface AddEatInforProps {
   isEdit?: boolean;
@@ -75,10 +74,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
     },
   });
 
-  useEffect(() => {
-    console.log(data.mealsKind);
-  }, [data]);
-
   const initCategoryLink = get(data, "categoryLinks.id") || "";
 
   const [showTagsModal, setShowTagsModal] = useState(false);
@@ -91,40 +86,20 @@ const AddEatInfor = (props: AddEatInforProps) => {
 
   useEffect(() => {
     // Category links
-    const getCategoryLinks = async () => {
-      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(
-        Categories.EAT
-      );
-      const categoryLinks = get(data, "data.data");
-      setCategoryLinks(categoryLinks);
-    };
-    getCategoryLinks().catch((e) => console.log(e));
+    CategoryLinkApi.getCategoryLinksByCategoryId(Categories.EAT)
+      .then((res) => setCategoryLinks(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+
+    //Product types
+    ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink)
+      .then((res) => setProductTypes(getOptionsMappedFromResponse(res)))
+      .catch((e) => console.log(e));
 
     // Tags
-    const getTags = async () => {
-      const data = await TagApi.getTags();
-      const tags = get(data, "data.data");
-      console.log('tags------',tags)
-      setDescribeTags(tags);
-    };
-    getTags().catch((e) => console.log(e));
-
-    // Product type
-    const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
-        selectCategoryLink
-      );
-      const productTypes = get(data, "data.data");
-      const mapProductTypes =
-        Array.isArray(productTypes) &&
-        productTypes.map((type) => ({
-          value: type.id,
-          label: get(type, "attributes.label"),
-        }));
-      setProductTypes(mapProductTypes);
-    };
-
-    getProductTypes().catch((e) => console.log(e));
+    TagApi.getTags()
+      .then((res) => setDescribeTags(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = (data) => {
@@ -151,14 +126,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
     setSelectCategoryLink(opt.id);
 
     const data = await ProductTypeApi.getProductTypeByCategoryLinkId(opt.id);
-    const productTypes = get(data, "data.data");
-    const mapProductTypes =
-      Array.isArray(productTypes) &&
-      productTypes.map((type) => ({
-        value: type.id,
-        label: get(type, "attributes.label"),
-      }));
-    setProductTypes(mapProductTypes);
+    setProductTypes(getOptionsMappedFromResponse(data));
     setValue("productTypes", []);
   };
 

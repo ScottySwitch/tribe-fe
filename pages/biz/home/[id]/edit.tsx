@@ -11,14 +11,11 @@ import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInf
 import OnboardChecklist from "components/BizHomePage/OnboardChecklist/OnboardChecklist";
 import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import Upload from "components/Upload/Upload";
 import { Categories, ListingHomePageScreens } from "enums";
 import BizListingApi from "../../../../services/biz-listing";
 import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu";
 import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems";
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals";
-import TagApi from "services/tag";
-import FacilityApi from "services/facility";
 import ReviewApi from "services/review";
 import Facilities from "components/BizHomePage/Facilities/Facilities";
 import { IOption } from "type";
@@ -33,9 +30,9 @@ import Break from "components/Break/Break";
 import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
+import Banner from "components/BizHomePage/Banner/Banner";
 
 import styles from "styles/BizHomepage.module.scss";
-import Banner from "components/BizHomePage/Banner/Banner";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;

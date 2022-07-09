@@ -24,6 +24,7 @@ import CategoryLinkApi from "services/category-link";
 import ProductTypeApi from "services/product-type";
 import ProductBrandApi from "services/product-brand";
 import TagApi from "services/tag";
+import { getOptionsMappedFromResponse } from "utils";
 
 interface AddBuyInforProps {
   isEdit?: boolean;
@@ -69,39 +70,26 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
 
   useEffect(() => {
     // Category links
-    const getCategoryLinks = async () => {
-      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(
-        Categories.BUY
-      );
-      const categoryLinks = get(data, "data.data");
-      setCategoryLinks(categoryLinks);
-    };
-    getCategoryLinks().catch((e) => console.log(e));
+    CategoryLinkApi.getCategoryLinksByCategoryId(Categories.BUY)
+      .then((res) => setCategoryLinks(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
 
     //Product types
     ProductTypeApi.getProductTypeByCategoryLinkId(selectCategoryLink)
-      .then((res) => setProductTypes(get(res, "data.data")))
+      .then((res) => setProductTypes(get(res, "data.data") || []))
       .catch((e) => console.log(e));
 
     //Product brands
     get(selectedProductTypes, "length") > 0 &&
       ProductBrandApi.getProductBrandByProductTypeId(selectedProductTypes)
-        .then((res) => {
-          const productBrandsData = get(res, "data.data") || [];
-          const mapProductBrands = productBrandsData.map((productBrand) => ({
-            value: productBrand.id,
-            label: productBrand.attributes.label,
-          }));
-          setProductBrands(mapProductBrands);
-        })
+        .then((res) => setProductBrands(getOptionsMappedFromResponse(res)))
         .catch((error) => console.log(error));
+
     // Tags
-    const getTags = async () => {
-      const data = await TagApi.getTags();
-      const tags = get(data, "data.data");
-      setDescribeTags(tags);
-    };
-    getTags().catch((e) => console.log(e));
+    TagApi.getTags()
+      .then((res) => setDescribeTags(get(res, "data.data") || []))
+      .catch((e) => console.log(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectCategoryLink = async (opt) => {
@@ -128,14 +116,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
     setSelectedProductTypes(newProductTypes);
 
     ProductBrandApi.getProductBrandByProductTypeId(newProductTypes)
-      .then((res) => {
-        const productBrandsData = get(res, "data.data") || [];
-        const mapProductBrands = productBrandsData.map((productBrand) => ({
-          value: productBrand.id,
-          label: productBrand.attributes.label,
-        }));
-        setProductBrands(mapProductBrands);
-      })
+      .then((res) => setProductBrands(getOptionsMappedFromResponse(res)))
       .catch((error) => console.log(error));
   };
 
