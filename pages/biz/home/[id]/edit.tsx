@@ -36,6 +36,7 @@ import styles from "styles/BizHomepage.module.scss";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
+  const [userInfo, setUserInfo] = useState<any>({})
   const [category, setCategory] = useState(Categories.EAT);
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
   const [description, setDescription] = useState<string>("");
@@ -82,6 +83,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       : [];
 
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || '{}')  
+    setUserInfo(userInfo)
     const getListingData = async (listingSlug) => {
       let data;
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -490,6 +493,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           onSetPriceRange={handleSetPriceRange}
           onSetSocialInfo={handleSetSocialInfo}
           onSetPhoneNumber={handleSetPhoneNumber}
+          userInfo={userInfo}
         />
         <div className={styles.body}>
           <div className={styles.right_col}>

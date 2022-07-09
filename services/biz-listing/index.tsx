@@ -348,9 +348,15 @@ const getExclusiveDealByCategory = async (category) => {
   return await Api.get(url)
 }
 
-const getBizlistingByCategoryLink = async (category, categoryLinks, page) => {
-  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&page=${page}`
+const getBizlistingByCategoryLink = async (category, categoryLinks, limit) => {
+  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&litmit=${limit}`
   return await Api.get(url)
+}
+
+const getListingFavouriteByCategory = async (category) => {
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  const url = `/api/biz-listings/listing-favourite-by-category?category=${category}&userId=${userInfo.id}`;
+	return await Api.get(url);
 }
 
 
@@ -376,5 +382,6 @@ export default {
   getBizListingForYou,
   getAllBizListingsByCategory,
   getAllBizListingsHaveExclusiveDeal,
-  getExclusiveDealByCategory
+  getExclusiveDealByCategory,
+  getListingFavouriteByCategory
 }
