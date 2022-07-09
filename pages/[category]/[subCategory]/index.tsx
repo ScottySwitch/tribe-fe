@@ -25,13 +25,13 @@ import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import {get} from "lodash"
 import styles from "styles/Home.module.scss";
+import { json } from "stream/consumers";
 
 const SubCategoryPage = (props: any) => {
-  console.log(props)
   const {
     bizListings,
     listingBanners,
-    listCategoryLink
+    listCategoryLink,
   } = props
   const trans = useTrans();
   const router = useRouter();
@@ -40,33 +40,58 @@ const SubCategoryPage = (props: any) => {
   const [subCategoryData, setSubCategoryData] = useState<any[]>([]);
   const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
   const [showFilter, setShowFilter] = useState(false);
-  const [page, setPage] = useState<number | undefined>(1);
+  const [total, setTotal] = useState<number>(0)
+  const [page, setPage] = useState<number | undefined>(0);
   const [limit, setLimit] = useState<number>(30)
+  const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
+  const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory)
   useEffect(() => {
     //get subCategory data
-    setSubCategoryData(inforCardList);
+    console.log('category', category)
+    console.log('subCategory', subCategory)
+    setSubCategoryData(inforCardList)
+    getDataBizlisting(category, currenCategoryLink, page)
   }, [currentSubCategory, page]);
 
   const handleChangeSubCategory = (e) => {
+    setCurrentCategoryLink(e)
     setCurrentSubCategory(e);
-    router.push(
+    router.replace(
       {
         pathname: `/${category}/${e}`,
       },
       undefined,
-      { shallow: true }
-    );
+      { shallow: true },
+    )
+    // getDataBizlisting(category, e, page)
   };
 
-  const formatDummySubCategories = [
-    {
-      label: "All",
-      value: "all",
-      slug: "all",
-      icon: "https://picsum.photos/200/300",
-    },
-    ...dummySubCategories,
-  ];
+  const getDataBizlisting = async (category, subCategory, page) => {
+    console.log('categoryQuery', category)
+    console.log('subCategoryQuery', subCategory)
+
+    const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, page)
+    if(get(dataBizlisting, 'data.data')) {
+      const rawBizlistingArray = get(dataBizlisting, 'data.data')
+      let listingArray = rawBizlistingArray.map((item) => ({
+        images: item.images || [],
+        title: item.name,
+        slug: item.slug,
+        isVerified: item.is_verified,
+        address: item.address,
+        country: item.country,
+        description: item.description,
+        followerNumber: item.user_listing_follows.length,
+        tags: item.tags,
+        categories: item.categories,
+        price: get(item, 'price_range.min') || '',
+        rate: item.rate,
+        rateNumber: item.rate_number,
+      }))
+      setListings(listingArray)
+      setTotal(get(dataBizlisting, 'data.total'))
+    } 
+  }
 
   return (
     <div>
@@ -124,8 +149,8 @@ const SubCategoryPage = (props: any) => {
       </SectionLayout>
       <SectionLayout>
         <div className="flex flex-wrap gap-10">
-          {Array.isArray(bizListings) &&
-            bizListings.map((item) => (
+          {Array.isArray(listings) &&
+            listings.map((item) => (
               <div key={item.title} className="pb-5">
                 <InforCard
                   imgUrl={item.images[0]}
@@ -137,11 +162,21 @@ const SubCategoryPage = (props: any) => {
                   categories={item.categories}
                   tags={item.tags}
                   isVerified={item.isVerified}
+                  onClick={() => {
+                    window.location.href = `/biz/home/${item.slug}`
+                  }}
                 />
               </div>
             ))}
         </div>
-        <Pagination onPageChange={(page) => setPage(page?.selected)} />
+        <Pagination 
+          limit={30}
+          total={total}
+          onPageChange={(page) => {
+            getDataBizlisting(category, subCategory, page?.selected)
+            setPage(page?.selected)
+          }} 
+        />
         <TopSearches />
       </SectionLayout>
       <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
@@ -153,7 +188,7 @@ export async function getServerSideProps(context) {
   const category = context.query.category
   const subCategory = context.query.subCategory
   const dataBanners = await BannerApi.getBannerByCategory(category)
-  const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, 30)
+  // const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, 30)
   const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category)
   let listingArray: any = []
   let listBannerArray: any = []
@@ -167,24 +202,24 @@ export async function getServerSideProps(context) {
     },
   ]
 
-  if(get(dataBizlisting, 'data.data')) {
-    const rawBizlistingArray = get(dataBizlisting, 'data.data')
-    listingArray = rawBizlistingArray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, 'price_range.min') || '',
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }))
-  } 
+  // if(get(dataBizlisting, 'data.data')) {
+  //   const rawBizlistingArray = get(dataBizlisting, 'data.data')
+  //   listingArray = rawBizlistingArray.map((item) => ({
+  //     images: item.images || [],
+  //     title: item.name,
+  //     slug: item.slug,
+  //     isVerified: item.is_verified,
+  //     address: item.address,
+  //     country: item.country,
+  //     description: item.description,
+  //     followerNumber: item.user_listing_follows.length,
+  //     tags: item.tags,
+  //     categories: item.categories,
+  //     price: get(item, 'price_range.min') || '',
+  //     rate: item.rate,
+  //     rateNumber: item.rate_number,
+  //   }))
+  // } 
   if (get(dataBanners, 'data.data')) {
     const rawListBanners = get(dataBanners, 'data.data')
     listBannerArray = rawListBanners.map((item) => ({
@@ -204,9 +239,9 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      bizListings: listingArray,
+      // bizListings: listingArray,
       listingBanners: listBannerArray,
-      listCategoryLink: ListCategoryLinkArray
+      listCategoryLink: ListCategoryLinkArray,
     },
   };
 }
