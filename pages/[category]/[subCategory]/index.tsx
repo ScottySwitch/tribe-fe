@@ -16,6 +16,8 @@ import {
 } from "constant";
 import useTrans from "hooks/useTrans";
 import BizlistingApi from "services/biz-listing"
+import CategoryLinkApi from "services/category-link"
+import BannerApi from "services/banner"
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -27,7 +29,9 @@ import styles from "styles/Home.module.scss";
 const SubCategoryPage = (props: any) => {
   console.log(props)
   const {
-    bizListings
+    bizListings,
+    listingBanners,
+    listCategoryLink
   } = props
   const trans = useTrans();
   const router = useRouter();
@@ -74,7 +78,7 @@ const SubCategoryPage = (props: any) => {
           {subCategory}
         </div>
         <Carousel responsive={homeBannerResponsive}>
-          {homeCarousel?.map((img, index) => (
+          {listingBanners?.map((img, index) => (
             <div key={index} className={styles.banner_card}>
               <Image alt="" layout="fill" src={img.imgUrl} objectFit="cover" />
             </div>
@@ -85,7 +89,7 @@ const SubCategoryPage = (props: any) => {
         <div className={styles.tab_filter_container}>
           <div className="flex">
             <TabsHorizontal
-              tablist={formatDummySubCategories.slice(0, 5)}
+              tablist={listCategoryLink.slice(0, 5)}
               type="secondary-no-outline"
               selectedTab={currentSubCategory}
               className="pt-[6px]"
@@ -98,7 +102,7 @@ const SubCategoryPage = (props: any) => {
               className={styles.sub_category_more}
               variant="no-outlined"
               size="small"
-              options={formatDummySubCategories.slice(5)}
+              options={listCategoryLink.slice(5)}
               controlStyle={{ fontWeight: "bold", fontSize: "16px" }}
               placeholderStyle={{
                 fontWeight: "bold",
@@ -148,10 +152,20 @@ const SubCategoryPage = (props: any) => {
 export async function getServerSideProps(context) {
   const category = context.query.category
   const subCategory = context.query.subCategory
-
-  let limit = 30
-  const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, limit)
+  const dataBanners = await BannerApi.getBannerByCategory(category)
+  const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(category, subCategory, 30)
+  const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category)
   let listingArray: any = []
+  let listBannerArray: any = []
+  let ListCategoryLinkArray: any = 
+  [
+    {
+      label: "All",
+      value: "all",
+      slug: "all",
+      icon: "https://picsum.photos/200/300",
+    },
+  ]
 
   if(get(dataBizlisting, 'data.data')) {
     const rawBizlistingArray = get(dataBizlisting, 'data.data')
@@ -171,10 +185,28 @@ export async function getServerSideProps(context) {
       rateNumber: item.rate_number,
     }))
   } 
+  if (get(dataBanners, 'data.data')) {
+    const rawListBanners = get(dataBanners, 'data.data')
+    listBannerArray = rawListBanners.map((item) => ({
+      imgUrl: item.image_url,
+      linkActive: item.link_active
+    }))
+  }
+  if (get(dataCategoryLinks, 'data.data')) {
+    const rawListCategory = get(dataCategoryLinks, 'data.data')
+    let arrayRawListCategoryLink = rawListCategory.map((item) => ({
+      icon: get(item, 'attributes.logo.url') || null,
+      label: get(item, 'attributes.label'),
+      value: get(item, 'attributes.value'),
+      slug: get(item, 'attributes.value')
+    }))
+    ListCategoryLinkArray = ListCategoryLinkArray.concat(arrayRawListCategoryLink)
+  }
   return {
     props: {
       bizListings: listingArray,
-      limit: limit
+      listingBanners: listBannerArray,
+      listCategoryLink: ListCategoryLinkArray
     },
   };
 }
