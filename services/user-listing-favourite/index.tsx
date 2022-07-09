@@ -17,5 +17,4 @@ const createFavourite = async () => {
 
 export default {
     createFavourite,
-
 }

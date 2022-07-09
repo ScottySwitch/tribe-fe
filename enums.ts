@@ -93,7 +93,7 @@ export enum ProfileTabs {
 export enum ProfileTabFavourited {
   EAT = "eat",
   BUY = "buy",
-  SEE_DO = "see-do",
+  SEE_DO = "see-and-do",
   TRANSPORT = "transport",
   STAY = "stay",
 }

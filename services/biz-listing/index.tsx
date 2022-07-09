@@ -353,6 +353,12 @@ const getBizlistingByCategoryLink = async (category, categoryLinks, limit) => {
   return await Api.get(url)
 }
 
+const getListingFavouriteByCategory = async (category) => {
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  const url = `/api/biz-listings/listing-favourite-by-category?category=${category}&userId=${userInfo.id}`;
+	return await Api.get(url);
+}
+
 
 export default {
   getBizlistingByCategoryLink,
@@ -376,5 +382,6 @@ export default {
   getBizListingForYou,
   getAllBizListingsByCategory,
   getAllBizListingsHaveExclusiveDeal,
-  getExclusiveDealByCategory
+  getExclusiveDealByCategory,
+  getListingFavouriteByCategory
 }

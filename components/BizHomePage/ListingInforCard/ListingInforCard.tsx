@@ -50,7 +50,7 @@ const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; biz
   const handleAddFollow = async () => {
     const data = await UserFollowApi.createFollowing()
     if (get(data, 'data')) {
-      setIsFollow(true)
+      setIsFavourite(true)
     }
   }
 
