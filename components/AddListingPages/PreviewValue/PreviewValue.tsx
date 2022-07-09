@@ -38,7 +38,7 @@ const PreviewValue = ({
       <div className={styles.preview}>
         {Array.isArray(value) &&
           value.map((item) => (
-            <Badge className={styles.preview_value_badge} key={item.value}>
+            <Badge variant="no-outlined" key={item.value}>
               {item.label}
             </Badge>
           ))}

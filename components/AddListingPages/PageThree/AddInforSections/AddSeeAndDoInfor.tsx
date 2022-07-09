@@ -58,10 +58,24 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
   const [categoryLinks, setCategoryLinks] = useState<any>([]);
-  const [selectCategoryLink, setSelectCategoryLink] =
-    useState<string>(initCategoryLink);
   const [productTypes, setProductTypes] = useState<any>([]);
   const [describeTags, setDescribeTags] = useState<any>([]);
+  const [selectCategoryLink, setSelectCategoryLink] =
+    useState<string>(initCategoryLink);
+
+  const title = facilityMode
+    ? undefined
+    : isEdit
+    ? "Business Detail"
+    : "Add a thing to do";
+
+  const subTitle = facilityMode
+    ? undefined
+    : isEdit
+    ? undefined
+    : "After you complete this form, you'll be able to make changes before submitting.";
+
+  const sectionContainer = facilityMode ? "pt-0" : undefined;
 
   useEffect(() => {
     // Category links
@@ -104,20 +118,6 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
     onPreview?.(data);
     onEdit?.(data);
   };
-
-  const title = facilityMode
-    ? undefined
-    : isEdit
-    ? "Business Detail"
-    : "Add a thing to do";
-
-  const subTitle = facilityMode
-    ? undefined
-    : isEdit
-    ? undefined
-    : "After you complete this form, you'll be able to make changes before submitting.";
-
-  const sectionContainer = facilityMode ? "pt-0" : undefined;
 
   const handleSelectCategoryLink = async (opt) => {
     setValue("categoryLinks", opt.id);

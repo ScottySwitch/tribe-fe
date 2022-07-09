@@ -123,14 +123,14 @@ const BusinessDetail = (props: BusinessDetailProps) => {
           />
         );
         break;
-      // case Categories.TRANSPORT:
-      //   detail = (
-      //     <BusinessDetailTransport
-      //       formData={formData}
-      //       submitFormData={submitFormData}
-      //     />
-      //   );
-      //   break;
+      case Categories.TRANSPORT:
+        detail = (
+          <BusinessDetailTransport
+            formData={viewBusinessDetailData}
+            submitFormData={submitFormData}
+          />
+        );
+        break;
       // case Categories.STAY:
       //   detail = (
       //     <BusinessDetailStay

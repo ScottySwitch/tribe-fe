@@ -11,7 +11,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import Modal from "components/Modal/Modal";
 import Break from "components/Break/Break";
 import OpenHours from "components/OpenHours/OpenHours";
-import { YesNo } from "enums";
+import { Categories, YesNo } from "enums";
 import { transportAreas, transportAssociatedCategories } from "../constant";
 import TagsSelection from "components/TagsSelection/TagsSelection";
 import { IOption } from "type";
@@ -27,16 +27,16 @@ import ProductTypeApi from "../../../../services/product-type";
 
 interface AddTransportInforProps {
   isEdit?: boolean;
-  subCateList: IOption[];
+  facilityMode?: boolean;
   data: { [key: string]: any };
   show?: boolean;
   onPrevPage?: () => void;
-  onPreview?: (data: { [key: string]: any }) => void;
+  onPreview?: (data: IAddListingForm) => void;
   onEdit?: (data: IAddListingForm) => void;
 }
 
 const AddTransportInfor = (props: AddTransportInforProps) => {
-  const { isEdit, data, show, subCateList, onEdit, onPrevPage, onPreview } =
+  const { isEdit, data, show, facilityMode, onEdit, onPrevPage, onPreview } =
     props;
 
   const { register, handleSubmit, setValue, getValues } = useForm({
@@ -52,44 +52,74 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
     },
   });
 
+  const initCategoryLink = get(data, "categoryLinks.id") || "";
+
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [showOpeningHoursModal, setShowOpenHoursModal] = useState(false);
-
   const [categoryLinks, setCategoryLinks] = useState<any>([]);
-  const [selectCategoryLink, setSelectCategoryLink] = useState<
-    string | undefined
-  >(getValues("categoryLinks"));
   const [productTypes, setProductTypes] = useState<any>([]);
+  const [selectCategoryLink, setSelectCategoryLink] =
+    useState<string>(initCategoryLink);
+
+  const title = facilityMode
+    ? undefined
+    : isEdit
+    ? "Business Detail"
+    : "Add a mean of transport";
+
+  const subTitle = facilityMode
+    ? undefined
+    : isEdit
+    ? undefined
+    : "After you complete this form, you will be able to make changes before submitting.";
+
+  const sectionContainer = facilityMode ? "pt-0" : undefined;
 
   useEffect(() => {
     // Category links
     const getCategoryLinks = async () => {
-      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(4);
+      const data = await CategoryLinkApi.getCategoryLinksByCategoryId(
+        Categories.TRANSPORT
+      );
       const categoryLinks = get(data, "data.data");
       setCategoryLinks(categoryLinks);
     };
     getCategoryLinks().catch((e) => console.log(e));
-  }, []);
 
-  useEffect(() => {
-    setValue("productTypes", []);
+    // Product type
     const getProductTypes = async () => {
       const data = await ProductTypeApi.getProductTypeByCategoryLinkId(
         selectCategoryLink
       );
       const productTypes = get(data, "data.data");
-      const mapProductTypes: any = [];
-      Array.isArray(productTypes) &&
-        productTypes.map((mapProductType) => {
-          mapProductTypes.push({
-            value: mapProductType.id,
-            label: mapProductType.attributes.label,
-          });
-        });
+      const mapProductTypes =
+        Array.isArray(productTypes) &&
+        productTypes.map((type) => ({
+          value: type.id,
+          label: get(type, "attributes.label"),
+        }));
       setProductTypes(mapProductTypes);
     };
+
     getProductTypes().catch((e) => console.log(e));
-  }, [selectCategoryLink]);
+  }, []);
+
+  const handleSelectCategoryLink = async (opt) => {
+    setValue("categoryLinks", opt.id);
+    setSelectCategoryLink(opt.id);
+
+    const data = await ProductTypeApi.getProductTypeByCategoryLinkId(opt.id);
+    const productTypes = get(data, "data.data");
+    const mapProductTypes =
+      Array.isArray(productTypes) &&
+      productTypes.map((type) => ({
+        value: type.id,
+        label: get(type, "attributes.label"),
+      }));
+
+    setProductTypes(mapProductTypes);
+    setValue("productTypes", []);
+  };
 
   const onSubmit = (data) => {
     onPreview?.(data);
@@ -102,12 +132,9 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
   return (
     <>
       <SectionLayout
-        title={isEdit ? "Business Detail" : "Add a mean of transport"}
-        subTitle={
-          isEdit
-            ? undefined
-            : "After you complete this form, you will be able to make changes before submitting."
-        }
+        title={title}
+        subTitle={subTitle}
+        className={sectionContainer}
         containerClassName={isEdit ? "w-full px-[30px]" : ""}
       >
         <Break />
@@ -120,10 +147,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
                     key={opt.id}
                     text={opt.attributes.label}
                     selected={selectCategoryLink === opt.id}
-                    onClick={() => {
-                      setValue("categoryLinks", opt.id);
-                      setSelectCategoryLink(opt.id);
-                    }}
+                    onClick={() => handleSelectCategoryLink(opt)}
                   />
                 ))}
             </div>

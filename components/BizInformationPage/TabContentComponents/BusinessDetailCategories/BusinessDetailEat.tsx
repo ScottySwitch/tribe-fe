@@ -10,7 +10,7 @@ import { IAddListingForm } from "pages/add-listing";
 import React, { useState } from "react";
 
 interface BusinessDetailProps {
-  formData: any;
+  formData: { [key: string]: any };
   submitFormData?: (form: IAddListingForm) => void;
 }
 
