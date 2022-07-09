@@ -114,7 +114,7 @@ const TabContent = ({
       </div>
       <div
         className={styles.see_all}
-        onClick={() => router.push(`/biz/${selectedTab}/${listingSlug}`)}
+        onClick={() => router.replace(`/biz/${selectedTab}/${listingSlug}`)}
       >
         See all
       </div>
