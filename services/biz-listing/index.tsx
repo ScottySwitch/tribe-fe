@@ -348,8 +348,8 @@ const getExclusiveDealByCategory = async (category) => {
   return await Api.get(url)
 }
 
-const getBizlistingByCategoryLink = async (category, categoryLinks, page) => {
-  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&page=${page}`
+const getBizlistingByCategoryLink = async (category, categoryLinks, limit) => {
+  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&litmit=${limit}`
   return await Api.get(url)
 }
 

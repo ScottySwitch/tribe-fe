@@ -12,8 +12,10 @@ import { dummyKeywords, dummySavedDeals, dummyUserInfo, inforCardList } from "co
 import { ProfileTabs } from "enums"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import React from "react"
+import React, { useEffect, useState } from "react"
+import {get} from "lodash"
 import styles from "styles/Profile.module.scss"
+import { userInfo } from "os"
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props
@@ -103,6 +105,14 @@ const ProfilePage = () => {
     },
   ]
 
+  const [userInfor, setUserInfo] = useState<any>({})
+
+  useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    console.log('userInfo', userInfo)
+    setUserInfo(userInfo)
+  }, [])
+
   return (
     <div className="wrapper-profile">
       <div className={styles.section_cover_image}>
@@ -112,8 +122,11 @@ const ProfilePage = () => {
         className={styles.section_profile}
         containerClassName={styles.section_profile_container}
       >
-        <GroupHeadingOne name="Anna Nhun" imageUrl="https://picsum.photos/218" />
-        <GroupHeadingTwo contributions={20} following={100} points={32} />
+        <GroupHeadingOne 
+          name={`${userInfor.first_name} ${userInfor.last_name || ''}`} 
+          imageUrl={userInfor.avatar || 'https://picsum.photos/218'} 
+        />
+        <GroupHeadingTwo contributions={0} following={get(userInfor, 'user_listing_follows.length')} points={0} />
         <TabsHorizontal
           tablist={TabList}
           type="secondary-no-outline"

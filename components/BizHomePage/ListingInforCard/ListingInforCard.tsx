@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import classNames from "classnames"
 
 import Button from "components/Button/Button"
@@ -7,6 +7,8 @@ import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Modal from "components/Modal/Modal"
 import Upload from "components/Upload/Upload"
+
+import UserFollowApi from "services/user-listing-follow"
 
 import styles from "./ListingInforCard.module.scss"
 import { get } from "lodash"
@@ -18,23 +20,35 @@ interface ListingInforCardProps {
   socialInfo: string
   phoneNumber: string
   logo?: any
+  userInfo?: any,
   handleChangeLogo?: (srcImages: string[]) => void
   onSetPriceRange?: (value: { min: string; max: string; currency: string }) => void
   onSetSocialInfo?: (value: string) => void
   onSetPhoneNumber?: (value: string | number) => void
 }
 
-const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; bizListing: any }) => {
-  const { isViewPage, className, bizListing } = props
+const ReviewsFollowers = (props: { isViewPage?: boolean; className?: string; bizListing: any; userInfo?: any }) => {
+  const { isViewPage, className, bizListing, userInfo } = props
   const reviewsFollowersClassName = classNames(styles.reviews_followers_container, className)
-
+  console.log('bizListing', bizListing)
   const bizListingReviewCount = get(bizListing, "reviews.length") || 0
   const bizListingFollowerCount = get(bizListing, "user_listing_follows.length") || 0
+  const [isFollow, setIsFollow] = useState<boolean>(true)
+
+  const handleFollow = async () => {
+    console.log('add follow')
+    const data = await UserFollowApi.createFollowing()
+  }
+
   return (
     <div>
       {isViewPage && (
         <div className="flex gap-3 mb-2">
-          <Button text="Follow" size="small" width={130} />
+          <Button 
+            text="Follow" size="small" width={130} 
+            onClick={handleFollow}
+            disabled={isFollow}
+          />
           <Button
             prefix={<Icon icon="like-stroke" color="#e60112" />}
             text="Add to favourite "
@@ -137,6 +151,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     phoneNumber,
     socialInfo,
     logo,
+    userInfo,
     handleChangeLogo,
     onSetSocialInfo,
     onSetPhoneNumber,
@@ -147,7 +162,6 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     max: string
     currency: string
   }>(priceRange || {})
-  console.log('bizListing', bizListing)
   const [newPhoneNumber, setNewPhoneNumber] = useState<string | number>(phoneNumber)
   const [newSocialInfo, setNewSocialInfo] = useState<string>(socialInfo)
 
@@ -214,6 +228,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
       </div>
       {bizListing && (
         <ReviewsFollowers
+          userInfo={userInfo}
           isViewPage={isViewPage}
           className={styles.reviews_followers_desktop}
           bizListing={bizListing}

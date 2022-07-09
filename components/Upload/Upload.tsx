@@ -46,7 +46,7 @@ const Upload = (props: UploadProps) => {
   const lastItemArray = Array.isArray(fileList) ? fileList.slice(-1) : [];
   const initFileList = multiple ? fileList : lastItemArray;
 
-  const [srcList, setSrcList] = useState<string[]>(initFileList);
+  const [srcList, setSrcList] = useState<string[]>(initFileList || []);
   const [localFileList, setLocalFileList] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
