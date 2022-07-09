@@ -240,10 +240,10 @@ export const fakeAddlistingForm: IAddListingForm = {
   atmosphere: ["Beach", "Al Fresco"],
   payment: ["Cash Only"],
   additionalServices: ["Takeout", "prayer facility available/nearby"],
-  foodOptions: [""],
-  paryerFacilities: [""],
-  foodOptionsRamadan: [""],
-  nonHalalActivities: [""],
+  foodOptions: [],
+  paryerFacilities: [],
+  foodOptionsRamadan: [],
+  nonHalalActivities: [],
 };
 
 export const defaultAddlistingForm: IAddListingForm = {
@@ -293,16 +293,16 @@ export const defaultAddlistingForm: IAddListingForm = {
   ],
 
   tags: [],
-  mealsKind: [""],
-  placeGoodFor: [""],
-  parking: [""],
-  atmosphere: [""],
-  payment: [""],
-  additionalServices: [""],
-  foodOptions: [""],
-  paryerFacilities: [""],
-  foodOptionsRamadan: [""],
-  nonHalalActivities: [""],
+  mealsKind: [],
+  placeGoodFor: [],
+  parking: [],
+  atmosphere: [],
+  payment: [],
+  additionalServices: [],
+  foodOptions: [],
+  paryerFacilities: [],
+  foodOptionsRamadan: [],
+  nonHalalActivities: [],
 };
 
 export const currencyOptions = [

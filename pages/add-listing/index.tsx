@@ -215,28 +215,24 @@ const AddListing = () => {
           onPreview={handlePreview}
         />
         <AddEatInfor
-          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.EAT}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddSeeAndDoInfor
-          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.SEE_AND_DO}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddStayInfor
-          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.STAY}
           onPrevPage={handlePrevPage}
           onPreview={handlePreview}
         />
         <AddTransportInfor
-          subCateList={fakeSubCateList}
           data={formData}
           show={pageNumber === 3 && formData.category === Categories.TRANSPORT}
           onPrevPage={handlePrevPage}

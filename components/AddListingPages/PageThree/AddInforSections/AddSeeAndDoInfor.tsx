@@ -110,7 +110,6 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
         }));
       setProductTypes(mapProductTypes);
     };
-
     getProductTypes().catch((e) => console.log(e));
   }, []);
 

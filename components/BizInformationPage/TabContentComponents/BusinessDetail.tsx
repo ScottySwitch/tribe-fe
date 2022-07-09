@@ -131,14 +131,14 @@ const BusinessDetail = (props: BusinessDetailProps) => {
           />
         );
         break;
-      // case Categories.STAY:
-      //   detail = (
-      //     <BusinessDetailStay
-      //       formData={formData}
-      //       submitFormData={submitFormData}
-      //     />
-      //   );
-      //   break;
+      case Categories.STAY:
+        detail = (
+          <BusinessDetailStay
+            formData={viewBusinessDetailData}
+            submitFormData={submitFormData}
+          />
+        );
+        break;
       default:
         detail = <div></div>;
         break;

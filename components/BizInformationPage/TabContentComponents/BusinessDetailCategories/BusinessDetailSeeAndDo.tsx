@@ -61,7 +61,7 @@ const BusinessDetailSeeAndDo = (props: BusinessDetailProps) => {
           childrenClassName="flex flex-wrap gap-3"
           optional
         >
-          {viewDescribeTags?.map((item) => (
+           {viewDescribeTags?.map((item) => (
             <Badge variant="no-outlined" key={item} text={item} />
           ))}
         </Question>
