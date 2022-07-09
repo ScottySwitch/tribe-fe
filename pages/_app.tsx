@@ -88,6 +88,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
       await AuthApi.getMe();
+      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (userInfo) {
         const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
         // const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
