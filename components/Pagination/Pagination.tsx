@@ -5,13 +5,19 @@ import styles from "./Pagination.module.scss"
 
 interface PaginationProps {
   onPageChange?: (selected?: { selected: number }) => void
+  total?: number;
+  limit?: number;
 }
 
 const Pagination = (props: PaginationProps) => {
-  const { onPageChange } = props
+  const { 
+    onPageChange, 
+    total = 1000,
+    limit = 30,
+    ...rest
+  } = props
 
-  const limit = 8
-  const pageCount = Math.ceil(1000 / limit)
+  const pageCount = Math.ceil(total / limit)
 
   return (
     <ReactPaginate

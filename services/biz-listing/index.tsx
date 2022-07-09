@@ -1,3 +1,4 @@
+import category from "services/category";
 import Api from "../index";
 
 const qs = require('qs');
@@ -337,7 +338,24 @@ const getAllBizListingsByCategory = async () => {
     return await Api.get(url)
 }
 
+const getAllBizListingsHaveExclusiveDeal = async () => {
+  const url = `/api/biz-listings/exclusive-deal/`
+  return await Api.get(url)
+}
+
+const getExclusiveDealByCategory = async (category) => {
+  const url = `/api/biz-listings/exclusive-deal-by-category/?category=${category}`
+  return await Api.get(url)
+}
+
+const getBizlistingByCategoryLink = async (category, categoryLinks, page) => {
+  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&page=${page}`
+  return await Api.get(url)
+}
+
+
 export default {
+  getBizlistingByCategoryLink,
   getBizListing,
   getOwnerListingRoleByUserId,
   getInfoOwnerBizListingBySlug,
@@ -356,5 +374,7 @@ export default {
   getBizListingByCountry,
   checkListingHaveOwner,
   getBizListingForYou,
-  getAllBizListingsByCategory
+  getAllBizListingsByCategory,
+  getAllBizListingsHaveExclusiveDeal,
+  getExclusiveDealByCategory
 }

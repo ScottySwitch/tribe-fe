@@ -15,7 +15,7 @@ export const menuItems = [
   { icon: "categories-color", label: "Categories" },
   { icon: "deal", label: "Saved deals" },
   { icon: "heart-color", label: "Favorited", borderBottom: true },
-  { icon: "comment-color", label: "Edit profile" },
+  { icon: "comment-color", label: "Edit profile", href: '/profile' },
   { icon: "settings-color", label: "Settings", borderBottom: true },
   { icon: "like-color-2", label: "Referral code" },
   { icon: "business", label: "Tribes for Businesses" },
@@ -32,6 +32,13 @@ const Menu = (props: MenuMenuProps) => {
     window.location.href = "/"
   }
 
+  const handleHref = (item) => {
+    if (item.href) {
+      console.log(item)
+      window.location.href = `${item.href}`
+    }
+  }
+
   return (
     <>
       {menuItems.map((item) => {
@@ -39,9 +46,11 @@ const Menu = (props: MenuMenuProps) => {
           [styles.border_bottom]: mobile && item.borderBottom,
         })
         return (
-          <div key={item.label} className={menuItemClassName} onClick={onShowCategoriesModal}>
+          <div key={item.label} className={menuItemClassName} onClick={() => handleHref(item)}>
             <Icon icon={item.icon} size={20} />
-            <div>{item.label}</div>
+            <div>
+              {item.label}
+            </div>
           </div>
         )
       })}

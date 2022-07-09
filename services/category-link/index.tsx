@@ -16,6 +16,22 @@ const getCategoryLinksByCategoryId = async (categoryId: number) => {
   return await Api.get(url);
 }
 
+const getCategoryLinksByCategorySlug = async (category) => {
+  const query = qs.stringify({
+    "filters": {
+      "category": {
+        "slug": category
+      }
+    },
+    "populate": "*"
+  }, {
+    encodeValuesOnly: true
+  });
+
+  const url = `/api/category-links?${query}`;
+  return await Api.get(url);
+}
+
 const getCategoryLinks = async () => {
   const query = qs.stringify({
     "populate": [
@@ -30,5 +46,6 @@ const getCategoryLinks = async () => {
 
 export default {
   getCategoryLinksByCategoryId,
-  getCategoryLinks
+  getCategoryLinks,
+  getCategoryLinksByCategorySlug
 }
