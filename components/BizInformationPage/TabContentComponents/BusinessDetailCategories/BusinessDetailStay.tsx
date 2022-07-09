@@ -1,27 +1,27 @@
-import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/AddBuyInfor"
-import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor"
-import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor"
-import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor"
-import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor"
-import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
-import Badge from "components/Badge/Badge"
-import Break from "components/Break/Break"
-import Button from "components/Button/Button"
-import Question from "components/Question/Question"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import { fakeSubCateList } from "constant"
-import { IAddListingForm } from "pages/add-listing"
-import React, { useState } from "react"
+import AddBuyInfor from "components/AddListingPages/PageThree/AddInforSections/AddBuyInfor";
+import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/AddEatInfor";
+import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSections/AddSeeAndDoInfor";
+import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor";
+import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor";
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
+import Badge from "components/Badge/Badge";
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import Question from "components/Question/Question";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import { fakeSubCateList } from "constant";
+import { IAddListingForm } from "pages/add-listing";
+import React, { useState } from "react";
 
 interface BusinessDetailProps {
-  formData: IAddListingForm
-  submitFormData?: (form: IAddListingForm) => void
+  formData: { [key: string]: any };
+  submitFormData?: (form: IAddListingForm) => void;
 }
 
 const BusinessDetailStay = (props: BusinessDetailProps) => {
-  const { formData, submitFormData } = props
+  const { formData, submitFormData } = props;
   const {
-    categoryKind,
+    categoryLinks,
     tags,
     foodOptions,
     describePlace,
@@ -32,25 +32,33 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
     currency,
     foodOptionsRamadan,
     nonHalalActivities,
-  } = formData
+    viewProductTypes,
+    viewDescribeTags,
+  } = formData;
 
-  const [isEdit, setIsEdit] = useState(false)
+  const [isEdit, setIsEdit] = useState(false);
   return (
     <React.Fragment>
-      <SectionLayout title="Business detail" show={!isEdit} containerClassName="w-full px-[30px]">
+      <SectionLayout
+        title="Business detail"
+        show={!isEdit}
+        containerClassName="w-full px-[30px]"
+      >
         <Break />
         <Question
           question="What is the category best associated with this service?"
           childrenClassName="flex"
         >
-          {categoryKind && <Badge>{categoryKind}</Badge>}
+          {categoryLinks && (
+            <Badge variant="no-outlined">{categoryLinks.label}</Badge>
+          )}
         </Question>
         <Question
           question="What areas best associated with this service?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {tags?.map((item) => (
-            <Badge key={item} text={item} />
+          {viewProductTypes?.map((item) => (
+            <Badge variant="no-outlined" key={item} text={item.label} />
           ))}
         </Question>
         <Question question="What are the opening hours?" optional>
@@ -60,19 +68,22 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           question="What tags best describe this accommodation?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {describePlace?.map((item) => (
-            <Badge key={item} text={item} />
+          {viewDescribeTags?.map((item) => (
+            <Badge variant="no-outlined" key={item} text={item} />
           ))}
         </Question>
         <Question question="What’s the average price range of a meal?">
-          {currency && minPrice && maxPrice && `${currency}${minPrice} - ${currency}${maxPrice}`}
+          {currency &&
+            minPrice &&
+            maxPrice &&
+            `${currency}${minPrice} - ${currency}${maxPrice}`}
         </Question>
         <Question
           question="What are the Halal food options available?"
           childrenClassName="flex flex-wrap gap-3"
         >
           {foodOptions?.map((item) => (
-            <Badge key={item} text={item} />
+            <Badge variant="no-outlined" key={item} text={item} />
           ))}
         </Question>
         <Question
@@ -80,7 +91,7 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           childrenClassName="flex flex-wrap gap-3"
         >
           {paryerFacilities?.map((item) => (
-            <Badge key={item} text={item} />
+            <Badge variant="no-outlined" key={item} text={item} />
           ))}
         </Question>
         <Question
@@ -89,7 +100,7 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           childrenClassName="flex flex-wrap gap-3"
         >
           {foodOptionsRamadan?.map((item) => (
-            <Badge key={item} text={item} />
+            <Badge variant="no-outlined" key={item} text={item} />
           ))}
         </Question>
         <Question
@@ -97,7 +108,7 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           childrenClassName="flex flex-wrap gap-3"
         >
           {nonHalalActivities?.map((item) => (
-            <Badge key={item} text={item} />
+            <Badge variant="no-outlined" key={item} text={item} />
           ))}
         </Question>
         <Break />
@@ -111,14 +122,14 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
         </div>
       </SectionLayout>
       <AddStayInfor
-        subCateList={fakeSubCateList}
         data={formData}
         show={isEdit}
         isEdit={true}
         onEdit={(data) => submitFormData?.(data)}
+        onPrevPage={() => setIsEdit(false)}
       />
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default BusinessDetailStay
+export default BusinessDetailStay;

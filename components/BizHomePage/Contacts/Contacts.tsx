@@ -1,6 +1,7 @@
-import Heading from "components/Heading/Heading"
-import Icon from "components/Icon/Icon"
-import styles from "./Contacts.module.scss"
+import Heading from "components/Heading/Heading";
+import Icon from "components/Icon/Icon";
+import Image from "next/image";
+import styles from "./Contacts.module.scss";
 
 const Contacts = () => {
   return (
@@ -30,12 +31,19 @@ const Contacts = () => {
           <div className="flex gap-5">
             <Icon icon="google-logo" size={20} className={styles.icon} />
             <Icon icon="facebook-color" size={20} className={styles.icon} />
-            <Icon icon="instagram-color" size={20} className={styles.icon} />
+            <div className={styles.icon}>
+              <Image
+                src={require("/public/icons/instagram-color.svg")}
+                alt="insta"
+                width={30}
+                height={30}
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Contacts
+export default Contacts;

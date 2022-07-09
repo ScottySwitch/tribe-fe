@@ -1,20 +1,20 @@
-import Break from "components/Break/Break"
-import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
-import InforCard from "components/InforCard/InforCard"
-import Popover from "components/Popover/Popover"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import { bizInformationDefaultFormData, getAddItemsFields } from "constant"
-import React, { useEffect, useState } from "react"
-import { randomId } from "utils"
-import AddItems from "./AddItems/AddItems"
-import styles from "./TabContent.module.scss"
-import ProductApi from "../../../services/product"
-import { get } from "lodash"
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
+import InforCard from "components/InforCard/InforCard";
+import Popover from "components/Popover/Popover";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import { bizInformationDefaultFormData, getAddItemsFields } from "constant";
+import React, { useEffect, useState } from "react";
+import { randomId } from "utils";
+import AddItems from "./AddItems/AddItems";
+import styles from "./TabContent.module.scss";
+import ProductApi from "../../../services/product";
+import { get } from "lodash";
 
 interface ProductListingProps {
-  bizListingId: number
-  isPaid: boolean
+  bizListingId?: number | string;
+  isPaid: boolean;
 }
 
 enum ProductListingScreens {
@@ -24,24 +24,26 @@ enum ProductListingScreens {
 }
 
 const ProductListing = (props: ProductListingProps) => {
-  const { isPaid, bizListingId } = props
-  const [formData, setFormData] = useState(bizInformationDefaultFormData)
-  const [selectedItem, setSelectedItem] = useState<any[]>([])
-  const [screen, setScreen] = useState<ProductListingScreens>(ProductListingScreens.LIST)
-  const { category } = formData
+  const { isPaid, bizListingId } = props;
+  const [formData, setFormData] = useState(bizInformationDefaultFormData);
+  const [selectedItem, setSelectedItem] = useState<any[]>([]);
+  const [screen, setScreen] = useState<ProductListingScreens>(
+    ProductListingScreens.LIST
+  );
+  const { category } = formData;
 
-  const [productList, setProductList] = useState<any>()
+  const [productList, setProductList] = useState<any>();
   useEffect(() => {
-    const getProductsByBizListingId = async (bizListingId: number) => {
-      const result = await ProductApi.getProductsByBizListingId(bizListingId)
-      setProductList(result.data.data)
-    }
-    getProductsByBizListingId(bizListingId)
-  }, [bizListingId])
+    const getProductsByBizListingId = async (bizListingId: number | string) => {
+      const result = await ProductApi.getProductsByBizListingId(bizListingId);
+      setProductList(result.data.data);
+    };
+    bizListingId && getProductsByBizListingId(bizListingId);
+  }, [bizListingId]);
 
   const submitProduct = async (e: any) => {
     // console.log('newProduct', e[0]);
-    const newProduct = e[0]
+    const newProduct = e[0];
     const dataSend = {
       biz_listing: bizListingId,
       name: newProduct.name,
@@ -49,39 +51,42 @@ const ProductListing = (props: ProductListingProps) => {
       price: newProduct.price,
       tags: newProduct.tags,
       images: newProduct.images,
-    }
+    };
     await ProductApi.createProduct(dataSend).then((result) => {
-      setProductList([...productList, result.data.data])
-    })
-  }
+      setProductList([...productList, result.data.data]);
+    });
+  };
 
   const handleDelete = async (e) => {
     const newProductList = productList.filter((product) => {
-      return product.id !== e
-    })
-    setProductList(newProductList)
-    await ProductApi.deleteProduct(e)
-  }
+      return product.id !== e;
+    });
+    setProductList(newProductList);
+    await ProductApi.deleteProduct(e);
+  };
 
   const handlePinToTop = (e) => {
-    console.log(e)
-  }
+    console.log(e);
+  };
 
   const PopoverContent = ({ item }) => (
     <React.Fragment>
       <div
         onClick={() => {
-          setSelectedItem([item])
-          setScreen(ProductListingScreens.EDIT)
+          setSelectedItem([item]);
+          setScreen(ProductListingScreens.EDIT);
         }}
       >
         Edit
       </div>
-      <div className={styles.delete_action} onClick={() => handleDelete(item.id)}>
+      <div
+        className={styles.delete_action}
+        onClick={() => handleDelete(item.id)}
+      >
         Delete
       </div>
     </React.Fragment>
-  )
+  );
 
   return (
     <React.Fragment>
@@ -93,7 +98,8 @@ const ProductListing = (props: ProductListingProps) => {
       >
         <div className={styles.tips_button}>
           <div className={styles.tips}>
-            <strong>Tips:</strong> Click the pin icon to put 5 products on the top.
+            <strong>Tips:</strong> Click the pin icon to put 5 products on the
+            top.
           </div>
           <div className="flex gap-2">
             {!isPaid && productList.length > 2 && (
@@ -106,12 +112,14 @@ const ProductListing = (props: ProductListingProps) => {
               />
             )}
             <Button
-              disabled={!isPaid && Array.isArray(productList) && productList.length > 2}
+              disabled={
+                !isPaid && Array.isArray(productList) && productList.length > 2
+              }
               text="Add new"
               width={200}
               onClick={() => {
-                setSelectedItem([{}])
-                setScreen(ProductListingScreens.ADD)
+                setSelectedItem([{}]);
+                setScreen(ProductListingScreens.ADD);
               }}
             />
           </div>
@@ -123,7 +131,7 @@ const ProductListing = (props: ProductListingProps) => {
               const imgUrl =
                 get(item, "attributes.images[0]") ||
                 get(item, "images[0]") ||
-                "https://picsum.photos/200/300"
+                "https://picsum.photos/200/300";
               return (
                 <div key={item.id} className={styles.info_card_container}>
                   <InforCard
@@ -137,18 +145,23 @@ const ProductListing = (props: ProductListingProps) => {
                       <Icon icon="toolbar" color="white" />
                     </Popover>
                   </div>
-                  <div className={styles.pin} onClick={() => handlePinToTop(item)}>
+                  <div
+                    className={styles.pin}
+                    onClick={() => handlePinToTop(item)}
+                  >
                     <Icon icon="pin" color={index < 6 ? undefined : "white"} />
                   </div>
                 </div>
-              )
+              );
             })}
         </div>
         <Break />
       </SectionLayout>
       <SectionLayout
         show={screen !== ProductListingScreens.LIST}
-        title={screen === ProductListingScreens.EDIT ? "Edit product" : "Add deal"}
+        title={
+          screen === ProductListingScreens.EDIT ? "Edit product" : "Add deal"
+        }
       >
         <AddItems
           isPaid={isPaid}
@@ -156,13 +169,13 @@ const ProductListing = (props: ProductListingProps) => {
           placeholders={getAddItemsFields(category).placeholder}
           onCancel={() => setScreen(ProductListingScreens.LIST)}
           onSubmit={(e) => {
-            setScreen(ProductListingScreens.LIST)
-            submitProduct(e)
+            setScreen(ProductListingScreens.LIST);
+            submitProduct(e);
           }}
         />
       </SectionLayout>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ProductListing
+export default ProductListing;

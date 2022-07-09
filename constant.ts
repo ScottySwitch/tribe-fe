@@ -1,19 +1,19 @@
-import { CategoryText } from "./enums"
-import { UserProps } from "components/UserProfilePage/PanelAbout/PanelAbout"
+import { CategoryText } from "./enums";
+import { UserProps } from "components/UserProfilePage/PanelAbout/PanelAbout";
 import {
   Categories,
   InformationList,
   ListingHomePageScreens,
   ListingTabs,
   UserInformationList,
-} from "enums"
-import { IAddListingForm } from "pages/add-listing"
-import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed"
+} from "enums";
+import { IAddListingForm } from "pages/add-listing";
+import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed";
 
-export const loginInforItem = "login_infor"
-export const user = "user"
-export const userId = "user_id"
-export const token = "token"
+export const loginInforItem = "login_infor";
+export const user = "user";
+export const userId = "user_id";
+export const token = "token";
 
 export const curatedList = [
   {
@@ -31,7 +31,7 @@ export const curatedList = [
     content:
       "Gain insights about new brands through reviews  and ratings and get exclusive updates about the latest deals by community members.",
   },
-]
+];
 
 export const dummyTopSearchKeywords = [
   "Fast Food",
@@ -62,7 +62,7 @@ export const dummyTopSearchKeywords = [
   "Beverages",
   "Fast Food",
   "Desserts",
-]
+];
 
 export const homeCuratedResponsive = {
   xsShow: 2,
@@ -77,7 +77,7 @@ export const homeCuratedResponsive = {
   xlScroll: 3,
   show: 4,
   scroll: 3,
-}
+};
 export const infoCardResponsive = {
   xsShow: 2,
   xsScroll: 1,
@@ -91,7 +91,7 @@ export const infoCardResponsive = {
   xlScroll: 3,
   show: 4,
   scroll: 4,
-}
+};
 
 export const homeBannerResponsive = {
   xsShow: 1,
@@ -106,7 +106,7 @@ export const homeBannerResponsive = {
   xlScroll: 2,
   show: 3,
   scroll: 2,
-}
+};
 
 export const fakeSubCateList = [
   { label: "Subcate", value: "Subcate" },
@@ -114,15 +114,15 @@ export const fakeSubCateList = [
   { label: "Subcate 2", value: "Subcate 2" },
   { label: "Subcate 3", value: "Subcate 3" },
   { label: "Subcate 4", value: "Subcate 4" },
-]
+];
 
 export const bizInformationDefaultFormData = {
   category: Categories.BUY,
-  name: "Evertop Hainanese Boneless Chicken",
-  description:
-    "The first restaurant proprietor is believed to have been one A. Boulanger, a soup vendor, who opened his business in Paris in 1765. The sign above his door advertised restoratives, or restaurants, referring to the soups and broths available within.",
-  address: "50 Bussorah St, Singapore 199466",
-  phone: "+84 823996913",
+  logo: [],
+  name: "",
+  description: "",
+  address: "",
+  phone: "",
   productList: [
     {
       id: 123,
@@ -181,12 +181,12 @@ export const bizInformationDefaultFormData = {
       clicks: "123",
     },
   ],
-}
+};
 
 export const reviewSequenceOptions = [
   { label: "Top reviews", value: "top" },
   { label: "The lastest reviews", value: "latest" },
-]
+];
 
 export const fakeAddlistingForm: IAddListingForm = {
   category: 1,
@@ -240,13 +240,14 @@ export const fakeAddlistingForm: IAddListingForm = {
   atmosphere: ["Beach", "Al Fresco"],
   payment: ["Cash Only"],
   additionalServices: ["Takeout", "prayer facility available/nearby"],
-  foodOptions: [""],
-  paryerFacilities: [""],
-  foodOptionsRamadan: [""],
-  nonHalalActivities: [""],
-}
+  foodOptions: [],
+  paryerFacilities: [],
+  foodOptionsRamadan: [],
+  nonHalalActivities: [],
+};
 
 export const defaultAddlistingForm: IAddListingForm = {
+  id: 0,
   category: Categories.EAT, // TODO: remove
   relationship: "",
   listing: "",
@@ -292,24 +293,24 @@ export const defaultAddlistingForm: IAddListingForm = {
   ],
 
   tags: [],
-  mealsKind: [""],
-  placeGoodFor: [""],
-  parking: [""],
-  atmosphere: [""],
-  payment: [""],
-  additionalServices: [""],
-  foodOptions: [""],
-  paryerFacilities: [""],
-  foodOptionsRamadan: [""],
-  nonHalalActivities: [""],
-}
+  mealsKind: [],
+  placeGoodFor: [],
+  parking: [],
+  atmosphere: [],
+  payment: [],
+  additionalServices: [],
+  foodOptions: [],
+  paryerFacilities: [],
+  foodOptionsRamadan: [],
+  nonHalalActivities: [],
+};
 
 export const currencyOptions = [
   { label: "USD", value: "usd" },
   { label: "MYR", value: "myr" },
   { label: "SGD", value: "sgd" },
   { label: "IDR", value: "idr" },
-]
+];
 
 export const previewInfo = [
   { question: "What kind of place is this?", valueKey: "category" },
@@ -331,13 +332,16 @@ export const previewInfo = [
   { question: "Street address ", valueKey: "address" },
   { question: "Additional address information", valueKey: "additionalAddress" },
   { question: "Social Media", valueKey: "socialMedia" },
-  { question: "What is the category that best fits this place?", valueKey: "categoryKind" },
+  {
+    question: "What is the category that best fits this place?",
+    valueKey: "categoryKind",
+  },
   { question: "What type of cuisine does this place serve?", valueKey: "tags" },
   { question: "Open hours", valueKey: "openHours" },
   { question: "Select a currency", valueKey: "currency.label" },
   { question: "Max price", valueKey: "maxPrice" },
   { question: "Min price", valueKey: "minPrice" },
-]
+];
 
 export const paidInformationList = [
   { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
@@ -348,7 +352,7 @@ export const paidInformationList = [
   { label: InformationList.ANALYTICS, icon: "chart", star: true },
   { label: InformationList.CHANGE_ACCOUNT_TIER, icon: "reward-color" },
   { label: InformationList.VERIFICATION, icon: "like-color-2" },
-]
+];
 
 export const freeInformationList = [
   { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
@@ -356,9 +360,13 @@ export const freeInformationList = [
   { label: InformationList.PHOTOS_VIDEOS, icon: "camera-color" },
   { label: InformationList.PRODUCT_LISTING, icon: "buy-color" },
   { label: InformationList.ANALYTICS, icon: "chart" },
-  { label: InformationList.CHANGE_ACCOUNT_TIER, icon: "reward-color", star: true },
+  {
+    label: InformationList.CHANGE_ACCOUNT_TIER,
+    icon: "reward-color",
+    star: true,
+  },
   { label: InformationList.VERIFICATION, icon: "like-color-2" },
-]
+];
 
 export const userInformationList = [
   { label: UserInformationList.USER_INFORMATION, icon: "user-color-2" },
@@ -369,30 +377,58 @@ export const userInformationList = [
   { label: UserInformationList.TRIBES_FOR_BUSINESSES, icon: "user-color-2" },
   { label: UserInformationList.SUPPORT, icon: "support-color" },
   { label: UserInformationList.TERMS_CONDITIONS, icon: "user-color-2" },
-]
+];
 
 export const eatTabList = [
-  { text: "Dishes", value: ListingTabs.DISH, screen: ListingHomePageScreens.ADD_ITEMS },
-  { text: "Menu", value: ListingTabs.MENU, screen: ListingHomePageScreens.ADD_MENU },
-  { text: "Deals", value: ListingTabs.DEAL, screen: ListingHomePageScreens.ADD_DEALS },
-]
+  {
+    text: "Dishes",
+    value: ListingTabs.DISH,
+    screen: ListingHomePageScreens.ADD_ITEMS,
+  },
+  {
+    text: "Menu",
+    value: ListingTabs.MENU,
+    screen: ListingHomePageScreens.ADD_MENU,
+  },
+  {
+    text: "Deals",
+    value: ListingTabs.DEAL,
+    screen: ListingHomePageScreens.ADD_DEALS,
+  },
+];
 
 export const productTabList = [
-  { text: "Products", value: ListingTabs.PRODUCT, screen: ListingHomePageScreens.ADD_ITEMS },
-  { text: "Deals", value: ListingTabs.DEAL, screen: ListingHomePageScreens.ADD_DEALS },
-]
+  {
+    text: "Products",
+    value: ListingTabs.PRODUCT,
+    screen: ListingHomePageScreens.ADD_ITEMS,
+  },
+  {
+    text: "Deals",
+    value: ListingTabs.DEAL,
+    screen: ListingHomePageScreens.ADD_DEALS,
+  },
+];
 
 export const serviceTabList = [
-  { text: "Services", value: ListingTabs.SERVICE, screen: ListingHomePageScreens.ADD_ITEMS },
-  { text: "Deals", value: ListingTabs.DEAL, screen: ListingHomePageScreens.ADD_DEALS },
-]
+  {
+    text: "Services",
+    value: ListingTabs.SERVICE,
+    screen: ListingHomePageScreens.ADD_ITEMS,
+  },
+  {
+    text: "Deals",
+    value: ListingTabs.DEAL,
+    screen: ListingHomePageScreens.ADD_DEALS,
+  },
+];
 
 export const homeCarousel = [
   { imgUrl: "https://picsum.photos/600", url: "" },
   { imgUrl: "https://picsum.photos/600", url: "" },
   { imgUrl: "https://picsum.photos/600", url: "" },
   { imgUrl: "https://picsum.photos/600", url: "" },
-]
+];
 
 export const homeCuratedCarousel = [
   { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
@@ -401,7 +437,7 @@ export const homeCuratedCarousel = [
   { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
   { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
   { imgUrl: "https://picsum.photos/600", url: "", title: "Old Delhi Delights" },
-]
+];
 
 export const homeArticleCarousel = [
   {
@@ -442,7 +478,7 @@ export const homeArticleCarousel = [
     title: "Auntie Anne's In Singapore Is Now Halal-Certified!",
     time: "7 hours ago",
   },
-]
+];
 
 export const inforCardList = [
   {
@@ -828,7 +864,7 @@ export const inforCardList = [
     tags: ["Hot deals", "Best sellers"],
     isVerified: true,
   },
-]
+];
 
 export const interestingList = [
   { avatar: "https://picsum.photos/200/300", label: "Animal" },
@@ -840,20 +876,20 @@ export const interestingList = [
   { avatar: "https://picsum.photos/200/300", label: "Travel" },
   { avatar: "https://picsum.photos/200/300", label: "Ice cream" },
   { avatar: "https://picsum.photos/200/300", label: "Shopping" },
-]
+];
 
 export const contributePopOverList = [
   { icon: "map-color", label: "Add new listing", href: "/add-listing" },
   { icon: "comment-color", label: "Add new review", href: "/reviews" },
   { icon: "update-color", label: "Update listing", href: "/update-listing" },
-]
+];
 
 export const switchAccountList = [
   { name: "Evertop Hainanese Boneless Chicken" },
   { name: "The Cheese Merchant 1" },
   { name: "The Cheese Merchant 2" },
   { name: "The Cheese Merchant 3" },
-]
+];
 
 export const locations = [
   { label: "Singapore", value: "singapore" },
@@ -861,11 +897,21 @@ export const locations = [
   { label: "Indonesia", value: "indonesia" },
   { label: "India", value: "india" },
   { label: "Thailand", value: "thailand" },
-]
+];
 
 export const dummySubCategories = [
-  { label: "Dessert", value: "dessert", slug: "dessert", icon: "https://picsum.photos/200/300" },
-  { label: "Bakeries", value: "bakeries", slug: "bakeries", icon: "https://picsum.photos/200/300" },
+  {
+    label: "Dessert",
+    value: "dessert",
+    slug: "dessert",
+    icon: "https://picsum.photos/200/300",
+  },
+  {
+    label: "Bakeries",
+    value: "bakeries",
+    slug: "bakeries",
+    icon: "https://picsum.photos/200/300",
+  },
   {
     label: "Quick bites",
     value: "quick-bites",
@@ -884,7 +930,7 @@ export const dummySubCategories = [
     slug: "restaurant",
     icon: "https://picsum.photos/200/300",
   },
-]
+];
 
 export const categories = [
   {
@@ -957,7 +1003,7 @@ export const categories = [
       { label: "Dessert", value: "dessert" },
     ],
   },
-]
+];
 
 export const listingSearchResult = [
   {
@@ -1030,7 +1076,7 @@ export const listingSearchResult = [
       followers: 500,
     },
   },
-]
+];
 
 export const dummyKeywords = [
   "Fast Food",
@@ -1061,7 +1107,7 @@ export const dummyKeywords = [
   "Beverages",
   "Fast Food",
   "Desserts",
-]
+];
 
 export const roleList = [
   { label: "Owner", value: "owner" },
@@ -1070,7 +1116,7 @@ export const roleList = [
   { label: "Accounting/ Finance", value: "finance" },
   { label: "Guest service/ Front Office", value: "front-office" },
   { label: "Marketing", value: "marketing" },
-]
+];
 
 export const educationLevels = [
   { label: "High School", value: "High School" },
@@ -1079,12 +1125,15 @@ export const educationLevels = [
   { label: "Bachelor's", value: "Bachelor's" },
   { label: "Master's", value: "Master's" },
   { label: "Doctorate", value: "Doctorate" },
-]
+];
 
 export const industryList = [
   { label: "Accountancy", value: "Accountancy" },
   { label: "Advertising", value: "Advertising" },
-  { label: "Agriculture & Chemical Industry", value: "Agriculture & Chemical Industry" },
+  {
+    label: "Agriculture & Chemical Industry",
+    value: "Agriculture & Chemical Industry",
+  },
   { label: "Commerce", value: "Commerce" },
   { label: "Construction", value: "Construction" },
   { label: "Design", value: "Design" },
@@ -1105,7 +1154,7 @@ export const industryList = [
   { label: "Shipping & Logistics", value: "Shipping & Logistics" },
   { label: "Tourism", value: "Tourism" },
   { label: "Transportation", value: "Transportation" },
-]
+];
 
 export const countryList = [
   { label: "Afghanistan", value: "Afghanistan" },
@@ -1153,7 +1202,10 @@ export const countryList = [
   { label: "Cuba", value: "Cuba" },
   { label: "Cyprus", value: "Cyprus" },
   { label: "Czechia (Czech Republic)", value: "Czechia (Czech Republic)" },
-  { label: "Democratic Republic of the Congo", value: "Democratic Republic of the Congo" },
+  {
+    label: "Democratic Republic of the Congo",
+    value: "Democratic Republic of the Congo",
+  },
   { label: "Denmark", value: "Denmark" },
   { label: "Djibouti", value: "Djibouti" },
   { label: "Dominica", value: "Dominica" },
@@ -1255,7 +1307,10 @@ export const countryList = [
   { label: "Rwanda", value: "Rwanda" },
   { label: "Saint Kitts and Nevis", value: "Saint Kitts and Nevis" },
   { label: "Saint Lucia", value: "Saint Lucia" },
-  { label: "Saint Vincent and the Grenadines", value: "Saint Vincent and the Grenadines" },
+  {
+    label: "Saint Vincent and the Grenadines",
+    value: "Saint Vincent and the Grenadines",
+  },
   { label: "Samoa", value: "Samoa" },
   { label: "San Marino", value: "San Marino" },
   { label: "Sao Tome and Principe", value: "Sao Tome and Principe" },
@@ -1303,7 +1358,7 @@ export const countryList = [
   { label: "Yemen", value: "Yemen" },
   { label: "Zambia", value: "Zambia" },
   { label: "Zimbabwe", value: "Zimbabwe" },
-]
+];
 
 export const phoneAreaCodes = [
   { label: "Afghanistan", value: "+93" },
@@ -1546,63 +1601,90 @@ export const phoneAreaCodes = [
   { label: "Yemen", value: "+967" },
   { label: "Zambia", value: "+260" },
   { label: "Zimbabwe", value: "+263" },
-]
+];
 
 export const socialMediaOptions = [
-  { icon: require("public/icons/twitter-color.svg"), label: "Twitter", value: "twitter" },
-  { icon: require("public/icons/instagram-color.svg"), label: "Instagram", value: "instagram" },
-  { icon: require("public/icons/whatsapp-color.svg"), label: "WhatsApp", value: "whatsapp" },
-  { icon: require("public/icons/telegram-color.svg"), label: "Telegram", value: "telegram" },
-]
+  {
+    icon: require("public/icons/twitter-color.svg"),
+    label: "Twitter",
+    value: "twitter",
+  },
+  {
+    icon: require("public/icons/instagram-color.svg"),
+    label: "Instagram",
+    value: "instagram",
+  },
+  {
+    icon: require("public/icons/whatsapp-color.svg"),
+    label: "WhatsApp",
+    value: "whatsapp",
+  },
+  {
+    icon: require("public/icons/telegram-color.svg"),
+    label: "Telegram",
+    value: "telegram",
+  },
+];
 
 export const formattedAreaCodes = phoneAreaCodes.map((item) => ({
   label: `${item.label}  ${item.value}`,
   value: item.value,
-}))
+}));
 
 export const getAddItemsFields = (category, isEdit?: boolean) => {
   switch (category) {
     case Categories.BUY: // Buy
       return {
         title: isEdit ? "Edit product" : "Add products",
-        placeholder: ["Product", "describe your product (optional)", "Create products"],
-      }
+        placeholder: [
+          "Product",
+          "describe your product (optional)",
+          "Create products",
+        ],
+      };
     case Categories.EAT: // Eat
       return {
         title: isEdit ? "Edit dish" : "Add dishes",
         placeholder: ["Dish", "describe your dish (optional)", "Create dishes"],
-      }
+      };
     default:
       return {
         title: isEdit ? "Edit service" : "Add services",
-        placeholder: ["Service", "describe your service (optional)", "Create services"],
-      }
+        placeholder: [
+          "Service",
+          "describe your service (optional)",
+          "Create services",
+        ],
+      };
   }
-}
+};
 
 export const dummySavedDeals = [
   {
     imgUrl: "https://picsum.photos/300/600",
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 17, 2022",
     type: 2,
     favourite: true,
   },
   {
     imgUrl: "https://picsum.photos/300/600",
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 30, 2022",
     type: 2,
     favourite: true,
   },
   {
     imgUrl: "https://picsum.photos/300/600",
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 24, 2022",
     type: 2,
     favourite: true,
   },
-]
+];
 
 export const dummyUserInfo: UserProps = {
   email: "annabae@gmail.com",
@@ -1612,7 +1694,7 @@ export const dummyUserInfo: UserProps = {
   educationLevel: "",
   industry: "",
   birthday: "",
-}
+};
 
 export const dummyPending = [
   {
@@ -1657,7 +1739,7 @@ export const dummyPending = [
       location: "50 Bussorah St, Singapore 199466",
     },
   },
-]
+];
 
 export const dummyApproved = [
   {
@@ -1702,7 +1784,7 @@ export const dummyApproved = [
       location: "50 Bussorah St, Singapore 199466",
     },
   },
-]
+];
 
 export const dummyDenied = [
   {
@@ -1747,7 +1829,7 @@ export const dummyDenied = [
       location: "50 Bussorah St, Singapore 199466",
     },
   },
-]
+];
 
 export const optionsReportPhoto = [
   { id: "photo-1", label: "Offensive, hateful or sexually explicit" },
@@ -1756,7 +1838,7 @@ export const optionsReportPhoto = [
   { id: "photo-4", label: "Poor quality" },
   { id: "photo-5", label: "Not a photo of the place" },
   { id: "other", label: "Other" },
-]
+];
 
 export const optionsReportReview = [
   { id: "review-1", label: "Digress" },
@@ -1768,10 +1850,10 @@ export const optionsReportReview = [
   { id: "review-7", label: "Personal information" },
   { id: "review-8", label: "Not helpful" },
   { id: "other", label: "Other" },
-]
+];
 
 export const optionsReportListing = [
   { id: "listing-1", label: "Content that is dishonest or inaccurate" },
   { id: "listing-2", label: "This place is not real" },
   { id: "other", label: "Other" },
-]
+];

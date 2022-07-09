@@ -1,40 +1,44 @@
-import classNames from "classnames"
-import Icon from "components/Icon/Icon"
-import React, { ReactNode, useState } from "react"
-import { UseFormRegisterReturn } from "react-hook-form"
-import ReactSelect, { ControlProps, components, StylesConfig } from "react-select"
-import styles from "./Select.module.scss"
+import classNames from "classnames";
+import Icon from "components/Icon/Icon";
+import React, { ReactNode, useState } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
+import ReactSelect, {
+  ControlProps,
+  components,
+  StylesConfig,
+} from "react-select";
+import styles from "./Select.module.scss";
 
 interface IOption {
-  label: string | ReactNode
-  value: string | number
+  label: string | ReactNode;
+  value: string | number;
 }
 
 export interface SelectProps {
-  id?: string
-  label?: string
-  className?: string
-  defaultValue?: IOption[] | IOption
-  value?: IOption[] | IOption | string
-  options?: IOption[]
-  prefixIcon?: string
-  helperText?: string
-  disabled?: boolean
-  placeholder?: string
-  isMulti?: boolean
-  isSearchable?: boolean
-  closeMenuOnSelect?: boolean
-  menuFooter?: ReactNode
-  register?: UseFormRegisterReturn
-  width?: number | string
-  menuWidth?: string | number
-  onChange?: (value: any) => void
-  variant?: "filled" | "outlined" | "no-outlined"
-  size?: "small" | "medium" | "large"
-  inputRef?: any
-  shouldControlShowValue?: boolean
-  controlStyle?: any
-  placeholderStyle?: any
+  id?: string;
+  label?: string;
+  className?: string;
+  defaultValue?: IOption[] | IOption | string;
+  value?: IOption[] | IOption | string;
+  options?: IOption[];
+  prefixIcon?: string;
+  helperText?: string;
+  disabled?: boolean;
+  placeholder?: string;
+  isMulti?: boolean;
+  isSearchable?: boolean;
+  closeMenuOnSelect?: boolean;
+  menuFooter?: ReactNode;
+  register?: UseFormRegisterReturn;
+  width?: number | string;
+  menuWidth?: string | number;
+  onChange?: (value: any) => void;
+  variant?: "filled" | "outlined" | "no-outlined";
+  size?: "small" | "medium" | "large";
+  inputRef?: any;
+  shouldControlShowValue?: boolean;
+  controlStyle?: any;
+  placeholderStyle?: any;
 }
 
 const Select = (props: SelectProps) => {
@@ -62,11 +66,11 @@ const Select = (props: SelectProps) => {
     inputRef,
     controlStyle,
     placeholderStyle,
-  } = props
+  } = props;
 
-  const [selected, setSelected] = useState<IOption[] | IOption | string | undefined>(
-    value || defaultValue
-  )
+  const [selected, setSelected] = useState<
+    IOption[] | IOption | string | undefined
+  >(value || defaultValue);
 
   const selectWrapperClassName = classNames(className, styles.select, {
     [styles.filled]: variant === "filled",
@@ -75,10 +79,10 @@ const Select = (props: SelectProps) => {
     [styles.large]: size === "large",
     [styles.small]: size === "small",
     [styles.label]: label,
-  })
+  });
 
-  const primary500 = "#E60112"
-  const primary20 = "#FEF1F2"
+  const primary500 = "#E60112";
+  const primary20 = "#FEF1F2";
 
   const customStyles: StylesConfig = {
     container: (styles) => ({ ...styles, width: "100%" }),
@@ -112,7 +116,7 @@ const Select = (props: SelectProps) => {
           backgroundColor: isSelected ? primary500 : primary20,
         },
         backgroundColor: isSelected ? primary500 : "white",
-      }
+      };
     },
     dropdownIndicator: (styles) => ({ ...styles, padding: 0 }),
     input: (styles) => ({ ...styles, padding: 0, margin: 0, fontWeight: 300 }),
@@ -131,12 +135,12 @@ const Select = (props: SelectProps) => {
     }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
     indicatorsContainer: (styles) => ({ ...styles, alignItems: "center" }),
-  }
+  };
 
   const handleChange = (dropdownValues: any) => {
-    onChange?.(dropdownValues)
-    setSelected(dropdownValues)
-  }
+    onChange?.(dropdownValues);
+    setSelected(dropdownValues);
+  };
 
   const Control = ({ children, ...props }: ControlProps<any, false>) => {
     return (
@@ -144,8 +148,8 @@ const Select = (props: SelectProps) => {
         <Icon size={20} icon={prefixIcon || ""} className="mr-[10px]" />
         {children}
       </components.Control>
-    )
-  }
+    );
+  };
 
   const Menu = (props: any) => {
     return (
@@ -155,22 +159,22 @@ const Select = (props: SelectProps) => {
           {menuFooter}
         </components.Menu>
       </React.Fragment>
-    )
-  }
+    );
+  };
 
   const Option = (props: any) => {
     return (
       <React.Fragment>
         <components.Option {...props}>{props.children}</components.Option>
       </React.Fragment>
-    )
-  }
+    );
+  };
 
   const SingleValue = (props) => (
     <components.SingleValue {...props}>
       {shouldControlShowValue ? props.data.value : props.data.label}
     </components.SingleValue>
-  )
+  );
 
   return (
     <div className={selectWrapperClassName} style={{ width }}>
@@ -180,7 +184,9 @@ const Select = (props: SelectProps) => {
           id={id}
           inputRef={inputRef}
           options={options}
-          value={selected}
+          value={options?.find(
+            (opt) => opt === selected || opt.value === selected
+          )}
           onChange={handleChange}
           placeholder={placeholder}
           isClearable={false}
@@ -195,7 +201,7 @@ const Select = (props: SelectProps) => {
       </div>
       {helperText && <div>{helperText}</div>}
     </div>
-  )
-}
+  );
+};
 
-export default Select
+export default Select;

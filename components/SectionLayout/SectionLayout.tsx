@@ -1,22 +1,25 @@
-import classNames from "classnames"
-import React, { ReactElement } from "react"
+import classNames from "classnames";
+import Loader from "components/Loader/Loader";
+import React, { ReactElement } from "react";
 
-import styles from "./SectionLayout.module.scss"
+import styles from "./SectionLayout.module.scss";
 
 export interface SectionLayoutProps {
-  title?: string
-  className?: string
-  childrenClassName?: string
-  children?: any
-  subTitle?: string
-  show?: boolean
-  backgroundColor?: boolean
-  containerClassName?: string
-  titleContainerClassName?: string
-  transparent?: boolean
+  title?: string;
+  loading?: boolean;
+  className?: string;
+  childrenClassName?: string;
+  children?: any;
+  subTitle?: string;
+  show?: boolean;
+  backgroundColor?: boolean;
+  containerClassName?: string;
+  titleContainerClassName?: string;
+  transparent?: boolean;
 }
 const SectionLayout = (props: SectionLayoutProps) => {
   const {
+    loading,
     title,
     className,
     subTitle,
@@ -27,18 +30,21 @@ const SectionLayout = (props: SectionLayoutProps) => {
     transparent,
     containerClassName,
     titleContainerClassName,
-  } = props
+  } = props;
 
   const sectionlayoutClassName = classNames(className, styles.section_layout, {
     [styles.colored_background]: backgroundColor,
     [styles.transparent]: transparent,
-  })
+  });
 
-  const titleContainerClassNames = classNames(styles.title_container, titleContainerClassName)
+  const titleContainerClassNames = classNames(
+    styles.title_container,
+    titleContainerClassName
+  );
 
-  const childrenClassNames = classNames(styles.children, childrenClassName)
+  const childrenClassNames = classNames(styles.children, childrenClassName);
   if (!show) {
-    return null
+    return null;
   }
   return (
     <div className={sectionlayoutClassName}>
@@ -49,9 +55,11 @@ const SectionLayout = (props: SectionLayoutProps) => {
             {subTitle && <div className={styles.sub_title}>{subTitle}</div>}
           </div>
         )}
-        <div className={childrenClassNames}>{children}</div>
+        <div className={childrenClassNames}>
+          {loading ? <Loader /> : children}
+        </div>
       </div>
     </div>
-  )
-}
-export default SectionLayout
+  );
+};
+export default SectionLayout;

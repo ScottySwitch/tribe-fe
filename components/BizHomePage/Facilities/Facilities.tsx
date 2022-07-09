@@ -8,7 +8,8 @@ import AddEatInfor from "components/AddListingPages/PageThree/AddInforSections/A
 import { IAddListingForm } from "pages/add-listing";
 import { Categories } from "enums";
 import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor";
-import _, { get } from "lodash";
+import _, { get, random } from "lodash";
+import { randomId } from "utils";
 
 interface FacilitiesProps {
   category: Categories;
@@ -44,12 +45,13 @@ const Facilities = (props: FacilitiesProps) => {
     );
   };
 
-  const FacilityItem = ({ item, className }) => (
-    <div key={item} className={className}>
-      <Icon icon="checked-circle" size={14} />
-      {item}
-    </div>
-  );
+  const FacilityItem = ({ item, className }) =>
+    typeof item === "string" ? (
+      <div key={item} className={className}>
+        <Icon icon="checked-circle" size={14} />
+        {item}
+      </div>
+    ) : null;
 
   const getFacilityDepartmentLabel = (facilitySlug: string) => {
     const facilityObject = {
@@ -90,13 +92,18 @@ const Facilities = (props: FacilitiesProps) => {
                     (item) =>
                       item && (
                         <FacilityItem
+                          key={randomId()}
                           item={item}
                           className={facilityClassName}
                         />
                       )
                   )
                 ) : (
-                  <FacilityItem item={item} className={facilityClassName} />
+                  <FacilityItem
+                    key={randomId()}
+                    item={item}
+                    className={facilityClassName}
+                  />
                 )}
               </div>
             </div>
