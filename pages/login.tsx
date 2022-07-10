@@ -48,6 +48,8 @@ const LoginPage = () => {
   const [valuePhoneNumber, setValuePhoneNumber] = useState("")
   const [valuePassword, setValuePassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [isErrorPhoneNumber, setIsErrorPhoneNumber] = useState<boolean>(false)
+  const [isErrorEmail, setIsErrorEmail] = useState<boolean>(false)
 
   const handleLogin = async () => {
     let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}")
@@ -64,6 +66,8 @@ const LoginPage = () => {
         // TODO: notify error (missing template)
         console.log(get(err, "response.data.error"))
         setIsLoading(false)
+        setIsErrorPhoneNumber(false)
+        setIsErrorEmail(true)
         return false
       }
 
@@ -84,6 +88,8 @@ const LoginPage = () => {
         // TODO: notify error (missing template)
         console.log(err.response.data.error)
         setIsLoading(false)
+        setIsErrorEmail(false)
+        setIsErrorPhoneNumber(true)
         return false
       }
 
@@ -139,6 +145,11 @@ const LoginPage = () => {
             type={showPassword ? "default" : "password"}
             suffix={<PasswordEye onClick={() => setShowPassword(!showPassword)} />}
             onChange={(e: any) => setValuePassword(e.target.value)}
+            error={
+              isErrorPhoneNumber 
+              ? 'Ops! We cannot find the account with that phone number or invalid password.'  : 
+              isErrorEmail ? 'Ops! We cannot find the account with that email or invalid password.'
+            : ''}
           />
           <div className={styles.actions}>
             <div className="w-[150px]">
