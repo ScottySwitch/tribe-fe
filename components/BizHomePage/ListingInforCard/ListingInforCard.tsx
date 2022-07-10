@@ -43,8 +43,6 @@ const ReviewsFollowers = (props: {
     styles.reviews_followers_container,
     className
   );
-  console.log("bizListing", bizListing);
-  console.log("userInfo", userInfo);
   const bizListingReviewCount = get(bizListing, "reviews.length") || 0;
   const bizListingFollowerCount =
     get(bizListing, "user_listing_follows.length") || 0;
@@ -67,14 +65,14 @@ const ReviewsFollowers = (props: {
   }, []);
 
   const handleAddFollow = async () => {
-    const data = await UserFollowApi.createFollowing();
+    const data = await UserFollowApi.createFollowing(bizListing.id);
     if (get(data, "data")) {
-      setIsFavourite(true);
+      setIsFollow(true);
     }
   };
 
   const handleAddFavorite = async () => {
-    const data = await UserFavouriteApi.createFavourite();
+    const data = await UserFavouriteApi.createFavourite(bizListing.id);
     if (get(data, "data")) {
       setIsFavourite(true);
     }

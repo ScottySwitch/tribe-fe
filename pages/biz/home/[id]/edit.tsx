@@ -83,8 +83,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       : [];
 
   useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    setUserInfo(userInfo);
     const getListingData = async (listingSlug) => {
       let data;
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -107,6 +105,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         console.log("userInfo", userInfo);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
+        setUserInfo(userInfo);
         const rawTags = listing.tags || [];
         const rawFacilities = listing.facilities_data || [];
         const rawPhoneNumber = listing.phone_number;
