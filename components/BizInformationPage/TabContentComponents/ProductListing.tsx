@@ -32,8 +32,8 @@ const ProductListing = (props: ProductListingProps) => {
     ProductListingScreens.LIST
   );
   const { category } = formData;
-  const [isShowModalDelete, setIsShowModalDelete] = useState<boolean>(false)
-  const [modalDeleteProductId, setModalDeleteProductId] = useState<number>(0)
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false)
+  const [deleteModalProductId, setDeleteModalProductId] = useState<number>(0)
   const [productList, setProductList] = useState<any>();
 
   const getProductsByBizListingId = async (bizListingId: number | string | undefined) => {
@@ -63,11 +63,11 @@ const ProductListing = (props: ProductListingProps) => {
 
   const handleDelete = async () => {
     const newProductList = productList.filter((product) => {
-      return product.id !== modalDeleteProductId
+      return product.id !== deleteModalProductId
     })
+    await ProductApi.deleteProduct(deleteModalProductId)
     setProductList(newProductList)
-    await ProductApi.deleteProduct(modalDeleteProductId)
-    setIsShowModalDelete(false)
+    setIsShowDeleteModal(false)
   }
 
   const handlePinToTop = async (e) => {
@@ -88,8 +88,8 @@ const ProductListing = (props: ProductListingProps) => {
         Edit
       </div>
       <div className={styles.delete_action} onClick={() => {
-        setModalDeleteProductId(item.id)
-        setIsShowModalDelete(true)
+        setDeleteModalProductId(item.id)
+        setIsShowDeleteModal(true)
       }}>
         Delete
       </div>
@@ -178,15 +178,15 @@ const ProductListing = (props: ProductListingProps) => {
           }}
         />
       </SectionLayout>
-      <ModalDelete visible={isShowModalDelete}
-                   onClose={() => setIsShowModalDelete(false)}
-                   onSubmit={() => handleDelete()}
+      <DeleteModal visible={isShowDeleteModal}
+                   onClose={() => setIsShowDeleteModal(false)}
+                   onSubmit={handleDelete}
       />
     </React.Fragment>
   );
 };
 
-const ModalDelete = (props) => {
+const DeleteModal = (props) => {
   const {visible, onClose, onSubmit} = props
   return (
     <Modal visible={visible} width={579} title="Delete Product?" onClose={onClose}>
@@ -197,7 +197,7 @@ const ModalDelete = (props) => {
         </div>
         <ModalFooter>
           <Button className="text-sm bg-transparent text-black border mr-2" text="Do not delete" onClick={onClose}/>
-          <Button className="text-sm" text="Delete" onClick={() => onSubmit()}/>
+          <Button className="text-sm" text="Delete" onClick={onSubmit}/>
         </ModalFooter>
       </div>
     </Modal>
