@@ -73,7 +73,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
   const userOwnerListing = userInfo.owner_listings || [];
   const ownerListing = userOwnerListing.map((item) => item.attributes);
   const {
-    query: { id: currentHomeSlug },
+    query: { listingSlug },
   } = router;
   return (
     <React.Fragment>
@@ -97,7 +97,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
             className={styles.name}
           >
             {item.name}
-            {currentHomeSlug === item.slug && (
+            {listingSlug === item.slug && (
               <Icon icon="icon-check-bold" size={14} color="#4acc8f" />
             )}
           </div>
