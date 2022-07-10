@@ -14,6 +14,16 @@ import Loader from "components/Loader/Loader";
 import styles from "styles/Home.module.scss";
 import Button from "components/Button/Button";
 import Filter from "components/Filter/Filter";
+import bizListingApi from "services/biz-listing";
+import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
+import { Categories, CategoryText } from "enums";
+import { categories } from "constant";
+
+const categoryTabList: ITab[] = categories.map((item) => ({
+  label: item.slug,
+  value: item.value,
+  content: <div></div>,
+}));
 
 const Deals = () => {
   const trans = useTrans();
@@ -22,16 +32,19 @@ const Deals = () => {
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
+  const [loading, setLoading] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<Categories>(Categories.BUY);
+  const [pagination, setPagination] = useState(defaultPagination);
   const [listingsHaveDeals, setListingsHaveDeals] = useState<{
     [key: string]: any;
   }>([]);
-  const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState(defaultPagination);
-  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
-    const getCollection = async () => {
-      const response = await Biz.getAllDeals();
+    const getListingsHaveDeals = async () => {
+      const response = await bizListingApi.getBizListingsHaveDealsByCategoryId(
+        selectedTab
+      );
       const mappedData =
         Array.isArray(get(response, "data.data")) &&
         get(response, "data.data").map((item) => ({
@@ -53,8 +66,8 @@ const Deals = () => {
       setLoading(false);
     };
 
-    getCollection();
-  }, [pagination]);
+    getListingsHaveDeals();
+  }, [pagination, selectedTab]);
 
   if (loading) {
     return (
@@ -69,7 +82,7 @@ const Deals = () => {
       <SectionLayout className="py-0 pb-3">
         <div className={styles.breadcrumbs}>
           Home <Icon icon="carret-right" size={14} color="#7F859F" />
-          Collection
+          Deals
         </div>
       </SectionLayout>
       <SectionLayout className={styles.banner}>
@@ -80,7 +93,16 @@ const Deals = () => {
           objectFit="cover"
         />
       </SectionLayout>
-      <SectionLayout>
+      <SectionLayout childrenClassName="flex justify-between">
+        <div className="flex">
+          <TabsHorizontal
+            tablist={categoryTabList}
+            type="secondary-no-outline"
+            selectedTab={selectedTab}
+            className="pt-[6px]"
+            onCurrentTab={(e: Categories) => setSelectedTab(e)}
+          />
+        </div>
         <div className="flex gap-5">
           <Button
             width={120}
@@ -114,6 +136,7 @@ const Deals = () => {
                   categories={item.categories}
                   tags={item.tags}
                   isVerified={item.isVerified}
+                  description={item.description}
                   onClick={() => {
                     window.location.href = `/biz/home/${item.slug}`;
                   }}

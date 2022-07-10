@@ -1,4 +1,4 @@
-import { Categories } from "enums";
+import { Categories, CategoryText } from "enums";
 import category from "services/category";
 import Api from "../index";
 
@@ -362,10 +362,15 @@ const getListingFavouriteByCategory = async (category) => {
   return await Api.get(url);
 };
 
-const getBizListingsHaveDeals = async () => {
+const getBizListingsHaveDealsByCategoryId = async (categoryId: Categories) => {
   const query = qs.stringify(
     {
       filters: {
+        categories: {
+          id: {
+            $eq: categoryId,
+          },
+        },
         deals: {
           is_exclusive: true,
           is_revision: {
@@ -384,9 +389,8 @@ const getBizListingsHaveDeals = async () => {
   return await Api.get(url);
 };
 
-export default {
+const bizListingApi = {
   getBizlistingByCategoryLink,
-  getBizListingsHaveDeals,
   getBizListing,
   getOwnerListingRoleByUserId,
   getInfoOwnerBizListingBySlug,
@@ -407,6 +411,9 @@ export default {
   getBizListingForYou,
   getAllBizListingsByCategory,
   getAllBizListingsHaveExclusiveDeal,
+  getBizListingsHaveDealsByCategoryId,
   getExclusiveDealByCategory,
   getListingFavouriteByCategory,
 };
+
+export default bizListingApi;
