@@ -15,6 +15,7 @@ export interface ModalProps {
   mobilePosition?: "center" | "bottom" | "top" | "left" | "right";
   backdrop?: boolean;
   mobileFullHeight?: boolean;
+  mobileFullWidth?: boolean;
   containerClassName?: string;
   contentClassName?: string;
   onClose?: () => void;
@@ -32,6 +33,7 @@ const Modal = (props: ModalProps) => {
     closable = true,
     mobilePosition = "bottom",
     mobileFullHeight,
+    mobileFullWidth = true,
     containerClassName,
     contentClassName,
     backdrop = true,
@@ -49,7 +51,8 @@ const Modal = (props: ModalProps) => {
 
   const modalContainerClassName = classNames(
     styles.container,
-    containerClassName
+    containerClassName,
+    { [styles.mobile_full_width]: mobileFullHeight && mobileFullWidth }
   );
 
   const modalContentClassName = classNames(styles.content, contentClassName);

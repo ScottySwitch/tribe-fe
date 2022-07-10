@@ -182,6 +182,7 @@ const HamModal = (props: HamModalProps) => {
       <Modal
         visible={showHamModal}
         mobileFullHeight
+        mobileFullWidth={false}
         mobilePosition="right"
         onClose={() => onSetShowHamModal(false)}
       >
