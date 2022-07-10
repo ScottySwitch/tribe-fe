@@ -122,7 +122,7 @@ const ClaimListing = (context) => {
             <Question question="Please click the statements below to indicate you understand and accept these terms.">
               <Checkbox
                 register={register("isAuthorized", { required: "Please confirm" })}
-                label="I certify that I am an authorized representative or affiliate of this establishment and have the authority to register as a business representative. The information I have entered into this form is neither false nor fraudulent. I also understand that Tripadvisor may disclose my name and affiliation to other verified representatives of this establishment."
+                label="I hereby certify that I am an authorized representative or affiliate of this establishment and that I am authorized to register as a business representative. I have not entered any false or fraudulent information into this form and that if I knowingly claim an incorrect listing, legal action may be taken against me. I also acknowledge that Tribes may reveal my name and affiliation to other confirmed representatives of this establishment. "
               />
               <br />
               <Checkbox

@@ -84,7 +84,7 @@ const Category = (props: any) => {
   }, [page])
 
   const getData = async (categoryId, page) => {
-    const data = await BizListingApi.getBizListingsByCategoryId(categoryId, page)
+    const data = await BizListingApi.getBizListingsByCategoryIdWithPagination(categoryId, page)
     if (get(data, 'data.data')) {
       const rawListingArray = get(data, "data.data");
       let listingArray: any = [];

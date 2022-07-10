@@ -43,7 +43,48 @@ const getBizListing = async () => {
   return await Api.get(url);
 }
 
-const getBizListingsByCategoryId = async (categoryId: Categories, page: number) => {
+const getBizListingsByCategoryId = async (categoryId: Categories) => {
+  const query = qs.stringify({
+    "filters": {
+      "categories": {
+        "id": {
+          "$eq": categoryId
+        }
+      }
+    },
+    "populate": {
+      "user_listing_follows": {
+        "fields": [
+          "id"
+        ]
+      },
+      "reviews": {
+        "fields": [
+          "id"
+        ]
+      },
+      "listing_roles": {
+        "data": [
+          "id",
+          "attributes"
+        ]
+      },
+      "claim_listings": {
+        "data": [
+          "id",
+          "attributes"
+        ]
+      }
+    }
+  }, {
+    encodeValuesOnly: true, // prettify url
+  });
+
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+}
+
+const getBizListingsByCategoryIdWithPagination = async (categoryId: Categories, page: number) => {
   const query = qs.stringify({
     "filters": {
       "categories": {
@@ -361,6 +402,7 @@ const getListingFavouriteByCategory = async (category) => {
 }
 
 export default {
+  getBizListingsByCategoryIdWithPagination,
   getBizlistingByCategoryLink,
   getBizListing,
   getOwnerListingRoleByUserId,
