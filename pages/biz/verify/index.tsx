@@ -30,7 +30,7 @@ interface BizUserVerifyProps {
 
 const BizUserVerify = (props: BizUserVerifyProps) => {
   const { tier } = props;
-  const [verifyStep, setVerifyStep] = useState(VerifySteps.ADD_ID_CARD);
+  const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");

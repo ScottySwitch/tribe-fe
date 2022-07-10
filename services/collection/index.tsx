@@ -25,10 +25,27 @@ const getAllCollection = async () => {
   return await Api.get(url);
 };
 
+const getAllCollectionByCollectionSlug = async (collectionSlug: string) => {
+  const query = qs.stringify(
+    {
+      filters: {
+        slug: collectionSlug,
+      },
+      populate: "*",
+    },
+    {
+      encodeValuesOnly: true,
+    }
+  );
+  const url = `/api/collections?${query}`;
+  return await Api.get(url);
+};
+
 const CollectionApi = {
   getCollection,
   getCollectionByCategory,
   getAllCollection,
+  getAllCollectionByCollectionSlug,
 };
 
 export default CollectionApi;
