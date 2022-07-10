@@ -1,6 +1,14 @@
 @import "styles/variables.scss";
 
 .tier {
+  .recommended {
+    position: absolute;
+    top: -26px;
+    right: 10px;
+    height: 26px;
+    overflow: hidden;
+  }
+
   table {
     width: 100%;
   }
@@ -24,6 +32,7 @@
     vertical-align: top;
     border: 1px solid $bg-100;
     &:first-child {
+      width: auto;
       border-left: none;
     }
   }
@@ -50,6 +59,7 @@
   }
 
   &_payment {
+    width: auto;
     font-size: $text-md;
     font-weight: normal;
     height: 100%;
@@ -60,10 +70,10 @@
   }
 
   &_feature {
+    width: 100%;
     color: $bg-700;
     font-size: $text-md;
     font-weight: $font-bold;
-    height: 100%;
   }
 }
 
@@ -84,13 +94,6 @@
       display: block;
       span {
         width: fit-content;
-      }
-      .recommended {
-        position: absolute;
-        top: -26px;
-        right: 10px;
-        height: 26px;
-        overflow: hidden;
       }
 
       &_card {
@@ -131,29 +134,32 @@
             display: flex;
             align-items: flex-start;
             gap: 10px;
-            &.no_provided {
-              text-decoration: line-through;
-              color: $bg-400;
-            }
+            width: max-content;
+            background-color: transparent;
+          }
+
+          &.no_provided {
+            text-decoration: line-through;
+            color: $bg-400;
           }
         }
+      }
 
-        .price {
-          font-weight: $font-bold;
-          color: $bg-700;
-          font-size: $text-lg;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-top: 20px;
-        }
+      .price {
+        font-weight: $font-bold;
+        color: $bg-700;
+        font-size: $text-lg;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20px;
+      }
 
-        .button_container {
-          display: flex;
-          justify-content: center;
-          padding: 20px;
-          border-top: 1px solid $bg-100;
-        }
+      .button_container {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        border-top: 1px solid $bg-100;
       }
     }
   }

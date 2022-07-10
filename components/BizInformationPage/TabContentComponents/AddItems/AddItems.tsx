@@ -8,10 +8,12 @@ import { ListingHomePageScreens } from "enums"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { getIndex, randomId } from "utils"
+import get from "lodash/get"
 
 import styles from "./AddItems.module.scss"
 
 interface AddItemsProps {
+  isEdit?: boolean
   isPaid?: boolean
   multiple?: boolean
   itemList?: { [key: string]: any }[]
@@ -21,7 +23,7 @@ interface AddItemsProps {
 }
 
 const AddItems = (props: AddItemsProps) => {  
-  const { itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
+  const { isEdit, itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
   const [localItemList, setLocalItemList] = useState(itemList || [])
   const router = useRouter()
 
@@ -39,8 +41,12 @@ const AddItems = (props: AddItemsProps) => {
   ) => {
     const index = getIndex(id, localItemList)
     const newArray = [...localItemList]
-    newArray[index][type] = value
-    newArray[index].isEdited = true
+    if (isEdit) {
+      newArray[index]['attributes'][type] = value
+      newArray[index].isEdited = true
+    } else {
+      newArray[index][type] = value
+    }
     setLocalItemList(newArray)
   }
 
@@ -80,7 +86,7 @@ const AddItems = (props: AddItemsProps) => {
             <div key={item.id} className={styles.add_items_container}>
               <div className={styles.break} />
               <div className={styles.header}>
-                <p className="text-left">Add images</p>
+                <p className="text-left">{isEdit ? 'Edit' : 'Add'} images</p>
                 {multiple && (
                   <div className={styles.close} onClick={() => handleRemoveItem(item.id)}>
                     <Icon icon="cancel" />
@@ -90,17 +96,17 @@ const AddItems = (props: AddItemsProps) => {
               <Upload
                 isPaid={isPaid}
                 multiple
-                fileList={item.images || []}
+                fileList={get(item, "attributes.images") || []}
                 centerIcon={<Icon icon="plus" size={20} />}
                 onChange={(e) => handleChangeItem(item.id, "images", e)}
               />
               <Input
-                value={item.name}
+                value={get(item, "attributes.name")}
                 placeholder={placeholders[0]}
                 onChange={(e: any) => handleChangeItem(item.id, "name", e.target.value)}
               />
               <Input
-                value={item.description}
+                value={get(item, "attributes.description")}
                 placeholder={placeholders[1]}
                 onChange={(e: any) => handleChangeItem(item.id, "description", e.target.value)}
               />
@@ -108,18 +114,18 @@ const AddItems = (props: AddItemsProps) => {
                 <SelectInput
                   width="50%"
                   selectPosition="suffix"
-                  value={item.price}
+                  value={{ input: get(item, "attributes.price") }}
                   placeholder="Enter price"
                   selectDefaultValue={{ label: "SGD", value: "SGD" }}
                   onChange={(e: any) => handleChangeItem(item.id, "price", e.input)}
                 />
                 <SelectInput
                   width="50%"
-                  value={item.discount}
+                  value={{ input: get(item, "attributes.discount_percent")}}
                   selectPosition="suffix"
                   placeholder="Enter discount"
                   selectDefaultValue={{ label: "%", value: "%" }}
-                  onChange={(e: any) => handleChangeItem(item.id, "discount", e.input)}
+                  onChange={(e: any) => handleChangeItem(item.id, "discount_percent", e.input)}
                   // onChange={(e: any) => console.log(e)}
                 />
               </div>
@@ -131,16 +137,16 @@ const AddItems = (props: AddItemsProps) => {
               /> */}
               <Input
                 label="Klook URL"
-                value={item.klookUrl}
+                value={get(item, "attributes.klook_url")}
                 placeholder="Enter URL"
-                onChange={(e: any) => handleChangeItem(item.id, "klookUrl", e.target.value)}
+                onChange={(e: any) => handleChangeItem(item.id, "klook_url", e.target.value)}
               />
               {isPaid ? (
                 <Input
                   label="Website URL"
-                  value={item.websiteUrl}
+                  value={get(item, "attributes.website_url")}
                   placeholder="Enter URL"
-                  onChange={(e: any) => handleChangeItem(item.id, "websiteUrl", e.target.value)}
+                  onChange={(e: any) => handleChangeItem(item.id, "website_url", e.target.value)}
                 />
               ) : (
                 <Input
@@ -168,7 +174,7 @@ const AddItems = (props: AddItemsProps) => {
       <div className="flex gap-5">
         <CancelButton />
         <Button
-          text={placeholders[2]}
+          text={isEdit ? "Edit product" : placeholders[2]}
           width={280}
           size="small"
           onClick={() => onSubmit(localItemList)}

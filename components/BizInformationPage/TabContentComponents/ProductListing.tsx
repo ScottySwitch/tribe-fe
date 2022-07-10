@@ -11,6 +11,7 @@ import AddItems from "./AddItems/AddItems";
 import styles from "./TabContent.module.scss";
 import ProductApi from "../../../services/product";
 import { get } from "lodash";
+import Modal, { ModalFooter } from "../../Modal/Modal";
 
 interface ProductListingProps {
   bizListingId?: number | string;
@@ -31,42 +32,54 @@ const ProductListing = (props: ProductListingProps) => {
     ProductListingScreens.LIST
   );
   const { category } = formData;
-
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+  const [deleteModalProductId, setDeleteModalProductId] = useState<number>(0);
   const [productList, setProductList] = useState<any>();
+
+  const getProductsByBizListingId = async (
+    bizListingId: number | string | undefined
+  ) => {
+    const result = await ProductApi.getProductsByBizListingId(
+      bizListingId,
+      "is_pinned:desc"
+    );
+    setProductList(result.data.data);
+  };
+
   useEffect(() => {
-    const getProductsByBizListingId = async (bizListingId: number | string) => {
-      const result = await ProductApi.getProductsByBizListingId(bizListingId);
-      setProductList(result.data.data);
-    };
-    bizListingId && getProductsByBizListingId(bizListingId);
+    getProductsByBizListingId(bizListingId);
   }, [bizListingId]);
 
   const submitProduct = async (e: any) => {
-    // console.log('newProduct', e[0]);
-    const newProduct = e[0];
-    const dataSend = {
-      biz_listing: bizListingId,
-      name: newProduct.name,
-      description: newProduct.description,
-      price: newProduct.price,
-      tags: newProduct.tags,
-      images: newProduct.images,
-    };
-    await ProductApi.createProduct(dataSend).then((result) => {
-      setProductList([...productList, result.data.data]);
-    });
+    if (e[0].isEdited) {
+      const dataSend = { ...e[0].attributes };
+      await ProductApi.updateProduct(e[0].id, dataSend);
+    } else {
+      const newProduct = e[0];
+      const dataSend = {
+        biz_listing: bizListingId,
+        ...newProduct,
+      };
+      await ProductApi.createProduct(dataSend).then((result) => {
+        setProductList([...productList, result.data.data]);
+      });
+    }
   };
 
-  const handleDelete = async (e) => {
+  const handleDelete = async () => {
     const newProductList = productList.filter((product) => {
-      return product.id !== e;
+      return product.id !== deleteModalProductId;
     });
+    await ProductApi.deleteProduct(deleteModalProductId);
     setProductList(newProductList);
-    await ProductApi.deleteProduct(e);
+    setIsShowDeleteModal(false);
   };
 
-  const handlePinToTop = (e) => {
-    console.log(e);
+  const handlePinToTop = async (e) => {
+    await ProductApi.updateProduct(e.id, {
+      is_pinned: get(e, "attributes.is_pinned") || false,
+    });
+    await getProductsByBizListingId(bizListingId);
   };
 
   const PopoverContent = ({ item }) => (
@@ -81,7 +94,10 @@ const ProductListing = (props: ProductListingProps) => {
       </div>
       <div
         className={styles.delete_action}
-        onClick={() => handleDelete(item.id)}
+        onClick={() => {
+          setDeleteModalProductId(item.id);
+          setIsShowDeleteModal(true);
+        }}
       >
         Delete
       </div>
@@ -102,15 +118,17 @@ const ProductListing = (props: ProductListingProps) => {
             top.
           </div>
           <div className="flex gap-2">
-            {!isPaid && productList.length > 2 && (
-              <Button
-                prefix={<Icon icon="star-2" color="#653fff" />}
-                variant="secondary"
-                text="Update to use full feature"
-                width="fit-content"
-                onClick={() => null}
-              />
-            )}
+            {!isPaid &&
+              Array.isArray(productList) &&
+              productList.length > 2 && (
+                <Button
+                  prefix={<Icon icon="star-2" color="#653fff" />}
+                  variant="secondary"
+                  text="Update to use full feature"
+                  width="fit-content"
+                  onClick={() => null}
+                />
+              )}
             <Button
               disabled={
                 !isPaid && Array.isArray(productList) && productList.length > 2
@@ -131,14 +149,14 @@ const ProductListing = (props: ProductListingProps) => {
               const imgUrl =
                 get(item, "attributes.images[0]") ||
                 get(item, "images[0]") ||
-                "https://picsum.photos/200/300";
+                require("public/images/avatar.svg");
               return (
                 <div key={item.id} className={styles.info_card_container}>
                   <InforCard
                     imgUrl={imgUrl}
-                    title={item.attributes.name}
-                    price={item.attributes.price}
-                    description={item.attributes.description}
+                    title={get(item, "attributes.name")}
+                    price={get(item, "attributes.price")}
+                    description={get(item, "attributes.description")}
                   />
                   <div className={styles.toolbar}>
                     <Popover content={<PopoverContent item={item} />}>
@@ -149,7 +167,10 @@ const ProductListing = (props: ProductListingProps) => {
                     className={styles.pin}
                     onClick={() => handlePinToTop(item)}
                   >
-                    <Icon icon="pin" color={index < 6 ? undefined : "white"} />
+                    <Icon
+                      icon="pin"
+                      color={get(item, "attributes.is_pinned") || "white"}
+                    />
                   </div>
                 </div>
               );
@@ -160,10 +181,11 @@ const ProductListing = (props: ProductListingProps) => {
       <SectionLayout
         show={screen !== ProductListingScreens.LIST}
         title={
-          screen === ProductListingScreens.EDIT ? "Edit product" : "Add deal"
+          screen === ProductListingScreens.EDIT ? "Edit product" : "Add product"
         }
       >
         <AddItems
+          isEdit={screen === ProductListingScreens.EDIT}
           isPaid={isPaid}
           itemList={selectedItem}
           placeholders={getAddItemsFields(category).placeholder}
@@ -174,7 +196,42 @@ const ProductListing = (props: ProductListingProps) => {
           }}
         />
       </SectionLayout>
+      <DeleteModal
+        visible={isShowDeleteModal}
+        onClose={() => setIsShowDeleteModal(false)}
+        onSubmit={handleDelete}
+      />
     </React.Fragment>
+  );
+};
+
+const DeleteModal = (props) => {
+  const { visible, onClose, onSubmit } = props;
+  return (
+    <Modal
+      visible={visible}
+      width={579}
+      title="Delete Product?"
+      onClose={onClose}
+    >
+      <div className="p-7">
+        <div className="text-sm max-w-sm mx-auto text-center mb-7">
+          <p>You are about to delete this product.</p>
+          <p>
+            This action <span className="font-bold">cannot</span> be undone. Are
+            you sure?
+          </p>
+        </div>
+        <ModalFooter>
+          <Button
+            className="text-sm bg-transparent text-black border mr-2"
+            text="Do not delete"
+            onClick={onClose}
+          />
+          <Button className="text-sm" text="Delete" onClick={onSubmit} />
+        </ModalFooter>
+      </div>
+    </Modal>
   );
 };
 
