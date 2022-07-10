@@ -67,6 +67,47 @@ const getBizListingsByCategoryId = async (categoryId: Categories) => {
   return await Api.get(url);
 };
 
+const getBizListingsByCategoryIdWithPagination = async (categoryId: Categories, page: number) => {
+  const query = qs.stringify({
+    "filters": {
+      "categories": {
+        "id": {
+          "$eq": categoryId
+        }
+      }
+    },
+    "populate": {
+      "user_listing_follows": {
+        "fields": [
+          "id"
+        ]
+      },
+      "reviews": {
+        "fields": [
+          "id"
+        ]
+      },
+      "listing_roles": {
+        "data": [
+          "id",
+          "attributes"
+        ]
+      },
+      "claim_listings": {
+        "data": [
+          "id",
+          "attributes"
+        ]
+      }
+    }
+  }, {
+    encodeValuesOnly: true, // prettify url
+  });
+
+  const url = `/api/biz-listings?${query}&pagination[page]=${page}&pagination[pageSize]=28`;
+  return await Api.get(url);
+}
+
 const getBizListingByUserId = async (userId: number) => {
   const query = qs.stringify(
     {
@@ -351,10 +392,10 @@ const getExclusiveDealByCategory = async (category) => {
   return await Api.get(url);
 };
 
-const getBizlistingByCategoryLink = async (category, categoryLinks, limit) => {
-  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&litmit=${limit}`;
-  return await Api.get(url);
-};
+const getBizlistingByCategoryLink = async (category, categoryLinks, page) => {
+  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&page=${page}`
+  return await Api.get(url)
+}
 
 const getListingFavouriteByCategory = async (category) => {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -390,6 +431,7 @@ const getBizListingsHaveDealsByCategoryId = async (categoryId: Categories) => {
 };
 
 const bizListingApi = {
+  getBizListingsByCategoryIdWithPagination,
   getBizlistingByCategoryLink,
   getBizListing,
   getOwnerListingRoleByUserId,
