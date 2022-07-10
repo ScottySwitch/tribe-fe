@@ -139,7 +139,9 @@ const resetPassword = async (params: ResetPassword) => {
 
 const loginFacebookCallback = async (accessToken: any) => {
   localStorage.removeItem('user')
-  let userInfo;
+  let userInfo = {
+    token: null
+  };
   const url = `/api/auth/facebook/callback?access_token=${accessToken}`;
   let user = await Api.get(url);
   if (user.data) {
@@ -153,7 +155,9 @@ const loginFacebookCallback = async (accessToken: any) => {
 
 const loginGoogleCallback = async (accessToken: any) => {
   localStorage.removeItem('user')
-  let userInfo;
+  let userInfo = {
+    token: null
+  };
   const url = `/api/auth/google/callback?access_token=${accessToken}`;
   let user = await Api.get(url);
   if (user.data) {
