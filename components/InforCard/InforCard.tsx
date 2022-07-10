@@ -71,45 +71,53 @@ const InforCard = (props: InforCardProps) => {
       </div>
       <div className={styles.details}>
         <div className={styles.title}>{title}</div>
-        {!!rate && (
-          <div className={styles.reviews}>
-            <Icon icon="red-star" size={14} />
-            <div className={styles.rate}>{rate}</div>
-            <div>({rateNumber})</div>
-            <Icon icon="dot" size={10} className={styles.dot} />
-            <div>{followerNumber} followers</div>
-          </div>
-        )}
-        {description && <div className={styles.description}>
-          {description}
-        </div>}
-        {Array.isArray(categories) && (
-          <div className={styles.categories}>
-            {categories.map((cate) => (
-              <div key={cate} className={styles.category}>
-                {cate}
+        <div className={styles.content}>
+          <div>
+            {!!rate && (
+              <div className={styles.reviews}>
+                <Icon icon="red-star" size={14} />
+                <div className={styles.rate}>{rate}</div>
+                <div>({rateNumber})</div>
+                <Icon icon="dot" size={10} className={styles.dot} />
+                <div>{followerNumber} followers</div>
               </div>
-            ))}
+            )}
+            {description && (
+              <div className={styles.description}>{description}</div>
+            )}
           </div>
-        )}
-        {(price || tags) && <Break />}
-        {price && (
-          <div className={styles.price}>
-            From <span>{price}</span>
-          </div>
-        )}
-        {Array.isArray(tags) && (
-          <div className={styles.tags}>
-            {tags.map((tag) => (
-              <div key={tag} className={`${styles.tag} flex items-center`}>
-                {iconTag && tag === "Hot deals" && (
-                  <Icon icon="hot-deal" className="mr-2" />
-                )}
-                {tag}
+          <div>
+            {Array.isArray(categories) && (
+              <div className={styles.categories}>
+                {categories.map((cate) => (
+                  <div key={cate} className={styles.category}>
+                    {cate}
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
+            {(price || tags) && <div className={styles.break} />}
           </div>
-        )}
+        </div>
+        <div className={styles.footer}>
+          {price && (
+            <div className={styles.price}>
+              From <span>{price}</span>
+            </div>
+          )}
+          {Array.isArray(tags) && tags.length > 0 && (
+            <div className={styles.tags}>
+              {tags.map((tag) => (
+                <div key={tag} className={`${styles.tag} flex items-center`}>
+                  {iconTag && tag === "Hot deals" && (
+                    <Icon icon="hot-deal" className="mr-2" />
+                  )}
+                  {tag}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
