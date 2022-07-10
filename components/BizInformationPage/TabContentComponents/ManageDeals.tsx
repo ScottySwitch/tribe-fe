@@ -16,7 +16,7 @@ import DealApi from "services/deal";
 import Modal, {ModalFooter} from "../../Modal/Modal";
 
 interface ManageDealProps {
-  bizListingId: number
+  bizListingId?: number | string;
 }
 
 enum ManageDealsScreens {
@@ -34,10 +34,10 @@ const ManageDeals = (props: ManageDealProps) => {
   const { activeDeals, pastDeals } = formData
   const [activeDealList, setActiveDealList] = useState<any>()
   const [pastDealList, setPastDealList] = useState<any>([])
-  const [isShowModalDelete, setIsShowModalDelete] = useState<boolean>(false)
-  const [modalDeleteDealId, setModalDeleteDealId] = useState<number>(0)
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false)
+  const [deleteModalDealId, setDeleteModalDealId] = useState<number>(0)
 
-  const getDealsByBizListingId = async (bizListingId: number) => {
+  const getDealsByBizListingId = async (bizListingId: number | string | undefined) => {
     const result = await DealApi.getDealsByBizListingId(bizListingId, 'is_pinned:desc')
     const currentDate = new Date()
     const activeDeals: any = []
@@ -78,11 +78,11 @@ const ManageDeals = (props: ManageDealProps) => {
 
   const handleDelete = async () => {
     const newDealList = activeDealList.filter((deal) => {
-      return deal.id !== modalDeleteDealId
+      return deal.id !== deleteModalDealId
     })
+    await DealApi.deleteDeal(deleteModalDealId)
     setActiveDealList(newDealList)
-    await DealApi.deleteDeal(modalDeleteDealId)
-    setIsShowModalDelete(false)
+    setIsShowDeleteModal(false)
   }
 
   const handlePinToTop = async (e) => {
@@ -165,8 +165,8 @@ const ManageDeals = (props: ManageDealProps) => {
           Edit deal
         </div>
         <div className={styles.delete_action} onClick={() => {
-          setModalDeleteDealId(item.id)
-          setIsShowModalDelete(true)
+          setDeleteModalDealId(item.id)
+          setIsShowDeleteModal(true)
         }}>
           Delete deal
         </div>
@@ -230,15 +230,15 @@ const ManageDeals = (props: ManageDealProps) => {
           }}
         />
       </SectionLayout>
-      <ModalDelete visible={isShowModalDelete}
-                   onClose={() => setIsShowModalDelete(false)}
-                   onSubmit={() => handleDelete()}
+      <DeleteModal visible={isShowDeleteModal}
+                   onClose={() => setIsShowDeleteModal(false)}
+                   onSubmit={handleDelete}
       />
     </React.Fragment>
   )
 }
 
-const ModalDelete = (props) => {
+const DeleteModal = (props) => {
   const {visible, onClose, onSubmit} = props
   return (
     <Modal visible={visible} width={579} title="Delete deal?" onClose={onClose}>
@@ -249,7 +249,7 @@ const ModalDelete = (props) => {
         </div>
         <ModalFooter>
           <Button className="text-sm bg-transparent text-black border mr-2" text="Do not delete" onClick={onClose}/>
-          <Button className="text-sm" text="Delete" onClick={() => onSubmit()}/>
+          <Button className="text-sm" text="Delete" onClick={onSubmit}/>
         </ModalFooter>
       </div>
     </Modal>
