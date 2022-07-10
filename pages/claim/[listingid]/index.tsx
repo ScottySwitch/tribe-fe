@@ -81,7 +81,7 @@ const ClaimListing = (context) => {
 
     await BizListingApi.createListingRole({
       bizListingId: listingId,
-      role,
+      name: role,
     })
     setClaimStep(ClaimStep.CHOOSE_TIER)
     userInfo.pay_price = "600"

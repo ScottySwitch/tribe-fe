@@ -1,6 +1,15 @@
 import classNames from "classnames"
 import React from "react"
 import styles from "./PanelAbout.module.scss"
+export interface UserPropsData {
+  email: string,
+  phone_number?: string,
+  country?: string,
+  gender: "male" | "female" | "others",
+  educate_level?: string,
+  industry?: string,
+  birthday?: string,
+}
 export interface UserProps {
   email: string,
   phoneNumber?: string,
@@ -10,6 +19,7 @@ export interface UserProps {
   industry?: string,
   birthday?: string,
 }
+
 
 const AboutInfor = (props: {label: string, text?: string, blankText: string}) => {
   const { label, text, blankText } = props
@@ -25,13 +35,14 @@ const AboutInfor = (props: {label: string, text?: string, blankText: string}) =>
   )
 }
 
-const PanelAbout = (props: {data: UserProps}) => {
+const PanelAbout = (props: {data: UserPropsData}) => {
+  console.log(props.data)
   const {
     email,
-    phoneNumber,
+    phone_number,
     country,
     gender = "others",
-    educationLevel,
+    educate_level,
     industry,
     birthday,
   } = props.data
@@ -45,7 +56,7 @@ const PanelAbout = (props: {data: UserProps}) => {
           <AboutInfor label="Email" text={email} blankText="Add email"/>
         </div>
         <div className={col2ClassName}>
-          <AboutInfor label="Phone number" text={phoneNumber} blankText="Add phone number"/>
+          <AboutInfor label="Phone number" text={phone_number} blankText="Add phone number"/>
         </div>
         <div className={styles.field}>
           <AboutInfor label="Country" text={country} blankText="Add country"/>
@@ -54,7 +65,7 @@ const PanelAbout = (props: {data: UserProps}) => {
           <AboutInfor label="Gender" text={gender} blankText="Add gender"/>
         </div>
         <div className={styles.field}>
-          <AboutInfor label="Education Level" text={educationLevel} blankText="Add Education level"/>
+          <AboutInfor label="Education Level" text={educate_level} blankText="Add Education level"/>
         </div>
         <div className={styles.field}>
           <AboutInfor label="Industry" text={industry} blankText="Add industry"/>

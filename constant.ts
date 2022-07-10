@@ -887,7 +887,7 @@ export const interestingList = [
 export const contributePopOverList = [
   { icon: "map-color", label: "Add new listing", href: "/add-listing" },
   { icon: "comment-color", label: "Add new review", href: "/reviews" },
-  { icon: "update-color", label: "Update listing", href: "/update-listing" },
+  // { icon: "update-color", label: "Update listing", href: "/update-listing" },
 ];
 
 export const switchAccountList = [
@@ -1116,7 +1116,7 @@ export const dummyKeywords = [
 ];
 
 export const roleList = [
-  { label: "Owner", value: "owner" },
+  { label: "Owner", value: "Owner" },
   { label: "Manager", value: "manager" },
   { label: "Agency/ Consultant", value: "consultant" },
   { label: "Accounting/ Finance", value: "finance" },

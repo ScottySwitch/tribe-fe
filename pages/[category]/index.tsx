@@ -186,7 +186,7 @@ const Category = (props: any) => {
           ))}
       </SectionLayout>
       {Array.isArray(listingExclusiveDeal) && listingExclusiveDeal.length > 0 && (
-        <SectionLayout title="Exclusive deals">
+        <SectionLayout title="Brands With Exclusive Deals For You">
           <Carousel responsive={infoCardResponsive}>
             {listingExclusiveDeal?.map((card) => (
               <div key={card.title} className="pb-5">

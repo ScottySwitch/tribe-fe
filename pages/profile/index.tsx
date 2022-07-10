@@ -86,6 +86,15 @@ const GroupHeadingTwo = (props: { contributions: number; following: number; poin
 }
 
 const ProfilePage = () => {
+  const [userInfor, setUserInfo] = useState<any>({})
+
+  useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    console.log('userInfo', userInfo)
+    setUserInfo(userInfo)
+  }, [])
+
+  
   const TabList: ITab[] = [
     { label: ProfileTabs.FAVOURITED, value: ProfileTabs.FAVOURITED, content: <FavouriedPanel /> },
     {
@@ -101,17 +110,9 @@ const ProfilePage = () => {
     {
       label: ProfileTabs.ABOUT,
       value: ProfileTabs.ABOUT,
-      content: <PanelAbout data={dummyUserInfo} />,
+      content: <PanelAbout data={userInfor} />,
     },
   ]
-
-  const [userInfor, setUserInfo] = useState<any>({})
-
-  useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log('userInfo', userInfo)
-    setUserInfo(userInfo)
-  }, [])
 
   return (
     <div className="wrapper-profile">

@@ -50,7 +50,13 @@ const SignupPage = () => {
     register,
     handleSubmit,
     formState: { isDirty, isValid },
-  } = useForm({ mode: "onChange" })
+  } = useForm({ 
+      mode: "onChange", 
+      defaultValues: {
+        password: '',
+        agreePolicies: true,
+        receivePromotions: true
+  } })
 
   const onSubmit = async (form: any) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
@@ -178,11 +184,11 @@ const SignupPage = () => {
           />
           <Checkbox
             label="I have read and agree to the T&C of Tribes"
-            register={register("agreePolicies", { required: true })}
+            register={register("agreePolicies", { required: false })}
           />
           <Checkbox
             label="I would like to recieve offers, promotion and other informations"
-            register={register("receivePromotions", { required: true })}
+            register={register("receivePromotions", { required: false })}
           />
           <div className={styles.break}>
             <span>Or log in with</span>
