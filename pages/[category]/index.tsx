@@ -18,7 +18,7 @@ import {
   infoCardResponsive,
   inforCardList,
 } from "constant";
-import { CategoryText } from "enums";
+import { Categories, CategoryText } from "enums";
 import useTrans from "hooks/useTrans";
 import type { NextPage } from "next";
 import Image from "next/image";
@@ -41,9 +41,7 @@ const Category = (props: any) => {
     query: { category },
   } = router;
   const {
-    listingBuy,
-    listingSee,
-    listingEat,
+    listingArray,
     listingExclusiveDeal,
     listingBanners,
     listCollections,
@@ -142,6 +140,7 @@ const Category = (props: any) => {
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={card.images[0]}
+                  description={card.description}
                   title={card.title}
                   rate={card.rate}
                   rateNumber={card.rateNumber}
@@ -170,96 +169,27 @@ const Category = (props: any) => {
           </Carousel>
         </SectionLayout>
       )}
-      <SectionLayout title="Where to BUY">
-        <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listingBuy) ? (
-            listingBuy?.map((card) => (
-              <div key={card.title} className="pb-5">
-                <InforCard
-                  imgUrl={card.images[0]}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
-                />
-              </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
-      </SectionLayout>
-      <SectionLayout title="What to SEE">
-        <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listingSee) ? (
-            listingSee?.map((card) => (
-              <div key={card.title} className="pb-5">
-                <InforCard
-                  imgUrl={card.images[0]}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
-                />
-              </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
-      </SectionLayout>
-      {/* <SectionLayout backgroundColor title="Featured Articles">
-        <Carousel responsive={homeCuratedResponsive}>
-          {homeArticleCarousel?.map((item, index) => (
-            <div key={index} className="pb-5">
-              <ArticleCard
-                title={item.title}
-                imgUrl={item.imgUrl}
-                time={item.time}
+      <SectionLayout childrenClassName="flex flex-wrap gap-5">
+        {Array.isArray(listingArray) &&
+          listingArray.map((card) => (
+            <div key={card.title} className="pb-5">
+              <InforCard
+                imgUrl={card.images[0]}
+                title={card.title}
+                rate={card.rate}
+                rateNumber={card.rateNumber}
+                followerNumber={card.followerNumber}
+                price={card.price}
+                categories={card.categories}
+                description={card.description}
+                tags={card.tags}
+                isVerified={card.isVerified}
+                onClick={() => {
+                  window.location.href = `/biz/home/${card.slug}`;
+                }}
               />
             </div>
           ))}
-        </Carousel>
-      </SectionLayout> */}
-      <SectionLayout title="What to EAT">
-        <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listingEat) ? (
-            listingEat?.map((card) => (
-              <div key={card.title} className="pb-5">
-                <InforCard
-                  imgUrl={card.images[0]}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
-                />
-              </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
       </SectionLayout>
       {/* <SectionLayout childrenClassName="flex justify-center">
         <Button variant="outlined" text="Load more" width={400} />
@@ -291,7 +221,27 @@ const Category = (props: any) => {
 export async function getServerSideProps(context) {
   // Pass data to the page via props
   const category = context.query.category;
-  const data = await BizListingApi.getAllBizListingsByCategory();
+
+  let categoryId;
+  switch (category) {
+    case CategoryText.BUY:
+      categoryId = Categories.BUY;
+      break;
+    case CategoryText.EAT:
+      categoryId = Categories.EAT;
+      break;
+    case CategoryText.SEE_AND_DO:
+      categoryId = Categories.SEE_AND_DO;
+      break;
+    case CategoryText.STAY:
+      categoryId = Categories.STAY;
+      break;
+    case CategoryText.TRANSPORT:
+      categoryId = Categories.TRANSPORT;
+      break;
+  }
+
+  const data = await BizListingApi.getBizListingsByCategoryId(categoryId);
   const dataExclusiveDeal = await BizListingApi.getExclusiveDealByCategory(
     category
   );
@@ -299,71 +249,37 @@ export async function getServerSideProps(context) {
   const dataCollections = await CollectionApi.getCollectionByCategory(category);
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  let listingBuyArray: any = [];
-  let listingSeeArray: any = [];
-  let listingEatArray: any = [];
+  let listingArray: any = [];
   let listBannerArray: any = [];
   let listingExclusiveDealArray: any = [];
   let listCollectionArray: any = [];
   let ListCategoryLinkArray: any = [];
-  const rawListingBuyArray = get(data, "data.data[0]");
-  const rawListingSeeArray = get(data, "data.data[1]");
-  const rawListingEatAray = get(data, "data.data[2]");
+  const rawListingArray = get(data, "data.data");
   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawListCategory = get(dataCategoryLinks, "data.data");
-  listingBuyArray =
-    Array.isArray(rawListingBuyArray) &&
-    rawListingBuyArray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
+
+  listingArray =
+    Array.isArray(rawListingArray) &&
+    rawListingArray.map((item) => ({
+      images: get(item, "attributes.images") || [],
+      title: get(item, "attributes.name"),
+      slug: get(item, "attributes.slug"),
+      isVerified: get(item, "attributes.is_verified"),
+      address: get(item, "attributes.address"),
+      country: get(item, "attributes.country"),
+      description: get(item, "attributes.description"),
+      // followerNumber: get(item, "user_listing_follows.length"),
+      // tags: get(item, "attributes.tags"),
+      // categories: get(item, "attributes.categories"),
       price: get(item, "price_range.min") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
+      // rate: get(item, "attributes.rate"),
+      // rateNumber: get(item, "attributes.rate_number"),
     }));
-  listingSeeArray =
-    Array.isArray(rawListingSeeArray) &&
-    rawListingSeeArray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
-  listingEatArray =
-    Array.isArray(rawListingEatAray) &&
-    rawListingEatAray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
+
+  console.log("data--------", listingArray);
+
   listingExclusiveDealArray =
     Array.isArray(rawListingExclusiveDealAray) &&
     rawListingExclusiveDealAray.map((item) => ({
@@ -374,7 +290,7 @@ export async function getServerSideProps(context) {
       address: item.address,
       country: item.country,
       description: item.description,
-      followerNumber: item.user_listing_follows.length,
+      followerNumber: get(item, "user_listing_follows.length"),
       tags: item.tags,
       categories: item.categories,
       price: get(item, "price_range.min") || "",
@@ -403,9 +319,7 @@ export async function getServerSideProps(context) {
     }));
   return {
     props: {
-      listingBuy: listingBuyArray,
-      listingEat: listingEatArray,
-      listingSee: listingSeeArray,
+      listingArray: listingArray,
       listingExclusiveDeal: listingExclusiveDealArray,
       listingBanners: listBannerArray,
       listCollections: listCollectionArray,

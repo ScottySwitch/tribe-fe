@@ -75,8 +75,10 @@ export const homeCuratedResponsive = {
   lgScroll: 3,
   xlShow: 4,
   xlScroll: 3,
-  show: 4,
-  scroll: 3,
+  xxlShow: 4,
+  xxlScroll: 3,
+  show: 5,
+  scroll: 4,
 };
 export const infoCardResponsive = {
   xsShow: 2,
@@ -89,6 +91,8 @@ export const infoCardResponsive = {
   lgScroll: 3,
   xlShow: 4,
   xlScroll: 3,
+  xxlShow: 4,
+  xxlScroll: 3,
   show: 5,
   scroll: 4,
 };
@@ -104,8 +108,10 @@ export const homeBannerResponsive = {
   lgScroll: 2,
   xlShow: 3,
   xlScroll: 2,
-  show: 3,
-  scroll: 2,
+  xxlShow: 3,
+  xxlScroll: 2,
+  show: 4,
+  scroll: 3,
 };
 
 export const fakeSubCateList = [

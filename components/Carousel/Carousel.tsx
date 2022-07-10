@@ -1,19 +1,19 @@
-import Icon from "components/Icon/Icon"
-import InforCard from "components/InforCard/InforCard"
-import React, { ReactElement, useRef } from "react"
-import Slider from "react-slick"
+import Icon from "components/Icon/Icon";
+import InforCard from "components/InforCard/InforCard";
+import React, { ReactElement, useRef } from "react";
+import Slider from "react-slick";
 
-import styles from "./Carousel.module.scss"
+import styles from "./Carousel.module.scss";
 
 interface CarouselProps {
-  children?: ReactElement | ReactElement[]
-  responsive?: { [key: string]: number }
+  children?: ReactElement | ReactElement[];
+  responsive?: { [key: string]: number };
 }
 
 const Carousel = (props: CarouselProps) => {
-  const { children, responsive } = props
+  const { children, responsive } = props;
 
-  const horizontalSliderRef = useRef<any>(null)
+  const horizontalSliderRef = useRef<any>(null);
 
   const horizontalSliderSettings = {
     className: styles.slick_slide,
@@ -28,6 +28,14 @@ const Carousel = (props: CarouselProps) => {
     cssEase: "linear",
 
     responsive: [
+      //2xl
+      {
+        breakpoint: 1920,
+        settings: {
+          slidesToShow: responsive?.xxlShow,
+          slidesToScroll: responsive?.xxlScroll,
+        },
+      },
       //xl
       {
         breakpoint: 1450,
@@ -69,17 +77,17 @@ const Carousel = (props: CarouselProps) => {
         },
       },
     ],
-  }
+  };
 
   function handlePrevHorizontalSlide() {
     if (horizontalSliderRef && horizontalSliderRef.current) {
-      horizontalSliderRef.current.slickPrev()
+      horizontalSliderRef.current.slickPrev();
     }
   }
 
   function handleNextHorizontalSlide() {
     if (horizontalSliderRef && horizontalSliderRef.current) {
-      horizontalSliderRef.current.slickNext()
+      horizontalSliderRef.current.slickNext();
     }
   }
 
@@ -95,7 +103,7 @@ const Carousel = (props: CarouselProps) => {
         <Icon icon="carret-right" size={20} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Carousel
+export default Carousel;

@@ -1,3 +1,4 @@
+import { Categories } from "enums";
 import category from "services/category";
 import Api from "../index";
 
@@ -42,7 +43,7 @@ const getBizListing = async () => {
   return await Api.get(url);
 }
 
-const getBizListingsByCategoryId = async (categoryId: number) => {
+const getBizListingsByCategoryId = async (categoryId: Categories) => {
   const query = qs.stringify({
     "filters": {
       "categories": {
