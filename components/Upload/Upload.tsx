@@ -44,18 +44,20 @@ const Upload = (props: UploadProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
   useEffect(() => {
-    const lastItemArray = Array.isArray(fileList)
-      ? [fileList[fileList.length - 1]]
-      : [];
-    const initFileList = multiple ? fileList : lastItemArray;
-    setSrcList(initFileList);
+    if (Array.isArray(fileList) && fileList.length > 0) {
+      const lastItemArray = Array.isArray(fileList)
+        ? [fileList[fileList.length - 1]]
+        : [];
+      const initFileList = multiple ? fileList : lastItemArray;
+      setSrcList(initFileList);
+    }
   }, [fileList, multiple]);
 
   const showedImages =
     type === "banner"
       ? isPaid
-        ? srcList.slice(0, 4)
-        : srcList.slice(0, 3)
+        ? Array.isArray(srcList) && srcList.slice(0, 4)
+        : Array.isArray(srcList) && srcList.slice(0, 3)
       : srcList;
 
   const showInput =
@@ -208,27 +210,23 @@ const Upload = (props: UploadProps) => {
 
   return (
     <div className={containerClassName}>
-      {showedImages.map((src, index) => (
-        <div
-          key={src}
-          className={mediaClassName(index)}
-          onClick={() => isViewPage && onImageClick?.(src)}
-        >
-          <div className={styles.close} onClick={() => handleRemoveItem(src)}>
-            <Icon icon="cancel" size={25} />
+      {Array.isArray(showedImages) &&
+        showedImages.map((src, index) => (
+          <div
+            key={src}
+            className={mediaClassName(index)}
+            onClick={() => isViewPage && onImageClick?.(src)}
+          >
+            <div className={styles.close} onClick={() => handleRemoveItem(src)}>
+              <Icon icon="cancel" size={25} />
+            </div>
+            <div className={styles.add_icon}>{centerIcon}</div>
+            <div className={styles.loader} />
+            <Input onChange={(e) => handleChange(e, src)} multiple={false} />
+            {src && <Image src={src} alt="" layout="fill" objectFit="cover" />}
+            {/* <VideoThumbnail videoUrl={src} /> */}
           </div>
-          <div className={styles.add_icon}>{centerIcon}</div>
-          <div className={styles.loader} />
-          <Input onChange={(e) => handleChange(e, src)} multiple={false} />
-          <Image
-            src={src || require("public/images/avatar.png")}
-            alt=""
-            layout="fill"
-            objectFit="cover"
-          />
-          {/* <VideoThumbnail videoUrl={src} /> */}
-        </div>
-      ))}
+        ))}
 
       {showInput && !isUploading && !isViewPage && (
         <div className={addMoreButtonClassName}>

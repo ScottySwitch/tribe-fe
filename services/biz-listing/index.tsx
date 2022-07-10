@@ -138,7 +138,7 @@ const createListingRole = async (params: any) => {
 const getOwnerListingRoleByUserId = async (userId: any) => {
   const query = qs.stringify({
     "filters": {
-      "name": "owner",
+      "name": "Owner",
       "user": {
         "id": {
           "$eq": userId
@@ -190,7 +190,7 @@ const getOwnerBizListingBySlug = async (bizListingSlug: any) => {
         },
         {
           "listing_roles": {
-            "name": "owner",
+            "name": "Owner",
             "user": {
               "id": {
                 "$eq": userInfo.id
@@ -231,7 +231,7 @@ const getOwnerBizListing = async (bizListingSlug: any) => {
         },
         {
           "listing_roles": {
-            "name": "owner",
+            "name": "Owner",
             "user": {
               "id": {
                 "$eq": userInfo.id
@@ -313,7 +313,7 @@ const checkListingHaveOwner = async (bizListingSlug: any) => {
     "filters": {
       "slug": bizListingSlug,
       "listing_roles": {
-        "name": "owner"
+        "name": "Owner"
       }
     },
     "populate": "*"

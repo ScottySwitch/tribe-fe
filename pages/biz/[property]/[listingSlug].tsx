@@ -1,39 +1,47 @@
-import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard"
-import DealDetailModal from "components/DealDetailModal/DealDetailModal"
-import InforCard from "components/InforCard/InforCard"
-import MenuCard from "components/MenuCard/MenuCard"
-import ProductDetailModal from "components/ProductDetailModal/ProductDetailModal"
-import PromotionCard from "components/PromotionCard/PromotionCard"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import TopSearches from "components/TopSearches/TopSearches"
-import { ListingTabs } from "enums"
-import {get, orderBy} from "lodash"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import BizListingApi from "services/biz-listing"
+import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard";
+import DealDetailModal from "components/DealDetailModal/DealDetailModal";
+import InforCard from "components/InforCard/InforCard";
+import MenuCard from "components/MenuCard/MenuCard";
+import ProductDetailModal from "components/ProductDetailModal/ProductDetailModal";
+import PromotionCard from "components/PromotionCard/PromotionCard";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import TopSearches from "components/TopSearches/TopSearches";
+import { ListingTabs } from "enums";
+import { get, orderBy } from "lodash";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import BizListingApi from "services/biz-listing";
 
-import styles from "styles/Property.module.scss"
+import styles from "styles/Property.module.scss";
 
 interface PropertiesContainerProps {
-  cardItem?: any
-  list?: any[]
-  onShowDetailModal?: (item: { [key: string]: any }) => void
+  cardItem?: any;
+  list?: any[];
+  onShowDetailModal?: (item: { [key: string]: any }) => void;
 }
 
-const PropertiesContainer = ({ cardItem, list, onShowDetailModal }: PropertiesContainerProps) => {
-  const CardItem = cardItem
+const PropertiesContainer = ({
+  cardItem,
+  list,
+  onShowDetailModal,
+}: PropertiesContainerProps) => {
+  const CardItem = cardItem;
   return (
     <div className="flex flex-wrap gap-10">
       {Array.isArray(list) && list.length > 0 ? (
         list.map((item) => {
-          const id = get(item, "attributes.id") || item.id
-          const images = item.images || []
-          const firstImage = item.imgUrl || images[0]
-          const name = get(item, "attributes.name") || item.name || ""
-          const price = get(item, "attributes.price") || item.price || ""
+          const id = get(item, "attributes.id") || item.id;
+          const images = item.images || [];
+          const firstImage = item.imgUrl || images[0];
+          const name = get(item, "attributes.name") || item.name || "";
+          const price = get(item, "attributes.price") || item.price || "";
           const description =
-            get(item, "attributes.description") || item.information || item.description || ""
-          const expiredAt = get(item, "attributes.expire_at") || item.expireAt || ""
+            get(item, "attributes.description") ||
+            item.information ||
+            item.description ||
+            "";
+          const expiredAt =
+            get(item, "attributes.expire_at") || item.expireAt || "";
           return (
             <CardItem
               key={id}
@@ -45,47 +53,58 @@ const PropertiesContainer = ({ cardItem, list, onShowDetailModal }: PropertiesCo
               onClick={() => onShowDetailModal?.(item?.attributes)}
               onCardClick={() => onShowDetailModal?.(item?.attributes)}
             />
-          )
+          );
         })
       ) : (
         <div>There is no data yet</div>
       )}
     </div>
-  )
-}
+  );
+};
 
 const Properties = () => {
-  const router = useRouter()
-  const { query } = router
-  const { property, listingSlug }: any = query
+  const router = useRouter();
+  const { query } = router;
+  const { property, listingSlug }: any = query;
 
-  const upperCaseTitle = property?.[0].toUpperCase() + property?.slice(1)
-  const [properties, setProperties] = useState<any[]>([])
-  const [selectedItem, setSelectedItem] = useState<any>({})
-  const [showDetailModal, setShowDetailModal] = useState(false)
-  const [listingInformation, setListingInformation] = useState<any>({})
+  const upperCaseTitle = property?.[0].toUpperCase() + property?.slice(1);
+  const [properties, setProperties] = useState<any[]>([]);
+  const [selectedItem, setSelectedItem] = useState<any>({});
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [listingInformation, setListingInformation] = useState<any>({});
+  const [userInfo, setUserInfo] = useState<any>({});
 
   useEffect(() => {
     const getProperties = async () => {
-      let data
-      data = await BizListingApi.getBizListingBySlug(listingSlug)
-      const listingDetail = get(data, `data.data[0].attributes`)
-      let propertiesData = get(data, `data.data[0].attributes.${property}.data`)
-      setListingInformation(listingDetail)
-      if (property === 'products') {
-        propertiesData = orderBy(propertiesData, ['attributes.is_pinned'], ['desc'])
+      let data = await BizListingApi.getBizListingBySlug(listingSlug);
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const listingDetail = get(data, `data.data[0].attributes`);
+      userInfo.now_biz_listing = listingDetail;
+      localStorage.setItem("user", JSON.stringify(userInfo));
+      setUserInfo(userInfo);
+      let propertiesData = get(
+        data,
+        `data.data[0].attributes.${property}.data`
+      );
+      setListingInformation(listingDetail);
+      if (property === "products") {
+        propertiesData = orderBy(
+          propertiesData,
+          ["attributes.is_pinned"],
+          ["desc"]
+        );
       }
-      setProperties(propertiesData)
-    }
-    listingSlug && getProperties()
-  }, [property, listingSlug])
+      setProperties(propertiesData);
+    };
+    listingSlug && getProperties();
+  }, [property, listingSlug]);
 
   const handleShowDetailModal = (item) => {
-    setSelectedItem(item)
-    setShowDetailModal(true)
-  }
+    setSelectedItem(item);
+    setShowDetailModal(true);
+  };
 
-  let DetailModal: any = ProductDetailModal
+  let DetailModal: any = ProductDetailModal;
   const renderProperties = () => {
     switch (property) {
       case ListingTabs.DISH:
@@ -95,7 +114,7 @@ const Properties = () => {
             list={properties}
             onShowDetailModal={handleShowDetailModal}
           />
-        )
+        );
       case ListingTabs.PRODUCT:
         return (
           <PropertiesContainer
@@ -103,7 +122,7 @@ const Properties = () => {
             list={properties}
             onShowDetailModal={handleShowDetailModal}
           />
-        )
+        );
       case ListingTabs.SERVICE:
         return (
           <PropertiesContainer
@@ -111,16 +130,16 @@ const Properties = () => {
             list={properties}
             onShowDetailModal={handleShowDetailModal}
           />
-        )
+        );
       case ListingTabs.DEAL:
-        DetailModal = DealDetailModal
+        DetailModal = DealDetailModal;
         return (
           <PropertiesContainer
             cardItem={PromotionCard}
             list={properties}
             onShowDetailModal={handleShowDetailModal}
           />
-        )
+        );
       case ListingTabs.MENU:
         return (
           <PropertiesContainer
@@ -128,9 +147,9 @@ const Properties = () => {
             list={properties}
             onShowDetailModal={handleShowDetailModal}
           />
-        )
+        );
     }
-  }
+  };
 
   return (
     <div>
@@ -138,10 +157,11 @@ const Properties = () => {
         <ListingInforCard
           isViewPage={true}
           logo={listingInformation.logo}
-          phoneNumber={listingInformation.phone}
+          phoneNumber={listingInformation.phone_number}
           socialInfo={listingInformation.social_info}
           priceRange={listingInformation.price_range}
           bizListing={listingInformation}
+          userInfo={userInfo}
         />
       </SectionLayout>
       <SectionLayout title={upperCaseTitle}>{renderProperties()}</SectionLayout>
@@ -154,7 +174,7 @@ const Properties = () => {
         onClose={() => setShowDetailModal(false)}
       />
     </div>
-  )
-}
+  );
+};
 
-export default Properties
+export default Properties;

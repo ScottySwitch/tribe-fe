@@ -1,98 +1,107 @@
-import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import Modal from "components/Modal/Modal"
-import Select from "components/Select/Select"
-import Upload from "components/Upload/Upload"
-import { loginInforItem } from "constant"
-import { Tiers, UsersTypes, VerifySteps } from "enums"
-import Image from "next/image"
-import { useRouter } from "next/router"
-import { ChangeEvent, FormEvent, useState, useCallback, useEffect } from "react"
-import styles from "styles/BizUserVerify.module.scss"
-import { randomId, removeZeroInPhoneNumber } from "utils"
-import AuthApi from "../../../services/auth"
-import UserApi from "../../../services/user"
-import BizInvoinceApi from "../../../services/biz-invoice"
-import ClaimListingApi from "../../../services/claim-listing"
-import SelectInput from "components/SelectInput/SelectInput"
-import { formattedAreaCodes, phoneAreaCodes } from "constant"
+import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import Modal from "components/Modal/Modal";
+import Select from "components/Select/Select";
+import Upload from "components/Upload/Upload";
+import { loginInforItem } from "constant";
+import { Tiers, UsersTypes, VerifySteps } from "enums";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import {
+  ChangeEvent,
+  FormEvent,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
+import styles from "styles/BizUserVerify.module.scss";
+import { randomId, removeZeroInPhoneNumber } from "utils";
+import AuthApi from "../../../services/auth";
+import UserApi from "../../../services/user";
+import BizInvoinceApi from "../../../services/biz-invoice";
+import ClaimListingApi from "../../../services/claim-listing";
+import SelectInput from "components/SelectInput/SelectInput";
+import { formattedAreaCodes, phoneAreaCodes } from "constant";
 
 interface BizUserVerifyProps {
-  tier: string
+  tier: string;
 }
 
 const BizUserVerify = (props: BizUserVerifyProps) => {
-  const { tier } = props
-  const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP)
-  const [phoneNumber, setPhoneNumber] = useState("")
-  const [otp, setOtp] = useState("")
-  const [paymentMethod, setPaymentMethod] = useState("")
-  const [showResultModal, setShowResultModal] = useState(false)
-  const [frontImageIdentity, setFrontImageIdentity] = useState<string>("")
-  const [backImageIdentity, setBackImageIdentity] = useState<string>("")
-  const [payPrice, setPayPrice] = useState<string>("")
-  const [time, setTime] = useState<number>(30)
+  const { tier } = props;
+  const [verifyStep, setVerifyStep] = useState(VerifySteps.ADD_ID_CARD);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [otp, setOtp] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [frontImageIdentity, setFrontImageIdentity] = useState<string>("");
+  const [backImageIdentity, setBackImageIdentity] = useState<string>("");
+  const [payPrice, setPayPrice] = useState<string>("");
+  const [time, setTime] = useState<number>(30);
 
-  const router = useRouter()
-  let baseURL = process.env.NEXT_PUBLIC_API_URL
+  const router = useRouter();
+  let baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-  console.log(tier)
+  console.log(tier);
 
   useEffect(() => {
-    const sessionId = router.query.sessionId
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-    setPayPrice(userInfo.pay_price)
+    const sessionId = router.query.sessionId;
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    setPayPrice(userInfo.pay_price);
     if (sessionId && userInfo.isVeriFy != "true") {
-      setVerifyStep(VerifySteps.ADD_PAYMENT)
-      handleFinishVerifying("stripe")
-      const checkoutSessionId = sessionId
-      console.log(checkoutSessionId)
+      setVerifyStep(VerifySteps.ADD_PAYMENT);
+      handleFinishVerifying("stripe");
+      const checkoutSessionId = sessionId;
+      console.log(checkoutSessionId);
       if (checkoutSessionId) {
-        SS_GetProductPaymentDetails(checkoutSessionId)
+        SS_GetProductPaymentDetails(checkoutSessionId);
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (verifyStep === VerifySteps.CONFIRM_OTP) {
       let timer = setTimeout(() => {
         if (time > 0) {
-          setTime(returnTime(time - 1))
+          setTime(returnTime(time - 1));
         }
-      }, 1000)
+      }, 1000);
       return () => {
-        clearTimeout(timer)
-      }
+        clearTimeout(timer);
+      };
     }
-  })
+  });
 
   const returnTime = (time) => {
     if (time === 0) {
-      return "00"
+      return "00";
     } else if (time < 10) {
-      return "0" + time
+      return "0" + time;
     } else {
-      return time
+      return time;
     }
-  }
+  };
 
   const handleSubmit = () => {
-    const ssProduct = document.getElementById("SS_ProductCheckout")
-    console.log(ssProduct)
-    SS_ProductCheckout()
-  }
+    const ssProduct = document.getElementById("SS_ProductCheckout");
+    console.log(ssProduct);
+    SS_ProductCheckout();
+  };
 
   function SS_ProductCheckout() {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-    const strapiStripe = document.querySelector("#SS_ProductCheckout") as HTMLElement
-    const productId = strapiStripe?.dataset.id
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    const strapiStripe = document.querySelector(
+      "#SS_ProductCheckout"
+    ) as HTMLElement;
+    const productId = strapiStripe?.dataset.id;
 
-    const baseUrl = strapiStripe?.dataset.url || ""
-    userInfo.strapiStripeUrl = baseUrl
-    localStorage.setItem("user", JSON.stringify(userInfo))
-    const getProductApi = baseUrl + "/strapi-stripe/getProduct/" + productId
-    const checkoutSessionUrl = baseUrl + "/strapi-stripe/createCheckoutSession/"
+    const baseUrl = strapiStripe?.dataset.url || "";
+    userInfo.strapiStripeUrl = baseUrl;
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    const getProductApi = baseUrl + "/strapi-stripe/getProduct/" + productId;
+    const checkoutSessionUrl =
+      baseUrl + "/strapi-stripe/createCheckoutSession/";
 
     fetch(getProductApi, {
       method: "get",
@@ -119,17 +128,17 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           .then((response) => response.json())
           .then((response) => {
             if (response.id) {
-              window.location.replace(response.url)
+              window.location.replace(response.url);
             }
-          })
-      })
+          });
+      });
   }
 
   function SS_GetProductPaymentDetails(checkoutSessionId) {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-    const baseUrl = userInfo.strapiStripeUrl
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    const baseUrl = userInfo.strapiStripeUrl;
     const retrieveCheckoutSessionUrl =
-      baseUrl + "/strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId
+      baseUrl + "/strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId;
     fetch(retrieveCheckoutSessionUrl, {
       method: "get",
       mode: "cors",
@@ -146,10 +155,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               .map((nav: any) => nav.type)
               .includes("reload")
           ) {
-            console.info("website reloded")
+            console.info("website reloded");
           } else {
             // store payment in strapi
-            const stripePaymentUrl = baseUrl + "/strapi-stripe/stripePayment"
+            const stripePaymentUrl = baseUrl + "/strapi-stripe/stripePayment";
             fetch(stripePaymentUrl, {
               method: "post",
               body: JSON.stringify({
@@ -166,139 +175,143 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               headers: new Headers({
                 "Content-Type": "application/json",
               }),
-            })
+            });
           }
         }
-      })
+      });
   }
 
   const handleRequestOTP = async () => {
     //send OPT
-    await AuthApi.otpPhoneGenerate(phoneNumber)
-    console.log(phoneNumber)
-    setVerifyStep(VerifySteps.CONFIRM_OTP)
-  }
+    await AuthApi.otpPhoneGenerate(phoneNumber);
+    console.log(phoneNumber);
+    setVerifyStep(VerifySteps.CONFIRM_OTP);
+  };
 
   const handleConfirmOTP = async () => {
     //submit otp to check
     if (tier === Tiers.FREE) {
-      const result = await AuthApi.otpPhoneConfirm({ otp })
+      const result = await AuthApi.otpPhoneConfirm({ otp });
       if (result.data.success) {
         const result1 = ClaimListingApi.createClaimListing({
           paymentMethod: "free",
           transaction_id: "",
-        })
-        setShowResultModal(true)
+        });
+        setShowResultModal(true);
       } else {
-        alert("Wrong OTP")
+        alert("Wrong OTP");
       }
     } else {
-      const result = await AuthApi.otpPhoneConfirm({ otp })
+      const result = await AuthApi.otpPhoneConfirm({ otp });
       if (result.data.success) {
-        setVerifyStep(VerifySteps.ADD_ID_CARD)
+        setVerifyStep(VerifySteps.ADD_ID_CARD);
       } else {
-        alert("Wrong OTP")
+        alert("Wrong OTP");
       }
     }
-  }
+  };
 
   const handleDirectToStorePage = () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-    userInfo.isVeriFy = false
-    localStorage.setItem("user", JSON.stringify(userInfo))
-    if (userInfo.role_choose === 'Owner') {
-      window.location.href = `/biz/home/${userInfo.biz_slug}/edit/`
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.isVeriFy = false;
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    if (userInfo.role_choose === "Owner") {
+      window.location.href = `/biz/home/${userInfo.biz_slug}/edit/`;
+    } else {
+      window.location.href = `/`;
     }
-    else {
-      window.location.href = `/`
-    }
-  }
+  };
 
   const handleAddIdCard = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     if (frontImageIdentity != "" && backImageIdentity != "") {
-      setVerifyStep(VerifySteps.ADD_PAYMENT)
-      const userId = userInfo.id
+      setVerifyStep(VerifySteps.ADD_PAYMENT);
+      const userId = userInfo.id;
       if (userId) {
         const result = UserApi.updateUser(parseInt(userId), {
           front_papers_identity: frontImageIdentity,
-        })
+        });
         const resultTwo = UserApi.updateUser(parseInt(userId), {
           back_papers_identity: backImageIdentity,
-        })
+        });
       }
     } else {
-      alert("Image is required")
+      alert("Image is required");
     }
-  }
+  };
 
   const handleFinishVerifying = async (paymentMethodValue: string) => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-    let price = userInfo.pay_price
-    let transaction_id
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    let price = userInfo.pay_price;
+    let transaction_id;
     if (router.query.sessionId) {
-      transaction_id = router.query.sessionId
+      transaction_id = router.query.sessionId;
     } else {
-      transaction_id = ""
+      transaction_id = "";
     }
     if (price != null) {
-      if (userInfo.type_handle === 'Claim') {
+      if (userInfo.type_handle === "Claim") {
         const result = await BizInvoinceApi.createBizInvoice({
           value: parseInt(price),
           paymentMethod: paymentMethodValue,
           transaction_id: transaction_id,
-        })
+        });
         const result1 = await ClaimListingApi.createClaimListing({
           paymentMethod: paymentMethodValue,
           transaction_id: transaction_id,
-        })
-      }
-      else {
-        if (userInfo.role_choose === 'Owner') {
+        });
+      } else {
+        if (userInfo.role_choose === "Owner") {
           const result = await BizInvoinceApi.createBizInvoice({
             value: parseInt(price),
             paymentMethod: paymentMethodValue,
             transaction_id: transaction_id,
-          })
+          });
           const result1 = await ClaimListingApi.createClaimListing({
             paymentMethod: paymentMethodValue,
             transaction_id: transaction_id,
-          })
-        }
-        else {
+          });
+        } else {
           const result = await BizInvoinceApi.createBizRevisionInvoice({
             value: parseInt(price),
             paymentMethod: paymentMethodValue,
             transaction_id: transaction_id,
-          })
+          });
           const result1 = await ClaimListingApi.createClaimListingRevision({
             paymentMethod: paymentMethodValue,
             transaction_id: transaction_id,
-          })
+          });
         }
       }
     }
-    userInfo.isVeriFy = true
-    localStorage.setItem("user", JSON.stringify(userInfo))
-    setShowResultModal(true)
-  }
+    userInfo.isVeriFy = true;
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    setShowResultModal(true);
+  };
 
   const handleUploadFrontImagesIdentity = useCallback((srcImages) => {
-    setFrontImageIdentity(srcImages)
-    console.log("srcImages", srcImages)
-  }, [])
+    setFrontImageIdentity(srcImages);
+    console.log("srcImages", srcImages);
+  }, []);
 
   const handleUploadBackImagesIdentity = useCallback((srcImages) => {
-    setBackImageIdentity(srcImages)
-    console.log("srcImages", srcImages)
-  }, [])
+    setBackImageIdentity(srcImages);
+    console.log("srcImages", srcImages);
+  }, []);
 
   const requireOTP = async () => {
     const result = await AuthApi.forgetPasswordByPhone({
       phone_number: phoneNumber,
-    })
-    setTime(30)
-  }
+    });
+    setTime(30);
+  };
+
+  const CenterIcon = ({ type }) => (
+    <div className="flex gap-1 items-center flex-col">
+      <Icon icon="plus" size={20} />
+      <p>{type}</p>
+    </div>
+  );
 
   return (
     <div className={styles.biz_verify}>
@@ -313,9 +326,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             shouldControlShowValue
             onChange={(e) => setPhoneNumber(removeZeroInPhoneNumber(e))}
           />
-          <Button 
-            text="Receive OTP" 
-            onClick={handleRequestOTP} 
+          <Button
+            text="Receive OTP"
+            onClick={handleRequestOTP}
             disabled={phoneNumber.length >= 10 ? false : true}
           />
         </div>
@@ -324,13 +337,15 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         <div className={styles.form}>
           <div className={styles.header}>Confirm number</div>
           <p>
-            An OTP has been sent to the number {phoneNumber} Please enter the OTP to complete the
-            registration.
+            An OTP has been sent to the number {phoneNumber} Please enter the
+            OTP to complete the registration.
           </p>
           <Input
             placeholder="Enter OTP"
             width="100%"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setOtp(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setOtp(e.target.value)
+            }
           />
           <div className="flex justify-between w-full">
             <div className={styles.time}>00:{time}</div>
@@ -343,42 +358,39 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               />
             </div>
           </div>
-          <Button text="Receive OTP" onClick={handleConfirmOTP} disabled={!otp} />
+          <Button
+            text="Receive OTP"
+            onClick={handleConfirmOTP}
+            disabled={!otp}
+          />
         </div>
       )}
       {verifyStep === VerifySteps.ADD_ID_CARD && (
         <div className={styles.form}>
-          <div className={styles.header}>Add ID Card / Driving License photo</div>
+          <div className={styles.header}>
+            Add ID Card / Driving License photo
+          </div>
           <p>We need this to verify the information you’ve provided.</p>
           <div className={styles.field_group}>
             <label>ID Type</label>
             <Select
+              className="mt-3"
               placeholder="Driving Licence"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setOtp(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setOtp(e.target.value)
+              }
             />
           </div>
           <div className={styles.field_group}>
             <label>Upload ID card or driver liciense photos</label>
-            <div className="w-full flex justify-between gap-5">
+            <div className="w-full flex justify-center gap-10">
               <Upload
                 onChange={handleUploadFrontImagesIdentity}
-                className={styles.upload_id}
-                centerIcon={
-                  <div className="flex gap-1 items-center flex-col">
-                    <Icon icon="plus" size={20} />
-                    <p>Front</p>
-                  </div>
-                }
+                centerIcon={<CenterIcon type="Front" />}
               />
               <Upload
                 onChange={handleUploadBackImagesIdentity}
-                className={styles.upload_id}
-                centerIcon={
-                  <div className="flex gap-1 items-center flex-col">
-                    <Icon icon="plus" size={20} />
-                    <p>Back</p>
-                  </div>
-                }
+                centerIcon={<CenterIcon type="Back" />}
               />
             </div>
           </div>
@@ -409,17 +421,29 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             <label>Payment method</label>
             <div className={styles.payment_container}>
               <div
-                className={`${styles.payment} ${paymentMethod === "xendit" ? styles.selected : ""}`}
+                className={`${styles.payment} ${
+                  paymentMethod === "xendit" ? styles.selected : ""
+                }`}
                 onClick={() => setPaymentMethod("xendit")}
               >
-                <Image src={require("public/images/xendit.svg")} width="60px" alt="" />
+                <Image
+                  src={require("public/images/xendit.svg")}
+                  width="60px"
+                  alt=""
+                />
                 Xendit
               </div>
               <div
-                className={`${styles.payment} ${paymentMethod === "stripe" ? styles.selected : ""}`}
+                className={`${styles.payment} ${
+                  paymentMethod === "stripe" ? styles.selected : ""
+                }`}
                 onClick={() => setPaymentMethod("stripe")}
               >
-                <Image src={require("public/images/stripe.svg")} width="60px" alt="" />
+                <Image
+                  src={require("public/images/stripe.svg")}
+                  width="60px"
+                  alt=""
+                />
                 Stripe
               </div>
             </div>
@@ -448,7 +472,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           </div>
         </div>
       )}
-      <Modal transparent width={400} mobilePosition="center" visible={showResultModal}>
+      <Modal
+        transparent
+        width={400}
+        mobilePosition="center"
+        visible={showResultModal}
+      >
         <div className={styles.modal}>
           <Image
             src={require("public/images/success-submit.svg")}
@@ -470,12 +499,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         </div>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  return { props: { tier: context.query.tier || Tiers.FREE } }
+  return { props: { tier: context.query.tier || Tiers.FREE } };
 }
 
-export default BizUserVerify
+export default BizUserVerify;

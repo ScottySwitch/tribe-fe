@@ -4,13 +4,13 @@ import Api from "../index";
 
 const qs = require('qs');
 
-const createFollowing = async () => {
+const createFollowing = async (bizlistingId) => {
 	let userInfo = JSON.parse(localStorage.getItem("user") || '{}')  
 	const url = `/api/user-listing-follows`;
 	return await Api.post(url, {
 		data: {
 			user: userInfo.id,
-			biz_listing: userInfo.now_biz_listing.id
+			biz_listing: bizlistingId
 		}
 	});
 }
