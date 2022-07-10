@@ -1,24 +1,17 @@
-import Select from "components/Select/Select";
-import { useState } from "react"
 import ReactPaginate from "react-paginate"
 
-import styles from "./Pagination.module.scss"
+import styles from "./Pagination.module.scss";
 
 interface PaginationProps {
-  onPageChange?: (selected?: { selected: number }) => void
+  onPageChange?: (selected: { selected: number }) => void;
   total?: number;
   limit?: number;
 }
 
 const Pagination = (props: PaginationProps) => {
-  const { 
-    onPageChange, 
-    total = 1000,
-    limit = 30,
-    ...rest
-  } = props
+  const { onPageChange, total = 1000, limit = 30, ...rest } = props;
 
-  const pageCount = Math.ceil(total / limit)
+  const pageCount = Math.ceil(total / limit);
 
   return (
     <ReactPaginate
@@ -32,7 +25,7 @@ const Pagination = (props: PaginationProps) => {
       pageRangeDisplayed={2}
       pageClassName={styles.page}
     />
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;

@@ -207,7 +207,6 @@ const SubCategoryPage = (props: any) => {
 
 export async function getServerSideProps(context) {
   const category = context.query.category;
-  const subCategory = context.query.subCategory;
   const dataBanners = await BannerApi.getBannerByCategory(category);
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
