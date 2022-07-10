@@ -1,24 +1,19 @@
+import get from "lodash/get";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import {
-  categories,
   contributePopOverList,
-  loginInforItem,
-  switchAccountList,
 } from "constant";
 import Popover from "components/Popover/Popover";
 import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
 import Menu from "components/Menu/Menu";
-
-import styles from "./Header.module.scss";
 import { ILoginInfor } from "pages/_app";
 import { UsersTypes } from "enums";
-import Break from "components/Break/Break";
-import { randomId } from "utils";
-import get from "lodash/get";
+
+import styles from "./Header.module.scss";
 
 export const Categories = (props: {
   currentCategory?: string;
