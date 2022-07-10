@@ -184,6 +184,21 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
     }
   }
 
+  const handleSetInterest = (item) => {
+    let isSelected = interest.some((ItemIterest) => item.label === ItemIterest.label)
+    let newArray: any = []
+    if (isSelected) {
+      newArray = interest.filter((ItemIterest) => item.label !== ItemIterest.label)
+    }
+    else {
+      newArray = [
+        ...interest,
+        {label: item.label, id: item.id}
+      ]
+    }
+    setInterest(newArray)
+  }
+
   const handleSubmit = () => {
     setIsLoading(true)
     // console.log(interest)
@@ -216,7 +231,8 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
               <div
                 key={item.value}
                 className={itemClass}
-                onClick={() => setInterest([...interest, {label: item.label, id: item.id}])}
+                // onClick={() => setInterest([...interest, {label: item.label, id: item.id}])}
+                onClick={() => handleSetInterest(item)}
               >
                 <div className={styles.avatar}>
                   <Image src={item.avatar} alt="" layout="fixed" width={50} height={50} />
