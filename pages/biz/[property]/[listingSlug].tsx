@@ -142,7 +142,7 @@ const Properties = () => {
         <ListingInforCard
           isViewPage={true}
           logo={listingInformation.logo}
-          phoneNumber={listingInformation.phone}
+          phoneNumber={listingInformation.phone_number}
           socialInfo={listingInformation.social_info}
           priceRange={listingInformation.price_range}
           bizListing={listingInformation}

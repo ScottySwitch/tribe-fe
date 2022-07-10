@@ -190,7 +190,7 @@ const getOwnerBizListingBySlug = async (bizListingSlug: any) => {
         },
         {
           "listing_roles": {
-            "name": "owner",
+            "name": "Owner",
             "user": {
               "id": {
                 "$eq": userInfo.id
@@ -231,7 +231,7 @@ const getOwnerBizListing = async (bizListingSlug: any) => {
         },
         {
           "listing_roles": {
-            "name": "owner",
+            "name": "Owner",
             "user": {
               "id": {
                 "$eq": userInfo.id
