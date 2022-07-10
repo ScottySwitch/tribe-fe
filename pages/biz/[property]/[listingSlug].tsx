@@ -75,18 +75,11 @@ const Properties = () => {
       userInfo.now_biz_listing = listingDetail;
       localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo)
-      userInfo.now_biz_listing = listingDetail;
-      localStorage.setItem("user", JSON.stringify(userInfo));
-      setUserInfo(userInfo)
       let propertiesData = get(data, `data.data[0].attributes.${property}.data`)
       setListingInformation(listingDetail)
-      console.log("listing", listingDetail)
-      console.log("userInfo", userInfo)
       if (property === 'products') {
         propertiesData = orderBy(propertiesData, ['attributes.is_pinned'], ['desc'])
       }
-      console.log("listing", listingDetail)
-      console.log("userInfo", userInfo)
       setProperties(propertiesData)
     }
     listingSlug && getProperties()
