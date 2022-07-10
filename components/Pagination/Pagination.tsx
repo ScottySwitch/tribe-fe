@@ -1,3 +1,4 @@
+import Select from "components/Select/Select";
 import { useState } from "react"
 import ReactPaginate from "react-paginate"
 
@@ -26,7 +27,7 @@ const Pagination = (props: PaginationProps) => {
       nextLabel={">"}
       previousLabel={"<"}
       pageCount={pageCount}
-      onPageChange={onPageChange}
+      onPageChange={(page) => onPageChange?.({...page, selected: page.selected + 1})}
       marginPagesDisplayed={1}
       pageRangeDisplayed={2}
       pageClassName={styles.page}

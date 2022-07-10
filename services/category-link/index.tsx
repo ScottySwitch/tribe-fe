@@ -27,7 +27,6 @@ const getCategoryLinksByCategorySlug = async (category) => {
   }, {
     encodeValuesOnly: true
   });
-
   const url = `/api/category-links?${query}`;
   return await Api.get(url);
 }

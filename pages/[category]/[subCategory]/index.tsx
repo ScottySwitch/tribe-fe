@@ -33,7 +33,7 @@ const SubCategoryPage = (props: any) => {
   const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
   const [showFilter, setShowFilter] = useState(false);
   const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number | undefined>(0);
+  const [page, setPage] = useState<number | undefined>(1);
   const [limit, setLimit] = useState<number>(30);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory);
@@ -180,6 +180,7 @@ const SubCategoryPage = (props: any) => {
                   categories={item.categories}
                   tags={item.tags}
                   isVerified={item.isVerified}
+                  description={item.description}
                   onClick={() => {
                     window.location.href = `/biz/home/${item.slug}`;
                   }}

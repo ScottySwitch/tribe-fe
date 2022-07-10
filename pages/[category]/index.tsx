@@ -33,6 +33,8 @@ import styles from "styles/Home.module.scss";
 import { get } from "lodash";
 import { getEnvironmentData } from "worker_threads";
 import Loader from "components/Loader/Loader";
+import Pagination from "components/Pagination/Pagination";
+import { route } from "next/dist/server/router";
 
 const Category = (props: any) => {
   const trans = useTrans();
@@ -41,7 +43,7 @@ const Category = (props: any) => {
     query: { category },
   } = router;
   const {
-    listingArray,
+    // listingArray,
     listingExclusiveDeal,
     listingBanners,
     listCollections,
@@ -49,14 +51,64 @@ const Category = (props: any) => {
   } = props;
 
   const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number | undefined>(1)
+  const [listingArray, setListingArray] = useState<{ [key: string]: any }[]>([]);
+  const [categoryId, setCategoryId] = useState<number>(1)
   const [subCategories, setSubCategories] = useState<
     { [key: string]: string }[]
   >([]);
 
   useEffect(() => {
+    let idCategory;
+    switch (category) {
+      case CategoryText.BUY:
+        idCategory = Categories.BUY
+        break;
+      case CategoryText.EAT:
+        idCategory = Categories.EAT
+        break;
+      case CategoryText.SEE_AND_DO:
+        idCategory = Categories.SEE_AND_DO
+        break;
+      case CategoryText.STAY:
+        idCategory = Categories.STAY
+        break;
+      case CategoryText.TRANSPORT:
+        idCategory = Categories.TRANSPORT
+        break;
+    }
     setSubCategories(dummySubCategories);
     setLoading(false);
-  }, []);
+    getData(categoryId, page)
+  }, [page])
+
+  const getData = async (categoryId, page) => {
+    const data = await BizListingApi.getBizListingsByCategoryId(categoryId, page)
+    if (get(data, 'data.data')) {
+      const rawListingArray = get(data, "data.data");
+      let listingArray: any = [];
+      listingArray =
+      Array.isArray(rawListingArray) &&
+      rawListingArray.map((item) => ({
+        images: get(item, "attributes.images") || [],
+        title: get(item, "attributes.name"),
+        slug: get(item, "attributes.slug"),
+        isVerified: get(item, "attributes.is_verified"),
+        address: get(item, "attributes.address"),
+        country: get(item, "attributes.country"),
+        description: get(item, "attributes.description"),
+        // followerNumber: get(item, "user_listing_follows.length"),
+        // tags: get(item, "attributes.tags"),
+        // categories: get(item, "attributes.categories"),
+        price: get(item, "price_range.min") || "",
+        // rate: get(item, "attributes.rate"),
+        // rateNumber: get(item, "attributes.rate_number"),
+      }));
+      setListingArray(listingArray)
+      setTotal(get(data, 'data.meta.pagination.total'))
+    }
+  }
 
   let bannerSrc;
   switch (category) {
@@ -191,6 +243,15 @@ const Category = (props: any) => {
             </div>
           ))}
       </SectionLayout>
+      <SectionLayout show={total > 0}>
+        <Pagination
+          limit={30}
+          total={total}
+          onPageChange={(page) => {
+            setPage(page?.selected)
+          }}
+        />
+      </SectionLayout>
       {/* <SectionLayout childrenClassName="flex justify-center">
         <Button variant="outlined" text="Load more" width={400} />
       </SectionLayout> */}
@@ -241,7 +302,7 @@ export async function getServerSideProps(context) {
       break;
   }
 
-  const data = await BizListingApi.getBizListingsByCategoryId(categoryId);
+  // const data = await BizListingApi.getBizListingsByCategoryId(categoryId);
   const dataExclusiveDeal = await BizListingApi.getExclusiveDealByCategory(
     category
   );
@@ -254,32 +315,11 @@ export async function getServerSideProps(context) {
   let listingExclusiveDealArray: any = [];
   let listCollectionArray: any = [];
   let ListCategoryLinkArray: any = [];
-  const rawListingArray = get(data, "data.data");
   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawListCategory = get(dataCategoryLinks, "data.data");
-
-  listingArray =
-    Array.isArray(rawListingArray) &&
-    rawListingArray.map((item) => ({
-      images: get(item, "attributes.images") || [],
-      title: get(item, "attributes.name"),
-      slug: get(item, "attributes.slug"),
-      isVerified: get(item, "attributes.is_verified"),
-      address: get(item, "attributes.address"),
-      country: get(item, "attributes.country"),
-      description: get(item, "attributes.description"),
-      // followerNumber: get(item, "user_listing_follows.length"),
-      // tags: get(item, "attributes.tags"),
-      // categories: get(item, "attributes.categories"),
-      price: get(item, "price_range.min") || "",
-      // rate: get(item, "attributes.rate"),
-      // rateNumber: get(item, "attributes.rate_number"),
-    }));
-
-  console.log("data--------", listingArray);
-
+    
   listingExclusiveDealArray =
     Array.isArray(rawListingExclusiveDealAray) &&
     rawListingExclusiveDealAray.map((item) => ({
@@ -310,16 +350,17 @@ export async function getServerSideProps(context) {
       slug: item.slug,
       title: item.name,
     }));
+  console.log('rawListCategory', rawListCategory)
   ListCategoryLinkArray =
     Array.isArray(rawListCategory) &&
     rawListCategory.map((item) => ({
-      icon: get(item, "attributes.logo.url") || null,
+      icon: get(item, "attributes.logo.data.attributes.url") || null,
       label: get(item, "attributes.label"),
       slug: get(item, "attributes.value"),
     }));
   return {
     props: {
-      listingArray: listingArray,
+      // listingArray: listingArray,
       listingExclusiveDeal: listingExclusiveDealArray,
       listingBanners: listBannerArray,
       listCollections: listCollectionArray,

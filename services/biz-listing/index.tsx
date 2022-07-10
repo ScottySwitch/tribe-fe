@@ -43,7 +43,7 @@ const getBizListing = async () => {
   return await Api.get(url);
 }
 
-const getBizListingsByCategoryId = async (categoryId: Categories) => {
+const getBizListingsByCategoryId = async (categoryId: Categories, page: number) => {
   const query = qs.stringify({
     "filters": {
       "categories": {
@@ -80,7 +80,7 @@ const getBizListingsByCategoryId = async (categoryId: Categories) => {
     encodeValuesOnly: true, // prettify url
   });
 
-  const url = `/api/biz-listings?${query}`;
+  const url = `/api/biz-listings?${query}&pagination[page]=${page}&pagination[pageSize]=28`;
   return await Api.get(url);
 }
 
@@ -349,8 +349,8 @@ const getExclusiveDealByCategory = async (category) => {
   return await Api.get(url)
 }
 
-const getBizlistingByCategoryLink = async (category, categoryLinks, limit) => {
-  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&litmit=${limit}`
+const getBizlistingByCategoryLink = async (category, categoryLinks, page) => {
+  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&page=${page}`
   return await Api.get(url)
 }
 
@@ -359,7 +359,6 @@ const getListingFavouriteByCategory = async (category) => {
   const url = `/api/biz-listings/listing-favourite-by-category?category=${category}&userId=${userInfo.id}`;
 	return await Api.get(url);
 }
-
 
 export default {
   getBizlistingByCategoryLink,
