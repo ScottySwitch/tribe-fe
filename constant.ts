@@ -89,7 +89,7 @@ export const infoCardResponsive = {
   lgScroll: 3,
   xlShow: 4,
   xlScroll: 3,
-  show: 4,
+  show: 5,
   scroll: 4,
 };
 

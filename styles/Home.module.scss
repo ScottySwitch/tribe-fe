@@ -24,13 +24,6 @@
   left: 0;
   padding: 0;
   cursor: pointer;
-
-  &_container {
-    padding: 6px 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
 }
 
 .for_you {
@@ -57,11 +50,12 @@
     fill: $primary-500;
   }
 }
+
 .for_you_container {
   padding: 6px 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 10px;
 }
 
 .banner_card {
@@ -186,10 +180,6 @@
   .bests {
     gap: unset;
     justify-content: space-between;
-    .category {
-      width: 50px;
-      height: 50px;
-    }
   }
 
   .introduction {

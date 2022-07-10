@@ -156,6 +156,12 @@
   }
 }
 
+@media screen and (max-width: $big-tablet) {
+  .infor_card {
+    width: 220px;
+  }
+}
+
 @media screen and (max-width: $tablet) {
   .infor_card {
     width: 200px;
