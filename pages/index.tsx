@@ -114,45 +114,49 @@ const Home: NextPage = (props: any) => {
           </div>
         ))}
       </SectionLayout>  
-      <SectionLayout title="Exclusive deals">
-        <Button
-          size="small"
-          text={trans.filter}
-          variant="secondary"
-          onClick={() => setShowFilter(true)}
-          className="w-[50px] mb-5"
-        />
-        <Carousel responsive={infoCardResponsive}>
-            {Array.isArray(listingExclusiveDeal) ? listingExclusiveDeal?.map((card) => (
-              <div key={card.name} className="pb-5">
-                <InforCard
-                  imgUrl={get(card, 'images[0]')}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`
-                  }}
-                />
-              </div>
-            )): <div></div>}
-        </Carousel>
+      { Array.isArray(listingExclusiveDeal) && listingExclusiveDeal.length > 0 &&
+        <SectionLayout title="Exclusive deals">
+          <Button
+            size="small"
+            text={trans.filter}
+            variant="secondary"
+            onClick={() => setShowFilter(true)}
+            className="w-[50px] mb-5"
+          />
+          <Carousel responsive={infoCardResponsive}>
+              {listingExclusiveDeal?.map((card) => (
+                <div key={card.name} className="pb-5">
+                  <InforCard
+                    imgUrl={get(card, 'images[0]')}
+                    title={card.title}
+                    rate={card.rate}
+                    rateNumber={card.rateNumber}
+                    followerNumber={card.followerNumber}
+                    price={card.price}
+                    categories={card.categories}
+                    tags={card.tags}
+                    isVerified={card.isVerified}
+                    description={card.description}
+                    onClick={() => {
+                      window.location.href = `/biz/home/${card.slug}`
+                    }}
+                  />
+                </div>
+              ))}
+          </Carousel>
       </SectionLayout>
-      <SectionLayout backgroundColor title="Specially Curated For You">
-        <Carousel responsive={homeCuratedResponsive}>
-            {Array.isArray(listCollections) ? listCollections?.map((item, index) => (
-              <div key={index} className="pb-5">
-                <CollectionCard title={item.title} imgUrl={item.imgUrl} />
-              </div>
-            )): <div></div>}
-        </Carousel>
-      </SectionLayout>
+      }
+      { Array.isArray(listCollections) && listCollections.length > 0 &&
+        <SectionLayout backgroundColor title="Specially Curated For You">
+          <Carousel responsive={homeCuratedResponsive}>
+              {listCollections?.map((item, index) => (
+                <div key={index} className="pb-5">
+                  <CollectionCard title={item.title} imgUrl={item.imgUrl} />
+                </div>
+              ))}
+          </Carousel>
+        </SectionLayout>
+      }
       <SectionLayout title="Where to BUY">
         <Carousel responsive={infoCardResponsive}>
             {Array.isArray(listingBuy) ? listingBuy?.map((card) => (
@@ -199,7 +203,7 @@ const Home: NextPage = (props: any) => {
           )): <div></div>}
         </Carousel>
       </SectionLayout>
-      <SectionLayout backgroundColor title="Featured Articles">
+      {/* <SectionLayout backgroundColor title="Featured Articles">
         <Carousel responsive={homeCuratedResponsive}>
           {homeArticleCarousel?.map((item, index) => (
             <div key={index} className="pb-5">
@@ -211,7 +215,7 @@ const Home: NextPage = (props: any) => {
             </div>
           ))}
         </Carousel>
-      </SectionLayout>
+      </SectionLayout> */}
       <SectionLayout title="What to EAT">
         <Carousel responsive={infoCardResponsive}>
             {Array.isArray(listingEat) ? listingEat?.map((card) => (
