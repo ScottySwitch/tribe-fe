@@ -14,6 +14,7 @@ import PromotionApi from "services/promotion";
 import get from "lodash/get";
 import {useRouter} from "next/router";
 import { calcRateNumber } from "utils"
+import Link from "next/link";
 
 const dummyPromotion = [
   {
@@ -273,22 +274,24 @@ const PromotionsPage = () => {
               className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
               {Array.isArray(get(bizListing, "biz_listings.data"))
                 && get(bizListing, "biz_listings.data")?.map((card, index) => (
-                <InforCard
-                  key={index}
-                  imgUrl={get(card, "attributes.images") ? card.attributes.images[0] : "https://picsum.photos/200/300"}
-                  title={get(card, "attributes.name")}
-                  rate={calcRateNumber(get(card, "attributes.reviews.data"))}
-                  rateNumber={get(card, "attributes.reviews.data") ?
-                    (get(card, "attributes.reviews.data")).length : 0}
-                  followerNumber={get(card, "attributes.user_listing_follows.data") ?
-                    get(card, "attributes.user_listing_follows.data").length : 0}
-                  price={get(card, "attributes.price_range.min")}
-                  categories={card.categories}
-                  tags={get(card, "attributes.tags.data")}
-                  iconTag={true}
-                  isVerified={get(card, "attributes.is_verified")}
-                  className="w-full"
-                />
+                  <Link href={`/biz/home/${get(card, "attributes.slug")}`} key={index}>
+                    <InforCard
+                      key={index}
+                      imgUrl={get(card, "attributes.images") ? card.attributes.images[0] : "https://picsum.photos/200/300"}
+                      title={get(card, "attributes.name")}
+                      rate={calcRateNumber(get(card, "attributes.reviews.data"))}
+                      rateNumber={get(card, "attributes.reviews.data") ?
+                        (get(card, "attributes.reviews.data")).length : 0}
+                      followerNumber={get(card, "attributes.user_listing_follows.data") ?
+                        get(card, "attributes.user_listing_follows.data").length : 0}
+                      price={get(card, "attributes.price_range.min")}
+                      categories={card.categories}
+                      tags={get(card, "attributes.tags.data")}
+                      iconTag={true}
+                      isVerified={get(card, "attributes.is_verified")}
+                      className="w-full"
+                    />
+                  </Link>
               ))}
             </div>
           </SectionLayout>
