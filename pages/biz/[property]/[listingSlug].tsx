@@ -1,6 +1,7 @@
 import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard";
 import DealDetailModal from "components/DealDetailModal/DealDetailModal";
 import InforCard from "components/InforCard/InforCard";
+import Loader from "components/Loader/Loader";
 import MenuCard from "components/MenuCard/MenuCard";
 import ProductDetailModal from "components/ProductDetailModal/ProductDetailModal";
 import PromotionCard from "components/PromotionCard/PromotionCard";
@@ -68,6 +69,7 @@ const Properties = () => {
   const { property, listingSlug }: any = query;
 
   const upperCaseTitle = property?.[0].toUpperCase() + property?.slice(1);
+  const [loading, setLoading] = useState(true);
   const [properties, setProperties] = useState<any[]>([]);
   const [selectedItem, setSelectedItem] = useState<any>({});
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -95,6 +97,7 @@ const Properties = () => {
         );
       }
       setProperties(propertiesData);
+      setLoading(false);
     };
     listingSlug && getProperties();
   }, [property, listingSlug]);
@@ -150,6 +153,14 @@ const Properties = () => {
         );
     }
   };
+
+  if (loading) {
+    return (
+      <SectionLayout childrenClassName="flex justify-center">
+        <Loader />
+      </SectionLayout>
+    );
+  }
 
   return (
     <div>
