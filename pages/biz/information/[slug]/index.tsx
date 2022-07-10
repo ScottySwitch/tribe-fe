@@ -86,7 +86,7 @@ const BizInformation = (props) => {
       case InformationList.PHOTOS_VIDEOS:
         return <PhotosVideos isPaid={isPaid} />;
       case InformationList.MANAGE_DEALS:
-        return <ManageDeals />;
+        return <ManageDeals bizListingId={listing.id} />
       case InformationList.ANALYTICS:
         return (
           <SectionLayout
