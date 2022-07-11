@@ -87,10 +87,6 @@ const FavouriedPanel = () => {
     console.log("removedListing", removedListing);
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
-    let newFavouriteListing = userInfo.listing_favourite_ids.filter(
-      (id) => id !== removedListing.id
-    );
-
     await UserApi.removeListingFavourite({
       userId: userInfo.id,
       listingFavouriteId: removedListing.id,
