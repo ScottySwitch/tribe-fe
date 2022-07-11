@@ -145,11 +145,15 @@ const loginFacebookCallback = async (accessToken: any) => {
   const url = `/api/auth/facebook/callback?access_token=${accessToken}`;
   let user = await Api.get(url);
   if (user.data) {
-    let { jwt } = user.data;
+    let { jwt, user: { confirmed } } = user.data;
     userInfo.token = jwt
     localStorage.setItem("user", JSON.stringify(userInfo))
     await getMe();
-    window.location.href = '/signup/setup-profile';
+    if (!confirmed) {
+      window.location.href = '/signup/setup-profile';
+    } else {
+      window.location.href = '/';
+    }
   }
 }
 
@@ -161,11 +165,15 @@ const loginGoogleCallback = async (accessToken: any) => {
   const url = `/api/auth/google/callback?access_token=${accessToken}`;
   let user = await Api.get(url);
   if (user.data) {
-    let { jwt } = user.data;
+    let { jwt, user: { confirmed } } = user.data;
     userInfo.token = jwt
     localStorage.setItem("user", JSON.stringify(userInfo))
     await getMe();
-    window.location.href = '/signup/setup-profile';
+    if (!confirmed) {
+      window.location.href = '/signup/setup-profile';
+    } else {
+      window.location.href = '/';
+    }
   }
 }
 
