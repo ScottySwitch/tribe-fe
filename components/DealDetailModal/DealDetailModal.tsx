@@ -23,6 +23,7 @@ interface DealDetailModalProps extends ModalProps {
 
 const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props
+  console.log('data', data)
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
   useEffect(() => {
@@ -110,7 +111,10 @@ const DealDetailModal = (props: DealDetailModalProps) => {
           text="Cancel"
           className={`${styles.btn_cancel} text-sm font-medium no-underline`}
           width="max-content"
-          onClick={onClose}
+          onClick={() => {
+            onClose
+            setIsFavourite(false)
+          }}
         />
       </div>
     </Modal>
