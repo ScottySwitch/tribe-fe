@@ -19,7 +19,6 @@ import {
   inforCardList,
 } from "constant";
 import { Categories, CategoryText } from "enums";
-import useTrans from "hooks/useTrans";
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -35,6 +34,7 @@ import { getEnvironmentData } from "worker_threads";
 import Loader from "components/Loader/Loader";
 import Pagination from "components/Pagination/Pagination";
 import { route } from "next/dist/server/router";
+import useTrans from "useTrans";
 
 const Category = (props: any) => {
   const trans = useTrans();

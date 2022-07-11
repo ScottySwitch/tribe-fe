@@ -85,7 +85,10 @@ const SubCategoryPage = (props: any) => {
         rateNumber: item.rate_number,
       }));
       setListings(listingArray);
-      setPagination({ ...pagination, total: get(dataBizlisting, "data.total") })
+      setPagination({
+        ...pagination,
+        total: get(dataBizlisting, "data.total"),
+      });
     }
     setLoading(false);
   };
@@ -233,7 +236,7 @@ export async function getServerSideProps(context) {
       value: get(item, "attributes.value"),
       slug: get(item, "attributes.value"),
     }));
-    categoryLinkArray =
+  categoryLinkArray =
     Array.isArray(arrayRawListCategoryLink) &&
     categoryLinkArray.concat(arrayRawListCategoryLink);
   return {
