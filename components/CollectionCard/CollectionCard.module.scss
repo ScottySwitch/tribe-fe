@@ -2,7 +2,7 @@
 
 .collection_card {
   position: relative;
-  height: 400px;
+  height: 340px;
   overflow: auto;
   position: relative;
   cursor: pointer;
@@ -23,7 +23,7 @@
     background: linear-gradient(
       0deg,
       rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.5) 0%,
       rgba(249, 253, 254, 0) 100%
     );
   }
