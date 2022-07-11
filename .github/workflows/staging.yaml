@@ -6,11 +6,11 @@ on:
 jobs:
   build_push_deploy:
     env:
-      SERVER_URL: ${{ secrets.SERVER_URL }}
-      TOKEN: ${{ secrets.TOKEN }}
-      DEPLOYMENT: 'tribes'
-      IMAGE_NAME: 'eastplayers/tribes:staging-0.1.${{github.run_number}}'
-      CONTAINER_NAME: 'tribes'
+      DEPLOYMENT: 'tribes-frontend'
+
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      DOCKER_REPO: 'eastplayers'
+      DOCKER_IMAGE: 'tribes-frontend'
     runs-on: ubuntu-latest
 
     steps:
