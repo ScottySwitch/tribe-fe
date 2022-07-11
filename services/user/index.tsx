@@ -6,8 +6,14 @@ const updateUser = async (userId: number, params: any) => {
   return await Api.put(url, params);
 };
 
+const removeListingFavourite = async (params: any) => {
+  const url = `/api/auth/remove-listing-favourite`;
+  return await Api.post(url, params);
+} 
+
 const UserApi = {
   updateUser,
+  removeListingFavourite,
 };
 
 export default UserApi;
