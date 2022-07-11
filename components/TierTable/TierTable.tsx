@@ -43,7 +43,7 @@ const tableData = [
   },
   {
     feature: "Reply to review",
-    free: <ProvidedFeature />,
+    free: null,
     basic: <ProvidedFeature />,
     premium: null,
   },
@@ -55,7 +55,7 @@ const tableData = [
   },
   {
     feature: "Uploading products",
-    free: null,
+    free: "Maximum 3",
     basic: "Unlimited",
     premium: null,
   },
@@ -71,12 +71,12 @@ const tableData = [
     basic: <ProvidedFeature />,
     premium: null,
   },
-  {
-    feature: "Connect with customer through chat system",
-    free: null,
-    basic: <ProvidedFeature />,
-    premium: null,
-  },
+  // {
+  //   feature: "Connect with customer through chat system",
+  //   free: null,
+  //   basic: <ProvidedFeature />,
+  //   premium: null,
+  // },
 ];
 
 const tiers = [
