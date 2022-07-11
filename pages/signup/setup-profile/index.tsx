@@ -94,6 +94,7 @@ const StepOne = ({
       gender: data.gender,
       birthday: data.birthday,
       country: data.country?.value || null,
+      confirmed: true
     }
     console.log('uploadAvatar', uploadAvatar)
     if (uploadAvatar !== "") {
