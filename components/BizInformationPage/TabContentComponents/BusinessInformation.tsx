@@ -158,7 +158,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
             />
           </div>
           <Question question="Name & Desccription">
-            <Input label="Business name" register={register("name")} />
+            <Input label="Business name" register={register("name")} readOnly />
             <br />
             <Input
               label="Description of property"

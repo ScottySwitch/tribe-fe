@@ -180,7 +180,7 @@
       z-index: 5;
     }
     .container {
-      width: 100% !important;
+      width: 80%;
       height: 100%;
       border-radius: 0;
       display: flex;
@@ -189,5 +189,9 @@
       align-items: center;
       margin-bottom: 0;
     }
+  }
+
+  .mobile_full_width {
+    width: 100%;
   }
 } ;

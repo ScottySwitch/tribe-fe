@@ -86,7 +86,7 @@ const BizInformation = (props) => {
       case InformationList.PHOTOS_VIDEOS:
         return <PhotosVideos isPaid={isPaid} />;
       case InformationList.MANAGE_DEALS:
-        return <ManageDeals bizListingId={listing.id} />
+        return <ManageDeals bizListingId={listing.id} />;
       case InformationList.ANALYTICS:
         return (
           <SectionLayout
@@ -158,8 +158,8 @@ const BizInformation = (props) => {
   );
 };
 export const getServerSideProps = async (context) => {
-  const { slug } = context.query;
-  return { props: { listingSlug: slug } };
+  const { listingSlug } = context.query;
+  return { props: { listingSlug: listingSlug } };
 };
 
 export default BizInformation;

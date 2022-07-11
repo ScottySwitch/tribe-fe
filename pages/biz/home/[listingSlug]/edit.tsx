@@ -31,7 +31,7 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
-import {orderBy} from "lodash";
+import { orderBy } from "lodash";
 
 import styles from "styles/BizHomepage.module.scss";
 
@@ -72,7 +72,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const router = useRouter();
   const { query } = router;
-  const { id: listingSlug } = query;
+  const { listingSlug } = query;
 
   const formatOptions = (list) =>
     Array.isArray(list)
@@ -116,7 +116,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             rawPhoneNumber.substring(7)
           : "";
         let rawListing = listing.products || [];
-        rawListing = orderBy(rawListing, ['is_pinned'], ['desc'])
+        rawListing = orderBy(rawListing, ["is_pinned"], ["desc"]);
         const listingArray = rawListing.map((item) => ({
           name: item.name,
           is_revision: item.is_revision,
@@ -143,7 +143,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           isChange: false,
         }));
         let rawDeal = listing.deals || [];
-        rawDeal = orderBy(rawDeal, ['is_pinned'], ['desc'])
+        rawDeal = orderBy(rawDeal, ["is_pinned"], ["desc"]);
         const dealArray = rawDeal.map((item) => ({
           id: item.id,
           is_revision: item.is_revision,

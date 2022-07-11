@@ -1,32 +1,25 @@
+import get from "lodash/get";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-import {
-  categories,
-  contributePopOverList,
-  loginInforItem,
-  switchAccountList,
-} from "constant";
+import { contributePopOverList } from "constant";
 import Popover from "components/Popover/Popover";
 import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
 import Menu from "components/Menu/Menu";
-
-import styles from "./Header.module.scss";
 import { ILoginInfor } from "pages/_app";
 import { UsersTypes } from "enums";
-import Break from "components/Break/Break";
-import { randomId } from "utils";
-import get from "lodash/get";
+
+import styles from "./Header.module.scss";
 
 export const Categories = (props: {
   currentCategory?: string;
   onSetCurrentCategory: (e: string) => void;
-  navList: {[key: string]: any} []
+  navList: { [key: string]: any }[];
 }) => {
   const { onSetCurrentCategory, currentCategory, navList } = props;
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <React.Fragment>
@@ -35,7 +28,7 @@ export const Categories = (props: {
         const categoryContent = (
           <React.Fragment>
             {cat.items.map((value) => (
-              <div 
+              <div
                 key={value.value}
                 onClick={() => router.push(`/${cat.slug}/${value.value}`)}
               >
@@ -80,7 +73,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
   const userOwnerListing = userInfo.owner_listings || [];
   const ownerListing = userOwnerListing.map((item) => item.attributes);
   const {
-    query: { id: currentHomeSlug },
+    query: { listingSlug },
   } = router;
   return (
     <React.Fragment>
@@ -97,7 +90,17 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
             onClick={() => router.push(`/biz/information/${item.slug}`)}
             style={{ borderRadius: "50%" }}
           />
-          <div onClick={() => (window.location.href = `/biz/home/${item.slug}/edit`)} className={styles.name}>{item.name}</div>
+          <div
+            onClick={() =>
+              (window.location.href = `/biz/home/${item.slug}/edit`)
+            }
+            className={styles.name}
+          >
+            {item.name}
+            {listingSlug === item.slug && (
+              <Icon icon="icon-check-bold" size={14} color="#4acc8f" />
+            )}
+          </div>
         </div>
       ))}
       <div className="cursor-pointer flex" onClick={onSwitchToNormalUser}>
@@ -121,8 +124,6 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
 
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter();
-  const { query } = router;
-  const { id: listingSlug } = query;
 
   const handleSwitchToBizUser = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -143,7 +144,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.type = UsersTypes.NORMAL_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    router.pathname === "/" ? router.reload() : router.push("/")
+    window.location.href = "/";
   };
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {

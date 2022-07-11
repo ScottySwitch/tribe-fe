@@ -56,7 +56,7 @@ const TabContent = ({
 }: TabContentProps) => {
   const router = useRouter()
   const { query } = router
-  const { id: listingSlug } = query
+  const { listingSlug } = query
 
   const isDeal = selectedTab === ListingTabs.DEAL
   const itemArray = [ListingTabs.DISH, ListingTabs.PRODUCT, ListingTabs.SERVICE]

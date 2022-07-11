@@ -16,7 +16,7 @@
     border-bottom: 1px solid $bg-100;
     height: 60px;
     display: flex;
-    
+
     .content {
       margin: auto;
       width: $content-width;
@@ -49,16 +49,16 @@
         .name {
           display: flex;
           align-items: center;
+          justify-content: space-between;
+          gap: 30px;
           width: calc(100% - 40px);
         }
 
         .wrapper_content {
           align-items: unset !important;
         }
-
       }
     }
-
   }
 
   .header_bottom {
@@ -123,7 +123,6 @@
     }
   }
 }
-
 
 @media screen and (max-width: $mobile) {
   .header {

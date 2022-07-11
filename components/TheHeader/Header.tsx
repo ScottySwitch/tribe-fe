@@ -6,7 +6,7 @@ import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import Select from "components/Select/Select"
 import { locations } from "constant"
-import { Categories, UserInfor } from "./HeaderSubComponents"
+import { Categories, UserInfor } from "./HeaderComponents"
 
 import styles from "./Header.module.scss"
 import useTrans from "hooks/useTrans"
