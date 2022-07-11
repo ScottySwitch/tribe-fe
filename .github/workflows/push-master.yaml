@@ -6,11 +6,11 @@ on:
 jobs:
   build_push_deploy:
     env:
-      SERVER_URL: ${{ secrets.SERVER_URL }}
-      TOKEN: ${{ secrets.TOKEN }}
-      DEPLOYMENT: 'tribes'
-      IMAGE_NAME: 'eastplayers/tribes:0.1.${{github.run_number}}'
-      CONTAINER_NAME: 'tribes'
+      DEPLOYMENT: 'tribes-frontend'
+
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      DOCKER_REPO: 'eastplayers'
+      DOCKER_IMAGE: 'tribes-frontend'
     runs-on: ubuntu-latest
 
     steps:
@@ -36,9 +36,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: |
-            eastplayers/tribes:staging-latest
-            eastplayers/tribes:staging-0.1.${{github.run_number}}
-
+            ${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:latest
+            ${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:0.1.${{github.run_number}}
       - name: Deploy to cluster
         uses: Foxhound401/k8s-rollout-action@v0.1.8
         with:
