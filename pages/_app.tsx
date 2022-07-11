@@ -128,9 +128,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         ? get(item, "attributes.category_links.data").map((navItem) => ({
             label: get(navItem, "attributes.label"),
             value: get(navItem, "attributes.value"),
+            href: `/${get(item, "attributes.slug")}/${get(navItem, "attributes.value")}`
           }))
         : [],
     }));
+
     setNavList(categoryArray);
   };
 
