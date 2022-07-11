@@ -12,6 +12,7 @@ import { get, orderBy } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import BizListingApi from "services/biz-listing";
+import {calcRateNumber} from "utils"
 
 import styles from "styles/Property.module.scss";
 
@@ -51,8 +52,8 @@ const PropertiesContainer = ({
               price={price}
               description={description}
               expiredAt={expiredAt}
-              onClick={() => onShowDetailModal?.(item?.attributes)}
-              onCardClick={() => onShowDetailModal?.(item?.attributes)}
+              onClick={() => onShowDetailModal?.(item)}
+              onCardClick={() => onShowDetailModal?.(item)}
             />
           );
         })
@@ -78,16 +79,19 @@ const Properties = () => {
 
   useEffect(() => {
     const getProperties = async () => {
-      let data = await BizListingApi.getBizListingBySlug(listingSlug);
+      let data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const listingDetail = get(data, `data.data[0].attributes`);
+      const listingDetail = get(data, `data.data[0]`);
       userInfo.now_biz_listing = listingDetail;
       localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo);
+      let handleProperties = property === 'dishes' ? 'products' : property
       let propertiesData = get(
         data,
-        `data.data[0].attributes.${property}.data`
+        `data.data[0].${handleProperties}`
       );
+      console.log('listingDetail', listingDetail)
+      
       setListingInformation(listingDetail);
       if (property === "products") {
         propertiesData = orderBy(
