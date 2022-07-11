@@ -1,14 +1,14 @@
-import { dummyTopSearchKeywords } from "constant"
-import React, { useState } from "react"
-import styles from "./TopSearches.module.scss"
+import { dummyTopSearchKeywords } from "constant";
+import React, { useState } from "react";
+import styles from "./TopSearches.module.scss";
 
 interface ITopSearchesProp {
-  className?: string
+  className?: string;
 }
 
 const TopSearches = (props: ITopSearchesProp) => {
-  const { className } = props
-  const [keywords, setKeyWords] = useState(dummyTopSearchKeywords)
+  const { className } = props;
+  const [keywords, setKeyWords] = useState(dummyTopSearchKeywords);
   return (
     <React.Fragment>
       {keywords && (
@@ -25,7 +25,7 @@ const TopSearches = (props: ITopSearchesProp) => {
         </div>
       )}
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default TopSearches
+export default TopSearches;
