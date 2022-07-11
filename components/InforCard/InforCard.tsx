@@ -40,7 +40,33 @@ const InforCard = (props: InforCardProps) => {
     isFavourited,
     onClick,
   } = props;
-  // console.log('props', props)
+
+  const sortingTags: string[] = Array.isArray(tags)
+    ? tags.sort((a, b) => {
+        return a?.length - b?.length;
+      })
+    : [];
+
+  const optimizeTagSequence = () => {
+    let optimizeTags: any[] = [];
+    for (let index = 0; index < Math.floor(sortingTags.length / 2); index++) {
+      optimizeTags.push(sortingTags[index]);
+      optimizeTags.push(sortingTags[sortingTags.length - index - 1]);
+    }
+    return optimizeTags;
+  };
+
+  const renderSortingTags = () => {
+    return optimizeTagSequence().map((tag) => (
+      <div key={tag} className={`${styles.tag} flex items-center`}>
+        {iconTag && tag === "Hot deals" && (
+          <Icon icon="hot-deal" className="mr-2" />
+        )}
+        {tag}
+      </div>
+    ));
+  };
+
   return (
     <div
       className={`${styles.infor_card} ${className}`}
@@ -105,17 +131,8 @@ const InforCard = (props: InforCardProps) => {
               From <span>{price}</span>
             </div>
           )}
-          {Array.isArray(tags) && tags.length > 0 && (
-            <div className={styles.tags}>
-              {tags.map((tag) => (
-                <div key={tag} className={`${styles.tag} flex items-center`}>
-                  {iconTag && tag === "Hot deals" && (
-                    <Icon icon="hot-deal" className="mr-2" />
-                  )}
-                  {tag}
-                </div>
-              ))}
-            </div>
+          {sortingTags.length > 0 && (
+            <div className={styles.tags}>{renderSortingTags()}</div>
           )}
         </div>
       </div>

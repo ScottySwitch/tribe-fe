@@ -1,29 +1,23 @@
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { ChangeEvent, useState, useCallback, useEffect } from "react";
+
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Select from "components/Select/Select";
 import Upload from "components/Upload/Upload";
-import { loginInforItem } from "constant";
-import { Tiers, UsersTypes, VerifySteps } from "enums";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import {
-  ChangeEvent,
-  FormEvent,
-  useState,
-  useCallback,
-  useEffect,
-} from "react";
-import styles from "styles/BizUserVerify.module.scss";
-import { randomId, removeZeroInPhoneNumber } from "utils";
+import { Tiers, VerifySteps } from "enums";
+import { removeZeroInPhoneNumber } from "utils";
 import AuthApi from "../../../services/auth";
 import UserApi from "../../../services/user";
 import BizInvoinceApi from "../../../services/biz-invoice";
 import ClaimListingApi from "../../../services/claim-listing";
 import SelectInput from "components/SelectInput/SelectInput";
-import { formattedAreaCodes, phoneAreaCodes } from "constant";
+import { formattedAreaCodes } from "constant";
 
+import styles from "styles/BizUserVerify.module.scss";
 interface BizUserVerifyProps {
   tier: string;
 }
@@ -319,6 +313,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         <div className={styles.form}>
           <div className={styles.header}>Enter phone number</div>
           <SelectInput
+            width="100%"
             label="Phone number"
             placeholder="your phone number"
             selectPlaceholder="Area code"
