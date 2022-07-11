@@ -3,9 +3,10 @@ import Image from "next/image"
 import Modal, { ModalProps } from "components/Modal/Modal"
 import Icon from "components/Icon/Icon"
 import Button from "components/Button/Button"
-
+import { useState, useEffect } from "react"
 import styles from "./DealDetailModal.module.scss"
 import get from "lodash/get";
+import DealFavouriteApi from "services/user-deal-favourite"
 
 export interface IDealsDetails {
   name: string
@@ -22,6 +23,26 @@ interface DealDetailModalProps extends ModalProps {
 
 const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props
+  const [isFavourite, setIsFavourite] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (data) {
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const userFavourite = userInfo.listing_favourite_deal_ids;
+      let checkIsFavourite =
+        Array.isArray(userFavourite) &&
+        userFavourite.some((item) => item === data.id);
+      setIsFavourite(checkIsFavourite);
+    }
+  }, [data]);
+
+  const handleAddFavouriteDeal = async (id) => {
+    const data = await DealFavouriteApi.createDealFavourite(id)
+    if (get(data, "data")) {
+      setIsFavourite(true)
+    }
+  };
+
   return (
     <Modal visible={visible} width="100%" maxWidth={678} mobilePosition="center" onClose={onClose}>
       <div className={styles.header}>
@@ -29,7 +50,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
           <div className={styles.icon}>
             <Icon icon="deals-color" size={22} />
           </div>
-          <div className={`${styles.title} truncate`}>{get(data, "attributes.name")}</div>
+          <div className={`${styles.title} truncate`}>{data.name}</div>
         </div>
         <div className={styles.close} onClick={onClose}>
           <Icon icon="cancel-mobile" />
@@ -37,30 +58,30 @@ const DealDetailModal = (props: DealDetailModalProps) => {
       </div>
       <div className={styles.cover_image}>
         <Image
-          src={get(data, "attributes.images") ? data.attributes.images[0] : "https://picsum.photos/678/169"}
-          alt={get(data, "attributes.name")}
+          src={data.images ? data.images[0] : "https://picsum.photos/678/169"}
+          alt={data.name}
           width="100%"
           height="100%"
           layout="responsive"
         />
       </div>
       <div className={styles.content}>
-        {get(data, "attributes.description") && (
+        {data.description && (
           <div className={styles.item}>
             <h6 className={styles.label}>Offers</h6>
-            <p>{get(data, "attributes.description")}</p>
+            <p>{data.description}</p>
           </div>
         )}
-        {get(data, "attributes.end_date") && (
+        {data.end_date && (
           <div className={styles.item}>
             <h6 className={styles.label}>Valid</h6>
-            <p>{`${get(data, "attributes.start_date")} - ${get(data, "attributes.end_date")}`}</p>
+            <p>{`${data.start_date} - ${data.end_date}`}</p>
           </div>
         )}
         {get(data, "attributes.terms_conditions") && (
           <div className={styles.item}>
             <h6 className={styles.label}>Terms & Conditions</h6>
-            <p>{get(data, "attributes.terms_conditions")}</p>
+            <p>{data.terms_conditions}</p>
           </div>
         )}
       </div>
@@ -80,7 +101,8 @@ const DealDetailModal = (props: DealDetailModalProps) => {
             className="text-sm	font-bold"
             width="max-content"
             prefix={<Icon icon="like-stroke" color="#ffffff" />}
-            onClick={onFavourite}
+            onClick={() => handleAddFavouriteDeal(data.id)}
+            disabled={isFavourite}
           />
         </div>
         <Button
@@ -88,7 +110,10 @@ const DealDetailModal = (props: DealDetailModalProps) => {
           text="Cancel"
           className={`${styles.btn_cancel} text-sm font-medium no-underline`}
           width="max-content"
-          onClick={onClose}
+          onClick={() => {
+            onClose
+            setIsFavourite(false)
+          }}
         />
       </div>
     </Modal>

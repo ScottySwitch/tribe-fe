@@ -103,7 +103,7 @@ const InforCard = (props: InforCardProps) => {
               <div className={styles.reviews}>
                 <Icon icon="red-star" size={14} />
                 <div className={styles.rate}>{rate}</div>
-                <div>{rateNumber}</div>
+                <div>({rateNumber})</div>
                 <Icon icon="dot" size={10} className={styles.dot} />
                 <div>{followerNumber} followers</div>
               </div>
