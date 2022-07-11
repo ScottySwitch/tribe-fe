@@ -12,6 +12,7 @@ import TopSearches from "components/TopSearches/TopSearches"
 import BizListingApi from "../../services/biz-listing"
 import get from "lodash/get"
 import ReviewApi from "../../services/review"
+import ContributeApi from "services/contribute"
 
 const dummyReviews = [
   {
@@ -122,10 +123,18 @@ const ReviewsPage = () => {
       visited_date: dataSend.visitedDate,
       images: dataSend.images,
     }
+    const dataSendContribute = {
+      user: userInfo.id,
+      biz_listing: bizListingId,
+      type: "Review",
+      status: "Approved"
+    }
+    await ContributeApi.createContribute(dataSendContribute).then(() => {
+    });
     await ReviewApi.addReview(dataSendApi).then(() => {
-      setIsShowResultModal(true)
-      setIsSuccess(true)
-    })
+      setIsShowResultModal(true);
+      setIsSuccess(true);
+    });
   }
 
   return (

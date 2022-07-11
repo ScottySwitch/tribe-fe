@@ -18,6 +18,7 @@ import BizListingApi from "../../../services/biz-listing";
 import get from "lodash/get";
 import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard";
 import { dummyTopSearchKeywords } from "constant";
+import ContributeApi from "services/contribute"
 
 const AddReviewPage = () => {
   const router = useRouter();
@@ -73,9 +74,17 @@ const AddReviewPage = () => {
       visited_date: dataSend.visitedDate,
       images: dataSend.images,
     };
+    const dataSendContribute = {
+      user: userInfo.id,
+      biz_listing: bizListing.id,
+      type: "Review",
+      status: "Approved"
+    }
     await ReviewApi.addReview(dataSendApi).then(() => {
       setIsShowResultModal(true);
       setIsSuccess(true);
+    });
+    await ContributeApi.createContribute(dataSendContribute).then(() => {
     });
   };
 
