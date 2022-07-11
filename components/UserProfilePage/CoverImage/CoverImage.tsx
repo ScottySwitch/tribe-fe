@@ -1,16 +1,13 @@
-import Image from "next/image"
-import styles from "./CoverImage.module.scss"
+import Image from "next/image";
+import styles from "./CoverImage.module.scss";
 
 interface CoverImageProps {
-  className?: string
-  imageUrl?: string
+  className?: string;
+  imageUrl?: string;
 }
 
 const CoverImage = (props: CoverImageProps) => {
-  const {
-    className = "",
-    imageUrl,
-  } = props
+  const { className = "", imageUrl } = props;
 
   return (
     <div className={`${className} ${styles.container}`}>
@@ -21,10 +18,11 @@ const CoverImage = (props: CoverImageProps) => {
           width="100%"
           layout="responsive"
           alt="cover_image"
+          objectFit="cover"
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CoverImage
+export default CoverImage;

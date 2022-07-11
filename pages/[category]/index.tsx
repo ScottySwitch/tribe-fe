@@ -1,5 +1,8 @@
-import ArticleCard from "components/ArticleCard/ArticleCard";
-import Button from "components/Button/Button";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { get } from "lodash";
+
 import Carousel from "components/Carousel/Carousel";
 import CollectionCard from "components/CollectionCard/CollectionCard";
 import Icon from "components/Icon/Icon";
@@ -7,33 +10,21 @@ import InforCard from "components/InforCard/InforCard";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
 import {
-  categories,
   curatedList,
   dummySubCategories,
-  homeArticleCarousel,
   homeBannerResponsive,
-  homeCarousel,
-  homeCuratedCarousel,
   homeCuratedResponsive,
   infoCardResponsive,
-  inforCardList,
 } from "constant";
 import { Categories, CategoryText } from "enums";
-import type { NextPage } from "next";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-
 import BizListingApi from "services/biz-listing";
 import BannerApi from "services/banner";
 import CollectionApi from "services/collection";
 import CategoryLinkApi from "services/category-link";
-import styles from "styles/Home.module.scss";
-import { get } from "lodash";
-import { getEnvironmentData } from "worker_threads";
 import Loader from "components/Loader/Loader";
 import Pagination from "components/Pagination/Pagination";
-import { route } from "next/dist/server/router";
+
+import styles from "styles/Home.module.scss";
 import useTrans from "useTrans";
 
 const Category = (props: any) => {
@@ -54,8 +45,10 @@ const Category = (props: any) => {
 
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
-  const [listingArray, setListingArray] = useState<{ [key: string]: any }[]>([]);
-  const [categoryId, setCategoryId] = useState<number>(1)
+  const [listingArray, setListingArray] = useState<{ [key: string]: any }[]>(
+    []
+  );
+  const [categoryId, setCategoryId] = useState<number>(1);
   const [subCategories, setSubCategories] = useState<
     { [key: string]: string }[]
   >([]);
@@ -64,54 +57,59 @@ const Category = (props: any) => {
     let categoryId;
     switch (category) {
       case CategoryText.BUY:
-        categoryId = Categories.BUY
+        categoryId = Categories.BUY;
         break;
       case CategoryText.EAT:
-        categoryId = Categories.EAT
+        categoryId = Categories.EAT;
         break;
       case CategoryText.SEE_AND_DO:
-        categoryId = Categories.SEE_AND_DO
+        categoryId = Categories.SEE_AND_DO;
         break;
       case CategoryText.STAY:
-        categoryId = Categories.STAY
+        categoryId = Categories.STAY;
         break;
       case CategoryText.TRANSPORT:
-        categoryId = Categories.TRANSPORT
+        categoryId = Categories.TRANSPORT;
         break;
     }
     setSubCategories(dummySubCategories);
     setLoading(false);
-    getData(categoryId, pagination.page)
-  }, [pagination.page])
+    getData(categoryId, pagination.page);
+  }, [pagination.page]);
 
   const getData = async (categoryId, page) => {
-    const data = await BizListingApi.getBizListingsByCategoryId(categoryId, page)
-    if (get(data, 'data.data')) {
+    const data = await BizListingApi.getBizListingsByCategoryId(
+      categoryId,
+      page
+    );
+    if (get(data, "data.data")) {
       const rawListingArray = get(data, "data.data");
       let listingArray: any = [];
       listingArray =
-      Array.isArray(rawListingArray) &&
-      rawListingArray.map((item) => ({
-        images: get(item, "attributes.images") || [],
-        title: get(item, "attributes.name"),
-        slug: get(item, "attributes.slug"),
-        isVerified: get(item, "attributes.is_verified"),
-        address: get(item, "attributes.address"),
-        country: get(item, "attributes.country"),
-        description: get(item, "attributes.description"),
-        // followerNumber: get(item, "user_listing_follows.length"),
-        // tags: get(item, "attributes.tags"),
-        // categories: get(item, "attributes.categories"),
-        price: get(item, "price_range.min") || "",
-        // rate: get(item, "attributes.rate"),
-        // rateNumber: get(item, "attributes.rate_number"),
-      }));
-      setListingArray(listingArray)
+        Array.isArray(rawListingArray) &&
+        rawListingArray.map((item) => ({
+          images: get(item, "attributes.images") || [],
+          title: get(item, "attributes.name"),
+          slug: get(item, "attributes.slug"),
+          isVerified: get(item, "attributes.is_verified"),
+          address: get(item, "attributes.address"),
+          country: get(item, "attributes.country"),
+          description: get(item, "attributes.description"),
+          // followerNumber: get(item, "user_listing_follows.length"),
+          // tags: get(item, "attributes.tags"),
+          // categories: get(item, "attributes.categories"),
+          price: get(item, "price_range.min") || "",
+          // rate: get(item, "attributes.rate"),
+          // rateNumber: get(item, "attributes.rate_number"),
+        }));
+      setListingArray(listingArray);
       // setTotal(get(data, 'data.meta.pagination.total'))
-      setPagination({ ...pagination, total: get(data, 'data.meta.pagination.total') })
-
+      setPagination({
+        ...pagination,
+        total: get(data, "data.meta.pagination.total"),
+      });
     }
-  }
+  };
 
   let bannerSrc;
   switch (category) {
@@ -148,7 +146,9 @@ const Category = (props: any) => {
   return (
     <div>
       <SectionLayout className={styles.banner}>
-        {bannerSrc && <Image src={bannerSrc} alt="" layout="fill" />}
+        {bannerSrc && (
+          <Image src={bannerSrc} alt="" layout="fill" objectFit="cover" />
+        )}
       </SectionLayout>
       <SectionLayout>
         {Array.isArray(listingBanners) && listingBanners.length > 0 && (
@@ -317,7 +317,7 @@ export async function getServerSideProps(context) {
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawListCategory = get(dataCategoryLinks, "data.data");
-    
+
   const exclusiveDealListingArray =
     Array.isArray(rawListingExclusiveDealAray) &&
     rawListingExclusiveDealAray.map((item) => ({

@@ -1,26 +1,26 @@
-import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal"
-import React, { useEffect, useState } from "react"
-import ReviewBizInfoCard from "components/ReviewsPage/ReviewBizInfoCard/ReviewBizInfoCard"
-import styles from "./PanelContributed.module.scss"
-import { dummyApproved, dummyDenied, dummyPending } from "constant"
+import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
+import React, { useEffect, useState } from "react";
+import ReviewBizInfoCard from "components/ReviewsPage/ReviewBizInfoCard/ReviewBizInfoCard";
+import styles from "./PanelContributed.module.scss";
+import { dummyApproved, dummyDenied, dummyPending } from "constant";
 import UserReviewCard, {
   UserReviewCardProps,
-} from "components/ReviewsPage/UserReviewCard/UserReviewCard"
+} from "components/ReviewsPage/UserReviewCard/UserReviewCard";
 interface IBiz {
-  title: string
-  imgUrl: string
-  location: string
-  rate?: number
-  rateNumber?: number
-  followerNumber?: number
-  tags?: any[]
+  title: string;
+  imgUrl: string;
+  location: string;
+  rate?: number;
+  rateNumber?: number;
+  followerNumber?: number;
+  tags?: any[];
 }
 export interface ListCardProps extends UserReviewCardProps {
-  biz?: IBiz
+  biz?: IBiz;
 }
 
 const ListCard = (props: { data: ListCardProps[] }) => {
-  const { data } = props
+  const { data } = props;
 
   return (
     <React.Fragment>
@@ -53,37 +53,42 @@ const ListCard = (props: { data: ListCardProps[] }) => {
         </UserReviewCard>
       ))}
     </React.Fragment>
-  )
-}
+  );
+};
 
 const ContributedPanel = () => {
-  const [listCard, setListCard] = useState<ListCardProps[] | any>()
-  const [currentTab, setCurrentTab] = useState<string>()
-  const [total, setTotal] = useState<number>()
+  const [listCard, setListCard] = useState<ListCardProps[] | any>();
+  const [currentTab, setCurrentTab] = useState<string>();
+  const [total, setTotal] = useState<number>();
 
   const TabList: ITab[] = [
-    { label: "Pending", value: "pending", content: <ListCard data={listCard} /> },
-    { label: "Approved", value: "approved", content: <ListCard data={listCard} /> },
-    { label: "Denied", value: "denied", content: <ListCard data={listCard} /> },
-  ]
+    {
+      label: "Pending",
+      value: "pending",
+      content: <ListCard data={listCard} />,
+    },
+    {
+      label: "Approved",
+      value: "approved",
+      content: <ListCard data={listCard} />,
+    },
+    // { label: "Denied", value: "denied", content: <ListCard data={listCard} /> },
+  ];
 
   useEffect(() => {
     switch (currentTab) {
       case "pending":
-        setListCard(dummyPending)
-        break
+        setListCard(dummyPending);
+        break;
       case "approved":
-        setListCard(dummyApproved)
-        break
-      case "denied":
-        setListCard(dummyDenied)
-        break
-      default:
-        setListCard(dummyPending)
-        break
+        setListCard(dummyApproved);
+        break;
+      // case "denied":
+      //   setListCard(dummyDenied);
+      //   break;
     }
-    setTotal(listCard?.length)
-  }, [currentTab])
+    setTotal(listCard?.length);
+  }, [currentTab]);
 
   return (
     <div className={styles.contributed_panel}>
@@ -95,7 +100,7 @@ const ContributedPanel = () => {
         onCurrentTab={(e) => setCurrentTab(e)}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ContributedPanel
+export default ContributedPanel;
