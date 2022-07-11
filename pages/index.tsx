@@ -341,7 +341,7 @@ export async function getServerSideProps(context) {
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawCategories = get(dataCategories, "data.data");
-  const listingBuyArray =
+  const buyListingArray =
     Array.isArray(rawListingBuyArray) &&
     rawListingBuyArray.map((item) => ({
       images: item.images || [],
@@ -358,7 +358,7 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  const listingSeeArray =
+  const seeListingArray =
     Array.isArray(rawListingSeeArray) &&
     rawListingSeeArray.map((item) => ({
       images: item.images || [],
@@ -375,7 +375,7 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  const listingEatArray =
+  const eatListingArray =
     Array.isArray(rawListingEatAray) &&
     rawListingEatAray.map((item) => ({
       images: item.images || [],
@@ -392,7 +392,7 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  const listingExclusiveDealArray =
+  const exclusiveDealListingArray =
     Array.isArray(rawListingExclusiveArray) &&
     rawListingExclusiveArray.map((item) => ({
       images: item.images || [],
@@ -409,13 +409,13 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  const listBannerArray =
+  const bannerArray =
     Array.isArray(rawListBanners) &&
     rawListBanners.map((item) => ({
       imgUrl: item.image_url,
       linkActive: item.link_active,
     }));
-  const listCollectionArray =
+  const collectionArray =
     Array.isArray(rawListCollections) &&
     rawListCollections.map((item) => ({
       imgUrl: item.thumbnail || null,
@@ -431,12 +431,12 @@ export async function getServerSideProps(context) {
     }));
   return {
     props: {
-      listingBuy: listingBuyArray,
-      listingEat: listingEatArray,
-      listingSee: listingSeeArray,
-      listingExclusiveDeal: listingExclusiveDealArray,
-      listBanners: listBannerArray,
-      listCollections: listCollectionArray,
+      listingBuy: buyListingArray,
+      listingEat: eatListingArray,
+      listingSee: seeListingArray,
+      listingExclusiveDeal: exclusiveDealListingArray,
+      listBanners: bannerArray,
+      listCollections: collectionArray,
       listCategories: categoryArray,
     },
   };

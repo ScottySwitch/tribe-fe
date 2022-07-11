@@ -318,7 +318,7 @@ export async function getServerSideProps(context) {
   const rawListCollections = get(dataCollections, "data.data");
   const rawListCategory = get(dataCategoryLinks, "data.data");
     
-  const listingExclusiveDealArray =
+  const exclusiveDealListingArray =
     Array.isArray(rawListingExclusiveDealAray) &&
     rawListingExclusiveDealAray.map((item) => ({
       images: item.images || [],
@@ -335,20 +335,20 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  const listBannerArray =
+  const bannerArray =
     Array.isArray(rawListBanners) &&
     rawListBanners.map((item) => ({
       imgUrl: item.image_url,
       linkActive: item.link_active,
     }));
-  const listCollectionArray =
+  const collectionArray =
     Array.isArray(rawListCollections) &&
     rawListCollections.map((item) => ({
       imgUrl: item.thumbnail || null,
       slug: item.slug,
       title: item.name,
     }));
-  const ListCategoryLinkArray =
+  const categoryLinkArray =
     Array.isArray(rawListCategory) &&
     rawListCategory.map((item) => ({
       icon: get(item, "attributes.logo.data.attributes.url") || null,
@@ -357,10 +357,10 @@ export async function getServerSideProps(context) {
     }));
   return {
     props: {
-      listingExclusiveDeal: listingExclusiveDealArray,
-      listingBanners: listBannerArray,
-      listCollections: listCollectionArray,
-      listCategoryLink: ListCategoryLinkArray,
+      listingExclusiveDeal: exclusiveDealListingArray,
+      listingBanners: bannerArray,
+      listCollections: collectionArray,
+      listCategoryLink: categoryLinkArray,
     },
   };
 }

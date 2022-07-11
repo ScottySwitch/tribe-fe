@@ -209,7 +209,7 @@ export async function getServerSideProps(context) {
   const dataBanners = await BannerApi.getBannerByCategory(category);
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  let ListCategoryLinkArray: any = [
+  let categoryLinkArray: any = [
     {
       label: "All",
       value: "all",
@@ -233,14 +233,14 @@ export async function getServerSideProps(context) {
       value: get(item, "attributes.value"),
       slug: get(item, "attributes.value"),
     }));
-  ListCategoryLinkArray =
+    categoryLinkArray =
     Array.isArray(arrayRawListCategoryLink) &&
-    ListCategoryLinkArray.concat(arrayRawListCategoryLink);
+    categoryLinkArray.concat(arrayRawListCategoryLink);
   return {
     props: {
       // bizListings: listingArray,
       listingBanners: listBannerArray,
-      listCategoryLink: ListCategoryLinkArray,
+      listCategoryLink: categoryLinkArray,
     },
   };
 }
