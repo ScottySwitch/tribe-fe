@@ -33,13 +33,7 @@ const PropertiesContainer = ({
       {Array.isArray(list) && list.length > 0 ? (
         list.map((item) => {
           const id = get(item, "attributes.id") || item.id;
-          let images
-          if (get(item, 'images')) {
-            images = item.images || [];
-          }
-          else {
-            images = item.menu_file || []
-          }
+          const images = item?.images || item.menu_file || []
           const firstImage = item.imgUrl || images[0];
           const name = get(item, "attributes.name") || item.name || "";
           const price = get(item, "attributes.price") || item.price || "";
