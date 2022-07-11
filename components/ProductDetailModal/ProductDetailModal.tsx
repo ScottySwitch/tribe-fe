@@ -6,6 +6,7 @@ import Button from "components/Button/Button"
 import Icon from "components/Icon/Icon"
 import ScrollingBox from "components/ScrollingBox/ScrollingBox"
 import styles from "./ProductDetailModal.module.scss"
+import Album from "components/Album/Album"
 
 export interface IProduct {
   id: number
@@ -118,6 +119,7 @@ const SliderSyncing = (props) => {
 
 const ProductDetailModal = (props: ProductDetailsModalProps) => {
   const { data, visible, onClose, onShare, onKlook, onBookNow } = props
+  console.log('data', data)
   return (
     <Modal visible={visible} width="100%" maxWidth={1028} onClose={onClose}>
       <div className={styles.container}>
@@ -125,26 +127,35 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
           <Icon icon="cancel-mobile" />
         </div>
         <div className={styles.container_gallery}>
-          <SliderSyncing images={data.images} />
+          <Album images={data.images} />
         </div>
 
         <div className={styles.container_info}>
           <h2 className={styles.title}>{data.name}</h2>
           <div className="flex items-center justify-between mb-[10px]">
             <div className="flex items-center gap-[16px]">
-              <div className={styles.price_sale}>
-                <span>$</span>
-                <span>{data.priceSale}</span>
-              </div>
-              <div className={styles.price}>
+              {data.priceSale ? 
+                <div>
+                  <div className={styles.price_sale}>
+                    <span>$</span>
+                    <span>{data.priceSale}</span>
+                  </div>
+                  <div className={styles.price}>
+                    <span>$</span>
+                    <span>{data.price}</span>
+                  </div>
+                  <div className={styles.discount}>
+                    <div className={`${styles.badge} ${styles.badge_warning}`}>
+                      {data.discount}% OFF
+                    </div>
+                  </div>
+                </div>
+                :
+                <div className={styles.price_sale}>
                 <span>$</span>
                 <span>{data.price}</span>
               </div>
-              <div className={styles.discount}>
-                <div className={`${styles.badge} ${styles.badge_warning}`}>
-                  {data.discount}% OFF
-                </div>
-              </div>
+              }
             </div>
             <Button
               className={styles.btn_share}
