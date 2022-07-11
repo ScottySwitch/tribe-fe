@@ -9,7 +9,7 @@ import { locations } from "constant"
 import { Categories, UserInfor } from "./HeaderComponents"
 
 import styles from "./Header.module.scss"
-import useTrans from "hooks/useTrans"
+import useTrans from "useTrans"
 
 export const languages = [
   {
