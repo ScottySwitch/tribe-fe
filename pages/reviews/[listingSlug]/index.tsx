@@ -74,18 +74,20 @@ const AddReviewPage = () => {
       visited_date: dataSend.visitedDate,
       images: dataSend.images,
     };
-    const dataSendContribute = {
-      user: userInfo.id,
-      biz_listing: bizListing.id,
-      type: "Review",
-      status: "Approved"
-    }
-    await ReviewApi.addReview(dataSendApi).then(() => {
+    const data = await ReviewApi.addReview(dataSendApi)
+    if (data) {
+      const dataSendContribute = {
+        user: userInfo.id,
+        biz_listing: bizListing.id,
+        type: "Review",
+        status: "Approved",
+        review: get(data, "data.data.id")
+      }
+      await ContributeApi.createContribute(dataSendContribute).then(() => {
+      });
       setIsShowResultModal(true);
       setIsSuccess(true);
-    });
-    await ContributeApi.createContribute(dataSendContribute).then(() => {
-    });
+    }
   };
 
   return (

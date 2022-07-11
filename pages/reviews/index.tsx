@@ -129,12 +129,20 @@ const ReviewsPage = () => {
       type: "Review",
       status: "Approved"
     }
-    await ContributeApi.createContribute(dataSendContribute).then(() => {
-    });
-    await ReviewApi.addReview(dataSendApi).then(() => {
+    const data = await ReviewApi.addReview(dataSendApi)
+    if (data) {
+      const dataSendContribute = {
+        user: userInfo.id,
+        biz_listing: bizListingId,
+        type: "Review",
+        status: "Approved",
+        review: get(data, "data.data.id")
+      }
+      await ContributeApi.createContribute(dataSendContribute).then(() => {
+      });
       setIsShowResultModal(true);
       setIsSuccess(true);
-    });
+    }
   }
 
   return (
