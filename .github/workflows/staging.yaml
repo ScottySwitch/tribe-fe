@@ -1,8 +1,8 @@
-name: Master CI/CD
+name: Staging CI/CD
 
 on:
   push:
-    branches: [master]
+    branches: [staging]
 jobs:
   build_push_deploy:
     env:
@@ -36,14 +36,22 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: |
-            ${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:latest
-            ${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:0.1.${{github.run_number}}
-      - name: Deploy to cluster
-        uses: Foxhound401/k8s-rollout-action@v0.1.8
+            ${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:staging-latest
+            ${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:staging-0.1.${{github.run_number}}
+      - name: Commit to ops repository
+        uses: Eastplayers/ep-gitops-action@v0.0.5
         with:
-          server-url: ${{ env.SERVER_URL }}
-          token: ${{ env.TOKEN }}
-          deployment: ${{ env.DEPLOYMENT }}
-          image-name: ${{ env.IMAGE_NAME }}
-          namespace: 'staging'
-          container-name: ${{ env.DEPLOYMENT }}
+          tag: 'staging-0.1.${{ github.run_number }}'
+          deployment-dir: 'overlay/staging/deployment.yaml'
+          image: ${{ env.DEPLOYMENT }}
+          token: ${{ env.GIT_TOKEN }}
+          repo-url: 'github.com/Eastplayers/tribes-ops.git'
+          match: 'staging-0.1.*'
+          ops-dir: 'tribes-ops'
+          message: 'STAG'
+      # - name: Actions Status Discord
+      #   if: always()
+      #   uses: sarisia/actions-status-discord@v1.8.6
+      #   with:
+      #     webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      #

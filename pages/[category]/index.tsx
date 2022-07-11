@@ -17,7 +17,6 @@ import {
   infoCardResponsive,
 } from "constant";
 import { Categories, CategoryText } from "enums";
-import useTrans from "hooks/useTrans";
 import BizListingApi from "services/biz-listing";
 import BannerApi from "services/banner";
 import CollectionApi from "services/collection";
@@ -26,6 +25,7 @@ import Loader from "components/Loader/Loader";
 import Pagination from "components/Pagination/Pagination";
 
 import styles from "styles/Home.module.scss";
+import useTrans from "useTrans";
 
 const Category = (props: any) => {
   const trans = useTrans();

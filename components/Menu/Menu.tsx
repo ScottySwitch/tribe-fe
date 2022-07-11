@@ -25,7 +25,7 @@ const Menu = (props: MenuMenuProps) => {
       icon: "heart-color",
       label: "Favorited",
       borderBottom: true,
-      href: "/profile",
+      onClick: () => (window.location.href = "/profile"),
     },
     {
       icon: "comment-color",

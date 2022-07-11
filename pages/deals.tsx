@@ -8,7 +8,6 @@ import InforCard from "components/InforCard/InforCard";
 import Pagination from "components/Pagination/Pagination";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
-import useTrans from "hooks/useTrans";
 import Loader from "components/Loader/Loader";
 
 import styles from "styles/Home.module.scss";
@@ -18,6 +17,7 @@ import bizListingApi from "services/biz-listing";
 import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
+import useTrans from "useTrans";
 
 const categoryTabList: ITab[] = categories.map((item) => ({
   label: item.slug,

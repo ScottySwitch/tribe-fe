@@ -7,7 +7,6 @@ import InforCard from "components/InforCard/InforCard";
 import Pagination from "components/Pagination/Pagination";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
-import useTrans from "hooks/useTrans";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
 import Filter from "components/Filter/Filter";
@@ -17,6 +16,7 @@ import { categories } from "constant";
 import CollectionApi from "services/collection";
 
 import styles from "styles/Home.module.scss";
+import useTrans from "useTrans";
 
 type Object = {
   [key: string]: any;

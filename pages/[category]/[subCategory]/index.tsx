@@ -12,13 +12,13 @@ import Select from "components/Select/Select";
 import TabsHorizontal from "components/TabsHorizontal/TabsHorizontal";
 import TopSearches from "components/TopSearches/TopSearches";
 import { homeBannerResponsive, inforCardList } from "constant";
-import useTrans from "hooks/useTrans";
 import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
 import Loader from "components/Loader/Loader";
 
 import styles from "styles/Home.module.scss";
+import useTrans from "useTrans";
 
 const SubCategoryPage = (props: any) => {
   const { bizListings, listingBanners, listCategoryLink } = props;
@@ -85,7 +85,10 @@ const SubCategoryPage = (props: any) => {
         rateNumber: item.rate_number,
       }));
       setListings(listingArray);
-      setPagination({ ...pagination, total: get(dataBizlisting, "data.total") })
+      setPagination({
+        ...pagination,
+        total: get(dataBizlisting, "data.total"),
+      });
     }
     setLoading(false);
   };
@@ -233,7 +236,7 @@ export async function getServerSideProps(context) {
       value: get(item, "attributes.value"),
       slug: get(item, "attributes.value"),
     }));
-    categoryLinkArray =
+  categoryLinkArray =
     Array.isArray(arrayRawListCategoryLink) &&
     categoryLinkArray.concat(arrayRawListCategoryLink);
   return {
