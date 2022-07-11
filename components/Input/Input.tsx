@@ -11,6 +11,7 @@ export interface InputProps
   prefix?: ReactNode
   suffix?: ReactNode
   helperText?: string
+  error?: string,
   width?: string | number
   variant?: "filled" | "outlined"
   size?: "small" | "medium" | "large"
@@ -25,6 +26,7 @@ const Input = (props: InputProps) => {
     readOnly,
     variant = "outlined",
     helperText,
+    error,
     size = "medium",
     id,
     width,
@@ -53,6 +55,7 @@ const Input = (props: InputProps) => {
         </div>
       </div>
       {helperText && <div>{helperText}</div>}
+      {error && <div className={styles.error}>{error}</div>}
     </div>
   )
 }

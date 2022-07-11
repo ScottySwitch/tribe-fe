@@ -28,21 +28,21 @@ const SubCategoryPage = (props: any) => {
   const { query } = router;
   const { category, subCategory }: any = query;
 
+  const defaultPagination = { page: 1, total: 0, limit: 28 };
+
   const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState(defaultPagination);
   const [subCategoryData, setSubCategoryData] = useState<any[]>([]);
   const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
   const [showFilter, setShowFilter] = useState(false);
-  const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number | undefined>(1);
-  const [limit, setLimit] = useState<number>(30);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory);
 
   useEffect(() => {
     //get subCategory data
     setSubCategoryData(inforCardList);
-    getDataBizlisting(category, currenCategoryLink, page);
-  }, [currentSubCategory, page]);
+    getDataBizlisting(category, currenCategoryLink, pagination.page);
+  }, [currentSubCategory, pagination.page]);
 
   const handleChangeSubCategory = (e) => {
     setCurrentCategoryLink(e);
@@ -85,7 +85,7 @@ const SubCategoryPage = (props: any) => {
         rateNumber: item.rate_number,
       }));
       setListings(listingArray);
-      setTotal(get(dataBizlisting, "data.total"));
+      setPagination({ ...pagination, total: get(dataBizlisting, "data.total") })
     }
     setLoading(false);
   };
@@ -188,14 +188,13 @@ const SubCategoryPage = (props: any) => {
               </div>
             ))}
         </div>
-        {total > 0 && (
+        {pagination.total > 0 && (
           <Pagination
             limit={30}
-            total={total}
-            onPageChange={(page) => {
-              getDataBizlisting(category, subCategory, page?.selected);
-              setPage(page?.selected);
-            }}
+            total={pagination.total}
+            onPageChange={(selected) =>
+              setPagination({ ...pagination, page: selected.selected })
+            }
           />
         )}
         <TopSearches />
@@ -210,8 +209,7 @@ export async function getServerSideProps(context) {
   const dataBanners = await BannerApi.getBannerByCategory(category);
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  let listBannerArray: any = [];
-  let ListCategoryLinkArray: any = [
+  let categoryLinkArray: any = [
     {
       label: "All",
       value: "all",
@@ -221,7 +219,7 @@ export async function getServerSideProps(context) {
   ];
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCategory = get(dataCategoryLinks, "data.data");
-  listBannerArray =
+  const listBannerArray =
     Array.isArray(rawListBanners) &&
     rawListBanners.map((item) => ({
       imgUrl: item.image_url,
@@ -235,14 +233,14 @@ export async function getServerSideProps(context) {
       value: get(item, "attributes.value"),
       slug: get(item, "attributes.value"),
     }));
-  ListCategoryLinkArray =
+    categoryLinkArray =
     Array.isArray(arrayRawListCategoryLink) &&
-    ListCategoryLinkArray.concat(arrayRawListCategoryLink);
+    categoryLinkArray.concat(arrayRawListCategoryLink);
   return {
     props: {
       // bizListings: listingArray,
       listingBanners: listBannerArray,
-      listCategoryLink: ListCategoryLinkArray,
+      listCategoryLink: categoryLinkArray,
     },
   };
 }

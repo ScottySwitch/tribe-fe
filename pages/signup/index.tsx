@@ -45,6 +45,7 @@ const SignupPage = () => {
   const [otpReceiver, setOtpReceiver] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const [isSignUpError, setIsSignUpError] = useState<boolean>(false)
 
   const {
     register,
@@ -94,6 +95,7 @@ const SignupPage = () => {
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(get(err, "response.data.error"))
+        setIsSignUpError(true)        
         setIsLoading(false)
       }
     } else {
@@ -128,6 +130,7 @@ const SignupPage = () => {
         }
       } catch (err: any) {
         console.log(get(err, "response.data.error"))
+        setIsSignUpError(true)        
         setIsLoading(false)
       }
     }
@@ -181,6 +184,7 @@ const SignupPage = () => {
               />
             }
             register={register("password", { required: true })}
+            error = { isSignUpError ? `Opps! it seems like this account has already been created. Continue to log in otherwise, choose another ${method}.`: ''}
           />
           <Checkbox
             label="I have read and agree to the T&C of Tribes"

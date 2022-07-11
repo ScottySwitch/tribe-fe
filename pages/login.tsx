@@ -44,10 +44,11 @@ const LoginPage = () => {
   const [method, setMethod] = useState(LoginMethod.EMAIL)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
-  const [valueEmail, setValueEmail] = useState("")
-  const [valuePhoneNumber, setValuePhoneNumber] = useState("")
-  const [valuePassword, setValuePassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoginError, setIsLoginError] = useState<boolean>(false)
 
   const handleLogin = async () => {
     let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}")
@@ -57,13 +58,14 @@ const LoginPage = () => {
       let result: any = null
       try {
         result = await AuthApi.loginByEmail({
-          email: valueEmail,
-          password: valuePassword,
+          email: email,
+          password: password,
         })
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(get(err, "response.data.error"))
         setIsLoading(false)
+        setIsLoginError(true)
         return false
       }
 
@@ -77,13 +79,14 @@ const LoginPage = () => {
       let result: any = null
       try {
         result = await AuthApi.loginByPhone({
-          phone_number: valuePhoneNumber,
-          password: valuePassword,
+          phone_number: phoneNumber,
+          password: password,
         })
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err.response.data.error)
         setIsLoading(false)
+        setIsLoginError(true)
         return false
       }
 
@@ -110,7 +113,10 @@ const LoginPage = () => {
               [styles.selected]: method === tab.value,
             })
             return (
-              <div key={tab.value} onClick={() => setMethod(tab.value)} className={tabClassNames}>
+              <div key={tab.value} onClick={() => {
+                setMethod(tab.value)
+                setIsLoginError(false)
+              }} className={tabClassNames}>
                 {tab.label}
               </div>
             )
@@ -124,13 +130,13 @@ const LoginPage = () => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) => setValuePhoneNumber(removeZeroInPhoneNumber(e))}
+              onChange={(e) => setPhoneNumber(removeZeroInPhoneNumber(e))}
             />
           ) : (
             <Input
               label="Email"
               placeholder="Your email"
-              onChange={(e: any) => setValueEmail(e.target.value)}
+              onChange={(e: any) => setEmail(e.target.value)}
             />
           )}
           <Input
@@ -138,7 +144,8 @@ const LoginPage = () => {
             placeholder="Password"
             type={showPassword ? "default" : "password"}
             suffix={<PasswordEye onClick={() => setShowPassword(!showPassword)} />}
-            onChange={(e: any) => setValuePassword(e.target.value)}
+            onChange={(e: any) => setPassword(e.target.value)}
+            error = { isLoginError ? `Ops! We cannot find the account with that ${method} or invalid password.`: ''}
           />
           <div className={styles.actions}>
             <div className="w-[150px]">
