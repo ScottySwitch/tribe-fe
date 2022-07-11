@@ -19,6 +19,7 @@ export interface InforCardProps {
   width?: string | number;
   validUntil?: any;
   isFavourited?: boolean;
+  onFavouritedClick?: () => void;
   onClick?: () => void;
 }
 
@@ -38,6 +39,7 @@ const InforCard = (props: InforCardProps) => {
     isVerified,
     width,
     isFavourited,
+    onFavouritedClick,
     onClick,
   } = props;
 
@@ -80,7 +82,7 @@ const InforCard = (props: InforCardProps) => {
       )}
       <div className={styles.cover}>
         {isFavourited && (
-          <div className={styles.favourited}>
+          <div className={styles.favourited} onClick={onFavouritedClick}>
             <Icon icon="like-solid" color="#e60112" />
           </div>
         )}

@@ -1,24 +1,24 @@
-import { useRouter } from "next/router"
-import React, { FormEvent, useCallback, useEffect, useState } from "react"
-import Image from "next/image"
-import classNames from "classnames"
+import { useRouter } from "next/router";
+import React, { FormEvent, useCallback, useEffect, useState } from "react";
+import Image from "next/image";
+import classNames from "classnames";
 
-import Upload from "components/Upload/Upload"
-import Button from "components/Button/Button"
-import Input from "components/Input/Input"
-import Modal, { ModalHeader } from "components/Modal/Modal"
-import Radio from "components/Radio/Radio"
-import Select from "components/Select/Select"
-import { countryList, educationLevels, industryList } from "constant"
+import Upload from "components/Upload/Upload";
+import Button from "components/Button/Button";
+import Input from "components/Input/Input";
+import Modal, { ModalHeader } from "components/Modal/Modal";
+import Radio from "components/Radio/Radio";
+import Select from "components/Select/Select";
+import { countryList, educationLevels, industryList } from "constant";
 
-import styles from "styles/Auth.module.scss"
-import DatePicker from "components/DatePicker/DatePicker"
-import { useForm } from "react-hook-form"
-import UserApi from "../../../services/user"
-import AuthApi from "../../../services/auth"
-import CategoryLinkAPi from "services/category-link"
-import { get } from "lodash"
-import categoryLink from "services/category-link"
+import styles from "styles/Auth.module.scss";
+import DatePicker from "components/DatePicker/DatePicker";
+import { useForm } from "react-hook-form";
+import UserApi from "../../../services/user";
+import AuthApi from "../../../services/auth";
+import CategoryLinkAPi from "services/category-link";
+import { get } from "lodash";
+import categoryLink from "services/category-link";
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
@@ -29,12 +29,12 @@ const StepOne = ({
   formData,
   onNextStep,
 }: {
-  formData: any
-  onNextStep: (e: FormEvent<HTMLFormElement>) => void
+  formData: any;
+  onNextStep: (e: FormEvent<HTMLFormElement>) => void;
 }) => {
-  const router = useRouter()
-  const [uploadAvatar, setUploadAvatar] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [uploadAvatar, setUploadAvatar] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { setValue, getValues, register, handleSubmit } = useForm({
     defaultValues: {
@@ -45,71 +45,73 @@ const StepOne = ({
       birthday: formData.birthday,
       industry: formData.industry,
     },
-  })
+  });
 
-  const [avatar, setAvatar] = useState([require("public/images/avatar.png")])
+  const [avatar, setAvatar] = useState([require("public/images/avatar.png")]);
   // If user is come from Facebook, Google
   useEffect(() => {
     const loginFacebookCallback = async (accessToken: any) => {
-      await AuthApi.loginFacebookCallback(accessToken)
-    }
+      await AuthApi.loginFacebookCallback(accessToken);
+    };
     const loginGoogleCallback = async (accessTokenGoogle: any) => {
-      await AuthApi.loginGoogleCallback(accessTokenGoogle)
-    }
+      await AuthApi.loginGoogleCallback(accessTokenGoogle);
+    };
     if (router.query.id_token) {
       // google has id_token
-      loginGoogleCallback(router.query.access_token).catch((e) => console.log(e))
+      loginGoogleCallback(router.query.access_token).catch((e) =>
+        console.log(e)
+      );
     } else if (router.query.access_token) {
-      loginFacebookCallback(router.query.access_token).catch((e) => console.log(e))
+      loginFacebookCallback(router.query.access_token).catch((e) =>
+        console.log(e)
+      );
     }
-  }, [router])
+  }, [router]);
 
-  const [socialUser, setSocialUser] = useState<any>()
+  const [socialUser, setSocialUser] = useState<any>();
   useEffect(() => {
-    const user = localStorage.getItem('user')
+    const user = localStorage.getItem("user");
     if (user) {
-      setSocialUser(user)
-      const userJson = JSON.parse(user || '')
-      setValue("name", userJson.first_name)
+      setSocialUser(user);
+      const userJson = JSON.parse(user || "");
+      setValue("name", userJson.first_name);
       if (userJson.avatar) {
-        setAvatar([userJson.avatar])
+        setAvatar([userJson.avatar]);
       }
     }
-  }, [socialUser])
+  }, [socialUser]);
 
   const handleUploadAvatar = useCallback((srcAvatar) => {
-    console.log('srcAvatar',srcAvatar);
-    setUploadAvatar(srcAvatar[0])
-  }, [])
+    console.log("srcAvatar", srcAvatar);
+    setUploadAvatar(srcAvatar[0]);
+  }, []);
 
   const onSubmit = async (data) => {
-    setIsLoading(true)
+    setIsLoading(true);
     let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    if (typeof localStorage.getItem("user") !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
-    const userId = userInfo.id || '0'
+    const userId = userInfo.id || "0";
     let dataSend: any = {
       first_name: data.name,
       gender: data.gender,
       birthday: data.birthday,
       country: data.country?.value || null,
-      confirmed: true
-    }
-    console.log('uploadAvatar', uploadAvatar)
+      confirmed: true,
+    };
     if (uploadAvatar !== "") {
-      dataSend = {...dataSend, avatar: uploadAvatar}
+      dataSend = { ...dataSend, avatar: uploadAvatar };
     }
     try {
-      await UserApi.updateUser(userId, dataSend)
+      await UserApi.updateUser(userId, dataSend);
     } catch (err) {
       // TODO: notify error (missing template)
-      console.log(err)
-      setIsLoading(false)
-      return false
+      setIsLoading(false);
+      return false;
     }
-    onNextStep(data)
-  }
+    onNextStep(data);
+  };
   return (
     <div>
       <ModalHeader alignTitle="center">
@@ -117,7 +119,11 @@ const StepOne = ({
       </ModalHeader>
       <form className={styles.body} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.profile_imgs}>
-          <Upload fileList={avatar} type="avatar" onChange={handleUploadAvatar} />
+          <Upload
+            fileList={avatar}
+            type="avatar"
+            onChange={handleUploadAvatar}
+          />
         </div>
         <Input placeholder="Your name" register={register("name")} />
         <Select
@@ -130,8 +136,16 @@ const StepOne = ({
           Gender
           <div className="flex gap-[30px] mt-2">
             <Radio label="Male" value="male" register={register("gender")} />
-            <Radio label="Female" value="female" register={register("gender")} />
-            <Radio label="Others" value="others" register={register("gender")} />
+            <Radio
+              label="Female"
+              value="female"
+              register={register("gender")}
+            />
+            <Radio
+              label="Others"
+              value="others"
+              register={register("gender")}
+            />
           </div>
         </div>
         <DatePicker
@@ -155,57 +169,66 @@ const StepOne = ({
           {/* <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
             Skip
           </div> */}
-          <Button className="w-1/2" text="Next" type="submit" isLoading={isLoading} />
+          <Button
+            className="w-1/2"
+            text="Next"
+            type="submit"
+            isLoading={isLoading}
+          />
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
 const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
-  const [interest, setInterest] = useState<{[key: string]: any} []>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [interestingList, setInterestingList] = useState<{[key: string]: any} []>([])
+  const [interest, setInterest] = useState<{ [key: string]: any }[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [interestingList, setInterestingList] = useState<
+    { [key: string]: any }[]
+  >([]);
 
   useEffect(() => {
-    getCategoryLinks()
-  }, [])
+    getCategoryLinks();
+  }, []);
 
   const getCategoryLinks = async () => {
-    const data = await CategoryLinkAPi.getCategoryLinks()
-    console.log(data)
-    if (get(data, 'data.data')) {
-      const rawInterestingList = get(data, "data.data") || []
-      const interestListingArray  = rawInterestingList.map((item) => ({
+    const data = await CategoryLinkAPi.getCategoryLinks();
+    console.log(data);
+    if (get(data, "data.data")) {
+      const rawInterestingList = get(data, "data.data") || [];
+      const interestListingArray = rawInterestingList.map((item) => ({
         id: item.id,
-        label: get(item, 'attributes.label'),
-        avatar: get(item, 'attributes.logo.data.attributes.url') || "https://picsum.photos/200/300"
-      }))
-      setInterestingList(interestListingArray)
+        label: get(item, "attributes.label"),
+        avatar:
+          get(item, "attributes.logo.data.attributes.url") ||
+          "https://picsum.photos/200/300",
+      }));
+      setInterestingList(interestListingArray);
     }
-  }
+  };
 
   const handleSetInterest = (item) => {
-    let isSelected = interest.some((ItemIterest) => item.label === ItemIterest.label)
-    let newArray: any = []
+    let isSelected = interest.some(
+      (ItemIterest) => item.label === ItemIterest.label
+    );
+    let newArray: any = [];
     if (isSelected) {
-      newArray = interest.filter((ItemIterest) => item.label !== ItemIterest.label)
+      newArray = interest.filter(
+        (ItemIterest) => item.label !== ItemIterest.label
+      );
+    } else {
+      newArray = [...interest, { label: item.label, id: item.id }];
     }
-    else {
-      newArray = [
-        ...interest,
-        {label: item.label, id: item.id}
-      ]
-    }
-    setInterest(newArray)
-  }
+    setInterest(newArray);
+  };
 
   const handleSubmit = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     // console.log(interest)
-    onSubmit(interest)
-    setIsLoading(false)
-  }
+    onSubmit(interest);
+    setIsLoading(false);
+  };
 
   return (
     <div>
@@ -217,17 +240,17 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
       </ModalHeader>
       <div className={styles.body}>
         <p>
-          We would love to recommend categories and content especially for you! You can choose more
-          than 1.
+          We would love to recommend categories and content especially for you!
+          You can choose more than 1.
         </p>
-        <p>
-          Selected: {interest?.length} / 50
-        </p>
+        <p>Selected: {interest?.length} / 50</p>
         <div className={styles.interesting}>
           {interestingList.map((item: any) => {
             const itemClass = classNames(styles.interesting_item, {
-              [styles.selected]: interest.some((ItemIterest) => item.label === ItemIterest.label),
-            })
+              [styles.selected]: interest.some(
+                (ItemIterest) => item.label === ItemIterest.label
+              ),
+            });
             return (
               <div
                 key={item.value}
@@ -236,51 +259,67 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
                 onClick={() => handleSetInterest(item)}
               >
                 <div className={styles.avatar}>
-                  <Image src={item.avatar} alt="" layout="fixed" width={50} height={50} />
+                  <Image
+                    src={item.avatar}
+                    alt=""
+                    layout="fixed"
+                    width={50}
+                    height={50}
+                  />
                 </div>
                 <div>{item.label}</div>
               </div>
-            )
+            );
           })}
         </div>
         <div className={styles.actions}>
-          <Button variant="secondary-no-outlined" text="Back" onClick={onBackStep} width={50} />
-          <Button className="w-1/2" text="Next" onClick={handleSubmit} isLoading={isLoading} />
+          <Button
+            variant="secondary-no-outlined"
+            text="Back"
+            onClick={onBackStep}
+            width={50}
+          />
+          <Button
+            className="w-1/2"
+            text="Next"
+            onClick={handleSubmit}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const SetupProfilePage = () => {
-  const [step, setStep] = useState(ProfileSteps.STEP_ONE)
-  const [formData, setFormData] = useState({})
+  const [step, setStep] = useState(ProfileSteps.STEP_ONE);
+  const [formData, setFormData] = useState({});
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleNextStep = (data) => {
-    setFormData({ ...formData, ...data })
-    console.log({ ...formData, ...data })
-    setStep(ProfileSteps.STEP_TWO)
-  }
+    setFormData({ ...formData, ...data });
+    console.log({ ...formData, ...data });
+    setStep(ProfileSteps.STEP_TWO);
+  };
 
   const handleSubmit = async (form) => {
-    const categoryLinkIds = form.map((item) => item.id)
+    const categoryLinkIds = form.map((item) => item.id);
     let dataSend = {
-      category_links: categoryLinkIds
-    }
+      category_links: categoryLinkIds,
+    };
     let userInfo;
-    if (typeof localStorage.getItem('user') !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+    if (typeof localStorage.getItem("user") !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
-    const userId = userInfo.id || '0'
-    await UserApi.updateUser(userId, dataSend)
-    window.location.href = "/"
-  }
+    const userId = userInfo.id || "0";
+    await UserApi.updateUser(userId, dataSend);
+    window.location.href = "/";
+  };
 
   const handleBackStep = () => {
-    setStep(ProfileSteps.STEP_ONE)
-  }
+    setStep(ProfileSteps.STEP_ONE);
+  };
 
   return (
     <div className={styles.auth}>
@@ -288,11 +327,15 @@ const SetupProfilePage = () => {
         {step === ProfileSteps.STEP_ONE ? (
           <StepOne onNextStep={handleNextStep} formData={formData} />
         ) : (
-          <StepTwo onSubmit={handleSubmit} onBackStep={handleBackStep} formData={formData} />
+          <StepTwo
+            onSubmit={handleSubmit}
+            onBackStep={handleBackStep}
+            formData={formData}
+          />
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SetupProfilePage
+export default SetupProfilePage;

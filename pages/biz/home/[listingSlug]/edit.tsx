@@ -1,3 +1,4 @@
+import { orderBy } from "lodash";
 import get from "lodash/get";
 import moment from "moment";
 import parseISO from "date-fns/parseISO";
@@ -31,7 +32,6 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
-import { orderBy } from "lodash";
 
 import styles from "styles/BizHomepage.module.scss";
 
