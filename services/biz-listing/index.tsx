@@ -33,7 +33,8 @@ const getBizListing = async () => {
   return await Api.get(url);
 };
 
-const getBizListingsByCategoryId = async (categoryId: Categories) => {
+const getBizListingsByCategoryId = async (categoryId: Categories, page?: number) => {
+  const pageNumber = page || 1
   const query = qs.stringify(
     {
       filters: {
@@ -62,8 +63,8 @@ const getBizListingsByCategoryId = async (categoryId: Categories) => {
       encodeValuesOnly: true, // prettify url
     }
   );
-
-  const url = `/api/biz-listings?${query}`;
+  const url = `/api/biz-listings?${query}&pagination[page]=${pageNumber}&pagination[pageSize]=28`;
+  // const url = `/api/biz-listings?${query}`;
   return await Api.get(url);
 };
 

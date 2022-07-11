@@ -334,13 +334,6 @@ export async function getServerSideProps(context) {
   const dataBanners = await BannerApi.getBanner();
   const dataCollections = await CollectionApi.getCollection();
   const dataCategories = await CategoryApi.getCategories();
-  let listingBuyArray: any = [];
-  let listingSeeArray: any = [];
-  let listingEatArray: any = [];
-  let listingExclusiveDealArray: any = [];
-  let listBannerArray: any = [];
-  let listCollectionArray: any = [];
-  let categoryArray: any = [];
   const rawListingBuyArray = get(data, "data.data[0]");
   const rawListingSeeArray = get(data, "data.data[1]");
   const rawListingEatAray = get(data, "data.data[2]");
@@ -348,7 +341,7 @@ export async function getServerSideProps(context) {
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawCategories = get(dataCategories, "data.data");
-  listingBuyArray =
+  const listingBuyArray =
     Array.isArray(rawListingBuyArray) &&
     rawListingBuyArray.map((item) => ({
       images: item.images || [],
@@ -365,7 +358,7 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  listingSeeArray =
+  const listingSeeArray =
     Array.isArray(rawListingSeeArray) &&
     rawListingSeeArray.map((item) => ({
       images: item.images || [],
@@ -382,7 +375,7 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  listingEatArray =
+  const listingEatArray =
     Array.isArray(rawListingEatAray) &&
     rawListingEatAray.map((item) => ({
       images: item.images || [],
@@ -399,7 +392,7 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  listingExclusiveDealArray =
+  const listingExclusiveDealArray =
     Array.isArray(rawListingExclusiveArray) &&
     rawListingExclusiveArray.map((item) => ({
       images: item.images || [],
@@ -416,20 +409,20 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
-  listBannerArray =
+  const listBannerArray =
     Array.isArray(rawListBanners) &&
     rawListBanners.map((item) => ({
       imgUrl: item.image_url,
       linkActive: item.link_active,
     }));
-  listCollectionArray =
+  const listCollectionArray =
     Array.isArray(rawListCollections) &&
     rawListCollections.map((item) => ({
       imgUrl: item.thumbnail || null,
       slug: item.slug,
       title: item.name,
     }));
-  categoryArray =
+  const categoryArray =
     Array.isArray(rawCategories) &&
     rawCategories.map((item) => ({
       label: get(item, "attributes.name"),
