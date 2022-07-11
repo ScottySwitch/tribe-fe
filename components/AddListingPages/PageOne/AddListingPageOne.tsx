@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import useTrans from "hooks/useTrans";
 import { roleList } from "constant";
 import Badge from "components/Badge/Badge";
 import Button from "components/Button/Button";
@@ -18,6 +17,7 @@ import ChooseCategory from "components/AddListingPages/PageOne/ChooseCategory/Ch
 import Question from "components/Question/Question";
 import { Categories, YesNo } from "enums";
 import BizListingApi from "../../../services/biz-listing";
+import useTrans from "useTrans";
 
 interface AddListingProps {
   onUpdateFormData: (data: { [key: string]: any }) => void;
