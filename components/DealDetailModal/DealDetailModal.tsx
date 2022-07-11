@@ -23,7 +23,6 @@ interface DealDetailModalProps extends ModalProps {
 
 const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props
-  console.log('data', data)
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
   useEffect(() => {
@@ -35,7 +34,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
         userFavourite.some((item) => item === data.id);
       setIsFavourite(checkIsFavourite);
     }
-  }, []);
+  }, [data]);
 
   const handleAddFavouriteDeal = async (id) => {
     const data = await DealFavouriteApi.createDealFavourite(id)
