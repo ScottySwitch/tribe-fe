@@ -1,0 +1,59 @@
+name: Staging CI/CD
+
+on:
+  push:
+    branches: [staging]
+  pull_request:
+    branches: [staging]
+jobs:
+  build_push_deploy:
+    env:
+      SERVER_URL: ${{ secrets.SERVER_URL }}
+      TOKEN: ${{ secrets.TOKEN }}
+      DEPLOYMENT: 'tribes'
+      IMAGE_NAME: 'eastplayers/tribes:staging-0.1.${{github.run_number}}'
+      CONTAINER_NAME: 'tribes'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Setup Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and Push Docker Image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./deployment/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: |
+            ${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:staging-latest
+            ${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:staging-0.1.${{github.run_number}}
+      - name: Commit to ops repository
+        uses: Eastplayers/ep-gitops-action@v0.0.5
+        with:
+          tag: 'staging-0.1.${{ github.run_number }}'
+          deployment-dir: 'overlay/staging/deployment.yaml'
+          image: ${{ env.DEPLOYMENT }}
+          token: ${{ env.GIT_TOKEN }}
+          repo-url: 'github.com/Eastplayers/tribes-ops.git'
+          match: 'staging-0.1.*'
+          ops-dir: 'tribes-ops'
+          message: 'STAG'
+      # - name: Actions Status Discord
+      #   if: always()
+      #   uses: sarisia/actions-status-discord@v1.8.6
+      #   with:
+      #     webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      #

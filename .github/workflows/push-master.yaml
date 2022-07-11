@@ -11,7 +11,7 @@ jobs:
       SERVER_URL: ${{ secrets.SERVER_URL }}
       TOKEN: ${{ secrets.TOKEN }}
       DEPLOYMENT: 'tribes'
-      IMAGE_NAME: 'eastplayers/tribes:staging-0.1.${{github.run_number}}'
+      IMAGE_NAME: 'eastplayers/tribes:0.1.${{github.run_number}}'
       CONTAINER_NAME: 'tribes'
     runs-on: ubuntu-latest
 
