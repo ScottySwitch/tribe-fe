@@ -20,7 +20,7 @@ const ListCard = (props: {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
       {Array.isArray(data) &&
-        data?.map((card, index) => (
+        data.map((card, index) => (
           <InforCard
             key={index}
             imgUrl={card.imgUrl}
