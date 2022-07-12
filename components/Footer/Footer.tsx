@@ -12,7 +12,7 @@ const Footer = (props: {
   navList: { [key: string]: any }[];
 }) => {
   const { visible, backgroundColor = true, navList } = props;
-  let newNavList
+  let newNavList;
   if (navList) {
     newNavList = [
       ...navList,
@@ -35,14 +35,14 @@ const Footer = (props: {
           { label: "Contact us", value: "" },
         ],
       },
-    ]
+    ];
   }
 
   const handleChangeHref = (href) => {
     if (href) {
-      window.location.href = href
+      window.location.href = href;
     }
-  }
+  };
 
   if (!visible) return null;
   return (
@@ -67,7 +67,11 @@ const Footer = (props: {
                 <div className={styles.header}>{nav.category}</div>
                 <div className={styles.item_container}>
                   {nav.items.map((item: any) => (
-                    <div key={item.label} className={styles.label} onClick={() => handleChangeHref(item.href)}>
+                    <div
+                      key={item.label}
+                      className={styles.label}
+                      onClick={() => handleChangeHref(item.href)}
+                    >
                       {item.label}
                     </div>
                   ))}

@@ -1,13 +1,13 @@
 import Api from "../index";
 
-const qs = require('qs');
+const qs = require("qs");
 
 const createContribute = async (params: any) => {
   const url = `/api/contributeds`;
   return await Api.post(url, {
-      data: params
+    data: params,
   });
-}
+};
 
 const getUserContribute = async () => {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -15,8 +15,9 @@ const getUserContribute = async () => {
   return await Api.get(url);
 };
 
-  
-export default {
+const ContributeApi = {
   createContribute,
-  getUserContribute
-}
+  getUserContribute,
+};
+
+export default ContributeApi;

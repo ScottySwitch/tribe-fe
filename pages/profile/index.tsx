@@ -1,24 +1,31 @@
-import Button from "components/Button/Button"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal"
-import TopSearches from "components/TopSearches/TopSearches"
-import CompleteProfileCard from "components/UserProfilePage/CompleteProfileCard/CompleteProfileCard"
-import CoverImage from "components/UserProfilePage/CoverImage/CoverImage"
-import PanelAbout from "components/UserProfilePage/PanelAbout/PanelAbout"
-import ContributedPanel from "components/UserProfilePage/PanelContributed/PanelContributed"
-import FavouriedPanel from "components/UserProfilePage/PanelFavouried/PanelFavouried"
-import SavedDealsPanel from "components/UserProfilePage/PanelSavedDeals/PanelSavedDeals"
-import { dummyKeywords, dummySavedDeals, dummyUserInfo, inforCardList } from "constant"
-import { ProfileTabs } from "enums"
-import Image from "next/image"
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
-import {get} from "lodash"
-import styles from "styles/Profile.module.scss"
-import { userInfo } from "os"
+import Button from "components/Button/Button";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
+import TopSearches from "components/TopSearches/TopSearches";
+import CompleteProfileCard from "components/UserProfilePage/CompleteProfileCard/CompleteProfileCard";
+import CoverImage from "components/UserProfilePage/CoverImage/CoverImage";
+import PanelAbout, {
+  UserPropsData,
+} from "components/UserProfilePage/PanelAbout/PanelAbout";
+import ContributedPanel from "components/UserProfilePage/PanelContributed/PanelContributed";
+import FavouriedPanel from "components/UserProfilePage/PanelFavouried/PanelFavouried";
+import SavedDealsPanel from "components/UserProfilePage/PanelSavedDeals/PanelSavedDeals";
+import {
+  dummyKeywords,
+  dummySavedDeals,
+  dummyUserInfo,
+  inforCardList,
+} from "constant";
+import { ProfileTabs } from "enums";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { get } from "lodash";
+import styles from "styles/Profile.module.scss";
+import { userInfo } from "os";
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
-  const { name, imageUrl } = props
+  const { name, imageUrl } = props;
 
   return (
     <div className={styles.group_heading_one}>
@@ -42,12 +49,16 @@ const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
         className={styles.CompleteProfileCard_desktop}
       />
     </div>
-  )
-}
+  );
+};
 
-const GroupHeadingTwo = (props: { contributions: number; following: number; points: number }) => {
-  const { contributions, following, points } = props
-  const router = useRouter()
+const GroupHeadingTwo = (props: {
+  contributions: number;
+  following: number;
+  points: number;
+}) => {
+  const { contributions, following, points } = props;
+  const router = useRouter();
   return (
     <React.Fragment>
       <div className={styles.group_heading_two}>
@@ -71,7 +82,7 @@ const GroupHeadingTwo = (props: { contributions: number; following: number; poin
           text="Edit profile"
           width={164}
           onClick={() => {
-            router.push("/profile/information")
+            router.push("/profile/information");
           }}
         />
       </div>
@@ -82,21 +93,32 @@ const GroupHeadingTwo = (props: { contributions: number; following: number; poin
         className={styles.CompleteProfileCard_mobile}
       />
     </React.Fragment>
-  )
-}
+  );
+};
 
 const ProfilePage = () => {
-  const [userInfor, setUserInfo] = useState<any>({})
+  const [userInfor, setUserInfo] = useState<UserPropsData>({
+    email: "",
+    phone_number: "",
+    country: "",
+    gender: "male",
+    educate_level: "",
+    industry: "",
+    birthday: "",
+  });
 
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log('userInfo', userInfo)
-    setUserInfo(userInfo)
-  }, [])
+    console.log("userInfo", userInfo);
+    setUserInfo(userInfo);
+  }, []);
 
-  
   const TabList: ITab[] = [
-    { label: ProfileTabs.FAVOURITED, value: ProfileTabs.FAVOURITED, content: <FavouriedPanel /> },
+    {
+      label: ProfileTabs.FAVOURITED,
+      value: ProfileTabs.FAVOURITED,
+      content: <FavouriedPanel />,
+    },
     {
       label: ProfileTabs.SAVED_DEALS,
       value: ProfileTabs.SAVED_DEALS,
@@ -105,14 +127,14 @@ const ProfilePage = () => {
     {
       label: ProfileTabs.CONTRIBUTED,
       value: ProfileTabs.CONTRIBUTED,
-      content: <ContributedPanel />,
+      content: <ContributedPanel userInfor={userInfor} />,
     },
     {
       label: ProfileTabs.ABOUT,
       value: ProfileTabs.ABOUT,
       content: <PanelAbout data={userInfor} />,
     },
-  ]
+  ];
 
   return (
     <div className="wrapper-profile">
@@ -123,11 +145,15 @@ const ProfilePage = () => {
         className={styles.section_profile}
         containerClassName={styles.section_profile_container}
       >
-        <GroupHeadingOne 
-          name={`${userInfor.first_name} ${userInfor.last_name || ''}`} 
-          imageUrl={userInfor.avatar || 'https://picsum.photos/218'} 
+        <GroupHeadingOne
+          name={`${userInfor.first_name} ${userInfor.last_name || ""}`}
+          imageUrl={userInfor.avatar || "https://picsum.photos/218"}
         />
-        <GroupHeadingTwo contributions={0} following={get(userInfor, 'user_listing_follows.length')} points={0} />
+        <GroupHeadingTwo
+          contributions={0}
+          following={get(userInfor, "user_listing_follows.length")}
+          points={0}
+        />
         <TabsHorizontal
           tablist={TabList}
           type="secondary-no-outline"
@@ -136,7 +162,7 @@ const ProfilePage = () => {
         <TopSearches className={styles.top_searches} />
       </SectionLayout>
     </div>
-  )
-}
+  );
+};
 
-export default ProfilePage
+export default ProfilePage;

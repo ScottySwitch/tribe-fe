@@ -1,34 +1,38 @@
-import { ReactElement, ReactNode } from "react"
-import { rateType } from "../ReviewCard/ReviewCard"
-import classNames from "classnames"
-import Icon from "components/Icon/Icon"
-import Rate from "components/Rate/Rate"
-import Image from "next/image"
-import styles from "./UserReviewCard.module.scss"
-import Popover from "components/Popover/Popover"
-import Button from "components/Button/Button"
-import { calcDistanceFromNow } from "utils"
+import { ReactElement, ReactNode } from "react";
+import { rateType } from "../ReviewCard/ReviewCard";
+import classNames from "classnames";
+import Icon from "components/Icon/Icon";
+import Rate from "components/Rate/Rate";
+import Image from "next/image";
+import styles from "./UserReviewCard.module.scss";
+import Popover from "components/Popover/Popover";
+import Button from "components/Button/Button";
+import { calcDistanceFromNow } from "utils";
 export interface UserReviewCardProps {
-  reply?: string
-  replyAt?: string
-  idReview?: string
-  className?: string
-  isPaid?: boolean
-  actions?: boolean
-  children?: ReactElement | ReactNode
-  avatarUrl?: string
-  content?: string
-  listImage?: any[]
-  dateVisit?: string
-  displayName?: string
-  rating?: number
-  censorshipLabel?: string
-  status?: "pending" | "approved" | "denied"
-  date?: string
-  isDivier?: boolean
-  user?: any
-  onReplyClick?(): void
-  onReportClick?(): void
+  reply?: string;
+  replyAt?: string;
+  idReview?: string;
+  className?: string;
+  isPaid?: boolean;
+  actions?: boolean;
+  children?: ReactElement | ReactNode;
+  listingCard?: ReactElement | ReactNode;
+  avatarUrl?: string;
+  content?: string;
+  listImage?: any[];
+  dateVisit?: string;
+  displayName?: string;
+  rating?: number;
+  censorshipLabel?: string;
+  status?: "Pending" | "Approved" | "Denied";
+  date?: string;
+  approvedDate?: string;
+  publishedAt?: string;
+  createdDate?: string;
+  isDivier?: boolean;
+  user?: any;
+  onReplyClick?(): void;
+  onReportClick?(): void;
 }
 
 const UserReviewCard = (props: UserReviewCardProps) => {
@@ -40,7 +44,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     content,
     listImage,
     dateVisit,
-    displayName,
+    listingCard,
     rating,
     isPaid,
     actions,
@@ -49,56 +53,98 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     status,
     children,
     date,
+    approvedDate,
+    createdDate,
     onReplyClick,
     onReportClick,
     isDivier = false,
-  } = props
+  } = props;
 
-  const userReviewCardClassName = classNames(styles.review_completed, className, {
-    [styles.divider]: isDivier,
-  })
+  const userReviewCardClassName = classNames(
+    styles.review_completed,
+    className,
+    {
+      [styles.divider]: isDivier,
+    }
+  );
 
   const statusClassName = classNames(styles.status, {
-    [styles.pending]: status === "pending",
-    [styles.approved]: status === "approved",
-    [styles.denied]: status === "denied",
-  })
+    [styles.pending]: status === "Pending",
+    [styles.approved]: status === "Approved",
+    [styles.denied]: status === "Denied",
+  });
   const censoredStatusClassName = classNames(styles.censored_status, "flex", {
-    ["justify-end"]: status === "denied",
-  })
+    ["justify-end"]: status === "Denied",
+  });
 
   return (
     <div className={userReviewCardClassName}>
       <div className={styles.group_heading}>
         <div className={styles.review_avatar}>
-          <Image
-            src={user?.avatar || avatarUrl}
-            height={56}
-            width={56}
-            alt=""
-            className="rounded-full"
-          />
+          {(user?.avatar || avatarUrl) && (
+            <Image
+              src={user?.avatar || avatarUrl}
+              height={56}
+              width={56}
+              alt=""
+              className="rounded-full"
+            />
+          )}
         </div>
-        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
+        {/* <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
           <div className={styles.header}>
             <h6 className={styles.name}>
-              {/* <span>{displayName}</span> */}
-              <span>{(user?.first_name || "") + " " + (user?.last_name || "")}</span>
-              {censorshipLabel && <span className="font-normal ml-2">{censorshipLabel}</span>}
+              <span>
+                {(user?.first_name || "") + " " + (user?.last_name || "")}
+              </span>
+              {censorshipLabel && (
+                <span className="font-normal ml-2">{censorshipLabel}</span>
+              )}
             </h6>
             {actions && (
-              <Popover content={<div onClick={onReportClick}>Report review</div>} position="bottom-left">
+              <Popover
+                content={<div onClick={onReportClick}>Report review</div>}
+                position="bottom-left"
+              >
                 <Icon icon="toolbar" />
               </Popover>
             )}
           </div>
           <div className={styles.status_date}>
             {status && <div className={statusClassName}>{status}</div>}
-            {date && <div className={styles.date}>{date}</div>}
+            {(createdDate || date) && (
+              <div className={styles.date}>{createdDate || date}</div>
+            )}
           </div>
-        </div>
+        </div> */}
       </div>
       <div className={styles.review_summary}>
+        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
+          <div className={styles.header}>
+            <h6 className={styles.name}>
+              <span>
+                {(user?.first_name || "") + " " + (user?.last_name || "")}
+              </span>
+              {censorshipLabel && (
+                <span className="font-normal ml-2">{censorshipLabel}</span>
+              )}
+            </h6>
+            {actions && (
+              <Popover
+                content={<div onClick={onReportClick}>Report review</div>}
+                position="bottom-left"
+              >
+                <Icon icon="toolbar" />
+              </Popover>
+            )}
+          </div>
+          <div className={styles.status_date}>
+            {status && <div className={statusClassName}>{status}</div>}
+            {(createdDate || date) && (
+              <div className={styles.date}>{createdDate || date}</div>
+            )}
+          </div>
+        </div>
         {rating && (
           <div className={styles.rating_group}>
             <Rate readonly={true} initialRating={rating} />
@@ -110,7 +156,13 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           <ul className={styles.image_list}>
             {listImage?.map((image, index) => (
               <li key={index} className={styles.image_item}>
-                <Image src={image} height={106} width={106} className="rounded-2xl" alt="" />
+                <Image
+                  src={image}
+                  height={106}
+                  width={106}
+                  className="rounded-2xl"
+                  alt=""
+                />
               </li>
             ))}
           </ul>
@@ -122,15 +174,15 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {children && <div className={styles.children}>{children}</div>}
-        {status !== "pending" && (
+        {status !== "Pending" && (
           <div className={censoredStatusClassName}>
-            {status === "approved" && (
+            {status === "Approved" && (
               <div className={styles.censored_status_approved}>
                 <Icon icon="checked-approved" className="mr-3" />
-                <span>Approved on {date}</span>
+                <span>Approved on {approvedDate}</span>
               </div>
             )}
-            {status === "denied" && (
+            {status === "Denied" && (
               <div className={styles.censored_status_denied}>
                 <span>Contact admin</span>
               </div>
@@ -171,7 +223,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserReviewCard
+export default UserReviewCard;

@@ -1,29 +1,29 @@
-import Break from "components/Break/Break"
-import Button from "components/Button/Button"
-import Heading from "components/Heading/Heading"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import Modal from "components/Modal/Modal"
-import Rate from "components/Rate/Rate"
-import ReportModal from "components/ReportModal/ReportModal"
-import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard"
-import Select from "components/Select/Select"
-import { optionsReportReview, reviewSequenceOptions } from "constant"
-import { get } from "lodash"
-import Image from "next/image"
-import { useRouter } from "next/router"
-import { useState } from "react"
-import { IOption } from "type"
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import Heading from "components/Heading/Heading";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import Modal from "components/Modal/Modal";
+import Rate from "components/Rate/Rate";
+import ReportModal from "components/ReportModal/ReportModal";
+import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard";
+import Select from "components/Select/Select";
+import { optionsReportReview, reviewSequenceOptions } from "constant";
+import { get } from "lodash";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { IOption } from "type";
 
-import styles from "./HomepageReviews.module.scss"
+import styles from "./HomepageReviews.module.scss";
 interface HomepageReviewsProps {
-  isPaid?: boolean
-  listingSlug?: any
-  isViewPage?: boolean
-  listingRate?: number
-  reviews: any[]
-  onSubmitReply: (value, id) => void
-  onChangeReviewsSequence?: (e: IOption) => void
+  isPaid?: boolean;
+  listingSlug?: any;
+  isViewPage?: boolean;
+  listingRate?: number;
+  reviews: any[];
+  onSubmitReply: (value, id) => void;
+  onChangeReviewsSequence?: (e: IOption) => void;
 }
 
 const HomepageReviews = (props: HomepageReviewsProps) => {
@@ -35,39 +35,39 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     isViewPage,
     onSubmitReply,
     onChangeReviewsSequence,
-  } = props
-  const [showReplyModal, setShowReplyModal] = useState(false)
-  const [showReportModal, setShowReportModal] = useState(false)
-  const [selectedReview, setSelectedReview] = useState({})
-  const router = useRouter()
-  const [reply, setReply ] = useState<string>('')
+  } = props;
+  const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [selectedReview, setSelectedReview] = useState({});
+  const router = useRouter();
+  const [reply, setReply] = useState<string>("");
   // const handleSetReplyReview = (value) => {
   //   if (value.length <= 100) {
   //     setReplyReview(value)
   //   }
   //   else {
   //     alert('Reply cannot over 100 character')
-  //   }    
+  //   }
   // }
 
   const calcRateNumber = (reviews) => {
-    const reviewsData = reviews
-    let rateNumber = 0
+    const reviewsData = reviews;
+    let rateNumber = 0;
     if (reviewsData.length > 0) {
-      let sum = 0
+      let sum = 0;
       reviewsData.map((review) => {
-        sum += get(review, "rating") || 0
-      })
-      rateNumber = Math.ceil(sum / reviewsData.length)
+        sum += get(review, "rating") || 0;
+      });
+      rateNumber = Math.ceil(sum / reviewsData.length);
     } else {
-      rateNumber = 0
+      rateNumber = 0;
     }
-    return rateNumber
-  }
+    return rateNumber;
+  };
 
   const handleSubmitReportReview = () => {
-    setShowReportModal(false)
-  }
+    setShowReportModal(false);
+  };
 
   return (
     <div>
@@ -109,13 +109,14 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
                 listImage={get(review, "images")}
                 content={get(review, "content")}
                 dateVisit={get(review, "visited_date")}
+                createdDate={get(review, "createdAt")}
                 rating={get(review, "rating")}
                 reply={get(review, "reply_reviews")}
                 replyAt={get(review, "date_create_reply")}
                 onReplyClick={() => {
-                  console.log('setSelectedReview', review)
-                  setSelectedReview(review)
-                  setShowReplyModal(true)
+                  console.log("setSelectedReview", review);
+                  setSelectedReview(review);
+                  setShowReplyModal(true);
                 }}
                 onReportClick={() => setShowReportModal(true)}
               />
@@ -123,7 +124,11 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
           ))
         ) : (
           <div className="flex flex-col items-center justify-center">
-            <Image src={require("public/images/no-review.svg")} width={100} alt="" />
+            <Image
+              src={require("public/images/no-review.svg")}
+              width={100}
+              alt=""
+            />
             <p>There are no review yet</p>
           </div>
         )}
@@ -154,33 +159,33 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             replyAt={get(selectedReview, "date_create_reply")}
             onReplyClick={() => setShowReplyModal(false)}
           />
-          {!get(selectedReview, "reply_reviews") &&
-              <Input 
-                placeholder="Reply ( 100 character maximum )" 
-                value={reply}
-                maxLength={100}
-                onChange={(e: any) => setReply(e.target.value)}
-              />
-          }
+          {!get(selectedReview, "reply_reviews") && (
+            <Input
+              placeholder="Reply ( 100 character maximum )"
+              value={reply}
+              maxLength={100}
+              onChange={(e: any) => setReply(e.target.value)}
+            />
+          )}
         </div>
         <div className="flex gap-3 justify-end p-[30px]">
-          <Button 
-            text="Cancel" 
-            variant="secondary-no-outlined" 
-            onClick={() => setShowReplyModal(false)} 
+          <Button
+            text="Cancel"
+            variant="secondary-no-outlined"
+            onClick={() => setShowReplyModal(false)}
           />
-          <Button 
-            text="Send reply"  
+          <Button
+            text="Send reply"
             onClick={() => {
-              setShowReplyModal(false)
-              setReply (get(selectedReview, "reply_reviews") || '')
-              onSubmitReply(reply, selectedReview)
-            }}  
+              setShowReplyModal(false);
+              setReply(get(selectedReview, "reply_reviews") || "");
+              onSubmitReply(reply, selectedReview);
+            }}
           />
         </div>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default HomepageReviews
+export default HomepageReviews;

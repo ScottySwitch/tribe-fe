@@ -3,7 +3,7 @@
 .review {
   &_completed {
     position: relative;
-
+    display: flex;
     &:not(:last-child) {
       margin-bottom: 40px;
 
@@ -33,6 +33,7 @@
     }
 
     .children {
+      width: 100%;
       margin-top: 16px;
     }
 
@@ -59,6 +60,7 @@
     }
 
     .status_date {
+      margin-top: 10px;
       display: flex;
       align-items: center;
       font-size: $text-sm;
@@ -99,8 +101,11 @@
   }
 
   &_summary {
+    margin-top: 0;
     flex: 1;
+
     .header {
+      width: 100%;
       display: flex;
       justify-content: space-between;
     }
@@ -108,10 +113,7 @@
       font-size: $text-md;
       font-weight: $font-bold;
       color: $bg-700;
-      margin-bottom: 10px;
     }
-    padding-left: 70px;
-    margin-top: 0;
 
     .rating {
       &_group {

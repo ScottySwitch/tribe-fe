@@ -11,6 +11,7 @@
     max-width: 48px;
     height: 48px;
     margin-right: 16px;
+    cursor: pointer;
 
     img {
       border-radius: 2px;
@@ -22,6 +23,7 @@
     font-weight: $font-semi-bold;
     color: $bg-500;
     margin-bottom: 4px;
+    cursor: pointer;
   }
 
   .group {
@@ -38,7 +40,7 @@
 
     .tag {
       color: $bg-400;
-      
+
       &:last-child span:nth-child(2) {
         display: none;
       }
