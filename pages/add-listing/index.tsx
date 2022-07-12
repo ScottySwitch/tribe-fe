@@ -77,6 +77,7 @@ const AddListing = () => {
   const [formData, setFormData] = useState(defaultAddlistingForm);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showSubmitResult, setShowSubmitResult] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   const router = useRouter();
 
@@ -98,6 +99,7 @@ const AddListing = () => {
   };
 
   const handleSubmitFormData = async () => {
+    setIsLoading(true)
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     ///do CRUD things here
     console.log("data", formData);
@@ -292,6 +294,7 @@ const AddListing = () => {
               onClick={() => setShowPreviewModal(false)}
             />
             <Button
+              isLoading={isLoading}
               text="Continue"
               size="small"
               width={270}

@@ -67,6 +67,7 @@ const Home: NextPage = (props: any) => {
           tags: item.tags,
           categories: item.categories,
           price: get(item, "price_range.min") || "",
+          currency: get(item, "price_range.currency") || "",
           rate: item.rate,
           rateNumber: item.rate_number,
         }))
@@ -139,6 +140,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
+                  currency={card.currency}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -157,7 +159,7 @@ const Home: NextPage = (props: any) => {
           <Carousel responsive={homeCuratedResponsive}>
             {listCollections?.map((item, index) => (
               <div key={index} className="pb-5">
-                <CollectionCard title={item.title} imgUrl={item.imgUrl} />
+                <CollectionCard slug={item.slug} title={item.title} imgUrl={item.imgUrl} />
               </div>
             ))}
           </Carousel>
@@ -175,6 +177,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
+                  currency={card.currency}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -202,6 +205,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
+                  currency={card.currency}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -242,6 +246,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
+                  currency={card.currency}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -279,6 +284,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
+                  currency={card.currency}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -355,6 +361,7 @@ export async function getServerSideProps(context) {
       tags: item.tags,
       categories: item.categories,
       price: get(item, "price_range.min") || "",
+      currency: get(item, "price_range.currency") || "",
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
@@ -372,6 +379,7 @@ export async function getServerSideProps(context) {
       tags: item.tags,
       categories: item.categories,
       price: get(item, "price_range.min") || "",
+      currency: get(item, "price_range.currency") || "",
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
@@ -389,6 +397,7 @@ export async function getServerSideProps(context) {
       tags: item.tags,
       categories: item.categories,
       price: get(item, "price_range.min") || "",
+            currency: get(item, "price_range.currency") || "",
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
@@ -406,6 +415,7 @@ export async function getServerSideProps(context) {
       tags: item.tags,
       categories: item.categories,
       price: get(item, "price_range.min") || "",
+            currency: get(item, "price_range.currency") || "",
       rate: item.rate,
       rateNumber: item.rate_number,
     }));

@@ -81,6 +81,7 @@ const SubCategoryPage = (props: any) => {
         tags: item.tags,
         categories: item.categories,
         price: get(item, "price_range.min") || "",
+        currency: get(item, "price_range.currency") || "",
         rate: item.rate,
         rateNumber: item.rate_number,
       }));
@@ -180,6 +181,7 @@ const SubCategoryPage = (props: any) => {
                   rateNumber={item.rateNumber}
                   followerNumber={item.followerNumber}
                   price={item.price}
+                  currency={item.currency}
                   categories={item.categories}
                   tags={item.tags}
                   isVerified={item.isVerified}

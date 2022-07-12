@@ -120,6 +120,7 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
       value: "approved",
       content: <ListCard data={contributions.approved} />,
     },
+    // { label: "Denied", value: "denied", content: <ListCard data={listCard} /> },
   ];
 
   useEffect(() => {
@@ -130,12 +131,9 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
       case "approved":
         setListCard(dummyApproved);
         break;
-      case "denied":
-        setListCard(dummyDenied);
-        break;
-      default:
-        setListCard(dummyPending);
-        break;
+      // case "denied":
+      //   setListCard(dummyDenied);
+      //   break;
     }
     setTotal(listCard?.length);
   }, [currentTab]);

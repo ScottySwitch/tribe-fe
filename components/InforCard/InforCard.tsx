@@ -12,6 +12,7 @@ export interface InforCardProps {
   tags?: string[];
   iconTag?: boolean;
   price?: string | number;
+  currency?: string | number;
   isVerified?: boolean;
   rateNumber?: number;
   followerNumber?: number;
@@ -39,6 +40,7 @@ const InforCard = (props: InforCardProps) => {
     isVerified,
     width,
     isFavourited,
+    currency,
     onFavouritedClick,
     onClick,
   } = props;
@@ -130,7 +132,7 @@ const InforCard = (props: InforCardProps) => {
         <div className={styles.footer}>
           {price && (
             <div className={styles.price}>
-              From <span>{price}</span>
+              From <span>{price}{currency}</span>
             </div>
           )}
           {sortingTags.length > 0 && (
