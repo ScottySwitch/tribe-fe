@@ -1,11 +1,19 @@
 import Api from "../index";
-import {UploadRefPayload} from "../../types/upload";
+import { UploadRefPayload } from "../../types/upload";
 
 const updateUser = async (userId: number, params: any) => {
   const url = `/api/users/${userId}`;
   return await Api.put(url, params);
-}
+};
 
-export default {
-  updateUser
-}
+const removeListingFavourite = async (params: any) => {
+  const url = `/api/auth/remove-listing-favourite`;
+  return await Api.post(url, params);
+} 
+
+const UserApi = {
+  updateUser,
+  removeListingFavourite,
+};
+
+export default UserApi;

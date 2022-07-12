@@ -12,6 +12,37 @@ const Footer = (props: {
   navList: { [key: string]: any }[];
 }) => {
   const { visible, backgroundColor = true, navList } = props;
+  let newNavList
+  if (navList) {
+    newNavList = [
+      ...navList,
+      {
+        category: "For Users",
+        items: [
+          { label: "Write review", value: "", href: "/reviews" },
+          { label: "Add listing", value: "", href: "/add-listing" },
+        ],
+      },
+      {
+        category: "Business owners",
+        items: [{ label: "Claim yourself", value: "" }],
+      },
+      {
+        category: "About",
+        items: [
+          { label: "About us", value: "" },
+          { label: "FAQ", value: "" },
+          { label: "Contact us", value: "" },
+        ],
+      },
+    ]
+  }
+
+  const handleChangeHref = (href) => {
+    if (href) {
+      window.location.href = href
+    }
+  }
 
   if (!visible) return null;
   return (
@@ -30,13 +61,13 @@ const Footer = (props: {
           </div>
         </div>
         <div className={styles.right_col}>
-          {navList.map((nav) => {
+          {newNavList.map((nav) => {
             return (
               <div key={nav.category} className={styles.nav}>
                 <div className={styles.header}>{nav.category}</div>
                 <div className={styles.item_container}>
                   {nav.items.map((item: any) => (
-                    <div key={item.label} className={styles.label}>
+                    <div key={item.label} className={styles.label} onClick={() => handleChangeHref(item.href)}>
                       {item.label}
                     </div>
                   ))}

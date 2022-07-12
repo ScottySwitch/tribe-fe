@@ -21,6 +21,8 @@ import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
 import BizListingApi from "../../services/biz-listing";
 import BizListingRevisionApi from "services/biz-listing-revision";
+import ContributeApi from "services/contribute"
+
 export interface IAddListingForm {
   id?: number;
   name?: string;
@@ -147,12 +149,32 @@ const AddListing = () => {
       is_accepted: false,
     };
     console.log("Role", get(formData, "role.label"));
-
     const result =
       get(formData, "role.label") === "Owner"
         ? await BizListingApi.createBizListing(dataSend)
         : await BizListingRevisionApi.createBizListingRevision(dataSend);
     console.log("result", result);
+    if (result) {
+      let dataSendContribute: any = {
+        user: userInfo.id,
+        type: "Create listing",
+      }
+      if (get(formData, "role.label") === "Owner") {
+        dataSendContribute = {
+          ...dataSendContribute,
+          biz_listing: get(result, "data.data.id"),
+          status: "Approved"
+        }
+      }
+      else {
+        dataSendContribute = {
+          ...dataSendContribute,
+          biz_listing_revision: get(result, "data.data.id"),
+          status: "Pending"
+        }
+      }
+      await ContributeApi.createContribute(dataSendContribute)
+    }
     if (get(formData, "role.label")) {
       const roleCreate =
         get(formData, "role.label") === "Owner"
