@@ -68,7 +68,8 @@ const Collection = (props) => {
             // followerNumber: get(item, "user_listing_follows.length"),
             // tags: get(item, "attributes.tags"),
             // categories: get(item, "attributes.categories"),
-            price: get(item, "price_range.min") || "",
+            price: get(item, "attributes.price_range.min") || "",
+            currency: get(item, "attributes.price_range.currency") || "",
             // rate: get(item, "attributes.rate"),
             // rateNumber: get(item, "attributes.rate_number"),
           }))
@@ -145,6 +146,7 @@ const Collection = (props) => {
                   rateNumber={item.rateNumber}
                   followerNumber={item.followerNumber}
                   price={item.price}
+                  currency={item.currency}
                   categories={item.categories}
                   tags={item.tags}
                   isVerified={item.isVerified}

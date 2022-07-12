@@ -98,7 +98,8 @@ const Category = (props: any) => {
           // followerNumber: get(item, "user_listing_follows.length"),
           // tags: get(item, "attributes.tags"),
           // categories: get(item, "attributes.categories"),
-          price: get(item, "price_range.min") || "",
+          price: get(item, "attributes.price_range.min") || "",
+          currency: get(item, "attributes.price_range.currency") || "",
           // rate: get(item, "attributes.rate"),
           // rateNumber: get(item, "attributes.rate_number"),
         }));
@@ -201,6 +202,7 @@ const Category = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
+                  currency={card.currency}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -218,7 +220,7 @@ const Category = (props: any) => {
           <Carousel responsive={homeCuratedResponsive}>
             {listCollections?.map((item, index) => (
               <div key={index} className="pb-5">
-                <CollectionCard title={item.title} imgUrl={item.imgUrl} />
+                <CollectionCard slug={item.slug} title={item.title} imgUrl={item.imgUrl} />
               </div>
             ))}
           </Carousel>
@@ -235,6 +237,7 @@ const Category = (props: any) => {
                 rateNumber={card.rateNumber}
                 followerNumber={card.followerNumber}
                 price={card.price}
+                currency={card.currency}
                 categories={card.categories}
                 description={card.description}
                 tags={card.tags}
@@ -332,6 +335,7 @@ export async function getServerSideProps(context) {
       tags: item.tags,
       categories: item.categories,
       price: get(item, "price_range.min") || "",
+      currency: get(item, "price_range.currency") || "",
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
