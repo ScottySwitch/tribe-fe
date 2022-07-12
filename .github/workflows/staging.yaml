@@ -52,9 +52,9 @@ jobs:
           match: 'staging-0.1.*'
           ops-dir: 'tribes-ops'
           message: 'STAG'
-      # - name: Actions Status Discord
-      #   if: always()
-      #   uses: sarisia/actions-status-discord@v1.8.6
-      #   with:
-      #     webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Actions Status Discord
+        if: always()
+        uses: sarisia/actions-status-discord@v1.8.6
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
       #
