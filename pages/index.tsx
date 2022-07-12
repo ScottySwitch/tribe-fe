@@ -1,3 +1,8 @@
+import { get } from "lodash";
+import type { NextPage } from "next";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Button from "components/Button/Button";
 import Carousel from "components/Carousel/Carousel";
 import CollectionCard from "components/CollectionCard/CollectionCard";
@@ -5,24 +10,19 @@ import Icon from "components/Icon/Icon";
 import InforCard from "components/InforCard/InforCard";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
-import { get } from "lodash";
+import BizListingApi from "services/biz-listing";
+import CollectionApi from "services/collection";
+import BannerApi from "services/banner";
+import CategoryApi from "services/category";
+import Loader from "components/Loader/Loader";
 import {
   curatedList,
   homeBannerResponsive,
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-import type { NextPage } from "next";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
-import BizListingApi from "services/biz-listing";
-import CollectionApi from "services/collection";
-import BannerApi from "services/banner";
 import styles from "styles/Home.module.scss";
-import CategoryApi from "services/category";
-import Loader from "components/Loader/Loader";
 
 const Home: NextPage = (props: any) => {
   const router = useRouter();
