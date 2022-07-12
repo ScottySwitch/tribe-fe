@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import Icon from "components/Icon/Icon";
 import { loginInforItem, user, userId, token } from "constant";
+import { useRouter } from "next/router";
 import { ILoginInfor } from "pages/_app";
 
 import styles from "./Menu.module.scss";
@@ -13,6 +14,7 @@ interface MenuMenuProps {
 
 const Menu = (props: MenuMenuProps) => {
   const { loginInfor = {}, mobile, onShowCategoriesModal } = props;
+  const router = useRouter();
 
   const menuItems = [
     {
@@ -25,12 +27,12 @@ const Menu = (props: MenuMenuProps) => {
       icon: "heart-color",
       label: "Favorited",
       borderBottom: true,
-      onClick: () => (window.location.href = "/profile"),
+      onClick: () => router.push("/profile"),
     },
     {
       icon: "comment-color",
       label: "Edit profile",
-      onClick: () => (window.location.href = "/profile"),
+      onClick: () => router.push("/profile"),
     },
     { icon: "settings-color", label: "Settings", borderBottom: true },
     { icon: "like-color-2", label: "Referral code" },

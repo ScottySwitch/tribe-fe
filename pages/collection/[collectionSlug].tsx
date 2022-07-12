@@ -17,6 +17,7 @@ import CollectionApi from "services/collection";
 
 import styles from "styles/Home.module.scss";
 import useTrans from "useTrans";
+import { useRouter } from "next/router";
 
 type Object = {
   [key: string]: any;
@@ -25,6 +26,7 @@ type Object = {
 const Collection = (props) => {
   const { collectionSlug } = props;
   const trans = useTrans();
+  const router = useRouter();
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
@@ -151,9 +153,7 @@ const Collection = (props) => {
                   tags={item.tags}
                   isVerified={item.isVerified}
                   description={item.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${item.slug}`;
-                  }}
+                  onClick={() => router.push(`/biz/home/${item.slug}`)}
                 />
               </div>
             ))}

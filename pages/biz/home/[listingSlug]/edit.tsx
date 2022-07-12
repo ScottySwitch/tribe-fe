@@ -98,7 +98,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           setIsRevision(true);
         }
         //they will be redirected to home if do not own the listing
-        get(data, "data.is_owner") !== true && (window.location.href = "/");
+        get(data, "data.is_owner") !== true && router.push("/");
       }
       const listing = get(data, "data.data[0]");
       if (listing) {

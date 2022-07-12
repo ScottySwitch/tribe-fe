@@ -186,9 +186,7 @@ const SubCategoryPage = (props: any) => {
                   tags={item.tags}
                   isVerified={item.isVerified}
                   description={item.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${item.slug}`;
-                  }}
+                  onClick={() => router.push(`/biz/home/${item.slug}`)}
                 />
               </div>
             ))}
