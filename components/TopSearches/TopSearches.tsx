@@ -1,6 +1,8 @@
 import { dummyTopSearchKeywords } from "constant";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./TopSearches.module.scss";
+import TopSearchApi from "services/top-search"
+import {get} from "lodash"
 
 interface ITopSearchesProp {
   className?: string;
@@ -8,7 +10,21 @@ interface ITopSearchesProp {
 
 const TopSearches = (props: ITopSearchesProp) => {
   const { className } = props;
-  const [keywords, setKeyWords] = useState(dummyTopSearchKeywords);
+  const [keywords, setKeyWords] = useState<any>([]);
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  const getData = async () => {
+    const data = await TopSearchApi.getTopSearches()
+    const rawTopSearchData = get(data, "data.data");
+    const topSearchArray =
+      Array.isArray(rawTopSearchData) ?
+      rawTopSearchData.map((item) => (item.attributes.Name)) : []
+    setKeyWords(topSearchArray)
+  }
+
   return (
     <React.Fragment>
       {keywords && (

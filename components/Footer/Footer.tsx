@@ -2,84 +2,47 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import styles from "./Footer.module.scss";
-import CategoryApi from "services/category"
-import CategoryLinkApi from "services/category-link"
-import {get} from "lodash"
+import CategoryApi from "services/category";
+import CategoryLinkApi from "services/category-link";
+import { get } from "lodash";
 
-// const navList = [
-//   {
-//     category: "Buy",
-//     items: [
-//       { label: "Online business", value: "" },
-//       { label: "Restaurant", value: "" },
-//       { label: "Coffee", value: "" },
-//       { label: "Deserts", value: "" },
-//       { label: "Bakeries", value: "" },
-//     ],
-//   },
-//   {
-//     category: "Eat",
-//     items: [
-//       { label: "Online business", value: "" },
-//       { label: "Restaurant", value: "" },
-//       { label: "Coffee", value: "" },
-//       { label: "Deserts", value: "" },
-//       { label: "Bakeries", value: "" },
-//     ],
-//   },
-//   {
-//     category: "See & Do",
-//     items: [
-//       { label: "Online business", value: "" },
-//       { label: "Restaurant", value: "" },
-//       { label: "Coffee", value: "" },
-//       { label: "Deserts", value: "" },
-//       { label: "Bakeries", value: "" },
-//     ],
-//   },
-//   {
-//     category: "Transport",
-//     items: [
-//       { label: "Online business", value: "" },
-//       { label: "Restaurant", value: "" },
-//       { label: "Coffee", value: "" },
-//       { label: "Deserts", value: "" },
-//       { label: "Bakeries", value: "" },
-//     ],
-//   },
-//   {
-//     category: "Stay",
-//     items: [
-//       { label: "Online business", value: "" },
-//       { label: "Restaurant", value: "" },
-//       { label: "Coffee", value: "" },
-//       { label: "Deserts", value: "" },
-//       { label: "Bakeries", value: "" },
-//     ],
-//   },
-//   {
-//     category: "For Users",
-//     items: [
-//       { label: "Write review", value: "" },
-//       { label: "Add listing", value: "" },
-//     ],
-//   },
-//   {
-//     category: "Business owners",
-//     items: [{ label: "Claim yourself", value: "" }],
-//   },
-//   {
-//     category: "About",
-//     items: [
-//       { label: "About us", value: "" },
-//       { label: "FAQ", value: "" },
-//       { label: "Contact us", value: "" },
-//     ],
-//   },
-// ];
-
-const Footer = (props: { backgroundColor?: boolean; visible: boolean; navList: {[key: string]: any} [] }) => {
+const Footer = (props: {
+  backgroundColor?: boolean;
+  visible: boolean;
+  navList: { [key: string]: any }[];
+}) => {
   const { visible, backgroundColor = true, navList } = props;
+  let newNavList
+  if (navList) {
+    newNavList = [
+      ...navList,
+      {
+        category: "For Users",
+        items: [
+          { label: "Write review", value: "", href: "/reviews" },
+          { label: "Add listing", value: "", href: "/add-listing" },
+        ],
+      },
+      {
+        category: "Business owners",
+        items: [{ label: "Claim yourself", value: "" }],
+      },
+      {
+        category: "About",
+        items: [
+          { label: "About us", value: "" },
+          { label: "FAQ", value: "" },
+          { label: "Contact us", value: "" },
+        ],
+      },
+    ]
+  }
+
+  const handleChangeHref = (href) => {
+    if (href) {
+      window.location.href = href
+    }
+  }
 
   if (!visible) return null;
   return (
@@ -90,17 +53,21 @@ const Footer = (props: { backgroundColor?: boolean; visible: boolean; navList: {
             <Image src={require("public/logo.svg")} alt="logo" />
           </div>
           <div>
-            <Image src={require("public/icons/socials.svg")} alt="" width={100} />
+            <Image
+              src={require("public/icons/socials.svg")}
+              alt=""
+              width={100}
+            />
           </div>
         </div>
         <div className={styles.right_col}>
-          {navList.map((nav) => {
+          {newNavList.map((nav) => {
             return (
               <div key={nav.category} className={styles.nav}>
                 <div className={styles.header}>{nav.category}</div>
                 <div className={styles.item_container}>
                   {nav.items.map((item: any) => (
-                    <div key={item.label} className={styles.label}>
+                    <div key={item.label} className={styles.label} onClick={() => handleChangeHref(item.href)}>
                       {item.label}
                     </div>
                   ))}

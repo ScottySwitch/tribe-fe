@@ -2,6 +2,7 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import React, { useEffect, useState } from "react";
 import ReviewBizInfoCard from "components/ReviewsPage/ReviewBizInfoCard/ReviewBizInfoCard";
 import styles from "./PanelContributed.module.scss";
+import ContributeApi from "services/contribute"
 import { dummyApproved, dummyDenied, dummyPending } from "constant";
 import UserReviewCard, {
   UserReviewCardProps,
@@ -21,6 +22,11 @@ export interface ListCardProps extends UserReviewCardProps {
 
 const ListCard = (props: { data: ListCardProps[] }) => {
   const { data } = props;
+
+  useEffect(() => {
+    const data = ContributeApi.getUserContribute()
+    console.log(data)
+  }, [])
 
   return (
     <React.Fragment>
