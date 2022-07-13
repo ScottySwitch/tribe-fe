@@ -156,6 +156,7 @@ const RenderTabs = (props: {
     case ListingTabs.PRODUCT:
       tabContent = (
         <TabContent
+        
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}

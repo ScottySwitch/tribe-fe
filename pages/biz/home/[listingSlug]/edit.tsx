@@ -462,7 +462,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         await ReviewApi.updateReviews(item.id, updateData);
       })
     );
-    window.location.reload();
+    // window.location.reload();
   };
 
   if (!bizListing) {
@@ -571,6 +571,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
       >
         <AddItems
+          isEdit
           isPaid={isPaid}
           multiple
           onSubmit={handleSetItemList}
@@ -598,6 +599,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
       >
         <AddDeals
+          isEdit
           isPaid={isPaid}
           multiple
           onCancel={handleCancel}
