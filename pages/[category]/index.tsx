@@ -1,3 +1,7 @@
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { get } from "lodash";
 import ArticleCard from "components/ArticleCard/ArticleCard";
 import Carousel from "components/Carousel/Carousel";
 import CollectionCard from "components/CollectionCard/CollectionCard";
@@ -13,17 +17,13 @@ import {
   infoCardResponsive,
 } from "constant";
 import {Categories, CategoryText} from "enums";
-import Image from "next/image";
-import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
 import BizListingApi from "services/biz-listing";
 import BannerApi from "services/banner";
 import CollectionApi from "services/collection";
 import CategoryLinkApi from "services/category-link";
-import styles from "styles/Home.module.scss";
-import {get} from "lodash";
 import Loader from "components/Loader/Loader";
 import Pagination from "components/Pagination/Pagination";
+import styles from "styles/Home.module.scss";
 import useTrans from "useTrans";
 import ArticleApi from "../../services/article";
 import Link from "next/link";
