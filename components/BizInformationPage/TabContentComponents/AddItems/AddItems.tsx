@@ -4,11 +4,11 @@ import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import SelectInput from "components/SelectInput/SelectInput"
 import Upload from "components/Upload/Upload"
+import { currencyOptions } from "constant"
 import { ListingHomePageScreens } from "enums"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { getIndex, randomId } from "utils"
-import get from "lodash/get"
 
 import styles from "./AddItems.module.scss"
 
@@ -27,7 +27,7 @@ const AddItems = (props: AddItemsProps) => {
   const [localItemList, setLocalItemList] = useState(itemList || [])
   const router = useRouter()
 
-  // console.log("itemList", itemList)
+  console.log("itemList", itemList)
 
   const handleRemoveItem = (id: number) => {
     const newArray = [...localItemList].filter((item) => item.id !== id)
@@ -42,7 +42,7 @@ const AddItems = (props: AddItemsProps) => {
     const index = getIndex(id, localItemList)
     const newArray = [...localItemList]
     if (isEdit) {
-      newArray[index]['attributes'][type] = value
+      newArray[index][type] = value
       newArray[index].isEdited = true
     } else {
       newArray[index][type] = value
@@ -86,7 +86,7 @@ const AddItems = (props: AddItemsProps) => {
             <div key={item.id} className={styles.add_items_container}>
               <div className={styles.break} />
               <div className={styles.header}>
-                <p className="text-left">{isEdit ? 'Edit' : 'Add'} images</p>
+              <p className="text-left">{isEdit ? 'Edit' : 'Add'} images</p>
                 {multiple && (
                   <div className={styles.close} onClick={() => handleRemoveItem(item.id)}>
                     <Icon icon="cancel" />
@@ -96,36 +96,35 @@ const AddItems = (props: AddItemsProps) => {
               <Upload
                 isPaid={isPaid}
                 multiple
-                fileList={get(item, "attributes.images") || []}
+                fileList={item.images || []}
                 centerIcon={<Icon icon="plus" size={20} />}
                 onChange={(e) => handleChangeItem(item.id, "images", e)}
               />
               <Input
-                value={get(item, "attributes.name")}
+                value={item.name}
                 placeholder={placeholders[0]}
                 onChange={(e: any) => handleChangeItem(item.id, "name", e.target.value)}
               />
               <Input
-                value={get(item, "attributes.description")}
+                value={item.description}
                 placeholder={placeholders[1]}
                 onChange={(e: any) => handleChangeItem(item.id, "description", e.target.value)}
               />
               <div className="flex gap-3">
                 <SelectInput
                   width="50%"
+                  options={currencyOptions}
                   selectPosition="suffix"
-                  value={{ input: get(item, "attributes.price") }}
+                  value={{input:item.price, select: item.currency}}
                   placeholder="Enter price"
-                  selectDefaultValue={{ label: "SGD", value: "SGD" }}
                   onChange={(e: any) => handleChangeItem(item.id, "price", e.input)}
                 />
                 <SelectInput
                   width="50%"
-                  value={{ input: get(item, "attributes.discount_percent")}}
                   selectPosition="suffix"
                   placeholder="Enter discount"
-                  selectDefaultValue={{ label: "%", value: "%" }}
-                  onChange={(e: any) => handleChangeItem(item.id, "discount_percent", e.input)}
+                  value={{input:item.discount, select: item.discount}}
+                  onChange={(e: any) => handleChangeItem(item.id, "discount", e.input)}
                   // onChange={(e: any) => console.log(e)}
                 />
               </div>
@@ -137,16 +136,16 @@ const AddItems = (props: AddItemsProps) => {
               /> */}
               <Input
                 label="Klook URL"
-                value={get(item, "attributes.klook_url")}
+                value={item.klookUrl}
                 placeholder="Enter URL"
-                onChange={(e: any) => handleChangeItem(item.id, "klook_url", e.target.value)}
+                onChange={(e: any) => handleChangeItem(item.id, "klookUrl", e.target.value)}
               />
               {isPaid ? (
                 <Input
                   label="Website URL"
-                  value={get(item, "attributes.website_url")}
+                  value={item.websiteUrl}
                   placeholder="Enter URL"
-                  onChange={(e: any) => handleChangeItem(item.id, "website_url", e.target.value)}
+                  onChange={(e: any) => handleChangeItem(item.id, "websiteUrl", e.target.value)}
                 />
               ) : (
                 <Input
@@ -174,7 +173,7 @@ const AddItems = (props: AddItemsProps) => {
       <div className="flex gap-5">
         <CancelButton />
         <Button
-          text={isEdit ? "Edit product" : placeholders[2]}
+          text={placeholders[2]}
           width={280}
           size="small"
           onClick={() => onSubmit(localItemList)}
