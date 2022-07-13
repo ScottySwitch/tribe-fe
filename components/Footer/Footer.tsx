@@ -48,21 +48,21 @@ const Footer = (props: {
             <Image src={require("public/logo.svg")} alt="logo" />
           </div>
           <div className={styles.social_row}>
-            <div className={styles.social_image} onClick={() => window.location.href = (`https://www.facebook.com/tribesbyhhwt`)}>
+            <div className={styles.social_image} onClick={() => window.open('https://www.facebook.com/tribesbyhhwt' , '_blank')}>
               <Image
                 src={require("public/images/facebook_svg.svg")}
                 alt=""
                 width={41}
               />
             </div>
-            <div className={styles.social_image} onClick={() => window.location.href = (`https://www.tiktok.com/@tribesbyhhwt?lang=en`)}>
+            <div className={styles.social_image} onClick={() => window.open('https://www.tiktok.com/@tribesbyhhwt?lang=en' , '_blank')}>
               <Image
                 src={require("public/images/tiktok_svg.svg")}
                 alt=""
                 width={41}
               />
             </div>
-            <div className={styles.social_image} onClick={() => window.location.href = (`https://www.instagram.com/tribesbyhhwt/`)}>
+            <div className={styles.social_image} onClick={() => window.open('https://www.instagram.com/tribesbyhhwt/' , '_blank')}>
               <Image
                 src={require("public/images/instagram_svg.svg")}
                 alt=""
