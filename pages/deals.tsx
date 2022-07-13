@@ -85,15 +85,22 @@ const Deals = () => {
           Deals
         </div>
       </SectionLayout>
-      <SectionLayout className={styles.banner}>
+      <SectionLayout className={styles.collection_banner}>
         <Image
           src={require("public/images/deals-banner.svg")}
           alt=""
           layout="fill"
           objectFit="cover"
+          className={styles.collection_banner_img}
         />
+        <div className={styles.collection_context_container}>
+          <div className={styles.collection_name}>Exclusive deals</div>
+          <div className={styles.collection_description}>
+            Get the hottest and earliest promotions
+          </div>
+        </div>
       </SectionLayout>
-      <SectionLayout childrenClassName="flex justify-between">
+      <SectionLayout childrenClassName="flex justify-between flex-wrap">
         <div className="flex">
           <TabsHorizontal
             tablist={categoryTabList}
@@ -105,14 +112,14 @@ const Deals = () => {
         </div>
         <div className="flex gap-5">
           <Button
-            width={120}
+            width={100}
             size="small"
             text="Price range"
             variant="secondary"
           />
-          <Button width={100} size="small" text="Rating" variant="secondary" />
+          <Button width={60} size="small" text="Rating" variant="secondary" />
           <Button
-            width={180}
+            width={130}
             size="small"
             text="Filter & Sort"
             variant="secondary"

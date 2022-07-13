@@ -26,13 +26,13 @@ const Footer = (props: {
       },
       {
         category: "Business owners",
-        items: [{ label: "Claim yourself", value: "" }],
+        items: [{ label: "Claim yourself", value: "", href: '/add-listing' }],
       },
       {
         category: "About",
         items: [
           { label: "About us", value: "" },
-          { label: "FAQ", value: "" },
+          { label: "FAQ", value: "", href: "/support" },
           { label: "Contact us", value: "" },
         ],
       },
@@ -47,12 +47,28 @@ const Footer = (props: {
           <div>
             <Image src={require("public/logo.svg")} alt="logo" />
           </div>
-          <div>
-            <Image
-              src={require("public/icons/socials.svg")}
-              alt=""
-              width={100}
-            />
+          <div className={styles.social_row}>
+            <div className={styles.social_image} onClick={() => window.open('https://www.facebook.com/tribesbyhhwt' , '_blank')}>
+              <Image
+                src={require("public/images/facebook_svg.svg")}
+                alt=""
+                width={41}
+              />
+            </div>
+            <div className={styles.social_image} onClick={() => window.open('https://www.tiktok.com/@tribesbyhhwt?lang=en' , '_blank')}>
+              <Image
+                src={require("public/images/tiktok_svg.svg")}
+                alt=""
+                width={41}
+              />
+            </div>
+            <div className={styles.social_image} onClick={() => window.open('https://www.instagram.com/tribesbyhhwt/' , '_blank')}>
+              <Image
+                src={require("public/images/instagram_svg.svg")}
+                alt=""
+                width={41}
+              />
+            </div>
           </div>
         </div>
         <div className={styles.right_col}>

@@ -117,14 +117,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       slug: get(item, "attributes.slug"),
       id: item.id,
       items: Array.isArray(get(item, "attributes.category_links.data"))
-        ? get(item, "attributes.category_links.data").map((navItem) => ({
-            label: get(navItem, "attributes.label"),
-            value: get(navItem, "attributes.value"),
-            href: `/${get(item, "attributes.slug")}/${get(
-              navItem,
-              "attributes.value"
-            )}`,
-          }))
+        ? get(item, "attributes.category_links.data").map((navItem, index) => ({
+          label: get(navItem, "attributes.label"),
+          value: get(navItem, "attributes.value"),
+          href: `/${get(item, "attributes.slug")}/${get(navItem, "attributes.value")}`
+        })).slice(0, 5)
         : [],
     }));
 
