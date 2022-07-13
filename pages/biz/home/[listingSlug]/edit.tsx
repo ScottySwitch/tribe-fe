@@ -128,6 +128,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           websiteUrl: item.website_url,
           klookUrl: item.klook_url,
           isEdited: false,
+          currency: item.currency,
+          currencyDiscount: item.currency_discount
         }));
         const rawMenu = listing.menus || [];
         const menuArray = rawMenu.map((item) => ({
