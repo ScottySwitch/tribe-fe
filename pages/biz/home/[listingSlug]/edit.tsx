@@ -98,7 +98,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           setIsRevision(true);
         }
         //they will be redirected to home if do not own the listing
-        get(data, "data.is_owner") !== true && router.push("/");
+        get(data, "data.is_owner") !== true && (window.location.href = "/");
       }
       const listing = get(data, "data.data[0]");
       if (listing) {
@@ -194,7 +194,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
         setSocialInfo(listing.social_info);
-        setDealList(listing.deals);
+        // setDealList(listing.deals);
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
         setTags(tagArray);
@@ -464,7 +464,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         await ReviewApi.updateReviews(item.id, updateData);
       })
     );
-    router.reload();
+    window.location.reload();
   };
 
   if (!bizListing) {
@@ -505,7 +505,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               isLoading={isLoading}
               isPaid={isPaid}
               action={action}
-              klookUrl={bizListing.klook_url}
               onApplyAction={handleSetAction}
               onPublishPage={handleSubmit}
             />

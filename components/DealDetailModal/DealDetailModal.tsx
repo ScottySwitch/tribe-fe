@@ -75,10 +75,10 @@ const DealDetailModal = (props: DealDetailModalProps) => {
         {data.end_date && (
           <div className={styles.item}>
             <h6 className={styles.label}>Valid</h6>
-            <p>{`${data.start_date} - ${data.end_date}`}</p>
+            <p>{data.start_date && data.start_date + ' - '}{`${data.end_date}`}</p>
           </div>
         )}
-        {get(data, "attributes.terms_conditions") && (
+        {data.terms_conditions && (
           <div className={styles.item}>
             <h6 className={styles.label}>Terms & Conditions</h6>
             <p>{data.terms_conditions}</p>
