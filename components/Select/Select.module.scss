@@ -15,6 +15,10 @@
       height: fit-content;
       padding: $p-md;
 
+      .required_mark {
+        color: $primary-500;
+      }
+      
       .content {
         height: min-content;
       }

@@ -18,6 +18,7 @@ interface IOption {
 
 export interface SelectProps {
   id?: string;
+  required?: boolean;
   label?: string;
   className?: string;
   defaultValue?: IOption[] | IOption | string;
@@ -45,6 +46,7 @@ export interface SelectProps {
 
 const Select = (props: SelectProps) => {
   const {
+    required,
     label,
     className,
     helperText,
@@ -187,7 +189,12 @@ const Select = (props: SelectProps) => {
   return (
     <div className={selectWrapperClassName} style={{ width }}>
       <div className={styles.container}>
-        {label && <label htmlFor={id}>{label}</label>}
+        {label && (
+          <label htmlFor={id}>
+            {label}
+            {required && <span className={styles.required_mark}> *</span>}
+          </label>
+        )}
         <ReactSelect
           id={id}
           inputRef={inputRef}

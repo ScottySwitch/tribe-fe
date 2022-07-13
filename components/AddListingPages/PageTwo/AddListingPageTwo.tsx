@@ -40,6 +40,8 @@ const AddListingPageTwo = (props: AddListingProps) => {
     },
   });
 
+  const [country, setCountry] = useState();
+
   if (!show) {
     return null;
   }
@@ -94,11 +96,15 @@ const AddListingPageTwo = (props: AddListingProps) => {
               />
               <br />
               <Select
+                required
                 label="Country"
                 placeholder="Singapore"
                 options={countryList}
                 value={getValues("country")}
-                onChange={(e) => setValue("country", e.value)}
+                onChange={(e) => {
+                  setCountry(e.value);
+                  setValue("country", e.value);
+                }}
               />
               <br />
               <Input
@@ -113,6 +119,19 @@ const AddListingPageTwo = (props: AddListingProps) => {
                 placeholder="Additional address information (optional)"
               />
             </>
+          )}
+          {isOnlineLocation && (
+            <Select
+              required
+              label="Country"
+              placeholder="Singapore"
+              options={countryList}
+              value={getValues("country")}
+              onChange={(e) => {
+                setCountry(e.value);
+                setValue("country", e.value);
+              }}
+            />
           )}
         </Question>
         <Question show question="Contact">
@@ -157,7 +176,13 @@ const AddListingPageTwo = (props: AddListingProps) => {
           >
             Go back
           </button>
-          <Button text="Continue" size="small" width={270} type="submit" />
+          <Button
+            text="Continue"
+            size="small"
+            width={270}
+            type="submit"
+            disabled={!country}
+          />
         </div>
       </SectionLayout>
     </form>
