@@ -21,8 +21,10 @@ import {
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-
 import styles from "styles/Home.module.scss";
+import ArticleApi from "services/article";
+import ArticleCard from "../components/ArticleCard/ArticleCard";
+import Link from "next/link";
 
 const Home: NextPage = (props: any) => {
   const router = useRouter();
@@ -40,6 +42,7 @@ const Home: NextPage = (props: any) => {
     listBanners,
     listCollections,
     listCategories,
+    listHomeArticles,
   } = props;
   const [limit, setLimit] = useState<number>(16);
   const [isLoading, setIsLoading] = useState(false);
@@ -221,19 +224,21 @@ const Home: NextPage = (props: any) => {
           )}
         </Carousel>
       </SectionLayout>
-      {/* <SectionLayout backgroundColor title="Featured Articles">
+      <SectionLayout backgroundColor title="Featured Articles">
         <Carousel responsive={homeCuratedResponsive}>
-          {homeArticleCarousel?.map((item, index) => (
-            <div key={index} className="pb-5">
-              <ArticleCard
-                title={item.title}
-                imgUrl={item.imgUrl}
-                time={item.time}
-              />
-            </div>
+          {listHomeArticles?.map((item, index) => (
+            <Link href={`/articles/${item.slug}`} key={index}>
+              <div className="pb-5">
+                <ArticleCard
+                  title={item.title}
+                  imgUrl={item.imgUrl}
+                  time={item.time}
+                />
+              </div>
+            </Link>
           ))}
         </Carousel>
-      </SectionLayout> */}
+      </SectionLayout>
       <SectionLayout title="What to EAT">
         <Carousel responsive={infoCardResponsive}>
           {Array.isArray(listingEat) ? (
@@ -392,6 +397,8 @@ export async function getServerSideProps(context) {
   const dataBanners = await BannerApi.getBanner();
   const dataCollections = await CollectionApi.getCollection();
   const dataCategories = await CategoryApi.getCategories();
+  const dataArticlesPinHome = await ArticleApi.getArticlesPinHome();
+
   const rawListingBuyArray = get(data, "data.data[0]");
   const rawListingSeeArray = get(data, "data.data[1]");
   const rawListingEatAray = get(data, "data.data[2]");
@@ -401,6 +408,7 @@ export async function getServerSideProps(context) {
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawCategories = get(dataCategories, "data.data");
+  const rawArticlesPinHome = get(dataArticlesPinHome, "data.data");
   const buyListingArray =
     Array.isArray(rawListingBuyArray) &&
     rawListingBuyArray.map((item) => ({
@@ -529,6 +537,14 @@ export async function getServerSideProps(context) {
       slug: get(item, "attributes.slug"),
       icon: get(item, "attributes.icon"),
     }));
+  const homeArticleArray =
+    Array.isArray(rawArticlesPinHome) &&
+    rawArticlesPinHome.map((item) => ({
+      title: get(item, "attributes.name") || null,
+      imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+      time: get(item, "attributes.createdAt"),
+      slug: get(item, "attributes.slug"),
+    }));
   return {
     props: {
       listingBuy: buyListingArray,
@@ -540,6 +556,7 @@ export async function getServerSideProps(context) {
       listBanners: bannerArray,
       listCollections: collectionArray,
       listCategories: categoryArray,
+      listHomeArticles: homeArticleArray,
     },
   };
 }

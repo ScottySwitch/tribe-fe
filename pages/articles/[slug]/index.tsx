@@ -10,6 +10,10 @@ import Image from "next/image"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import styles from "styles/Articles.module.scss"
+import ArticleApi from "../../../services/article";
+import {get} from "lodash";
+import {calcRateNumber} from "../../../utils";
+import showdown from "showdown";
 
 const breadcrumbs = [
   {text: "Home", path: "/home"},
@@ -96,23 +100,46 @@ const Breadcrumbs = (props: {breadcrumbs: {text: string, path: string}[]}) => {
   )
 }
 
-const ArticlesDetailPage = () => {  
-  const [article, setArticle] = useState<IArticle>({} as IArticle)
+const ArticlesDetailPage = (props: any) => {
+  const {
+    article,
+    breadcrumbs
+  } = props;
 
-  useEffect(() => {
-    setArticle(dummyArticles)
-  }, [article])
+  const converter = new showdown.Converter()
+
+  const actionShare = (provider: string) => {
+    const url = window.location.href
+    switch (provider) {
+      case 'facebook':
+        window.open("https://www.facebook.com/sharer/sharer.php?u=" + url, "pop", "width=600, height=400, scrollbars=no");
+        break;
+      case 'twitter':
+        window.open("https://twitter.com/intent/tweet/?url=" + url, "pop", "width=600, height=400, scrollbars=no");
+        break;
+      case 'email':
+        const emailContent = `mailto:?subject=I wanted you to see this site&body=Check out this site ${url}.`
+        window.open(emailContent, "pop", "width=600, height=400, scrollbars=no")
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url).then(function() {
+          console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+          console.error('Async: Could not copy text: ', err);
+        });
+    }
+  }
 
   return (
     <div className={styles.articles}>
       <div className={styles.cover}>
         <div className={styles.cover_container}>
-          <Image src="https://picsum.photos/1440/360"  alt="" layout="fill" className={styles.cover_image}/>
+          <Image src={get(article, "thumbnail.data.attributes.url")}  alt="" layout="fill" className={styles.cover_image}/>
           <SectionLayout backgroundColor className={styles.cover_heading} containerClassName={styles.section_layout_container}>
             <div className={styles.articles_container}>
               <Breadcrumbs breadcrumbs={breadcrumbs}/>
-              <h1 className={styles.title}>{article.title}</h1>
-              <div className={styles.date}>{article.date}</div>
+              <h1 className={styles.title}>{get(article, "name")}</h1>
+              <div className={styles.date}>{get(article, "createdAt")}</div>
             </div>
           </SectionLayout>
         </div>
@@ -122,53 +149,60 @@ const ArticlesDetailPage = () => {
         <SectionLayout containerClassName={styles.section_layout_container}>
           <div className={styles.call_to_action_fixed}>
             <ul className={styles.cta_list}>
-              <li className={styles.cta_item}><Icon icon="facebook-logo" size={20}/></li>
-              <li className={styles.cta_item}><Icon icon="instagram" size={16}/></li>
-              <li className={styles.cta_item}><Icon icon="twitter-logo" color="#7F859F" size={20}/></li>
-              <li className={styles.cta_item}><Icon icon="mail" color="#7F859F" size={17}/></li>
-              <li className={styles.cta_item}><Icon icon="copy" color="#7F859F" size={22}/></li>
+              <li className={styles.cta_item} onClick={() => actionShare('facebook')}><Icon icon="facebook-logo" size={20}/></li>
+              <li className={styles.cta_item} onClick={() => actionShare('twitter')}><Icon icon="twitter-logo" color="#7F859F" size={20}/></li>
+              <li className={styles.cta_item} onClick={() => actionShare('email')}><Icon icon="mail" color="#7F859F" size={17}/></li>
+              <li className={styles.cta_item} onClick={() => actionShare('copy')}><Icon icon="copy" color="#7F859F" size={22}/></li>
             </ul>
           </div>
           <div className={styles.articles_container}>
-            <div className="advertisement max-w-[728px] mx-auto my-5">
-              <Image src="https://picsum.photos/728/90"  width={728} height={90} layout="responsive" alt=""/>
-            </div>
-            <div className={styles.excerpt}>{article.excerpt}</div>
-            <h3 className="mb-[32px] font-bold text-2xl">Best Halal Thai Snacks In Malaysia</h3>
-            <h5 className="mb-[24px] font-bold text-base">Brands you can find:</h5>
-            <div className="my-7">
-              <Carousel responsive={infoCardResponsive}>
-                {inforCardList?.map((card: InforCardProps, index) => (
-                  <InforCard
-                    key={index}
-                    imgUrl={card.imgUrl}
-                    title={card.title}
-                    rate={card.rate}
-                    rateNumber={card.rateNumber}
-                    followerNumber={card.followerNumber}
-                    price={card.price}
-                    categories={card.categories}
-                    tags={card.tags}
-                    iconTag={true}
-                    isVerified={card.isVerified}
-                    className="max-w-[95%] w-full"
-                    isFavourited={true}
-                  />
-                ))}
-              </Carousel>
-            </div>
-            <div dangerouslySetInnerHTML={{__html: article.content}}></div>
+            {/*<div className="advertisement max-w-[728px] mx-auto my-5">*/}
+            {/*  <Image src="https://picsum.photos/728/90"  width={728} height={90} layout="responsive" alt=""/>*/}
+            {/*</div>*/}
+            {/*<div className={styles.excerpt}>{article.excerpt}</div>*/}
+            {/*<h3 className="mb-[32px] font-bold text-2xl">Best Halal Thai Snacks In Malaysia</h3>*/}
+            {Array.isArray(get(article, "biz_listings.data"))
+              && get(article, "biz_listings.data").length > 0
+              && (
+                <>
+                  <h5 className="mb-[24px] font-bold text-base">Brands you can find:</h5>
+                  <div className="my-7">
+                    <Carousel responsive={infoCardResponsive}>
+                      {get(article, "biz_listings.data")?.map((card: any, index) => (
+                        <InforCard
+                          key={index}
+                          imgUrl={get(card, "attributes.images") ? card.attributes.images[0] : "https://picsum.photos/200/300"}
+                          title={get(card, "attributes.name")}
+                          rate={calcRateNumber(get(card, "attributes.reviews.data"))}
+                          rateNumber={get(card, "attributes.reviews.data") ?
+                            (get(card, "attributes.reviews.data")).length : 0}
+                          followerNumber={get(card, "attributes.user_listing_follows.data") ?
+                            get(card, "attributes.user_listing_follows.data").length : 0}
+                          price={get(card, "attributes.price_range.min")}
+                          categories={card.categories}
+                          tags={get(card, "attributes.tags.data")}
+                          iconTag={true}
+                          isVerified={get(card, "attributes.is_verified")}
+                          className="max-w-[95%] w-full"
+                          isFavourited={true}
+                        />
+                      ))}
+                    </Carousel>
+                  </div>
+                  </>
+                )
+              }
+            <div dangerouslySetInnerHTML={{__html: converter.makeHtml(get(article, "content"))}}></div>
 
             <div className={styles.call_to_action_container}>
               <Break/>
               <div className={styles.call_to_action}>
                 <span className="text-[11px]">SHARE</span>
                 <ul className="flex items-center gap-[35px]">
-                  <li><Icon icon="facebook-logo" size={20}/></li>
-                  <li><Icon icon="instagram" size={16}/></li>
-                  <li><Icon icon="twitter-logo" color="#7F859F" size={20}/></li>
-                  <li><Icon icon="mail" color="#7F859F" size={17}/></li>
-                  <li><Icon icon="copy" color="#7F859F" size={22}/></li>
+                  <li onClick={() => actionShare('facebook')}><Icon icon="facebook-logo" size={20}/></li>
+                  <li onClick={() => actionShare('twitter')}><Icon icon="twitter-logo" color="#7F859F" size={20}/></li>
+                  <li onClick={() => actionShare('email')}><Icon icon="mail" color="#7F859F" size={17}/></li>
+                  <li onClick={() => actionShare('copy')}><Icon icon="copy" color="#7F859F" size={22}/></li>
                 </ul>
               </div>
               <Break/>
@@ -181,15 +215,27 @@ const ArticlesDetailPage = () => {
           </div>
         </SectionLayout>
 
-        <SectionLayout title="Featured Articles" className="pt-0" containerClassName={styles.section_layout_container}>
-          <Carousel responsive={homeCuratedResponsive}>
-            {homeArticleCarousel?.map((item, index) => (
-              <div key={index} className="pb-5">
-                <ArticleCard title={item.title} imgUrl={item.imgUrl} time={item.time} width="95%"/>
-              </div>
-            ))}
-          </Carousel>
-        </SectionLayout>
+        {
+          Array.isArray(get(article, "related_articles.data"))
+          && get(article, "related_articles.data").length > 0
+          && (
+            <SectionLayout title="Related Articles" className="pt-0" containerClassName={styles.section_layout_container}>
+              <Carousel responsive={homeCuratedResponsive}>
+                {get(article, "related_articles.data")?.map((item, index) => (
+                  <Link href={`/articles/${get(item, "attributes.slug")}`} key={index}>
+                    <div className="pb-5">
+                      <ArticleCard
+                        title={get(item, "attributes.name")}
+                        imgUrl={get(item, "attributes.thumbnail.data.attributes.url")}
+                        time={get(item, "attributes.createdAt")}
+                        width="95%"/>
+                    </div>
+                  </Link>
+                ))}
+              </Carousel>
+            </SectionLayout>
+          )
+        }
 
         <SectionLayout className="pt-0">
           <TopSearches/>
@@ -197,6 +243,28 @@ const ArticlesDetailPage = () => {
       </div>
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  // Pass data to the page via props
+  const slug = context.query.slug;
+
+  const data = await ArticleApi.getArticleDetail(slug);
+  const rawDataArticle = get(data, "data.data[0].attributes");
+  const breadcrumbs = [
+    {text: "Home", path: "/home"},
+    {
+      text: get(rawDataArticle, "category.data.attributes.name"),
+      path: "/" + get(rawDataArticle, "category.data.attributes.slug")
+    },
+  ]
+
+  return {
+    props: {
+      article: rawDataArticle,
+      breadcrumbs
+    },
+  };
 }
 
 export default ArticlesDetailPage
