@@ -44,7 +44,8 @@ const Menu = (props: MenuMenuProps) => {
   const handleLogout = () => {
     localStorage.clear();
     localStorage.removeItem("user");
-    window.location.href = "/";
+    router.push("/");
+    router.reload();
   };
 
   return (

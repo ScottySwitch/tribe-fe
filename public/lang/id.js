@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 export default {
-  filter: 'Filter-sg',
-  location: "Location-sg",
-  addNewListing: "Add new listing-sg",
+  filter: 'Filter-id',
+  location: "Location-id",
+  addNewListing: "Add new listing-id",
   topSearch: "Top search-id"
 
 }

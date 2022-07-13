@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { userInformationList } from "constant";
@@ -16,6 +17,8 @@ const ProfileInformationPage = () => {
     informationList[0].label
   );
 
+  const router = useRouter();
+
   const tabContent = () => {
     switch (selectedTab) {
       case UserInformationList.USER_INFORMATION:
@@ -29,7 +32,8 @@ const ProfileInformationPage = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/";
+    router.push("/");
+    router.reload();
   };
 
   return (

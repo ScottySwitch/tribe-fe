@@ -65,13 +65,13 @@ export const dummyTopSearchKeywords = [
 ];
 
 export const homeCuratedResponsive = {
-  xsShow: 2,
+  xsShow: 1,
   xsScroll: 1,
-  smShow: 2,
-  smScroll: 2,
-  mdShow: 3,
-  mdScroll: 3,
-  lgShow: 4,
+  smShow: 1,
+  smScroll: 1,
+  mdShow: 2,
+  mdScroll: 2,
+  lgShow: 3,
   lgScroll: 3,
   xlShow: 4,
   xlScroll: 3,
@@ -102,16 +102,16 @@ export const homeBannerResponsive = {
   xsScroll: 1,
   smShow: 2,
   smScroll: 2,
-  mdShow: 2,
+  mdShow: 2.2,
   mdScroll: 2,
-  lgShow: 3,
+  lgShow: 2.7,
   lgScroll: 2,
-  xlShow: 3,
+  xlShow: 2.7,
   xlScroll: 2,
-  xxlShow: 3,
+  xxlShow: 2.7,
   xxlScroll: 2,
-  show: 4,
-  scroll: 3,
+  show: 2.7,
+  scroll: 2,
 };
 
 export const fakeSubCateList = [

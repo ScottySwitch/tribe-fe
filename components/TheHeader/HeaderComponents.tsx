@@ -83,7 +83,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
           className={`${styles.wrapper_content} cursor-pointer`}
         >
           <Image
-            src={item.images[0] || require("public/images/page-avatar.png")}
+            src={get(item,"logo[0]") || require("public/images/page-avatar.png")}
             alt=""
             width={30}
             height={30}
@@ -91,9 +91,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
             style={{ borderRadius: "50%" }}
           />
           <div
-            onClick={() =>
-              (window.location.href = `/biz/home/${item.slug}/edit`)
-            }
+            onClick={() => router.push(`/biz/home/${item.slug}/edit`)}
             className={styles.name}
           >
             {item.name}
@@ -129,11 +127,12 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.type = UsersTypes.BIZ_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    if (get(userInfo, "owner_listings.length") > 0) {
-      window.location.href = `/biz/home/${get(
-        userInfo,
-        "owner_listings[0].attributes.slug"
-      )}/edit`;
+    const firstOwnedListingSlug = get(
+      userInfo,
+      "owner_listings[0].attributes.slug"
+    );
+    if (firstOwnedListingSlug) {
+      router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
       // router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
     } else {
       router.push("/claim");
@@ -144,7 +143,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.type = UsersTypes.NORMAL_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    window.location.href = "/";
+    router.push("/");
   };
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {

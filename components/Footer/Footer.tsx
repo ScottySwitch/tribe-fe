@@ -1,11 +1,9 @@
-import SectionLayout from "components/SectionLayout/SectionLayout";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import styles from "./Footer.module.scss";
-import CategoryApi from "services/category";
-import CategoryLinkApi from "services/category-link";
-import { get } from "lodash";
 import { useRouter } from "next/router";
+
+import SectionLayout from "components/SectionLayout/SectionLayout";
+
+import styles from "./Footer.module.scss";
 
 const Footer = (props: {
   backgroundColor?: boolean;

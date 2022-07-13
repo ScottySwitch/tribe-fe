@@ -1,25 +1,30 @@
-import { inforCardList } from "constant"
-import DealsDetailsModal, { IDealsDetails } from "components/DealDetailModal/DealDetailModal"
-import ProductDetailsModal, { IProduct } from "components/ProductDetailModal/ProductDetailModal"
-import InforCard from "components/InforCard/InforCard"
-import PromotionCard from "components/PromotionCard/PromotionCard"
-import Image from "next/image"
-import CarouselBanner from "components/CarouselBanner/CarouselBanner"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import DividerSection from "components/DividerSection/DividerSection"
-import ScrollingBox from "components/ScrollingBox/ScrollingBox"
-import styles from "styles/Promotions.module.scss"
-import {useEffect, useState} from "react";
+import { inforCardList } from "constant";
+import DealsDetailsModal, {
+  IDealsDetails,
+} from "components/DealDetailModal/DealDetailModal";
+import ProductDetailsModal, {
+  IProduct,
+} from "components/ProductDetailModal/ProductDetailModal";
+import InforCard from "components/InforCard/InforCard";
+import PromotionCard from "components/PromotionCard/PromotionCard";
+import Image from "next/image";
+import CarouselBanner from "components/CarouselBanner/CarouselBanner";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import DividerSection from "components/DividerSection/DividerSection";
+import ScrollingBox from "components/ScrollingBox/ScrollingBox";
+import styles from "styles/Promotions.module.scss";
+import { useEffect, useState } from "react";
 import PromotionApi from "services/promotion";
 import get from "lodash/get";
-import {useRouter} from "next/router";
-import { calcRateNumber } from "utils"
+import { useRouter } from "next/router";
+import { calcRateNumber } from "utils";
 import Link from "next/link";
 
 const dummyPromotion = [
   {
     images: ["https://picsum.photos/130"],
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 17, 2022",
     type: 1,
     link: "/",
@@ -27,7 +32,8 @@ const dummyPromotion = [
   },
   {
     images: ["https://picsum.photos/130"],
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 30, 2022",
     type: 1,
     link: "/",
@@ -35,7 +41,8 @@ const dummyPromotion = [
   },
   {
     images: ["https://picsum.photos/130"],
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 24, 2022",
     type: 1,
     link: "/",
@@ -43,7 +50,8 @@ const dummyPromotion = [
   },
   {
     images: ["https://picsum.photos/130"],
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
     type: 1,
     link: "/",
@@ -51,7 +59,8 @@ const dummyPromotion = [
   },
   {
     images: ["https://picsum.photos/130"],
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
     type: 1,
     link: "/",
@@ -59,7 +68,8 @@ const dummyPromotion = [
   },
   {
     images: ["https://picsum.photos/130"],
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
     type: 1,
     link: "/",
@@ -67,7 +77,8 @@ const dummyPromotion = [
   },
   {
     images: ["https://picsum.photos/130"],
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
     type: 1,
     link: "/",
@@ -75,27 +86,30 @@ const dummyPromotion = [
   },
   {
     images: ["https://picsum.photos/130"],
-    title: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    title:
+      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 28, 2022",
     type: 1,
     link: "/",
     favourite: false,
   },
-]
+];
 
 const dummyBanner = [
   "https://picsum.photos/1185/255",
   "https://picsum.photos/1185/255//",
   "https://picsum.photos/1185/255/",
-]
+];
 
 const dummyDealsDetails: IDealsDetails = {
   name: "Evertop Hainanese Boneless Chicken",
   imgUrl: "https://picsum.photos/678/169",
-  offers: "Complimentary top up set (mushroom soup with garlic bread) with every main purchased.",
+  offers:
+    "Complimentary top up set (mushroom soup with garlic bread) with every main purchased.",
   valid: "April 17, 2022 - April 17, 2022",
-  conditions: "A valid tribe listing pass must be presented upon payment to enjoy the offer.",
-}
+  conditions:
+    "A valid tribe listing pass must be presented upon payment to enjoy the offer.",
+};
 
 const dummyProductDetails: IProduct = {
   id: 678,
@@ -125,58 +139,69 @@ const dummyProductDetails: IProduct = {
     <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
   `,
   type: "paid",
-}
+};
 
 const PromotionsPage = () => {
-  const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>()
-  const [dealsDetails, setDealsDetails] = useState<IDealsDetails>({} as IDealsDetails)
-  const [showModalProductDetails, setShowModalProductDetails] = useState<boolean>()
+  const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>();
+  const [dealsDetails, setDealsDetails] = useState<IDealsDetails>(
+    {} as IDealsDetails
+  );
+  const [showModalProductDetails, setShowModalProductDetails] =
+    useState<boolean>();
+
+  const router = useRouter();
 
   const handleDealsDetails = (value: boolean, dealInfo?: any) => {
-    setShowModalDealsDetails(value)
+    setShowModalDealsDetails(value);
     if (dealInfo) {
-      setDealsDetails(dealInfo)
+      setDealsDetails(dealInfo);
     }
-  }
+  };
 
   const handleShare = () => {
-    console.log("handleShare")
-  }
+    console.log("handleShare");
+  };
 
   const handleFavourite = () => {
-    console.log("handleFavourite")
-  }
+    console.log("handleFavourite");
+  };
 
-
-  const [bizListings, setBizListings] = useState<any>([])
+  const [bizListings, setBizListings] = useState<any>([]);
 
   const {
     query: { slug },
-  } = useRouter()
+  } = useRouter();
 
-  const [promotion, setPromotion] = useState<any>([])
+  const [promotion, setPromotion] = useState<any>([]);
 
   useEffect(() => {
     const getPromotionBySlug = async (slug) => {
-      const data = await PromotionApi.getPromotionBySlug(slug)
-      const promotionData = get(data, "data.data")
+      const data = await PromotionApi.getPromotionBySlug(slug);
+      const promotionData = get(data, "data.data");
       if (promotionData.length === 0) {
-        window.location.href = "/"
+        router.push("/");
       }
-      setPromotion(get(promotionData, "[0].attributes"))
-      setBizListings(get(promotionData, "[0].attributes.microsite_biz_listings"))
-    }
+      setPromotion(get(promotionData, "[0].attributes"));
+      setBizListings(
+        get(promotionData, "[0].attributes.microsite_biz_listings")
+      );
+    };
     if (slug) {
-      getPromotionBySlug(slug).catch((e) => console.log(e))
+      getPromotionBySlug(slug).catch((e) => console.log(e));
     }
-  }, [slug])
+  }, [slug]);
 
   return (
     <div className={styles.wrapper_promotions}>
-      <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}>
+      <SectionLayout
+        className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}
+      >
         <div>
           <Image
-            src={get(promotion, "main_banner.data.attributes.url") || "https://picsum.photos/1188/400"}
+            src={
+              get(promotion, "main_banner.data.attributes.url") ||
+              "https://picsum.photos/1188/400"
+            }
             width={1188}
             height={400}
             layout="responsive"
@@ -186,38 +211,52 @@ const PromotionsPage = () => {
       </SectionLayout>
 
       {/* Start FEATURED VOUCHERS */}
-      {Array.isArray(get(promotion, "deals.data"))
-        && get(promotion, "deals.data").length > 0
-        && (
-          <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-10`}>
-            <DividerSection title="FEATURED VOUCHERS" className="mb-5 md:mb-8"/>
-            <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
+      {Array.isArray(get(promotion, "deals.data")) &&
+        get(promotion, "deals.data").length > 0 && (
+          <SectionLayout
+            className={`${styles.section_layout_background_color} pt-0 pb-10`}
+          >
+            <DividerSection
+              title="FEATURED VOUCHERS"
+              className="mb-5 md:mb-8"
+            />
+            <ScrollingBox
+              className={styles.scrolling_box_custom}
+              maxHeight={475}
+            >
               <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
                 {get(promotion, "deals.data").map((promotion, index) => (
                   <PromotionCard
                     key={index}
                     title={get(promotion, "attributes.name")}
-                    imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
-                    expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                    imgUrl={
+                      get(promotion, "attributes.images")
+                        ? promotion.attributes.images[0]
+                        : "https://picsum.photos/200/300"
+                    }
+                    expiredAt={`${get(
+                      promotion,
+                      "attributes.start_date"
+                    )} - ${get(promotion, "attributes.end_date")}`}
                     type={1}
                     favourite={false}
                     size="large"
                     onClick={() => handleDealsDetails(true, promotion)}
                   />
-                  ))}
+                ))}
               </div>
             </ScrollingBox>
           </SectionLayout>
-        )
-      }
+        )}
       {/* End FEATURED VOUCHERS */}
 
       {/* Start BANNERS */}
-      {Array.isArray(get(promotion, "banners.data"))
-        && get(promotion, "banners.data").length > 0
-        && (
-          <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}>
-            <DividerSection title="BANNERS" className="mb-5 md:mb-8"/>
+      {Array.isArray(get(promotion, "banners.data")) &&
+        get(promotion, "banners.data").length > 0 && (
+          <SectionLayout
+            className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}
+          >
+            <DividerSection title="BANNERS" className="mb-5 md:mb-8" />
             <CarouselBanner>
               {get(promotion, "banners.data").map((banner: any) => (
                 <Image
@@ -229,100 +268,140 @@ const PromotionsPage = () => {
                   layout="responsive"
                   className="rounded-lg"
                 />
-                ))}
+              ))}
             </CarouselBanner>
           </SectionLayout>
-        )
-      }
+        )}
       {/* End BANNERS */}
 
       {/* Start HOT DEALS */}
-      {Array.isArray(get(promotion, "hot_deals.data"))
-        && get(promotion, "hot_deals.data").length > 0
-        && (
-          <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-10`}>
-            <DividerSection title="HOT DEALS" className="mb-5 md:mb-8"/>
-            <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
+      {Array.isArray(get(promotion, "hot_deals.data")) &&
+        get(promotion, "hot_deals.data").length > 0 && (
+          <SectionLayout
+            className={`${styles.section_layout_background_color} pt-0 pb-10`}
+          >
+            <DividerSection title="HOT DEALS" className="mb-5 md:mb-8" />
+            <ScrollingBox
+              className={styles.scrolling_box_custom}
+              maxHeight={475}
+            >
               <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
                 {get(promotion, "hot_deals.data").map((promotion, index) => (
                   <PromotionCard
                     key={index}
                     title={get(promotion, "attributes.name")}
-                    imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
-                    expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                    imgUrl={
+                      get(promotion, "attributes.images")
+                        ? promotion.attributes.images[0]
+                        : "https://picsum.photos/200/300"
+                    }
+                    expiredAt={`${get(
+                      promotion,
+                      "attributes.start_date"
+                    )} - ${get(promotion, "attributes.end_date")}`}
                     type={1}
                     favourite={false}
                     size="large"
                     onClick={() => handleDealsDetails(true, promotion)}
                   />
-                  ))}
+                ))}
               </div>
             </ScrollingBox>
           </SectionLayout>
-        )
-      }
+        )}
       {/* End HOT DEALS */}
 
       {/* Start loop biz_listing components */}
-      {bizListings.map((bizListing, index) => (
-        Array.isArray(get(bizListing, "biz_listings.data"))
-        && get(bizListing, "biz_listings.data").length > 0
-        && (
-          <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`} key={index}>
-            <DividerSection title={bizListing.title} className="mb-5 md:mb-8"/>
-            <div
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-              {Array.isArray(get(bizListing, "biz_listings.data"))
-                && get(bizListing, "biz_listings.data")?.map((card, index) => (
-                  <Link href={`/biz/home/${get(card, "attributes.slug")}`} key={index}>
-                    <InforCard
+      {bizListings.map(
+        (bizListing, index) =>
+          Array.isArray(get(bizListing, "biz_listings.data")) &&
+          get(bizListing, "biz_listings.data").length > 0 && (
+            <SectionLayout
+              className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}
+              key={index}
+            >
+              <DividerSection
+                title={bizListing.title}
+                className="mb-5 md:mb-8"
+              />
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
+                {Array.isArray(get(bizListing, "biz_listings.data")) &&
+                  get(bizListing, "biz_listings.data")?.map((card, index) => (
+                    <Link
+                      href={`/biz/home/${get(card, "attributes.slug")}`}
                       key={index}
-                      imgUrl={get(card, "attributes.images") ? card.attributes.images[0] : "https://picsum.photos/200/300"}
-                      title={get(card, "attributes.name")}
-                      rate={calcRateNumber(get(card, "attributes.reviews.data"))}
-                      rateNumber={get(card, "attributes.reviews.data") ?
-                        (get(card, "attributes.reviews.data")).length : 0}
-                      followerNumber={get(card, "attributes.user_listing_follows.data") ?
-                        get(card, "attributes.user_listing_follows.data").length : 0}
-                      price={get(card, "attributes.price_range.min")}
-                      categories={card.categories}
-                      tags={get(card, "attributes.tags.data")}
-                      iconTag={true}
-                      isVerified={get(card, "attributes.is_verified")}
-                      className="w-full"
-                    />
-                  </Link>
-              ))}
-            </div>
-          </SectionLayout>
-        )
-      ))}
+                    >
+                      <InforCard
+                        key={index}
+                        imgUrl={
+                          get(card, "attributes.images")
+                            ? card.attributes.images[0]
+                            : "https://picsum.photos/200/300"
+                        }
+                        title={get(card, "attributes.name")}
+                        rate={calcRateNumber(
+                          get(card, "attributes.reviews.data")
+                        )}
+                        rateNumber={
+                          get(card, "attributes.reviews.data")
+                            ? get(card, "attributes.reviews.data").length
+                            : 0
+                        }
+                        followerNumber={
+                          get(card, "attributes.user_listing_follows.data")
+                            ? get(card, "attributes.user_listing_follows.data")
+                                .length
+                            : 0
+                        }
+                        price={get(card, "attributes.price_range.min")}
+                        categories={card.categories}
+                        tags={get(card, "attributes.tags.data")}
+                        iconTag={true}
+                        isVerified={get(card, "attributes.is_verified")}
+                        className="w-full"
+                      />
+                    </Link>
+                  ))}
+              </div>
+            </SectionLayout>
+          )
+      )}
 
       {/* Start Shop more deals */}
-      {Array.isArray(get(promotion, "more_deals.data"))
-        && get(promotion, "more_deals.data").length > 0
-        && (
-          <SectionLayout className={`${styles.section_layout_background_color} pt-0 pb-10`}>
-            <DividerSection title="Shop more deals" className="mb-5 md:mb-8"/>
-            <ScrollingBox className={styles.scrolling_box_custom} maxHeight={475}>
+      {Array.isArray(get(promotion, "more_deals.data")) &&
+        get(promotion, "more_deals.data").length > 0 && (
+          <SectionLayout
+            className={`${styles.section_layout_background_color} pt-0 pb-10`}
+          >
+            <DividerSection title="Shop more deals" className="mb-5 md:mb-8" />
+            <ScrollingBox
+              className={styles.scrolling_box_custom}
+              maxHeight={475}
+            >
               <div className="promotion_list grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
                 {get(promotion, "more_deals.data").map((promotion, index) => (
                   <PromotionCard
                     key={index}
                     title={get(promotion, "attributes.name")}
-                    imgUrl={get(promotion, "attributes.images") ? promotion.attributes.images[0] : "https://picsum.photos/200/300"}
-                    expiredAt={`${get(promotion, "attributes.start_date")} - ${get(promotion, "attributes.end_date")}`}
+                    imgUrl={
+                      get(promotion, "attributes.images")
+                        ? promotion.attributes.images[0]
+                        : "https://picsum.photos/200/300"
+                    }
+                    expiredAt={`${get(
+                      promotion,
+                      "attributes.start_date"
+                    )} - ${get(promotion, "attributes.end_date")}`}
                     type={1}
                     favourite={false}
                     size="large"
                     onClick={() => handleDealsDetails(true, promotion)}
                   />
-                  ))}
+                ))}
               </div>
             </ScrollingBox>
           </SectionLayout>
-        )
-      }
+        )}
 
       <DealsDetailsModal
         visible={showModalDealsDetails}
@@ -338,7 +417,7 @@ const PromotionsPage = () => {
         onClose={() => setShowModalProductDetails(false)}
       />
     </div>
-  )
-}
+  );
+};
 
-export default PromotionsPage
+export default PromotionsPage;
