@@ -12,7 +12,7 @@ import { get, orderBy } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import BizListingApi from "services/biz-listing";
-import {calcRateNumber} from "utils"
+import { calcRateNumber } from "utils";
 
 import styles from "styles/Property.module.scss";
 
@@ -32,8 +32,9 @@ const PropertiesContainer = ({
     <div className="flex flex-wrap gap-10">
       {Array.isArray(list) && list.length > 0 ? (
         list.map((item) => {
+          console.log(item);
           const id = get(item, "attributes.id") || item.id;
-          const images = item?.images || item.menu_file || []
+          const images = item?.images || item.menu_file || [];
           const firstImage = item.imgUrl || images[0];
           const name = get(item, "attributes.name") || item.name || "";
           const price = get(item, "attributes.price") || item.price || "";
@@ -44,9 +45,15 @@ const PropertiesContainer = ({
             "";
           const expiredAt =
             get(item, "attributes.expire_at") || item.expireAt || "";
-          const endDate = get(item, "attributes.end_date") || item.end_date || "";
-          const startDate = get(item, "attributes.start_date") || item.start_date || "";
-          const termsConditions = get(item, "attributes.terms_conditions") || item.terms_conditions || "";
+          const endDate =
+            get(item, "attributes.end_date") || item.end_date || "";
+          const startDate =
+            get(item, "attributes.start_date") || item.start_date || "";
+          const termsConditions =
+            get(item, "attributes.terms_conditions") ||
+            item.terms_conditions ||
+            item.conditions ||
+            "";
           return (
             <CardItem
               key={id}
@@ -56,6 +63,7 @@ const PropertiesContainer = ({
               description={description}
               expiredAt={expiredAt}
               termsConditions={termsConditions}
+              conditions={termsConditions}
               endDate={endDate}
               startDate={startDate}
               onClick={() => onShowDetailModal?.(item)}
@@ -91,19 +99,15 @@ const Properties = () => {
       userInfo.now_biz_listing = listingDetail;
       localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo);
-      let handleProperties =  'products'
-      if (property === 'menu') {
-        handleProperties = 'menus'
+      let handleProperties = "products";
+      if (property === "menu") {
+        handleProperties = "menus";
+      } else if (property === "deals") {
+        handleProperties = "deals";
       }
-      else if (property === 'deals') {
-        handleProperties = 'deals'
-      }
-      let propertiesData = get(
-        data,
-        `data.data[0].${handleProperties}`
-      );
-      console.log('listingDetail', listingDetail)
-      
+      let propertiesData = get(data, `data.data[0].${handleProperties}`);
+      console.log("listingDetail", listingDetail);
+
       setListingInformation(listingDetail);
       if (property === "products") {
         propertiesData = orderBy(

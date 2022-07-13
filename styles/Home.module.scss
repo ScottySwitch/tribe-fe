@@ -19,20 +19,31 @@
 
 .collection_banner {
   color: white;
+  width: 100vw;
+  padding-top: 10%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  position: relative;
 
-  .collection_name {
+  .collection_context_container {
     position: absolute;
-    top: 20px;
-    left: 100px;
-    font-weight: $font-bold;
-    font-size: $text-2xl;
+    top: 50%;
+    transform: translateY((-50%));
+
+    .collection_name {
+      font-weight: $font-bold;
+      font-size: 46px;
+    }
+    .collection_description {
+      font-weight: $font-normal;
+      font-size: $text-lg;
+    }
   }
-  .collection_description {
-    position: absolute;
-    top: 80px;
-    left: 100px;
-    font-weight: $font-normal;
-    font-size: $text-md;
+
+  .collection_banner_img {
+    z-index: -1;
+    object-position: right;
   }
 }
 
@@ -137,10 +148,13 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  width: 120px;
+  text-align: center;
   cursor: pointer;
 
   &:hover {
     .sub_category_label {
+      width: 100%;
       color: $primary-500;
     }
   }
@@ -198,6 +212,14 @@
 }
 
 @media screen and (max-width: $big-tablet) {
+  .collection_banner {
+    padding-top: 12%;
+    .collection_banner_img {
+      object-position: 70% 20%;
+      object-fit: contain;
+    }
+  }
+
   .bests {
     gap: unset;
     justify-content: space-between;
@@ -214,7 +236,38 @@
   }
 }
 
+@media screen and (max-width: $tablet) {
+  .collection_banner {
+    padding-top: 23%;
+    .collection_description {
+      width: 50%;
+    }
+  }
+}
+
 @media screen and (max-width: $mobile) {
+  .tab_filter,
+  .for_you {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 2;
+    left: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .collection_banner {
+    padding-top: 50%;
+    .collection_description {
+      width: 50%;
+    }
+    .collection_banner_img {
+      object-position: 50% 20%;
+      object-fit: scale-down;
+    }
+  }
+
   .bests {
     gap: unset;
     justify-content: space-between;

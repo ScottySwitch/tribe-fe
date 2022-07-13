@@ -113,21 +113,36 @@ const Category = (props: any) => {
   };
 
   let bannerSrc;
+  let categoryName;
+  let categoryDescription;
   switch (category) {
     case CategoryText.BUY:
       bannerSrc = "/images/buy-banner.svg";
+      categoryName = "Buy";
+      categoryDescription = "Explore a range of items.";
       break;
     case CategoryText.EAT:
       bannerSrc = "/images/eat-banner.svg";
+      categoryName = "Eat";
+      categoryDescription =
+        "Explore a wide array of cuisine types across different cultures.";
       break;
     case CategoryText.SEE_AND_DO:
       bannerSrc = "/images/see-and-do-banner.svg";
+      categoryName = "See & Do";
+      categoryDescription =
+        "Explore famous attractions, key landmarks and experience localized activities. ";
       break;
     case CategoryText.STAY:
       bannerSrc = "/images/stay-banner.svg";
+      categoryName = "Stay";
+      categoryDescription =
+        "Find the best accommodation for your any occasion.";
       break;
     case CategoryText.TRANSPORT:
       bannerSrc = "/images/transport-banner.svg";
+      categoryName = "Transport";
+      categoryDescription = "Find the best way to get around.";
       break;
   }
 
@@ -146,10 +161,20 @@ const Category = (props: any) => {
 
   return (
     <div>
-      <SectionLayout className={styles.banner}>
-        {bannerSrc && (
-          <Image src={bannerSrc} alt="" layout="fill" objectFit="cover" />
-        )}
+      <SectionLayout className={styles.collection_banner}>
+        <Image
+          src={bannerSrc}
+          alt=""
+          layout="fill"
+          objectFit="cover"
+          className={styles.collection_banner_img}
+        />
+        <div className={styles.collection_context_container}>
+          <div className={styles.collection_name}>{categoryName}</div>
+          <div className={styles.collection_description}>
+            {categoryDescription}
+          </div>
+        </div>
       </SectionLayout>
       <SectionLayout>
         {Array.isArray(listingBanners) && listingBanners.length > 0 && (

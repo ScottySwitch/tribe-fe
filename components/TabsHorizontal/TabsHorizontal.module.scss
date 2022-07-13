@@ -15,7 +15,7 @@
     font-size: $text-md;
     font-weight: $font-normal;
     color: $bg-300;
-    margin-right: 70px;
+    margin-right: 30px;
     padding-bottom: 10px;
     cursor: pointer;
     font-weight: $font-semi-bold;
@@ -90,7 +90,7 @@
       overflow-x: auto;
     }
     &_nav {
-      margin-right: 60px !important;
+      margin-right: 15px !important;
       &.secondary_outline {
         margin-right: 30px !important;
       }

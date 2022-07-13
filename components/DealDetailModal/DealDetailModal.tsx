@@ -1,29 +1,32 @@
-import Image from "next/image"
+import Image from "next/image";
 
-import Modal, { ModalProps } from "components/Modal/Modal"
-import Icon from "components/Icon/Icon"
-import Button from "components/Button/Button"
-import { useState, useEffect } from "react"
-import styles from "./DealDetailModal.module.scss"
+import Modal, { ModalProps } from "components/Modal/Modal";
+import Icon from "components/Icon/Icon";
+import Button from "components/Button/Button";
+import { useState, useEffect } from "react";
+import styles from "./DealDetailModal.module.scss";
 import get from "lodash/get";
-import DealFavouriteApi from "services/user-deal-favourite"
+import DealFavouriteApi from "services/user-deal-favourite";
+import { Item } from "framer-motion/types/components/Reorder/Item";
 
 export interface IDealsDetails {
-  name: string
-  imgUrl: string
-  offers?: string
-  valid?: string
-  conditions?: string
+  name: string;
+  imgUrl: string;
+  offers?: string;
+  valid?: string;
+  conditions?: string;
 }
 interface DealDetailModalProps extends ModalProps {
-  data: any
-  onShare?: () => void
-  onFavourite?: () => void
+  data: any;
+  onShare?: () => void;
+  onFavourite?: () => void;
 }
 
 const DealDetailModal = (props: DealDetailModalProps) => {
-  const { data, visible, onClose, onShare, onFavourite } = props
+  const { data, visible, onClose, onShare, onFavourite } = props;
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
+
+  console.log("conditions", data);
 
   useEffect(() => {
     if (data) {
@@ -37,14 +40,20 @@ const DealDetailModal = (props: DealDetailModalProps) => {
   }, [data]);
 
   const handleAddFavouriteDeal = async (id) => {
-    const data = await DealFavouriteApi.createDealFavourite(id)
+    const data = await DealFavouriteApi.createDealFavourite(id);
     if (get(data, "data")) {
-      setIsFavourite(true)
+      setIsFavourite(true);
     }
   };
 
   return (
-    <Modal visible={visible} width="100%" maxWidth={678} mobilePosition="center" onClose={onClose}>
+    <Modal
+      visible={visible}
+      width="100%"
+      maxWidth={678}
+      mobilePosition="center"
+      onClose={onClose}
+    >
       <div className={styles.header}>
         <div className="flex items-center min-w-0">
           <div className={styles.icon}>
@@ -60,9 +69,8 @@ const DealDetailModal = (props: DealDetailModalProps) => {
         <Image
           src={data.images ? data.images[0] : "https://picsum.photos/678/169"}
           alt={data.name}
-          width="100%"
-          height="100%"
-          layout="responsive"
+          layout="fill"
+          objectFit="contain"
         />
       </div>
       <div className={styles.content}>
@@ -78,10 +86,16 @@ const DealDetailModal = (props: DealDetailModalProps) => {
             <p>{`${data.start_date} - ${data.end_date}`}</p>
           </div>
         )}
-        {get(data, "attributes.terms_conditions") && (
+        {(get(data, "attributes.terms_conditions") ||
+          data.conditions ||
+          data.terms_conditions) && (
           <div className={styles.item}>
             <h6 className={styles.label}>Terms & Conditions</h6>
-            <p>{data.terms_conditions}</p>
+            <p>
+              {get(data, "attributes.terms_conditions") ||
+                data.terms_conditions ||
+                data.conditions}
+            </p>
           </div>
         )}
       </div>
@@ -111,13 +125,13 @@ const DealDetailModal = (props: DealDetailModalProps) => {
           className={`${styles.btn_cancel} text-sm font-medium no-underline`}
           width="max-content"
           onClick={() => {
-            onClose
-            setIsFavourite(false)
+            onClose;
+            setIsFavourite(false);
           }}
         />
       </div>
     </Modal>
-  )
-}
+  );
+};
 
-export default DealDetailModal
+export default DealDetailModal;
