@@ -897,13 +897,6 @@ export const switchAccountList = [
   { name: "The Cheese Merchant 3" },
 ];
 
-export const locations = [
-  { label: "Singapore", value: "singapore" },
-  { label: "Malaysia", value: "malaysia" },
-  { label: "Indonesia", value: "indonesia" },
-  { label: "India", value: "india" },
-  { label: "Thailand", value: "thailand" },
-];
 
 export const dummySubCategories = [
   {
