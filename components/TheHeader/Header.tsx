@@ -60,12 +60,7 @@ const Header = (props: HeaderProps) => {
   const [defaultLanguage, setDefaultLanguage] = useState<string>();
 
   useEffect(() => {
-    const getDefaultLang = () => {
-      const defaultLocale = languages.filter((item) => item.value === locale);
-      const localeValue = defaultLocale[0]?.value || "en";
-      setDefaultLanguage(localeValue);
-    };
-    getDefaultLang();
+    // setDefaultLanguage(locale);
   }, [router, locale]);
 
   return (
@@ -89,7 +84,7 @@ const Header = (props: HeaderProps) => {
               menuWidth={150}
               closeMenuOnSelect
               onChange={(e) => changeLang(e.value)}
-              value={defaultLanguage}
+              value={locale}
             />
           </div>
           <div className={styles.right_col}>

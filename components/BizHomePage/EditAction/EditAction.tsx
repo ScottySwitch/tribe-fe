@@ -17,6 +17,7 @@ interface EditActionProps {
   onPublishPage: () => void;
   isPaid?: boolean;
   isLoading?: boolean;
+  klookUrl?: string;
 }
 
 const EditAction = (props: EditActionProps) => {
@@ -26,6 +27,7 @@ const EditAction = (props: EditActionProps) => {
     action,
     isPaid,
     isLoading,
+    klookUrl,
     onPublishPage,
     onApplyAction,
   } = props;
@@ -150,7 +152,7 @@ const EditAction = (props: EditActionProps) => {
       window.open(`tel:${phoneNumber}`);
     } else {
       let url = value;
-      if (url.indexOf("//") < 0) url = "https://" + url;
+      if (url && url.indexOf("//") < 0) url = "https://" + url;
       window.open(url, "_blank")?.focus();
     }
   };
@@ -200,6 +202,16 @@ const EditAction = (props: EditActionProps) => {
             business!
           </p>
           <a>Upgrade now</a>
+        </div>
+      )}
+      {klookUrl && (
+        <div className={styles.action_modal}>
+          <Button
+            text="Book on KLOOK"
+            size="small"
+            onClick={() => handleOpenNewWindow(klookUrl)}
+            backgroundColor="#FF5B02"
+          />
         </div>
       )}
       <Modal

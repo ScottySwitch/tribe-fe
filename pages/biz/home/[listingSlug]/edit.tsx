@@ -464,7 +464,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         await ReviewApi.updateReviews(item.id, updateData);
       })
     );
-    window.location.reload();
+    router.reload();
   };
 
   if (!bizListing) {
@@ -505,6 +505,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               isLoading={isLoading}
               isPaid={isPaid}
               action={action}
+              klookUrl={bizListing.klook_url}
               onApplyAction={handleSetAction}
               onPublishPage={handleSubmit}
             />

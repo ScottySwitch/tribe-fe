@@ -21,6 +21,7 @@ import {
 } from "constant";
 
 import styles from "styles/BizInformation.module.scss";
+import { Router, useRouter } from "next/router";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -31,6 +32,8 @@ const BizInformation = (props) => {
 
   const informationList = isPaid ? paidInformationList : freeInformationList;
   const [selectedTab, setSelectedTab] = useState(informationList[0].label);
+
+  const router = useRouter();
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
@@ -115,7 +118,8 @@ const BizInformation = (props) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/";
+    router.push("/");
+    router.reload();
   };
 
   return (
