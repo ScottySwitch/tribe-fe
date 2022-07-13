@@ -1,12 +1,14 @@
-import classNames from "classnames";
-import Icon from "components/Icon/Icon";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
+import classNames from "classnames";
 import ReactSelect, {
   ControlProps,
   components,
   StylesConfig,
 } from "react-select";
+
+import Icon from "components/Icon/Icon";
+
 import styles from "./Select.module.scss";
 
 interface IOption {
@@ -16,6 +18,7 @@ interface IOption {
 
 export interface SelectProps {
   id?: string;
+  required?: boolean;
   label?: string;
   className?: string;
   defaultValue?: IOption[] | IOption | string;
@@ -32,17 +35,18 @@ export interface SelectProps {
   register?: UseFormRegisterReturn;
   width?: number | string;
   menuWidth?: string | number;
-  onChange?: (value: any) => void;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
   inputRef?: any;
   shouldControlShowValue?: boolean;
   controlStyle?: any;
   placeholderStyle?: any;
+  onChange?: (value: any) => void;
 }
 
 const Select = (props: SelectProps) => {
   const {
+    required,
     label,
     className,
     helperText,
@@ -55,22 +59,28 @@ const Select = (props: SelectProps) => {
     value,
     shouldControlShowValue,
     placeholder,
-    onChange,
     isSearchable = true,
     defaultValue,
     closeMenuOnSelect = false,
-    variant = "outlined",
     menuWidth,
-    size = "medium",
     menuFooter,
     inputRef,
     controlStyle,
     placeholderStyle,
+    variant = "outlined",
+    size = "medium",
+    onChange,
   } = props;
 
-  const [selected, setSelected] = useState<
-    IOption[] | IOption | string | undefined
-  >(value || defaultValue);
+  const [selected, setSelected] = useState<IOption[] | IOption | string>();
+
+  useEffect(() => {
+    const getInitValue = (value) =>
+      options?.find((opt) => opt === value || opt.value === value);
+
+    setSelected(getInitValue(value || defaultValue));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, defaultValue]);
 
   const selectWrapperClassName = classNames(className, styles.select, {
     [styles.filled]: variant === "filled",
@@ -179,15 +189,17 @@ const Select = (props: SelectProps) => {
   return (
     <div className={selectWrapperClassName} style={{ width }}>
       <div className={styles.container}>
-        {label && <label htmlFor={id}>{label}</label>}
+        {label && (
+          <label htmlFor={id}>
+            {label}
+            {required && <span className={styles.required_mark}> *</span>}
+          </label>
+        )}
         <ReactSelect
           id={id}
           inputRef={inputRef}
           options={options}
-          value={options?.find(
-            (opt) => opt === selected || opt.value === selected
-          )}
-          onChange={handleChange}
+          value={selected}
           placeholder={placeholder}
           isClearable={false}
           closeMenuOnSelect={closeMenuOnSelect}
@@ -196,6 +208,7 @@ const Select = (props: SelectProps) => {
           // @ts-ignore
           isMulti={isMulti}
           isSearchable={isSearchable}
+          onChange={handleChange}
           components={{ Control, Menu, Option, SingleValue }}
         />
       </div>

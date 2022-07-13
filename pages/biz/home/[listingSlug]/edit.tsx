@@ -94,7 +94,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         //if normal users go to edit listing homepage
         data = await BizListingApi.getInfoOwnerBizListingBySlug(listingSlug);
         if (get(data, "data.is_revision") === true) {
-          console.log("revision");
           setIsRevision(true);
         }
         //they will be redirected to home if do not own the listing
@@ -102,8 +101,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       }
       const listing = get(data, "data.data[0]");
       if (listing) {
-        console.log(listing);
-        console.log("userInfo", userInfo);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
         setUserInfo(userInfo);
