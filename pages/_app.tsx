@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { get } from "lodash";
 
 import type { AppProps } from "next/app";
 import AuthPopup from "components/AuthPopup/AuthPopup";
@@ -12,8 +13,6 @@ import { Tiers, UsersTypes } from "enums";
 import AuthApi from "../services/auth";
 import { IUser, UserInforContext } from "Context/UserInforContext";
 import CategoryApi from "services/category";
-import CategoryLinkApi from "services/category-link";
-import { get } from "lodash";
 
 import styles from "styles/App.module.scss";
 import "../styles/globals.css";
@@ -91,16 +90,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (userInfo) {
         const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
-        // const dataBizlisting = await BizApi.getBizListingByUserId(userInfo.id)
-        // const dataBizInvoice = await BizInvoice.getBizInvoiceByUserId(userInfo.id)
-        // const dataClaimListing = await ClaimListingApi.getClaimListingByUserId(userInfo.id)
-        // const dataListingRoles = await BizApi.getOwnerListingRoleByUserId(userInfo.id)
+
         userInfo = {
           ...userInfo,
-          // // biz_listings: dataBizlisting.data.data,
-          // biz_invoice: dataBizInvoice.data.data,
-          // claim_listings: dataClaimListing.data.data,
-          // listing_roles: dataListingRoles.data.data,
           owner_listings: dataOwnerListing.data.data,
         };
       }
@@ -128,7 +120,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         ? get(item, "attributes.category_links.data").map((navItem) => ({
             label: get(navItem, "attributes.label"),
             value: get(navItem, "attributes.value"),
-            href: `/${get(item, "attributes.slug")}/${get(navItem, "attributes.value")}`
+            href: `/${get(item, "attributes.slug")}/${get(
+              navItem,
+              "attributes.value"
+            )}`,
           }))
         : [],
     }));
@@ -154,9 +149,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <UserInforContext.Consumer>
         {({ user, updateUser, deleteUser }) => (
           <div className={styles.app}>
-            {/* <div className={styles.black} id="black_cover">
-              <div className={styles.black_btn} onClick={handleRemoveCover} />
-            </div> */}
             <Header
               id="header"
               loginInfor={loginInfor}

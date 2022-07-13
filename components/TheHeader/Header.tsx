@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+import useTrans from "useTrans";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Select from "components/Select/Select";
-import { locations } from "constant";
 import { Categories, UserInfor } from "./HeaderComponents";
 
 import styles from "./Header.module.scss";
-import useTrans from "useTrans";
 
 export const languages = [
   {
@@ -28,21 +27,29 @@ export const languages = [
     ),
     value: "id",
   },
-  {
-    label: (
-      <div className="flex gap-2 items-center">
-        <Icon icon="sing-flag" size={30} /> Singapore
-      </div>
-    ),
-    value: "sg",
-  },
+  // {
+  //   label: (
+  //     <div className="flex gap-2 items-center">
+  //       <Icon icon="sing-flag" size={30} /> Singapore
+  //     </div>
+  //   ),
+  //   value: "sg",
+  // },
+];
+
+export const locations = [
+  { label: "Singapore", value: "singapore", code: "sg" },
+  { label: "Malaysia", value: "malaysia", code: "my" },
+  { label: "Indonesia", value: "indonesia", code: "id" },
+  // { label: "India", value: "india" },
+  // { label: "Thailand", value: "thailand" },
 ];
 
 export interface HeaderProps {
-  loginInfor: any;
   id: string;
-  onOpenHamModal: () => void;
+  loginInfor: any;
   navList: { [key: string]: any }[];
+  onOpenHamModal: () => void;
 }
 
 const Header = (props: HeaderProps) => {
@@ -52,16 +59,26 @@ const Header = (props: HeaderProps) => {
   const { locale, pathname, asPath } = router;
 
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
+  const [location, setLocation] = useState<string>();
 
-  const changeLang = (lang: string) => {
-    router.isReady && router.push(pathname, asPath, { locale: lang });
+  const changeLanguage = (language) => {
+    router.isReady && router.push(pathname, asPath, { locale: language.value });
   };
 
-  const [defaultLanguage, setDefaultLanguage] = useState<string>();
-
   useEffect(() => {
-    // setDefaultLanguage(locale);
-  }, [router, locale]);
+    ///get location
+    fetch("https://www.cloudflare.com/cdn-cgi/trace")
+      .then((response) => response.text())
+      .then((two) => {
+        let data = two.replace(/[\r\n]+/g, '","').replace(/\=+/g, '":"');
+        data = '{"' + data.slice(0, data.lastIndexOf('","')) + '"}';
+        var userLocation = JSON.parse(data).loc?.toLowerCase();
+        const defaultLocale =
+          locations.find((country) => country.code === userLocation) ||
+          locations[0];
+        setLocation(defaultLocale.value);
+      });
+  }, []);
 
   return (
     <div id={id} className={styles.header}>
@@ -74,6 +91,7 @@ const Header = (props: HeaderProps) => {
               variant="no-outlined"
               placeholder={trans.location}
               options={locations}
+              value={location}
               menuWidth={150}
             />
             <Select
@@ -83,7 +101,7 @@ const Header = (props: HeaderProps) => {
               variant="no-outlined"
               menuWidth={150}
               closeMenuOnSelect
-              onChange={(e) => changeLang(e.value)}
+              onChange={changeLanguage}
               value={locale}
             />
           </div>
