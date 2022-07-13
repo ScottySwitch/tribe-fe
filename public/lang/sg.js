@@ -2,6 +2,6 @@
 export default {
   filter: 'Filter-sg',
   location: "Location-sg",
-  addNewListing: "Add new listing-sg"
-
+  addNewListing: "Add new listing-sg",
+  topSearch: "Top search-sg"
 }

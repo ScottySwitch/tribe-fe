@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import styles from "./CollectionCard.module.scss";
 
 interface CollectionCardProps {
@@ -9,15 +10,25 @@ interface CollectionCardProps {
 
 const CollectionCard = (props: CollectionCardProps) => {
   const { imgUrl, title, slug } = props;
+  const router = useRouter();
   return (
-    <div 
-      className={styles.collection_card}                   
-      onClick={() => {
-        window.location.href = `/collection/${slug}`;
-      }}
+    <div
+      className={styles.collection_card}
+      onClick={() => router.push(`/collection/${slug}`)}
     >
       <div className={styles.title}>{title}</div>
-      {imgUrl && <Image alt="" layout="fill" src={imgUrl} objectFit="cover" />}
+      {/* <div className={styles.banner}> */}
+      {imgUrl && (
+        <Image
+          alt=""
+          layout="intrinsic"
+          height={350}
+          width={270}
+          src={imgUrl}
+          objectFit="contain"
+        />
+      )}
+      {/* </div> */}
     </div>
   );
 };

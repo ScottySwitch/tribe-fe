@@ -206,9 +206,7 @@ const Category = (props: any) => {
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))}
@@ -220,7 +218,11 @@ const Category = (props: any) => {
           <Carousel responsive={homeCuratedResponsive}>
             {listCollections?.map((item, index) => (
               <div key={index} className="pb-5">
-                <CollectionCard slug={item.slug} title={item.title} imgUrl={item.imgUrl} />
+                <CollectionCard
+                  slug={item.slug}
+                  title={item.title}
+                  imgUrl={item.imgUrl}
+                />
               </div>
             ))}
           </Carousel>
@@ -242,9 +244,7 @@ const Category = (props: any) => {
                 description={card.description}
                 tags={card.tags}
                 isVerified={card.isVerified}
-                onClick={() => {
-                  window.location.href = `/biz/home/${card.slug}`;
-                }}
+                onClick={() => router.push(`/biz/home/${card.slug}`)}
               />
             </div>
           ))}

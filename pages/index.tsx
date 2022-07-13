@@ -98,15 +98,15 @@ const Home: NextPage = (props: any) => {
               <div
                 key={index}
                 className={styles.banner_card}
-                onClick={() => {
-                  window.location.href = `${img.linkActive}`;
-                }}
+                onClick={() => router.push(`${img.linkActive}`)}
               >
                 <Image
                   alt=""
-                  layout="fill"
+                  layout="intrinsic"
                   src={img.imgUrl}
-                  objectFit="cover"
+                  objectFit="contain"
+                  width={500}
+                  height={200}
                 />
               </div>
             ))
@@ -147,9 +147,7 @@ const Home: NextPage = (props: any) => {
                   tags={card.tags}
                   isVerified={card.isVerified}
                   description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))}
@@ -160,8 +158,12 @@ const Home: NextPage = (props: any) => {
         <SectionLayout backgroundColor title="Specially Curated For You">
           <Carousel responsive={homeCuratedResponsive}>
             {listCollections?.map((item, index) => (
-              <div key={index} className="pb-5">
-                <CollectionCard slug={item.slug} title={item.title} imgUrl={item.imgUrl} />
+              <div key={index}>
+                <CollectionCard
+                  slug={item.slug}
+                  title={item.title}
+                  imgUrl={item.imgUrl}
+                />
               </div>
             ))}
           </Carousel>
@@ -184,9 +186,7 @@ const Home: NextPage = (props: any) => {
                   tags={card.tags}
                   isVerified={card.isVerified}
                   description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))
@@ -212,9 +212,7 @@ const Home: NextPage = (props: any) => {
                   tags={card.tags}
                   isVerified={card.isVerified}
                   description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))
@@ -253,9 +251,7 @@ const Home: NextPage = (props: any) => {
                   tags={card.tags}
                   isVerified={card.isVerified}
                   description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))
@@ -347,9 +343,7 @@ const Home: NextPage = (props: any) => {
                   tags={card.tags}
                   isVerified={card.isVerified}
                   description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))}
@@ -457,7 +451,7 @@ export async function getServerSideProps(context) {
       tags: item.tags,
       categories: item.categories,
       price: get(item, "price_range.min") || "",
-            currency: get(item, "price_range.currency") || "",
+      currency: get(item, "price_range.currency") || "",
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
@@ -511,7 +505,7 @@ export async function getServerSideProps(context) {
       tags: item.tags,
       categories: item.categories,
       price: get(item, "price_range.min") || "",
-            currency: get(item, "price_range.currency") || "",
+      currency: get(item, "price_range.currency") || "",
       rate: item.rate,
       rateNumber: item.rate_number,
     }));

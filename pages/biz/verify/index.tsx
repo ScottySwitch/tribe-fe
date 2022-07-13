@@ -122,7 +122,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           .then((response) => response.json())
           .then((response) => {
             if (response.id) {
-              window.location.replace(response.url);
+              router.push(response.url);
             }
           });
       });
@@ -210,9 +210,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     userInfo.isVeriFy = false;
     localStorage.setItem("user", JSON.stringify(userInfo));
     if (userInfo.role_choose === "Owner") {
-      window.location.href = `/biz/home/${userInfo.biz_slug}/edit/`;
+      router.push(`/biz/home/${userInfo.biz_slug}/edit/`);
     } else {
-      window.location.href = `/`;
+      router.push(`/`);
     }
   };
 

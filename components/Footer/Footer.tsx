@@ -1,10 +1,9 @@
-import SectionLayout from "components/SectionLayout/SectionLayout";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+import SectionLayout from "components/SectionLayout/SectionLayout";
+
 import styles from "./Footer.module.scss";
-import CategoryApi from "services/category";
-import CategoryLinkApi from "services/category-link";
-import { get } from "lodash";
 
 const Footer = (props: {
   backgroundColor?: boolean;
@@ -12,6 +11,8 @@ const Footer = (props: {
   navList: { [key: string]: any }[];
 }) => {
   const { visible, backgroundColor = true, navList } = props;
+  const router = useRouter();
+
   let newNavList;
   if (navList) {
     newNavList = [
@@ -37,12 +38,6 @@ const Footer = (props: {
       },
     ];
   }
-
-  const handleChangeHref = (href) => {
-    if (href) {
-      window.location.href = href;
-    }
-  };
 
   if (!visible) return null;
   return (
@@ -70,7 +65,7 @@ const Footer = (props: {
                     <div
                       key={item.label}
                       className={styles.label}
-                      onClick={() => handleChangeHref(item.href)}
+                      onClick={() => router.push(item.href)}
                     >
                       {item.label}
                     </div>
