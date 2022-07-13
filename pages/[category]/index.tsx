@@ -16,7 +16,7 @@ import {
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-import {Categories, CategoryText} from "enums";
+import { Categories, CategoryText } from "enums";
 import BizListingApi from "services/biz-listing";
 import BannerApi from "services/banner";
 import CollectionApi from "services/collection";
@@ -40,7 +40,7 @@ const Category = (props: any) => {
     listingBanners,
     listCollections,
     listCategoryLink,
-    listCategoryArticles
+    listCategoryArticles,
   } = props;
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
@@ -196,7 +196,7 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout
         title="Explore by Top Categories"
-        childrenClassName="flex gap-[100px] flex-wrap"
+        childrenClassName="flex gap-y-[20px] gap-x-[50px] flex-wrap"
       >
         {Array.isArray(listCategoryLink) &&
           listCategoryLink.map((item, index) => (
@@ -419,7 +419,7 @@ export async function getServerSideProps(context) {
       listingBanners: bannerArray,
       listCollections: collectionArray,
       listCategoryLink: categoryLinkArray,
-      listCategoryArticles: []
+      listCategoryArticles: [],
     },
   };
 }
