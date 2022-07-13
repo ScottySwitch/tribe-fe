@@ -360,7 +360,7 @@ export async function getServerSideProps(context) {
   const dataCollections = await CollectionApi.getCollectionByCategory(category);
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
+  // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
@@ -419,7 +419,7 @@ export async function getServerSideProps(context) {
       listingBanners: bannerArray,
       listCollections: collectionArray,
       listCategoryLink: categoryLinkArray,
-      // listCategoryArticles: categoryArticleArray
+      listCategoryArticles: []
     },
   };
 }
