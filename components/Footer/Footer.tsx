@@ -47,12 +47,28 @@ const Footer = (props: {
           <div>
             <Image src={require("public/logo.svg")} alt="logo" />
           </div>
-          <div>
-            <Image
-              src={require("public/icons/socials.svg")}
-              alt=""
-              width={100}
-            />
+          <div className={styles.social_row}>
+            <div className={styles.social_image} onClick={() => window.location.href = (`https://www.facebook.com/tribesbyhhwt`)}>
+              <Image
+                src={require("public/images/facebook_svg.svg")}
+                alt=""
+                width={41}
+              />
+            </div>
+            <div className={styles.social_image} onClick={() => window.location.href = (`https://www.tiktok.com/@tribesbyhhwt?lang=en`)}>
+              <Image
+                src={require("public/images/tiktok_svg.svg")}
+                alt=""
+                width={41}
+              />
+            </div>
+            <div className={styles.social_image} onClick={() => window.location.href = (`https://www.instagram.com/tribesbyhhwt/`)}>
+              <Image
+                src={require("public/images/instagram_svg.svg")}
+                alt=""
+                width={41}
+              />
+            </div>
           </div>
         </div>
         <div className={styles.right_col}>
