@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import styles from "./DealDetailModal.module.scss";
 import get from "lodash/get";
 import DealFavouriteApi from "services/user-deal-favourite";
-import { Item } from "framer-motion/types/components/Reorder/Item";
 
 export interface IDealsDetails {
   name: string;
@@ -83,7 +82,10 @@ const DealDetailModal = (props: DealDetailModalProps) => {
         {data.end_date && (
           <div className={styles.item}>
             <h6 className={styles.label}>Valid</h6>
-            <p>{data.start_date && data.start_date + ' - '}{`${data.end_date}`}</p>
+            <p>
+              {data.start_date && data.start_date + " - "}
+              {`${data.end_date}`}
+            </p>
           </div>
         )}
         {(get(data, "attributes.terms_conditions") ||
