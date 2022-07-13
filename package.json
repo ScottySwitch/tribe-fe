@@ -12,6 +12,7 @@
     "@types/axios": "^0.14.0",
     "@types/react-datepicker": "^4.4.1",
     "@types/react-slick": "^0.23.8",
+    "@types/showdown": "^2.0.0",
     "axios": "^0.26.1",
     "classnames": "^2.3.1",
     "date-fns": "^2.28.0",

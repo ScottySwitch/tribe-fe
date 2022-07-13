@@ -365,7 +365,7 @@ export async function getServerSideProps(context) {
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawListCategory = get(dataCategoryLinks, "data.data");
-  const rawCategoryArticles = get(dataCategoryArticles, "data.data");
+  // const rawCategoryArticles = get(dataCategoryArticles, "data.data");
 
   const exclusiveDealListingArray =
     Array.isArray(rawListingExclusiveDealAray) &&
@@ -405,21 +405,21 @@ export async function getServerSideProps(context) {
       label: get(item, "attributes.label"),
       slug: get(item, "attributes.value"),
     }));
-  const categoryArticleArray =
-    Array.isArray(rawCategoryArticles) &&
-    rawCategoryArticles.map((item) => ({
-      title: get(item, "attributes.name") || null,
-      imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
-      time: get(item, "attributes.createdAt"),
-      slug: get(item, "attributes.slug"),
-    }));
+  // const categoryArticleArray =
+  //   Array.isArray(rawCategoryArticles) &&
+  //   rawCategoryArticles.map((item) => ({
+  //     title: get(item, "attributes.name") || null,
+  //     imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+  //     time: get(item, "attributes.createdAt"),
+  //     slug: get(item, "attributes.slug"),
+  //   }));
   return {
     props: {
       listingExclusiveDeal: exclusiveDealListingArray,
       listingBanners: bannerArray,
       listCollections: collectionArray,
       listCategoryLink: categoryLinkArray,
-      listCategoryArticles: categoryArticleArray
+      // listCategoryArticles: categoryArticleArray
     },
   };
 }

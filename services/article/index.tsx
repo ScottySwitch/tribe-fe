@@ -49,8 +49,11 @@ const getArticleDetail = async (slug: string) => {
   return await Api.get(url);
 }
 
-export default {
+const ArticleApi = 
+{
   getArticleDetail,
   getArticlesPinHome,
   getArticlesByCategoryId
 }
+
+export default ArticleApi
