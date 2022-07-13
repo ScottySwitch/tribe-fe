@@ -11,7 +11,7 @@ export const randomId = () => Math.floor(Math.random() * 10000000);
 
 export const calcRateNumber = (reviewsData) => {
   let rateNumber = 0;
-  if (reviewsData.length > 0) {
+  if (reviewsData && reviewsData.length > 0) {
     let sum = 0;
     reviewsData.map((review) => {
       sum += get(review, "attributes.rating") || 0;

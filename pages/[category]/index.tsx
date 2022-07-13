@@ -1,8 +1,4 @@
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { get } from "lodash";
-
+import ArticleCard from "components/ArticleCard/ArticleCard";
 import Carousel from "components/Carousel/Carousel";
 import CollectionCard from "components/CollectionCard/CollectionCard";
 import Icon from "components/Icon/Icon";
@@ -16,16 +12,21 @@ import {
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-import { Categories, CategoryText } from "enums";
+import {Categories, CategoryText} from "enums";
+import Image from "next/image";
+import {useRouter} from "next/router";
+import {useEffect, useState} from "react";
 import BizListingApi from "services/biz-listing";
 import BannerApi from "services/banner";
 import CollectionApi from "services/collection";
 import CategoryLinkApi from "services/category-link";
+import styles from "styles/Home.module.scss";
+import {get} from "lodash";
 import Loader from "components/Loader/Loader";
 import Pagination from "components/Pagination/Pagination";
-
-import styles from "styles/Home.module.scss";
 import useTrans from "useTrans";
+import ArticleApi from "../../services/article";
+import Link from "next/link";
 
 const Category = (props: any) => {
   const trans = useTrans();
@@ -39,6 +40,7 @@ const Category = (props: any) => {
     listingBanners,
     listCollections,
     listCategoryLink,
+    listCategoryArticles
   } = props;
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
@@ -261,6 +263,23 @@ const Category = (props: any) => {
       {/* <SectionLayout childrenClassName="flex justify-center">
         <Button variant="outlined" text="Load more" width={400} />
       </SectionLayout> */}
+      {Array.isArray(listCategoryArticles) && listCategoryArticles.length > 0 && (
+        <SectionLayout backgroundColor title="Articles">
+          <Carousel responsive={homeCuratedResponsive}>
+            {listCategoryArticles?.map((item, index) => (
+              <Link href={`/articles/${item.slug}`} key={index}>
+                <div className="pb-5">
+                  <ArticleCard
+                    title={item.title}
+                    imgUrl={item.imgUrl}
+                    time={item.time}
+                  />
+                </div>
+              </Link>
+            ))}
+          </Carousel>
+        </SectionLayout>
+      )}
       <div className={styles.introduction}>
         <SectionLayout transparent>
           <div className={styles.header}>
@@ -316,10 +335,12 @@ export async function getServerSideProps(context) {
   const dataCollections = await CollectionApi.getCollectionByCategory(category);
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+  const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawListCategory = get(dataCategoryLinks, "data.data");
+  const rawCategoryArticles = get(dataCategoryArticles, "data.data");
 
   const exclusiveDealListingArray =
     Array.isArray(rawListingExclusiveDealAray) &&
@@ -359,12 +380,21 @@ export async function getServerSideProps(context) {
       label: get(item, "attributes.label"),
       slug: get(item, "attributes.value"),
     }));
+  const categoryArticleArray =
+    Array.isArray(rawCategoryArticles) &&
+    rawCategoryArticles.map((item) => ({
+      title: get(item, "attributes.name") || null,
+      imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+      time: get(item, "attributes.createdAt"),
+      slug: get(item, "attributes.slug"),
+    }));
   return {
     props: {
       listingExclusiveDeal: exclusiveDealListingArray,
       listingBanners: bannerArray,
       listCollections: collectionArray,
       listCategoryLink: categoryLinkArray,
+      listCategoryArticles: categoryArticleArray
     },
   };
 }
