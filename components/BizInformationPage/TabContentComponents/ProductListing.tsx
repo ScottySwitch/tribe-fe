@@ -43,7 +43,27 @@ const ProductListing = (props: ProductListingProps) => {
       bizListingId,
       "is_pinned:desc"
     );
-    setProductList(result.data.data);
+    console.log('result', result)
+    if (get(result, 'data.data')) {
+      let rawListing = get(result, 'data.data') || [];
+      const listingArray = rawListing.map((item) => ({
+        name: get(item,'attributes.name'),
+        is_revision: get(item,'attributes.is_revision'),
+        parent_id: get(item,'attributes.parent_id'),
+        price: get(item,'attributes.price'),
+        id: get(item,'attributes.id'),
+        description: get(item,'attributes.description'),
+        images: get(item,'attributes.images'),
+        imgUrl: get(item,'attributes, "images[0]")') || "https://picsum.photos/200/300",
+        discount: get(item,'attributes.discount_percent'),
+        tags: get(item,'attributes.tags'),
+        websiteUrl: get(item,'attributes.website_url'),
+        klookUrl: get(item,'attributes.klook_url'),
+        isEdited: false,
+      }));
+      console.log('listingArray', listingArray)
+      setProductList(listingArray);
+    }
   };
 
   useEffect(() => {
@@ -51,8 +71,9 @@ const ProductListing = (props: ProductListingProps) => {
   }, [bizListingId]);
 
   const submitProduct = async (e: any) => {
+    console.log(e)
     if (e[0].isEdited) {
-      const dataSend = { ...e[0].attributes };
+      const dataSend = { ...e[0] };
       await ProductApi.updateProduct(e[0].id, dataSend);
     } else {
       const newProduct = e[0];
@@ -61,7 +82,22 @@ const ProductListing = (props: ProductListingProps) => {
         ...newProduct,
       };
       await ProductApi.createProduct(dataSend).then((result) => {
-        setProductList([...productList, result.data.data]);
+        const newProudct = {
+          name: get(result,'data.data.attributes.name'),
+          is_revision: get(result,'data.data.attributes.is_revision'),
+          parent_id: get(result,'data.data.attributes.parent_id'),
+          price: get(result,'data.data.attributes.price'),
+          id: get(result,'data.data.attributes.id'),
+          description: get(result,'data.data.attributes.description'),
+          images: get(result,'data.data.attributes.images'),
+          imgUrl: get(result,'data.data.attributes, "images[0]")') || "https://picsum.photos/200/300",
+          discount: get(result,'data.data.attributes.discount_percent'),
+          tags: get(result,'data.data.attributes.tags'),
+          websiteUrl: get(result,'data.data.attributes.website_url'),
+          klookUrl: get(result,'data.data.attributes.klook_url'),
+          isEdited: false,
+        }
+        setProductList([...productList, newProudct]);
       });
     }
   };
@@ -77,7 +113,7 @@ const ProductListing = (props: ProductListingProps) => {
 
   const handlePinToTop = async (e) => {
     await ProductApi.updateProduct(e.id, {
-      is_pinned: get(e, "attributes.is_pinned") || false,
+      is_pinned: e.is_pinned || false,
     });
     await getProductsByBizListingId(bizListingId);
   };
@@ -147,16 +183,15 @@ const ProductListing = (props: ProductListingProps) => {
           {productList &&
             productList.map((item: any, index) => {
               const imgUrl =
-                get(item, "attributes.images[0]") ||
                 get(item, "images[0]") ||
                 require("public/images/avatar.svg");
               return (
                 <div key={item.id} className={styles.info_card_container}>
                   <InforCard
                     imgUrl={imgUrl}
-                    title={get(item, "attributes.name")}
-                    price={get(item, "attributes.price")}
-                    description={get(item, "attributes.description")}
+                    title={item.name}
+                    price={item.price}
+                    description={item.description}
                   />
                   <div className={styles.toolbar}>
                     <Popover content={<PopoverContent item={item} />}>
@@ -169,7 +204,7 @@ const ProductListing = (props: ProductListingProps) => {
                   >
                     <Icon
                       icon="pin"
-                      color={get(item, "attributes.is_pinned") || "white"}
+                      color={item.is_pinned || "white"}
                     />
                   </div>
                 </div>

@@ -69,15 +69,16 @@ const ManageDeals = (props: ManageDealProps) => {
   }, [bizListingId]);
 
   const submitDeal = async (e) => {
+    console.log(e)
     if (e[0].isEdited) {
-      const dataSend = { ...e[0]?.attributes };
+      const dataSend = { ...e[0] };
       await DealApi.updateDeal(e[0]?.id, dataSend);
     } else {
       const newDeal = e[0];
       const dataSend = {
         biz_listing: bizListingId,
         start_date: new Date(),
-        end_date: newDeal.end_date || new Date(),
+        end_date: newDeal.validUntil || new Date(),
         ...newDeal,
       };
       await DealApi.createDeal(dataSend).then((result) => {

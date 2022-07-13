@@ -8,6 +8,16 @@
   .left_col {
     margin-right: 5rem;
     width: fit-content;
+
+    .social_row {
+      display: flex;
+      flex-direction: row;
+      
+      .social_image {
+        margin-right: 15px;
+        cursor: pointer;
+      }
+    }
   }
 
   .right_col {

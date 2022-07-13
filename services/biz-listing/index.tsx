@@ -378,8 +378,8 @@ const getBizListingForYou = async (limit) => {
   }
 };
 
-const getAllBizListingsByCategory = async () => {
-  const url = `/api/biz-listings/bizlisting-by-category/`;
+const getAllBizlitingPinnedByCategory = async () => {
+  const url = `/api/biz-listings/get-listing-pinned`;
   return await Api.get(url);
 };
 
@@ -452,7 +452,7 @@ const bizListingApi = {
   getBizListingByCountry,
   checkListingHaveOwner,
   getBizListingForYou,
-  getAllBizListingsByCategory,
+  getAllBizlitingPinnedByCategory,
   getAllBizListingsHaveExclusiveDeal,
   getBizListingsHaveDealsByCategoryId,
   getExclusiveDealByCategory,
