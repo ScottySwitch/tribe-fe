@@ -34,6 +34,8 @@ const Home: NextPage = (props: any) => {
     listingBuy,
     listingSee,
     listingEat,
+    listingTransport,
+    listingStay,
     listingExclusiveDeal,
     listBanners,
     listCollections,
@@ -262,6 +264,62 @@ const Home: NextPage = (props: any) => {
           )}
         </Carousel>
       </SectionLayout>
+      <SectionLayout title="What to TRANSPORT">
+        <Carousel responsive={infoCardResponsive}>
+          {Array.isArray(listingTransport) ? (
+            listingTransport?.map((card) => (
+              <div key={card.title} className="pb-5">
+                <InforCard
+                  imgUrl={get(card, "images[0]")}
+                  title={card.title}
+                  rate={card.rate}
+                  rateNumber={card.rateNumber}
+                  followerNumber={card.followerNumber}
+                  price={card.price}
+                  currency={card.currency}
+                  categories={card.categories}
+                  tags={card.tags}
+                  isVerified={card.isVerified}
+                  description={card.description}
+                  onClick={() => {
+                    window.location.href = `/biz/home/${card.slug}`;
+                  }}
+                />
+              </div>
+            ))
+          ) : (
+            <div></div>
+          )}
+        </Carousel>
+      </SectionLayout>
+      <SectionLayout title="What to STAY">
+        <Carousel responsive={infoCardResponsive}>
+          {Array.isArray(listingStay) ? (
+            listingStay?.map((card) => (
+              <div key={card.title} className="pb-5">
+                <InforCard
+                  imgUrl={get(card, "images[0]")}
+                  title={card.title}
+                  rate={card.rate}
+                  rateNumber={card.rateNumber}
+                  followerNumber={card.followerNumber}
+                  price={card.price}
+                  currency={card.currency}
+                  categories={card.categories}
+                  tags={card.tags}
+                  isVerified={card.isVerified}
+                  description={card.description}
+                  onClick={() => {
+                    window.location.href = `/biz/home/${card.slug}`;
+                  }}
+                />
+              </div>
+            ))
+          ) : (
+            <div></div>
+          )}
+        </Carousel>
+      </SectionLayout>
       {Array.isArray(listingForYou) && listingForYou.length > 0 && (
         <div>
           <SectionLayout className={styles.for_you}>
@@ -334,7 +392,7 @@ const Home: NextPage = (props: any) => {
 export async function getServerSideProps(context) {
   // Pass data to the page via props
   const category = context.query.category;
-  const data = await BizListingApi.getAllBizListingsByCategory();
+  const data = await BizListingApi.getAllBizlitingPinnedByCategory();
   const dataExclusiveDeal =
     await BizListingApi.getAllBizListingsHaveExclusiveDeal();
   const dataBanners = await BannerApi.getBanner();
@@ -343,6 +401,8 @@ export async function getServerSideProps(context) {
   const rawListingBuyArray = get(data, "data.data[0]");
   const rawListingSeeArray = get(data, "data.data[1]");
   const rawListingEatAray = get(data, "data.data[2]");
+  const rawListingTransportArray = get(data, "data.data[3]");
+  const rawListingStayAray = get(data, "data.data[4]");
   const rawListingExclusiveArray = get(dataExclusiveDeal, "data.data");
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
@@ -401,6 +461,42 @@ export async function getServerSideProps(context) {
       rate: item.rate,
       rateNumber: item.rate_number,
     }));
+  const transportListingArray =
+    Array.isArray(rawListingTransportArray) &&
+    rawListingTransportArray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, "price_range.min") || "",
+            currency: get(item, "price_range.currency") || "",
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }));
+  const stayListingArray =
+    Array.isArray(rawListingStayAray) &&
+    rawListingStayAray.map((item) => ({
+      images: item.images || [],
+      title: item.name,
+      slug: item.slug,
+      isVerified: item.is_verified,
+      address: item.address,
+      country: item.country,
+      description: item.description,
+      followerNumber: item.user_listing_follows.length,
+      tags: item.tags,
+      categories: item.categories,
+      price: get(item, "price_range.min") || "",
+            currency: get(item, "price_range.currency") || "",
+      rate: item.rate,
+      rateNumber: item.rate_number,
+    }));
   const exclusiveDealListingArray =
     Array.isArray(rawListingExclusiveArray) &&
     rawListingExclusiveArray.map((item) => ({
@@ -444,6 +540,8 @@ export async function getServerSideProps(context) {
       listingBuy: buyListingArray,
       listingEat: eatListingArray,
       listingSee: seeListingArray,
+      listingTransport: transportListingArray,
+      listingStay: stayListingArray,
       listingExclusiveDeal: exclusiveDealListingArray,
       listBanners: bannerArray,
       listCollections: collectionArray,
