@@ -26,13 +26,13 @@ const Footer = (props: {
       },
       {
         category: "Business owners",
-        items: [{ label: "Claim yourself", value: "" }],
+        items: [{ label: "Claim yourself", value: "", href: '/add-listing' }],
       },
       {
         category: "About",
         items: [
           { label: "About us", value: "" },
-          { label: "FAQ", value: "" },
+          { label: "FAQ", value: "", href: "/support" },
           { label: "Contact us", value: "" },
         ],
       },
