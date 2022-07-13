@@ -60,9 +60,13 @@
     justify-content: space-between;
 
     .title {
-      margin-bottom: 8px;
       font-weight: $font-semi-bold;
       font-size: $text-md;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .content {

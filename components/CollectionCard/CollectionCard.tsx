@@ -17,7 +17,18 @@ const CollectionCard = (props: CollectionCardProps) => {
       onClick={() => router.push(`/collection/${slug}`)}
     >
       <div className={styles.title}>{title}</div>
-      {imgUrl && <Image alt="" layout="fill" src={imgUrl} objectFit="cover" />}
+      {/* <div className={styles.banner}> */}
+      {imgUrl && (
+        <Image
+          alt=""
+          layout="intrinsic"
+          height={350}
+          width={270}
+          src={imgUrl}
+          objectFit="contain"
+        />
+      )}
+      {/* </div> */}
     </div>
   );
 };

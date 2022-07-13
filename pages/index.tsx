@@ -100,9 +100,11 @@ const Home: NextPage = (props: any) => {
               >
                 <Image
                   alt=""
-                  layout="fill"
+                  layout="intrinsic"
                   src={img.imgUrl}
-                  objectFit="cover"
+                  objectFit="contain"
+                  width={500}
+                  height={200}
                 />
               </div>
             ))
@@ -154,7 +156,7 @@ const Home: NextPage = (props: any) => {
         <SectionLayout backgroundColor title="Specially Curated For You">
           <Carousel responsive={homeCuratedResponsive}>
             {listCollections?.map((item, index) => (
-              <div key={index} className="pb-5">
+              <div key={index}>
                 <CollectionCard
                   slug={item.slug}
                   title={item.title}
