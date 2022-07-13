@@ -44,7 +44,13 @@ const PropertiesContainer = ({
             item.description ||
             "";
           const expiredAt =
-            get(item, "attributes.expire_at") || item.expireAt || "";
+            get(item, "attributes.expire_at") ||
+            item.expireAt ||
+            `${item?.start_date?.replaceAll(
+              "-",
+              "/"
+            )} - ${item?.end_date?.replaceAll("-", "/")} ` ||
+            "";
           const endDate =
             get(item, "attributes.end_date") || item.end_date || "";
           const startDate =
