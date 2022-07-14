@@ -97,7 +97,8 @@ const LoginPage = () => {
         await AuthApi.getMe();
       }
     }
-    router.push("/");
+    // router.push("/"); 
+    window.location.href = "/"
   };
 
   const routeFacebookLogin =
