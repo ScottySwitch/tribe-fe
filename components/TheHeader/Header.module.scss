@@ -60,6 +60,20 @@
       }
     }
   }
+  .category {
+    &_suggestion {
+      display: flex;
+      gap: 6px;
+      padding: 10px 20px;
+      cursor: pointer;
+      &:hover {
+        background-color: $bg-50;
+      }
+    }
+    &_description {
+      font-weight: $font-bold;
+    }
+  }
 
   .header_bottom {
     .content {

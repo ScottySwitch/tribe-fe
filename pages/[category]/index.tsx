@@ -74,7 +74,7 @@ const Category = (props: any) => {
       });
     };
 
-    let defaultCategoryInfor;
+    let defaultCategoryInfor = {};
     switch (category) {
       case CategoryText.BUY:
         defaultCategoryInfor = {
@@ -119,7 +119,7 @@ const Category = (props: any) => {
     setCategoryInfor(defaultCategoryInfor);
     setLoading(false);
     location && getData(category, pagination.page);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, category, location]);
 
   const handleSelectSubCategory = (slug) =>
@@ -138,13 +138,15 @@ const Category = (props: any) => {
   return (
     <div>
       <SectionLayout className={styles.collection_banner}>
-        <Image
-          src={categoryInfor.bannerSrc}
-          alt=""
-          layout="fill"
-          objectFit="cover"
-          className={styles.collection_banner_img}
-        />
+        {categoryInfor.bannerSrc && (
+          <Image
+            src={categoryInfor.bannerSrc}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+            className={styles.collection_banner_img}
+          />
+        )}
         <div className={styles.collection_context_container}>
           <div className={styles.collection_name}>
             {categoryInfor.categoryName}

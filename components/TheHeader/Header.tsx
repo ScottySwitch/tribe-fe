@@ -1,16 +1,22 @@
+import { get } from "lodash";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { useDebounce } from "usehooks-ts";
 
 import useTrans from "hooks/useTrans";
 import Icon from "components/Icon/Icon";
-import Input from "components/Input/Input";
 import Select from "components/Select/Select";
 import { Categories, UserInfor } from "./HeaderComponents";
 
 import styles from "./Header.module.scss";
-import { languages, locations } from "constant";
+import { categories, languages, locations } from "constant";
 import useLocation from "hooks/useLocation";
+import ListingSearch, {
+  formatListingResultOption,
+  ListingMenuFooter,
+} from "components/ListingSearch/ListingSearch";
+import bizListingApi from "services/biz-listing";
 
 export interface HeaderProps {
   id: string;
@@ -26,8 +32,20 @@ const Header = (props: HeaderProps) => {
   const { locale, pathname, asPath } = router;
 
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
+  const [bizListing, setBizListing] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
+  const debouncedSearchTerm = useDebounce(searchKey, 500);
 
   const { location } = useLocation();
+
+  useEffect(() => {
+    const getBizListing = async () => {
+      const data = await bizListingApi.getBizListing(debouncedSearchTerm);
+      setBizListing(get(data, "data.data"));
+    };
+
+    getBizListing();
+  }, [debouncedSearchTerm]);
 
   const formatLanguages = () => {
     return languages.map((lang) => ({
@@ -40,8 +58,39 @@ const Header = (props: HeaderProps) => {
     }));
   };
 
+  const HeaderSearchMenuFooter = () => (
+    <div>
+      {Array.isArray(categories) &&
+        categories.map((item: any) => (
+          <div
+            className={styles.category_suggestion}
+            key={item.value}
+            onClick={() => router.push(`/${item.slug}`)}
+          >
+            <div>
+              <Icon icon={item.icon} size={20} />
+            </div>
+            <div>
+              <div className={styles.category_description}>
+                {item.description}
+              </div>
+              <div>{item.label}</div>
+            </div>
+          </div>
+        ))}
+      <ListingMenuFooter onClick={() => router.push("/add-listing")} />
+    </div>
+  );
   const changeLanguage = (language) => {
     router.isReady && router.push(pathname, asPath, { locale: language.value });
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchKey(e);
+  };
+
+  const handleDirectToBizHome = (item) => {
+    router.push(`/biz/home/${item.attributes.slug}`);
   };
 
   return (
@@ -82,11 +131,16 @@ const Header = (props: HeaderProps) => {
             alt="logo"
             onClick={() => router.push("/")}
           />
-          <Input
-            className={styles.search}
-            prefix={<Icon icon="search" size={20} />}
-            variant="filled"
-            placeholder="Search"
+          <ListingSearch
+            width={450}
+            size="medium"
+            listingOptions={
+              Array.isArray(bizListing) ? bizListing.slice(0, 2) : []
+            }
+            onChange={handleDirectToBizHome}
+            onInputChange={handleSearchChange}
+            closeMenuOnSelect
+            menuFooter={<HeaderSearchMenuFooter />}
           />
           <div
             className={styles.categories}

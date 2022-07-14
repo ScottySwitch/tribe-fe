@@ -22,16 +22,15 @@ const ClaimPage = () => {
   const [bizListing, setBizListing] = useState([]);
 
   useEffect(() => {
+    const getBizListing = async () => {
+      const data = await BizListingApi.getBizListing();
+      setBizListing(get(data, "data.data"));
+    };
+
     getBizListing();
   }, []);
 
-  const getBizListing = async () => {
-    const data = await BizListingApi.getBizListing();
-    setBizListing(get(data, "data.data"));
-  };
-
   const handleSetListing = (e) => {
-    console.log('e', e);
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo = {
       ...userInfo,

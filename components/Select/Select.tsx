@@ -42,6 +42,7 @@ export interface SelectProps {
   controlStyle?: any;
   placeholderStyle?: any;
   onChange?: (value: any) => void;
+  onInputChange?: (e) => void;
 }
 
 const Select = (props: SelectProps) => {
@@ -69,6 +70,7 @@ const Select = (props: SelectProps) => {
     placeholderStyle,
     variant = "outlined",
     size = "medium",
+    onInputChange,
     onChange,
   } = props;
 
@@ -91,7 +93,7 @@ const Select = (props: SelectProps) => {
     [styles.label]: label,
   });
 
-  const primary500 = "#E60112";
+  const primary200 = "#f06771";
   const primary20 = "#FEF1F2";
 
   const customStyles: StylesConfig = {
@@ -123,9 +125,9 @@ const Select = (props: SelectProps) => {
         },
         ":hover": {
           ...styles[":hover"],
-          backgroundColor: isSelected ? primary500 : primary20,
+          backgroundColor: isSelected ? primary200 : primary20,
         },
-        backgroundColor: isSelected ? primary500 : "white",
+        backgroundColor: isSelected ? primary200 : "white",
       };
     },
     dropdownIndicator: (styles) => ({ ...styles, padding: 0 }),
@@ -138,6 +140,7 @@ const Select = (props: SelectProps) => {
       fontWeight: 300,
       ...placeholderStyle,
     }),
+    menu: (styles) => ({ ...styles, width: "fit-content" }),
     valueContainer: (styles) => ({
       ...styles,
       padding: 0,
@@ -152,14 +155,14 @@ const Select = (props: SelectProps) => {
     setSelected(dropdownValues);
   };
 
-  const Control = ({ children, ...props }: ControlProps<any, false>) => {
-    return (
-      <components.Control {...props}>
-        <Icon size={20} icon={prefixIcon || ""} className="mr-[10px]" />
-        {children}
-      </components.Control>
-    );
-  };
+  // const Control = ({ children, ...props }: ControlProps<any, false>) => {
+  //   return (
+  //     <components.Control {...props}>
+  //       <Icon size={20} icon={prefixIcon || ""} className="mr-[10px]" />
+  //       {children}
+  //     </components.Control>
+  //   );
+  // };
 
   const Menu = (props: any) => {
     return (
@@ -195,22 +198,26 @@ const Select = (props: SelectProps) => {
             {required && <span className={styles.required_mark}> *</span>}
           </label>
         )}
-        <ReactSelect
-          id={id}
-          inputRef={inputRef}
-          options={options}
-          value={selected}
-          placeholder={placeholder}
-          isClearable={false}
-          closeMenuOnSelect={closeMenuOnSelect}
-          isDisabled={disabled}
-          styles={customStyles}
-          // @ts-ignore
-          isMulti={isMulti}
-          isSearchable={isSearchable}
-          onChange={handleChange}
-          components={{ Control, Menu, Option, SingleValue }}
-        />
+        <div className={styles.content_container}>
+          {prefixIcon && <Icon icon={prefixIcon} />}
+          <ReactSelect
+            id={id}
+            options={options}
+            value={selected}
+            placeholder={placeholder}
+            isClearable={false}
+            closeMenuOnSelect={closeMenuOnSelect}
+            isDisabled={disabled}
+            styles={customStyles}
+            // @ts-ignore
+            inputRef={inputRef}
+            isMulti={isMulti}
+            isSearchable={isSearchable}
+            onChange={handleChange}
+            components={{ Menu, Option, SingleValue }}
+            onInputChange={onInputChange}
+          />
+        </div>
       </div>
       {helperText && <div>{helperText}</div>}
     </div>

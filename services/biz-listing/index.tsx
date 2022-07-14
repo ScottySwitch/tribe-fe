@@ -4,9 +4,12 @@ import Api from "../index";
 
 const qs = require("qs");
 
-const getBizListing = async () => {
+const getBizListing = async (search?: string) => {
   const query = qs.stringify(
     {
+      filters: {
+        name: { $contains: search || "" },
+      },
       populate: {
         user_listing_follows: {
           fields: ["id"],

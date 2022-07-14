@@ -957,6 +957,7 @@ export const categories = [
     width: "w-[30px]",
     icon: "buy-color",
     label: "Buy",
+    description: "Explore stores to shop",
     value: Categories.BUY,
     slug: CategoryText.BUY,
     options: [
@@ -970,6 +971,7 @@ export const categories = [
   {
     width: "w-[30px]",
     icon: "eat-color",
+    description: "Explore things to eat",
     label: "Eat",
     value: Categories.EAT,
     slug: CategoryText.EAT,
@@ -985,6 +987,7 @@ export const categories = [
     width: "w-[70px]",
     icon: "camera-color",
     label: "See & Do",
+    description: "Discover things to do",
     value: Categories.SEE_AND_DO,
     slug: CategoryText.SEE_AND_DO,
     options: [
@@ -998,6 +1001,7 @@ export const categories = [
   {
     width: "w-[80px]",
     icon: "car-color",
+    description: "Find out ways to get to your destination",
     label: "Transport",
     value: Categories.TRANSPORT,
     slug: CategoryText.TRANSPORT,
@@ -1012,6 +1016,7 @@ export const categories = [
   {
     width: "w-[30px]",
     icon: "bed-color",
+    description: "Discover places to stay",
     label: "Stay",
     value: Categories.STAY,
     slug: CategoryText.STAY,

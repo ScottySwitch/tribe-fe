@@ -10,9 +10,6 @@ import TopSearches from "components/TopSearches/TopSearches";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
 import Filter from "components/Filter/Filter";
-import { ITab } from "components/TabsHorizontal/TabsHorizontal";
-import { Categories } from "enums";
-import { categories } from "constant";
 import CollectionApi from "services/collection";
 
 import styles from "styles/Home.module.scss";
@@ -141,7 +138,7 @@ const Collection = (props) => {
         </div>
       </SectionLayout>
       <SectionLayout>
-        <div className="flex flex-wrap gap-1 lg:gap-10">
+        <div className="flex flex-wrap gap-3 md:gap-2 lg:gap-5">
           {Array.isArray(collection) &&
             collection.map((item) => (
               <div key={item?.title} className="pb-5">
