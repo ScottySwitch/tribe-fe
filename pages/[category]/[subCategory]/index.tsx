@@ -102,6 +102,8 @@ const SubCategoryPage = (props: any) => {
     );
   }
 
+  console.log("listingBanners", listingBanners);
+
   return (
     <div>
       <SectionLayout className="pt-0">
@@ -117,9 +119,11 @@ const SubCategoryPage = (props: any) => {
               <div key={index} className={styles.banner_card}>
                 <Image
                   alt=""
-                  layout="fill"
+                  layout="intrinsic"
                   src={img.imgUrl}
-                  objectFit="cover"
+                  objectFit="contain"
+                  width={500}
+                  height={200}
                 />
               </div>
             ))}
@@ -128,7 +132,7 @@ const SubCategoryPage = (props: any) => {
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
-          <div className="flex">
+          <div className="flex flex-wrap">
             <TabsHorizontal
               tablist={
                 Array.isArray(listCategoryLink)

@@ -76,6 +76,8 @@ const Collection = (props) => {
             // rateNumber: get(item, "attributes.rate_number"),
           }))
         : [];
+
+      console.log("mappedListings", mappedListings);
       setCollectionDetail(collectionDetailObject);
       setCollection(mappedListings);
       setLoading(false);
@@ -110,15 +112,17 @@ const Collection = (props) => {
             className={styles.collection_banner_img}
           />
         )}
-        <div className={styles.collection_name}>
-          {collectionDetail.collectionName}
-        </div>
-        <div className={styles.collection_description}>
-          {collectionDetail.description}
+        <div className={styles.collection_context_container}>
+          <div className={styles.collection_name}>
+            {collectionDetail.collectionName}
+          </div>
+          <div className={styles.collection_description}>
+            {collectionDetail.description}
+          </div>
         </div>
       </SectionLayout>
       <SectionLayout>
-        <div className="flex gap-5">
+        <div className="flex gap-5 flex-wrap">
           <Button
             width={120}
             size="small"

@@ -16,7 +16,7 @@ import {
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-import {Categories, CategoryText} from "enums";
+import { Categories, CategoryText } from "enums";
 import BizListingApi from "services/biz-listing";
 import BannerApi from "services/banner";
 import CollectionApi from "services/collection";
@@ -40,7 +40,7 @@ const Category = (props: any) => {
     listingBanners,
     listCollections,
     listCategoryLink,
-    listCategoryArticles
+    listCategoryArticles,
   } = props;
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
@@ -115,21 +115,36 @@ const Category = (props: any) => {
   };
 
   let bannerSrc;
+  let categoryName;
+  let categoryDescription;
   switch (category) {
     case CategoryText.BUY:
       bannerSrc = "/images/buy-banner.svg";
+      categoryName = "Buy";
+      categoryDescription = "Explore a range of items.";
       break;
     case CategoryText.EAT:
       bannerSrc = "/images/eat-banner.svg";
+      categoryName = "Eat";
+      categoryDescription =
+        "Explore a wide array of cuisine types across different cultures.";
       break;
     case CategoryText.SEE_AND_DO:
       bannerSrc = "/images/see-and-do-banner.svg";
+      categoryName = "See & Do";
+      categoryDescription =
+        "Explore famous attractions, key landmarks and experience localized activities. ";
       break;
     case CategoryText.STAY:
       bannerSrc = "/images/stay-banner.svg";
+      categoryName = "Stay";
+      categoryDescription =
+        "Find the best accommodation for your any occasion.";
       break;
     case CategoryText.TRANSPORT:
       bannerSrc = "/images/transport-banner.svg";
+      categoryName = "Transport";
+      categoryDescription = "Find the best way to get around.";
       break;
   }
 
@@ -148,10 +163,20 @@ const Category = (props: any) => {
 
   return (
     <div>
-      <SectionLayout className={styles.banner}>
-        {bannerSrc && (
-          <Image src={bannerSrc} alt="" layout="fill" objectFit="cover" />
-        )}
+      <SectionLayout className={styles.collection_banner}>
+        <Image
+          src={bannerSrc}
+          alt=""
+          layout="fill"
+          objectFit="cover"
+          className={styles.collection_banner_img}
+        />
+        <div className={styles.collection_context_container}>
+          <div className={styles.collection_name}>{categoryName}</div>
+          <div className={styles.collection_description}>
+            {categoryDescription}
+          </div>
+        </div>
       </SectionLayout>
       <SectionLayout>
         {Array.isArray(listingBanners) && listingBanners.length > 0 && (
@@ -171,7 +196,7 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout
         title="Explore by Top Categories"
-        childrenClassName="flex gap-[100px] flex-wrap"
+        childrenClassName="flex gap-y-[20px] gap-x-[50px] flex-wrap"
       >
         {Array.isArray(listCategoryLink) &&
           listCategoryLink.map((item, index) => (
@@ -335,12 +360,12 @@ export async function getServerSideProps(context) {
   const dataCollections = await CollectionApi.getCollectionByCategory(category);
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
+  // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawListCategory = get(dataCategoryLinks, "data.data");
-  const rawCategoryArticles = get(dataCategoryArticles, "data.data");
+  // const rawCategoryArticles = get(dataCategoryArticles, "data.data");
 
   const exclusiveDealListingArray =
     Array.isArray(rawListingExclusiveDealAray) &&
@@ -380,21 +405,21 @@ export async function getServerSideProps(context) {
       label: get(item, "attributes.label"),
       slug: get(item, "attributes.value"),
     }));
-  const categoryArticleArray =
-    Array.isArray(rawCategoryArticles) &&
-    rawCategoryArticles.map((item) => ({
-      title: get(item, "attributes.name") || null,
-      imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
-      time: get(item, "attributes.createdAt"),
-      slug: get(item, "attributes.slug"),
-    }));
+  // const categoryArticleArray =
+  //   Array.isArray(rawCategoryArticles) &&
+  //   rawCategoryArticles.map((item) => ({
+  //     title: get(item, "attributes.name") || null,
+  //     imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+  //     time: get(item, "attributes.createdAt"),
+  //     slug: get(item, "attributes.slug"),
+  //   }));
   return {
     props: {
       listingExclusiveDeal: exclusiveDealListingArray,
       listingBanners: bannerArray,
       listCollections: collectionArray,
       listCategoryLink: categoryLinkArray,
-      listCategoryArticles: categoryArticleArray
+      listCategoryArticles: [],
     },
   };
 }
