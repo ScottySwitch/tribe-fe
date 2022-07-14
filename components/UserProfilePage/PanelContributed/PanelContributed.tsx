@@ -55,7 +55,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
           >
             <ListingInfoCardInReview
               title={bizListing.name}
-              imgUrl={bizListing.images[0]}
+              imgUrl={get(bizListing, 'images[0]')}
               location={`${bizListing.address}, ${bizListing.country}`}
               rate={bizListing.rate}
               rateNumber={bizListing.rate_number}
