@@ -42,7 +42,7 @@ const ClaimListing = (context) => {
       let data =
         userInfo.type_handle === "Claim"
           ? await BizListingApi.getBizListingById(listingId)
-          : userInfo.role_choose
+          : userInfo.role
           ? await BizListingApi.getBizListingById(listingId)
           : await BizListingRevisionApi.getBizListingRevisionById(listingId);
       setListing(data.data.data);
@@ -84,7 +84,7 @@ const ClaimListing = (context) => {
     setClaimStep(ClaimStep.CHOOSE_TIER);
     userInfo = {
       ...userInfo,
-      role_choose: get(form, "role.value"),
+      role: get(form, "role.value"),
       pay_price: "600"
     }
     localStorage.setItem("user", JSON.stringify(userInfo));

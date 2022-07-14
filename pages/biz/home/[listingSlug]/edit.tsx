@@ -129,7 +129,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           klookUrl: item.klook_url,
           isEdited: false,
           currency: item.currency,
-          currencyDiscount: item.currency_discount
+          discountType: item.currency_discount
         }));
         const rawMenu = listing.menus || [];
         const menuArray = rawMenu.map((item) => ({
@@ -343,7 +343,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           klook_url: item.klookUrl,
           is_revision: true,
           currency: item.currency,
-          currency_discount: item.currencyDiscount
+          currency_discount: item.discountType
         };
         await ProductApi.createProduct(CreateData);
       })

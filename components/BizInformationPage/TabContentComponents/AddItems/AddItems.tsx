@@ -4,7 +4,7 @@ import Icon from "components/Icon/Icon"
 import Input from "components/Input/Input"
 import SelectInput from "components/SelectInput/SelectInput"
 import Upload from "components/Upload/Upload"
-import { currencyOptions, currencyDiscountOptions } from "constant"
+import { currencyOptions, discountTypeOptions } from "constant"
 import { ListingHomePageScreens } from "enums"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -124,12 +124,12 @@ const AddItems = (props: AddItemsProps) => {
                 />
                 <SelectInput
                   width="50%"
-                  options={currencyDiscountOptions}
+                  options={discountTypeOptions}
                   selectPosition="suffix"
                   placeholder="Enter discount"
-                  value={{input:item.discount, select: item.currencyDiscount}}
+                  value={{input:item.discount, select: item.discountType}}
                   onChange={(e: any) => {
-                    handleChangeItem(item.id, "currencyDiscount", e.select.value)
+                    handleChangeItem(item.id, "discountType", e.select.value)
                     handleChangeItem(item.id, "discount", e.input)
                   }}
                   // onChange={(e: any) => console.log(e)}

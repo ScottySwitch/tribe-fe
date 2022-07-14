@@ -210,7 +210,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.isVeriFy = false;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    if (userInfo.role_choose) {
+    if (userInfo.role) {
       router.push(`/biz/home/${userInfo.biz_slug}/edit/`);
     } else {
       router.push(`/`);
@@ -256,7 +256,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           transaction_id: transaction_id,
         });
       } else {
-        if (userInfo.role_choose) {
+        if (userInfo.role) {
           const result = await BizInvoinceApi.createBizInvoice({
             value: parseInt(price),
             paymentMethod: paymentMethodValue,

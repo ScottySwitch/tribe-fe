@@ -454,6 +454,7 @@ const bizListingApi = {
   updateBizListing,
   createBizListing,
   getBizListingReviews,
+  getAllBizlitingByCategorySlug,
   getBizListingCountries,
   getBizListingByCountry,
   checkListingHaveOwner,
