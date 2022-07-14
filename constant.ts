@@ -33,6 +33,20 @@ export const curatedList = [
   },
 ];
 
+export const locations = [
+  { label: "Singapore", value: "singapore", code: "sg" },
+  { label: "Malaysia", value: "malaysia", code: "my" },
+  { label: "Indonesia", value: "indonesia", code: "id" },
+  // { label: "India", value: "india" },
+  // { label: "Thailand", value: "thailand" },
+];
+
+export const languages = [
+  { label: "English", icon: "eng-flag", value: "en" },
+  { label: "Indonesia", icon: "indo-flag", value: "id" },
+  { label: "Singapore", icon: "sing-flag", value: "sg" },
+];
+
 export const dummyTopSearchKeywords = [
   "Fast Food",
   "Desserts",
@@ -904,7 +918,6 @@ export const switchAccountList = [
   { name: "The Cheese Merchant 2" },
   { name: "The Cheese Merchant 3" },
 ];
-
 
 export const dummySubCategories = [
   {
