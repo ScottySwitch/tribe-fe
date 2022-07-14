@@ -34,7 +34,7 @@ const RightColumn = (props: {
     const isBeingClaimed =
       get(listing, "attributes.claim_listings.data.length") > 0;
     const doesHasOwners = listingRolesArray.some(
-      (item) => get(item, "attributes.name") === "owner"
+      (item) => get(item, "attributes.name") === "Owner"
     );
     if (isBeingClaimed || doesHasOwners) setIsDisabled(true);
   }, []);

@@ -342,6 +342,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           website_url: item.websiteUrl,
           klook_url: item.klookUrl,
           is_revision: true,
+          currency: item.currency,
+          currency_discount: item.currencyDiscount
         };
         await ProductApi.createProduct(CreateData);
       })

@@ -133,9 +133,11 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     );
     if (firstOwnedListingSlug) {
       router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
+      router.reload()
       // router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
     } else {
       router.push("/claim");
+      router.reload()
     }
   };
 
@@ -144,6 +146,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     userInfo.type = UsersTypes.NORMAL_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
     router.push("/");
+    router.reload();
   };
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {

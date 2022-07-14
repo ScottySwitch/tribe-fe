@@ -186,6 +186,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     //submit otp to check
     if (tier === Tiers.FREE) {
       const result = await AuthApi.otpPhoneConfirm({ otp });
+      let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
       if (result.data.success) {
         const result1 = ClaimListingApi.createClaimListing({
           paymentMethod: "free",
@@ -209,7 +210,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.isVeriFy = false;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    if (userInfo.role_choose === "Owner") {
+    if (userInfo.role_choose) {
       router.push(`/biz/home/${userInfo.biz_slug}/edit/`);
     } else {
       router.push(`/`);
@@ -255,7 +256,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           transaction_id: transaction_id,
         });
       } else {
-        if (userInfo.role_choose === "Owner") {
+        if (userInfo.role_choose) {
           const result = await BizInvoinceApi.createBizInvoice({
             value: parseInt(price),
             paymentMethod: paymentMethodValue,
@@ -415,7 +416,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           <div className={styles.field_group}>
             <label>Payment method</label>
             <div className={styles.payment_container}>
-              <div
+              {/* <div
                 className={`${styles.payment} ${
                   paymentMethod === "xendit" ? styles.selected : ""
                 }`}
@@ -427,7 +428,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                   alt=""
                 />
                 Xendit
-              </div>
+              </div> */}
               <div
                 className={`${styles.payment} ${
                   paymentMethod === "stripe" ? styles.selected : ""

@@ -31,11 +31,12 @@ const ClaimPage = () => {
   };
 
   const handleSetListing = (e) => {
-    console.log(e);
+    console.log('e', e);
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo = {
       ...userInfo,
-      biz_id: get(e, "id"),
+      type_handle: "Claim",
+      biz_id: e.id,
       biz_slug: get(e, "attributes.slug"),
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
@@ -51,7 +52,7 @@ const ClaimPage = () => {
       const isBeingClaimed =
         get(listing, "attributes.claim_listings.data.length") > 0;
       const doesHasOwners = listingRolesArray.some(
-        (item) => get(item, "attributes.name") === "owner"
+        (item) => get(item, "attributes.name") === "Owner"
       );
       if (isBeingClaimed || doesHasOwners) setIsDisabled(true);
     }, []);

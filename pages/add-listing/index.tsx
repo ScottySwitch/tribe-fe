@@ -151,17 +151,19 @@ const AddListing = () => {
       is_accepted: false,
     };
     console.log("Role", get(formData, "role.label"));
-    const result =
-      get(formData, "role.label") === "Owner"
-        ? await BizListingApi.createBizListing(dataSend)
-        : await BizListingRevisionApi.createBizListingRevision(dataSend);
-    console.log("result", result);
+    let result;
+    if (get(formData, "role.label")) {
+      result = await BizListingApi.createBizListing(dataSend)
+    }
+    else {
+      result = await BizListingRevisionApi.createBizListingRevision(dataSend);
+    }
     if (result) {
       let dataSendContribute: any = {
         user: userInfo.id,
         type: "Create listing",
       }
-      if (get(formData, "role.label") === "Owner") {
+      if (get(formData, "role.label")) {
         dataSendContribute = {
           ...dataSendContribute,
           biz_listing: get(result, "data.data.id"),
@@ -178,23 +180,23 @@ const AddListing = () => {
       await ContributeApi.createContribute(dataSendContribute)
     }
     if (get(formData, "role.label")) {
-      const roleCreate =
-        get(formData, "role.label") === "Owner"
-          ? await BizListingApi.createListingRole({
-              bizListingId: get(result, "data.data.id"),
-              name: get(formData, "role.label"),
-            })
-          : await BizListingRevisionApi.createListingRoleRevison({
-              bizListingId: get(result, "data.data.id"),
-              name: get(formData, "role.label"),
-            });
+      await BizListingApi.createListingRole({
+          bizListingId: get(result, "data.data.id"),
+          name: get(formData, "role.label"),
+      })
+    }
+    else {
+      await BizListingRevisionApi.createListingRoleRevison({
+        bizListingId: get(result, "data.data.id"),
+        name: get(formData, "role.label"),
+      });
     }
     userInfo = {
       ...userInfo,
       pay_price: "600",
       biz_id: get(result, "data.data.id"),
       biz_slug: get(result, "data.data.attributes.slug"),
-      role_choose: get(formData, "role.label") === "Owner" ? "Owner" : "",
+      role_choose: get(formData, "role.label"),
       type_handle: "Create",
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
