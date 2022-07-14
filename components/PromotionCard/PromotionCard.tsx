@@ -8,7 +8,7 @@ import styles from "./PromotionCard.module.scss";
 export interface PromotionProps {
   imgUrl?: string;
   title: string;
-  startData: string;
+  startDate: string;
   expiredAt: string;
   type?: string | number;
   favourite?: boolean;
@@ -25,7 +25,7 @@ const PromotionCard = (props: PromotionProps) => {
     width,
     title,
     expiredAt,
-    startData,
+    startDate,
     description,
     type,
     favourite,
@@ -74,7 +74,9 @@ const PromotionCard = (props: PromotionProps) => {
       <div className={styles.promotion_info}>
         <div>
           <h3 className={styles.promotion_title}>{title}</h3>
-          <div className={styles.promotion_date}>{startData} - {expiredAt}</div>
+          <div className={styles.promotion_date}>
+            {startDate} - {expiredAt}
+          </div>
           <div className={styles.promotion_date}>{description}</div>
         </div>
         {type && (
