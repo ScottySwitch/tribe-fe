@@ -447,7 +447,29 @@ const getAllBizlitingByCategorySlug = async (
   return await Api.get(url);
 };
 
+const getFavouriteDeals = async () => {
+  let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = userInfo.id
+  const query = qs.stringify(
+    {
+      filters: {
+        user: {
+          id: userId
+        }
+      },
+      populate: "*",
+    },
+    {
+      encodeValuesOnly: true,
+    }
+  );
+
+  const url = `/api/user-deal-favourites?${query}`;
+  return await Api.get(url);
+}
+
 const bizListingApi = {
+  getFavouriteDeals,
   getAllBizlitingByCategorySlug,
   getBizListingsByCategoryIdWithPagination,
   getBizlistingByCategoryLink,
