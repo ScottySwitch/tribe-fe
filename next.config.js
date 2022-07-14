@@ -12,4 +12,4 @@ module.exports = {
     locales: ['en', 'id', 'sg'],
     defaultLocale: 'en',
   },
-}
+} 

@@ -22,20 +22,7 @@ export type ILoginInfor = {
 const ContributeTabBar = (props: ContributeProps) => {
   const { id, visible } = props;
   const router = useRouter();
-  const pathname = router.pathname;
-  const notAuthPages = [
-    "/login",
-    "/signup",
-    "/forgot-password",
-    "/forgot-password/otp",
-    "/forgot-password/reset",
-    "/signup/otp",
-    "/signup/setup-profile",
-    "/biz/verify",
-  ];
-  const isAuthPage = !notAuthPages.includes(pathname);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-  const [loginInfor, setLoginInfo] = useState<ILoginInfor>({});
 
   const handleHref = (href: string) => {
     const stringyLoginInfo = localStorage.getItem("user");
@@ -43,7 +30,6 @@ const ContributeTabBar = (props: ContributeProps) => {
     if (localLoginInfo.token) {
       router.push(href)
     } else {
-      setLoginInfo({});
       setShowAuthPopup(true);
     }
   }
@@ -91,7 +77,7 @@ const ContributeTabBar = (props: ContributeProps) => {
       </div>
       <AuthPopup
         onClose={() => setShowAuthPopup(false)}
-        visible={isAuthPage && showAuthPopup && !loginInfor.token}
+        visible={showAuthPopup}
       />
     </div>
   );
