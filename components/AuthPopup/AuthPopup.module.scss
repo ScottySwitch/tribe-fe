@@ -90,3 +90,10 @@
     }
   }
 }
+
+@media screen and (max-width: 360px) {
+  .auth_popup {
+    padding-top: 15px;
+    height: 190px;
+  }
+}

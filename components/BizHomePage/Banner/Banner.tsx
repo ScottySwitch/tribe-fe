@@ -39,7 +39,7 @@ const Banner = (props: BannerProps) => {
       />
       <Modal
         visible={showAlbumModal}
-        title="Add opening hours"
+        title=" "
         width="90%"
         // maxHeight="90%"
         mobileFullHeight

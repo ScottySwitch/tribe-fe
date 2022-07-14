@@ -4,6 +4,7 @@ import styles from "./AuthPopup.module.scss";
 import Button from "components/Button/Button";
 import Modal from "components/Modal/Modal";
 
+
 export interface AuthPopupProps {
   visible?: boolean;
   onClose: () => void;

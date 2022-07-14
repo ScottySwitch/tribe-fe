@@ -34,14 +34,28 @@
 //   }
 // }
 
-// @media screen and (max-width: $tablet) {
-//   .collection_card {
-//     height: 340px;
-//   }
-// }
+@media screen and (max-width: $tablet) {
+  // .collection_card {
+  //   height: 340px;
+  // }
+}
 
-// @media screen and (max-width: $mobile) {
-//   .collection_card {
-//     height: 340px;
-//   }
-// }
+@media screen and (max-width: 675px) {
+  .collection_card {
+    .title {
+      left: 26%;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  // .collection_card {
+  //   height: 340px;
+  // }
+
+  .collection_card {
+    .title {
+      left: 15%;
+    }
+  }
+}

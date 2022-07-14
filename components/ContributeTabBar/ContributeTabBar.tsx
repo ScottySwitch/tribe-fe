@@ -2,17 +2,38 @@ import Icon from "components/Icon/Icon";
 import Popover from "components/Popover/Popover";
 import { contributePopOverList } from "constant";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ContributeTabBar.module.scss";
+import AuthPopup from "components/AuthPopup/AuthPopup";
+import { Tiers, UsersTypes } from "enums";
 
 export interface ContributeProps {
   id?: string;
   visible: boolean;
 }
 
+export type ILoginInfor = {
+  token?: string;
+  type?: UsersTypes;
+  tier?: Tiers;
+  avatar?: string;
+};
+
 const ContributeTabBar = (props: ContributeProps) => {
   const { id, visible } = props;
   const router = useRouter();
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+
+  const handleHref = (href: string) => {
+    const stringyLoginInfo = localStorage.getItem("user");
+    const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
+    if (localLoginInfo.token) {
+      router.push(href)
+    } else {
+      setShowAuthPopup(true);
+    }
+  }
+
 
   const content = (
     <React.Fragment>
@@ -35,25 +56,29 @@ const ContributeTabBar = (props: ContributeProps) => {
 
   return (
     <div id={id} className={styles.contribute}>
-      <div>
+      <div onClick={() => router.push(`/`)}>
         <Icon icon="home-stroke-1" size={20} />
         Home
       </div>
-      <div>
+      <div onClick={() => handleHref(`/profile`)}>
         <Icon icon="deal" size={20} />
         Deals
       </div>
       <Popover content={content} position="top">
         <div className={styles.main_button} />
       </Popover>
-      <div>
+      <div onClick={() => handleHref(`/profile`)}>
         <Icon icon="like-solid" size={20} />
         Favorited
       </div>
-      <div>
+      <div onClick={() => handleHref(`/profile`)}>
         <Icon icon="user-stroke-1" size={20} />
         User
       </div>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </div>
   );
 };
