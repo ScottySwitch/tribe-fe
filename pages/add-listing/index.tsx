@@ -21,7 +21,7 @@ import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
 import BizListingApi from "../../services/biz-listing";
 import BizListingRevisionApi from "services/biz-listing-revision";
-import ContributeApi from "services/contribute"
+import ContributeApi from "services/contribute";
 
 export interface IAddListingForm {
   id?: number;
@@ -77,7 +77,7 @@ const AddListing = () => {
   const [formData, setFormData] = useState(defaultAddlistingForm);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showSubmitResult, setShowSubmitResult] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -99,7 +99,7 @@ const AddListing = () => {
   };
 
   const handleSubmitFormData = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     ///do CRUD things here
     console.log("data", formData);
@@ -151,39 +151,36 @@ const AddListing = () => {
       is_accepted: false,
     };
     console.log("Role", get(formData, "role.label"));
-    const role = get(formData, "role.label")
+    const role = get(formData, "role.label");
     let result;
     let dataSendContribute: any = {
       user: userInfo.id,
       type: "Create listing",
-    }
+    };
     if (role) {
-      result = await BizListingApi.createBizListing(dataSend)
+      result = await BizListingApi.createBizListing(dataSend);
       dataSendContribute = {
         ...dataSendContribute,
         biz_listing: get(result, "data.data.id"),
-        status: "Approved"
-      }
+        status: "Approved",
+      };
       await BizListingApi.createListingRole({
-          bizListingId: get(result, "data.data.id"),
-          name: get(formData, "role.label"),
-      })
-    }
-    else {
+        bizListingId: get(result, "data.data.id"),
+        name: get(formData, "role.label"),
+      });
+    } else {
       result = await BizListingRevisionApi.createBizListingRevision(dataSend);
       dataSendContribute = {
         ...dataSendContribute,
         biz_listing_revision: get(result, "data.data.id"),
-        status: "Pending"
-      }
+        status: "Pending",
+      };
       await BizListingRevisionApi.createListingRoleRevison({
         bizListingId: get(result, "data.data.id"),
         name: get(formData, "role.label"),
       });
     }
-    if (result) {
-      await ContributeApi.createContribute(dataSendContribute)
-    }
+    await ContributeApi.createContribute(dataSendContribute);
     userInfo = {
       ...userInfo,
       pay_price: "600",
