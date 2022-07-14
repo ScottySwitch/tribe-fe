@@ -17,12 +17,16 @@ const Menu = (props: MenuMenuProps) => {
   const router = useRouter();
 
   const menuItems = [
+    // {
+    //   icon: "categories-color",
+    //   label: "Categories",
+    //   onClick: onShowCategoriesModal,
+    // },
     {
-      icon: "categories-color",
-      label: "Categories",
-      onClick: onShowCategoriesModal,
+      icon: "deal",
+      label: "Saved deals",
+      onClick: () => router.push("/profile"),
     },
-    { icon: "deal", label: "Saved deals" },
     {
       icon: "heart-color",
       label: "Favorited",
@@ -34,11 +38,19 @@ const Menu = (props: MenuMenuProps) => {
       label: "Edit profile",
       onClick: () => router.push("/profile"),
     },
-    { icon: "settings-color", label: "Settings", borderBottom: true },
-    { icon: "like-color-2", label: "Referral code" },
-    { icon: "business", label: "Tribes for Businesses" },
-    { icon: "support-color", label: "Support" },
-    { icon: "eng-flag", label: "Languages" },
+    // { icon: "settings-color", label: "Settings", borderBottom: true },
+    // { icon: "like-color-2", label: "Referral code" },
+    {
+      icon: "business",
+      label: "Tribes for Businesses",
+      onClick: () => router.push("/claim"),
+    },
+    {
+      icon: "support-color",
+      label: "Support",
+      onClick: () => router.push("/support"),
+    },
+    // { icon: "eng-flag", label: "Languages" },
   ];
 
   const handleLogout = () => {

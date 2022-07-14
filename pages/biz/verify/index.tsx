@@ -33,6 +33,18 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [backImageIdentity, setBackImageIdentity] = useState<string>("");
   const [payPrice, setPayPrice] = useState<string>("");
   const [time, setTime] = useState<number>(30);
+  const [type, setType] = useState<any>({})
+
+  const idTypeOptions = [
+    {
+      label: "Driving License",
+      value: "Driving License"
+    },
+    {
+      label: "ID card",
+      value: "ID card"
+    }
+  ]
 
   const router = useRouter();
   let baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -370,10 +382,15 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           <div className={styles.field_group}>
             <label>ID Type</label>
             <Select
+              value={type}
+              options={idTypeOptions}
               className="mt-3"
               placeholder="Driving Licence"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setOtp(e.target.value)
+              onChange={(e) =>
+                {
+                  console.log(e)
+                  setType(e)
+                }
               }
             />
           </div>

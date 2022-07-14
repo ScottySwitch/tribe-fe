@@ -121,3 +121,12 @@
     border-right: 1px solid $bg-200;
   }
 }
+
+
+@media screen and (max-width: $mobile) {
+  .collection_card {
+    .title {
+      left: 15%;
+    }
+  }
+}
