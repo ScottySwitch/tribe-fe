@@ -102,6 +102,11 @@ const getMe = async () => {
   me.data.biz_invoice =  userInfo.biz_invoice || []
   me.data.claim_listings =  userInfo.claim_listings || [] 
   me.data.listing_roles =  userInfo.listing_roles || []
+  me.data.biz_slug =  userInfo.biz_slug || ''
+  me.data.biz_id =  userInfo.biz_id || ''
+  me.data.type_handle =  userInfo.type_handle || ''
+  me.data.pay_price =  userInfo.pay_price || ''
+  me.data.role =  userInfo.role || ''
   me.data.now_biz_listing = userInfo.now_biz_listing || {}
   localStorage.setItem("user", JSON.stringify(me.data))
 }

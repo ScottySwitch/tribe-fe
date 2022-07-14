@@ -128,6 +128,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           websiteUrl: item.website_url,
           klookUrl: item.klook_url,
           isEdited: false,
+          currency: item.currency,
+          discountType: item.currency_discount
         }));
         const rawMenu = listing.menus || [];
         const menuArray = rawMenu.map((item) => ({
@@ -340,6 +342,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           website_url: item.websiteUrl,
           klook_url: item.klookUrl,
           is_revision: true,
+          currency: item.currency,
+          currency_discount: item.discountType
         };
         await ProductApi.createProduct(CreateData);
       })
@@ -571,6 +575,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
       >
         <AddItems
+          isEdit
           isPaid={isPaid}
           multiple
           onSubmit={handleSetItemList}
@@ -598,6 +603,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         childrenClassName=" w-full sm:w-3/4 xl:w-1/2"
       >
         <AddDeals
+          isEdit
           isPaid={isPaid}
           multiple
           onCancel={handleCancel}

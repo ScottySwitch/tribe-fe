@@ -83,7 +83,9 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
           className={`${styles.wrapper_content} cursor-pointer`}
         >
           <Image
-            src={get(item,"logo[0]") || require("public/images/page-avatar.png")}
+            src={
+              get(item, "logo[0]") || require("public/images/page-avatar.png")
+            }
             alt=""
             width={30}
             height={30}
@@ -122,6 +124,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
 
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter();
+  const { pathname, locale } = router;
 
   const handleSwitchToBizUser = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -133,6 +136,9 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     );
     if (firstOwnedListingSlug) {
       router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
+      const url =
+        `/${(locale && locale !== 'en') ? (locale + '/') : ''}` + `biz/home/${firstOwnedListingSlug}/edit`;
+      window.location.href = url;
       // router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
     } else {
       router.push("/claim");
@@ -144,6 +150,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     userInfo.type = UsersTypes.NORMAL_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
     router.push("/");
+    router.reload();
   };
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {

@@ -32,23 +32,22 @@ const ClaimListing = (context) => {
   const [isPayYearly, setIsPayYearly] = useState(false);
   const router = useRouter();
   const {
-    query: { listingid: listingId },
+    query: { listingSlug: listingId },
   } = useRouter();
 
   useEffect(() => {
+    console.log(listingId)
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getListingData = async (listingId) => {
       let data =
         userInfo.type_handle === "Claim"
           ? await BizListingApi.getBizListingById(listingId)
-          : userInfo.role_choose === "Owner"
+          : userInfo.role
           ? await BizListingApi.getBizListingById(listingId)
           : await BizListingRevisionApi.getBizListingRevisionById(listingId);
       setListing(data.data.data);
     };
     if (listingId) {
-      userInfo.biz_id = listingId.toString();
-      localStorage.setItem("user", JSON.stringify(userInfo));
       getListingData(listingId);
     }
   }, [listingId]);
@@ -83,7 +82,11 @@ const ClaimListing = (context) => {
       name: role,
     });
     setClaimStep(ClaimStep.CHOOSE_TIER);
-    userInfo.pay_price = "600";
+    userInfo = {
+      ...userInfo,
+      role: get(form, "role.value"),
+      pay_price: "600"
+    }
     localStorage.setItem("user", JSON.stringify(userInfo));
   };
 

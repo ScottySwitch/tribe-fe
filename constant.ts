@@ -318,6 +318,14 @@ export const currencyOptions = [
   { label: "IDR", value: "idr" },
 ];
 
+export const discountTypeOptions = [
+  { label: "USD", value: "usd" },
+  { label: "MYR", value: "myr" },
+  { label: "SGD", value: "sgd" },
+  { label: "IDR", value: "idr" },
+  { label: "%", value: "%" },
+];
+
 export const previewInfo = [
   { question: "What kind of place is this?", valueKey: "category" },
   {

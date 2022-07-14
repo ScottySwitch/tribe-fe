@@ -383,6 +383,12 @@ const getAllBizlitingPinnedByCategory = async () => {
   return await Api.get(url);
 };
 
+const getAllBizlitingByCategorySlug = async () => {
+  const url = `/api/biz-listings/bizlisting-by-categoryslug`;
+  return await Api.get(url);
+};
+
+
 const getAllBizListingsHaveExclusiveDeal = async () => {
   const url = `/api/biz-listings/exclusive-deal/`;
   return await Api.get(url);
@@ -448,6 +454,7 @@ const bizListingApi = {
   updateBizListing,
   createBizListing,
   getBizListingReviews,
+  getAllBizlitingByCategorySlug,
   getBizListingCountries,
   getBizListingByCountry,
   checkListingHaveOwner,

@@ -11,7 +11,6 @@ const createClaimListing = async (params: any) => {
         payment_method: params.paymentMethod,
         transaction_id: params.transaction_id,
         biz_listings: userInfo.biz_id,
-        publishedAt: null
       }
   });
 }
@@ -25,7 +24,6 @@ const createClaimListingRevision = async (params: any) => {
         payment_method: params.paymentMethod,
         transaction_id: params.transaction_id,
         biz_listing_revision: userInfo.biz_id,
-        publishedAt: null
       }
   });
 }

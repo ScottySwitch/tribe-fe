@@ -353,7 +353,9 @@ const PromotionsPage = () => {
                                 .length
                             : 0
                         }
+                        description={get(card, "attributes.description")}
                         price={get(card, "attributes.price_range.min")}
+                        currency={get(card, "attributes.price_range.currency")}
                         categories={card.categories}
                         tags={get(card, "attributes.tags.data")}
                         iconTag={true}

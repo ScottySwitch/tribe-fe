@@ -13,7 +13,6 @@ const createBizInvoice = async (params: any) => {
         payment_method: params.paymentMethod,
         transaction_id: params.transaction_id,
         biz_listing: userInfo.biz_id,
-        publishedAt: null
     }
   });
 }
@@ -28,7 +27,6 @@ const createBizRevisionInvoice = async (params: any) => {
         payment_method: params.paymentMethod,
         transaction_id: params.transaction_id,
         biz_listing_revision: userInfo.biz_id,
-        publishedAt: null
     }
   });
 }
