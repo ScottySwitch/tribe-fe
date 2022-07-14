@@ -464,7 +464,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         await ReviewApi.updateReviews(item.id, updateData);
       })
     );
-    // window.location.reload();
+    window.location.reload();
   };
 
   if (!bizListing) {
