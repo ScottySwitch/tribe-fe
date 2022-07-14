@@ -136,7 +136,6 @@ const SelectField = (props: SelectProps) => {
   return (
     <ReactSelect
       id={id}
-      inputRef={inputRef}
       options={options}
       value={selected}
       defaultValue={defaultValue}
@@ -147,6 +146,8 @@ const SelectField = (props: SelectProps) => {
       isDisabled={disabled}
       styles={customStyles}
       controlShouldRenderValue={true}
+      // @ts-ignore
+      inputRef={inputRef}
       // @ts-ignore
       isMulti={isMulti}
       isSearchable={isSearchable}
