@@ -377,13 +377,8 @@ const getBizListingForYou = async (limit) => {
   }
 };
 
-const getAllBizlitingPinnedByCategory = async () => {
-  const url = `/api/biz-listings/get-listing-pinned`;
-  return await Api.get(url);
-};
-
-const getAllBizlitingByCategorySlug = async () => {
-  const url = `/api/biz-listings/bizlisting-by-categoryslug`;
+const getAllBizlitingPinnedByCategory = async (country?: string) => {
+  const url = `/api/biz-listings/get-listing-pinned?country=${country || ""}`;
   return await Api.get(url);
 };
 
@@ -397,8 +392,13 @@ const getExclusiveDealByCategory = async (category) => {
   return await Api.get(url);
 };
 
-const getBizlistingByCategoryLink = async (category, categoryLinks, page) => {
-  const url = `/api/biz-listings/bizlisting-by-categorylink?category=${category}&categoryLinks=${categoryLinks}&page=${page}`;
+const getBizlistingByCategoryLink = async (
+  category: string | number,
+  categoryLinks: any,
+  page: string | number,
+  country?: string
+) => {
+  const url = `/api/biz-listings/bizlisting-by-categorylink?country=${country}&category=${category}&categoryLinks=${categoryLinks}&page=${page}`;
   return await Api.get(url);
 };
 
@@ -435,7 +435,17 @@ const getBizListingsHaveDealsByCategoryId = async (categoryId: Categories) => {
   return await Api.get(url);
 };
 
+const getAllBizlitingByCategorySlug = async (
+  country?: string,
+  categoryId?: string | number,
+  page?: string | number
+) => {
+  const url = `/api/biz-listings/bizlisting-by-categoryslug?country=${country}&category=${categoryId}&page=${page}`;
+  return await Api.get(url);
+};
+
 const bizListingApi = {
+  getAllBizlitingByCategorySlug,
   getBizListingsByCategoryIdWithPagination,
   getBizlistingByCategoryLink,
   getBizListing,
@@ -452,7 +462,6 @@ const bizListingApi = {
   updateBizListing,
   createBizListing,
   getBizListingReviews,
-  getAllBizlitingByCategorySlug,
   getBizListingCountries,
   getBizListingByCountry,
   checkListingHaveOwner,

@@ -17,7 +17,7 @@ import bizListingApi from "services/biz-listing";
 import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
-import useTrans from "useTrans";
+import useTrans from "hooks/useTrans";
 
 const categoryTabList: ITab[] = categories.map((item) => ({
   label: item.slug,

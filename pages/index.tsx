@@ -1,8 +1,9 @@
-import { get } from "lodash";
 import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { get } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+
 import Button from "components/Button/Button";
 import Carousel from "components/Carousel/Carousel";
 import CollectionCard from "components/CollectionCard/CollectionCard";
@@ -23,62 +24,67 @@ import {
 } from "constant";
 
 import styles from "styles/Home.module.scss";
-import ArticleCard from "components/ArticleCard/ArticleCard";
+import useLocation from "hooks/useLocation";
+import { Ilisting } from "type";
+import { formatListingArray } from "utils";
 
 const Home: NextPage = (props: any) => {
-  const router = useRouter();
+  const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
+    props;
+
   const [loading, setLoading] = useState(true);
-  const [listingForYou, setListingForYou] = useState<{ [key: string]: any }[]>(
-    []
-  );
-  const {
-    listingBuy,
-    listingSee,
-    listingEat,
-    listingTransport,
-    listingStay,
-    listingExclusiveDeal,
-    listBanners,
-    listCollections,
-    listCategories,
-  } = props;
   const [limit, setLimit] = useState<number>(16);
-  const [isLoading, setIsLoading] = useState(false);
+  const [listingForYou, setListingForYou] = useState<Ilisting[]>([]);
+  const [listings, setListings] = useState<{
+    buy: Ilisting[];
+    eat: Ilisting[];
+    seeAndDo: Ilisting[];
+    stay: Ilisting[];
+    transport: Ilisting[];
+  }>();
+
+  const router = useRouter();
+  const { location } = useLocation();
 
   useEffect(() => {
-    getBizListingForYou();
-  }, []);
+    const getListings = async () => {
+      const data = await BizListingApi.getAllBizlitingPinnedByCategory(
+        location
+      );
+      const buyListingArray = formatListingArray(get(data, "data.data[0]"));
+      const seeListingArray = formatListingArray(get(data, "data.data[1]"));
+      const eatListingArray = formatListingArray(get(data, "data.data[2]"));
+      const stayListingArray = formatListingArray(get(data, "data.data[4]"));
+      const transportListingArray = formatListingArray(
+        get(data, "data.data[3]")
+      );
+
+      setListings({
+        buy: buyListingArray,
+        eat: eatListingArray,
+        seeAndDo: seeListingArray,
+        stay: stayListingArray,
+        transport: transportListingArray,
+      });
+    };
+
+    if (location) {
+      getListings();
+      getBizListingForYou();
+    }
+  }, [location]);
 
   const getBizListingForYou = async () => {
-    setIsLoading(true);
+    setLoading(true);
+
     const dataListing = await BizListingApi.getBizListingForYou(limit);
-    if (
-      get(dataListing, "data.data") &&
-      Array.isArray(get(dataListing, "data.data"))
-    ) {
-      const rawDataListing = get(dataListing, "data.data");
-      const listingArray = listingForYou.concat(
-        rawDataListing.map((item) => ({
-          images: item.images || [],
-          title: item.name,
-          slug: item.slug,
-          isVerified: item.is_verified,
-          address: item.address,
-          country: item.country,
-          description: item.description,
-          followerNumber: item.user_listing_follows.length,
-          tags: item.tags,
-          categories: item.categories,
-          price: get(item, "price_range.min") || "",
-          currency: get(item, "price_range.currency") || "",
-          rate: item.rate,
-          rateNumber: item.rate_number,
-        }))
-      );
-      setListingForYou(listingArray);
-      setLimit(limit + 16);
-      setIsLoading(false);
-    }
+    const rawForYouListing = get(dataListing, "data.data");
+    const listingArray = listingForYou.concat(
+      formatListingArray(rawForYouListing)
+    );
+
+    setListingForYou(listingArray);
+    setLimit(limit + 16);
     setLoading(false);
   };
 
@@ -172,8 +178,8 @@ const Home: NextPage = (props: any) => {
       )}
       <SectionLayout title="Where to BUY">
         <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listingBuy) ? (
-            listingBuy?.map((card) => (
+          {Array.isArray(listings?.buy) ? (
+            listings?.buy.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -198,8 +204,8 @@ const Home: NextPage = (props: any) => {
       </SectionLayout>
       <SectionLayout title="What to SEE">
         <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listingSee) ? (
-            listingSee?.map((card) => (
+          {Array.isArray(listings?.seeAndDo) ? (
+            listings?.seeAndDo.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -237,8 +243,8 @@ const Home: NextPage = (props: any) => {
       </SectionLayout> */}
       <SectionLayout title="What to EAT">
         <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listingEat) ? (
-            listingEat?.map((card) => (
+          {Array.isArray(listings?.eat) ? (
+            listings?.eat.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -263,8 +269,8 @@ const Home: NextPage = (props: any) => {
       </SectionLayout>
       <SectionLayout title="What to TRANSPORT">
         <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listingTransport) ? (
-            listingTransport?.map((card) => (
+          {Array.isArray(listings?.transport) ? (
+            listings?.transport.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -291,8 +297,8 @@ const Home: NextPage = (props: any) => {
       </SectionLayout>
       <SectionLayout title="What to STAY">
         <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listingStay) ? (
-            listingStay?.map((card) => (
+          {Array.isArray(listings?.stay) ? (
+            listings?.stay.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -351,8 +357,8 @@ const Home: NextPage = (props: any) => {
           </SectionLayout>
           <SectionLayout childrenClassName="flex justify-center">
             <Button
-              isLoading={isLoading}
-              variant={isLoading ? "primary" : "outlined"}
+              isLoading={loading}
+              variant={loading ? "primary" : "outlined"}
               text="Load more"
               width={400}
               onClick={getBizListingForYou}
@@ -386,134 +392,22 @@ const Home: NextPage = (props: any) => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  const category = context.query.category;
-  const data = await BizListingApi.getAllBizlitingPinnedByCategory();
   const dataExclusiveDeal =
     await BizListingApi.getAllBizListingsHaveExclusiveDeal();
   const dataBanners = await BannerApi.getBanner();
   const dataCollections = await CollectionApi.getCollection();
   const dataCategories = await CategoryApi.getCategories();
-  // const dataArticlesPinHome = await ArticleApi.getArticlesPinHome();
 
-  const rawListingBuyArray = get(data, "data.data[0]");
-  const rawListingSeeArray = get(data, "data.data[1]");
-  const rawListingEatAray = get(data, "data.data[2]");
-  const rawListingTransportArray = get(data, "data.data[3]");
-  const rawListingStayAray = get(data, "data.data[4]");
-  const rawListingExclusiveArray = get(dataExclusiveDeal, "data.data");
+  // const dataArticlesPinHome = await ArticleApi.getArticlesPinHome();
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
   const rawCategories = get(dataCategories, "data.data");
-  // const rawArticlesPinHome = get(dataArticlesPinHome, "data.data");
 
-  const buyListingArray =
-    Array.isArray(rawListingBuyArray) &&
-    rawListingBuyArray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      currency: get(item, "price_range.currency") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
-  const seeListingArray =
-    Array.isArray(rawListingSeeArray) &&
-    rawListingSeeArray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      currency: get(item, "price_range.currency") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
-  const eatListingArray =
-    Array.isArray(rawListingEatAray) &&
-    rawListingEatAray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      currency: get(item, "price_range.currency") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
-  const transportListingArray =
-    Array.isArray(rawListingTransportArray) &&
-    rawListingTransportArray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      currency: get(item, "price_range.currency") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
-  const stayListingArray =
-    Array.isArray(rawListingStayAray) &&
-    rawListingStayAray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      currency: get(item, "price_range.currency") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
-  const exclusiveDealListingArray =
-    Array.isArray(rawListingExclusiveArray) &&
-    rawListingExclusiveArray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: item.user_listing_follows.length,
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      currency: get(item, "price_range.currency") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
+  // const rawArticlesPinHome = get(dataArticlesPinHome, "data.data");
+  const exclusiveDealListingArray = formatListingArray(
+    get(dataExclusiveDeal, "data.data")
+  );
+
   const bannerArray =
     Array.isArray(rawListBanners) &&
     rawListBanners.map((item) => ({
@@ -534,21 +428,17 @@ export async function getServerSideProps(context) {
       slug: get(item, "attributes.slug"),
       icon: get(item, "attributes.icon"),
     }));
-    // const homeArticleArray =
-    //   Array.isArray(rawArticlesPinHome) &&
-    //   rawArticlesPinHome.map((item) => ({
-    //     title: get(item, "attributes.name") || null,
-    //     imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
-    //     time: get(item, "attributes.createdAt"),
-    //     slug: get(item, "attributes.slug"),
-    //   }));
+  // const homeArticleArray =
+  //   Array.isArray(rawArticlesPinHome) &&
+  //   rawArticlesPinHome.map((item) => ({
+  //     title: get(item, "attributes.name") || null,
+  //     imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+  //     time: get(item, "attributes.createdAt"),
+  //     slug: get(item, "attributes.slug"),
+  //   }));
+
   return {
     props: {
-      listingBuy: buyListingArray,
-      listingEat: eatListingArray,
-      listingSee: seeListingArray,
-      listingTransport: transportListingArray,
-      listingStay: stayListingArray,
       listingExclusiveDeal: exclusiveDealListingArray,
       listBanners: bannerArray,
       listCollections: collectionArray,

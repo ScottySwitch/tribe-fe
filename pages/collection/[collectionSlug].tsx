@@ -16,7 +16,7 @@ import { categories } from "constant";
 import CollectionApi from "services/collection";
 
 import styles from "styles/Home.module.scss";
-import useTrans from "useTrans";
+import useTrans from "hooks/useTrans";
 import { useRouter } from "next/router";
 
 type Object = {

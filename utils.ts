@@ -85,3 +85,23 @@ export const calcDistanceFromNow = (time) => {
     return `${diff_in_days} days ago`;
   }
 };
+
+export const formatListingArray = (rawListing) =>
+  Array.isArray(rawListing)
+    ? rawListing.map((item) => ({
+        images: item.images || [],
+        title: item.name,
+        slug: item.slug,
+        isVerified: item.is_verified,
+        address: item.address,
+        country: item.country,
+        description: item.description,
+        followerNumber: item.user_listing_follows.length,
+        tags: item.tags,
+        categories: item.categories,
+        price: get(item, "price_range.min") || "",
+        currency: get(item, "price_range.currency") || "",
+        rate: item.rate,
+        rateNumber: item.rate_number,
+      }))
+    : [];

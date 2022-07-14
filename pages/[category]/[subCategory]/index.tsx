@@ -18,13 +18,17 @@ import BannerApi from "services/banner";
 import Loader from "components/Loader/Loader";
 
 import styles from "styles/Home.module.scss";
-import useTrans from "useTrans";
+import useTrans from "hooks/useTrans";
+import { formatListingArray } from "utils";
+import useLocation from "hooks/useLocation";
 
 const SubCategoryPage = (props: any) => {
   const { bizListings, listingBanners, listCategoryLink } = props;
 
   const trans = useTrans();
   const router = useRouter();
+  const { location } = useLocation();
+
   const { query } = router;
   const { category, subCategory }: any = query;
 
@@ -32,17 +36,33 @@ const SubCategoryPage = (props: any) => {
 
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
-  const [subCategoryData, setSubCategoryData] = useState<any[]>([]);
   const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
-  const [showFilter, setShowFilter] = useState(false);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory);
 
   useEffect(() => {
+    const getBizListings = async (category, subCategory, page) => {
+      const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(
+        category,
+        subCategory,
+        page,
+        location
+      );
+
+      const rawBizlistingArray = get(dataBizlisting, "data.data");
+      let listingArray = formatListingArray(rawBizlistingArray);
+
+      setListings(listingArray);
+      setPagination({
+        ...pagination,
+        total: get(dataBizlisting, "data.total"),
+      });
+      setLoading(false);
+    };
+
     //get subCategory data
-    setSubCategoryData(inforCardList);
-    getDataBizlisting(category, currenCategoryLink, pagination.page);
-  }, [currentSubCategory, pagination.page]);
+    getBizListings(category, currenCategoryLink, pagination.page);
+  }, [currentSubCategory, currenCategoryLink, pagination.page]);
 
   const handleChangeSubCategory = (e) => {
     setCurrentCategoryLink(e);
@@ -57,43 +77,6 @@ const SubCategoryPage = (props: any) => {
     // getDataBizlisting(category, e, page)
   };
 
-  const getDataBizlisting = async (category, subCategory, page) => {
-    const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(
-      category,
-      subCategory,
-      page
-    );
-    console.log("dataBizlisting", dataBizlisting);
-    if (
-      get(dataBizlisting, "data.data") &&
-      Array.isArray(get(dataBizlisting, "data.data"))
-    ) {
-      const rawBizlistingArray = get(dataBizlisting, "data.data");
-      let listingArray = rawBizlistingArray.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: get(item, "price_range.min") || "",
-        currency: get(item, "price_range.currency") || "",
-        rate: item.rate,
-        rateNumber: item.rate_number,
-      }));
-      setListings(listingArray);
-      setPagination({
-        ...pagination,
-        total: get(dataBizlisting, "data.total"),
-      });
-    }
-    setLoading(false);
-  };
-
   if (loading) {
     return (
       <SectionLayout childrenClassName="flex justify-center">
@@ -101,8 +84,6 @@ const SubCategoryPage = (props: any) => {
       </SectionLayout>
     );
   }
-
-  console.log("listingBanners", listingBanners);
 
   return (
     <div>
@@ -174,7 +155,7 @@ const SubCategoryPage = (props: any) => {
         </div>
       </SectionLayout>
       <SectionLayout>
-        <div className="flex flex-wrap gap-10">
+        <div className="flex flex-wrap gap-5">
           {Array.isArray(listings) &&
             listings.map((item) => (
               <div key={item.title} className="pb-5">

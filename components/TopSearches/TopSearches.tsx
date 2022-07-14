@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./TopSearches.module.scss";
 import TopSearchApi from "services/top-search";
 import { get } from "lodash";
-import useTrans from "useTrans";
+import useTrans from "hooks/useTrans";
 
 interface ITopSearchesProp {
   className?: string;

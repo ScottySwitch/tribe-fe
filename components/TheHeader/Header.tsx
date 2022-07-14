@@ -2,48 +2,15 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import useTrans from "useTrans";
+import useTrans from "hooks/useTrans";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Select from "components/Select/Select";
 import { Categories, UserInfor } from "./HeaderComponents";
 
 import styles from "./Header.module.scss";
-
-export const languages = [
-  {
-    label: (
-      <div className="flex gap-2 items-center">
-        <Icon icon="eng-flag" size={30} /> English
-      </div>
-    ),
-    value: "en",
-  },
-  {
-    label: (
-      <div className="flex gap-2 items-center">
-        <Icon icon="indo-flag" size={30} /> Indonesian
-      </div>
-    ),
-    value: "id",
-  },
-  // {
-  //   label: (
-  //     <div className="flex gap-2 items-center">
-  //       <Icon icon="sing-flag" size={30} /> Singapore
-  //     </div>
-  //   ),
-  //   value: "sg",
-  // },
-];
-
-export const locations = [
-  { label: "Singapore", value: "singapore", code: "sg" },
-  { label: "Malaysia", value: "malaysia", code: "my" },
-  { label: "Indonesia", value: "indonesia", code: "id" },
-  // { label: "India", value: "india" },
-  // { label: "Thailand", value: "thailand" },
-];
+import { languages, locations } from "constant";
+import useLocation from "hooks/useLocation";
 
 export interface HeaderProps {
   id: string;
@@ -59,26 +26,23 @@ const Header = (props: HeaderProps) => {
   const { locale, pathname, asPath } = router;
 
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
-  const [location, setLocation] = useState<string>();
+
+  const { location } = useLocation();
+
+  const formatLanguages = () => {
+    return languages.map((lang) => ({
+      label: (
+        <div className="flex gap-2 items-center">
+          <Icon icon={lang.icon} size={30} /> {lang.label}
+        </div>
+      ),
+      value: lang.value,
+    }));
+  };
 
   const changeLanguage = (language) => {
     router.isReady && router.push(pathname, asPath, { locale: language.value });
   };
-
-  useEffect(() => {
-    ///get location
-    fetch("https://www.cloudflare.com/cdn-cgi/trace")
-      .then((response) => response.text())
-      .then((two) => {
-        let data = two.replace(/[\r\n]+/g, '","').replace(/\=+/g, '":"');
-        data = '{"' + data.slice(0, data.lastIndexOf('","')) + '"}';
-        var userLocation = JSON.parse(data).loc?.toLowerCase();
-        const defaultLocale =
-          locations.find((country) => country.code === userLocation) ||
-          locations[0];
-        setLocation(defaultLocale.value);
-      });
-  }, []);
 
   return (
     <div id={id} className={styles.header}>
@@ -96,7 +60,7 @@ const Header = (props: HeaderProps) => {
             />
             <Select
               className={styles.language}
-              options={languages}
+              options={formatLanguages()}
               isSearchable={false}
               variant="no-outlined"
               menuWidth={150}

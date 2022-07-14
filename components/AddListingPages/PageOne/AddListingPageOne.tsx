@@ -17,7 +17,7 @@ import ChooseCategory from "components/AddListingPages/PageOne/ChooseCategory/Ch
 import Question from "components/Question/Question";
 import { Categories, YesNo } from "enums";
 import BizListingApi from "../../../services/biz-listing";
-import useTrans from "useTrans";
+import useTrans from "hooks/useTrans";
 
 interface AddListingProps {
   onUpdateFormData: (data: { [key: string]: any }) => void;

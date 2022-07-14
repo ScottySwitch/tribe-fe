@@ -16,6 +16,7 @@ import CategoryApi from "services/category";
 
 import styles from "styles/App.module.scss";
 import "../styles/globals.css";
+import useLocation from "hooks/useLocation";
 
 export type ILoginInfor = {
   token?: string;
@@ -49,6 +50,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [showHamModal, setShowHamModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [navList, setNavList] = useState<{ [key: string]: any }[]>([]);
+
+  const { location } = useLocation();
 
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
@@ -117,11 +120,16 @@ function MyApp({ Component, pageProps }: AppProps) {
       slug: get(item, "attributes.slug"),
       id: item.id,
       items: Array.isArray(get(item, "attributes.category_links.data"))
-        ? get(item, "attributes.category_links.data").map((navItem, index) => ({
-          label: get(navItem, "attributes.label"),
-          value: get(navItem, "attributes.value"),
-          href: `/${get(item, "attributes.slug")}/${get(navItem, "attributes.value")}`
-        })).slice(0, 5)
+        ? get(item, "attributes.category_links.data")
+            .map((navItem, index) => ({
+              label: get(navItem, "attributes.label"),
+              value: get(navItem, "attributes.value"),
+              href: `/${get(item, "attributes.slug")}/${get(
+                navItem,
+                "attributes.value"
+              )}`,
+            }))
+            .slice(0, 5)
         : [],
     }));
 
@@ -156,6 +164,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               user={user}
               updateUser={updateUser}
               deleteUser={deleteUser}
+              location={location}
               {...pageProps}
             />
             <AuthPopup

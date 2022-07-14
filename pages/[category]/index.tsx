@@ -1,7 +1,9 @@
+import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { get } from "lodash";
+
 import ArticleCard from "components/ArticleCard/ArticleCard";
 import Carousel from "components/Carousel/Carousel";
 import CollectionCard from "components/CollectionCard/CollectionCard";
@@ -11,7 +13,6 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
 import {
   curatedList,
-  dummySubCategories,
   homeBannerResponsive,
   homeCuratedResponsive,
   infoCardResponsive,
@@ -24,9 +25,11 @@ import CategoryLinkApi from "services/category-link";
 import Loader from "components/Loader/Loader";
 import Pagination from "components/Pagination/Pagination";
 import styles from "styles/Home.module.scss";
-import useTrans from "useTrans";
+import useTrans from "hooks/useTrans";
 import ArticleApi from "../../services/article";
-import Link from "next/link";
+import useLocation from "hooks/useLocation";
+import { Ilisting } from "type";
+import { formatListingArray } from "utils";
 
 const Category = (props: any) => {
   const trans = useTrans();
@@ -47,106 +50,77 @@ const Category = (props: any) => {
 
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
+  const [categoryInfor, setCategoryInfor] = useState<Ilisting>({});
   const [listingArray, setListingArray] = useState<{ [key: string]: any }[]>(
     []
   );
-  const [categoryId, setCategoryId] = useState<number>(1);
-  const [subCategories, setSubCategories] = useState<
-    { [key: string]: string }[]
-  >([]);
+
+  const { location } = useLocation();
 
   useEffect(() => {
-    let categoryId;
-    switch (category) {
-      case CategoryText.BUY:
-        categoryId = Categories.BUY;
-        break;
-      case CategoryText.EAT:
-        categoryId = Categories.EAT;
-        break;
-      case CategoryText.SEE_AND_DO:
-        categoryId = Categories.SEE_AND_DO;
-        break;
-      case CategoryText.STAY:
-        categoryId = Categories.STAY;
-        break;
-      case CategoryText.TRANSPORT:
-        categoryId = Categories.TRANSPORT;
-        break;
-    }
-    setSubCategories(dummySubCategories);
-    setLoading(false);
-    getData(categoryId, pagination.page);
-  }, [pagination.page]);
-
-  const getData = async (categoryId, page) => {
-    const data = await BizListingApi.getBizListingsByCategoryId(
-      categoryId,
-      page
-    );
-    if (get(data, "data.data")) {
+    const getData = async (categoryId, page) => {
+      const data = await BizListingApi.getAllBizlitingByCategorySlug(
+        location,
+        categoryId,
+        page
+      );
       const rawListingArray = get(data, "data.data");
-      let listingArray: any = [];
-      listingArray =
-        Array.isArray(rawListingArray) &&
-        rawListingArray.map((item) => ({
-          images: get(item, "attributes.images") || [],
-          title: get(item, "attributes.name"),
-          slug: get(item, "attributes.slug"),
-          isVerified: get(item, "attributes.is_verified"),
-          address: get(item, "attributes.address"),
-          country: get(item, "attributes.country"),
-          description: get(item, "attributes.description"),
-          // followerNumber: get(item, "user_listing_follows.length"),
-          // tags: get(item, "attributes.tags"),
-          // categories: get(item, "attributes.categories"),
-          price: get(item, "attributes.price_range.min") || "",
-          currency: get(item, "attributes.price_range.currency") || "",
-          // rate: get(item, "attributes.rate"),
-          // rateNumber: get(item, "attributes.rate_number"),
-        }));
+      let listingArray = formatListingArray(rawListingArray);
+
       setListingArray(listingArray);
-      // setTotal(get(data, 'data.meta.pagination.total'))
       setPagination({
         ...pagination,
         total: get(data, "data.meta.pagination.total"),
       });
-    }
-  };
+    };
 
-  let bannerSrc;
-  let categoryName;
-  let categoryDescription;
-  switch (category) {
-    case CategoryText.BUY:
-      bannerSrc = "/images/buy-banner.svg";
-      categoryName = "Buy";
-      categoryDescription = "Explore a range of items.";
-      break;
-    case CategoryText.EAT:
-      bannerSrc = "/images/eat-banner.svg";
-      categoryName = "Eat";
-      categoryDescription =
-        "Explore a wide array of cuisine types across different cultures.";
-      break;
-    case CategoryText.SEE_AND_DO:
-      bannerSrc = "/images/see-and-do-banner.svg";
-      categoryName = "See & Do";
-      categoryDescription =
-        "Explore famous attractions, key landmarks and experience localized activities. ";
-      break;
-    case CategoryText.STAY:
-      bannerSrc = "/images/stay-banner.svg";
-      categoryName = "Stay";
-      categoryDescription =
-        "Find the best accommodation for your any occasion.";
-      break;
-    case CategoryText.TRANSPORT:
-      bannerSrc = "/images/transport-banner.svg";
-      categoryName = "Transport";
-      categoryDescription = "Find the best way to get around.";
-      break;
-  }
+    let defaultCategoryInfor;
+    switch (category) {
+      case CategoryText.BUY:
+        defaultCategoryInfor = {
+          bannerSrc: "/images/buy-banner.svg",
+          categoryName: "Buy",
+          categoryDescription: "Explore a range of items.",
+        };
+        break;
+      case CategoryText.EAT:
+        defaultCategoryInfor = {
+          bannerSrc: "/images/eat-banner.svg",
+          categoryName: "Eat",
+          categoryDescription:
+            "Explore a wide array of cuisine types across different cultures.",
+        };
+        break;
+      case CategoryText.SEE_AND_DO:
+        defaultCategoryInfor = {
+          bannerSrc: "/images/see-and-do-banner.svg",
+          categoryName: "See and Do",
+          categoryDescription:
+            "Explore a wide array of cuisine types across different cultures.",
+        };
+        break;
+      case CategoryText.STAY:
+        defaultCategoryInfor = {
+          bannerSrc: "/images/stay-banner.svg",
+          categoryName: "Stay",
+          categoryDescription:
+            "Explore famous attractions, key landmarks and experience localized activities. ",
+        };
+        break;
+      case CategoryText.TRANSPORT:
+        defaultCategoryInfor = {
+          bannerSrc: "/images/transport-banner.svg",
+          categoryName: "Transport",
+          categoryDescription: "Find the best way to get around.",
+        };
+        break;
+    }
+
+    setCategoryInfor(defaultCategoryInfor);
+    setLoading(false);
+    location && getData(category, pagination.page);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.page, category, location]);
 
   const handleSelectSubCategory = (slug) =>
     router.push({
@@ -165,16 +139,18 @@ const Category = (props: any) => {
     <div>
       <SectionLayout className={styles.collection_banner}>
         <Image
-          src={bannerSrc}
+          src={categoryInfor.bannerSrc}
           alt=""
           layout="fill"
           objectFit="cover"
           className={styles.collection_banner_img}
         />
         <div className={styles.collection_context_container}>
-          <div className={styles.collection_name}>{categoryName}</div>
+          <div className={styles.collection_name}>
+            {categoryInfor.categoryName}
+          </div>
           <div className={styles.collection_description}>
-            {categoryDescription}
+            {categoryInfor.categoryDescription}
           </div>
         </div>
       </SectionLayout>
@@ -292,7 +268,7 @@ const Category = (props: any) => {
         <SectionLayout backgroundColor title="Articles">
           <Carousel responsive={homeCuratedResponsive}>
             {listCategoryArticles?.map((item, index) => (
-              <Link href={`/articles/${item.slug}`} key={index}>
+              <Link href={`/articles/${item.slug}`} passHref key={index}>
                 <div className="pb-5">
                   <ArticleCard
                     title={item.title}
@@ -367,24 +343,10 @@ export async function getServerSideProps(context) {
   const rawListCategory = get(dataCategoryLinks, "data.data");
   // const rawCategoryArticles = get(dataCategoryArticles, "data.data");
 
-  const exclusiveDealListingArray =
-    Array.isArray(rawListingExclusiveDealAray) &&
-    rawListingExclusiveDealAray.map((item) => ({
-      images: item.images || [],
-      title: item.name,
-      slug: item.slug,
-      isVerified: item.is_verified,
-      address: item.address,
-      country: item.country,
-      description: item.description,
-      followerNumber: get(item, "user_listing_follows.length"),
-      tags: item.tags,
-      categories: item.categories,
-      price: get(item, "price_range.min") || "",
-      currency: get(item, "price_range.currency") || "",
-      rate: item.rate,
-      rateNumber: item.rate_number,
-    }));
+  const exclusiveDealListingArray = formatListingArray(
+    rawListingExclusiveDealAray
+  );
+
   const bannerArray =
     Array.isArray(rawListBanners) &&
     rawListBanners.map((item) => ({
