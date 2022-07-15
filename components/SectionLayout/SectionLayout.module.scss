@@ -55,3 +55,14 @@
     }
   }
 }
+
+@media screen and (max-width: 450px) {
+  .section_layout {
+    .container {
+      width: 90%;
+      .children {
+        justify-content: center;
+      }
+    }
+  }
+}

@@ -384,7 +384,9 @@ export async function getServerSideProps(context) {
   const dataExclusiveDeal =
     await BizListingApi.getAllBizListingsHaveExclusiveDeal();
   const dataBanners = await BannerApi.getBanner();
-  const dataCollections = await CollectionApi.getCollection();
+  const dataCollections = await CollectionApi.getCollection({
+    pinnedHomepage: true
+  });
   const dataCategories = await CategoryApi.getCategories();
 
   // const dataArticlesPinHome = await ArticleApi.getArticlesPinHome();
