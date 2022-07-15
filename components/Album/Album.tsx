@@ -46,8 +46,12 @@ export const Album = (props: AlbumProps) => {
   };
 
   useEffect(() => {
-    setNavThumbnail(refSlider1.current);
-    setNavGallery(refSlider2.current);
+    console.log("refSlider1", refSlider1.current);
+    console.log("refSlider2", refSlider2.current);
+    setNavThumbnail(images[0]);
+    setNavGallery(images[0]);
+    // setNavThumbnail(refSlider1.current);
+    // setNavGallery(refSlider2.current);
   }, []);
 
   const configThumbnail: Settings = {
