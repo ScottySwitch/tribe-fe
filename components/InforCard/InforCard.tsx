@@ -2,6 +2,7 @@ import Break from "components/Break/Break";
 import Icon from "components/Icon/Icon";
 import Image from "next/image";
 import styles from "./InforCard.module.scss";
+import { useState } from "react";
 
 export interface InforCardProps {
   className?: string;
@@ -71,6 +72,8 @@ const InforCard = (props: InforCardProps) => {
     ));
   };
 
+  const [src, setSrc] = useState(imgUrl);
+
   return (
     <div
       className={`${styles.infor_card} ${className}`}
@@ -90,12 +93,15 @@ const InforCard = (props: InforCardProps) => {
         )}
         {imgUrl && (
           <Image
-            src={imgUrl}
+            src={src}
             alt=""
             layout="responsive"
             width="100%"
             height="100%"
             objectFit="cover"
+            onErrorCapture={() => {
+              setSrc("https://picsum.photos/200/300");
+            }}
           />
         )}
       </div>
@@ -132,7 +138,11 @@ const InforCard = (props: InforCardProps) => {
         <div className={styles.footer}>
           {price && (
             <div className={styles.price}>
-              From <span>{price}{currency}</span>
+              From{" "}
+              <span>
+                {price}
+                {currency}
+              </span>
             </div>
           )}
           {sortingTags.length > 0 && (

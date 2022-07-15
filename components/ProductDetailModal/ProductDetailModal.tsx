@@ -1,55 +1,55 @@
-import { ReactElement, useEffect, useRef, useState } from "react"
-import Image from "next/image"
-import Slider, { Settings } from "react-slick"
-import Modal, { ModalProps } from "components/Modal/Modal"
-import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
-import ScrollingBox from "components/ScrollingBox/ScrollingBox"
-import styles from "./ProductDetailModal.module.scss"
-import Album from "components/Album/Album"
+import { ReactElement, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Slider, { Settings } from "react-slick";
+import Modal, { ModalProps } from "components/Modal/Modal";
+import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
+import ScrollingBox from "components/ScrollingBox/ScrollingBox";
+import styles from "./ProductDetailModal.module.scss";
+import Album from "components/Album/Album";
 
 export interface IProduct {
-  id: number
-  name: string
-  images?: any[]
-  price?: string | number
-  priceSale?: string | number
-  discount?: string | number
-  description?: string
-  type: "paid" | "klook" | "free" | ""
+  id: number;
+  name: string;
+  images?: any[];
+  price?: string | number;
+  priceSale?: string | number;
+  discount?: string | number;
+  description?: string;
+  type: "paid" | "klook" | "free" | "";
 }
 
 interface ProductDetailsModalProps extends ModalProps {
-  data: IProduct
-  onShare?: () => void
-  onKlook?: () => void
-  onBookNow?: () => void
+  data: IProduct;
+  onShare?: () => void;
+  onKlook?: () => void;
+  onBookNow?: () => void;
 }
 
 const SliderSyncing = (props) => {
-  const { images } = props
+  const { images } = props;
 
-  const [navThumbnail, setNavThumbnail] = useState<any>()
-  const [navGallery, setNavGallery] = useState<any>()
+  const [navThumbnail, setNavThumbnail] = useState<any>();
+  const [navGallery, setNavGallery] = useState<any>();
 
-  const refSlider1 = useRef<any>(null)
-  const refSlider2 = useRef<any>(null)
+  const refSlider1 = useRef<any>(null);
+  const refSlider2 = useRef<any>(null);
 
   const handlePrev = () => {
     if (refSlider2 && refSlider2.current) {
-      refSlider2.current.slickPrev()
+      refSlider2.current.slickPrev();
     }
-  }
+  };
   const handleNext = () => {
     if (refSlider2 && refSlider2.current) {
-      refSlider2.current.slickNext()
+      refSlider2.current.slickNext();
     }
-  }
+  };
 
   useEffect(() => {
-    setNavThumbnail(refSlider1.current)
-    setNavGallery(refSlider2.current)
-  }, [])
+    setNavThumbnail(refSlider1.current);
+    setNavGallery(refSlider2.current);
+  }, []);
 
   const configThumbnail: Settings = {
     dots: false,
@@ -61,7 +61,7 @@ const SliderSyncing = (props) => {
     slidesToScroll: 1,
     cssEase: "linear",
     asNavFor: navGallery,
-  }
+  };
 
   const configGallery: Settings = {
     className: styles.slider_gallery_item,
@@ -75,11 +75,15 @@ const SliderSyncing = (props) => {
     focusOnSelect: true,
     asNavFor: navThumbnail,
     adaptiveHeight: true,
-  }
+  };
 
   return (
     <div className={styles.slider_syncing}>
-      <Slider ref={refSlider1} {...configThumbnail} className={styles.slider_thumbnail}>
+      <Slider
+        ref={refSlider1}
+        {...configThumbnail}
+        className={styles.slider_thumbnail}
+      >
         {images?.map((image, index) => (
           <div key={index}>
             <Image
@@ -96,7 +100,11 @@ const SliderSyncing = (props) => {
         <div onClick={handlePrev} className={styles.btn_prev}>
           <Icon icon="carret-left" size={20} color="#FFFFFF" />
         </div>
-        <Slider ref={refSlider2} {...configGallery} className={styles.slider_gallery}>
+        <Slider
+          ref={refSlider2}
+          {...configGallery}
+          className={styles.slider_gallery}
+        >
           {images?.map((image, index) => (
             <div key={index}>
               <Image
@@ -114,27 +122,30 @@ const SliderSyncing = (props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const ProductDetailModal = (props: ProductDetailsModalProps) => {
-  const { data, visible, onClose, onShare, onKlook, onBookNow } = props
-  console.log('data', data)
+  const { data, visible, onClose, onShare, onKlook, onBookNow } = props;
+  console.log("data", data);
   return (
-    <Modal visible={visible} width="100%" maxWidth={1028} onClose={onClose}>
+    <Modal visible={visible} width="100%" maxWidth={1328} onClose={onClose}>
       <div className={styles.container}>
         <div className={styles.close} onClick={onClose}>
           <Icon icon="cancel-mobile" />
         </div>
         <div className={styles.container_gallery}>
-          <Album images={data.images} />
+          <Album
+            images={data.images}
+            showedPicsNumber={{ slidesToShow: 6, slidesToScroll: 6 }}
+          />
         </div>
 
         <div className={styles.container_info}>
           <h2 className={styles.title}>{data.name}</h2>
           <div className="flex items-center justify-between mb-[10px]">
             <div className="flex items-center gap-[16px]">
-              {data.priceSale ? 
+              {data.priceSale ? (
                 <div>
                   <div className={styles.price_sale}>
                     <span>$</span>
@@ -150,12 +161,12 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
                     </div>
                   </div>
                 </div>
-                :
+              ) : (
                 <div className={styles.price_sale}>
-                <span>$</span>
-                <span>{data.price}</span>
-              </div>
-              }
+                  <span>$</span>
+                  <span>{data.price}</span>
+                </div>
+              )}
             </div>
             <Button
               className={styles.btn_share}
@@ -194,7 +205,7 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
         </div>
       </div>
     </Modal>
-  )
-}
+  );
+};
 
-export default ProductDetailModal
+export default ProductDetailModal;

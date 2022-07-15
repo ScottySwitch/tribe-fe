@@ -112,7 +112,6 @@ const Properties = () => {
         handleProperties = "deals";
       }
       let propertiesData = get(data, `data.data[0].${handleProperties}`);
-      console.log("listingDetail", listingDetail);
 
       setListingInformation(listingDetail);
       if (property === "products") {

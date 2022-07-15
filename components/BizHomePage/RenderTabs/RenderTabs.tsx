@@ -1,46 +1,48 @@
-import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
-import InforCard from "components/InforCard/InforCard"
-import Input from "components/Input/Input"
-import MenuCard from "components/MenuCard/MenuCard"
-import PromotionCard from "components/PromotionCard/PromotionCard"
-import { eatTabList, productTabList, serviceTabList } from "constant"
-import { Categories, ListingHomePageScreens, ListingTabs } from "enums"
-import { get } from "lodash"
-import Image from "next/image"
-import { useRouter } from "next/router"
-import { useState } from "react"
-import Heading from "../../Heading/Heading"
+import Button from "components/Button/Button";
+import DealDetailModal from "components/DealDetailModal/DealDetailModal";
+import Icon from "components/Icon/Icon";
+import InforCard from "components/InforCard/InforCard";
+import Input from "components/Input/Input";
+import MenuCard from "components/MenuCard/MenuCard";
+import ProductDetailModal from "components/ProductDetailModal/ProductDetailModal";
+import PromotionCard from "components/PromotionCard/PromotionCard";
+import { eatTabList, productTabList, serviceTabList } from "constant";
+import { Categories, ListingHomePageScreens, ListingTabs } from "enums";
+import { get } from "lodash";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import Heading from "../../Heading/Heading";
 
-import styles from "./RenderTabs.module.scss"
+import styles from "./RenderTabs.module.scss";
 
 const initSelectedTab = (category) => {
   switch (category) {
     case Categories.BUY:
-      return { itemType: ListingTabs.PRODUCT, tabList: productTabList }
+      return { itemType: ListingTabs.PRODUCT, tabList: productTabList };
     case Categories.EAT:
-      return { itemType: ListingTabs.DISH, tabList: eatTabList }
+      return { itemType: ListingTabs.DISH, tabList: eatTabList };
     default:
-      return { itemType: ListingTabs.SERVICE, tabList: serviceTabList }
+      return { itemType: ListingTabs.SERVICE, tabList: serviceTabList };
   }
-}
+};
 
 const EditList = ({ category, selectedTab, onSetScreen }) => {
-  const tabList = initSelectedTab(category).tabList
-  const tabScreen = tabList.find((tab) => tab.value === selectedTab)?.screen
-  return <a onClick={() => onSetScreen(tabScreen)}>Edit {selectedTab}</a>
-}
+  const tabList = initSelectedTab(category).tabList;
+  const tabScreen = tabList.find((tab) => tab.value === selectedTab)?.screen;
+  return <a onClick={() => onSetScreen(tabScreen)}>Edit {selectedTab}</a>;
+};
 
 interface TabContentProps {
-  isViewPage?: boolean
-  selectedTab?: ListingTabs
-  cardItem?: any
-  list: any[]
-  blankImg: string
-  blankText: string
-  buttonText: string
-  onClick: () => void
-  onDelete: (item: any) => void
+  isViewPage?: boolean;
+  selectedTab?: ListingTabs;
+  cardItem?: any;
+  list: any[];
+  blankImg: string;
+  blankText: string;
+  buttonText: string;
+  onClick: () => void;
+  onDelete: (item: any) => void;
 }
 
 const TabContent = ({
@@ -54,14 +56,21 @@ const TabContent = ({
   onClick,
   onDelete,
 }: TabContentProps) => {
-  const router = useRouter()
-  const { query } = router
-  const { listingSlug } = query
+  const router = useRouter();
+  const { query } = router;
+  const { listingSlug } = query;
 
-  const isDeal = selectedTab === ListingTabs.DEAL
-  const itemArray = [ListingTabs.DISH, ListingTabs.PRODUCT, ListingTabs.SERVICE]
-  const isItem = selectedTab && itemArray.includes(selectedTab)
-  const CardItem = cardItem
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>({});
+
+  const isDeal = selectedTab === ListingTabs.DEAL;
+  const itemArray = [
+    ListingTabs.DISH,
+    ListingTabs.PRODUCT,
+    ListingTabs.SERVICE,
+  ];
+  const isItem = selectedTab && itemArray.includes(selectedTab);
+  const CardItem = cardItem;
 
   if (!(Array.isArray(list) && list.length)) {
     return (
@@ -69,32 +78,76 @@ const TabContent = ({
         <Image src={blankImg} width={100} alt="" />
         <p>{blankText}</p>
         {!isViewPage && (
-          <Button text={buttonText} size="small" width={300} className="my-5" onClick={onClick} />
+          <Button
+            text={buttonText}
+            size="small"
+            width={300}
+            className="my-5"
+            onClick={onClick}
+          />
         )}
       </div>
-    )
+    );
+  }
+
+  const handleOpenDetailModal = (item) => {
+    setSelectedItem(item);
+    setShowDetailModal(true);
+  };
+
+  // let DetailModal = ProductDetailModal;
+  console.log("selectedTab", selectedTab);
+  let DetailModal;
+  switch (selectedTab) {
+    case ListingTabs.DISH:
+      DetailModal = ProductDetailModal;
+      break;
+    case ListingTabs.PRODUCT:
+      DetailModal = ProductDetailModal;
+      break;
+
+    case ListingTabs.SERVICE:
+      DetailModal = ProductDetailModal;
+      break;
+
+    case ListingTabs.DEAL:
+      DetailModal = DealDetailModal;
+      break;
   }
 
   return (
     <div className={styles.tab_content_container}>
       <div className="w-full flex justify-center p-[16px]">
-        <Input placeholder="search" width="100%" prefix={<Icon icon="search" />} />
+        <Input
+          placeholder="search"
+          width="100%"
+          prefix={<Icon icon="search" />}
+        />
       </div>
       <div className={styles.items_container}>
         {list.map((item) => {
-          const id = get(item, "attributes.id") || item.id
-          const images = item.images || []
-          const firstImage = item.imgUrl || images[0]
-          const name = get(item, "attributes.name") || item.name || ""
-          const price = get(item, "attributes.price") || item.price || ""
+          const id = get(item, "attributes.id") || item.id;
+          const images = item.images || [];
+          const firstImage = item.imgUrl || images[0];
+          const name = get(item, "attributes.name") || item.name || "";
+          const price = get(item, "attributes.price") || item.price || "";
           const description =
-            get(item, "attributes.description") || item.information || item.description || ""
-          const expiredAt = get(item, "attributes.expire_at") || item.expireAt || ""
+            get(item, "attributes.description") ||
+            item.information ||
+            item.description ||
+            item.termsConditions ||
+            "";
+          const expiredAt =
+            get(item, "attributes.expire_at") ||
+            new Date(item.validUntil).toLocaleString() ||
+            item.expireAt ||
+            "";
           return (
             <div
               key={id}
               className={styles.info_card_container}
               style={{ width: isDeal ? "50%" : "" }}
+              onClick={() => handleOpenDetailModal(item)}
             >
               <CardItem
                 imgUrl={firstImage || "https://picsum.photos/200/300"}
@@ -109,7 +162,7 @@ const TabContent = ({
                 </div>
               )}
             </div>
-          )
+          );
         })}
       </div>
       <div
@@ -118,25 +171,40 @@ const TabContent = ({
       >
         See all
       </div>
+      <DetailModal
+        visible={showDetailModal}
+        data={selectedItem}
+        onClose={() => setShowDetailModal(false)}
+      />
     </div>
-  )
-}
+  );
+};
 
 const RenderTabs = (props: {
-  isPaid?: boolean
-  isViewPage?: boolean
-  itemList: any[]
-  dealList: any[]
-  menuList: any[]
-  category: Categories
-  onSetScreen: (e: ListingHomePageScreens) => void
-  onDelete: (e: { [key: string]: any }) => void
+  isPaid?: boolean;
+  isViewPage?: boolean;
+  itemList: any[];
+  dealList: any[];
+  menuList: any[];
+  category: Categories;
+  onSetScreen: (e: ListingHomePageScreens) => void;
+  onDelete: (e: { [key: string]: any }) => void;
 }) => {
-  const { isPaid, isViewPage, itemList, dealList, menuList, category, onSetScreen, onDelete } =
-    props
-  const [selectedTab, setSelectedTab] = useState<ListingTabs>(initSelectedTab(category).itemType)
+  const {
+    isPaid,
+    isViewPage,
+    itemList,
+    dealList,
+    menuList,
+    category,
+    onSetScreen,
+    onDelete,
+  } = props;
+  const [selectedTab, setSelectedTab] = useState<ListingTabs>(
+    initSelectedTab(category).itemType
+  );
 
-  let tabContent
+  let tabContent;
   switch (selectedTab) {
     case ListingTabs.SERVICE:
       tabContent = (
@@ -151,12 +219,11 @@ const RenderTabs = (props: {
           buttonText="Add Service now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
         />
-      )
-      break
+      );
+      break;
     case ListingTabs.PRODUCT:
       tabContent = (
         <TabContent
-        
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
@@ -167,8 +234,8 @@ const RenderTabs = (props: {
           buttonText="Add product now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
         />
-      )
-      break
+      );
+      break;
     case ListingTabs.DISH:
       tabContent = (
         <TabContent
@@ -182,8 +249,8 @@ const RenderTabs = (props: {
           buttonText="Add dish now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
         />
-      )
-      break
+      );
+      break;
     case ListingTabs.MENU:
       tabContent = (
         <TabContent
@@ -197,8 +264,8 @@ const RenderTabs = (props: {
           buttonText="Add menu now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_MENU)}
         />
-      )
-      break
+      );
+      break;
     case ListingTabs.DEAL:
       tabContent = (
         <TabContent
@@ -212,8 +279,8 @@ const RenderTabs = (props: {
           buttonText="Add deals now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEALS)}
         />
-      )
-      break
+      );
+      break;
   }
 
   return (
@@ -226,17 +293,22 @@ const RenderTabs = (props: {
               selected={selectedTab === tab.value}
               text={tab.text}
               onClick={() =>
-                !(tab.value === ListingTabs.DEAL && !isPaid) && setSelectedTab(tab.value)
+                !(tab.value === ListingTabs.DEAL && !isPaid) &&
+                setSelectedTab(tab.value)
               }
             />
           ))}
         </div>
         {!isViewPage && (
-          <EditList category={category} selectedTab={selectedTab} onSetScreen={onSetScreen} />
+          <EditList
+            category={category}
+            selectedTab={selectedTab}
+            onSetScreen={onSetScreen}
+          />
         )}
       </div>
       {tabContent}
     </div>
-  )
-}
-export default RenderTabs
+  );
+};
+export default RenderTabs;

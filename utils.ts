@@ -105,3 +105,7 @@ export const formatListingArray = (rawListing) =>
         rateNumber: item.rate_number,
       }))
     : [];
+
+    export const isArray = (item) => {
+      return (Array.isArray(item) && item.length > 0) ? true : false
+    }

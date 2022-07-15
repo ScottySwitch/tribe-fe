@@ -48,6 +48,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [openHours, setOpenHours] = useState([]);
   const [reviews, setReviews] = useState<{ [key: string]: any }[]>([]);
   const [listingRate, setListingRate] = useState(1);
+  const [klookUrl, setKlookUrl] = useState<string>("");
   const [priceRange, setPriceRange] = useState({
     min: "",
     max: "",
@@ -129,7 +130,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           klookUrl: item.klook_url,
           isEdited: false,
           currency: item.currency,
-          discountType: item.currency_discount
+          discountType: item.currency_discount,
         }));
         const rawMenu = listing.menus || [];
         const menuArray = rawMenu.map((item) => ({
@@ -193,6 +194,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
         setSocialInfo(listing.social_info);
+        setKlookUrl(listing.klook_url);
         // setDealList(listing.deals);
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
@@ -343,7 +345,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           klook_url: item.klookUrl,
           is_revision: true,
           currency: item.currency,
-          currency_discount: item.discountType
+          currency_discount: item.discountType,
         };
         await ProductApi.createProduct(CreateData);
       })
@@ -502,6 +504,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         <div className={styles.body}>
           <div className={styles.right_col}>
             <EditAction
+              klookUrl={klookUrl}
               isOwned={true}
               isViewPage={isViewPage}
               isLoading={isLoading}

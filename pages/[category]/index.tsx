@@ -335,7 +335,9 @@ export async function getServerSideProps(context) {
     category
   );
   const dataBanners = await BannerApi.getBannerByCategory(category);
-  const dataCollections = await CollectionApi.getCollectionByCategory(category);
+  const dataCollections = await CollectionApi.getCollection({
+    category: category
+  });
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
   // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);

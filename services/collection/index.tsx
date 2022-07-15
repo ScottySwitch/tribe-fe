@@ -2,13 +2,17 @@ import Api from "../index";
 
 const qs = require("qs");
 
-const getCollection = async () => {
-  const url = `/api/collections/get-collection-custom`;
-  return await Api.get(url);
-};
-
-const getCollectionByCategory = async (category) => {
-  const url = `/api/collections/get-collection-by-category?category=${category}`;
+const getCollection = async (params: any) => {
+  let query: any = {};
+  const {category, pinnedHomepage} = params
+  if (category) {
+    query.category = category
+  }
+  if (pinnedHomepage) {{
+    query.pinned_homepage = pinnedHomepage
+  }}
+  query = qs.stringify(query)
+  const url = `/api/collections/get-collection-custom?${query}`;
   return await Api.get(url);
 };
 
@@ -43,7 +47,6 @@ const getAllCollectionByCollectionSlug = async (collectionSlug: string) => {
 
 const CollectionApi = {
   getCollection,
-  getCollectionByCategory,
   getAllCollection,
   getAllCollectionByCollectionSlug,
 };
