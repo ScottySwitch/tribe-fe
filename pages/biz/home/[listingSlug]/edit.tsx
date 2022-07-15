@@ -510,6 +510,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               isLoading={isLoading}
               isPaid={isPaid}
               action={action}
+              klookUrl={bizListing.klook_url}
               onApplyAction={handleSetAction}
               onPublishPage={handleSubmit}
             />

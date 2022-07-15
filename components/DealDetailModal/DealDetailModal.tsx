@@ -25,8 +25,6 @@ const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props;
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
-  console.log("conditions", data);
-
   useEffect(() => {
     if (data) {
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -44,6 +42,8 @@ const DealDetailModal = (props: DealDetailModalProps) => {
       setIsFavourite(true);
     }
   };
+
+  console.log(data);
 
   return (
     <Modal
@@ -73,30 +73,36 @@ const DealDetailModal = (props: DealDetailModalProps) => {
         />
       </div>
       <div className={styles.content}>
-        {data.description && (
-          <div className={styles.item}>
-            <h6 className={styles.label}>Offers</h6>
-            <p>{data.description}</p>
-          </div>
-        )}
-        {data.end_date && (
+        {data.description ||
+          (data.information && (
+            <div className={styles.item}>
+              <h6 className={styles.label}>Offers</h6>
+              <p className="text-left">
+                {data.description || data.information}
+              </p>
+            </div>
+          ))}
+        {(data.end_date || data.validUntil) && (
           <div className={styles.item}>
             <h6 className={styles.label}>Valid</h6>
-            <p>
+            <p className="text-left">
               {data.start_date && data.start_date + " - "}
-              {`${data.end_date}`}
+              {data.end_date}
+              {new Date(data.validUntil).toLocaleString()}
             </p>
           </div>
         )}
         {(get(data, "attributes.terms_conditions") ||
           data.conditions ||
-          data.terms_conditions) && (
+          data.terms_conditions ||
+          data.termsConditions) && (
           <div className={styles.item}>
             <h6 className={styles.label}>Terms & Conditions</h6>
-            <p>
+            <p className="text-left">
               {get(data, "attributes.terms_conditions") ||
                 data.terms_conditions ||
-                data.conditions}
+                data.conditions ||
+                data.termsConditions}
             </p>
           </div>
         )}

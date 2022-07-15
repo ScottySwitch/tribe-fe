@@ -8,10 +8,14 @@ import styles from "./Album.module.scss";
 
 interface AlbumProps {
   images?: any[];
+  showedPicsNumber?: { slidesToShow: number; slidesToScroll: number };
 }
 
 export const Album = (props: AlbumProps) => {
-  const { images = [] } = props;
+  const {
+    images = [],
+    showedPicsNumber = { slidesToShow: 12, slidesToScroll: 12 },
+  } = props;
 
   const [navThumbnail, setNavThumbnail] = useState<any>();
   const [navGallery, setNavGallery] = useState<any>();
@@ -64,8 +68,8 @@ export const Album = (props: AlbumProps) => {
     arrows: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 12,
-    slidesToScroll: 12,
+    slidesToShow: showedPicsNumber.slidesToShow,
+    slidesToScroll: showedPicsNumber.slidesToScroll,
     cssEase: "linear",
     focusOnSelect: true,
     asNavFor: navThumbnail,
@@ -115,7 +119,7 @@ export const Album = (props: AlbumProps) => {
                 src={image}
                 layout="fill"
                 alt={`gallery-${index}`}
-                objectFit="contain"
+                objectFit="cover"
               />
             </div>
           ))}

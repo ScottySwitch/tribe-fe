@@ -211,7 +211,7 @@ const EditAction = (props: EditActionProps) => {
           <Button
             text="Book on KLOOK"
             size="small"
-            onClick={() => handleOpenNewWindow({label: 'Klook url', value: klookUrl})}
+            onClick={() => window.open(klookUrl, "_blank")?.focus()}
             backgroundColor="#FF5B02"
           />
         </div>
