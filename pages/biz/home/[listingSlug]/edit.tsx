@@ -48,7 +48,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [openHours, setOpenHours] = useState([]);
   const [reviews, setReviews] = useState<{ [key: string]: any }[]>([]);
   const [listingRate, setListingRate] = useState(1);
-  const [klookUrl, setKlookUrl] = useState<string>('')
+  const [klookUrl, setKlookUrl] = useState<string>("");
   const [priceRange, setPriceRange] = useState({
     min: "",
     max: "",
@@ -194,7 +194,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setOpenHours(listing.open_hours);
         setPriceRange(listing.price_range);
         setSocialInfo(listing.social_info);
-        setKlookUrl(listing.klook_url)
+        setKlookUrl(listing.klook_url);
         // setDealList(listing.deals);
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
@@ -510,7 +510,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               isLoading={isLoading}
               isPaid={isPaid}
               action={action}
-              klookUrl={bizListing.klook_url}
               onApplyAction={handleSetAction}
               onPublishPage={handleSubmit}
             />
