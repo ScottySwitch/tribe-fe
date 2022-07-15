@@ -157,6 +157,8 @@ const EditAction = (props: EditActionProps) => {
     }
   };
 
+
+  
   return (
     <React.Fragment>
       {isViewPage && isPaid && action?.value && (
@@ -209,7 +211,7 @@ const EditAction = (props: EditActionProps) => {
           <Button
             text="Book on KLOOK"
             size="small"
-            onClick={() => handleOpenNewWindow(klookUrl)}
+            onClick={() => handleOpenNewWindow({label: 'Klook url', value: klookUrl})}
             backgroundColor="#FF5B02"
           />
         </div>

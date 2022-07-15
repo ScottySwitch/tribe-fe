@@ -26,7 +26,7 @@ import {
 import styles from "styles/Home.module.scss";
 import useLocation from "hooks/useLocation";
 import { Ilisting } from "type";
-import { formatListingArray } from "utils";
+import { formatListingArray, isArray } from "utils";
 
 const Home: NextPage = (props: any) => {
   const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
@@ -98,10 +98,10 @@ const Home: NextPage = (props: any) => {
 
   return (
     <div>
-      <SectionLayout>
-        <Carousel responsive={homeBannerResponsive}>
-          {Array.isArray(listBanners) ? (
-            listBanners?.map((img, index) => (
+      {isArray(listBanners) && (
+        <SectionLayout>
+          <Carousel responsive={homeBannerResponsive}>
+            {listBanners?.map((img, index) => (
               <div
                 key={index}
                 className={styles.banner_card}
@@ -116,17 +116,15 @@ const Home: NextPage = (props: any) => {
                   height={200}
                 />
               </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
-      </SectionLayout>
-      <SectionLayout title="Explore BESTS" childrenClassName={styles.bests}>
-        {Array.isArray(listCategories) &&
-          listCategories.map((item, index) => (
+            ))}
+          </Carousel>
+        </SectionLayout>
+      )}
+      {isArray(listCategories) && (
+        <SectionLayout title="Explore BESTS" childrenClassName={styles.bests}>
+          {listCategories.map((item, index) => (
             <div
-              key={index}
+              key={index.slug}
               className={styles.category}
               onClick={() => router.push(item.slug)}
             >
@@ -136,8 +134,9 @@ const Home: NextPage = (props: any) => {
               <div className={styles.category_label}>{item.label}</div>
             </div>
           ))}
-      </SectionLayout>
-      {Array.isArray(listingExclusiveDeal) && listingExclusiveDeal.length > 0 && (
+        </SectionLayout>
+      )}
+      {isArray(listingExclusiveDeal) && (
         <SectionLayout title="Brands With Exclusive Deals For You">
           <Carousel responsive={infoCardResponsive}>
             {listingExclusiveDeal?.map((card) => (
@@ -161,11 +160,11 @@ const Home: NextPage = (props: any) => {
           </Carousel>
         </SectionLayout>
       )}
-      {Array.isArray(listCollections) && listCollections.length > 0 && (
+      {isArray(listCollections) && (
         <SectionLayout backgroundColor title="Specially Curated For You">
           <Carousel responsive={homeCuratedResponsive}>
             {listCollections?.map((item, index) => (
-              <div key={index}>
+              <div key={item.slug}>
                 <CollectionCard
                   slug={item.slug}
                   title={item.title}
@@ -176,10 +175,10 @@ const Home: NextPage = (props: any) => {
           </Carousel>
         </SectionLayout>
       )}
-      <SectionLayout title="Where to BUY">
-        <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listings?.buy) ? (
-            listings?.buy.map((card) => (
+      {isArray(listings?.buy) && (
+        <SectionLayout title="Where to Buy">
+          <Carousel responsive={infoCardResponsive}>
+            {listings?.buy.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -196,16 +195,14 @@ const Home: NextPage = (props: any) => {
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
-      </SectionLayout>
-      <SectionLayout title="What to SEE">
-        <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listings?.seeAndDo) ? (
-            listings?.seeAndDo.map((card) => (
+            ))}
+          </Carousel>
+        </SectionLayout>
+      )}
+      {isArray(listings?.seeAndDo) && (
+        <SectionLayout title="What to See">
+          <Carousel responsive={infoCardResponsive}>
+            {listings?.seeAndDo.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -222,12 +219,10 @@ const Home: NextPage = (props: any) => {
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
-      </SectionLayout>
+            ))}
+          </Carousel>
+        </SectionLayout>
+      )}
       {/* <SectionLayout backgroundColor title="Featured Articles">
         <Carousel responsive={homeCuratedResponsive}>
           {listHomeArticles?.map((item, index) => (
@@ -241,10 +236,10 @@ const Home: NextPage = (props: any) => {
           ))}
         </Carousel>
       </SectionLayout> */}
-      <SectionLayout title="What to EAT">
-        <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listings?.eat) ? (
-            listings?.eat.map((card) => (
+      {isArray(listings?.eat) && (
+        <SectionLayout title="What to Eat">
+          <Carousel responsive={infoCardResponsive}>
+            {listings?.eat.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -261,16 +256,14 @@ const Home: NextPage = (props: any) => {
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
-      </SectionLayout>
-      <SectionLayout title="What to TRANSPORT">
-        <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listings?.transport) ? (
-            listings?.transport.map((card) => (
+            ))}
+          </Carousel>
+        </SectionLayout>
+      )}
+      {isArray(listings?.transport) && (
+        <SectionLayout title="Access to Transport">
+          <Carousel responsive={infoCardResponsive}>
+            {listings?.transport.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -289,16 +282,14 @@ const Home: NextPage = (props: any) => {
                   }}
                 />
               </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
-      </SectionLayout>
-      <SectionLayout title="What to STAY">
-        <Carousel responsive={infoCardResponsive}>
-          {Array.isArray(listings?.stay) ? (
-            listings?.stay.map((card) => (
+            ))}
+          </Carousel>
+        </SectionLayout>
+      )}
+      {isArray(listings?.stay) && (
+        <SectionLayout title="Where to Stay">
+          <Carousel responsive={infoCardResponsive}>
+            {listings?.stay.map((card) => (
               <div key={card.title} className="pb-5">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
@@ -317,13 +308,11 @@ const Home: NextPage = (props: any) => {
                   }}
                 />
               </div>
-            ))
-          ) : (
-            <div></div>
-          )}
-        </Carousel>
-      </SectionLayout>
-      {Array.isArray(listingForYou) && listingForYou.length > 0 && (
+            ))}
+          </Carousel>
+        </SectionLayout>
+      )}
+      {isArray(listingForYou) && (
         <div>
           <SectionLayout className={styles.for_you}>
             <div className={styles.for_you_tag}>
