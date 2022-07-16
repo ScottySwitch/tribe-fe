@@ -23,7 +23,6 @@ const TopSearches = (props: ITopSearchesProp) => {
   const getData = async () => {
     const data = await TopSearchApi.getTopSearches();
     const rawTopSearchData = get(data, "data.data");
-    console.log("rawTopSearchData", rawTopSearchData);
     const topSearchArray = Array.isArray(rawTopSearchData)
       ? rawTopSearchData.map((item) => ({
           name: item.attributes.name,

@@ -49,8 +49,10 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoginError, setIsLoginError] = useState<boolean>(false);
+  const { pathname, locale } = router;
 
   const handleLogin = async () => {
+    console.log(pathname);
     let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}");
     setIsLoading(true);
     // Email
@@ -97,8 +99,7 @@ const LoginPage = () => {
         await AuthApi.getMe();
       }
     }
-    // router.push("/"); 
-    window.location.href = "/"
+    window.location.href = "/";
   };
 
   const routeFacebookLogin =
