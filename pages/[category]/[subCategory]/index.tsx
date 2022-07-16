@@ -19,7 +19,7 @@ import Loader from "components/Loader/Loader";
 
 import styles from "styles/Home.module.scss";
 import useTrans from "hooks/useTrans";
-import { formatListingArray } from "utils";
+import { formatListingArray, isArray } from "utils";
 import useLocation from "hooks/useLocation";
 
 const SubCategoryPage = (props: any) => {
@@ -94,7 +94,7 @@ const SubCategoryPage = (props: any) => {
           <Icon icon="carret-right" size={14} color="#7F859F" />
           {subCategory}
         </div>
-        {Array.isArray(listingBanners) && listingBanners.length > 0 && (
+        {isArray(listingBanners) && (
           <Carousel responsive={homeBannerResponsive}>
             {listingBanners.map((img, index) => (
               <div key={index} className={styles.banner_card}>
@@ -154,10 +154,9 @@ const SubCategoryPage = (props: any) => {
           /> */}
         </div>
       </SectionLayout>
-      <SectionLayout>
+      <SectionLayout show={isArray(listings)}>
         <div className="flex flex-wrap gap-5">
-          {Array.isArray(listings) &&
-            listings.map((item) => (
+            {listings.map((item) => (
               <div key={item.title} className="pb-5">
                 <InforCard
                   imgUrl={item.images[0]}

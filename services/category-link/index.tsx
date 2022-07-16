@@ -23,7 +23,7 @@ const getCategoryLinksByCategorySlug = async (category) => {
         "slug": category
       }
     },
-    "populate": "*"
+    // "populate": "*"
   }, {
     encodeValuesOnly: true
   });

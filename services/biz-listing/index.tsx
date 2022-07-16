@@ -271,7 +271,9 @@ const getOwnerBizListing = async (bizListingSlug: any) => {
           },
           {
             listing_roles: {
-              name: "Owner",
+              name: {
+                $ne: null
+              },
               user: {
                 id: {
                   $eq: userInfo.id,
@@ -281,7 +283,7 @@ const getOwnerBizListing = async (bizListingSlug: any) => {
           },
         ],
       },
-      populate: "*",
+      // populate: "*",
     },
     {
       encodeValuesOnly: true,
