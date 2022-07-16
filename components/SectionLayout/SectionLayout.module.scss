@@ -66,3 +66,13 @@
     }
   }
 }
+
+@media screen and (max-width: 370px) {
+  .section_layout {
+    .container {
+      .children {
+        justify-content: space-around;
+      }
+    }
+  }
+}
