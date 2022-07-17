@@ -29,7 +29,7 @@ const dummyQuestion = [
   {
     question: "What is Tribes?",
     answer:
-      "Tribes is a community-driven, lifestyle platform for Muslims to explore and discover new content in the areas of *Buy, Eat, Stay, Transport, See & Do.* All items listed on the platform are Muslim-friendly. As much as we have a team of dedicated members working tirelessly curating listings to help fellow community members make better travel and purchase decisions, we believe fully that each community member has the power and desire to contribute and share as well. This platform is designed in a way that allows each and every one of you to create and edit unclaimed listings, as well as to leave honest reviews and feedback on every brand listed on the platform. Our cumulative effort will enable the Tribes community and platform to become better!",
+      "Tribes is a community-driven, lifestyle platform for Muslims to explore and discover new content in the areas of Buy, Eat, Stay, Transport, See & Do. All items listed on the platform are Muslim-friendly. As much as we have a team of dedicated members working tirelessly curating listings to help fellow community members make better travel and purchase decisions, we believe fully that each community member has the power and desire to contribute and share as well. This platform is designed in a way that allows each and every one of you to create and edit unclaimed listings, as well as to leave honest reviews and feedback on every brand listed on the platform. Our cumulative effort will enable the Tribes community and platform to become better!",
   },
   {
     question: "Who is it for?",
@@ -39,10 +39,7 @@ const dummyQuestion = [
   {
     question: "How can I contribute to the Tribes community?",
     answer:
-      "There are currently 3 ways for you to contribute to the community! Every contribution will enable you to earn Tribes points." + 
-      "Edit a listing - if you see a familiar brand with incomplete or outdated information, you will be able to suggest an edit to put in the correct information." + 
-      "Suggest a new listing - know of a new brand that is currently not listed on Tribes? Feel free to create a page for them so that other users will learn of the new options that they have"+
-      "Reviews - Purchased or dined in at one of the brands listed on Tribes? Share your experience with other Tribes users! This will help them make better decisions based on their requirements."
+      "There are currently 3 ways for you to contribute to the community! Every contribution will enable you to earn Tribes points.",
   },
   {
     question: "How old is Tribes?",

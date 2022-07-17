@@ -16,6 +16,7 @@ import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
 import Loader from "components/Loader/Loader";
+import Filter from "components/Filter/Filter";
 
 import styles from "styles/Home.module.scss";
 import useTrans from "hooks/useTrans";
@@ -39,6 +40,7 @@ const SubCategoryPage = (props: any) => {
   const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory);
+  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
     const getBizListings = async (category, subCategory, page) => {
@@ -156,24 +158,24 @@ const SubCategoryPage = (props: any) => {
       </SectionLayout>
       <SectionLayout show={isArray(listings)}>
         <div className="flex flex-wrap gap-5">
-            {listings.map((item) => (
-              <div key={item.title} className="pb-5">
-                <InforCard
-                  imgUrl={item.images[0]}
-                  title={item.title}
-                  rate={item.rate}
-                  rateNumber={item.rateNumber}
-                  followerNumber={item.followerNumber}
-                  price={item.price}
-                  currency={item.currency}
-                  categories={item.categories}
-                  tags={item.tags}
-                  isVerified={item.isVerified}
-                  description={item.description}
-                  onClick={() => router.push(`/biz/home/${item.slug}`)}
-                />
-              </div>
-            ))}
+          {listings.map((item) => (
+            <div key={item.title} className="pb-5">
+              <InforCard
+                imgUrl={item.images[0]}
+                title={item.title}
+                rate={item.rate}
+                rateNumber={item.rateNumber}
+                followerNumber={item.followerNumber}
+                price={item.price}
+                currency={item.currency}
+                categories={item.categories}
+                tags={item.tags}
+                isVerified={item.isVerified}
+                description={item.description}
+                onClick={() => router.push(`/biz/home/${item.slug}`)}
+              />
+            </div>
+          ))}
         </div>
         {pagination.total > 0 && (
           <Pagination
@@ -185,8 +187,8 @@ const SubCategoryPage = (props: any) => {
           />
         )}
         <TopSearches />
+        {/* <Filter onClose={() => setShowFilter(false)} visible={true} /> */}
       </SectionLayout>
-      {/* <Filter onClose={() => setShowFilter(false)} visible={showFilter} /> */}
     </div>
   );
 };

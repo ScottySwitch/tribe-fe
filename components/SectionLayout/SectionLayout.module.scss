@@ -61,7 +61,18 @@
     .container {
       width: 90%;
       .children {
-        justify-content: center;
+        justify-content: space-around;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 370px) {
+  .section_layout {
+    .container {
+      width: 100%;
+      .children {
+        justify-content: space-around;
       }
     }
   }

@@ -227,7 +227,13 @@
 }
 
 @media screen and (max-width: 450px) {
-  .pb-5 {
-    width: 48%;
+  .infor_card {
+    width: 160px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .infor_card {
+    width: 150px;
   }
 }

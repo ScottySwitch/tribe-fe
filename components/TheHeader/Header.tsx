@@ -17,6 +17,7 @@ import ListingSearch, {
   ListingMenuFooter,
 } from "components/ListingSearch/ListingSearch";
 import bizListingApi from "services/biz-listing";
+import {changeToSlugify} from "utils"
 
 export interface HeaderProps {
   id: string;
@@ -34,13 +35,13 @@ const Header = (props: HeaderProps) => {
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
   const [bizListing, setBizListing] = useState([]);
   const [searchKey, setSearchKey] = useState("");
-  const debouncedSearchTerm = useDebounce(searchKey, 500);
+  const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
 
   const { location } = useLocation();
 
   useEffect(() => {
     const getBizListing = async () => {
-      const data = await bizListingApi.getBizListing(debouncedSearchTerm);
+      const data = await bizListingApi.getListingBySlug(debouncedSearchTerm);
       setBizListing(get(data, "data.data"));
     };
 

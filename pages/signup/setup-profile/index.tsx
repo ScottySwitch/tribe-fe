@@ -314,7 +314,8 @@ const SetupProfilePage = () => {
     }
     const userId = userInfo.id || "0";
     await UserApi.updateUser(userId, dataSend);
-    router.push("/");
+    window.location.href = "/";
+    // router.push("/");
   };
 
   const handleBackStep = () => {
