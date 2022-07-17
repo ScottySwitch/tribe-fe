@@ -22,6 +22,16 @@ const signUpByEmail = async (params: AuthEmailPayload) => {
   });
 }
 
+const resetPasswordByOldPassword = async (params: any) => {
+  let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+  const url = `/api/auth/confirm-to-reset-password`
+  return await Api.post(url, {
+    id: userInfo.id,
+    oldPassword: params.oldPassword,
+    newPassword: params.newPassword,
+  })
+}
+
 const signUpByPhone = async (params: AuthPhonePayload) => {
   localStorage.removeItem('user')
   const url = `/api/auth/local/register`;
@@ -183,6 +193,7 @@ const loginGoogleCallback = async (accessToken: any) => {
 }
 
 export default {
+  resetPasswordByOldPassword,
   signUpByEmail,
   otpEmailGenerate,
   otpEmailConfirm,
