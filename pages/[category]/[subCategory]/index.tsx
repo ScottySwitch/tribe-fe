@@ -40,6 +40,7 @@ const SubCategoryPage = (props: any) => {
   const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory);
+  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
     const getBizListings = async (category, subCategory, page) => {
@@ -186,6 +187,7 @@ const SubCategoryPage = (props: any) => {
           />
         )}
         <TopSearches />
+        {/* <Filter onClose={() => setShowFilter(false)} visible={true} /> */}
       </SectionLayout>
     </div>
   );
