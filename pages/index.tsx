@@ -72,6 +72,7 @@ const Home: NextPage = (props: any) => {
       getListings();
       getBizListingForYou();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const getBizListingForYou = async () => {
@@ -124,7 +125,7 @@ const Home: NextPage = (props: any) => {
         <SectionLayout title="Explore BESTS" childrenClassName={styles.bests}>
           {listCategories.map((item, index) => (
             <div
-              key={index.slug}
+              key={item.slug}
               className={styles.category}
               onClick={() => router.push(item.slug)}
             >
@@ -385,7 +386,7 @@ export async function getServerSideProps(context) {
     await BizListingApi.getAllBizListingsHaveExclusiveDeal();
   const dataBanners = await BannerApi.getBanner();
   const dataCollections = await CollectionApi.getCollection({
-    pinnedHomepage: true
+    pinnedHomepage: true,
   });
   const dataCategories = await CategoryApi.getCategories();
 

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
@@ -20,7 +20,7 @@ import Filter from "components/Filter/Filter";
 
 import styles from "styles/Home.module.scss";
 import useTrans from "hooks/useTrans";
-import { formatListingArray, isArray } from "utils";
+import { formatListingArray } from "utils";
 import useLocation from "hooks/useLocation";
 
 const SubCategoryPage = (props: any) => {
@@ -63,8 +63,10 @@ const SubCategoryPage = (props: any) => {
     };
 
     //get subCategory data
-    getBizListings(category, currenCategoryLink, pagination.page);
-  }, [currentSubCategory, currenCategoryLink, pagination.page]);
+    location && getBizListings(category, currenCategoryLink, pagination.page);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSubCategory, currenCategoryLink, location, pagination.page]);
 
   const handleChangeSubCategory = (e) => {
     setCurrentCategoryLink(e);
