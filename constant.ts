@@ -1880,5 +1880,5 @@ export const optionsReportReview = [
 export const optionsReportListing = [
   { id: "listing-1", label: "Content that is dishonest or inaccurate" },
   { id: "listing-2", label: "This place is not real" },
-  { id: "other", label: "Other" },
+  { id: "other-listing", label: "Other" },
 ];

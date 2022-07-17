@@ -14,10 +14,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { IOption } from "type";
+import ReportApi from "services/report"
 
 import styles from "./HomepageReviews.module.scss";
 interface HomepageReviewsProps {
   isPaid?: boolean;
+  bizListingId?: number;
   listingSlug?: any;
   isViewPage?: boolean;
   listingRate?: number;
@@ -28,6 +30,7 @@ interface HomepageReviewsProps {
 
 const HomepageReviews = (props: HomepageReviewsProps) => {
   const {
+    bizListingId,
     listingSlug,
     reviews,
     listingRate,
@@ -38,7 +41,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   } = props;
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
-  const [selectedReview, setSelectedReview] = useState({});
+  const [selectedReview, setSelectedReview] = useState<any>({});
   const router = useRouter();
   const [reply, setReply] = useState<string>("");
   // const handleSetReplyReview = (value) => {
@@ -65,7 +68,20 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     return rateNumber;
   };
 
-  const handleSubmitReportReview = () => {
+  const handleSubmitReportReview = async (data?: any) => {
+    let userInfo;
+    if (typeof localStorage.getItem("user") !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    }
+    const userId = userInfo.id || "0";
+
+    await ReportApi.createReport({
+      type: "review",
+      reason: data,
+      user: userId,
+      review: selectedReview.id,
+      biz_listing: bizListingId
+    })
     setShowReportModal(false);
   };
 
@@ -118,7 +134,10 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
                   setSelectedReview(review);
                   setShowReplyModal(true);
                 }}
-                onReportClick={() => setShowReportModal(true)}
+                onReportClick={() => {
+                  setSelectedReview(review);
+                  setShowReportModal(true)
+                }}
               />
             </div>
           ))
