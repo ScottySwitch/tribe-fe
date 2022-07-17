@@ -52,7 +52,6 @@ const LoginPage = () => {
   const { pathname, locale } = router;
 
   const handleLogin = async () => {
-    console.log(pathname);
     let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}");
     setIsLoading(true);
     // Email
