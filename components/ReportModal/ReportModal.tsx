@@ -8,7 +8,7 @@ import Input from "components/Input/Input"
 
 interface ReportModalProps extends ModalProps{
   options: RadioProps[]
-  onSubmit?: () => void
+  onSubmit?: (data?) => void
 }
 
 const ReportModal = (props: ReportModalProps) => {
@@ -21,7 +21,12 @@ const ReportModal = (props: ReportModalProps) => {
   } = props
 
   const [currentOption, setCurrentOption] = useState<string>()
+  const [anotherReason, setAnotherReason] = useState<string>()
 
+  const handleOnSubmit = () => {
+    const reason = currentOption === "Other" ? anotherReason : currentOption
+    onSubmit?.(reason);
+  }
   return (
     <Modal
       visible={visible}
@@ -38,7 +43,7 @@ const ReportModal = (props: ReportModalProps) => {
           <div
             key={index}
             className={styles.option}
-            onClick={() => setCurrentOption(option?.id)}
+            onClick={() => setCurrentOption(option?.label)}
           >
             <Radio
               id={option.id}
@@ -48,13 +53,13 @@ const ReportModal = (props: ReportModalProps) => {
               />
           </div>
         ))}
-        {currentOption === "other" && (
-          <Input size="large" placeholder="Your reason"/>
+        {currentOption === "Other" && (
+          <Input size="large" placeholder="Your reason" onChange={(e: any) => setAnotherReason(e.target.value)}/>
         )}
       </div>
       <div className={styles.footer}>
         <Button variant="underlined" text="Cancel" width="max-content" className={styles.btn_cancel} onClick={onClose}/>
-        <Button text="Submit" width={182} onClick={onSubmit} className={styles.btn_submit}/>
+        <Button text="Submit" width={182} onClick={handleOnSubmit} className={styles.btn_submit}/>
       </div>
     </Modal>
   )

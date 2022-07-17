@@ -12,10 +12,10 @@ import { Filters } from "./enums"
 import styles from "./Filter.module.scss"
 
 const sortList = [
-  { label: "Price (Low to high)" },
-  { label: "Price (High to low)" },
+  // { label: "Price (Low to high)" },
+  // { label: "Price (High to low)" },
   { label: "Rating (Low to high)" },
-  { label: "Recently added" },
+  // { label: "Recently added" },
 ]
 
 export const otherList = [
@@ -74,10 +74,10 @@ const Location = () => (
 
 const tabList = [
   { label: "Sort", value: Filters.SORT, content: <Sort /> },
-  { label: "Rating", value: Filters.RATING, content: <Rating /> },
+  // { label: "Rating", value: Filters.RATING, content: <Rating /> },
   { label: "Price range", value: Filters.PRICE_RANGE, content: <PriceRange /> },
-  { label: "Other", value: Filters.OTHER, content: <Other /> },
-  { label: "Location", value: Filters.LOCATION, content: <Location /> },
+  // { label: "Other", value: Filters.OTHER, content: <Other /> },
+  // { label: "Location", value: Filters.LOCATION, content: <Location /> },
 ]
 
 export interface FilterProps extends ModalProps {}

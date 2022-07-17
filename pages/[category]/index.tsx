@@ -56,6 +56,7 @@ const Category = (props: any) => {
   );
 
   const { location } = useLocation();
+  const { pathname, locale } = router;
 
   useEffect(() => {
     const getData = async (categoryId, page) => {
@@ -70,7 +71,7 @@ const Category = (props: any) => {
       setListingArray(listingArray);
       setPagination({
         ...pagination,
-        total: get(data, "data.meta.pagination.total"),
+        total: get(data, 'data.total'),
       });
     };
 
@@ -121,8 +122,8 @@ const Category = (props: any) => {
     location && getData(category, pagination.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, category, location]);
-
-  const handleSelectSubCategory = (slug) =>
+  
+  const handleSelectSubCategory = (slug) => 
     router.push({
       pathname: `${category}/${slug}`,
     });
@@ -340,6 +341,7 @@ export async function getServerSideProps(context) {
   });
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+  console.log('dataCategoryLink', dataCategoryLinks.data.data)
   // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
   const rawListBanners = get(dataBanners, "data.data");

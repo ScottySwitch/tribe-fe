@@ -22,7 +22,7 @@ import Facilities from "components/BizHomePage/Facilities/Facilities";
 import { IOption } from "type";
 import Tags from "components/BizHomePage/Tags/Tags";
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours";
-import { defaultAddlistingForm, getAddItemsFields } from "constant";
+import {defaultAddlistingForm, getAddItemsFields, optionsReportListing} from "constant";
 import ProductApi from "../../../../services/product";
 import MenuApi from "../../../../services/menu";
 import DealApi from "../../../../services/deal";
@@ -34,6 +34,8 @@ import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
 
 import styles from "styles/BizHomepage.module.scss";
+import ReportModal from "../../../../components/ReportModal/ReportModal";
+import ReportApi from "../../../../services/report";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
@@ -70,6 +72,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [isPaid, setIsPaid] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
+  const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
 
   const router = useRouter();
   const { query } = router;
@@ -254,6 +257,22 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     newReviewArray[indexReviewSelected].reply_reviews = reply;
     newReviewArray[indexReviewSelected].date_create_reply = new Date();
     setReviews(newReviewArray);
+  };
+
+  const handleSubmitReportBizListing = async (data?: any) => {
+    let userInfo;
+    if (typeof localStorage.getItem("user") !== null) {
+      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    }
+    const userId = userInfo.id || "0";
+
+    await ReportApi.createReport({
+      type: "listing",
+      reason: data,
+      user: userId,
+      biz_listing: bizListing.id
+    })
+    setIsShowReportModal(false);
   };
 
   const handleSubmit = async () => {
@@ -559,6 +578,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             </div>
             <Break />
             <HomepageReviews
+              bizListingId={bizListing.id}
               listingSlug={listingSlug}
               listingRate={listingRate}
               isPaid={isPaid}
@@ -569,6 +589,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             />
             <Break />
             <Contacts />
+            <Break />
+            <ReportBizListing
+              optionsReportListing={optionsReportListing}
+              showReportModal={isShowReportModal}
+              onSetShowReportModal={setIsShowReportModal}
+              handleSubmitReportBizListing={handleSubmitReportBizListing}
+            />
           </div>
         </div>
       </SectionLayout>
@@ -616,6 +643,21 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       </SectionLayout>
     </div>
   );
+};
+
+const ReportBizListing = ({optionsReportListing, showReportModal, onSetShowReportModal, handleSubmitReportBizListing}) => {
+  return (
+    <>
+      <a onClick={() => onSetShowReportModal(true)}>Report biz listing</a>
+      <ReportModal
+        title="Why are you reporting this listing?"
+        visible={showReportModal}
+        options={optionsReportListing}
+        onClose={() => onSetShowReportModal(false)}
+        onSubmit={handleSubmitReportBizListing}
+      />
+    </>
+  )
 };
 
 export async function getServerSideProps(context) {

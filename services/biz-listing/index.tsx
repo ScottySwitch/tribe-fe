@@ -36,6 +36,38 @@ const getBizListing = async (search?: string) => {
   return await Api.get(url);
 };
 
+const getListingBySlug = async (search?: string) => {
+  const query = qs.stringify(
+    {
+      filters: {
+        slug: { $contains: search || "" },
+      },
+      populate: {
+        user_listing_follows: {
+          fields: ["id"],
+        },
+        reviews: {
+          fields: ["id"],
+        },
+        categories: {
+          data: ["id", "attributes"],
+        },
+        listing_roles: {
+          data: ["id", "attributes"],
+        },
+        claim_listings: {
+          data: ["id", "attributes"],
+        },
+      },
+    },
+    {
+      encodeValuesOnly: true, // prettify url
+    }
+  );
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+};
+
 const getBizListingsByCategoryId = async (
   categoryId: Categories,
   page?: number
@@ -271,7 +303,9 @@ const getOwnerBizListing = async (bizListingSlug: any) => {
           },
           {
             listing_roles: {
-              name: "Owner",
+              name: {
+                $ne: null
+              },
               user: {
                 id: {
                   $eq: userInfo.id,
@@ -281,7 +315,7 @@ const getOwnerBizListing = async (bizListingSlug: any) => {
           },
         ],
       },
-      populate: "*",
+      // populate: "*",
     },
     {
       encodeValuesOnly: true,
@@ -470,6 +504,7 @@ const getFavouriteDeals = async () => {
 
 const bizListingApi = {
   getFavouriteDeals,
+  getListingBySlug,
   getAllBizlitingByCategorySlug,
   getBizListingsByCategoryIdWithPagination,
   getBizlistingByCategoryLink,

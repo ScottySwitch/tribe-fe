@@ -184,7 +184,7 @@ const SignupPage = () => {
               />
             }
             register={register("password", { required: true })}
-            error = { isSignUpError ? `Opps! it seems like this account has already been created. Continue to log in otherwise, choose another ${method}.`: ''}
+            error = { isSignUpError ? `Opps! It seems that this account has already been created. Please log in to continue.`: ''}
           />
           <Checkbox
             label="I have read and agree to the T&C of Tribes"
