@@ -40,7 +40,8 @@ const tabList = [
   { label: "Email", value: LoginMethod.EMAIL },
 ];
 
-const LoginPage = () => {
+const LoginPage = (context) => {
+  const { prevPagePathname } = context;
   const [method, setMethod] = useState(LoginMethod.EMAIL);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
@@ -49,7 +50,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoginError, setIsLoginError] = useState<boolean>(false);
-  const { pathname, locale } = router;
 
   const handleLogin = async () => {
     let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}");
@@ -98,7 +98,15 @@ const LoginPage = () => {
         await AuthApi.getMe();
       }
     }
-    window.location.href = "/";
+    const finalPreviousPage = [
+      "/forgot-password/reset",
+      "/signup",
+      "/signup/otp",
+    ].includes(prevPagePathname)
+      ? "/"
+      : prevPagePathname;
+
+    window.location.href = finalPreviousPage;
   };
 
   const routeFacebookLogin =
@@ -110,6 +118,7 @@ const LoginPage = () => {
     <div className={styles.auth}>
       <div className={styles.form_container}>
         <ModalHeader alignTitle="center">Log in</ModalHeader>
+
         <div className={styles.tabs}>
           {tabList.map((tab) => {
             const tabClassNames = classNames(styles.tab, {
@@ -195,5 +204,21 @@ const LoginPage = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  const prevPage = context.req.headers.referer;
+  const host = context.req.headers.host;
+  const index = prevPage.indexOf(host) + host.length;
+  const prevPagePathname = prevPage.slice(index);
+
+  console.log("prevPagePathname", prevPagePathname);
+
+  // Pass data to the page via props
+  return {
+    props: {
+      prevPagePathname: prevPagePathname,
+    },
+  };
+}
 
 export default LoginPage;

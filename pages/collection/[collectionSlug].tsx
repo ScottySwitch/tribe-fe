@@ -141,7 +141,7 @@ const Collection = (props) => {
         <div className="flex flex-wrap gap-3 md:gap-2 lg:gap-5">
           {Array.isArray(collection) &&
             collection.map((item) => (
-              <div key={item?.title} className="pb-5">
+              <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={item.images[0]}
                   title={item.title}

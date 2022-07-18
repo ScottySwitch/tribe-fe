@@ -141,7 +141,7 @@ const Home: NextPage = (props: any) => {
         <SectionLayout title="Brands With Exclusive Deals For You">
           <Carousel responsive={infoCardResponsive}>
             {listingExclusiveDeal?.map((card) => (
-              <div key={card.name} className="pb-5">
+              <div key={card.name} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
                   title={card.title}
@@ -180,7 +180,7 @@ const Home: NextPage = (props: any) => {
         <SectionLayout title="Where to Buy">
           <Carousel responsive={infoCardResponsive}>
             {listings?.buy.map((card) => (
-              <div key={card.title} className="pb-5">
+              <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
                   title={card.title}
@@ -204,7 +204,7 @@ const Home: NextPage = (props: any) => {
         <SectionLayout title="What to See">
           <Carousel responsive={infoCardResponsive}>
             {listings?.seeAndDo.map((card) => (
-              <div key={card.title} className="pb-5">
+              <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
                   title={card.title}
@@ -227,7 +227,7 @@ const Home: NextPage = (props: any) => {
       {/* <SectionLayout backgroundColor title="Featured Articles">
         <Carousel responsive={homeCuratedResponsive}>
           {listHomeArticles?.map((item, index) => (
-            <div key={index} className="pb-5">
+            <div key={index} className="pb-5 pt-3 pl-3">
               <ArticleCard
                 title={item.title}
                 imgUrl={item.imgUrl}
@@ -241,7 +241,7 @@ const Home: NextPage = (props: any) => {
         <SectionLayout title="What to Eat">
           <Carousel responsive={infoCardResponsive}>
             {listings?.eat.map((card) => (
-              <div key={card.title} className="pb-5">
+              <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
                   title={card.title}
@@ -265,7 +265,7 @@ const Home: NextPage = (props: any) => {
         <SectionLayout title="Access to Transport">
           <Carousel responsive={infoCardResponsive}>
             {listings?.transport.map((card) => (
-              <div key={card.title} className="pb-5">
+              <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
                   title={card.title}
@@ -291,7 +291,7 @@ const Home: NextPage = (props: any) => {
         <SectionLayout title="Where to Stay">
           <Carousel responsive={infoCardResponsive}>
             {listings?.stay.map((card) => (
-              <div key={card.title} className="pb-5">
+              <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={get(card, "images[0]")}
                   title={card.title}
@@ -327,7 +327,7 @@ const Home: NextPage = (props: any) => {
           </SectionLayout>
           <SectionLayout childrenClassName={styles.for_you_container}>
             {listingForYou?.map((card) => (
-              <div key={card.title} className="pb-5">
+              <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={card.images[0]}
                   title={card.title}

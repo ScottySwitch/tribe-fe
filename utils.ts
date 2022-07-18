@@ -107,16 +107,28 @@ export const formatListingArray = (rawListing) =>
     : [];
 
 export const isArray = (item) => {
-  return (Array.isArray(item) && item.length > 0) ? true : false
-}
+  return Array.isArray(item) && item.length > 0 ? true : false;
+};
 
 export const changeToSlugify = (str) => {
   return str
-  .toLowerCase()
-  .trim()
-  .replace("'", '-')
-  .replace(/[^\w\s-]/g, '')
-  .replace(/[\s_-]+/g, '-')
-  .replace(/^-+|-+$/g, '');
-}
+    .toLowerCase()
+    .trim()
+    .replace("'", "-")
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+};
 
+export const censoredPhoneNumber = (phoneNumber) => {
+  const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+  const phoneArray = phoneNumber ? phoneNumber.split("") : [];
+
+  for (let i = 2; i < phoneArray.length - 4; i++) {
+    if (numbers.includes(phoneArray[i].toString())) {
+      phoneArray[i] = "X";
+    }
+  }
+
+  return phoneArray.join("");
+};

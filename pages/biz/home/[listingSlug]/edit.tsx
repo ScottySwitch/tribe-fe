@@ -22,7 +22,11 @@ import Facilities from "components/BizHomePage/Facilities/Facilities";
 import { IOption } from "type";
 import Tags from "components/BizHomePage/Tags/Tags";
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours";
-import {defaultAddlistingForm, getAddItemsFields, optionsReportListing} from "constant";
+import {
+  defaultAddlistingForm,
+  getAddItemsFields,
+  optionsReportListing,
+} from "constant";
 import ProductApi from "../../../../services/product";
 import MenuApi from "../../../../services/menu";
 import DealApi from "../../../../services/deal";
@@ -36,6 +40,7 @@ import Banner from "components/BizHomePage/Banner/Banner";
 import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
 import ReportApi from "../../../../services/report";
+import { censoredPhoneNumber } from "utils";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
@@ -111,11 +116,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         const rawTags = listing.tags || [];
         const rawFacilities = listing.facilities_data || [];
         const rawPhoneNumber = listing.phone_number;
-        const defaultPhone = rawPhoneNumber
-          ? rawPhoneNumber.substring(0, 2) +
-            "XXXXXX" +
-            rawPhoneNumber.substring(7)
-          : "";
+        const defaultPhone = censoredPhoneNumber(rawPhoneNumber);
         let rawListing = listing.products || [];
         rawListing = orderBy(rawListing, ["is_pinned"], ["desc"]);
         const listingArray = rawListing.map((item) => ({
@@ -270,8 +271,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       type: "listing",
       reason: data,
       user: userId,
-      biz_listing: bizListing.id
-    })
+      biz_listing: bizListing.id,
+    });
     setIsShowReportModal(false);
   };
 
@@ -645,7 +646,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   );
 };
 
-const ReportBizListing = ({optionsReportListing, showReportModal, onSetShowReportModal, handleSubmitReportBizListing}) => {
+const ReportBizListing = ({
+  optionsReportListing,
+  showReportModal,
+  onSetShowReportModal,
+  handleSubmitReportBizListing,
+}) => {
   return (
     <>
       <a onClick={() => onSetShowReportModal(true)}>Report biz listing</a>
@@ -657,7 +663,7 @@ const ReportBizListing = ({optionsReportListing, showReportModal, onSetShowRepor
         onSubmit={handleSubmitReportBizListing}
       />
     </>
-  )
+  );
 };
 
 export async function getServerSideProps(context) {

@@ -19,6 +19,7 @@ export const Album = (props: AlbumProps) => {
 
   const [navThumbnail, setNavThumbnail] = useState<any>();
   const [navGallery, setNavGallery] = useState<any>();
+  const [isMobile, setIsMobile] = useState(false);
 
   const refSlider1 = useRef<any>(null);
   const refSlider2 = useRef<any>(null);
@@ -39,6 +40,7 @@ export const Album = (props: AlbumProps) => {
       refSlider1.current.slickPrev();
     }
   };
+
   const handleNextThumbnail = () => {
     if (refSlider1 && refSlider1.current) {
       refSlider1.current.slickNext();
@@ -46,12 +48,9 @@ export const Album = (props: AlbumProps) => {
   };
 
   useEffect(() => {
-    console.log("refSlider1", refSlider1.current);
-    console.log("refSlider2", refSlider2.current);
-    setNavThumbnail(images[0]);
-    setNavGallery(images[0]);
-    // setNavThumbnail(refSlider1.current);
-    // setNavGallery(refSlider2.current);
+    setIsMobile(window.innerWidth < 430);
+    setNavThumbnail(refSlider1.current);
+    setNavGallery(refSlider2.current);
   }, []);
 
   const configThumbnail: Settings = {
@@ -72,8 +71,8 @@ export const Album = (props: AlbumProps) => {
     arrows: true,
     infinite: true,
     speed: 500,
-    slidesToShow: showedPicsNumber.slidesToShow,
-    slidesToScroll: showedPicsNumber.slidesToScroll,
+    slidesToShow: isMobile ? 3 : showedPicsNumber.slidesToShow,
+    slidesToScroll: isMobile ? 3 : showedPicsNumber.slidesToScroll,
     cssEase: "linear",
     focusOnSelect: true,
     asNavFor: navThumbnail,
@@ -123,7 +122,7 @@ export const Album = (props: AlbumProps) => {
                 src={image}
                 layout="fill"
                 alt={`gallery-${index}`}
-                objectFit="cover"
+                objectFit="contain"
               />
             </div>
           ))}

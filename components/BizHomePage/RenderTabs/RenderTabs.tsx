@@ -96,7 +96,6 @@ const TabContent = ({
   };
 
   // let DetailModal = ProductDetailModal;
-  console.log("selectedTab", selectedTab);
   let DetailModal;
   switch (selectedTab) {
     case ListingTabs.DISH:
@@ -287,24 +286,17 @@ const RenderTabs = (props: {
     <div className="w-full">
       <div className="flex gap-5 items-center justify-between">
         <div className="flex gap-5 items-center">
-          {
-            initSelectedTab(category).tabList.map((tab) => {
-              const userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-              if ((!!userInfo.token && tab.text === 'Deals') || (tab.text !== 'Deals') ) {
-                return (
-                  <Heading
-                    key={tab.text}
-                    selected={selectedTab === tab.value}
-                    text={tab.text}
-                    onClick={() =>
-                      !(tab.value === ListingTabs.DEAL && !isPaid) &&
-                      setSelectedTab(tab.value)
-                    }
-                  />
-                )
+          {initSelectedTab(category).tabList.map((tab) => (
+            <Heading
+              key={tab.text}
+              selected={selectedTab === tab.value}
+              text={tab.text}
+              onClick={() =>
+                !(tab.value === ListingTabs.DEAL && !isPaid) &&
+                setSelectedTab(tab.value)
               }
-            })
-          }
+            />
+          ))}
         </div>
         {!isViewPage && (
           <EditList

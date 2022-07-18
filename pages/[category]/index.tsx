@@ -71,7 +71,7 @@ const Category = (props: any) => {
       setListingArray(listingArray);
       setPagination({
         ...pagination,
-        total: get(data, 'data.total'),
+        total: get(data, "data.total"),
       });
     };
 
@@ -122,8 +122,8 @@ const Category = (props: any) => {
     location && getData(category, pagination.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, category, location]);
-  
-  const handleSelectSubCategory = (slug) => 
+
+  const handleSelectSubCategory = (slug) =>
     router.push({
       pathname: `${category}/${slug}`,
     });
@@ -199,7 +199,7 @@ const Category = (props: any) => {
         <SectionLayout title="Brands With Exclusive Deals For You">
           <Carousel responsive={infoCardResponsive}>
             {listingExclusiveDeal?.map((card) => (
-              <div key={card.title} className="pb-5">
+              <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={card.images[0]}
                   description={card.description}
@@ -223,7 +223,7 @@ const Category = (props: any) => {
         <SectionLayout backgroundColor title="Specially Curated For You">
           <Carousel responsive={homeCuratedResponsive}>
             {listCollections?.map((item, index) => (
-              <div key={index} className="pb-5">
+              <div key={index} className="pb-5 pt-3 pl-3">
                 <CollectionCard
                   slug={item.slug}
                   title={item.title}
@@ -237,7 +237,7 @@ const Category = (props: any) => {
       <SectionLayout childrenClassName="flex flex-wrap gap-5">
         {Array.isArray(listingArray) &&
           listingArray.map((card) => (
-            <div key={card.title} className="pb-5">
+            <div key={card.title} className="pb-5 pt-3 pl-3">
               <InforCard
                 imgUrl={card.images[0]}
                 title={card.title}
@@ -272,7 +272,7 @@ const Category = (props: any) => {
           <Carousel responsive={homeCuratedResponsive}>
             {listCategoryArticles?.map((item, index) => (
               <Link href={`/articles/${item.slug}`} passHref key={index}>
-                <div className="pb-5">
+                <div className="pb-5 pt-3 pl-3">
                   <ArticleCard
                     title={item.title}
                     imgUrl={item.imgUrl}
@@ -337,11 +337,11 @@ export async function getServerSideProps(context) {
   );
   const dataBanners = await BannerApi.getBannerByCategory(category);
   const dataCollections = await CollectionApi.getCollection({
-    category: category
+    category: category,
   });
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  console.log('dataCategoryLink', dataCategoryLinks.data.data)
+  console.log("dataCategoryLink", dataCategoryLinks.data.data);
   // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
   const rawListBanners = get(dataBanners, "data.data");

@@ -1,3 +1,4 @@
+import { get } from "lodash";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
@@ -12,7 +13,6 @@ import UserFollowApi from "services/user-listing-follow";
 import UserFavouriteApi from "services/user-listing-favourite";
 
 import styles from "./ListingInforCard.module.scss";
-import { get } from "lodash";
 
 interface ListingInforCardProps {
   isViewPage?: boolean;
@@ -176,19 +176,12 @@ const SocialInfo = ({
 
 const PhoneNumber = ({ isViewPage, phoneNumber, onSetPhoneNumberModal }) => {
   if (isViewPage) {
-    return phoneNumber ? (
-      <a target="_blank" rel="noreferrer" href={phoneNumber}>
-        {phoneNumber}
-      </a>
-    ) : (
-      <div>Not provided</div>
-    );
+    return phoneNumber ? <div>{phoneNumber}</div> : <div>Not provided</div>;
   }
+
   return phoneNumber ? (
     <div className="flex gap-5">
-      <a target="_blank" rel="noreferrer" href={phoneNumber}>
-        {phoneNumber}
-      </a>
+      <div>{phoneNumber}</div>
       <div>
         <a onClick={() => onSetPhoneNumberModal(true)}>Edit</a>
       </div>
