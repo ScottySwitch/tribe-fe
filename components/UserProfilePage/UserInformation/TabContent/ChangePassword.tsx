@@ -13,19 +13,27 @@ const ChangePassword = () => {
     newPassword: false,
     confirmPassword: false
   }
-  const [isError, setIsError] = useState<any>('')
+  const [isError, setIsError] = useState<any>({})
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
 
   const onSubmit = async (data) => {
     console.log('data',data)
     if (data.newPassword.length < 6) {
-      setIsError('error with newPassword') 
+      setIsError({
+        oldPassword: '',
+        newPasswordError: 'Password must contains at least 6 charaters',
+        confirmPassword: ''
+      })
       setIsSuccess(false)
       return
     }
     if (data.newPassword !== data.cofirmPassword) {
-      setIsError('error with cofirmPassword') 
       setIsSuccess(false)
+      setIsError({
+        oldPassword: '',
+        newPasswordError: '',
+        confirmPassword: 'Your password and confirmation password do not match.'
+      })
       return
     }
     const sendData = await AuthApi.resetPasswordByOldPassword({
@@ -33,7 +41,11 @@ const ChangePassword = () => {
       newPassword: data.newPassword
     })
     if (sendData.data.error) {
-      setIsError('error with oldPassword') 
+      setIsError({
+        oldPassword: 'Your current password is not correct',
+        newPasswordError: '',
+        confirmPassword: ''
+      })
       setIsSuccess(false)
       return
     }
@@ -50,21 +62,21 @@ const ChangePassword = () => {
             success={isSuccess ? 'Change password success' : ''}
             placeholder="Old password" type="password" size="large"
             register={register("oldPassword")}
-            error={isError === 'error with oldPassword' ? 'Password is not true':''}
+            error={isError.oldPassword}
           />
         </div>
         <div className={styles.form_group}>
           <Input 
             placeholder="New password" type="password" size="large"
             register={register("newPassword")}
-            error={isError === 'error with newPassword' ? 'New password must contain at least 6 characters':''}
+            error={isError.newPasswordError}
           />
         </div>
         <div className={styles.form_group}>
           <Input 
             placeholder="Confirm new password" type="password" size="large"
             register={register("cofirmPassword")}
-            error={isError === 'error with cofirmPassword' ? 'confirm password not true':''}
+            error={isError.confirmPassword}
           />
         </div>
         <Button type="submit" text="Save" size="large" className="w-full lg:max-w-max ml-auto text-sm"/>
