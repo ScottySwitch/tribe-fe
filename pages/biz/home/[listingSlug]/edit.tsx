@@ -171,17 +171,21 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         const tagArray = formatOptions(rawTags);
 
         const rawReview = listing.reviews || [];
-        const reviewArray = rawReview.map((item) => ({
-          id: item.id,
-          content: item.content,
-          rating: item.rating,
-          images: item.images,
-          reply_reviews: item.reply_reviews,
-          date_create_reply: item.date_create_reply,
-          user: item.user,
-          visited_date: item.visited_date,
-        }));
-
+        let reviewArray: any = []
+        rawReview.map((item) => {
+          if (!item.is_revision) {
+            reviewArray.push({
+              id: item.id,
+              content: item.content,
+              rating: item.rating,
+              images: item.images,
+              reply_reviews: item.reply_reviews,
+              date_create_reply: item.date_create_reply,
+              user: item.user,
+              visited_date: item.visited_date,
+            })
+          }
+        });
         const rawTagOptions = listing.tag_options || [];
         const tagOptionsArray = rawTagOptions.map((item) => ({
           label: item.label,
@@ -314,6 +318,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         is_verified: false,
         logo: logo,
         is_accepted: false,
+        expiration_date: bizListing.expiration_date,
         products: currentItemList.map((item) => item.id) || [],
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
@@ -338,6 +343,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         is_verified: false,
         is_accepted: false,
         logo: logo,
+        expiration_date: bizListing.expiration_date,
         products: currentItemList.map((item) => item.id) || [],
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],

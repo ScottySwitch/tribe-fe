@@ -73,6 +73,7 @@ const AddReviewPage = () => {
       content: dataSend.content,
       visited_date: dataSend.visitedDate,
       images: dataSend.images,
+      is_revision: true
     };
     const data = await ReviewApi.addReview(dataSendApi)
     if (data) {
@@ -80,7 +81,7 @@ const AddReviewPage = () => {
         user: userInfo.id,
         biz_listing: bizListing.id,
         type: "Review",
-        status: "Approved",
+        status: "Pending",
         review: get(data, "data.data.id")
       }
       await ContributeApi.createContribute(dataSendContribute).then(() => {

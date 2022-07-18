@@ -1,18 +1,18 @@
-import { randomId } from "utils"
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import ReviewSearchBox from "components/ListingSearchBox/ListingSearchBox"
-import ReviewCard from "components/ReviewsPage/ReviewCard/ReviewCard"
-import ResultModal from "components/ReviewsPage/ResultModal/ResultModal"
-import { dummyKeywords } from "constant"
+import { randomId } from "utils";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import ReviewSearchBox from "components/ListingSearchBox/ListingSearchBox";
+import ReviewCard from "components/ReviewsPage/ReviewCard/ReviewCard";
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
+import { dummyKeywords } from "constant";
 
-import styles from "styles/Reviews.module.scss"
-import TopSearches from "components/TopSearches/TopSearches"
-import BizListingApi from "../../services/biz-listing"
-import get from "lodash/get"
-import ReviewApi from "../../services/review"
-import ContributeApi from "services/contribute"
+import styles from "styles/Reviews.module.scss";
+import TopSearches from "components/TopSearches/TopSearches";
+import BizListingApi from "../../services/biz-listing";
+import get from "lodash/get";
+import ReviewApi from "../../services/review";
+import ContributeApi from "services/contribute";
 
 const dummyReviews = [
   {
@@ -55,66 +55,68 @@ const dummyReviews = [
     rateNumber: 0,
     location: "50 Bussorah St, Singapore 199466",
   },
-]
+];
 
 const ReviewsPage = () => {
-  const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false)
-  const [isSuccess, setIsSuccess] = useState<boolean>(false)
-  const [locationList, setLocationList] = useState<any>([])
-  const [listingOptions, setListingOptions] = useState<any>([])
-  const [listingSearchResult, setListingSearchResult] = useState<any>()
+  const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [locationList, setLocationList] = useState<any>([]);
+  const [listingOptions, setListingOptions] = useState<any>([]);
+  const [listingSearchResult, setListingSearchResult] = useState<any>();
 
   useEffect(() => {
     const getBizListingCountries = async () => {
-      const data = await BizListingApi.getBizListingCountries()
-      const countries = get(data, "data.data")
-      const countriesArr: any = []
+      const data = await BizListingApi.getBizListingCountries();
+      const countries = get(data, "data.data");
+      const countriesArr: any = [];
       countries.map((country) => {
         countriesArr.push({
           label: country,
           value: country,
-        })
-      })
-      setLocationList(countriesArr)
-    }
-    getBizListingCountries().catch((e) => console.log(e))
-  }, [])
+        });
+      });
+      setLocationList(countriesArr);
+    };
+    getBizListingCountries().catch((e) => console.log(e));
+  }, []);
 
   const handleOnLocationChange = async ({ value }: any) => {
-    const result = await BizListingApi.getBizListingByCountry(value)
-    const data = get(result, "data.data")
-    setListingOptions(data)
-  }
+    const result = await BizListingApi.getBizListingByCountry(value);
+    const data = get(result, "data.data");
+    setListingOptions(data);
+  };
 
   const handleOnListingSearchChange = async (option: any) => {
-    const result = await BizListingApi.getBizListingBySlug(option.attributes.slug)
-    const data = get(result, "data.data")
-    setListingSearchResult(data)
-  }
+    const result = await BizListingApi.getBizListingBySlug(
+      option.attributes.slug
+    );
+    const data = get(result, "data.data");
+    setListingSearchResult(data);
+  };
 
   const calcRateNumber = (reviews) => {
     // TODO: rateNumber not work on FE
-    const reviewsData = get(reviews, "data")
-    let rateNumber = 0
+    const reviewsData = get(reviews, "data");
+    let rateNumber = 0;
     if (reviewsData.length > 0) {
-      let sum = 0
+      let sum = 0;
       reviewsData.map((review) => {
-        sum += get(review, "attributes.rating") || 0
-      })
-      rateNumber = Math.ceil(sum / reviewsData.length)
+        sum += get(review, "attributes.rating") || 0;
+      });
+      rateNumber = Math.ceil(sum / reviewsData.length);
     } else {
-      rateNumber = 0
+      rateNumber = 0;
     }
-    return rateNumber
-  }
+    return rateNumber;
+  };
 
   const handleCloseModal = () => {
-    setIsShowResultModal(false)
-  }
+    setIsShowResultModal(false);
+  };
 
   const handleSubmit = async (dataSend: any) => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-    const bizListingId = get(listingSearchResult, "[0].id")
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    const bizListingId = get(listingSearchResult, "[0].id");
     const dataSendApi = {
       user: userInfo.id,
       biz_listing: bizListingId,
@@ -122,28 +124,22 @@ const ReviewsPage = () => {
       content: dataSend.content,
       visited_date: dataSend.visitedDate,
       images: dataSend.images,
-    }
-    const dataSendContribute = {
-      user: userInfo.id,
-      biz_listing: bizListingId,
-      type: "Review",
-      status: "Approved"
-    }
-    const data = await ReviewApi.addReview(dataSendApi)
+      is_revision: true,
+    };
+    const data = await ReviewApi.addReview(dataSendApi);
     if (data) {
       const dataSendContribute = {
         user: userInfo.id,
         biz_listing: bizListingId,
         type: "Review",
-        status: "Approved",
-        review: get(data, "data.data.id")
-      }
-      await ContributeApi.createContribute(dataSendContribute).then(() => {
-      });
+        status: "Pending",
+        review: get(data, "data.data.id"),
+      };
+      await ContributeApi.createContribute(dataSendContribute).then(() => {});
       setIsShowResultModal(true);
       setIsSuccess(true);
     }
-  }
+  };
 
   return (
     <div className={`${styles.review}`}>
@@ -183,7 +179,10 @@ const ReviewsPage = () => {
                 key={review.id}
                 id={review.id}
                 title={get(review, "attributes.name")}
-                imgUrl={get(review, "attributes.images[0]") || "https://picsum.photos/200/300"}
+                imgUrl={
+                  get(review, "attributes.images[0]") ||
+                  "https://picsum.photos/200/300"
+                }
                 isVerified={get(review, "attributes.is_verified")}
                 rateNumber={calcRateNumber(get(review, "attributes.reviews"))}
                 location={get(review, "attributes.address")}
@@ -193,17 +192,29 @@ const ReviewsPage = () => {
           </div>
         </div>
         <div className={`${styles.advertisement} mt-8`}>
-          <Image src="https://picsum.photos/300/600" height={600} width={300} alt="" />
+          <Image
+            src="https://picsum.photos/300/600"
+            height={600}
+            width={300}
+            alt=""
+          />
         </div>
       </SectionLayout>
 
-      <SectionLayout className={styles.top_search} containerClassName={styles.top_search_container}>
+      <SectionLayout
+        className={styles.top_search}
+        containerClassName={styles.top_search_container}
+      >
         <TopSearches />
       </SectionLayout>
 
-      <ResultModal visible={isShowResultModal} isSuccess={isSuccess} onClose={handleCloseModal} />
+      <ResultModal
+        visible={isShowResultModal}
+        isSuccess={isSuccess}
+        onClose={handleCloseModal}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default ReviewsPage
+export default ReviewsPage;
