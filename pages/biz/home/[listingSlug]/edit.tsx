@@ -32,6 +32,7 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
+import { isPaidUser } from "utils";
 
 import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
@@ -209,11 +210,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setDealList(dealArray);
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
-        if (bizInvoicesArray.length > 0) {
-          setIsPaid(true);
-          setPhoneNumber(rawPhoneNumber);
-        } else {
-          setPhoneNumber(defaultPhone);
+        if (listing.expiration_date) {
+          setIsPaid(isPaidUser(listing.expiration_date))
+        }
+        else {
+          setIsPaid(false)
         }
       }
     };
