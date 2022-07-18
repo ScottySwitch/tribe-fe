@@ -54,9 +54,8 @@ export const ReviewForm = (props) => {
       <div className={styles.form_group}>
         <Input
           size="large"
-          placeholder="Review ( 100 character minumum )"
+          placeholder="Review"
           width={`100%`}
-          maxLength={100}
           autoFocus
           onChange={(e: any) => setContent(e.target.value)}
         />
