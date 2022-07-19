@@ -200,7 +200,7 @@ const loginGoogleCallback = async (accessToken: any) => {
   }
 };
 
-export default {
+const AuthApi = {
   resetPasswordByOldPassword,
   signUpByEmail,
   otpEmailGenerate,
@@ -218,3 +218,5 @@ export default {
   loginFacebookCallback,
   loginGoogleCallback,
 };
+
+export default AuthApi;
