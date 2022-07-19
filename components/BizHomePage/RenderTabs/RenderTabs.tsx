@@ -271,9 +271,7 @@ const RenderTabs = (props: {
       break;
     case ListingTabs.DEAL:
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      console.log('userInfo',userInfo)
       const blankText = (userInfo && userInfo.token) ? "There are no deal yet" : "Login/sign up to see deals"
-      console.log('dealList', dealList)
       tabContent = (
         <TabContent
           selectedTab={selectedTab}
