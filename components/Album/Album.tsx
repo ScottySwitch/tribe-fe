@@ -5,7 +5,6 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
-import { Item } from "framer-motion/types/components/Reorder/Item";
 import { get } from "lodash";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
