@@ -61,12 +61,9 @@ const ClaimPage = () => {
     const router = useRouter();
     const handleClick = () => {
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      if (userInfo.token) {
-        router.push(`/claim/${listing.id}`)
-      }
-      else {
-        setShowAuthPopup(true)
-      }
+      userInfo && userInfo.token
+        ? router.push(`/claim/${listing.id}`)
+        : setShowAuthPopup(true);
     };
     return (
       <>

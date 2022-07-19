@@ -115,16 +115,16 @@ const ReviewCard = (props: IReviewCardProps) => {
   const [ratingType, setRatingType] = useState<string>("")
   const [ratingReadonly, setRatingReadonly] = useState<boolean>(true)
   const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+
+  useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.token ? setIsLoggedIn(true) : false
+  })
 
   const handleReview = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    if (userInfo.token) {
-      setExpanded(!expanded)
-      setRatingReadonly(false)
-    }
-    else {
-      setShowAuthPopup(true)
-    }
+    isLoggedIn ? setExpanded(!expanded) : setShowAuthPopup(true)
   }
 
   const handleCickRating = (value: number) => {
@@ -160,7 +160,7 @@ const ReviewCard = (props: IReviewCardProps) => {
           <Break />
           <div className={`${styles.cta_group} mb-0`}>
           <Rate
-            readonly={ratingReadonly}
+            readonly={isLoggedIn}
             initialRating={rating}
             placeholderRating={rateNumber}
             onClick={handleCickRating}
@@ -182,7 +182,7 @@ const ReviewCard = (props: IReviewCardProps) => {
         </div>
         <div className={`${styles.cta_group} ${styles.display_desktop}`}>
           <Rate
-            readonly={ratingReadonly}
+            readonly={isLoggedIn}
             initialRating={rating}
             placeholderRating={rateNumber}
             onClick={handleCickRating}

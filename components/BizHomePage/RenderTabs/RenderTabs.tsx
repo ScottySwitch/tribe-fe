@@ -271,19 +271,16 @@ const RenderTabs = (props: {
       break;
     case ListingTabs.DEAL:
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const blankText = userInfo && userInfo.token ? "Login/sign up to see deals" : "There are no deal yet"
       tabContent = (
         <TabContent
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={!userInfo.token ? [] : dealList}
+          list={userInfo && userInfo.token ? [] : dealList}
           blankImg={require("public/images/no-product.svg")}
-          blankText={
-            !userInfo.token
-              ? "Login/sign up to see deals"
-              : "There are no deal yet"
-          }
+          blankText={blankText}
           buttonText="Add deals now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEALS)}
         />

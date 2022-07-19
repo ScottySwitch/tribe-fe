@@ -89,12 +89,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
 
   const checkLogin = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    if (userInfo.token) {
-      router.push(`/reviews/${listingSlug}`)
-    }
-    else {
-      setShowAuthPopup(true)
-    }
+    userInfo.token ? router.push(`/reviews/${listingSlug}`) : setShowAuthPopup(true)
   }
 
 
