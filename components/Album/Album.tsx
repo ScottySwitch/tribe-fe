@@ -1,4 +1,11 @@
+import Button from "components/Button/Button";
+import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import Modal from "components/Modal/Modal";
+import Radio from "components/Radio/Radio";
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
+import { Item } from "framer-motion/types/components/Reorder/Item";
 import { get } from "lodash";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -20,6 +27,10 @@ export const Album = (props: AlbumProps) => {
   const [navThumbnail, setNavThumbnail] = useState<any>();
   const [navGallery, setNavGallery] = useState<any>();
   const [isMobile, setIsMobile] = useState(false);
+  const [reason, setReason] = useState();
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [submitResult, setSubmitResult] = useState(false);
 
   const refSlider1 = useRef<any>(null);
   const refSlider2 = useRef<any>(null);
@@ -79,11 +90,23 @@ export const Album = (props: AlbumProps) => {
     adaptiveHeight: true,
   };
 
+  const handleShowReportModal = () => {
+    setShowReportModal(true);
+  };
+
+  const onSubmit = () => {
+    setShowReportModal(false);
+    setShowResultModal(true);
+  };
+
   return (
     <div className={styles.slider_syncing}>
       <div className={styles.slider_thumbnail_container}>
+        <div onClick={handleShowReportModal} className={styles.btn_report}>
+          <Icon icon="flag" size={25} color="#FFFFFF" />
+        </div>
         <div onClick={handlePrevThumbnail} className={styles.btn_prev}>
-          <Icon icon="carret-left" size={30} color="#FFFFFF" />
+          <Icon icon="carret-left" size={40} color="#FFFFFF" />
         </div>
         <Slider
           ref={refSlider1}
@@ -102,7 +125,7 @@ export const Album = (props: AlbumProps) => {
           ))}
         </Slider>
         <div onClick={handleNextThumbnail} className={styles.btn_next}>
-          <Icon icon="carret-right" size={30} color="#FFFFFF" />
+          <Icon icon="carret-right" size={40} color="#FFFFFF" />
         </div>
       </div>
       <div className={styles.slider_gallery_container}>
@@ -133,8 +156,72 @@ export const Album = (props: AlbumProps) => {
           </div>
         )}
       </div>
+      <Modal
+        visible={showReportModal}
+        title="Why do you report this photo/video?"
+        width={780}
+        onClose={() => setShowReportModal(false)}
+      >
+        <div className="p-[30px] flex flex-col gap-5">
+          {reportReasons.map((reason) => (
+            <Radio
+              key={reason.value}
+              label={reason.label}
+              value={reason.value}
+              name="report-media"
+              onChange={(e: any) => setReason(e.target.value)}
+            />
+          ))}
+          <Input
+            placeholder="Your reason"
+            onChange={(e: any) => setReason(e.target.value)}
+            disabled={reason !== reportReasons[5].value}
+          />
+          <div className="flex justify-end gap-3">
+            <Button
+              variant="no-outlined"
+              text="Cancel"
+              width={100}
+              onClick={() => setShowReportModal(false)}
+            />
+            <Button text="Submit" width={150} onClick={onSubmit} />
+          </div>
+        </div>
+      </Modal>
+      <ResultModal
+        visible={showResultModal}
+        isSuccess={submitResult}
+        onClose={() => setShowResultModal(false)}
+      />
     </div>
   );
 };
+
+const reportReasons = [
+  {
+    label: "Offensive, hateful or sexually explicit",
+    value: "Offensive, hateful or sexually explicit",
+  },
+  {
+    label: "Legal issue",
+    value: "Legal issue",
+  },
+  {
+    label: "Privacy concern",
+    value: "Privacy concern",
+  },
+  {
+    label: "Poor quality",
+    value: "Poor quality",
+  },
+  {
+    label: "Not a photo of the place",
+    value: "Not a photo of the place",
+  },
+  {
+    label: "Other",
+    value: "Other",
+  },
+];
 
 export default Album;
