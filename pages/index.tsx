@@ -47,6 +47,8 @@ const Home: NextPage = (props: any) => {
   const { location } = useLocation();
 
   useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    console.log(userInfo)
     const getListings = async () => {
       const data = await BizListingApi.getAllBizlitingPinnedByCategory(
         location
@@ -66,11 +68,14 @@ const Home: NextPage = (props: any) => {
         stay: stayListingArray,
         transport: transportListingArray,
       });
+      setLoading(false);
     };
 
     if (location) {
       getListings();
-      getBizListingForYou();
+      if (userInfo.token) {
+        getBizListingForYou();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);

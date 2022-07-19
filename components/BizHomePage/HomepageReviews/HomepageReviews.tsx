@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { IOption } from "type";
 import ReportApi from "services/report"
+import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import styles from "./HomepageReviews.module.scss";
 interface HomepageReviewsProps {
@@ -42,6 +43,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState<any>({});
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
   const router = useRouter();
   const [reply, setReply] = useState<string>("");
   // const handleSetReplyReview = (value) => {
@@ -85,6 +87,12 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     setShowReportModal(false);
   };
 
+  const checkLogin = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.token ? router.push(`/reviews/${listingSlug}`) : setShowAuthPopup(true)
+  }
+
+
   return (
     <div>
       <Heading text="Reviews" />
@@ -103,7 +111,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             text="Add your review"
             width={300}
             prefix={<Icon icon="edit-color" />}
-            onClick={() => router.push(`/reviews/${listingSlug}`)}
+            onClick={checkLogin}
           />
           <Select
             width={200}
@@ -203,6 +211,10 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
           />
         </div>
       </Modal>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </div>
   );
 };

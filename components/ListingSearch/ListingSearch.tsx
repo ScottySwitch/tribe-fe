@@ -2,20 +2,36 @@ import Icon from "components/Icon/Icon";
 import Select, { SelectProps } from "components/Select/Select";
 import { Categories, YesNo } from "enums";
 import { useRouter } from "next/router";
-
+import AuthPopup from "components/AuthPopup/AuthPopup";
 import styles from "./ListingSearch.module.scss";
 import get from "lodash/get";
 import { IOption } from "type";
+import { useState } from "react";
 
 export const ListingMenuFooter = ({ onClick }) => {
   const router = useRouter();
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+
+  const checkLogin = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    if (userInfo.token) {
+      onClick(YesNo.NO)    
+    }
+    else {
+      setShowAuthPopup(true)
+    }
+  }
   return (
     <div
       className={styles.add_listing_search_footer}
-      onClick={() => onClick(YesNo.NO)}
+      onClick={checkLogin}
     >
       <div>Cannot find the listing?</div>
       <p>List it now</p>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </div>
   );
 };

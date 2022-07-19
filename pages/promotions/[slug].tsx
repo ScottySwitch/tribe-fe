@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import PromotionApi from "services/promotion";
 import get from "lodash/get";
 import { useRouter } from "next/router";
+import AuthPopup from "components/AuthPopup/AuthPopup";
 import { calcRateNumber } from "utils";
 import Link from "next/link";
 
@@ -173,6 +174,7 @@ const PromotionsPage = () => {
   } = useRouter();
 
   const [promotion, setPromotion] = useState<any>([]);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   useEffect(() => {
     const getPromotionBySlug = async (slug) => {
@@ -190,6 +192,17 @@ const PromotionsPage = () => {
       getPromotionBySlug(slug).catch((e) => console.log(e));
     }
   }, [slug]);
+
+  const checkLogin = () => {
+    console.log('check login')
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    if (userInfo.token) {
+      handleDealsDetails(true, promotion)
+    }
+    else {
+      setShowAuthPopup(true)
+    }
+  }
 
   return (
     <div className={styles.wrapper_promotions}>
@@ -241,7 +254,7 @@ const PromotionsPage = () => {
                     type={1}
                     favourite={false}
                     size="large"
-                    onClick={() => handleDealsDetails(true, promotion)}
+                    onClick={checkLogin}
                   />
                 ))}
               </div>
@@ -302,7 +315,7 @@ const PromotionsPage = () => {
                     type={1}
                     favourite={false}
                     size="large"
-                    onClick={() => handleDealsDetails(true, promotion)}
+                    onClick={checkLogin}
                   />
                 ))}
               </div>
@@ -397,7 +410,7 @@ const PromotionsPage = () => {
                     type={1}
                     favourite={false}
                     size="large"
-                    onClick={() => handleDealsDetails(true, promotion)}
+                    onClick={checkLogin}
                   />
                 ))}
               </div>
@@ -417,6 +430,10 @@ const PromotionsPage = () => {
         visible={showModalProductDetails}
         data={dummyProductDetails}
         onClose={() => setShowModalProductDetails(false)}
+      />
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
       />
     </div>
   );

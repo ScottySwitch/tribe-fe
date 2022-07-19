@@ -8,6 +8,7 @@ import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Upload from "components/Upload/Upload";
+import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import UserFollowApi from "services/user-listing-follow";
 import UserFavouriteApi from "services/user-listing-favourite";
@@ -48,6 +49,7 @@ const ReviewsFollowers = (props: {
     get(bizListing, "user_listing_follows.length") || 0;
   const [isFollow, setIsFollow] = useState<boolean>(false);
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   useEffect(() => {
     if (userInfo) {
@@ -65,16 +67,28 @@ const ReviewsFollowers = (props: {
   }, []);
 
   const handleAddFollow = async () => {
-    const data = await UserFollowApi.createFollowing(bizListing.id);
-    if (get(data, "data")) {
-      setIsFollow(true);
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    if (userInfo.token) {
+      const data = await UserFollowApi.createFollowing(bizListing.id);
+      if (get(data, "data")) {
+        setIsFollow(true);
+      }
+    }
+    else {
+      setShowAuthPopup(true)
     }
   };
 
   const handleAddFavorite = async () => {
-    const data = await UserFavouriteApi.createFavourite(bizListing.id);
-    if (get(data, "data")) {
-      setIsFavourite(true);
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    if (userInfo.token) {
+      const data = await UserFavouriteApi.createFavourite(bizListing.id);
+      if (get(data, "data")) {
+        setIsFavourite(true);
+      }
+    }
+    else {
+      setShowAuthPopup(true)
     }
   };
 
@@ -96,6 +110,10 @@ const ReviewsFollowers = (props: {
             variant="secondary"
             disabled={isFavourite}
             onClick={handleAddFavorite}
+          />
+          <AuthPopup
+            onClose={() => setShowAuthPopup(false)}
+            visible={showAuthPopup}
           />
         </div>
       )}
