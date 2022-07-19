@@ -36,34 +36,40 @@ const getBizListing = async (search?: string) => {
   return await Api.get(url);
 };
 
-const getListingBySlug = async (search?: string) => {
-  const query = qs.stringify(
-    {
-      filters: {
-        slug: { $contains: search || "" },
+const getListingBySlug = async (
+  search?: string,
+  country?: string,
+  limit?: number
+) => {
+  const params = {
+    filters: {
+      slug: { $contains: search || "" },
+      country: country,
+    },
+    pagination: {
+      limit: limit,
+    },
+    populate: {
+      user_listing_follows: {
+        fields: ["id"],
       },
-      populate: {
-        user_listing_follows: {
-          fields: ["id"],
-        },
-        reviews: {
-          fields: ["id"],
-        },
-        categories: {
-          data: ["id", "attributes"],
-        },
-        listing_roles: {
-          data: ["id", "attributes"],
-        },
-        claim_listings: {
-          data: ["id", "attributes"],
-        },
+      reviews: {
+        fields: ["id"],
+      },
+      categories: {
+        data: ["id", "attributes"],
+      },
+      listing_roles: {
+        data: ["id", "attributes"],
+      },
+      claim_listings: {
+        data: ["id", "attributes"],
       },
     },
-    {
-      encodeValuesOnly: true, // prettify url
-    }
-  );
+  };
+  const query = qs.stringify(params, {
+    encodeValuesOnly: true, // prettify url
+  });
   const url = `/api/biz-listings?${query}`;
   return await Api.get(url);
 };
@@ -304,7 +310,7 @@ const getOwnerBizListing = async (bizListingSlug: any) => {
           {
             listing_roles: {
               name: {
-                $ne: null
+                $ne: null,
               },
               user: {
                 id: {
@@ -483,13 +489,13 @@ const getAllBizlitingByCategorySlug = async (
 
 const getFavouriteDeals = async () => {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-  const userId = userInfo.id
+  const userId = userInfo.id;
   const query = qs.stringify(
     {
       filters: {
         user: {
-          id: userId
-        }
+          id: userId,
+        },
       },
       populate: "*",
     },
@@ -500,7 +506,7 @@ const getFavouriteDeals = async () => {
 
   const url = `/api/user-deal-favourites?${query}`;
   return await Api.get(url);
-}
+};
 
 const bizListingApi = {
   getFavouriteDeals,

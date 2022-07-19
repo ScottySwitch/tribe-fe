@@ -102,6 +102,7 @@ const ListingSearch = (props: ListingSearchProps) => {
       shouldControlShowValue
       size="large"
       isSearchable
+      closeMenuOnSelect
       prefixIcon="search"
       options={formatListingResultOption(listingOptions)}
       onChange={(e) => onChange?.(e)}

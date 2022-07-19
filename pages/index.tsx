@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { get } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -16,6 +16,9 @@ import CollectionApi from "services/collection";
 import BannerApi from "services/banner";
 import CategoryApi from "services/category";
 import Loader from "components/Loader/Loader";
+import { formatListingArray, isArray } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
+import { Ilisting } from "type";
 import {
   curatedList,
   homeBannerResponsive,
@@ -24,9 +27,6 @@ import {
 } from "constant";
 
 import styles from "styles/Home.module.scss";
-import useLocation from "hooks/useLocation";
-import { Ilisting } from "type";
-import { formatListingArray, isArray } from "utils";
 
 const Home: NextPage = (props: any) => {
   const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
@@ -44,11 +44,11 @@ const Home: NextPage = (props: any) => {
   }>();
 
   const router = useRouter();
-  const { location } = useLocation();
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log(userInfo)
     const getListings = async () => {
       const data = await BizListingApi.getAllBizlitingPinnedByCategory(
         location
@@ -71,12 +71,8 @@ const Home: NextPage = (props: any) => {
       setLoading(false);
     };
 
-    if (location) {
-      getListings();
-      if (userInfo.token) {
-        getBizListingForYou();
-      }
-    }
+    location && getListings();
+    userInfo.token && getBizListingForYou();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { get, isArray } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
@@ -21,13 +21,15 @@ import useTrans from "hooks/useTrans";
 import { formatListingArray } from "utils";
 
 import styles from "styles/Home.module.scss";
+import { UserInforContext } from "Context/UserInforContext";
 
 const SubCategoryPage = (props: any) => {
   const { bizListings, listingBanners, listCategoryLink } = props;
 
   const trans = useTrans();
   const router = useRouter();
-  const { location } = useLocation();
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
 
   const { query } = router;
   const { category, subCategory }: any = query;

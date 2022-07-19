@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { get } from "lodash";
 
 import ArticleCard from "components/ArticleCard/ArticleCard";
@@ -30,6 +30,7 @@ import ArticleApi from "../../services/article";
 import useLocation from "hooks/useLocation";
 import { Ilisting } from "type";
 import { formatListingArray } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
 
 const Category = (props: any) => {
   const trans = useTrans();
@@ -54,9 +55,8 @@ const Category = (props: any) => {
   const [listingArray, setListingArray] = useState<{ [key: string]: any }[]>(
     []
   );
-
-  const { location } = useLocation();
-  const { pathname, locale } = router;
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
 
   useEffect(() => {
     const getData = async (categoryId, page) => {
