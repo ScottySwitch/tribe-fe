@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { get, isArray } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
@@ -16,19 +16,20 @@ import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
 import Loader from "components/Loader/Loader";
-import Filter from "components/Filter/Filter";
-
-import styles from "styles/Home.module.scss";
+import useLocation from "hooks/useLocation";
 import useTrans from "hooks/useTrans";
 import { formatListingArray } from "utils";
-import useLocation from "hooks/useLocation";
+
+import styles from "styles/Home.module.scss";
+import { UserInforContext } from "Context/UserInforContext";
 
 const SubCategoryPage = (props: any) => {
   const { bizListings, listingBanners, listCategoryLink } = props;
 
   const trans = useTrans();
   const router = useRouter();
-  const { location } = useLocation();
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
 
   const { query } = router;
   const { category, subCategory }: any = query;
@@ -64,7 +65,7 @@ const SubCategoryPage = (props: any) => {
 
     //get subCategory data
     location && getBizListings(category, currenCategoryLink, pagination.page);
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSubCategory, currenCategoryLink, location, pagination.page]);
 
@@ -159,9 +160,9 @@ const SubCategoryPage = (props: any) => {
         </div>
       </SectionLayout>
       <SectionLayout show={isArray(listings)}>
-        <div className="flex flex-wrap gap-5">
+        <div className="flex flex-wrap gap-5 sm:gap-2 lg:gap-8">
           {listings.map((item) => (
-            <div key={item.title} className="pb-5">
+            <div key={item.title} className="pb-5 pt-3">
               <InforCard
                 imgUrl={item.images[0]}
                 title={item.title}
@@ -169,7 +170,7 @@ const SubCategoryPage = (props: any) => {
                 rateNumber={item.rateNumber}
                 followerNumber={item.followerNumber}
                 price={item.price}
-                currency={item.currency}
+                currency={item.currency?.toUpperCase()}
                 categories={item.categories}
                 tags={item.tags}
                 isVerified={item.isVerified}
@@ -181,7 +182,7 @@ const SubCategoryPage = (props: any) => {
         </div>
         {pagination.total > 0 && (
           <Pagination
-            limit={30}
+            limit={24}
             total={pagination.total}
             onPageChange={(selected) =>
               setPagination({ ...pagination, page: selected.selected })

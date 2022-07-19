@@ -2,18 +2,15 @@ import Icon from "components/Icon/Icon";
 import Select, { SelectProps } from "components/Select/Select";
 import { Categories, YesNo } from "enums";
 import { useRouter } from "next/router";
-
+import AuthPopup from "components/AuthPopup/AuthPopup";
 import styles from "./ListingSearch.module.scss";
 import get from "lodash/get";
 import { IOption } from "type";
+import React, { useState } from "react";
 
 export const ListingMenuFooter = ({ onClick }) => {
-  const router = useRouter();
   return (
-    <div
-      className={styles.add_listing_search_footer}
-      onClick={() => onClick(YesNo.NO)}
-    >
+    <div className={styles.add_listing_search_footer} onClick={onClick}>
       <div>Cannot find the listing?</div>
       <p>List it now</p>
     </div>
@@ -81,18 +78,36 @@ interface ListingSearchProps extends SelectProps {
 const ListingSearch = (props: ListingSearchProps) => {
   const { onChange, onInputChange, listingOptions, menuFooter, ...rest } =
     props;
+
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+
+  const checkLogin = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.token ? onChange?.(YesNo.NO) : setShowAuthPopup(true);
+  };
+
   return (
-    <Select
-      shouldControlShowValue
-      size="large"
-      isSearchable
-      prefixIcon="search"
-      options={formatListingResultOption(listingOptions)}
-      onChange={(e) => onChange?.(e)}
-      menuFooter={menuFooter || <ListingMenuFooter onClick={onChange} />}
-      onInputChange={onInputChange}
-      {...rest}
-    />
+    <React.Fragment>
+      <Select
+        shouldControlShowValue
+        size="large"
+        isSearchable
+        closeMenuOnSelect
+        prefixIcon="search"
+        options={formatListingResultOption(listingOptions)}
+        onChange={(e) => onChange?.(e)}
+        menuFooter={menuFooter || <ListingMenuFooter onClick={checkLogin} />}
+        onInputChange={onInputChange}
+        {...rest}
+      />
+      <AuthPopup
+        onClose={() => {
+          console.log("close");
+          setShowAuthPopup(false);
+        }}
+        visible={showAuthPopup}
+      />
+    </React.Fragment>
   );
 };
 

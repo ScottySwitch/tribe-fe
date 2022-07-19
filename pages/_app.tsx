@@ -11,12 +11,14 @@ import BizApi from "services/biz-listing";
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
 import { Tiers, UsersTypes } from "enums";
 import AuthApi from "../services/auth";
-import { IUser, UserInforContext } from "Context/UserInforContext";
+import { IUser, UserInforProvider } from "Context/UserInforContext";
 import CategoryApi from "services/category";
 
 import styles from "styles/App.module.scss";
 import "../styles/globals.css";
 import useLocation from "hooks/useLocation";
+import { locations } from "constant";
+import { getLocation } from "utils";
 
 export type ILoginInfor = {
   token?: string;
@@ -39,30 +41,83 @@ function MyApp({ Component, pageProps }: AppProps) {
     "/biz/verify",
   ];
   const isAuthPage = !notAuthPages.includes(pathname);
+
   const defaultUserInformation: { [key: string]: any } = {
     token: undefined,
     avatar: undefined,
+    location: undefined,
   };
 
-  const [loginInfor, setLoginInfo] = useState<ILoginInfor>({});
   const [user, setUser] = useState<IUser>(defaultUserInformation);
+  const [loginInfor, setLoginInfo] = useState<ILoginInfor>({});
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [showHamModal, setShowHamModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [navList, setNavList] = useState<{ [key: string]: any }[]>([]);
 
-  const { location } = useLocation();
+  const contextDefaultValue = {
+    user: user,
+    deleteUser: () => setUser({}),
+    updateUser: (infor) => {
+      const localStringyUserInfor = localStorage.getItem("user") || "{}";
+      const localUserInfor = JSON.parse(localStringyUserInfor);
+      const newUserInfor = { ...localUserInfor, ...infor };
+      const stringyNewLocalUserInfor = JSON.stringify(newUserInfor);
+      localStorage.setItem("user", stringyNewLocalUserInfor);
+      setUser({ ...user, ...infor });
+    },
+  };
 
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
-    if (localLoginInfo.token) {
-      setLoginInfo(localLoginInfo);
-      setShowAuthPopup(false);
+    const localLocation = localLoginInfo.location;
+    const { user, updateUser } = contextDefaultValue;
+
+    ///get location
+    if (localLocation) {
+      updateUser({
+        ...user,
+        location: localLocation,
+      });
     } else {
-      setLoginInfo({});
-      setShowAuthPopup(true);
+      getLocation().then((locationValue) =>
+        updateUser({
+          ...user,
+          location: locationValue,
+        })
+      );
     }
+
+    const getMenuList = async () => {
+      const dataCategories = await CategoryApi.getItemCategory();
+      const rawCategories = get(dataCategories, "data.data");
+      const categoryArray = await rawCategories.map((item) => ({
+        category: get(item, "attributes.name"),
+        icon: get(item, "attributes.icon"),
+        slug: get(item, "attributes.slug"),
+        id: item.id,
+        items: Array.isArray(get(item, "attributes.category_links.data"))
+          ? get(item, "attributes.category_links.data")
+              .map((navItem, index) => ({
+                label: get(navItem, "attributes.label"),
+                value: get(navItem, "attributes.value"),
+                href: `/${get(item, "attributes.slug")}/${get(
+                  navItem,
+                  "attributes.value"
+                )}`,
+              }))
+              .slice(0, 5)
+          : [],
+      }));
+      setNavList(categoryArray);
+    };
+
+    setIsMobile(screen.width < 501);
+    setLoginInfo(localLoginInfo.token ? localLoginInfo : {});
+    setShowAuthPopup(!localLoginInfo.token);
+    getMenuList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //handle logic hide header when scroll, not hide when in desktop || when setShowOpenHoursModal ham modal || in unAuthPages
@@ -79,115 +134,54 @@ function MyApp({ Component, pageProps }: AppProps) {
       prevScrollpos = currentScrollPos;
     };
 
-    if (header && isMobile) {
+    if (header && screen.width < 501) {
       window.addEventListener("scroll", handleScroll, { passive: true });
       return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, [showHamModal, isMobile, isAuthPage]);
+  }, [showHamModal, isAuthPage]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
       await AuthApi.getMe();
-      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      if (userInfo) {
-        const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
-
-        userInfo = {
-          ...userInfo,
-          owner_listings: dataOwnerListing.data.data,
-        };
-      }
+      const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
+      userInfo = {
+        ...userInfo,
+        owner_listings: dataOwnerListing.data.data,
+      };
       localStorage.setItem("user", JSON.stringify(userInfo));
     };
-    getMenuList();
-    if (userInfo.token) {
-      getMe().catch((e) => console.log(e));
-    }
-
-    if (screen.width < 501) {
-      setIsMobile(true);
-    }
+    userInfo && userInfo.token && getMe().catch((e) => console.log(e));
   }, [router]);
 
-  const getMenuList = async () => {
-    const dataCategories = await CategoryApi.getItemCategory();
-    const rawCategories = get(dataCategories, "data.data");
-    const categoryArray = await rawCategories.map((item) => ({
-      category: get(item, "attributes.name"),
-      icon: get(item, "attributes.icon"),
-      slug: get(item, "attributes.slug"),
-      id: item.id,
-      items: Array.isArray(get(item, "attributes.category_links.data"))
-        ? get(item, "attributes.category_links.data")
-            .map((navItem, index) => ({
-              label: get(navItem, "attributes.label"),
-              value: get(navItem, "attributes.value"),
-              href: `/${get(item, "attributes.slug")}/${get(
-                navItem,
-                "attributes.value"
-              )}`,
-            }))
-            .slice(0, 5)
-        : [],
-    }));
-
-    setNavList(categoryArray);
-  };
-
-  const contextDefaultValue = {
-    user: user,
-    deleteUser: () => setUser({}),
-    updateUser: (infor) => {
-      setUser({ ...user, ...infor });
-    },
-  };
-
-  const handleRemoveCover = () => {
-    const cover = document.getElementById("black_cover") as any;
-    cover.style.display = "none";
-  };
-
   return (
-    <UserInforContext.Provider value={contextDefaultValue}>
-      <UserInforContext.Consumer>
-        {({ user, updateUser, deleteUser }) => (
-          <div className={styles.app}>
-            <Header
-              id="header"
-              loginInfor={loginInfor}
-              navList={navList}
-              onOpenHamModal={() => setShowHamModal(!showHamModal)}
-            />
-            <Component
-              user={user}
-              updateUser={updateUser}
-              deleteUser={deleteUser}
-              location={location}
-              {...pageProps}
-            />
-            <AuthPopup
-              onClose={() => setShowAuthPopup(false)}
-              visible={isAuthPage && showAuthPopup && !loginInfor.token}
-            />
-            <HamModal
-              loginInfor={loginInfor}
-              showHamModal={showHamModal}
-              onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
-            />
-            <Footer
-              navList={navList}
-              visible={isAuthPage}
-              backgroundColor={pathname !== "/biz/information"}
-            />
-            <ContributeTabBar
-              visible={!showHamModal && isAuthPage && isMobile}
-            />
-          </div>
-        )}
-      </UserInforContext.Consumer>
-    </UserInforContext.Provider>
+    <UserInforProvider value={contextDefaultValue}>
+      <div className={styles.app}>
+        <Header
+          id="header"
+          loginInfor={loginInfor}
+          navList={navList}
+          onOpenHamModal={() => setShowHamModal(!showHamModal)}
+        />
+        <Component {...pageProps} />
+        <AuthPopup
+          onClose={() => setShowAuthPopup(false)}
+          visible={isAuthPage && showAuthPopup && !loginInfor.token}
+        />
+        <HamModal
+          loginInfor={loginInfor}
+          showHamModal={showHamModal}
+          onSetShowHamModal={(e: boolean) => setShowHamModal(e)}
+        />
+        <Footer
+          navList={navList}
+          visible={isAuthPage}
+          backgroundColor={pathname !== "/biz/information"}
+        />
+        <ContributeTabBar visible={!showHamModal && isAuthPage && isMobile} />
+      </div>
+    </UserInforProvider>
   );
 }
 

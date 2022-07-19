@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import { useEffect, useState } from "react";
 
 import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation";
@@ -39,22 +39,27 @@ const BizInformation = (props) => {
     const getListingData = async (listingSlug) => {
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
-      const data = await BizListingApi.getInfoBizListingBySlug(
-        listingSlug
-      ).finally(() => setLoading(false));
+      const data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
 
-      if (data.data.data.length > 0) {
+      //TODO: Check listing is owned by user before returning biz listing data on BE
+      if (
+        isArray(userInfo.owner_listings) &&
+        userInfo.owner_listings.includes(get(data, "data.data[0].id") || "")
+      ) {
         const listing = get(data, "data.data[0]") || {};
-        console.log("business information", listing);
         userInfo.now_biz_listing = listing;
         localStorage.setItem("user", JSON.stringify(userInfo));
         const isPaidListing = get(listing, "biz_invoices.length") > 0;
         setIsPaid(isPaidListing);
         setListing(listing);
+        setLoading(false);
+      } else {
+        router.push("/");
       }
     };
 
     listingSlug && getListingData(listingSlug);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, loading]);
 
   const onSubmit = async (data) => {
@@ -118,8 +123,7 @@ const BizInformation = (props) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    router.push("/");
-    router.reload();
+    window.location.href = "/";
   };
 
   return (

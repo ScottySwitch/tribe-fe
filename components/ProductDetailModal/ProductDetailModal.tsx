@@ -1,12 +1,10 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Slider, { Settings } from "react-slick";
 import Modal, { ModalProps } from "components/Modal/Modal";
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import ScrollingBox from "components/ScrollingBox/ScrollingBox";
-import styles from "./ProductDetailModal.module.scss";
 import Album from "components/Album/Album";
+
+import styles from "./ProductDetailModal.module.scss";
 
 export interface IProduct {
   id: number;
@@ -26,108 +24,8 @@ interface ProductDetailsModalProps extends ModalProps {
   onBookNow?: () => void;
 }
 
-const SliderSyncing = (props) => {
-  const { images } = props;
-
-  const [navThumbnail, setNavThumbnail] = useState<any>();
-  const [navGallery, setNavGallery] = useState<any>();
-
-  const refSlider1 = useRef<any>(null);
-  const refSlider2 = useRef<any>(null);
-
-  const handlePrev = () => {
-    if (refSlider2 && refSlider2.current) {
-      refSlider2.current.slickPrev();
-    }
-  };
-  const handleNext = () => {
-    if (refSlider2 && refSlider2.current) {
-      refSlider2.current.slickNext();
-    }
-  };
-
-  useEffect(() => {
-    setNavThumbnail(refSlider1.current);
-    setNavGallery(refSlider2.current);
-  }, []);
-
-  const configThumbnail: Settings = {
-    dots: false,
-    arrows: false,
-    infinite: true,
-    fade: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    cssEase: "linear",
-    asNavFor: navGallery,
-  };
-
-  const configGallery: Settings = {
-    className: styles.slider_gallery_item,
-    dots: false,
-    arrows: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 5,
-    cssEase: "linear",
-    focusOnSelect: true,
-    asNavFor: navThumbnail,
-    adaptiveHeight: true,
-  };
-
-  return (
-    <div className={styles.slider_syncing}>
-      <Slider
-        ref={refSlider1}
-        {...configThumbnail}
-        className={styles.slider_thumbnail}
-      >
-        {images?.map((image, index) => (
-          <div key={index}>
-            <Image
-              src={image}
-              height="100%"
-              width="100%"
-              layout="responsive"
-              alt={`thumbnail-${index}`}
-            />
-          </div>
-        ))}
-      </Slider>
-      <div className={styles.slider_gallery_container}>
-        <div onClick={handlePrev} className={styles.btn_prev}>
-          <Icon icon="carret-left" size={20} color="#FFFFFF" />
-        </div>
-        <Slider
-          ref={refSlider2}
-          {...configGallery}
-          className={styles.slider_gallery}
-        >
-          {images?.map((image, index) => (
-            <div key={index}>
-              <Image
-                src={image}
-                height="100%"
-                width="100%"
-                layout="responsive"
-                alt={`gallery-${index}`}
-              />
-            </div>
-          ))}
-        </Slider>
-        <div onClick={handleNext} className={styles.btn_next}>
-          <Icon icon="carret-right" size={20} color="#FFFFFF" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const ProductDetailModal = (props: ProductDetailsModalProps) => {
   const { data, visible, onClose, onShare, onKlook, onBookNow } = props;
-  console.log("data", data);
   return (
     <Modal visible={visible} width="100%" maxWidth={1328} onClose={onClose}>
       <div className={styles.container}>
@@ -136,6 +34,8 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
         </div>
         <div className={styles.container_gallery}>
           <Album
+            //make rerender album when popup product detail modal
+            key={data.images?.[0]}
             images={data.images}
             showedPicsNumber={{ slidesToShow: 6, slidesToScroll: 6 }}
           />

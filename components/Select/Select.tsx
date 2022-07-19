@@ -1,11 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import classNames from "classnames";
-import ReactSelect, {
-  ControlProps,
-  components,
-  StylesConfig,
-} from "react-select";
+import ReactSelect, { components, StylesConfig } from "react-select";
 
 import Icon from "components/Icon/Icon";
 
@@ -35,6 +31,8 @@ export interface SelectProps {
   register?: UseFormRegisterReturn;
   width?: number | string;
   menuWidth?: string | number;
+  ellipsis?: boolean;
+  isClearable?: boolean;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
   inputRef?: any;
@@ -58,6 +56,7 @@ const Select = (props: SelectProps) => {
     isMulti = false,
     options,
     value,
+    isClearable,
     shouldControlShowValue,
     placeholder,
     isSearchable = true,
@@ -67,6 +66,7 @@ const Select = (props: SelectProps) => {
     menuFooter,
     inputRef,
     controlStyle,
+    ellipsis,
     placeholderStyle,
     variant = "outlined",
     size = "medium",
@@ -93,7 +93,6 @@ const Select = (props: SelectProps) => {
     [styles.label]: label,
   });
 
-  const primary200 = "#f06771";
   const primary20 = "#FEF1F2";
 
   const customStyles: StylesConfig = {
@@ -104,11 +103,12 @@ const Select = (props: SelectProps) => {
       border: "none",
       boxShadow: "none",
       fontSize: "14px",
-      width: "100%",
-      minWidth: "max-content",
+      maxWidth: "100%",
+      minWidth: ellipsis ? "unset" : "max-content",
       minHeight: "min-content",
       backgroundColor: "transparent",
       fontWeight: 300,
+
       ...controlStyle,
     }),
     option: (styles, { isSelected }) => {
@@ -121,17 +121,22 @@ const Select = (props: SelectProps) => {
         cursor: isSelected ? "default" : "pointer",
         ":active": {
           ...styles[":active"],
-          backgroundColor: "#E5E5E5",
+          backgroundColor: "#e60112",
         },
         ":hover": {
           ...styles[":hover"],
-          backgroundColor: isSelected ? primary200 : primary20,
+          backgroundColor: isSelected ? "#e60112" : primary20,
         },
-        backgroundColor: isSelected ? primary200 : "white",
+        backgroundColor: isSelected ? "#e60112" : "white",
       };
     },
     dropdownIndicator: (styles) => ({ ...styles, padding: 0 }),
-    input: (styles) => ({ ...styles, padding: 0, margin: 0, fontWeight: 300 }),
+    input: (styles) => ({
+      ...styles,
+      padding: 0,
+      margin: 0,
+      fontWeight: 300,
+    }),
     placeholder: (styles) => ({
       ...styles,
       padding: 0,
@@ -140,11 +145,24 @@ const Select = (props: SelectProps) => {
       fontWeight: 300,
       ...placeholderStyle,
     }),
-    menu: (styles) => ({ ...styles, width: "fit-content" }),
+    menu: (styles) => ({
+      ...styles,
+      width: "fit-content",
+      top: "30px",
+      left: "-30px !important",
+    }),
     valueContainer: (styles) => ({
       ...styles,
       padding: 0,
       width: "max-content",
+    }),
+    singleValue: (styles) => ({
+      ...styles,
+      textOverflow: "ellipsis",
+      maxWidth: "90%",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      display: "initial",
     }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
     indicatorsContainer: (styles) => ({ ...styles, alignItems: "center" }),
@@ -155,33 +173,24 @@ const Select = (props: SelectProps) => {
     setSelected(dropdownValues);
   };
 
-  // const Control = ({ children, ...props }: ControlProps<any, false>) => {
-  //   return (
-  //     <components.Control {...props}>
-  //       <Icon size={20} icon={prefixIcon || ""} className="mr-[10px]" />
-  //       {children}
-  //     </components.Control>
-  //   );
-  // };
-
-  const Menu = (props: any) => {
+  const MenuList = (props: any) => {
     return (
       <React.Fragment>
-        <components.Menu {...props}>
+        <components.MenuList {...props}>
           {props.children}
           {menuFooter}
-        </components.Menu>
+        </components.MenuList>
       </React.Fragment>
     );
   };
 
-  const Option = (props: any) => {
-    return (
-      <React.Fragment>
-        <components.Option {...props}>{props.children}</components.Option>
-      </React.Fragment>
-    );
-  };
+  // const Option = (props: any) => {
+  //   return (
+  //     <React.Fragment>
+  //       <components.Option {...props}>{props.children}</components.Option>
+  //     </React.Fragment>
+  //   );
+  // };
 
   const SingleValue = (props) => (
     <components.SingleValue {...props}>
@@ -205,8 +214,8 @@ const Select = (props: SelectProps) => {
             options={options}
             value={selected}
             placeholder={placeholder}
-            isClearable={false}
-            closeMenuOnSelect={closeMenuOnSelect}
+            isClearable={isClearable}
+            closeMenuOnSelect={closeMenuOnSelect || !isMulti}
             isDisabled={disabled}
             styles={customStyles}
             // @ts-ignore
@@ -214,7 +223,7 @@ const Select = (props: SelectProps) => {
             isMulti={isMulti}
             isSearchable={isSearchable}
             onChange={handleChange}
-            components={{ Menu, Option, SingleValue }}
+            components={{ MenuList, SingleValue }}
             onInputChange={onInputChange}
           />
         </div>

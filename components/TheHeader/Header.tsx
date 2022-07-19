@@ -1,6 +1,12 @@
 import { get } from "lodash";
 import Image from "next/image";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/router";
 import { useDebounce } from "usehooks-ts";
 
@@ -17,7 +23,8 @@ import ListingSearch, {
   ListingMenuFooter,
 } from "components/ListingSearch/ListingSearch";
 import bizListingApi from "services/biz-listing";
-import {changeToSlugify} from "utils"
+import { changeToSlugify } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
 
 export interface HeaderProps {
   id: string;
@@ -37,16 +44,21 @@ const Header = (props: HeaderProps) => {
   const [searchKey, setSearchKey] = useState("");
   const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
 
-  const { location } = useLocation();
+  const { user, updateUser } = useContext(UserInforContext);
+  const { location } = user;
 
   useEffect(() => {
     const getBizListing = async () => {
-      const data = await bizListingApi.getListingBySlug(debouncedSearchTerm);
+      const data = await bizListingApi.getListingBySlug(
+        debouncedSearchTerm,
+        location,
+        2
+      );
       setBizListing(get(data, "data.data"));
     };
 
-    getBizListing();
-  }, [debouncedSearchTerm]);
+    debouncedSearchTerm ? getBizListing() : setBizListing([]);
+  }, [debouncedSearchTerm, location]);
 
   const formatLanguages = () => {
     return languages.map((lang) => ({
@@ -91,7 +103,8 @@ const Header = (props: HeaderProps) => {
   };
 
   const handleDirectToBizHome = (item) => {
-    router.push(`/biz/home/${item.attributes.slug}`);
+    get(item, "attributes.slug") &&
+      router.push(`/biz/home/${item.attributes.slug}`);
   };
 
   return (
@@ -106,6 +119,7 @@ const Header = (props: HeaderProps) => {
               placeholder={trans.location}
               options={locations}
               value={location}
+              onChange={(e) => updateUser({ location: e.value })}
               menuWidth={150}
             />
             <Select
@@ -126,23 +140,25 @@ const Header = (props: HeaderProps) => {
       </div>
       <div className={styles.header_bottom}>
         <div className={styles.content}>
-          <Image
-            className="cursor-pointer"
-            src={require("public/logo.svg")}
-            alt="logo"
-            onClick={() => router.push("/")}
-          />
-          <ListingSearch
-            width={450}
-            size="medium"
-            listingOptions={
-              Array.isArray(bizListing) ? bizListing.slice(0, 2) : []
-            }
-            onChange={handleDirectToBizHome}
-            onInputChange={handleSearchChange}
-            closeMenuOnSelect
-            menuFooter={<HeaderSearchMenuFooter />}
-          />
+          <div className={styles.logo}>
+            <Image
+              src={require("public/logo.svg")}
+              alt="logo"
+              onClick={() => router.push("/")}
+            />
+          </div>
+          <div className={styles.search_container}>
+            <ListingSearch
+              ellipsis
+              size="medium"
+              isClearable
+              listingOptions={bizListing}
+              onChange={handleDirectToBizHome}
+              onInputChange={handleSearchChange}
+              closeMenuOnSelect
+              menuFooter={<HeaderSearchMenuFooter />}
+            />
+          </div>
           <div
             className={styles.categories}
             tabIndex={1}
@@ -155,7 +171,6 @@ const Header = (props: HeaderProps) => {
             />
           </div>
           <div className={styles.mobile}>
-            <Icon className={styles.mobile_searchr} icon="search" size={25} />
             <div onClick={onOpenHamModal}>
               <Icon
                 className={styles.mobile_hamburger}

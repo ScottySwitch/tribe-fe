@@ -11,6 +11,7 @@ import Rate from "components/Rate/Rate"
 import Link from "next/link"
 import classNames from "classnames"
 import Break from "components/Break/Break"
+import AuthPopup from "components/AuthPopup/AuthPopup"
 
 const dummyDate = [
   {label: "April 2022", value: "April 2022"},
@@ -54,9 +55,8 @@ export const ReviewForm = (props) => {
       <div className={styles.form_group}>
         <Input
           size="large"
-          placeholder="Review ( 100 character minumum )"
+          placeholder="Review"
           width={`100%`}
-          maxLength={100}
           autoFocus
           onChange={(e: any) => setContent(e.target.value)}
         />
@@ -114,10 +114,17 @@ const ReviewCard = (props: IReviewCardProps) => {
   const [rating, setRating] = useState<number>()
   const [ratingType, setRatingType] = useState<string>("")
   const [ratingReadonly, setRatingReadonly] = useState<boolean>(true)
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+
+  useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.token ? setIsLoggedIn(true) : false
+  })
 
   const handleReview = () => {
-    setExpanded(!expanded)
-    setRatingReadonly(false)
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    isLoggedIn ? setExpanded(!expanded) : setShowAuthPopup(true)
   }
 
   const handleCickRating = (value: number) => {
@@ -153,7 +160,7 @@ const ReviewCard = (props: IReviewCardProps) => {
           <Break />
           <div className={`${styles.cta_group} mb-0`}>
           <Rate
-            readonly={ratingReadonly}
+            readonly={isLoggedIn}
             initialRating={rating}
             placeholderRating={rateNumber}
             onClick={handleCickRating}
@@ -175,7 +182,7 @@ const ReviewCard = (props: IReviewCardProps) => {
         </div>
         <div className={`${styles.cta_group} ${styles.display_desktop}`}>
           <Rate
-            readonly={ratingReadonly}
+            readonly={isLoggedIn}
             initialRating={rating}
             placeholderRating={rateNumber}
             onClick={handleCickRating}
@@ -188,6 +195,10 @@ const ReviewCard = (props: IReviewCardProps) => {
         </div>
         {expanded && <ReviewForm onSubmit={onSubmit} rating={rating} />}
       </div>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </div>
   )
 }
