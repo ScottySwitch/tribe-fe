@@ -99,26 +99,27 @@ export const formatListingArray = (rawListing) =>
         followerNumber: item.user_listing_follows.length,
         tags: item.tags,
         categories: item.categories,
-        price: get(item, "price_range.min") || "",
-        currency: get(item, "price_range.currency") || "",
+        price: item.min_price || "",
+        // currency: get(item, "price_range.currency") || "",
+        currency: item.currency || "",
         rate: item.rate,
         rateNumber: item.rate_number,
       }))
     : [];
 
 export const isArray = (item) => {
-  return (Array.isArray(item) && item.length > 0) ? true : false
-}
+  return Array.isArray(item) && item.length > 0 ? true : false;
+};
 
 export const changeToSlugify = (str) => {
   return str
-  .toLowerCase()
-  .trim()
-  .replace("'", '-')
-  .replace(/[^\w\s-]/g, '')
-  .replace(/[\s_-]+/g, '-')
-  .replace(/^-+|-+$/g, '');
-}
+    .toLowerCase()
+    .trim()
+    .replace("'", "-")
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+};
 
 export const isPaidUser = (time) => {
   const timeCalcDistance = parseISO(moment(time).format("YYYY-MM-DD HH:mm:ss"));
@@ -127,3 +128,15 @@ export const isPaidUser = (time) => {
 };
 
 
+export const censoredPhoneNumber = (phoneNumber) => {
+  const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+  const phoneArray = phoneNumber ? phoneNumber.split("") : [];
+
+  for (let i = 2; i < phoneArray.length - 4; i++) {
+    if (numbers.includes(phoneArray[i].toString())) {
+      phoneArray[i] = "X";
+    }
+  }
+
+  return phoneArray.join("");
+};

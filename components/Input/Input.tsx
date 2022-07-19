@@ -12,6 +12,7 @@ export interface InputProps
   suffix?: ReactNode
   helperText?: string
   error?: string,
+  success?: string,
   width?: string | number
   variant?: "filled" | "outlined"
   size?: "small" | "medium" | "large"
@@ -26,6 +27,7 @@ const Input = (props: InputProps) => {
     readOnly,
     variant = "outlined",
     helperText,
+    success,
     error,
     size = "medium",
     id,
@@ -46,6 +48,7 @@ const Input = (props: InputProps) => {
 
   return (
     <div className={inputWrapperClassName} style={{ width }}>
+      {success && <div className={styles.success}>{success}</div>}
       <div className={styles.container}>
         {label && <label htmlFor={id}>{label}</label>}
         <div className={styles.content}>

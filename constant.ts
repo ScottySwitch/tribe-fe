@@ -409,6 +409,11 @@ export const userInformationList = [
 
 export const eatTabList = [
   {
+    text: "Deals",
+    value: ListingTabs.DEAL,
+    screen: ListingHomePageScreens.ADD_DEALS,
+  },
+  {
     text: "Dishes",
     value: ListingTabs.DISH,
     screen: ListingHomePageScreens.ADD_ITEMS,
@@ -418,36 +423,31 @@ export const eatTabList = [
     value: ListingTabs.MENU,
     screen: ListingHomePageScreens.ADD_MENU,
   },
+];
+
+export const productTabList = [
   {
     text: "Deals",
     value: ListingTabs.DEAL,
     screen: ListingHomePageScreens.ADD_DEALS,
   },
-];
-
-export const productTabList = [
   {
     text: "Products",
     value: ListingTabs.PRODUCT,
     screen: ListingHomePageScreens.ADD_ITEMS,
   },
-  {
-    text: "Deals",
-    value: ListingTabs.DEAL,
-    screen: ListingHomePageScreens.ADD_DEALS,
-  },
 ];
 
 export const serviceTabList = [
   {
-    text: "Services",
-    value: ListingTabs.SERVICE,
-    screen: ListingHomePageScreens.ADD_ITEMS,
-  },
-  {
     text: "Deals",
     value: ListingTabs.DEAL,
     screen: ListingHomePageScreens.ADD_DEALS,
+  },
+  {
+    text: "Services",
+    value: ListingTabs.SERVICE,
+    screen: ListingHomePageScreens.ADD_ITEMS,
   },
 ];
 

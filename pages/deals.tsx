@@ -58,7 +58,8 @@ const Deals = () => {
           // followerNumber: get(item, "user_listing_follows.length"),
           // tags: get(item, "attributes.tags"),
           // categories: get(item, "attributes.categories"),
-          price: get(item, "price_range.min") || "",
+          price: get(item, "attributes.min_price") || "",
+          currency: get(item, "attributes.currency") || "",
           // rate: get(item, "attributes.rate"),
           // rateNumber: get(item, "attributes.rate_number"),
         }));
@@ -132,7 +133,7 @@ const Deals = () => {
         <div className="flex flex-wrap gap-10">
           {Array.isArray(listingsHaveDeals) &&
             listingsHaveDeals.map((item) => (
-              <div key={item?.title} className="pb-5">
+              <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={item.images[0]}
                   title={item.title}
@@ -140,6 +141,7 @@ const Deals = () => {
                   rateNumber={item.rateNumber}
                   followerNumber={item.followerNumber}
                   price={item.price}
+                  currency={(item.currency)?.toUpperCase()}
                   categories={item.categories}
                   tags={item.tags}
                   isVerified={item.isVerified}

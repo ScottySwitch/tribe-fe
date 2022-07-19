@@ -95,10 +95,9 @@ const InforCard = (props: InforCardProps) => {
           <Image
             src={src}
             alt=""
-            layout="responsive"
-            width="100%"
-            height="100%"
+            layout="fill"
             objectFit="cover"
+            objectPosition="center"
             onErrorCapture={() => {
               setSrc("https://picsum.photos/200/300");
             }}

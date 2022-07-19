@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Heading from "../../Heading/Heading";
-
+import AuthPopup from "components/AuthPopup/AuthPopup";
 import styles from "./RenderTabs.module.scss";
 
 const initSelectedTab = (category) => {
@@ -62,6 +62,7 @@ const TabContent = ({
 
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>({});
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const isDeal = selectedTab === ListingTabs.DEAL;
   const itemArray = [
@@ -96,7 +97,6 @@ const TabContent = ({
   };
 
   // let DetailModal = ProductDetailModal;
-  console.log("selectedTab", selectedTab);
   let DetailModal;
   switch (selectedTab) {
     case ListingTabs.DISH:
@@ -109,7 +109,6 @@ const TabContent = ({
     case ListingTabs.SERVICE:
       DetailModal = ProductDetailModal;
       break;
-
     case ListingTabs.DEAL:
       DetailModal = DealDetailModal;
       break;
@@ -175,6 +174,10 @@ const TabContent = ({
         visible={showDetailModal}
         data={selectedItem}
         onClose={() => setShowDetailModal(false)}
+      />
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
       />
     </div>
   );
@@ -267,15 +270,17 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.DEAL:
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const blankText = (userInfo && userInfo.token) ? "There are no deal yet" : "Login/sign up to see deals"
       tabContent = (
         <TabContent
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={dealList}
+          list={(userInfo && userInfo.token) ? dealList : []}
           blankImg={require("public/images/no-product.svg")}
-          blankText="There are no deal yet"
+          blankText={blankText}
           buttonText="Add deals now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEALS)}
         />
@@ -287,24 +292,17 @@ const RenderTabs = (props: {
     <div className="w-full">
       <div className="flex gap-5 items-center justify-between">
         <div className="flex gap-5 items-center">
-          {
-            initSelectedTab(category).tabList.map((tab) => {
-              const userInfo = JSON.parse(localStorage.getItem("user") || "{}")
-              if ((!!userInfo.token && tab.text === 'Deals') || (tab.text !== 'Deals') ) {
-                return (
-                  <Heading
-                    key={tab.text}
-                    selected={selectedTab === tab.value}
-                    text={tab.text}
-                    onClick={() =>
-                      !(tab.value === ListingTabs.DEAL && !isPaid) &&
-                      setSelectedTab(tab.value)
-                    }
-                  />
-                )
+          {initSelectedTab(category).tabList.map((tab) => (
+            <Heading
+              key={tab.text}
+              selected={selectedTab === tab.value}
+              text={tab.text}
+              onClick={() =>
+                !(tab.value === ListingTabs.DEAL && !isPaid) &&
+                setSelectedTab(tab.value)
               }
-            })
-          }
+            />
+          ))}
         </div>
         {!isViewPage && (
           <EditList

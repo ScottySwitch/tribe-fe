@@ -16,12 +16,11 @@ import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
 import Loader from "components/Loader/Loader";
-import Filter from "components/Filter/Filter";
-
-import styles from "styles/Home.module.scss";
+import useLocation from "hooks/useLocation";
 import useTrans from "hooks/useTrans";
 import { formatListingArray } from "utils";
-import useLocation from "hooks/useLocation";
+
+import styles from "styles/Home.module.scss";
 
 const SubCategoryPage = (props: any) => {
   const { bizListings, listingBanners, listCategoryLink } = props;
@@ -64,7 +63,7 @@ const SubCategoryPage = (props: any) => {
 
     //get subCategory data
     location && getBizListings(category, currenCategoryLink, pagination.page);
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSubCategory, currenCategoryLink, location, pagination.page]);
 
@@ -159,9 +158,9 @@ const SubCategoryPage = (props: any) => {
         </div>
       </SectionLayout>
       <SectionLayout show={isArray(listings)}>
-        <div className="flex flex-wrap gap-5">
+        <div className="flex flex-wrap gap-5 sm:gap-2 lg:gap-8">
           {listings.map((item) => (
-            <div key={item.title} className="pb-5">
+            <div key={item.title} className="pb-5 pt-3">
               <InforCard
                 imgUrl={item.images[0]}
                 title={item.title}
@@ -169,7 +168,7 @@ const SubCategoryPage = (props: any) => {
                 rateNumber={item.rateNumber}
                 followerNumber={item.followerNumber}
                 price={item.price}
-                currency={item.currency}
+                currency={(item.currency)?.toUpperCase()}
                 categories={item.categories}
                 tags={item.tags}
                 isVerified={item.isVerified}
