@@ -150,7 +150,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={card.currency}
+                  currency={(card.currency)?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -189,7 +189,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={card.currency}
+                  currency={(card.currency)?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -213,7 +213,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={card.currency}
+                  currency={(card.currency)?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -250,7 +250,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={card.currency}
+                  currency={(card.currency)?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -274,7 +274,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={card.currency}
+                  currency={(card.currency)?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -300,7 +300,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={card.currency}
+                  currency={(card.currency)?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -336,7 +336,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={card.currency}
+                  currency={(card.currency)?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}

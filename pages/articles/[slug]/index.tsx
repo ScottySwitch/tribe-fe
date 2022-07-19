@@ -250,7 +250,7 @@ const ArticlesDetailPage = (props: any) => {
                                   ).length
                                 : 0
                             }
-                            price={get(card, "attributes.price_range.min")}
+                            price={get(card, "attributes.min_price")}
                             categories={card.categories}
                             tags={get(card, "attributes.tags.data")}
                             iconTag={true}

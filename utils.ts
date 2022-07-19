@@ -100,8 +100,9 @@ export const formatListingArray = (rawListing) =>
         followerNumber: item.user_listing_follows.length,
         tags: item.tags,
         categories: item.categories,
-        price: get(item, "price_range.min") || "",
-        currency: get(item, "price_range.currency") || "",
+        price: item.min_price || "",
+        // currency: get(item, "price_range.currency") || "",
+        currency: item.currency || "",
         rate: item.rate,
         rateNumber: item.rate_number,
       }))
