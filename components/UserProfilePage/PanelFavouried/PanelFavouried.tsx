@@ -29,6 +29,7 @@ const ListCard = (props: {
             rateNumber={card.rateNumber}
             followerNumber={card.followerNumber}
             price={card.price}
+            currency={(card.currency).toUpperCase()}
             categories={card.categories}
             tags={card.tags}
             iconTag={true}
@@ -70,7 +71,8 @@ const FavouriedPanel = () => {
             followerNumber: get(item, "user_listing_follows.length") || 0,
             tags: item.tags,
             categories: item.categories,
-            price: get(item, "price_range.min") || "",
+            price: item.min_price || "",
+            currency: (item.currency).toUpperCase() || "",
             rate: item.rate,
             rateNumber: item.rate_number,
           }))) ||

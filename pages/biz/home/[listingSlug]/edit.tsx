@@ -196,7 +196,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setCategory(get(listing, "categories[0].id") || Categories.BUY);
         setDescription(listing.description);
         setOpenHours(listing.open_hours);
-        setPriceRange(listing.price_range);
+        setPriceRange({
+          min: listing.min_price,
+          max: listing.max_price,
+          currency: listing.currency ? (listing.currency).toUpperCase() : ''
+        });
         setSocialInfo(listing.social_info);
         setKlookUrl(listing.klook_url);
         // setDealList(listing.deals);
@@ -301,9 +305,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       (item) => !item.isNew && item.isEdited
     );
     if (isRevision) {
+      console.log('priceRange',priceRange)
       await BizListingRevision.updateBizListingRevision(bizListing.id, {
         description: description,
-        price_range: priceRange,
+        // price_range: priceRange,
+        min_price: parseFloat(priceRange.min),
+        max_price: parseFloat(priceRange.max),
+        currency: (priceRange.currency).toLocaleLowerCase(),
         action: action,
         images: listingImages,
         social_info: socialInfo,
@@ -327,7 +335,10 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         biz_listing: bizListing.id.toString(),
         parent_id: bizListing.id.toString(),
         description: description,
-        price_range: priceRange,
+        // price_range: priceRange,
+        min_price: parseFloat(priceRange.min),
+        max_price: parseFloat(priceRange.max),
+        currency: (priceRange.currency).toLocaleLowerCase(),
         action: action,
         images: listingImages,
         social_info: socialInfo,

@@ -33,9 +33,9 @@ const BusinessDetail = (props: BusinessDetailProps) => {
     categoryLinks: get(listing, "category_links[0]"),
     viewProductTypes: get(listing, "product_types"),
     openHours: get(listing, "open_hours"),
-    minPrice: get(listing, "price_range.min"),
-    maxPrice: get(listing, "price_range.max"),
-    currency: get(listing, "price_range.currency"),
+    minPrice: get(listing, "min_price"),
+    maxPrice: get(listing, "max_price"),
+    currency: get(listing, "currency"),
     describeTags: get(listing, "tags").map((item) => item.id.toString()),
     viewDescribeTags: get(listing, "tags").map((item) => item.label),
     productTypes:
@@ -65,11 +65,14 @@ const BusinessDetail = (props: BusinessDetailProps) => {
   const submitFormData = (formData) => {
     const businessDetailFormattedData = {
       category_links: formData.categoryLinks,
-      price_range: {
-        currency: formData.currency?.value || formData.currency,
-        min: formData.minPrice,
-        max: formData.maxPrice,
-      },
+      // price_range: {
+      //   currency: formData.currency?.value || formData.currency,
+      //   min: formData.minPrice,
+      //   max: formData.maxPrice,
+      // },
+      currency: formData.currency?.value || formData.currency,
+      min_price: formData.minPrice,
+      max_price: formData.maxPrice,
       product_types:
         get(listing, "categories[0].id") === Categories.BUY
           ? formData.productTypes

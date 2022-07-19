@@ -367,8 +367,8 @@ const PromotionsPage = () => {
                             : 0
                         }
                         description={get(card, "attributes.description")}
-                        price={get(card, "attributes.price_range.min")}
-                        currency={get(card, "attributes.price_range.currency")}
+                        price={get(card, "attributes.min_price")}
+                        currency={get(card, "attributes.currency").toUpperCase()}
                         categories={card.categories}
                         tags={get(card, "attributes.tags.data")}
                         iconTag={true}
