@@ -102,6 +102,7 @@ const LoginPage = (context) => {
       "/forgot-password/reset",
       "/signup",
       "/signup/otp",
+      "/login"
     ].includes(prevPagePathname)
       ? "/"
       : prevPagePathname;
