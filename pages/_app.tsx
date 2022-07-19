@@ -41,6 +41,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     "/biz/verify",
   ];
   const isAuthPage = !notAuthPages.includes(pathname);
+
   const defaultUserInformation: { [key: string]: any } = {
     token: undefined,
     avatar: undefined,
@@ -114,7 +115,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     setIsMobile(screen.width < 501);
     setLoginInfo(localLoginInfo.token ? localLoginInfo : {});
-    setShowAuthPopup(!!localLoginInfo.token);
+    setShowAuthPopup(!localLoginInfo.token);
     getMenuList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
