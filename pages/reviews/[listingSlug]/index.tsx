@@ -69,7 +69,7 @@ const AddReviewPage = () => {
     const dataSendApi = {
       user: userInfo.id,
       biz_listing: bizListing.id,
-      rating,
+      rating: dataSend.rating,
       content: dataSend.content,
       visited_date: dataSend.visitedDate,
       images: dataSend.images,

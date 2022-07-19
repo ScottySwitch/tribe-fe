@@ -93,7 +93,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       let data;
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (isViewPage) {
-        //if normal user go to normal listing homepage
+        //if normal user go to normal listing homepage  
         data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
       } else {
         //if normal users go to edit listing homepage
@@ -483,15 +483,17 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     //API Reviews
     await Promise.all(
       reviews.map(async (item) => {
-        const updateData = {
+        const dataSend = {
           images: item.images,
           visited_date: item.visited_date,
           rating: item.rating,
           content: item.content,
           reply_reviews: item.reply_reviews,
           date_create_reply: item.date_create_reply,
+          parent_id: item.id,
+          is_revision: true
         };
-        await ReviewApi.updateReviews(item.id, updateData);
+        await ReviewApi.addReview(dataSend)
       })
     );
     window.location.reload();

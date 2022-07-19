@@ -304,7 +304,7 @@ const getOwnerBizListing = async (bizListingSlug: any) => {
           {
             listing_roles: {
               name: {
-                $ne: null
+                $ne: null,
               },
               user: {
                 id: {
@@ -435,7 +435,7 @@ const getBizlistingByCategoryLink = async (
   page: string | number,
   country?: string
 ) => {
-  const url = `/api/biz-listings/bizlisting-by-categorylink?country=${country}&category=${category}&categoryLinks=${categoryLinks}&page=${page}`;
+  const url = `/api/biz-listings/bizlisting-by-categorylink?country=${country}&category=${category}&categoryLinks=${categoryLinks}&page=${page}&price=${50}`;
   return await Api.get(url);
 };
 
@@ -483,13 +483,13 @@ const getAllBizlitingByCategorySlug = async (
 
 const getFavouriteDeals = async () => {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-  const userId = userInfo.id
+  const userId = userInfo.id;
   const query = qs.stringify(
     {
       filters: {
         user: {
-          id: userId
-        }
+          id: userId,
+        },
       },
       populate: "*",
     },
@@ -500,7 +500,7 @@ const getFavouriteDeals = async () => {
 
   const url = `/api/user-deal-favourites?${query}`;
   return await Api.get(url);
-}
+};
 
 const bizListingApi = {
   getFavouriteDeals,
