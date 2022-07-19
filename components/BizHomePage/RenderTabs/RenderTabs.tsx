@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Heading from "../../Heading/Heading";
-
+import AuthPopup from "components/AuthPopup/AuthPopup";
 import styles from "./RenderTabs.module.scss";
 
 const initSelectedTab = (category) => {
@@ -62,6 +62,7 @@ const TabContent = ({
 
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>({});
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const isDeal = selectedTab === ListingTabs.DEAL;
   const itemArray = [
@@ -108,7 +109,6 @@ const TabContent = ({
     case ListingTabs.SERVICE:
       DetailModal = ProductDetailModal;
       break;
-
     case ListingTabs.DEAL:
       DetailModal = DealDetailModal;
       break;
@@ -174,6 +174,10 @@ const TabContent = ({
         visible={showDetailModal}
         data={selectedItem}
         onClose={() => setShowDetailModal(false)}
+      />
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
       />
     </div>
   );
@@ -266,15 +270,20 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.DEAL:
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       tabContent = (
         <TabContent
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={dealList}
+          list={!userInfo.token ? [] : dealList}
           blankImg={require("public/images/no-product.svg")}
-          blankText="There are no deal yet"
+          blankText={
+            !userInfo.token
+              ? "Login/sign up to see deals"
+              : "There are no deal yet"
+          }
           buttonText="Add deals now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEALS)}
         />

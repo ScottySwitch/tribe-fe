@@ -16,6 +16,7 @@ import SearchListing, {
   listingTypes,
 } from "components/AddListingPages/PageOne/SearchListing/SearchListing";
 import get from "lodash/get";
+import AuthPopup from "components/AuthPopup/AuthPopup";
 
 const ClaimPage = () => {
   const [listing, setListing] = useState<{ [key: string]: any }>();
@@ -45,6 +46,8 @@ const ClaimPage = () => {
   const RightColumn = (props: { listing: { [key: string]: any } }) => {
     const { listing } = props;
     const [isDisabled, setIsDisabled] = useState<boolean>(false);
+    const [showAuthPopup, setShowAuthPopup] = useState(false);
+
     useEffect(() => {
       const listingRolesArray =
         get(listing, "attributes.listing_roles.data") || [];
@@ -56,7 +59,15 @@ const ClaimPage = () => {
       if (isBeingClaimed || doesHasOwners) setIsDisabled(true);
     }, []);
     const router = useRouter();
-    const handleClick = () => router.push(`/claim/${listing.id}`);
+    const handleClick = () => {
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      if (userInfo.token) {
+        router.push(`/claim/${listing.id}`)
+      }
+      else {
+        setShowAuthPopup(true)
+      }
+    };
     return (
       <>
         <Button
@@ -65,6 +76,10 @@ const ClaimPage = () => {
           disabled={isDisabled}
         />
         <span>Not your business?</span>
+        <AuthPopup
+          onClose={() => setShowAuthPopup(false)}
+          visible={showAuthPopup}
+        />
       </>
     );
   };

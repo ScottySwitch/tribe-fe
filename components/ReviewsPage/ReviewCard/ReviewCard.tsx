@@ -11,6 +11,7 @@ import Rate from "components/Rate/Rate"
 import Link from "next/link"
 import classNames from "classnames"
 import Break from "components/Break/Break"
+import AuthPopup from "components/AuthPopup/AuthPopup"
 
 const dummyDate = [
   {label: "April 2022", value: "April 2022"},
@@ -113,10 +114,17 @@ const ReviewCard = (props: IReviewCardProps) => {
   const [rating, setRating] = useState<number>()
   const [ratingType, setRatingType] = useState<string>("")
   const [ratingReadonly, setRatingReadonly] = useState<boolean>(true)
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const handleReview = () => {
-    setExpanded(!expanded)
-    setRatingReadonly(false)
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    if (userInfo.token) {
+      setExpanded(!expanded)
+      setRatingReadonly(false)
+    }
+    else {
+      setShowAuthPopup(true)
+    }
   }
 
   const handleCickRating = (value: number) => {
@@ -187,6 +195,10 @@ const ReviewCard = (props: IReviewCardProps) => {
         </div>
         {expanded && <ReviewForm onSubmit={onSubmit} rating={rating} />}
       </div>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </div>
   )
 }
