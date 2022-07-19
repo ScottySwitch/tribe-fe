@@ -49,6 +49,7 @@ const Home: NextPage = (props: any) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+
     const getListings = async () => {
       const data = await BizListingApi.getAllBizlitingPinnedByCategory(
         location
@@ -150,7 +151,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -189,7 +190,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -213,7 +214,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -250,7 +251,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -274,7 +275,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -300,7 +301,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -328,7 +329,7 @@ const Home: NextPage = (props: any) => {
           </SectionLayout>
           <SectionLayout childrenClassName={styles.for_you_container}>
             {listingForYou?.map((card) => (
-              <div key={card.title} className="pb-5 pt-3 pl-3">
+              <div key={card.title} className="pb-5 pt-3">
                 <InforCard
                   imgUrl={card.images[0]}
                   title={card.title}
@@ -336,7 +337,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}

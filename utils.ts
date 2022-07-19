@@ -135,19 +135,21 @@ export const censoredPhoneNumber = (phoneNumber) => {
   return phoneArray.join("");
 };
 
-export const getLocation = async () => {
-  fetch("https://www.cloudflare.com/cdn-cgi/trace")
-    .then((response) => response.text())
-    .then((two) => {
-      if (!two.trim()) {
-        return;
-      }
-      let data = two.replace(/[\r\n]+/g, '","').replace(/\=+/g, '":"');
-      data = '{"' + data.slice(0, data.lastIndexOf('","')) + '"}';
-      var userLocation = JSON.parse(data).loc?.toLowerCase();
-      const locationOption =
-        locations.find((country) => country.code === userLocation) ||
-        locations[0];
-      return locationOption.value;
-    });
+export const getBrowserLocation = async () => {
+  const locationData = await fetch(
+    "https://www.cloudflare.com/cdn-cgi/trace"
+  ).then((res) => res.text());
+
+  if (!locationData.trim()) {
+    return;
+  }
+
+  let data = locationData.replace(/[\r\n]+/g, '","').replace(/\=+/g, '":"');
+  data = '{"' + data.slice(0, data.lastIndexOf('","')) + '"}';
+  var userLocation = JSON.parse(data).loc?.toLowerCase();
+  const locationOption = locations.find(
+    (country) => country.code === userLocation
+  );
+
+  return locationOption?.value;
 };
