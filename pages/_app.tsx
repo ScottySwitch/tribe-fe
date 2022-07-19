@@ -13,12 +13,11 @@ import { Tiers, UsersTypes } from "enums";
 import AuthApi from "../services/auth";
 import { IUser, UserInforProvider } from "Context/UserInforContext";
 import CategoryApi from "services/category";
+import "../styles/globals.css";
+import { locations } from "constant";
+import { getBrowserLocation } from "utils";
 
 import styles from "styles/App.module.scss";
-import "../styles/globals.css";
-import useLocation from "hooks/useLocation";
-import { locations } from "constant";
-import { getLocation } from "utils";
 
 export type ILoginInfor = {
   token?: string;
@@ -75,19 +74,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     const { user, updateUser } = contextDefaultValue;
 
     ///get location
-    if (localLocation) {
+    const setDefaultLocation = async () => {
+      const browserLocation = await getBrowserLocation();
       updateUser({
         ...user,
-        location: localLocation,
+        location: localLocation || browserLocation || locations[0].value,
       });
-    } else {
-      getLocation().then((locationValue) =>
-        updateUser({
-          ...user,
-          location: locationValue,
-        })
-      );
-    }
+    };
 
     const getMenuList = async () => {
       const dataCategories = await CategoryApi.getItemCategory();
@@ -117,6 +110,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     setLoginInfo(localLoginInfo.token ? localLoginInfo : {});
     setShowAuthPopup(!localLoginInfo.token);
     getMenuList();
+    setDefaultLocation();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

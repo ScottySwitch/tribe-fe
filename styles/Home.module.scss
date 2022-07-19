@@ -87,6 +87,7 @@
   padding: 6px 0;
   display: flex;
   flex-wrap: wrap;
+  gap: 30px;
 }
 
 .banner_card {
@@ -233,6 +234,10 @@
       width: 100%;
     }
   }
+
+  .for_you_container {
+    gap: 40px;
+  }
 }
 
 @media screen and (max-width: $tablet) {
@@ -241,6 +246,9 @@
     .collection_description {
       width: 50%;
     }
+  }
+  .for_you_container {
+    gap: 6px;
   }
 }
 
