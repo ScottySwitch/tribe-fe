@@ -195,7 +195,11 @@ const Properties = () => {
           logo={listingInformation.logo}
           phoneNumber={listingInformation.phone_number}
           socialInfo={listingInformation.social_info}
-          priceRange={listingInformation.price_range}
+          priceRange={{
+            min: listingInformation.min_price,
+            max: listingInformation.max_price,
+            currency: listingInformation.currecy
+          }}
           bizListing={listingInformation}
           userInfo={userInfo}
         />
