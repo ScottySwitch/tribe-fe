@@ -199,7 +199,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setPriceRange({
           min: listing.min_price,
           max: listing.max_price,
-          currency: listing.currency ? (listing.currency).toUpperCase() : ''
+          currency: listing.currency ? (listing.currency)?.toUpperCase() : ''
         });
         setSocialInfo(listing.social_info);
         setKlookUrl(listing.klook_url);

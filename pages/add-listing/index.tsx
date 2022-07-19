@@ -126,7 +126,7 @@ const AddListing = () => {
       // },
       min_price: formData.minPrice,
       max_price: formData.maxPrice,
-      currency: formData.currency?.value,
+      currency: get(formData, 'currency.value'),
       images: formData.images,
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,

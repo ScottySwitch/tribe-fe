@@ -70,7 +70,7 @@ const BusinessDetail = (props: BusinessDetailProps) => {
       //   min: formData.minPrice,
       //   max: formData.maxPrice,
       // },
-      currency: formData.currency?.value || formData.currency,
+      currency: get(formData, 'currency?.value') || formData.currency,
       min_price: formData.minPrice,
       max_price: formData.maxPrice,
       product_types:

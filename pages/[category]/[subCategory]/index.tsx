@@ -168,7 +168,7 @@ const SubCategoryPage = (props: any) => {
                 rateNumber={item.rateNumber}
                 followerNumber={item.followerNumber}
                 price={item.price}
-                currency={(item.currency).toUpperCase()}
+                currency={(item.currency)?.toUpperCase()}
                 categories={item.categories}
                 tags={item.tags}
                 isVerified={item.isVerified}
