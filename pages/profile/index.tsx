@@ -42,12 +42,12 @@ const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
         </div>
         <h2 className={styles.name}>{name}</h2>
       </div>
-      <CompleteProfileCard
+      {/* <CompleteProfileCard
         stepCurrent={3}
         stepCompleted={5}
         linkable="/profile/information"
         className={styles.CompleteProfileCard_desktop}
-      />
+      /> */}
     </div>
   );
 };
@@ -71,10 +71,10 @@ const GroupHeadingTwo = (props: {
             <h5>Following</h5>
             <span>{following}</span>
           </div>
-          <div className={styles.outstanding_criteria}>
+          {/* <div className={styles.outstanding_criteria}>
             <h5>Points</h5>
             <span>{points}</span>
-          </div>
+          </div> */}
         </div>
         <Button
           className={styles.btn_edit_profile}
@@ -86,12 +86,12 @@ const GroupHeadingTwo = (props: {
           }}
         />
       </div>
-      <CompleteProfileCard
+      {/* <CompleteProfileCard
         stepCurrent={3}
         stepCompleted={5}
         linkable="/profile/information"
         className={styles.CompleteProfileCard_mobile}
-      />
+      /> */}
     </React.Fragment>
   );
 };
