@@ -53,6 +53,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [showHamModal, setShowHamModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [navList, setNavList] = useState<{ [key: string]: any }[]>([]);
+  const [userInfo, setUserInfo] = useState<any>({})
 
   const contextDefaultValue = {
     user: user,
@@ -70,6 +71,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
+    setUserInfo(localLoginInfo)
     const localLocation = localLoginInfo.location;
     const { user, updateUser } = contextDefaultValue;
 
@@ -165,6 +167,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           visible={isAuthPage && showAuthPopup && !loginInfor.token}
         />
         <HamModal
+          user={userInfo}
           loginInfor={loginInfor}
           showHamModal={showHamModal}
           onSetShowHamModal={(e: boolean) => setShowHamModal(e)}

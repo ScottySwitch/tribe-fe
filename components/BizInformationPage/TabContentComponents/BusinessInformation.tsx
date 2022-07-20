@@ -45,6 +45,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   };
 
   const onSubmitForm = (data) => {
+    console.log('data', data)
     onSubmit({
       name: data.name,
       description: data.description,
@@ -54,7 +55,12 @@ const BusinessInformation = (props: BusinessInformationProps) => {
       address: data.address,
       city: data.city,
       country: data.country,
-      social_info: data.socialInfo,
+      social_info: {
+        ...data.socialInfo,
+        twitter: data.twitter,
+        facebook: data.facebook,
+        instagram: data.instagram
+      },
     });
     setIsEdit(false);
   };

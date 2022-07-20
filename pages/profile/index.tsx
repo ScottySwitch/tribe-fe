@@ -15,10 +15,11 @@ import {
   dummySavedDeals,
   dummyUserInfo,
   inforCardList,
+  user,
 } from "constant";
 import { ProfileTabs } from "enums";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
@@ -26,7 +27,6 @@ import { userInfo } from "os";
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props;
-
   return (
     <div className={styles.group_heading_one}>
       <div className="flex items-end flex-wrap lg:flex-nowrap">
@@ -97,6 +97,7 @@ const GroupHeadingTwo = (props: {
 };
 
 const ProfilePage = () => {
+  const router = useRouter();
   const [userInfor, setUserInfo] = useState<UserPropsData>({
     email: "",
     phone_number: "",
@@ -109,6 +110,10 @@ const ProfilePage = () => {
 
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!userInfo || !userInfo?.token) {
+      router.push('/')
+    }
+
     console.log("userInfo", userInfo);
     setUserInfo(userInfo);
   }, []);

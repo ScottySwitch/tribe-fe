@@ -42,9 +42,10 @@ const BizInformation = (props) => {
       const data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
 
       //TODO: Check listing is owned by user before returning biz listing data on BE
+      console.log(userInfo.owner_listings.includes(get(data, "data.data[0].id") || ""))
       if (
         isArray(userInfo.owner_listings) &&
-        userInfo.owner_listings.includes(get(data, "data.data[0].id") || "")
+        userInfo.owner_listings.some((item) => item.id == get(data, "data.data[0].id"))
       ) {
         const listing = get(data, "data.data[0]") || {};
         userInfo.now_biz_listing = listing;

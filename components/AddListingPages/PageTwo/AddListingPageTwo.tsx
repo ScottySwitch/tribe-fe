@@ -37,6 +37,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
       contact: data.contact,
       email: data.email,
       socialMedia: data.socialMedia,
+      typeMedia: data?.typeMedia
     },
   });
 
@@ -158,7 +159,10 @@ const AddListingPageTwo = (props: AddListingProps) => {
           <SelectInput
             label="Social media (optional )"
             placeholder="https://www.facebook.com/YourFacebook"
-            onChange={(e) => setValue("socialMedia", e.input)}
+            onChange={(e) => {
+              setValue("socialMedia", e.input)
+              setValue("typeMedia", e.select)
+            }}
             options={formattedSocialMediaOptions}
             value={formatSelectInputValue(
               getValues("socialMedia"),

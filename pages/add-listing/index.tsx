@@ -15,7 +15,6 @@ import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSecti
 import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor";
 import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor";
 import { IOpenHours } from "components/OpenHours/OpenHours";
-
 import styles from "styles/AddListing.module.scss";
 import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
@@ -43,6 +42,7 @@ export interface IAddListingForm {
   contact: string;
   email: string;
   socialMedia: string;
+  typeMedia?: any;
   currency?: { label: string; value: string };
   minPrice: string;
   maxPrice: string;
@@ -107,7 +107,7 @@ const AddListing = () => {
     if (!formData.isOnline) {
       address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`;
     }
-    let dataSend = {
+    let dataSend: any = {
       user: userInfo.id,
       is_verified: false,
       is_online_store: !!formData.isOnline,
@@ -116,7 +116,6 @@ const AddListing = () => {
       description: formData.description,
       address,
       country: formData.country,
-      social_info: formData.socialMedia,
       phone_number: formData.contact,
       email: formData.email === "" ? null : formData.email,
       // price_range: {
@@ -124,9 +123,9 @@ const AddListing = () => {
       //   min: formData.minPrice,
       //   max: formData.maxPrice,
       // },
-      min_price: formData.minPrice,
-      max_price: formData.maxPrice,
-      currency: get(formData, 'currency.value'),
+      min_price: isNaN(parseFloat(formData.minPrice)) ? null : formData.minPrice,
+      max_price: isNaN(parseFloat(formData.maxPrice)) ? null : formData.maxPrice,
+      currency: get(formData, 'currency.value') ? get(formData, 'currency.value') : null,
       images: formData.images,
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,
@@ -153,6 +152,30 @@ const AddListing = () => {
       },
       is_accepted: false,
     };
+    if (get(formData,'typeMedia.value') && get(formData,'typeMedia.value') === 'facebook') {
+      dataSend = {
+        ...dataSend, 
+        social_info: {
+          facebook: formData.socialMedia
+        }
+      }
+    }
+    if (get(formData,'typeMedia.value') && get(formData,'typeMedia.value') === 'instagram') {
+      dataSend = {
+        ...dataSend, 
+        social_info: {
+          instagram: formData.socialMedia
+        }
+      }
+    }
+    if (get(formData,'typeMedia.value') && get(formData,'typeMedia.value') === 'twitter') {
+      dataSend = {
+        ...dataSend, 
+        social_info: {
+          twitter: formData.socialMedia
+        }
+      }
+    }
     console.log("Role", get(formData, "role.label"));
     const role = get(formData, "role.label");
     let result;
