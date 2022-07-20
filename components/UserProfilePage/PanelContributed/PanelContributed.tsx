@@ -82,7 +82,7 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
 
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    (userInfo && userInfo?.token)
+    (userInfo && userInfo?.token) &&
     ContributeApi.getUserContribute()
       .then((res) => {
         const contributionRawData = get(res, "data.data");

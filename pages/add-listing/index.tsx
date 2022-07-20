@@ -107,6 +107,20 @@ const AddListing = () => {
     if (!formData.isOnline) {
       address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`;
     }
+    let socialType: any = {}
+    switch (formData.typeMedia) {
+      case 'facebook':
+        socialType.facebook = formData.socialMedia
+        break;
+      case 'instagram':
+        socialType.instagram = formData.socialMedia
+        break;
+      case 'twitter':
+        socialType.twitter = formData.socialMedia
+        break;
+      default:
+        break;
+    }
     let dataSend: any = {
       user: userInfo.id,
       is_verified: false,
@@ -123,9 +137,9 @@ const AddListing = () => {
       //   min: formData.minPrice,
       //   max: formData.maxPrice,
       // },
-      min_price: isNaN(parseFloat(formData.minPrice)) ? null : formData.minPrice,
-      max_price: isNaN(parseFloat(formData.maxPrice)) ? null : formData.maxPrice,
-      currency: get(formData, 'currency.value') ? get(formData, 'currency.value') : null,
+      min_price: isNaN(parseFloat(formData.minPrice)) ? parseFloat(formData.minPrice) : 0,
+      max_price: isNaN(parseFloat(formData.maxPrice)) ? parseFloat(formData.maxPrice) : 0,
+      currency: get(formData, 'currency.value') || null,
       images: formData.images,
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,
@@ -150,33 +164,11 @@ const AddListing = () => {
         payment: formData.payment,
         placeGoodFor: formData.placeGoodFor,
       },
+      social_info: socialType,
       is_accepted: false,
     };
-    if (get(formData,'typeMedia.value') && get(formData,'typeMedia.value') === 'facebook') {
-      dataSend = {
-        ...dataSend, 
-        social_info: {
-          facebook: formData.socialMedia
-        }
-      }
-    }
-    if (get(formData,'typeMedia.value') && get(formData,'typeMedia.value') === 'instagram') {
-      dataSend = {
-        ...dataSend, 
-        social_info: {
-          instagram: formData.socialMedia
-        }
-      }
-    }
-    if (get(formData,'typeMedia.value') && get(formData,'typeMedia.value') === 'twitter') {
-      dataSend = {
-        ...dataSend, 
-        social_info: {
-          twitter: formData.socialMedia
-        }
-      }
-    }
-    console.log("Role", get(formData, "role.label"));
+    // get(dataSend, `social_info[${formData.typeMedia}]`, formData.socialMedia)
+    console.log(get(dataSend, `social_info[${formData.typeMedia}]`))
     const role = get(formData, "role.label");
     let result;
     let dataSendContribute: any = {
