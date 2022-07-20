@@ -8,14 +8,17 @@ import Modal from "components/Modal/Modal";
 import Tabs from "components/Tabs/Tabs";
 import { categories } from "constant";
 import { ILoginInfor } from "pages/_app";
+import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import styles from "./HamModal.module.scss";
 
 const HamModalHeader = ({
+  user,
   loginInfor,
   gotoLogin,
   gotoSignup,
 }: {
+  user?: any;
   loginInfor: ILoginInfor;
   gotoLogin: () => void;
   gotoSignup: () => void;
@@ -23,15 +26,16 @@ const HamModalHeader = ({
   return !!loginInfor.token ? (
     <div className={styles.user_profile}>
       <Image
-        src={require("public/images/avatar.png")}
+        src={user.avatar || require("public/images/avatar.png")}
         alt=""
         layout="fixed"
         width={50}
         height={50}
+        className={styles.avatar}
         objectFit="cover"
       />
       <div className={styles.user_infor}>
-        <div className={styles.name}>Anna Nhun</div>
+        <div className={styles.name}>{user.first_name} {user.last_name}</div>
         <div className={styles.see_profile}>See profile</div>
       </div>
     </div>
@@ -47,15 +51,17 @@ const HamModalHeader = ({
 };
 
 export interface HamModalProps {
+  user?: any;
   loginInfor: ILoginInfor;
   showHamModal: boolean;
   onSetShowHamModal: (e: boolean) => void;
 }
 
 const HamModal = (props: HamModalProps) => {
-  const { onSetShowHamModal, loginInfor, showHamModal } = props;
+  const { onSetShowHamModal, loginInfor, showHamModal, user } = props;
 
   const [showCategoriesModal, setShowCategoriesModal] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const router = useRouter();
 
@@ -188,14 +194,18 @@ const HamModal = (props: HamModalProps) => {
       >
         <div className={styles.ham_modal}>
           <HamModalHeader
+            user={user}
             loginInfor={loginInfor}
             gotoLogin={gotoLogin}
             gotoSignup={gotoSignup}
           />
           <Menu
+            user={user}
             loginInfor={loginInfor}
             mobile
+            onShowHamModal={() => onSetShowHamModal(false)}
             onShowCategoriesModal={() => setShowCategoriesModal(true)}
+            onShowAuthPopup={() => setShowAuthPopup(true)}
           />
         </div>
       </Modal>
@@ -209,6 +219,10 @@ const HamModal = (props: HamModalProps) => {
       >
         <Tabs tabList={categoriesTabs} />
       </Modal>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </>
   );
 };

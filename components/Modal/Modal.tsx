@@ -37,7 +37,6 @@ const Modal = (props: ModalProps) => {
     containerClassName,
     contentClassName,
     backdrop = true,
-
     subTitle,
     onClose,
   } = props;

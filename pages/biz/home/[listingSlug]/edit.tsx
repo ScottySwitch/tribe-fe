@@ -40,7 +40,7 @@ import Banner from "components/BizHomePage/Banner/Banner";
 import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
 import ReportApi from "../../../../services/report";
-import { censoredPhoneNumber } from "utils";
+import { censoredPhoneNumber, isArray, isEmptyObject } from "utils";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
@@ -68,13 +68,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [menuList, setMenuList] = useState<{ [key: string]: any }[]>([]);
   const [dealList, setDealList] = useState<{ [key: string]: any }[]>([]);
   const [bizInvoices, setBizInvoices] = useState<{ [key: string]: any }[]>([]);
-  const [facilitiesData, setFacilitiesData] = useState(defaultAddlistingForm);
+  const [facilitiesData, setFacilitiesData] = useState();
 
   const [bizListing, setBizListing] = useState<any>();
   const [listingImages, setListingImages] = useState<any>([]);
   const [logo, setLogo] = useState<any>([]);
 
-  const [isPaid, setIsPaid] = useState<boolean>(true);
+  const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
@@ -199,9 +199,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setPriceRange({
           min: listing.min_price,
           max: listing.max_price,
-          currency: listing.currency ? (listing.currency)?.toUpperCase() : ''
+          currency: listing.currency ? listing.currency?.toUpperCase() : "",
         });
-        setSocialInfo(listing.social_info);
+        setSocialInfo(listing.website);
         setKlookUrl(listing.klook_url);
         // setDealList(listing.deals);
         setFacilitiesData(listing.facilities_data);
@@ -269,7 +269,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     if (typeof localStorage.getItem("user") !== null) {
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
-    const userId = userInfo.id || "0";
+    const userId = userInfo.id || null;
 
     await ReportApi.createReport({
       type: "listing",
@@ -308,12 +308,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       await BizListingRevision.updateBizListingRevision(bizListing.id, {
         description: description,
         // price_range: priceRange,
-        min_price: parseFloat(priceRange.min),
-        max_price: parseFloat(priceRange.max),
-        currency: (priceRange.currency).toLocaleLowerCase(),
+        min_price: parseFloat(priceRange?.min) || null,
+        max_price: parseFloat(priceRange?.max) || null,
+        currency: priceRange?.currency.toLocaleLowerCase() || null,
         action: action,
         images: listingImages,
-        social_info: socialInfo,
+        website: socialInfo,
         phone_number: phoneNumber,
         facilities_data: facilitiesData,
         open_hours: openHours,
@@ -335,12 +335,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         parent_id: bizListing.id.toString(),
         description: description,
         // price_range: priceRange,
-        min_price: parseFloat(priceRange.min),
-        max_price: parseFloat(priceRange.max),
-        currency: (priceRange.currency).toLocaleLowerCase(),
+        min_price: parseFloat(priceRange?.min) || null,
+        max_price: parseFloat(priceRange?.max) || null,
+        currency: priceRange?.currency.toLocaleLowerCase() || null,
         action: action,
         images: listingImages,
-        social_info: socialInfo,
+        website: socialInfo,
         phone_number: phoneNumber,
         facilities_data: facilitiesData,
         open_hours: openHours,
@@ -519,6 +519,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           {bizListing.name}
         </div>
         <ListingInforCard
+          isPaid={isPaid}
           isViewPage={isViewPage}
           logo={logo}
           handleChangeLogo={handleChangeLogo}
@@ -553,21 +554,29 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               description={description}
               onSetDescription={handleSetDescription}
             />
-            <Break show={!isViewPage} />
-            <Facilities
-              category={category}
-              isViewPage={isViewPage}
-              facilities={facilitiesData}
-              onSetFacilities={handleSetFacilities}
-              // facilityOptions={facilityOptions}
-            />
-            <Break show={!isViewPage} />
-            <Tags
-              isViewPage={isViewPage}
-              tags={tags}
-              onSetTags={handleSetTags}
-              tagOptions={tagOptions}
-            />
+            {(facilitiesData && isEmptyObject(facilitiesData)) && (
+              <>
+                <Break show={!isViewPage} />
+                <Facilities
+                  category={category}
+                  isViewPage={isViewPage}
+                  facilities={facilitiesData}
+                  onSetFacilities={handleSetFacilities}
+                  // facilityOptions={facilityOptions}
+                />
+              </>
+            )}
+            {isArray(tags) && (
+              <>
+              <Break show={!isViewPage} />
+                <Tags
+                  isViewPage={isViewPage}
+                  tags={tags}
+                  onSetTags={handleSetTags}
+                  tagOptions={tagOptions}
+                />
+              </>
+            )}
             <Break show={!isViewPage} />
             <HomeOpenHours
               isViewPage={isViewPage}
@@ -575,7 +584,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               onSetOpenHours={handleSetOpenHours}
             />
             <Break />
-            <div>
+            <>
               <RenderTabs
                 isViewPage={isViewPage}
                 isPaid={isPaid}
@@ -586,7 +595,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 onSetScreen={(e) => setScreen(e)}
                 onDelete={(e) => console.log(e)}
               />
-            </div>
+            </>
             <Break />
             <HomepageReviews
               bizListingId={bizListing.id}
@@ -598,8 +607,22 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               onSubmitReply={(value, id) => handleSubmitReply(value, id)}
               // onChangeReviewsSequence={handleChangeReviewsSequence}
             />
-            <Break />
-            <Contacts />
+            {(bizListing?.email ||
+              bizListing?.website ||
+              get(bizListing, "social_info.twitter") ||
+              get(bizListing, "social_info.facebook") ||
+              get(bizListing, "social_info.instagram")) && (
+              <div>
+                <Break />     
+                <Contacts
+                  email={bizListing?.email}
+                  websiteUrl={bizListing?.website}
+                  twitterUrl={get(bizListing, "social_info.twitter")}
+                  facebookUrl={get(bizListing, "social_info.facebook")}
+                  instagramUrl={get(bizListing, "social_info.instagram")}
+                />
+              </div>
+            )}
             <Break />
             <ReportBizListing
               optionsReportListing={optionsReportListing}

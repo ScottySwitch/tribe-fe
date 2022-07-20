@@ -7,14 +7,26 @@ import { ILoginInfor } from "pages/_app";
 import styles from "./Menu.module.scss";
 
 interface MenuMenuProps {
+  user?: any;
   loginInfor: ILoginInfor;
   mobile?: boolean;
   onShowCategoriesModal?: () => void;
+  onShowAuthPopup: () => void;
+  onShowHamModal: () => void;
 }
 
 const Menu = (props: MenuMenuProps) => {
-  const { loginInfor = {}, mobile, onShowCategoriesModal } = props;
+  const { loginInfor = {}, user, mobile, onShowCategoriesModal, onShowAuthPopup, onShowHamModal } = props;
   const router = useRouter();
+
+  const checkLogin = () => {
+    onShowHamModal() 
+    if (user && user.token) {
+      router.push("/profile")  
+      return
+    }
+    onShowAuthPopup()
+  }
 
   const menuItems = [
     // {
@@ -25,18 +37,18 @@ const Menu = (props: MenuMenuProps) => {
     {
       icon: "deal",
       label: "Saved deals",
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(),
     },
     {
       icon: "heart-color",
       label: "Favorited",
       borderBottom: true,
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(),
     },
     {
       icon: "comment-color",
       label: "Edit profile",
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(),
     },
     // { icon: "settings-color", label: "Settings", borderBottom: true },
     // { icon: "like-color-2", label: "Referral code" },

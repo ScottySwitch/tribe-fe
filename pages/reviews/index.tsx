@@ -1,5 +1,5 @@
 import { randomId } from "utils"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import Image from "next/image"
 import SectionLayout from "components/SectionLayout/SectionLayout"
 import ReviewSearchBox from "components/ListingSearchBox/ListingSearchBox"
@@ -13,61 +13,23 @@ import BizListingApi from "../../services/biz-listing"
 import get from "lodash/get"
 import ReviewApi from "../../services/review"
 import ContributeApi from "services/contribute"
+import { UserInforContext } from "Context/UserInforContext";
 
-const dummyReviews = [
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-]
 
 const ReviewsPage = () => {
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
   const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
   const [locationList, setLocationList] = useState<any>([])
   const [listingOptions, setListingOptions] = useState<any>([])
-  const [listingSearchResult, setListingSearchResult] = useState<any>()
-
+  const [listingSearchResult, setListingSearchResult] = useState<any>([])
+    
   useEffect(() => {
     const getBizListingCountries = async () => {
       const data = await BizListingApi.getBizListingCountries()
       const countries = get(data, "data.data")
+      
       const countriesArr: any = []
       countries.map((country) => {
         countriesArr.push({
@@ -76,6 +38,14 @@ const ReviewsPage = () => {
         })
       })
       setLocationList(countriesArr)
+    }
+    const getRandomListing = async () => {
+      const result = await BizListingApi.getListingBySlug("", location, 7)
+      const data = get(result, "data.data")
+      setListingSearchResult(data)
+    }
+    if (listingSearchResult.length === 0) {
+      getRandomListing()
     }
     getBizListingCountries().catch((e) => console.log(e))
   }, [])
@@ -96,7 +66,7 @@ const ReviewsPage = () => {
     // TODO: rateNumber not work on FE
     const reviewsData = get(reviews, "data")
     let rateNumber = 0
-    if (reviewsData.length > 0) {
+    if (reviewsData?.length > 0) {
       let sum = 0
       reviewsData.map((review) => {
         sum += get(review, "attributes.rating") || 0
@@ -122,12 +92,6 @@ const ReviewsPage = () => {
       content: dataSend.content,
       visited_date: dataSend.visitedDate,
       images: dataSend.images,
-    }
-    const dataSendContribute = {
-      user: userInfo.id,
-      biz_listing: bizListingId,
-      type: "Review",
-      status: "Approved"
     }
     const data = await ReviewApi.addReview(dataSendApi)
     if (data) {
