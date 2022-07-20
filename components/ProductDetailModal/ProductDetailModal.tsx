@@ -1,28 +1,14 @@
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+
 import Modal, { ModalProps } from "components/Modal/Modal";
+import ShareModal from "components/ShareModal/ShareModal";
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import ScrollingBox from "components/ScrollingBox/ScrollingBox";
 import Album from "components/Album/Album";
 
 import styles from "./ProductDetailModal.module.scss";
-import React, { useState } from "react";
-import { shareOptions } from "constant";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-
-import {
-  FacebookShareButton,
-  LineShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  TelegramShareButton,
-  FacebookIcon,
-  LineIcon,
-  TelegramIcon,
-  TwitterIcon,
-  WhatsappIcon,
-} from "react-share";
 
 export interface IProduct {
   id: number;
@@ -52,27 +38,6 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
     setShowShareModal(true);
     onShare?.();
   };
-
-  const handleShareLink = (socialUrl) => {
-    window
-      .open(
-        `https://www.${socialUrl}/sharer.php?u=${process.env.NEXT_PUBLIC_DOMAIN}${asPath}`,
-        "_blank"
-      )
-      ?.focus();
-  };
-
-  const handleCopyUrl = () =>
-    navigator.clipboard
-      .writeText(`${process.env.NEXT_PUBLIC_DOMAIN}${asPath.slice(1)}`)
-      .then(() => {
-        toast.success("Copied!", {
-          autoClose: 2000,
-          position: "top-right",
-          hideProgressBar: true,
-          closeOnClick: true,
-        });
-      });
 
   return (
     <React.Fragment>
@@ -156,58 +121,11 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
           </div>
         </div>
       </Modal>
-      <Modal
-        title="Share"
-        mobilePosition="center"
-        visible={showShareModal}
-        width={600}
+      <ShareModal
+        url={asPath}
         onClose={() => setShowShareModal(false)}
-      >
-        <div className={styles.share_container}>
-          <FacebookShareButton
-            className={styles.social}
-            url={`${process.env.NEXT_PUBLIC_DOMAIN}${asPath}`}
-          >
-            <FacebookIcon borderRadius={100} size={50} />
-            Facebook
-          </FacebookShareButton>
-          <LineShareButton
-            url={`${process.env.NEXT_PUBLIC_DOMAIN}${asPath}`}
-            className={styles.social}
-          >
-            <LineIcon borderRadius={100} size={50} />
-            Line
-          </LineShareButton>
-          <TelegramShareButton
-            url={`${process.env.NEXT_PUBLIC_DOMAIN}${asPath}`}
-            className={styles.social}
-          >
-            <TelegramIcon borderRadius={100} size={50} />
-            Telegram
-          </TelegramShareButton>
-          <TwitterShareButton
-            url={`${process.env.NEXT_PUBLIC_DOMAIN}${asPath}`}
-            className={styles.social}
-          >
-            <TwitterIcon borderRadius={100} size={50} />
-            Twitter
-          </TwitterShareButton>
-          <WhatsappShareButton
-            url={`${process.env.NEXT_PUBLIC_DOMAIN}${asPath}`}
-            className={styles.social}
-          >
-            <WhatsappIcon borderRadius={100} size={50} />
-            Whatsapp
-          </WhatsappShareButton>
-          <div className={styles.social} onClick={handleCopyUrl}>
-            <Image
-              src={require("public/icons/copy-link.svg")}
-              alt=""
-              layout="fixed"
-            />
-          </div>
-        </div>
-      </Modal>
+        visible={showShareModal}
+      />
     </React.Fragment>
   );
 };
