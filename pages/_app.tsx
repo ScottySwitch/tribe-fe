@@ -147,7 +147,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       };
       localStorage.setItem("user", JSON.stringify(userInfo));
     };
+
     userInfo && userInfo.token && getMe().catch((e) => console.log(e));
+    //scroll to top
+    window.scrollTo(0, 0);
   }, [router]);
 
   return (

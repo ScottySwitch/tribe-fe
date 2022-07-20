@@ -94,6 +94,7 @@ export const Album = (props: AlbumProps) => {
   };
 
   const onSubmit = () => {
+    setSubmitResult(true);
     setShowReportModal(false);
     setShowResultModal(true);
   };
