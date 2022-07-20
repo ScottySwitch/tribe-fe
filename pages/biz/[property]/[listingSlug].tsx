@@ -12,7 +12,7 @@ import { get, orderBy } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import BizListingApi from "services/biz-listing";
-import { calcRateNumber } from "utils";
+import { calcRateNumber, censoredPhoneNumber } from "utils";
 
 import styles from "styles/Property.module.scss";
 
@@ -96,6 +96,8 @@ const Properties = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [listingInformation, setListingInformation] = useState<any>({});
   const [userInfo, setUserInfo] = useState<any>({});
+  const [phoneNumber, setPhoneNumber] = useState<any>("");
+  const [isPaid, setIsPaid] = useState<boolean>(false);
 
   useEffect(() => {
     const getProperties = async () => {
@@ -103,6 +105,15 @@ const Properties = () => {
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       const listingDetail = get(data, `data.data[0]`);
       userInfo.now_biz_listing = listingDetail;
+      const bizInvoice = listingDetail.biz_invoices || []
+      const rawPhoneNumber = listingDetail.phone_number;
+      const defaultPhone = censoredPhoneNumber(rawPhoneNumber);
+      if (bizInvoice.length > 0) {
+        setIsPaid(true);
+        setPhoneNumber(rawPhoneNumber);
+      } else {
+        setPhoneNumber(defaultPhone);
+      }
       localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo);
       let handleProperties = "products";
@@ -193,8 +204,9 @@ const Properties = () => {
         <ListingInforCard
           isViewPage={true}
           logo={listingInformation.logo}
-          phoneNumber={listingInformation.phone_number}
-          socialInfo={listingInformation.social_info}
+          isPaid={isPaid}
+          phoneNumber={phoneNumber}
+          socialInfo={listingInformation.website}
           priceRange={{
             min: listingInformation.min_price,
             max: listingInformation.max_price,

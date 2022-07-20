@@ -12,8 +12,9 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
   const [total, setTotal] = useState<number>();
 
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     // setTotal(data.length)
-    getData();
+    userInfo && userInfo?.token && getData();
   }, [data]);
 
   const getData = async () => {

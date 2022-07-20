@@ -153,3 +153,19 @@ export const getBrowserLocation = async () => {
 
   return locationOption?.value;
 };
+
+export const isEmptyObject = (item: any) => {
+  const arrayValues = Object.values(item)
+  for (let index = 0; index < arrayValues.length; index++) {
+    const element = arrayValues[index];
+    if (Array.isArray(element)) {
+      if ( (isArray(element)) ) {
+        return true
+      }
+    }
+    else {
+      if (element !== null) return true
+    }
+  }
+  return false
+}

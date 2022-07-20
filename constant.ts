@@ -1640,15 +1640,20 @@ export const socialMediaOptions = [
     value: "instagram",
   },
   {
-    icon: require("public/icons/whatsapp-color.svg"),
-    label: "WhatsApp",
-    value: "whatsapp",
+    icon: require("public/icons/facebook-color.svg"),
+    label: "Facebook",
+    value: "facebook",
   },
-  {
-    icon: require("public/icons/telegram-color.svg"),
-    label: "Telegram",
-    value: "telegram",
-  },
+  // {
+  //   icon: require("public/icons/whatsapp-color.svg"),
+  //   label: "WhatsApp",
+  //   value: "whatsapp",
+  // },
+  // {
+  //   icon: require("public/icons/telegram-color.svg"),
+  //   label: "Telegram",
+  //   value: "telegram",
+  // },
 ];
 
 export const shareOptions = [

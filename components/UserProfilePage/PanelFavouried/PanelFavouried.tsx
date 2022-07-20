@@ -54,6 +54,7 @@ const FavouriedPanel = () => {
   const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getListingFavourite = async (slug) => {
       const data = await BizlistingApi.getListingFavouriteByCategory(slug);
       const rawData = get(data, "data.data");
@@ -82,7 +83,7 @@ const FavouriedPanel = () => {
       setLoading(false);
     };
 
-    getListingFavourite(currentTab);
+    (userInfo && userInfo?.token) && getListingFavourite(currentTab);
   }, [currentTab, loading]);
 
   const handleRemoveFavorite = async (removedListing) => {
