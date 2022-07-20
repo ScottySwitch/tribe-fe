@@ -123,12 +123,6 @@ const ReviewsPage = () => {
       visited_date: dataSend.visitedDate,
       images: dataSend.images,
     }
-    const dataSendContribute = {
-      user: userInfo.id,
-      biz_listing: bizListingId,
-      type: "Review",
-      status: "Approved"
-    }
     const data = await ReviewApi.addReview(dataSendApi)
     if (data) {
       const dataSendContribute = {

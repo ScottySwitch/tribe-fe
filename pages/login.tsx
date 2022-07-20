@@ -230,7 +230,7 @@ const LoginPage = (context) => {
 export async function getServerSideProps(context) {
   const prevPage = context.req.headers.referer;
   const host = context.req.headers.host;
-  const index = prevPage.indexOf(host) + host.length;
+  const index = prevPage?.indexOf(host) + host.length;
   const prevPagePathname = prevPage.slice(index);
 
   // Pass data to the page via props
