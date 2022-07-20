@@ -5,20 +5,24 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
+import { UserInforContext } from "Context/UserInforContext";
 import { get } from "lodash";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Slider, { Settings } from "react-slick";
+import reportApi from "services/report";
 
 import styles from "./Album.module.scss";
 
 interface AlbumProps {
+  listingId?: string | number;
   images?: any[];
   showedPicsNumber?: { slidesToShow: number; slidesToScroll: number };
 }
 
 export const Album = (props: AlbumProps) => {
   const {
+    listingId,
     images = [],
     showedPicsNumber = { slidesToShow: 12, slidesToScroll: 12 },
   } = props;
@@ -30,6 +34,8 @@ export const Album = (props: AlbumProps) => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [submitResult, setSubmitResult] = useState(false);
+
+  const { user } = useContext(UserInforContext);
 
   const refSlider1 = useRef<any>(null);
   const refSlider2 = useRef<any>(null);
@@ -93,10 +99,20 @@ export const Album = (props: AlbumProps) => {
     setShowReportModal(true);
   };
 
-  const onSubmit = () => {
-    setSubmitResult(true);
+  const onSubmit = async () => {
     setShowReportModal(false);
-    setShowResultModal(true);
+    const body = {
+      type: "media",
+      reason: reason,
+      user: user.id,
+      biz_listing: listingId,
+    };
+
+    await reportApi
+      .createReport(body)
+      .then((res) => setSubmitResult(true))
+      .catch((error) => setSubmitResult(false))
+      .finally(() => setShowResultModal(true));
   };
 
   return (

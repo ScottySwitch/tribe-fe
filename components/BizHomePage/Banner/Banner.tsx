@@ -2,12 +2,14 @@ import Album from "components/Album/Album";
 import Icon from "components/Icon/Icon";
 import Modal from "components/Modal/Modal";
 import Upload from "components/Upload/Upload";
+import { get } from "lodash";
 import React, { useState } from "react";
 import styles from "./Banner.module.scss";
 interface BannerProps {
   isViewPage?: boolean;
   isPaid?: boolean;
   listingImages: string[];
+  listingId?: string | number;
   onChangeImages: (images: string[]) => void;
 }
 
@@ -19,8 +21,10 @@ const CenterIcon = () => (
 );
 
 const Banner = (props: BannerProps) => {
-  const { isPaid, isViewPage, listingImages, onChangeImages } = props;
+  const { isPaid, isViewPage, listingImages, listingId, onChangeImages } =
+    props;
   const [showAlbumModal, setShowAlbumModal] = useState(false);
+
   return (
     <React.Fragment>
       <Upload
@@ -46,7 +50,11 @@ const Banner = (props: BannerProps) => {
         onClose={() => setShowAlbumModal(false)}
       >
         <div className="p-5">
-          <Album images={listingImages} />
+          <Album
+            images={listingImages}
+            key={get(listingImages, "length")}
+            listingId={listingId}
+          />
         </div>
       </Modal>
     </React.Fragment>

@@ -49,7 +49,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
   const [description, setDescription] = useState<string>("");
   const [facilities, setFacilities] = useState<IAddListingForm | undefined>();
-  const [facilityOptions, setFacilityOptions] = useState<IOption[]>([]);
   const [tags, setTags] = useState<IOption[]>([]);
   const [tagOptions, setTagOptions] = useState<IOption[]>([]);
   const [openHours, setOpenHours] = useState([]);
@@ -521,6 +520,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           isViewPage={isViewPage}
           isPaid={isPaid}
           listingImages={listingImages}
+          listingId={bizListing.id}
           onChangeImages={handleChangeImages}
         />
         <div className={styles.breadcrumbs}>
