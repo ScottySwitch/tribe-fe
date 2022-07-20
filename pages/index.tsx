@@ -25,7 +25,7 @@ import {
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-
+import {CategoryText} from "enums"
 import styles from "styles/Home.module.scss";
 
 const Home: NextPage = (props: any) => {
@@ -73,7 +73,7 @@ const Home: NextPage = (props: any) => {
     };
 
     location && getListings();
-    userInfo.token && getBizListingForYou();
+    (userInfo && userInfo.token) && getBizListingForYou();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
@@ -140,7 +140,7 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listingExclusiveDeal) && (
-        <SectionLayout title="Brands With Exclusive Deals For You">
+        <SectionLayout title="Brands With Exclusive Deals For You" seeMore="/deals">
           <Carousel responsive={infoCardResponsive}>
             {listingExclusiveDeal?.map((card) => (
               <div key={card.name} className="pb-5 pt-3 pl-3">
@@ -179,7 +179,7 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.buy) && (
-        <SectionLayout title="Where to Buy">
+        <SectionLayout title="Where to Buy" seeMore={CategoryText.BUY}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.buy.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -203,7 +203,7 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.seeAndDo) && (
-        <SectionLayout title="What to See">
+        <SectionLayout title="What to See" seeMore={CategoryText.SEE_AND_DO}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.seeAndDo.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -240,7 +240,7 @@ const Home: NextPage = (props: any) => {
         </Carousel>
       </SectionLayout> */}
       {isArray(listings?.eat) && (
-        <SectionLayout title="What to Eat">
+        <SectionLayout title="What to Eat" seeMore={CategoryText.EAT}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.eat.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -264,7 +264,7 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.transport) && (
-        <SectionLayout title="Access to Transport">
+        <SectionLayout title="Access to Transport" seeMore={CategoryText.TRANSPORT}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.transport.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -290,7 +290,7 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.stay) && (
-        <SectionLayout title="Where to Stay">
+        <SectionLayout title="Where to Stay" seeMore={CategoryText.STAY}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.stay.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
