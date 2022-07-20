@@ -1,6 +1,6 @@
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
 import Button from "components/Button/Button";
@@ -16,6 +16,7 @@ import UserFavouriteApi from "services/user-listing-favourite";
 import styles from "./ListingInforCard.module.scss";
 
 interface ListingInforCardProps {
+  isPaid?: boolean;
   isViewPage?: boolean;
   bizListing: { [key: string]: any };
   priceRange: { min: string; max: string; currency: string };
@@ -73,9 +74,8 @@ const ReviewsFollowers = (props: {
       if (get(data, "data")) {
         setIsFollow(true);
       }
-    }
-    else {
-      setShowAuthPopup(true)
+    } else {
+      setShowAuthPopup(true);
     }
   };
 
@@ -86,9 +86,8 @@ const ReviewsFollowers = (props: {
       if (get(data, "data")) {
         setIsFavourite(true);
       }
-    }
-    else {
-      setShowAuthPopup(true)
+    } else {
+      setShowAuthPopup(true);
     }
   };
 
@@ -165,30 +164,36 @@ const Price = ({ isViewPage, newPriceRange, onSetShowPriceRangeModal }) => {
 };
 
 const SocialInfo = ({
+  isPaid,
   isViewPage,
   newSocialInfo,
   onSetShowSocialInfoModal,
 }) => {
+  const socialArray = newSocialInfo ? Object.keys(newSocialInfo) : [];
+
+  const contact = socialArray.map((item) => (
+    <a
+      key={item}
+      target="_blank"
+      rel="noreferrer"
+      href={newSocialInfo[item]}
+      className="mr-3"
+    >
+      {item}
+    </a>
+  ));
+
   if (isViewPage) {
-    return newSocialInfo ? (
-      <a target="_blank" rel="noreferrer" href={newSocialInfo}>
-        {newSocialInfo}
-      </a>
-    ) : (
-      <div>Not provided</div>
-    );
+    return <div>{!!socialArray.length ? contact : "Not provided"}</div>;
   }
-  return newSocialInfo ? (
-    <div className="flex gap-5">
-      <a target="_blank" rel="noreferrer" href={newSocialInfo}>
-        {newSocialInfo}
+
+  return (
+    <div className="flex flex-wrap w-max">
+      {contact}
+      <a onClick={() => onSetShowSocialInfoModal(true)}>
+        {newSocialInfo ? "Edit" : "Add social media"}
       </a>
-      <div>
-        <a onClick={() => onSetShowSocialInfoModal(true)}>Edit</a>
-      </div>
     </div>
-  ) : (
-    <a onClick={() => onSetShowSocialInfoModal(true)}>Add social media</a>
   );
 };
 
@@ -218,6 +223,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     socialInfo,
     logo,
     userInfo,
+    isPaid,
     handleChangeLogo,
     onSetSocialInfo,
     onSetPhoneNumber,
@@ -293,6 +299,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             <div className={styles.contact_right}>
               <Icon icon="web-color" size={20} />
               <SocialInfo
+                isPaid={isPaid}
                 isViewPage={isViewPage}
                 newSocialInfo={newSocialInfo}
                 onSetShowSocialInfoModal={(e) => setShowSocialInfoModal(e)}

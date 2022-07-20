@@ -204,8 +204,9 @@ export const bizInformationDefaultFormData = {
 };
 
 export const reviewSequenceOptions = [
-  { label: "Top reviews", value: "top" },
   { label: "The lastest reviews", value: "latest" },
+  { label: "Rating: High to Low", value: "highest" },
+  { label: "Rating: Low to High", value: "lowest" },
 ];
 
 export const fakeAddlistingForm: IAddListingForm = {

@@ -305,7 +305,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       (item) => !item.isNew && item.isEdited
     );
     if (isRevision) {
-      console.log('priceRange',priceRange)
       await BizListingRevision.updateBizListingRevision(bizListing.id, {
         description: description,
         // price_range: priceRange,

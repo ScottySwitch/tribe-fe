@@ -1,11 +1,13 @@
-import { IOption } from "type"
-import Button from "components/Button/Button"
-import Select from "components/Select/Select"
-import styles from "./ListingSearchBox.module.scss"
-import { useRouter } from "next/router"
-import { listingSearchResult } from "constant"
-import Icon from "components/Icon/Icon"
-import ListingSearch from "components/ListingSearch/ListingSearch"
+import { IOption } from "type";
+import Button from "components/Button/Button";
+import Select from "components/Select/Select";
+import styles from "./ListingSearchBox.module.scss";
+import { useRouter } from "next/router";
+import { listingSearchResult, locations } from "constant";
+import Icon from "components/Icon/Icon";
+import ListingSearch from "components/ListingSearch/ListingSearch";
+import { useContext } from "react";
+import { UserInforContext } from "Context/UserInforContext";
 
 const dummyLocation: IOption[] = [
   { label: "Indonesia", value: "Indonesia" },
@@ -14,17 +16,27 @@ const dummyLocation: IOption[] = [
   { label: "Japan", value: "Japan" },
   { label: "Thailand", value: "Thailand" },
   { label: "Hong Kong", value: "Hong Kong" },
-]
+];
 
 interface ListingSearchBoxProps {
-  title?: string
-  listingOptions?: any[]
-  locationList?: any[]
-  onListingSearchChange?: (item: { [key: string]: any }) => void
-  onLocationChange?: (item: { [key: string]: any }) => void
+  title?: string;
+  listingOptions?: any[];
+  onInputChange?: (e: string) => void;
+  onListingSearchChange?: (item: { [key: string]: any }) => void;
+  onLocationChange?: (item: { [key: string]: any }) => void;
 }
 const ListingSearchBox = (props: ListingSearchBoxProps) => {
-  const { title, locationList, listingOptions, onLocationChange, onListingSearchChange } = props
+  const {
+    title,
+    listingOptions,
+    onInputChange,
+    onLocationChange,
+    onListingSearchChange,
+  } = props;
+
+  const { user, updateUser } = useContext(UserInforContext);
+  const { location } = user;
+
   return (
     <div className={styles.listing_search_box}>
       <div className={styles.title}>{title}</div>
@@ -34,7 +46,8 @@ const ListingSearchBox = (props: ListingSearchBoxProps) => {
             prefixIcon="map"
             size="large"
             placeholder="Location"
-            options={locationList || dummyLocation}
+            options={locations}
+            value={location}
             onChange={onLocationChange}
           />
         </div>
@@ -42,6 +55,7 @@ const ListingSearchBox = (props: ListingSearchBoxProps) => {
           <ListingSearch
             listingOptions={listingOptions || listingSearchResult}
             onChange={onListingSearchChange}
+            onInputChange={onInputChange}
           />
         </div>
         <div className="col-auto">
@@ -49,7 +63,7 @@ const ListingSearchBox = (props: ListingSearchBoxProps) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ListingSearchBox
+export default ListingSearchBox;

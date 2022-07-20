@@ -162,7 +162,7 @@ const ReviewsPage = () => {
         >
           <ReviewSearchBox
             title="Review a place you've visited"
-            locationList={locationList}
+            // locationList={locationList}
             onLocationChange={handleOnLocationChange}
             listingOptions={listingOptions}
             onListingSearchChange={handleOnListingSearchChange}
