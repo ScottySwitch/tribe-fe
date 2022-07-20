@@ -14,8 +14,8 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     // setTotal(data.length)
-    userInfo && userInfo?.token && getData();
-  }, [data]);
+    (userInfo && userInfo?.token) && getData();
+  }, []);
 
   const getData = async () => {
     const data = await BizlistingApi.getFavouriteDeals();
