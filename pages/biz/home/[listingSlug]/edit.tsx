@@ -70,7 +70,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [bizInvoices, setBizInvoices] = useState<{ [key: string]: any }[]>([]);
   const [facilitiesData, setFacilitiesData] = useState();
 
-  const [bizListing, setBizListing] = useState<any>();
+  const [bizListing, setBizListing] = useState<any>({});
   const [listingImages, setListingImages] = useState<any>([]);
   const [logo, setLogo] = useState<any>([]);
 
