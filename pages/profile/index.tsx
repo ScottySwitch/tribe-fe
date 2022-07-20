@@ -110,9 +110,9 @@ const ProfilePage = () => {
 
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log('userInfo', userInfo)
+    console.log("userInfo", userInfo);
     if (!localStorage.getItem("user")) {
-      router.push('/')
+      router.push("/");
     }
 
     console.log("userInfo", userInfo);
@@ -145,7 +145,10 @@ const ProfilePage = () => {
   return (
     <div className="wrapper-profile">
       <div className={styles.section_cover_image}>
-        <CoverImage imageUrl="https://picsum.photos/1440/360" />
+        <CoverImage
+          layout="fill"
+          imageUrl={require("../../public/images/default-banner-profile.png")}
+        />
       </div>
       <SectionLayout
         className={styles.section_profile}
