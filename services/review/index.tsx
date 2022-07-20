@@ -1,7 +1,6 @@
 import Api from "../index";
 
 const qs = require('qs');
-
 const getReviewsByBizListingSlug = async (bizListingSlug: any) => {
   const query = qs.stringify({
     "filters": {
