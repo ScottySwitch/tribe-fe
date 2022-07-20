@@ -25,6 +25,8 @@ export type ILoginInfor = {
   type?: UsersTypes;
   tier?: Tiers;
   avatar?: string;
+  first_name?: string
+  last_name?: string
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -54,7 +56,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [showHamModal, setShowHamModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [navList, setNavList] = useState<{ [key: string]: any }[]>([]);
-  const [userInfo, setUserInfo] = useState<any>({})
 
   const contextDefaultValue = {
     user: user,
@@ -72,16 +73,20 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
-    setUserInfo(localLoginInfo)
     const localLocation = localLoginInfo.location;
     const { user, updateUser } = contextDefaultValue;
 
     ///get location
     const setDefaultLocation = async () => {
       const browserLocation = await getBrowserLocation();
+      console.log()
       updateUser({
         ...user,
         location: localLocation || browserLocation || locations[0].value,
+        token: localLoginInfo.token,
+        first_name: localLoginInfo.first_name,
+        last_name: localLoginInfo.last_name,
+        avatar: localLoginInfo.avatar
       });
     };
 
@@ -171,7 +176,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           visible={isAuthPage && showAuthPopup && !loginInfor.token}
         />
         <HamModal
-          user={userInfo}
           loginInfor={loginInfor}
           showHamModal={showHamModal}
           onSetShowHamModal={(e: boolean) => setShowHamModal(e)}

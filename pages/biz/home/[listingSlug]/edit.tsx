@@ -79,6 +79,15 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [isRevision, setIsRevision] = useState<boolean>(false);
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
 
+  const hasSocialLink =
+    bizListing.email ||
+    bizListing.website ||
+    get(bizListing, "social_info.twitter") ||
+    get(bizListing, "social_info.facebook") ||
+    get(bizListing, "social_info.instagram")
+      ? true
+      : false;
+
   const router = useRouter();
   const { query } = router;
   const { listingSlug } = query;
@@ -554,28 +563,28 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               description={description}
               onSetDescription={handleSetDescription}
             />
-            {(facilitiesData && isEmptyObject(facilitiesData)) && (
-              <>
-                <Break show={!isViewPage} />
-                <Facilities
-                  category={category}
-                  isViewPage={isViewPage}
-                  facilities={facilitiesData}
-                  onSetFacilities={handleSetFacilities}
-                  // facilityOptions={facilityOptions}
-                />
-              </>
+            <Break
+              show={
+                !isViewPage && facilitiesData && isEmptyObject(facilitiesData)
+              }
+            />
+            {facilitiesData && isEmptyObject(facilitiesData) && (
+              <Facilities
+                category={category}
+                isViewPage={isViewPage}
+                facilities={facilitiesData}
+                onSetFacilities={handleSetFacilities}
+                // facilityOptions={facilityOptions}
+              />
             )}
+            <Break show={!isViewPage && isArray(tags)} />
             {isArray(tags) && (
-              <>
-              <Break show={!isViewPage} />
-                <Tags
-                  isViewPage={isViewPage}
-                  tags={tags}
-                  onSetTags={handleSetTags}
-                  tagOptions={tagOptions}
-                />
-              </>
+              <Tags
+                isViewPage={isViewPage}
+                tags={tags}
+                onSetTags={handleSetTags}
+                tagOptions={tagOptions}
+              />
             )}
             <Break show={!isViewPage} />
             <HomeOpenHours
@@ -607,21 +616,15 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               onSubmitReply={(value, id) => handleSubmitReply(value, id)}
               // onChangeReviewsSequence={handleChangeReviewsSequence}
             />
-            {(bizListing?.email ||
-              bizListing?.website ||
-              get(bizListing, "social_info.twitter") ||
-              get(bizListing, "social_info.facebook") ||
-              get(bizListing, "social_info.instagram")) && (
-              <div>
-                <Break />     
-                <Contacts
-                  email={bizListing?.email}
-                  websiteUrl={bizListing?.website}
-                  twitterUrl={get(bizListing, "social_info.twitter")}
-                  facebookUrl={get(bizListing, "social_info.facebook")}
-                  instagramUrl={get(bizListing, "social_info.instagram")}
-                />
-              </div>
+            <Break show={hasSocialLink} />
+            {hasSocialLink && (
+              <Contacts
+                email={bizListing?.email}
+                websiteUrl={bizListing?.website}
+                twitterUrl={get(bizListing, "social_info.twitter")}
+                facebookUrl={get(bizListing, "social_info.facebook")}
+                instagramUrl={get(bizListing, "social_info.instagram")}
+              />
             )}
             <Break />
             <ReportBizListing

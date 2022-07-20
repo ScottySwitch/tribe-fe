@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { UserInforContext } from "Context/UserInforContext";
 
 import Button from "components/Button/Button";
 import Menu from "components/Menu/Menu";
@@ -13,16 +14,16 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 import styles from "./HamModal.module.scss";
 
 const HamModalHeader = ({
-  user,
   loginInfor,
   gotoLogin,
   gotoSignup,
 }: {
-  user?: any;
   loginInfor: ILoginInfor;
   gotoLogin: () => void;
   gotoSignup: () => void;
 }) => {
+  const { user } = useContext(UserInforContext);
+  
   return !!loginInfor.token ? (
     <div className={styles.user_profile}>
       <Image
@@ -51,14 +52,13 @@ const HamModalHeader = ({
 };
 
 export interface HamModalProps {
-  user?: any;
   loginInfor: ILoginInfor;
   showHamModal: boolean;
   onSetShowHamModal: (e: boolean) => void;
 }
 
 const HamModal = (props: HamModalProps) => {
-  const { onSetShowHamModal, loginInfor, showHamModal, user } = props;
+  const { onSetShowHamModal, loginInfor, showHamModal } = props;
 
   const [showCategoriesModal, setShowCategoriesModal] = useState(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
@@ -194,13 +194,11 @@ const HamModal = (props: HamModalProps) => {
       >
         <div className={styles.ham_modal}>
           <HamModalHeader
-            user={user}
             loginInfor={loginInfor}
             gotoLogin={gotoLogin}
             gotoSignup={gotoSignup}
           />
           <Menu
-            user={user}
             loginInfor={loginInfor}
             mobile
             onShowHamModal={() => onSetShowHamModal(false)}

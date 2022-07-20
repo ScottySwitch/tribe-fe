@@ -3,11 +3,12 @@ import Icon from "components/Icon/Icon";
 import { loginInforItem, user, userId, token } from "constant";
 import { useRouter } from "next/router";
 import { ILoginInfor } from "pages/_app";
+import { UserInforContext } from "Context/UserInforContext";
+import { useContext } from "react";
 
 import styles from "./Menu.module.scss";
 
 interface MenuMenuProps {
-  user?: any;
   loginInfor: ILoginInfor;
   mobile?: boolean;
   onShowCategoriesModal?: () => void;
@@ -16,8 +17,10 @@ interface MenuMenuProps {
 }
 
 const Menu = (props: MenuMenuProps) => {
-  const { loginInfor = {}, user, mobile, onShowCategoriesModal, onShowAuthPopup, onShowHamModal } = props;
+  const { loginInfor = {}, mobile, onShowCategoriesModal, onShowAuthPopup, onShowHamModal } = props;
   const router = useRouter();
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
 
   const checkLogin = () => {
     onShowHamModal?.() 
