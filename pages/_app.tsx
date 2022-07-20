@@ -18,6 +18,7 @@ import { locations } from "constant";
 import { getBrowserLocation } from "utils";
 
 import styles from "styles/App.module.scss";
+import Toast from "components/Toast/Toast";
 
 export type ILoginInfor = {
   token?: string;
@@ -178,6 +179,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           backgroundColor={pathname !== "/biz/information"}
         />
         <ContributeTabBar visible={!showHamModal && isAuthPage && isMobile} />
+        <Toast />
       </div>
     </UserInforProvider>
   );

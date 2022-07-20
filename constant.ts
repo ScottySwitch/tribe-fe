@@ -1651,6 +1651,39 @@ export const socialMediaOptions = [
   },
 ];
 
+export const shareOptions = [
+  {
+    icon: require("public/icons/facebook-color.svg"),
+    label: "Facebook",
+    url: "facebook.com",
+  },
+  {
+    icon: require("public/icons/instagram-color.svg"),
+    label: "Instagram",
+    url: "instagram.com",
+  },
+  {
+    icon: require("public/icons/twitter-color.svg"),
+    label: "Twitter",
+    url: "twitter.com",
+  },
+  {
+    icon: require("public/icons/whatsapp-color.svg"),
+    label: "WhatsApp",
+    url: "facebook.com",
+  },
+  {
+    icon: require("public/icons/telegram-color.svg"),
+    label: "Telegram",
+    url: "telegram.com",
+  },
+  {
+    icon: require("public/icons/line-color.svg"),
+    label: "Line",
+    url: "line.com",
+  },
+];
+
 export const formattedAreaCodes = phoneAreaCodes.map((item) => ({
   label: `${item.label}  ${item.value}`,
   value: item.value,
