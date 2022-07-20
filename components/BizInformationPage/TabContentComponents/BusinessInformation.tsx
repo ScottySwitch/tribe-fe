@@ -45,7 +45,6 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   };
 
   const onSubmitForm = (data) => {
-    console.log('data', data)
     onSubmit({
       name: data.name,
       description: data.description,

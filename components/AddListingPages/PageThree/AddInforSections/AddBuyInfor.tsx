@@ -121,7 +121,6 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
   };
 
   const onSubmit = (data) => {
-    console.log('data', data)
     onPreview?.(data);
     onEdit?.(data);
   };
