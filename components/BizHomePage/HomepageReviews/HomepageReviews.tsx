@@ -12,10 +12,11 @@ import { optionsReportReview, reviewSequenceOptions } from "constant";
 import { get } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IOption } from "type";
 import ReportApi from "services/report";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 
 import styles from "./HomepageReviews.module.scss";
 interface HomepageReviewsProps {
@@ -48,6 +49,14 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   const [reply, setReply] = useState<string>("");
   const router = useRouter();
 
+  const [showResultModal, setShowResultModal] = useState<boolean>(false);
+  const [submitResult, setSubmitResult] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+  useEffect(() => {
+    setSortingReviews(reviews);
+  }, [reviews]);
+
   // const handleSetReplyReview = (value) => {
   //   if (value.length <= 100) {
   //     setReplyReview(value)
@@ -77,16 +86,25 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     if (typeof localStorage.getItem("user") !== null) {
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
-    const userId = userInfo.id || "0";
+    const userId = userInfo.id || null;
 
-    await ReportApi.createReport({
-      type: "review",
-      reason: data,
-      user: userId,
-      review: selectedReview.id,
-      biz_listing: bizListingId,
-    });
+    try {
+      await ReportApi.createReport({
+        type: "review",
+        reason: data,
+        user: userId,
+        review: selectedReview.id,
+        biz_listing: bizListingId,
+      });
+      setSubmitResult(true);
+      setMessage(
+        "Thank you for your report. We will review the report and take action within 24 hours."
+      );
+    } catch (error) {
+      setSubmitResult(false);
+    }
     setShowReportModal(false);
+    setShowResultModal(true);
   };
 
   const checkLogin = () => {
@@ -183,6 +201,12 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         options={optionsReportReview}
         onClose={() => setShowReportModal(false)}
         onSubmit={handleSubmitReportReview}
+      />
+      <ResultModal
+        message={message}
+        visible={showResultModal}
+        isSuccess={submitResult}
+        onClose={() => setShowResultModal(false)}
       />
       <Modal
         visible={showReplyModal}

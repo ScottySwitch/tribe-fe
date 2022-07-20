@@ -110,12 +110,9 @@ const ProfilePage = () => {
 
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log("userInfo", userInfo);
     if (!localStorage.getItem("user")) {
       router.push("/");
     }
-
-    console.log("userInfo", userInfo);
     setUserInfo(userInfo);
   }, []);
 

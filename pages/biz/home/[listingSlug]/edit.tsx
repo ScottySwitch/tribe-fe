@@ -36,6 +36,7 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 
 import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
@@ -76,7 +77,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
+
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
+  const [showResultModal, setShowResultModal] = useState<boolean>(false);
+  const [submitResult, setSubmitResult] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const hasSocialLink =
     bizListing.email ||
@@ -280,13 +285,22 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     }
     const userId = userInfo.id || null;
 
-    await ReportApi.createReport({
-      type: "listing",
-      reason: data,
-      user: userId,
-      biz_listing: bizListing.id,
-    });
+    try {
+      await ReportApi.createReport({
+        type: "listing",
+        reason: data,
+        user: userId,
+        biz_listing: bizListing.id,
+      });
+      setSubmitResult(true);
+      setMessage(
+        "Thank you for your report. We will review the report and take action within 24 hours."
+      );
+    } catch (error) {
+      setSubmitResult(false);
+    }
     setIsShowReportModal(false);
+    setShowResultModal(true);
   };
 
   const handleSubmit = async () => {
@@ -633,6 +647,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               showReportModal={isShowReportModal}
               onSetShowReportModal={setIsShowReportModal}
               handleSubmitReportBizListing={handleSubmitReportBizListing}
+            />
+            <ResultModal
+              message={message}
+              visible={showResultModal}
+              isSuccess={submitResult}
+              onClose={() => setShowResultModal(false)}
             />
           </div>
         </div>
