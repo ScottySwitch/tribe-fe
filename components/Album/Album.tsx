@@ -113,7 +113,10 @@ export const Album = (props: AlbumProps) => {
       .createReport(body)
       .then((res) => setSubmitResult(true))
       .catch((error) => setSubmitResult(false))
-      .finally(() => setShowResultModal(true));
+      .finally(() => {
+        setShowReportModal(false);
+        setShowResultModal(true);
+      });
   };
 
   return (

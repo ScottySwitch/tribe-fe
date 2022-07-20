@@ -87,24 +87,28 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
     const userId = userInfo.id || null;
+    const body = {
+      type: "review",
+      reason: data,
+      user: userId,
+      review: selectedReview.id,
+      biz_listing: bizListingId,
+    };
 
-    try {
-      await ReportApi.createReport({
-        type: "review",
-        reason: data,
-        user: userId,
-        review: selectedReview.id,
-        biz_listing: bizListingId,
-      });
-      setSubmitResult(true);
+
+    await ReportApi
+    .createReport(body)
+    .then((res) => {
       setMessage(
         "Thank you for your report. We will review the report and take action within 24 hours."
       );
-    } catch (error) {
-      setSubmitResult(false);
-    }
-    setShowReportModal(false);
-    setShowResultModal(true);
+      setSubmitResult(true)
+    })
+    .catch((error) => setSubmitResult(false))
+    .finally(() => {
+      setShowReportModal(false)
+      setShowResultModal(true)
+    });
   };
 
   const checkLogin = () => {

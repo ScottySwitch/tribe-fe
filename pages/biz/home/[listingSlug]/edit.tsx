@@ -284,23 +284,26 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
     const userId = userInfo.id || null;
+    const body = {
+      type: "listing",
+      reason: data,
+      user: userId,
+      biz_listing: bizListing.id,
+  };
 
-    try {
-      await ReportApi.createReport({
-        type: "listing",
-        reason: data,
-        user: userId,
-        biz_listing: bizListing.id,
-      });
-      setSubmitResult(true);
+    await ReportApi
+    .createReport(body)
+    .then((res) => {
       setMessage(
         "Thank you for your report. We will review the report and take action within 24 hours."
       );
-    } catch (error) {
-      setSubmitResult(false);
-    }
-    setIsShowReportModal(false);
-    setShowResultModal(true);
+      setSubmitResult(true)
+    })
+    .catch((error) => setSubmitResult(false))
+    .finally(() => {
+      setIsShowReportModal(false);
+      setShowResultModal(true);
+    });
   };
 
   const handleSubmit = async () => {
