@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./ContributeTabBar.module.scss";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 import { Tiers, UsersTypes } from "enums";
+import {ProfileTabs} from "enums"
 
 export interface ContributeProps {
   id?: string;
@@ -60,18 +61,18 @@ const ContributeTabBar = (props: ContributeProps) => {
         <Icon icon="home-stroke-1" size={20} />
         Home
       </div>
-      <div onClick={() => handleHref(`/profile`)}>
+      <div onClick={() => handleHref(`/profile/${ProfileTabs.SAVED_DEALS}`)}>
         <Icon icon="deal" size={20} />
         Deals
       </div>
       <Popover content={content} position="top">
         <div className={styles.main_button} />
       </Popover>
-      <div onClick={() => handleHref(`/profile`)}>
+      <div onClick={() => handleHref(`/profile/${ProfileTabs.FAVOURITED}`)}>
         <Icon icon="like-solid" size={20} />
         Favorited
       </div>
-      <div onClick={() => handleHref(`/profile`)}>
+      <div onClick={() => handleHref(`/profile/${ProfileTabs.ABOUT}`)}>
         <Icon icon="user-stroke-1" size={20} />
         User
       </div>

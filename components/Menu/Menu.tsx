@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { ILoginInfor } from "pages/_app";
 import { UserInforContext } from "Context/UserInforContext";
 import { useContext } from "react";
-
+import { ProfileTabs } from "enums";
 import styles from "./Menu.module.scss";
 
 interface MenuMenuProps {
@@ -17,19 +17,25 @@ interface MenuMenuProps {
 }
 
 const Menu = (props: MenuMenuProps) => {
-  const { loginInfor = {}, mobile, onShowCategoriesModal, onShowAuthPopup, onShowHamModal } = props;
+  const {
+    loginInfor = {},
+    mobile,
+    onShowCategoriesModal,
+    onShowAuthPopup,
+    onShowHamModal,
+  } = props;
   const router = useRouter();
   const { user } = useContext(UserInforContext);
   const { location } = user;
 
-  const checkLogin = () => {
-    onShowHamModal?.() 
+  const checkLogin = (href: string) => {
+    onShowHamModal?.();
     if (user && user.token) {
-      router.push("/profile")  
-      return
+      router.push(`/profile/${href}`);
+      return;
     }
-    onShowAuthPopup?.()
-  }
+    onShowAuthPopup?.();
+  };
 
   const menuItems = [
     // {
@@ -40,18 +46,18 @@ const Menu = (props: MenuMenuProps) => {
     {
       icon: "deal",
       label: "Saved deals",
-      onClick: () => checkLogin(),
+      onClick: () => checkLogin(ProfileTabs.SAVED_DEALS),
     },
     {
       icon: "heart-color",
       label: "Favorited",
       borderBottom: true,
-      onClick: () => checkLogin(),
+      onClick: () => checkLogin(ProfileTabs.FAVOURITED),
     },
     {
       icon: "comment-color",
       label: "Edit profile",
-      onClick: () => checkLogin(),
+      onClick: () => checkLogin(ProfileTabs.ABOUT),
     },
     // { icon: "settings-color", label: "Settings", borderBottom: true },
     // { icon: "like-color-2", label: "Referral code" },

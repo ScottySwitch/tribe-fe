@@ -1,7 +1,9 @@
 import classNames from "classnames";
+import { useRouter } from "next/router";
 import React, { ReactNode, useState } from "react";
 import { useEffect } from "react";
 import styles from "./TabsHorizontal.module.scss";
+import {ProfileTabs} from "enums"
 
 export interface ITab {
   className?: string;
@@ -56,10 +58,28 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     tablist = [],
     onCurrentTab = () => "",
   } = props;
+  const router = useRouter()
+  const { slug } = router.query
+  const [currentTab, setCurrentTab] = useState<string | number>();
 
-  const [currentTab, setCurrentTab] = useState<string | number>(
-    selectedTab || tablist[0]?.value
-  );
+  useEffect(() => {
+    console.log(slug)
+    switch (slug) {
+      case ProfileTabs.SAVED_DEALS:
+        setCurrentTab(ProfileTabs.SAVED_DEALS)
+        break;
+      case ProfileTabs.FAVOURITED:
+        setCurrentTab(ProfileTabs.FAVOURITED)
+        break;
+      case ProfileTabs.ABOUT:
+        setCurrentTab(ProfileTabs.ABOUT)
+        break;
+      default:
+        setCurrentTab(selectedTab || tablist[0]?.value)
+        break;
+    }
+  }, [slug])
+
 
   const getCurrentTabIndex = tablist.findIndex(
     (item) => item.value === currentTab
