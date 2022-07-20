@@ -78,8 +78,16 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
-  const [hasSocialLink, setHasSocialLink] = useState<boolean>(false)
-  
+
+  const hasSocialLink =
+    bizListing.email ||
+    bizListing.website ||
+    get(bizListing, "social_info.twitter") ||
+    get(bizListing, "social_info.facebook") ||
+    get(bizListing, "social_info.instagram")
+      ? true
+      : false;
+
   const router = useRouter();
   const { query } = router;
   const { listingSlug } = query;
@@ -215,9 +223,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setDealList(dealArray);
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
-        if (listing.email || listing.website || get(listing, "social_info.twitter") || get(listing, "social_info.facebook") || get(listing, "social_info.instagram")) {
-          setHasSocialLink(true)
-        }
         if (bizInvoicesArray.length > 0) {
           setIsPaid(true);
           setPhoneNumber(rawPhoneNumber);
@@ -559,8 +564,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               description={description}
               onSetDescription={handleSetDescription}
             />
-            <Break show={!isViewPage && facilitiesData && isEmptyObject(facilitiesData)} />
-            {(facilitiesData && isEmptyObject(facilitiesData)) && (
+            <Break
+              show={
+                !isViewPage && facilitiesData && isEmptyObject(facilitiesData)
+              }
+            />
+            {facilitiesData && isEmptyObject(facilitiesData) && (
               <Facilities
                 category={category}
                 isViewPage={isViewPage}
@@ -608,7 +617,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               onSubmitReply={(value, id) => handleSubmitReply(value, id)}
               // onChangeReviewsSequence={handleChangeReviewsSequence}
             />
-            <Break  show={hasSocialLink}/>     
+            <Break show={hasSocialLink} />
             {hasSocialLink && (
               <Contacts
                 email={bizListing?.email}
