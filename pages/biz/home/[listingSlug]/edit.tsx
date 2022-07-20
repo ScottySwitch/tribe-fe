@@ -610,15 +610,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             />
             <Break  show={hasSocialLink}/>     
             {hasSocialLink && (
-              <div>
-                <Contacts
-                  email={bizListing?.email}
-                  websiteUrl={bizListing?.website}
-                  twitterUrl={get(bizListing, "social_info.twitter")}
-                  facebookUrl={get(bizListing, "social_info.facebook")}
-                  instagramUrl={get(bizListing, "social_info.instagram")}
-                />
-              </div>
+              <Contacts
+                email={bizListing?.email}
+                websiteUrl={bizListing?.website}
+                twitterUrl={get(bizListing, "social_info.twitter")}
+                facebookUrl={get(bizListing, "social_info.facebook")}
+                instagramUrl={get(bizListing, "social_info.instagram")}
+              />
             )}
             <Break />
             <ReportBizListing
