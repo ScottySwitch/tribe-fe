@@ -169,31 +169,26 @@ const SocialInfo = ({
   newSocialInfo,
   onSetShowSocialInfoModal,
 }) => {
-  const socialArray = newSocialInfo ? Object.keys(newSocialInfo) : [];
-
-  const contact = socialArray.map((item) => (
-    <a
-      key={item}
-      target="_blank"
-      rel="noreferrer"
-      href={newSocialInfo[item]}
-      className="mr-3"
-    >
-      {item}
-    </a>
-  ));
-
   if (isViewPage) {
-    return <div>{!!socialArray.length ? contact : "Not provided"}</div>;
-  }
-
-  return (
-    <div className="flex flex-wrap w-max">
-      {contact}
-      <a onClick={() => onSetShowSocialInfoModal(true)}>
-        {newSocialInfo ? "Edit" : "Add social media"}
+    return newSocialInfo ? (
+      <a target="_blank" rel="noreferrer" href={newSocialInfo}>
+        {newSocialInfo}
       </a>
+    ) : (
+      <div>Not provided</div>
+    );
+  }
+  return newSocialInfo ? (
+    <div className="flex gap-5">
+      <a target="_blank" rel="noreferrer" href={newSocialInfo}>
+        {newSocialInfo}
+      </a>
+      <div>
+        <a onClick={() => onSetShowSocialInfoModal(true)}>Edit</a>
+      </div>
     </div>
+  ) : (
+    <a onClick={() => onSetShowSocialInfoModal(true)}>Add social media</a>
   );
 };
 
