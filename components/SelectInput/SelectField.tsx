@@ -107,7 +107,14 @@ const SelectField = (props: SelectProps) => {
       width: "max-content",
     }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
-    indicatorsContainer: (styles) => ({ ...styles, alignItems: "center" }),
+    indicatorsContainer: (styles) => ({
+      ...styles,
+      alignItems: "center",
+    }),
+    clearIndicator: (styles) => ({
+      ...styles,
+      padding: 0,
+    }),
   };
 
   const handleChange = (dropdownValues: any) => {
@@ -141,7 +148,7 @@ const SelectField = (props: SelectProps) => {
       defaultValue={defaultValue}
       onChange={handleChange}
       placeholder={placeholder}
-      isClearable={false}
+      isClearable={true}
       closeMenuOnSelect={closeMenuOnSelect}
       isDisabled={disabled}
       styles={customStyles}

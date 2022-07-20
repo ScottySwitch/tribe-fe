@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import classNames from "classnames";
 
 import Button from "components/Button/Button";
@@ -42,14 +42,29 @@ const tabList = [
 
 const LoginPage = (context) => {
   const { prevPagePathname } = context;
+
+  const [isLoading, setIsLoading] = useState(false);
   const [method, setMethod] = useState(LoginMethod.EMAIL);
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoginError, setIsLoginError] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const loginButton = document.getElementById("login-button");
+    function clickLoginButton(event) {
+      if (event.key === "Enter") {
+        loginButton?.click();
+      }
+    }
+    // Execute a function when the user presses a key on the keyboard
+    window?.addEventListener("keypress", clickLoginButton);
+    //clean up
+    return () => window?.removeEventListener("keypress", clickLoginButton);
+  }, []);
 
   const handleLogin = async () => {
     let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}");
@@ -189,7 +204,13 @@ const LoginPage = (context) => {
               <Icon icon="facebook-color" size={20} className={styles.icon} />
             </a>
           </div>
-          <Button text="Log in" onClick={handleLogin} isLoading={isLoading} />
+          <Button
+            id="login-button"
+            text="Log in"
+            disabled={!((!!email || !!phoneNumber) && !!password)}
+            onClick={handleLogin}
+            isLoading={isLoading}
+          />
           <div className={styles.sign_up}>
             No account yet?
             <span>
@@ -211,8 +232,6 @@ export async function getServerSideProps(context) {
   const host = context.req.headers.host;
   const index = prevPage.indexOf(host) + host.length;
   const prevPagePathname = prevPage.slice(index);
-
-  console.log("prevPagePathname", prevPagePathname);
 
   // Pass data to the page via props
   return {

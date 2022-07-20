@@ -68,6 +68,7 @@
     }
 
     .calendar {
+      z-index: 5;
       border: none;
       box-shadow: $box-shadow;
     }

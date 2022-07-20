@@ -18,6 +18,7 @@ import { locations } from "constant";
 import { getBrowserLocation } from "utils";
 
 import styles from "styles/App.module.scss";
+import Toast from "components/Toast/Toast";
 
 export type ILoginInfor = {
   token?: string;
@@ -149,7 +150,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       };
       localStorage.setItem("user", JSON.stringify(userInfo));
     };
+
     userInfo && userInfo.token && getMe().catch((e) => console.log(e));
+    //scroll to top
+    window.scrollTo(0, 0);
   }, [router]);
 
   return (
@@ -178,6 +182,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           backgroundColor={pathname !== "/biz/information"}
         />
         <ContributeTabBar visible={!showHamModal && isAuthPage && isMobile} />
+        <Toast />
       </div>
     </UserInforProvider>
   );
