@@ -11,8 +11,8 @@ interface MenuMenuProps {
   loginInfor: ILoginInfor;
   mobile?: boolean;
   onShowCategoriesModal?: () => void;
-  onShowAuthPopup: () => void;
-  onShowHamModal: () => void;
+  onShowAuthPopup?: () => void;
+  onShowHamModal?: () => void;
 }
 
 const Menu = (props: MenuMenuProps) => {
@@ -20,12 +20,12 @@ const Menu = (props: MenuMenuProps) => {
   const router = useRouter();
 
   const checkLogin = () => {
-    onShowHamModal() 
+    onShowHamModal?.() 
     if (user && user.token) {
       router.push("/profile")  
       return
     }
-    onShowAuthPopup()
+    onShowAuthPopup?.()
   }
 
   const menuItems = [
