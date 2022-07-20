@@ -1,6 +1,6 @@
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
 import Button from "components/Button/Button";
@@ -16,6 +16,7 @@ import UserFavouriteApi from "services/user-listing-favourite";
 import styles from "./ListingInforCard.module.scss";
 
 interface ListingInforCardProps {
+  isPaid?: boolean;
   isViewPage?: boolean;
   bizListing: { [key: string]: any };
   priceRange: { min: string; max: string; currency: string };
@@ -73,9 +74,8 @@ const ReviewsFollowers = (props: {
       if (get(data, "data")) {
         setIsFollow(true);
       }
-    }
-    else {
-      setShowAuthPopup(true)
+    } else {
+      setShowAuthPopup(true);
     }
   };
 
@@ -86,9 +86,8 @@ const ReviewsFollowers = (props: {
       if (get(data, "data")) {
         setIsFavourite(true);
       }
-    }
-    else {
-      setShowAuthPopup(true)
+    } else {
+      setShowAuthPopup(true);
     }
   };
 
@@ -165,6 +164,7 @@ const Price = ({ isViewPage, newPriceRange, onSetShowPriceRangeModal }) => {
 };
 
 const SocialInfo = ({
+  isPaid,
   isViewPage,
   newSocialInfo,
   onSetShowSocialInfoModal,
@@ -192,9 +192,25 @@ const SocialInfo = ({
   );
 };
 
-const PhoneNumber = ({ isViewPage, phoneNumber, onSetPhoneNumberModal }) => {
+const PhoneNumber = ({
+  isViewPage,
+  phoneNumber,
+  onSetPhoneNumberModal,
+  isPaid,
+}) => {
+  const handleHref = () => {
+    if (isPaid) {
+      window.open(`tel:${phoneNumber}`);
+    }
+  };
   if (isViewPage) {
-    return phoneNumber ? <div>{phoneNumber}</div> : <div>Not provided</div>;
+    return phoneNumber ? (
+      <div onClick={handleHref} className={isPaid && "cursor-pointer"}>
+        {phoneNumber}
+      </div>
+    ) : (
+      <div>Not provided</div>
+    );
   }
 
   return phoneNumber ? (
@@ -218,6 +234,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     socialInfo,
     logo,
     userInfo,
+    isPaid,
     handleChangeLogo,
     onSetSocialInfo,
     onSetPhoneNumber,
@@ -277,6 +294,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             <div className={styles.contact_right}>
               <Icon icon="phone-color" size={20} />
               <PhoneNumber
+                isPaid={isPaid}
                 isViewPage={isViewPage}
                 phoneNumber={phoneNumber}
                 onSetPhoneNumberModal={(e) => setPhoneNumberModal(e)}
@@ -293,6 +311,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             <div className={styles.contact_right}>
               <Icon icon="web-color" size={20} />
               <SocialInfo
+                isPaid={isPaid}
                 isViewPage={isViewPage}
                 newSocialInfo={newSocialInfo}
                 onSetShowSocialInfoModal={(e) => setShowSocialInfoModal(e)}

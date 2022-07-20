@@ -204,8 +204,9 @@ export const bizInformationDefaultFormData = {
 };
 
 export const reviewSequenceOptions = [
-  { label: "Top reviews", value: "top" },
   { label: "The lastest reviews", value: "latest" },
+  { label: "Rating: High to Low", value: "highest" },
+  { label: "Rating: Low to High", value: "lowest" },
 ];
 
 export const fakeAddlistingForm: IAddListingForm = {
@@ -1640,14 +1641,52 @@ export const socialMediaOptions = [
     value: "instagram",
   },
   {
+    icon: require("public/icons/facebook-color.svg"),
+    label: "Facebook",
+    value: "facebook",
+  },
+  // {
+  //   icon: require("public/icons/whatsapp-color.svg"),
+  //   label: "WhatsApp",
+  //   value: "whatsapp",
+  // },
+  // {
+  //   icon: require("public/icons/telegram-color.svg"),
+  //   label: "Telegram",
+  //   value: "telegram",
+  // },
+];
+
+export const shareOptions = [
+  {
+    icon: require("public/icons/facebook-color.svg"),
+    label: "Facebook",
+    url: "facebook.com",
+  },
+  {
+    icon: require("public/icons/instagram-color.svg"),
+    label: "Instagram",
+    url: "instagram.com",
+  },
+  {
+    icon: require("public/icons/twitter-color.svg"),
+    label: "Twitter",
+    url: "twitter.com",
+  },
+  {
     icon: require("public/icons/whatsapp-color.svg"),
     label: "WhatsApp",
-    value: "whatsapp",
+    url: "facebook.com",
   },
   {
     icon: require("public/icons/telegram-color.svg"),
     label: "Telegram",
-    value: "telegram",
+    url: "telegram.com",
+  },
+  {
+    icon: require("public/icons/line-color.svg"),
+    label: "Line",
+    url: "line.com",
   },
 ];
 

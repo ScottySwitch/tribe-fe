@@ -12,6 +12,7 @@ import { countryList, formattedAreaCodes, socialMediaOptions } from "constant";
 import Image from "next/image";
 import { IAddListingForm } from "pages/add-listing";
 import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils";
+import { IOption } from "type";
 
 interface AddListingProps {
   onPrevPage: () => void;
@@ -37,6 +38,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
       contact: data.contact,
       email: data.email,
       socialMedia: data.socialMedia,
+      typeMedia: data?.typeMedia
     },
   });
 
@@ -158,7 +160,12 @@ const AddListingPageTwo = (props: AddListingProps) => {
           <SelectInput
             label="Social media (optional )"
             placeholder="https://www.facebook.com/YourFacebook"
-            onChange={(e) => setValue("socialMedia", e.input)}
+            onChange={(e) => {
+              // console.log(e.select)
+              const select = e.select as IOption
+              setValue("socialMedia", e.input)
+              setValue("typeMedia", select.value)
+            }}
             options={formattedSocialMediaOptions}
             value={formatSelectInputValue(
               getValues("socialMedia"),

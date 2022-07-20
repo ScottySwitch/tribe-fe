@@ -18,12 +18,15 @@ import { locations } from "constant";
 import { getBrowserLocation } from "utils";
 
 import styles from "styles/App.module.scss";
+import Toast from "components/Toast/Toast";
 
 export type ILoginInfor = {
   token?: string;
   type?: UsersTypes;
   tier?: Tiers;
   avatar?: string;
+  first_name?: string
+  last_name?: string
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -76,9 +79,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     ///get location
     const setDefaultLocation = async () => {
       const browserLocation = await getBrowserLocation();
+      console.log()
       updateUser({
         ...user,
         location: localLocation || browserLocation || locations[0].value,
+        token: localLoginInfo.token,
+        first_name: localLoginInfo.first_name,
+        last_name: localLoginInfo.last_name,
+        avatar: localLoginInfo.avatar
       });
     };
 
@@ -147,7 +155,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       };
       localStorage.setItem("user", JSON.stringify(userInfo));
     };
+
     userInfo && userInfo.token && getMe().catch((e) => console.log(e));
+    //scroll to top
+    window.scrollTo(0, 0);
   }, [router]);
 
   return (
@@ -175,6 +186,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           backgroundColor={pathname !== "/biz/information"}
         />
         <ContributeTabBar visible={!showHamModal && isAuthPage && isMobile} />
+        <Toast />
       </div>
     </UserInforProvider>
   );

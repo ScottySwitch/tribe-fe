@@ -4,34 +4,33 @@ import Api from "../index";
 
 const qs = require("qs");
 
-const getBizListing = async (search?: string) => {
-  const query = qs.stringify(
-    {
-      filters: {
-        name: { $contains: search || "" },
+const getBizListing = async (search?: string, country?: string) => {
+  const params = {
+    filters: {
+      name: { $contains: search || "" },
+      country: country,
+    },
+    populate: {
+      user_listing_follows: {
+        fields: ["id"],
       },
-      populate: {
-        user_listing_follows: {
-          fields: ["id"],
-        },
-        reviews: {
-          fields: ["id"],
-        },
-        categories: {
-          data: ["id", "attributes"],
-        },
-        listing_roles: {
-          data: ["id", "attributes"],
-        },
-        claim_listings: {
-          data: ["id", "attributes"],
-        },
+      reviews: {
+        fields: ["id"],
+      },
+      categories: {
+        data: ["id", "attributes"],
+      },
+      listing_roles: {
+        data: ["id", "attributes"],
+      },
+      claim_listings: {
+        data: ["id", "attributes"],
       },
     },
-    {
-      encodeValuesOnly: true, // prettify url
-    }
-  );
+  };
+  const query = qs.stringify(params, {
+    encodeValuesOnly: true, // prettify url
+  });
   const url = `/api/biz-listings?${query}`;
   return await Api.get(url);
 };
@@ -441,7 +440,7 @@ const getBizlistingByCategoryLink = async (
   page: string | number,
   country?: string
 ) => {
-  const subCat2 = ['ferries', 'eurail']
+  const subCat2 = ["ferries", "eurail"];
   const url = `/api/biz-listings/bizlisting-by-categorylink?country=${country}&category=${category}&categoryLinks=${categoryLinks}&page=${page}&minPrice=1&maxPrice=1&sort=desc&minRating=4&maxRating=5&subCat2=${subCat2}`;
   return await Api.get(url);
 };

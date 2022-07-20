@@ -40,7 +40,7 @@ export interface SelectProps {
   controlStyle?: any;
   placeholderStyle?: any;
   onChange?: (value: any) => void;
-  onInputChange?: (e) => void;
+  onInputChange?: (e: string) => void;
 }
 
 const Select = (props: SelectProps) => {
@@ -149,7 +149,7 @@ const Select = (props: SelectProps) => {
       ...styles,
       width: "fit-content",
       top: "30px",
-      left: "-30px !important",
+      left: "-10px !important",
     }),
     valueContainer: (styles) => ({
       ...styles,

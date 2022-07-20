@@ -3,6 +3,8 @@ import Icon from "components/Icon/Icon";
 import { loginInforItem, user, userId, token } from "constant";
 import { useRouter } from "next/router";
 import { ILoginInfor } from "pages/_app";
+import { UserInforContext } from "Context/UserInforContext";
+import { useContext } from "react";
 
 import styles from "./Menu.module.scss";
 
@@ -10,11 +12,24 @@ interface MenuMenuProps {
   loginInfor: ILoginInfor;
   mobile?: boolean;
   onShowCategoriesModal?: () => void;
+  onShowAuthPopup?: () => void;
+  onShowHamModal?: () => void;
 }
 
 const Menu = (props: MenuMenuProps) => {
-  const { loginInfor = {}, mobile, onShowCategoriesModal } = props;
+  const { loginInfor = {}, mobile, onShowCategoriesModal, onShowAuthPopup, onShowHamModal } = props;
   const router = useRouter();
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
+
+  const checkLogin = () => {
+    onShowHamModal?.() 
+    if (user && user.token) {
+      router.push("/profile")  
+      return
+    }
+    onShowAuthPopup?.()
+  }
 
   const menuItems = [
     // {
@@ -25,18 +40,18 @@ const Menu = (props: MenuMenuProps) => {
     {
       icon: "deal",
       label: "Saved deals",
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(),
     },
     {
       icon: "heart-color",
       label: "Favorited",
       borderBottom: true,
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(),
     },
     {
       icon: "comment-color",
       label: "Edit profile",
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(),
     },
     // { icon: "settings-color", label: "Settings", borderBottom: true },
     // { icon: "like-color-2", label: "Referral code" },
