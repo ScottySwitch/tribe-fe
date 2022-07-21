@@ -36,10 +36,15 @@ import {
   formatBanner,
   formatCollections,
   formatArticle,
-  formatCategoryLink
+  formatCategoryLink,
 } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
-import ProductApi from "services/product-type"
+import ProductApi from "services/product-type";
+
+interface IType {
+  [key: string]: any;
+}
+[];
 
 const Category = (props: any) => {
   const trans = useTrans();
@@ -52,19 +57,17 @@ const Category = (props: any) => {
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
   const [categoryInfor, setCategoryInfor] = useState<Ilisting>({});
-  const [listingArray, setListingArray] = useState<{ [key: string]: any }[]>([]);
-  const [bannerArray, setBannergArray] = useState<{ [key: string]: any }[]>([]);
-  const [collectionArray, setCollectionArray] = useState<{ [key: string]: any }[]>([]);
-  const [articleArray, setArticleArray] = useState<{ [key: string]: any }[]>([]);
-  const [dealArray, setDealArray] = useState<{ [key: string]: any }[]>([]);
-  const [categoryLinkArray, setCategoryLinkArray] = useState<{ [key: string]: any }[]>([]);
+  const [listingArray, setListingArray] = useState<IType[]>([]);
+  const [bannerArray, setBannergArray] = useState<IType[]>([]);
+  const [collectionArray, setCollectionArray] = useState<IType>([]);
+  const [articleArray, setArticleArray] = useState<IType[]>([]);
+  const [dealArray, setDealArray] = useState<IType[]>([]);
+  const [categoryLinkArray, setCategoryLinkArray] = useState<IType[]>([]);
   const { user } = useContext(UserInforContext);
   const { location } = user;
 
   useEffect(() => {
     const getData = async (categoryId, page) => {
-      const data = await ProductApi.getProductTypeByCategoryLinkSlug('dessert')
-
       const dataQuery = await BizListingApi.getListingCustom({
         country: location,
         categories: categoryId,
@@ -87,7 +90,7 @@ const Category = (props: any) => {
       const rawListingExclusiveDealAray = formatBizlistingArray(
         get(dataExclusiveDeal, "data.data")
       );
-      setDealArray(rawListingExclusiveDealAray)
+      setDealArray(rawListingExclusiveDealAray);
 
       const dataBanners = await BannerApi.getBannerCustom({
         categories: categoryId,
@@ -95,7 +98,7 @@ const Category = (props: any) => {
         page: 1,
       });
       const rawListBanners = formatBanner(get(dataBanners, "data.data"));
-      setBannergArray(rawListBanners)
+      setBannergArray(rawListBanners);
 
       const dataCollections = await CollectionApi.getCollectionCustom({
         categories: category,
@@ -105,19 +108,22 @@ const Category = (props: any) => {
       const rawListCollections = formatCollections(
         get(dataCollections, "data.data")
       );
-      setCollectionArray(rawListCollections)
+      setCollectionArray(rawListCollections);
 
-      const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-      const rawListCategoryLink = formatCategoryLink(get(dataCategoryLinks, "data.data"));
-      setCategoryLinkArray(rawListCategoryLink)
+      const dataCategoryLinks =
+        await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+      const rawListCategoryLink = formatCategoryLink(
+        get(dataCategoryLinks, "data.data")
+      );
+      setCategoryLinkArray(rawListCategoryLink);
 
       const dataArticles = await ArticleApi.getArticleCustomer({
         categories: category,
         page: 1,
         limit: 16,
       });
-      const rawArticle = formatArticle(get(dataArticles, "data.data"))
-      setArticleArray(rawArticle)
+      const rawArticle = formatArticle(get(dataArticles, "data.data"));
+      setArticleArray(rawArticle);
       // setLoading(false)
     };
 
@@ -427,6 +433,5 @@ const Category = (props: any) => {
 //     },
 //   };
 // }
-
 
 export default Category;

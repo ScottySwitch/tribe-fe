@@ -170,7 +170,7 @@ const Collection = (props) => {
           }
         />
       </SectionLayout>
-      <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
+      {/* <Filter onClose={() => setShowFilter(false)} visible={showFilter} /> */}
     </div>
   );
 };

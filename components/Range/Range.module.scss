@@ -9,7 +9,7 @@ $trach-height: 2px;
   .slider {
     position: relative;
     width: 200px;
-
+    width: 450px;
     &__range,
     &__track {
       position: absolute;
@@ -34,7 +34,7 @@ $trach-height: 2px;
     pointer-events: none;
     position: absolute;
     height: 0;
-    width: 200px;
+    width: 450px;
     outline: none;
     -webkit-appearance: none;
     -webkit-tap-highlight-color: transparent;
@@ -83,3 +83,14 @@ $trach-height: 2px;
     }
   }
 }
+
+@media screen and (max-width: $mobile) {
+  .container {
+    .slider {
+      width: 250px;
+    }
+    .thumb {
+      width: 250px;
+    }
+  }
+} ;
