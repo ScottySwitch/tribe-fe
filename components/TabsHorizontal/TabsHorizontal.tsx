@@ -22,8 +22,6 @@ const TabNav = (props: ITab) => {
     onSelectedTab = () => "",
   } = props;
 
-  console.log("currentTab-tabNav", currentTab);
-
   const selectedClassNames = classNames(styles.tab_nav, className, {
     [styles.selected]: currentTab === value,
   });
@@ -59,8 +57,6 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     tablist = [],
     onCurrentTab = () => "",
   } = props;
-  
-  console.log("currentTab", selectedTab);
 
   const [currentTab, setCurrentTab] = useState<string | number | undefined>(
     selectedTab
