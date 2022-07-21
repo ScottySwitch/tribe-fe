@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { get, isArray } from "lodash";
+import { filter, get, isArray } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
@@ -19,15 +19,17 @@ import Loader from "components/Loader/Loader";
 import useLocation from "hooks/useLocation";
 import useTrans from "hooks/useTrans";
 import { formatListingArray } from "utils";
-
-import styles from "styles/Home.module.scss";
 import { UserInforContext } from "Context/UserInforContext";
 import Button from "components/Button/Button";
-import Filter from "components/Filter/Filter";
+import Filter, { IFilter } from "components/Filter/Filter";
 import ProductTypeApi from "services/product-type";
 
-const SubCategoryPage = (props: any) => {
-  const { listingBanners, category, categoryLink } = props;
+import styles from "styles/Home.module.scss";
+import ProductBrandApi from "services/product-brand";
+import { IOption } from "type";
+
+const SubCategoryPage = (context) => {
+  const { listingBanners, category, categoryLink } = context;
 
   const trans = useTrans();
   const router = useRouter();
@@ -35,42 +37,37 @@ const SubCategoryPage = (props: any) => {
   const { location } = user;
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
+  const defaultFilterOptions: IFilter = {
+    productTypes: [],
+    productBrands: [],
+    minPrice: undefined,
+    maxPrice: undefined,
+    sort: undefined,
+    minRating: undefined,
+    maxRating: undefined,
+  };
 
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [showFilter, setShowFilter] = useState(false);
-  const [productTypes, setProductTypes] = useState<any[]>([]);
+  const [filter, setFilter] = useState(defaultFilterOptions);
 
   const finalTabLabel = categories.find(
     (cat) => cat.slug === category
   )?.finalTabLabel;
 
-  console.log(categories, finalTabLabel);
-
-  useEffect(() => {
-    const getProductTypes = async () => {
-      const data = await ProductTypeApi.getProductTypeByCategoryLinkSlug(
-        categoryLink
-      );
-      const rawProductTypes = get(data, "data.data") || [];
-      const formatProductTypes = rawProductTypes.map((item) => ({
-        label: item.attributes.label,
-        value: item.attributes.value,
-      }));
-      setProductTypes(formatProductTypes);
-    };
-
-    getProductTypes();
-  }, []);
-
   useEffect(() => {
     const getBizListings = async () => {
-      const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(
+      const params = {
         category,
-        categoryLink,
-        pagination.page,
-        location
+        categoryLinks: [categoryLink],
+        page: pagination.page,
+        location,
+        ...filter,
+      };
+      const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(
+        params
       );
 
       const rawBizlistingArray = get(dataBizlisting, "data.data");
@@ -88,7 +85,7 @@ const SubCategoryPage = (props: any) => {
     location && getBizListings();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location, pagination.page]);
+  }, [filter, location, pagination.page]);
 
   if (loading) {
     return (
@@ -97,6 +94,11 @@ const SubCategoryPage = (props: any) => {
       </SectionLayout>
     );
   }
+
+  const handleFilter = (e?: IFilter) => {
+    console.log({ ...filter, ...e });
+    e && setFilter({ ...filter, ...e });
+  };
 
   return (
     <div>
@@ -107,22 +109,24 @@ const SubCategoryPage = (props: any) => {
           <Icon icon="carret-right" size={14} color="#7F859F" />
           {categoryLink}
         </div>
-        {isArray(listingBanners) && (
-          <Carousel responsive={homeBannerResponsive}>
-            {listingBanners.map((img, index) => (
-              <div key={index} className={styles.banner_card}>
-                <Image
-                  alt=""
-                  layout="intrinsic"
-                  src={img.imgUrl}
-                  objectFit="contain"
-                  width={500}
-                  height={200}
-                />
-              </div>
-            ))}
-          </Carousel>
-        )}
+        <Carousel responsive={homeBannerResponsive}>
+          {listingBanners?.map((img, index) => (
+            <div
+              key={index}
+              className={styles.banner_card}
+              onClick={() => router.push(`${img.linkActive}`)}
+            >
+              <Image
+                alt=""
+                layout="intrinsic"
+                src={img.imgUrl}
+                objectFit="contain"
+                width={500}
+                height={200}
+              />
+            </div>
+          ))}
+        </Carousel>
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
@@ -168,11 +172,12 @@ const SubCategoryPage = (props: any) => {
         )}
         <TopSearches />
         <Filter
-          onClose={() => setShowFilter(false)}
           visible={showFilter}
-          otherList={productTypes}
-          finalTabList={[]}
+          categoryLink={categoryLink}
           finalTabLabel={finalTabLabel}
+          filter={filter}
+          onClose={() => setShowFilter(false)}
+          onSubmitFilter={handleFilter}
         />
       </SectionLayout>
     </div>
