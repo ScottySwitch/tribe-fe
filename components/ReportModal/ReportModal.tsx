@@ -50,7 +50,7 @@ const ReportModal = (props: ReportModalProps) => {
               label={option.label}
               name="report"
               className="text-sm"
-              />
+            />
           </div>
         ))}
         {currentOption === "Other" && (

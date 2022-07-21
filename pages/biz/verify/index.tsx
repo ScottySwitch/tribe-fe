@@ -46,6 +46,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     }
   ]
 
+
   const router = useRouter();
   let baseURL = process.env.NEXT_PUBLIC_API_URL;
 

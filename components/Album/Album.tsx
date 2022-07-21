@@ -37,6 +37,20 @@ export const Album = (props: AlbumProps) => {
   const [showResultModal, setShowResultModal] = useState(false);
   const [submitResult, setSubmitResult] = useState(false);
 
+  const resultType = [
+    {
+      title: "Success!",
+      message:  
+        "Thank you for your report. We will review the report and take action within 24 hours.!",
+      textButton: "Close",
+    },
+    {
+      title: "Fail!",
+      message: "Oops, something wrong. Please try again later.",
+      textButton: "Try again",
+    },
+  ];
+
   const { user } = useContext(UserInforContext);
 
   const refSlider1 = useRef<any>(null);
@@ -112,10 +126,17 @@ export const Album = (props: AlbumProps) => {
 
     await reportApi
       .createReport(body)
-      .then((res) => setSubmitResult(true))
-      .catch((error) => setSubmitResult(false))
-      .finally(() => setShowResultModal(true));
-  };
+      .then((res) => {
+        setSubmitResult(true)
+      })
+      .catch((error) => {
+        setSubmitResult(false)
+      })
+      .finally(() => {
+        setShowReportModal(false)
+        setShowResultModal(true)
+      });
+    };
 
   return (
     <div className={styles.slider_syncing}>
@@ -208,6 +229,7 @@ export const Album = (props: AlbumProps) => {
         </div>
       </Modal>
       <ResultModal
+        resultType={resultType}
         visible={showResultModal}
         isSuccess={submitResult}
         onClose={() => setShowResultModal(false)}

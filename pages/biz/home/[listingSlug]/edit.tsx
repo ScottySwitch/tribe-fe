@@ -36,6 +36,7 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 
 import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
@@ -76,8 +77,23 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
-  const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
 
+  const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
+  const [showResultModal, setShowResultModal] = useState<boolean>(false);
+  const [submitResult, setSubmitResult] = useState<boolean>(false);
+  const resultType = [
+    {
+      title: "Success!",
+      message:
+        "Thank you for your report. We will review the report and take action within 24 hours.!",
+      textButton: "Close",
+    },
+    {
+      title: "Fail!",
+      message: "Oops, something wrong. Please try again later.",
+      textButton: "Try again",
+    },
+  ];
   const hasSocialLink =
     bizListing.email ||
     bizListing.website ||
@@ -119,6 +135,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       const listing = get(data, "data.data[0]");
       if (listing) {
         userInfo.now_biz_listing = listing;
+        // console.log('userInfo', userInfo)
         localStorage.setItem("user", JSON.stringify(userInfo));
         setUserInfo(userInfo);
         const rawTags = listing.tags || [];
@@ -278,14 +295,24 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
     const userId = userInfo.id || null;
-
-    await ReportApi.createReport({
+    const body = {
       type: "listing",
       reason: data,
       user: userId,
       biz_listing: bizListing.id,
-    });
-    setIsShowReportModal(false);
+    };
+
+    await ReportApi.createReport(body)
+      .then((res) => {
+        setSubmitResult(true);
+      })
+      .catch((error) => {
+        setSubmitResult(false);
+      })
+      .finally(() => {
+        setIsShowReportModal(false);
+        setShowResultModal(true);
+      });
   };
 
   const handleSubmit = async () => {
@@ -607,6 +634,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             </>
             <Break />
             <HomepageReviews
+              key={get(reviews, "length")}
               bizListingId={bizListing.id}
               listingSlug={listingSlug}
               listingRate={listingRate}
@@ -632,6 +660,12 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               showReportModal={isShowReportModal}
               onSetShowReportModal={setIsShowReportModal}
               handleSubmitReportBizListing={handleSubmitReportBizListing}
+            />
+            <ResultModal
+              resultType={resultType}
+              visible={showResultModal}
+              isSuccess={submitResult}
+              onClose={() => setShowResultModal(false)}
             />
           </div>
         </div>
