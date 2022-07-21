@@ -566,6 +566,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           {bizListing.name}
         </div>
         <ListingInforCard
+          key={userInfo}
           isPaid={isPaid}
           isViewPage={isViewPage}
           logo={logo}

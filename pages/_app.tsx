@@ -147,8 +147,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
+      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       await AuthApi.getMe();
-      localStorage.setItem("user", JSON.stringify(userInfo));
       const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
       userInfo = {
         ...userInfo,
