@@ -98,6 +98,7 @@ const GroupHeadingTwo = (props: {
 
 const ProfilePage = () => {
   const router = useRouter();
+  const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
     email: "",
     phone_number: "",
@@ -107,16 +108,35 @@ const ProfilePage = () => {
     industry: "",
     birthday: "",
   });
+  
+  const [selectedTab, setSelectedTab] = useState<string>();
 
   useEffect(() => {
+    console.log('slug', slug)
+
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+
     if (!userInfo || !userInfo?.token) {
-      router.push('/')
+      router.push("/");
     }
 
-    console.log("userInfo", userInfo);
+    switch (slug) {
+      case ProfileTabs.SAVED_DEALS:
+        console.log("run", slug, ProfileTabs.SAVED_DEALS);
+        setSelectedTab("saved-deals");
+        break;
+      case ProfileTabs.FAVOURITED:
+        console.log("run", slug, ProfileTabs.FAVOURITED);
+        setSelectedTab(ProfileTabs.FAVOURITED);
+        break;
+      case ProfileTabs.ABOUT:
+        console.log("run", slug, ProfileTabs.ABOUT);
+        setSelectedTab(ProfileTabs.ABOUT);
+        break;
+    }
+
     setUserInfo(userInfo);
-  }, []);
+  }, [router]);
 
   const TabList: ITab[] = [
     {
@@ -144,7 +164,10 @@ const ProfilePage = () => {
   return (
     <div className="wrapper-profile">
       <div className={styles.section_cover_image}>
-        <CoverImage imageUrl="https://picsum.photos/1440/360" />
+        <CoverImage
+          layout="fill"
+          imageUrl={require("../../public/images/default-banner-profile.png")}
+        />
       </div>
       <SectionLayout
         className={styles.section_profile}
@@ -160,6 +183,7 @@ const ProfilePage = () => {
           points={0}
         />
         <TabsHorizontal
+          selectedTab={selectedTab}
           tablist={TabList}
           type="secondary-no-outline"
           className={styles.profile_tab}

@@ -7,25 +7,12 @@ export interface IResultModal {
   visible: boolean;
   isSuccess: boolean;
   onClose?: () => void;
+  resultType?: any;
 }
 
-let resultType = [
-  {
-    title: "Thank you",
-    message:
-      "Thank you for sharing your experience and helping to improve this listing!",
-    textButton: "Close",
-  },
-  {
-    title: "Uh...oh...",
-    message: "Something went wrong. Let’s give it another try!",
-    textButton: "Try again",
-  },
-];
-
 const ResultModal = (props: IResultModal) => {
-  const { visible = false, isSuccess = false, onClose } = props;
-
+  const { visible = false, isSuccess = false, resultType, onClose,  } = props;
+  
   return (
     <Modal
       visible={visible}
