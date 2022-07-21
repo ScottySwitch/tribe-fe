@@ -11,7 +11,6 @@ import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
 import Slider, { Settings } from "react-slick";
 import reportApi from "services/report";
-import { optionsReportPhoto } from "constant";
 
 import styles from "./Album.module.scss";
 
@@ -33,7 +32,7 @@ export const Album = (props: AlbumProps) => {
   const [navThumbnail, setNavThumbnail] = useState<any>();
   const [navGallery, setNavGallery] = useState<any>();
   const [isMobile, setIsMobile] = useState(false);
-  const [reason, setReason] = useState<string>();
+  const [reason, setReason] = useState();
   const [showReportModal, setShowReportModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [submitResult, setSubmitResult] = useState(false);
@@ -125,10 +124,10 @@ export const Album = (props: AlbumProps) => {
         setSubmitResult(false)
       })
       .finally(() => {
-        setShowReportModal(false);
-        setShowResultModal(true);
+        setShowReportModal(false)
+        setShowResultModal(true)
       });
-  };
+    };
 
   return (
     <div className={styles.slider_syncing}>
@@ -194,22 +193,20 @@ export const Album = (props: AlbumProps) => {
         onClose={() => setShowReportModal(false)}
       >
         <div className="p-[30px] flex flex-col gap-5">
-          {optionsReportPhoto.map((option, index) => (
-            <div
-              key={index}
-              className={styles.option}
-              onClick={() => {
-                console.log("click", option?.label);
-                setReason(option?.label);
-              }}
-            >
-              <Radio id={option.id} label={option.label} name="report-media" />
-            </div>
+          {reportReasons.map((reason) => (
+            <Radio
+              id={`${id} - ${reason.label}`}
+              key={reason.value}
+              label={reason.label}
+              value={reason.value}
+              name="report-media"
+              onChange={(e: any) => setReason(e.target.value)}
+            />
           ))}
           <Input
             placeholder="Your reason"
             onChange={(e: any) => setReason(e.target.value)}
-            disabled={reason !== optionsReportPhoto[5].label}
+            disabled={reason !== reportReasons[5].value}
           />
           <div className="flex justify-end gap-3">
             <Button
@@ -223,7 +220,6 @@ export const Album = (props: AlbumProps) => {
         </div>
       </Modal>
       <ResultModal
-        message={message}
         visible={showResultModal}
         isSuccess={submitResult}
         onClose={() => setShowResultModal(false)}
@@ -231,5 +227,32 @@ export const Album = (props: AlbumProps) => {
     </div>
   );
 };
+
+const reportReasons = [
+  {
+    label: "Offensive, hateful or sexually explicit",
+    value: "Offensive, hateful or sexually explicit",
+  },
+  {
+    label: "Legal issue",
+    value: "Legal issue",
+  },
+  {
+    label: "Privacy concern",
+    value: "Privacy concern",
+  },
+  {
+    label: "Poor quality",
+    value: "Poor quality",
+  },
+  {
+    label: "Not a photo of the place",
+    value: "Not a photo of the place",
+  },
+  {
+    label: "Other",
+    value: "Other",
+  },
+];
 
 export default Album;
