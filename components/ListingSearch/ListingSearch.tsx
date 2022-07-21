@@ -1,7 +1,7 @@
 import Icon from "components/Icon/Icon";
 import Select, { SelectProps } from "components/Select/Select";
 import { Categories, YesNo } from "enums";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 import styles from "./ListingSearch.module.scss";
 import get from "lodash/get";
@@ -74,17 +74,19 @@ export const formatListingResultOption = (bizListing: any[]) => {
 interface ListingSearchProps extends SelectProps {
   listingOptions: IOption[];
   menuFooter?: JSX.Element | JSX.Element[];
+  isClaimListing?: boolean;
 }
 const ListingSearch = (props: ListingSearchProps) => {
-  const { onChange, onInputChange, listingOptions, menuFooter, ...rest } =
+  const { onChange, onInputChange, listingOptions, menuFooter, isClaimListing = false,...rest } =
     props;
 
   const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const checkLogin = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.token ? onChange?.(YesNo.NO) : setShowAuthPopup(true);
+    userInfo.token ? (isClaimListing ? onChange?.(YesNo.NO) : Router.push(`/add-listing`)) : setShowAuthPopup(true);
   };
+  // router.push('/add-listing')
 
   return (
     <React.Fragment>

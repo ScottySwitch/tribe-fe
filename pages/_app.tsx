@@ -148,11 +148,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
       await AuthApi.getMe();
-      // const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
-      // userInfo = {
-      //   ...userInfo,
-      //   owner_listings: dataOwnerListing.data.data,
-      // };
+      const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
+      userInfo = {
+        ...userInfo,
+        owner_listings: dataOwnerListing.data.data,
+      };
       localStorage.setItem("user", JSON.stringify(userInfo));
     };
 

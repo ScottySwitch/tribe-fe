@@ -437,15 +437,23 @@ const getExclusiveDealByCategory = async (category) => {
   return await Api.get(url);
 };
 
-const getBizlistingByCategoryLink = async (
-  category: string | number,
-  categoryLinks: any,
-  page: string | number,
-  country?: string
-) => {
-  const subCat2 = ["ferries", "eurail"];
-  const url = `/api/biz-listings/bizlisting-by-categorylink?country=${country}&category=${category}&categoryLinks=${categoryLinks}&page=${page}&minPrice=1&maxPrice=1&sort=desc&minRating=4&maxRating=5&subCat2=${subCat2}`;
-  return await Api.get(url);
+const getBizlistingByCategoryLink = async (params?: any) => {
+  const getParams = {
+    category: params?.category,
+    categoryLinks: params?.categoryLinks,
+    page: params?.page || 1,
+    country: params?.location,
+
+    sort: params?.sort,
+    productTypes: params?.productTypes,
+    productBrands: params?.productBrands,
+    minPrice: params?.minPrice,
+    maxPrice: params?.maxPrice,
+    minRating: params?.minRating,
+    maxRating: params?.maxRating,
+  };
+  const url = `/api/biz-listings/bizlisting-by-categorylink`;
+  return await Api.get(url, { params: getParams });
 };
 
 const getListingFavouriteByCategory = async (category) => {
@@ -561,10 +569,10 @@ const getListingCustom = async (data: any) => {
       deals: {
         is_exclusive: true,
         is_revision: {
-          $not: true
-        }
-      }
-    }
+          $not: true,
+        },
+      },
+    };
   }
 
   if (data?.limit) {
@@ -582,12 +590,12 @@ const getListingCustom = async (data: any) => {
       ...pagination,
     },
     populate: {
-      // user_listing_follows: {
-      //   id: true,
-      // },
-      // user_listing_favourites: {
-      //   id: true,
-      // },
+      user_listing_follows: {
+        id: true,
+      },
+      user_listing_favourites: {
+        id: true,
+      },
       categories: {
         name: true,
       },

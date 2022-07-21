@@ -65,11 +65,13 @@ const SearchListing = ({
   listing,
   bizListing,
   setListing,
+  isClaimListing,
 }: {
   setListing: (e: listingTypes) => void;
   listing: any;
   bizListing: any;
   relationship?: string;
+  isClaimListing?: boolean;
 }) => {
   if (listing) {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -86,7 +88,7 @@ const SearchListing = ({
   switch (listing) {
     case undefined:
       return (
-        <ListingSearch listingOptions={bizListing} onChange={setListing} />
+        <ListingSearch isClaimListing={isClaimListing} listingOptions={bizListing} onChange={setListing} />
       );
     case YesNo.NO:
       return (

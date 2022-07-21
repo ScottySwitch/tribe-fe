@@ -1,55 +1,67 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { get, isArray } from "lodash";
+import { filter, get, isArray } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
 import InforCard from "components/InforCard/InforCard";
 import Pagination from "components/Pagination/Pagination";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import Select from "components/Select/Select";
-import TabsHorizontal from "components/TabsHorizontal/TabsHorizontal";
 import TopSearches from "components/TopSearches/TopSearches";
-import { homeBannerResponsive, inforCardList } from "constant";
+import { categories, homeBannerResponsive, inforCardList } from "constant";
 import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
 import Loader from "components/Loader/Loader";
-import useLocation from "hooks/useLocation";
 import useTrans from "hooks/useTrans";
 import { formatListingArray } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
+import Button from "components/Button/Button";
+import Filter, { IFilter } from "components/Filter/Filter";
 
 import styles from "styles/Home.module.scss";
-import { UserInforContext } from "Context/UserInforContext";
 
-const SubCategoryPage = (props: any) => {
-  const { bizListings, listingBanners, listCategoryLink } = props;
+const SubCategoryPage = (context) => {
+  const { listingBanners, category, categoryLink } = context;
 
   const trans = useTrans();
   const router = useRouter();
   const { user } = useContext(UserInforContext);
   const { location } = user;
 
-  const { query } = router;
-  const { category, subCategory }: any = query;
-
   const defaultPagination = { page: 1, total: 0, limit: 28 };
+  const defaultFilterOptions: IFilter = {
+    productTypes: [],
+    productBrands: [],
+    minPrice: undefined,
+    maxPrice: undefined,
+    sort: undefined,
+    minRating: undefined,
+    maxRating: undefined,
+  };
 
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
-  const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
-  const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory);
   const [showFilter, setShowFilter] = useState(false);
+  const [filter, setFilter] = useState(defaultFilterOptions);
+
+  const finalTabLabel = categories.find(
+    (cat) => cat.slug === category
+  )?.finalTabLabel;
 
   useEffect(() => {
-    const getBizListings = async (category, subCategory, page) => {
-      const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(
+    const getBizListings = async () => {
+      const params = {
         category,
-        subCategory,
-        page,
-        location
+        categoryLinks: [categoryLink],
+        page: pagination.page,
+        location,
+        ...filter,
+      };
+      const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(
+        params
       );
 
       const rawBizlistingArray = get(dataBizlisting, "data.data");
@@ -64,23 +76,10 @@ const SubCategoryPage = (props: any) => {
     };
 
     //get subCategory data
-    location && getBizListings(category, currenCategoryLink, pagination.page);
+    location && getBizListings();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSubCategory, currenCategoryLink, location, pagination.page]);
-
-  const handleChangeSubCategory = (e) => {
-    setCurrentCategoryLink(e);
-    setCurrentSubCategory(e);
-    router.replace(
-      {
-        pathname: `/${category}/${e}`,
-      },
-      undefined,
-      { shallow: true }
-    );
-    // getDataBizlisting(category, e, page)
-  };
+  }, [filter, location, pagination.page]);
 
   if (loading) {
     return (
@@ -90,6 +89,11 @@ const SubCategoryPage = (props: any) => {
     );
   }
 
+  const handleFilter = (e?: IFilter) => {
+    console.log({ ...filter, ...e });
+    e && setFilter({ ...filter, ...e });
+  };
+
   return (
     <div>
       <SectionLayout className="pt-0">
@@ -97,66 +101,37 @@ const SubCategoryPage = (props: any) => {
           Home <Icon icon="carret-right" size={14} color="#7F859F" />
           {category}
           <Icon icon="carret-right" size={14} color="#7F859F" />
-          {subCategory}
+          {categoryLink}
         </div>
-        {isArray(listingBanners) && (
-          <Carousel responsive={homeBannerResponsive}>
-            {listingBanners.map((img, index) => (
-              <div key={index} className={styles.banner_card}>
-                <Image
-                  alt=""
-                  layout="intrinsic"
-                  src={img.imgUrl}
-                  objectFit="contain"
-                  width={500}
-                  height={200}
-                />
-              </div>
-            ))}
-          </Carousel>
-        )}
+        <Carousel responsive={homeBannerResponsive}>
+          {listingBanners?.map((img, index) => (
+            <div
+              key={index}
+              className={styles.banner_card}
+              onClick={() => router.push(`${img.linkActive}`)}
+            >
+              <Image
+                alt=""
+                layout="intrinsic"
+                src={img.imgUrl}
+                objectFit="contain"
+                width={500}
+                height={200}
+              />
+            </div>
+          ))}
+        </Carousel>
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
-          <div className="flex flex-wrap">
-            <TabsHorizontal
-              tablist={
-                Array.isArray(listCategoryLink)
-                  ? listCategoryLink.slice(0, 5)
-                  : []
-              }
-              type="secondary-no-outline"
-              selectedTab={currentSubCategory}
-              className="pt-[6px]"
-              onCurrentTab={handleChangeSubCategory}
-            />
-            <Select
-              placeholder="More"
-              isSearchable={false}
-              width={50}
-              className={styles.sub_category_more}
-              variant="no-outlined"
-              size="small"
-              options={
-                Array.isArray(listCategoryLink) ? listCategoryLink.slice(5) : []
-              }
-              controlStyle={{ fontWeight: "bold", fontSize: "16px" }}
-              placeholderStyle={{
-                fontWeight: "bold",
-                fontSize: "16px",
-                color: "#a4a8b7",
-              }}
-              onChange={(e) => handleChangeSubCategory(e.value)}
-            />
-          </div>
-          {/* <Button
+          <Button
             width={180}
             size="small"
             text="Filter & Sort"
             variant="secondary"
             prefix={<Icon icon="filter-1" />}
             onClick={() => setShowFilter(true)}
-          /> */}
+          />
         </div>
       </SectionLayout>
       <SectionLayout show={isArray(listings)}>
@@ -190,7 +165,14 @@ const SubCategoryPage = (props: any) => {
           />
         )}
         <TopSearches />
-        {/* <Filter onClose={() => setShowFilter(false)} visible={true} /> */}
+        <Filter
+          visible={showFilter}
+          categoryLink={categoryLink}
+          finalTabLabel={finalTabLabel}
+          filter={filter}
+          onClose={() => setShowFilter(false)}
+          onSubmitFilter={handleFilter}
+        />
       </SectionLayout>
     </div>
   );
@@ -198,6 +180,7 @@ const SubCategoryPage = (props: any) => {
 
 export async function getServerSideProps(context) {
   const category = context.query.category;
+  const categoryLink = context.query.subCategory;
   const dataBanners = await BannerApi.getBannerByCategory(category);
   const dataCategoryLinks =
     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
@@ -217,6 +200,7 @@ export async function getServerSideProps(context) {
       imgUrl: item.image_url,
       linkActive: item.link_active,
     }));
+  console.log(listBannerArray);
   let arrayRawListCategoryLink =
     Array.isArray(rawListCategory) &&
     rawListCategory.map((item) => ({
@@ -231,6 +215,8 @@ export async function getServerSideProps(context) {
   return {
     props: {
       // bizListings: listingArray,
+      category: category,
+      categoryLink: categoryLink,
       listingBanners: listBannerArray,
       listCategoryLink: categoryLinkArray,
     },

@@ -89,6 +89,7 @@ const AddListingPageOne = (props: AddListingProps) => {
         question="Let’s find out if business is already listed in Tribes."
       >
         <SearchListing
+          isClaimListing
           relationship={relationship}
           listing={listing}
           bizListing={bizListing}
