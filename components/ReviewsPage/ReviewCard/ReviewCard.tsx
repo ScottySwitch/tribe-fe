@@ -34,7 +34,7 @@ export const ReviewForm = (props) => {
   const { rating, onSubmit } = props;
 
   const [content, setContent] = useState<string>();
-  const [images, setImages] = useState<any>();
+  const [images, setImages] = useState<any>([]);
   const [visitedDate, setVisitedDate] = useState<any>();
   const [checkbox, setCheckbox] = useState<boolean>(false);
 
@@ -66,7 +66,7 @@ export const ReviewForm = (props) => {
           accept="images"
           type="media"
           centerIcon={<Icon icon="plus" />}
-          onChange={(urls) => setImages([...images, urls])}
+          onChange={(urls) => setImages([...images, urls || ''])}
         />
       </div>
       <div className={styles.form_group}>

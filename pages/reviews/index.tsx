@@ -16,6 +16,7 @@ import ContributeApi from "services/contribute"
 import { UserInforContext } from "Context/UserInforContext";
 import { useDebounce } from "usehooks-ts";
 import { changeToSlugify } from "utils";
+import { useRouter } from "next/router"
 
 
 const ReviewsPage = () => {
@@ -27,6 +28,7 @@ const ReviewsPage = () => {
   const [searchKey, setSearchKey] = useState("");
   const [listingSearchResult, setListingSearchResult] = useState<any>([])
   const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
+  const router = useRouter()
 
   const resultType = [
     {
@@ -83,6 +85,7 @@ const ReviewsPage = () => {
   }
 
   const handleCloseModal = () => {
+    router.push("/");
     setIsShowResultModal(false)
   }
 

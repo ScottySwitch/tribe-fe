@@ -443,8 +443,7 @@ const getBizlistingByCategoryLink = async (
   page: string | number,
   country?: string
 ) => {
-  const subCat2 = ["ferries", "eurail"];
-  const url = `/api/biz-listings/bizlisting-by-categorylink?country=${country}&category=${category}&categoryLinks=${categoryLinks}&page=${page}&minPrice=1&maxPrice=1&sort=desc&minRating=4&maxRating=5&subCat2=${subCat2}`;
+  const url = `/api/biz-listings/bizlisting-by-categorylink?country=${country}&category=${category}&categoryLinks=${categoryLinks}&page=${page}`;
   return await Api.get(url);
 };
 
