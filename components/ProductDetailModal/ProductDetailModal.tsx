@@ -9,6 +9,7 @@ import ScrollingBox from "components/ScrollingBox/ScrollingBox";
 import Album from "components/Album/Album";
 
 import styles from "./ProductDetailModal.module.scss";
+import { get } from "lodash";
 
 export interface IProduct {
   id: number;
@@ -49,7 +50,8 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
           <div className={styles.container_gallery}>
             <Album
               //make rerender album when popup product detail modal
-              key={data.images?.[0]}
+              id="product-detail-modal-album"
+              key={get(data, "images.length")}
               images={data.images}
               showedPicsNumber={{ slidesToShow: 6, slidesToScroll: 6 }}
             />

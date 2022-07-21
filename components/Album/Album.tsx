@@ -15,6 +15,7 @@ import reportApi from "services/report";
 import styles from "./Album.module.scss";
 
 interface AlbumProps {
+  id?: string;
   listingId?: string | number;
   images?: any[];
   showedPicsNumber?: { slidesToShow: number; slidesToScroll: number };
@@ -22,6 +23,7 @@ interface AlbumProps {
 
 export const Album = (props: AlbumProps) => {
   const {
+    id,
     listingId,
     images = [],
     showedPicsNumber = { slidesToShow: 12, slidesToScroll: 12 },
@@ -181,6 +183,7 @@ export const Album = (props: AlbumProps) => {
         <div className="p-[30px] flex flex-col gap-5">
           {reportReasons.map((reason) => (
             <Radio
+              id={`${id} - ${reason.label}`}
               key={reason.value}
               label={reason.label}
               value={reason.value}
