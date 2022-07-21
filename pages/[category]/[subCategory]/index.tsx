@@ -8,25 +8,19 @@ import Icon from "components/Icon/Icon";
 import InforCard from "components/InforCard/InforCard";
 import Pagination from "components/Pagination/Pagination";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import Select from "components/Select/Select";
-import TabsHorizontal from "components/TabsHorizontal/TabsHorizontal";
 import TopSearches from "components/TopSearches/TopSearches";
 import { categories, homeBannerResponsive, inforCardList } from "constant";
 import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
 import Loader from "components/Loader/Loader";
-import useLocation from "hooks/useLocation";
 import useTrans from "hooks/useTrans";
 import { formatListingArray } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import Button from "components/Button/Button";
 import Filter, { IFilter } from "components/Filter/Filter";
-import ProductTypeApi from "services/product-type";
 
 import styles from "styles/Home.module.scss";
-import ProductBrandApi from "services/product-brand";
-import { IOption } from "type";
 
 const SubCategoryPage = (context) => {
   const { listingBanners, category, categoryLink } = context;
