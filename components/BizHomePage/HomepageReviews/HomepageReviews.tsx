@@ -104,7 +104,10 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
       );
       setSubmitResult(true)
     })
-    .catch((error) => setSubmitResult(false))
+    .catch((error) => {
+      setMessage("Oops, something wrong. Please try again later.")
+      setSubmitResult(false)
+    })
     .finally(() => {
       setShowReportModal(false)
       setShowResultModal(true)

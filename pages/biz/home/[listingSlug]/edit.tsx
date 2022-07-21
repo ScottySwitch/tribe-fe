@@ -82,6 +82,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [showResultModal, setShowResultModal] = useState<boolean>(false);
   const [submitResult, setSubmitResult] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [isReporting, setIsReporting] = useState<boolean>(false)
 
   const hasSocialLink =
     bizListing.email ||
@@ -291,6 +292,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       biz_listing: bizListing.id,
   };
 
+    setIsReporting(true)
     await ReportApi
     .createReport(body)
     .then((res) => {
@@ -299,7 +301,10 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       );
       setSubmitResult(true)
     })
-    .catch((error) => setSubmitResult(false))
+    .catch((error) => {
+      setMessage("Oops, something wrong. Please try again later.")
+      setSubmitResult(false)
+    })
     .finally(() => {
       setIsShowReportModal(false);
       setShowResultModal(true);
