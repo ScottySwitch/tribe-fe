@@ -34,9 +34,27 @@ export const curatedList = [
 ];
 
 export const locations = [
-  { label: "Singapore", value: "singapore", code: "sg" },
-  { label: "Malaysia", value: "malaysia", code: "my" },
-  { label: "Indonesia", value: "indonesia", code: "id" },
+  {
+    label: "Singapore",
+    value: "singapore",
+    code: "sg",
+    currency: "SGD",
+    max: 15000,
+  },
+  {
+    label: "Malaysia",
+    value: "malaysia",
+    code: "my",
+    currency: "MYR",
+    max: 5000,
+  },
+  {
+    label: "Indonesia",
+    value: "indonesia",
+    code: "id",
+    currency: "IDR",
+    max: 5000,
+  },
   // { label: "India", value: "india" },
   // { label: "Thailand", value: "thailand" },
 ];

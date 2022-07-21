@@ -1,7 +1,7 @@
 export enum Filters {
   SORT = "sort",
-  // RATING = "rating",
+  RATING = "rating",
   PRICE_RANGE = "price-range",
-  // OTHER = "other",
+  OTHER = "other",
   // LOCATION = "location",
 }
