@@ -344,4 +344,89 @@ const Category = (props: any) => {
   );
 };
 
+// export async function getServerSideProps(context) {
+//   // Pass data to the page via props
+//   const category = context.query.category;
+
+//   let categoryId;
+//   switch (category) {
+//     case CategoryText.BUY:
+//       categoryId = Categories.BUY;
+//       break;
+//     case CategoryText.EAT:
+//       categoryId = Categories.EAT;
+//       break;
+//     case CategoryText.SEE_AND_DO:
+//       categoryId = Categories.SEE_AND_DO;
+//       break;
+//     case CategoryText.STAY:
+//       categoryId = Categories.STAY;
+//       break;
+//     case CategoryText.TRANSPORT:
+//       categoryId = Categories.TRANSPORT;
+//       break;
+//   }
+
+//   // const data = await BizListingApi.getBizListingsByCategoryId(categoryId);
+//   const dataExclusiveDeal = await BizListingApi.getExclusiveDealByCategory(
+//     category
+//   );
+//   const dataBanners = await BannerApi.getBannerByCategory(category);
+//   const dataCollections = await CollectionApi.getCollection({
+//     category: category,
+//   });
+//   const dataCategoryLinks =
+//     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+//   console.log("dataCategoryLink", dataCategoryLinks.data.data);
+//   // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
+//   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
+//   const rawListBanners = get(dataBanners, "data.data");
+//   const rawListCollections = get(dataCollections, "data.data");
+//   const rawListCategory = get(dataCategoryLinks, "data.data");
+//   // const rawCategoryArticles = get(dataCategoryArticles, "data.data");
+
+//   const exclusiveDealListingArray = formatListingArray(
+//     rawListingExclusiveDealAray
+//   );
+
+//   const bannerArray =
+//     Array.isArray(rawListBanners) &&
+//     rawListBanners.map((item) => ({
+//       imgUrl: item.image_url,
+//       linkActive: item.link_active,
+//     }));
+//   const collectionArray =
+//     Array.isArray(rawListCollections) &&
+//     rawListCollections.map((item) => ({
+//       imgUrl: item.thumbnail || null,
+//       slug: item.slug,
+//       title: item.name,
+//     }));
+//   const categoryLinkArray =
+//     Array.isArray(rawListCategory) &&
+//     rawListCategory.map((item) => ({
+//       icon: get(item, "attributes.logo.data.attributes.url") || null,
+//       label: get(item, "attributes.label"),
+//       slug: get(item, "attributes.value"),
+//     }));
+//   // const categoryArticleArray =
+//   //   Array.isArray(rawCategoryArticles) &&
+//   //   rawCategoryArticles.map((item) => ({
+//   //     title: get(item, "attributes.name") || null,
+//   //     imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+//   //     time: get(item, "attributes.createdAt"),
+//   //     slug: get(item, "attributes.slug"),
+//   //   }));
+//   return {
+//     props: {
+//       listingExclusiveDeal: exclusiveDealListingArray,
+//       listingBanners: bannerArray,
+//       listCollections: collectionArray,
+//       listCategoryLink: categoryLinkArray,
+//       listCategoryArticles: [],
+//     },
+//   };
+// }
+
+
 export default Category;
