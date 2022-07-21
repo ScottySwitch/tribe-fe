@@ -55,7 +55,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     {
       title: "Success!",
       message:  
-        "Thank you for your report. We will review the report and take action within 24 hours.!",
+        "Thank you for your report. We will review the report and take action within 24 hours!",
       textButton: "Close",
     },
     {
