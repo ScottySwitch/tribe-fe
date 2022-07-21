@@ -51,8 +51,9 @@ const Banner = (props: BannerProps) => {
       >
         <div className="p-5">
           <Album
-            images={listingImages}
+            id="banner-album"
             key={get(listingImages, "length")}
+            images={listingImages}
             listingId={listingId}
           />
         </div>
