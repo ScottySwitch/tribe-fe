@@ -27,7 +27,7 @@ const getCategoryLinksByCategorySlug = async (category) => {
           slug: category,
         },
       },
-      populate: "*",
+      populate: ["logo"],
     },
     {
       encodeValuesOnly: true,
