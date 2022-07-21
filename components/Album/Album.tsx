@@ -36,7 +36,20 @@ export const Album = (props: AlbumProps) => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [submitResult, setSubmitResult] = useState(false);
-  const [message, setMessage] = useState<string>("");
+
+  const resultType = [
+    {
+      title: "Success!",
+      message:  
+        "Thank you for your report. We will review the report and take action within 24 hours.!",
+      textButton: "Close",
+    },
+    {
+      title: "Fail!",
+      message: "Oops, something wrong. Please try again later.",
+      textButton: "Try again",
+    },
+  ];
 
   const { user } = useContext(UserInforContext);
 
@@ -114,13 +127,9 @@ export const Album = (props: AlbumProps) => {
     await reportApi
       .createReport(body)
       .then((res) => {
-        setMessage(
-          "Thank you for your report. We will review the report and take action within 24 hours."
-        );
         setSubmitResult(true)
       })
       .catch((error) => {
-        setMessage("Oops, something wrong. Please try again later.")
         setSubmitResult(false)
       })
       .finally(() => {
@@ -220,6 +229,7 @@ export const Album = (props: AlbumProps) => {
         </div>
       </Modal>
       <ResultModal
+        resultType={resultType}
         visible={showResultModal}
         isSuccess={submitResult}
         onClose={() => setShowResultModal(false)}

@@ -6,26 +6,12 @@ import styles from "./ResultModal.module.scss";
 export interface IResultModal {
   visible: boolean;
   isSuccess: boolean;
-  message?: string;
   onClose?: () => void;
+  resultType?: any;
 }
 
 const ResultModal = (props: IResultModal) => {
-  const { visible = false, isSuccess = false, message, onClose } = props;
-
-  let resultType = [
-    {
-      title: "Thank you",
-      message: message || 
-        "Thank you for sharing your experience and helping to improve this listing!",
-      textButton: "Close",
-    },
-    {
-      title: "Uh...oh...",
-      message: message || "Something went wrong. Let’s give it another try!",
-      textButton: "Try again",
-    },
-  ];
+  const { visible = false, isSuccess = false, resultType, onClose,  } = props;
   
   return (
     <Modal

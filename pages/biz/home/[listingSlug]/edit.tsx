@@ -81,9 +81,19 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
   const [showResultModal, setShowResultModal] = useState<boolean>(false);
   const [submitResult, setSubmitResult] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [isReporting, setIsReporting] = useState<boolean>(false)
-
+  const resultType = [
+    {
+      title: "Success!",
+      message:
+        "Thank you for your report. We will review the report and take action within 24 hours.!",
+      textButton: "Close",
+    },
+    {
+      title: "Fail!",
+      message: "Oops, something wrong. Please try again later.",
+      textButton: "Try again",
+    },
+  ];
   const hasSocialLink =
     bizListing.email ||
     bizListing.website ||
@@ -290,25 +300,19 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       reason: data,
       user: userId,
       biz_listing: bizListing.id,
-  };
+    };
 
-    setIsReporting(true)
-    await ReportApi
-    .createReport(body)
-    .then((res) => {
-      setMessage(
-        "Thank you for your report. We will review the report and take action within 24 hours."
-      );
-      setSubmitResult(true)
-    })
-    .catch((error) => {
-      setMessage("Oops, something wrong. Please try again later.")
-      setSubmitResult(false)
-    })
-    .finally(() => {
-      setIsShowReportModal(false);
-      setShowResultModal(true);
-    });
+    await ReportApi.createReport(body)
+      .then((res) => {
+        setSubmitResult(true);
+      })
+      .catch((error) => {
+        setSubmitResult(false);
+      })
+      .finally(() => {
+        setIsShowReportModal(false);
+        setShowResultModal(true);
+      });
   };
 
   const handleSubmit = async () => {
@@ -657,7 +661,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               handleSubmitReportBizListing={handleSubmitReportBizListing}
             />
             <ResultModal
-              message={message}
+              resultType={resultType}
               visible={showResultModal}
               isSuccess={submitResult}
               onClose={() => setShowResultModal(false)}

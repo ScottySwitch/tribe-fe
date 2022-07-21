@@ -51,7 +51,20 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
 
   const [showResultModal, setShowResultModal] = useState<boolean>(false);
   const [submitResult, setSubmitResult] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
+  const resultType = [
+    {
+      title: "Success!",
+      message:  
+        "Thank you for your report. We will review the report and take action within 24 hours.!",
+      textButton: "Close",
+    },
+    {
+      title: "Fail!",
+      message: "Oops, something wrong. Please try again later.",
+      textButton: "Try again",
+    },
+  ];
+
 
   useEffect(() => {
     setSortingReviews(reviews);
@@ -99,13 +112,9 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     await ReportApi
     .createReport(body)
     .then((res) => {
-      setMessage(
-        "Thank you for your report. We will review the report and take action within 24 hours."
-      );
       setSubmitResult(true)
     })
     .catch((error) => {
-      setMessage("Oops, something wrong. Please try again later.")
       setSubmitResult(false)
     })
     .finally(() => {
@@ -210,7 +219,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         onSubmit={handleSubmitReportReview}
       />
       <ResultModal
-        message={message}
+        resultType={resultType}
         visible={showResultModal}
         isSuccess={submitResult}
         onClose={() => setShowResultModal(false)}
