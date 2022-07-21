@@ -148,6 +148,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
       await AuthApi.getMe();
+      localStorage.setItem("user", JSON.stringify(userInfo));
       const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
       userInfo = {
         ...userInfo,
