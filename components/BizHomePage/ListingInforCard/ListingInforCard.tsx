@@ -54,18 +54,19 @@ const ReviewsFollowers = (props: {
 
   useEffect(() => {
     if (userInfo) {
+      console.log(userInfo);
       const userFollowList = userInfo.listing_follow_ids;
       const userFavoriteList = userInfo.listing_favourite_ids;
       let checkIsFollow =
         Array.isArray(userFollowList) &&
-        userFollowList.some((item) => item === bizListing.id);
+        userFollowList.some((item) => item == bizListing.id);
       let checkIsFavourite =
         Array.isArray(userFavoriteList) &&
-        userFavoriteList.some((item) => item === bizListing.id);
+        userFavoriteList.some((item) => item == bizListing.id);
       setIsFollow(checkIsFollow);
       setIsFavourite(checkIsFavourite);
     }
-  }, []);
+  }, [userInfo]);
 
   const handleAddFollow = async () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
