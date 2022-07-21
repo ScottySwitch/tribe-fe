@@ -40,19 +40,6 @@ const ReviewsPage = () => {
   ];
 
   useEffect(() => {
-    const getBizListingCountries = async () => {
-      const data = await BizListingApi.getBizListingCountries()
-      const countries = get(data, "data.data")
-      
-      const countriesArr: any = []
-      countries.map((country) => {
-        countriesArr.push({
-          label: country,
-          value: country,
-        })
-      })
-      setLocationList(countriesArr)
-    }
     const getRandomListing = async () => {
       const result = await BizListingApi.getListingBySlug("", location, 7)
       const data = get(result, "data.data")
@@ -61,7 +48,6 @@ const ReviewsPage = () => {
     if (listingSearchResult.length === 0) {
       getRandomListing()
     }
-    getBizListingCountries().catch((e) => console.log(e))
   }, [])
 
   const handleOnLocationChange = async ({ value }: any) => {
