@@ -29,7 +29,12 @@ import useTrans from "hooks/useTrans";
 import ArticleApi from "../../services/article";
 import useLocation from "hooks/useLocation";
 import { Ilisting } from "type";
-import { formatListingArray } from "utils";
+import {
+  formatListingArray,
+  formatBizlistingArray,
+  isArray,
+  formatBanner,
+} from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 
 const Category = (props: any) => {
@@ -46,7 +51,7 @@ const Category = (props: any) => {
     listCategoryLink,
     listCategoryArticles,
   } = props;
-
+  console.log("listingBanners", listingBanners);
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
   const [loading, setLoading] = useState(true);
@@ -60,18 +65,18 @@ const Category = (props: any) => {
 
   useEffect(() => {
     const getData = async (categoryId, page) => {
-      const data = await BizListingApi.getAllBizlitingByCategorySlug(
-        location,
-        categoryId,
-        page
-      );
-      const rawListingArray = get(data, "data.data");
-      let listingArray = formatListingArray(rawListingArray);
+      const dataQuery = await BizListingApi.getListingCustom({
+        country: location,
+        categories: categoryId,
+        page: page,
+        limit: 28,
+      });
 
-      setListingArray(listingArray);
+      const listings = formatBizlistingArray(get(dataQuery, "data.data"));
+      setListingArray(listings);
       setPagination({
         ...pagination,
-        total: get(data, "data.total"),
+        total: get(dataQuery, "data.meta.pagination.total"),
       });
     };
 
@@ -157,21 +162,20 @@ const Category = (props: any) => {
           </div>
         </div>
       </SectionLayout>
-      <SectionLayout>
-        {Array.isArray(listingBanners) && listingBanners.length > 0 && (
-          <Carousel responsive={homeBannerResponsive}>
-            {listingBanners.map((img, index) => (
-              <div key={index} className={styles.banner_card}>
-                <Image
-                  alt=""
-                  layout="fill"
-                  src={img.imgUrl}
-                  objectFit="cover"
-                />
-              </div>
-            ))}
-          </Carousel>
-        )}
+      <SectionLayout show={isArray(listingBanners)}>
+        <Carousel responsive={homeBannerResponsive}>
+          {listingBanners.map((img, index) => (
+            <div key={index} className={styles.banner_card}>
+              <Image
+                layout="intrinsic"
+                src={img.imgUrl}
+                objectFit="contain"
+                width={500}
+                height={200}
+              />
+            </div>
+          ))}
+        </Carousel>
       </SectionLayout>
       <SectionLayout
         title="Explore by Top Categories"
@@ -195,7 +199,7 @@ const Category = (props: any) => {
             </div>
           ))}
       </SectionLayout>
-      {Array.isArray(listingExclusiveDeal) && listingExclusiveDeal.length > 0 && (
+      {isArray(listingExclusiveDeal) && (
         <SectionLayout title="Brands With Exclusive Deals For You">
           <Carousel responsive={infoCardResponsive}>
             {listingExclusiveDeal?.map((card) => (
@@ -208,7 +212,7 @@ const Category = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -245,7 +249,7 @@ const Category = (props: any) => {
                 rateNumber={card.rateNumber}
                 followerNumber={card.followerNumber}
                 price={card.price}
-                currency={(card.currency)?.toUpperCase()}
+                currency={card.currency?.toUpperCase()}
                 categories={card.categories}
                 description={card.description}
                 tags={card.tags}
@@ -312,67 +316,71 @@ export async function getServerSideProps(context) {
   // Pass data to the page via props
   const category = context.query.category;
 
-  let categoryId;
+  let categoryslug;
   switch (category) {
     case CategoryText.BUY:
-      categoryId = Categories.BUY;
+      categoryslug = CategoryText.BUY;
       break;
     case CategoryText.EAT:
-      categoryId = Categories.EAT;
+      categoryslug = CategoryText.EAT;
       break;
     case CategoryText.SEE_AND_DO:
-      categoryId = Categories.SEE_AND_DO;
+      categoryslug = CategoryText.SEE_AND_DO;
       break;
     case CategoryText.STAY:
-      categoryId = Categories.STAY;
+      categoryslug = CategoryText.STAY;
       break;
     case CategoryText.TRANSPORT:
-      categoryId = Categories.TRANSPORT;
+      categoryslug = CategoryText.TRANSPORT;
       break;
   }
 
-  // const data = await BizListingApi.getBizListingsByCategoryId(categoryId);
-  const dataExclusiveDeal = await BizListingApi.getExclusiveDealByCategory(
-    category
-  );
-  const dataBanners = await BannerApi.getBannerByCategory(category);
-  const dataCollections = await CollectionApi.getCollection({
-    category: category,
+  const dataExclusiveDeal = await BizListingApi.getListingCustom({
+    categories: categoryslug,
+    isExclusive: true,
+    limit: 16,
+    page: 1,
   });
-  const dataCategoryLinks =
-    await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  console.log("dataCategoryLink", dataCategoryLinks.data.data);
+  const dataBanners = await BannerApi.getBannerCustom({
+    categories: categoryslug,
+    limit: 16,
+    page: 1,
+  });
+  // const dataCollections = await CollectionApi.getCollection({
+  //   category: category,
+  // });
+  // const dataCategoryLinks =
+  //   await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
   // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
-  const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
-  const rawListBanners = get(dataBanners, "data.data");
-  const rawListCollections = get(dataCollections, "data.data");
-  const rawListCategory = get(dataCategoryLinks, "data.data");
-  // const rawCategoryArticles = get(dataCategoryArticles, "data.data");
-
-  const exclusiveDealListingArray = formatListingArray(
-    rawListingExclusiveDealAray
+  const rawListingExclusiveDealAray = formatBizlistingArray(
+    get(dataExclusiveDeal, "data.data")
   );
+  const rawListBanners = formatBanner(get(dataBanners, "data.data"));
+  console.log(rawListBanners);
+  // const rawListCollections = get(dataCollections, "data.data");
+  // const rawListCategory = get(dataCategoryLinks, "data.data");
+  // // const rawCategoryArticles = get(dataCategoryArticles, "data.data");
 
-  const bannerArray =
-    Array.isArray(rawListBanners) &&
-    rawListBanners.map((item) => ({
-      imgUrl: item.image_url,
-      linkActive: item.link_active,
-    }));
-  const collectionArray =
-    Array.isArray(rawListCollections) &&
-    rawListCollections.map((item) => ({
-      imgUrl: item.thumbnail || null,
-      slug: item.slug,
-      title: item.name,
-    }));
-  const categoryLinkArray =
-    Array.isArray(rawListCategory) &&
-    rawListCategory.map((item) => ({
-      icon: get(item, "attributes.logo.data.attributes.url") || null,
-      label: get(item, "attributes.label"),
-      slug: get(item, "attributes.value"),
-    }));
+  // const bannerArray =
+  //   Array.isArray(rawListBanners) &&
+  //   rawListBanners.map((item) => ({
+  //     imgUrl: item.image_url,
+  //     linkActive: item.link_active,
+  //   }));
+  // const collectionArray =
+  //   Array.isArray(rawListCollections) &&
+  //   rawListCollections.map((item) => ({
+  //     imgUrl: item.thumbnail || null,
+  //     slug: item.slug,
+  //     title: item.name,
+  //   }));
+  // const categoryLinkArray =
+  //   Array.isArray(rawListCategory) &&
+  //   rawListCategory.map((item) => ({
+  //     icon: get(item, "attributes.logo.data.attributes.url") || null,
+  //     label: get(item, "attributes.label"),
+  //     slug: get(item, "attributes.value"),
+  //   }));
   // const categoryArticleArray =
   //   Array.isArray(rawCategoryArticles) &&
   //   rawCategoryArticles.map((item) => ({
@@ -383,10 +391,10 @@ export async function getServerSideProps(context) {
   //   }));
   return {
     props: {
-      listingExclusiveDeal: exclusiveDealListingArray,
-      listingBanners: bannerArray,
-      listCollections: collectionArray,
-      listCategoryLink: categoryLinkArray,
+      listingExclusiveDeal: rawListingExclusiveDealAray,
+      listingBanners: rawListBanners,
+      listCollections: [],
+      listCategoryLink: [],
       listCategoryArticles: [],
     },
   };

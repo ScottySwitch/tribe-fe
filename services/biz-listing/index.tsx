@@ -1,5 +1,8 @@
+import { productTypes } from "components/AddListingPages/PageThree/constant";
 import { Categories, CategoryText } from "enums";
 import category from "services/category";
+import categoryLink from "services/category-link";
+import productType from "services/product-type";
 import Api from "../index";
 
 const qs = require("qs");
@@ -508,7 +511,103 @@ const getFavouriteDeals = async () => {
   return await Api.get(url);
 };
 
+const getListingCustom = async (data: any) => {
+  let filter: any = {};
+  let pagination: any = {};
+  if (data?.country) {
+    filter.country = data.country;
+  }
+  if (data?.categories) {
+    filter = {
+      ...filter,
+      categories: {
+        slug: data.categories,
+      },
+    };
+  }
+  if (data?.categoryLinks && data?.categoryLinks !== "all") {
+    filter = {
+      ...filter,
+      category_links: {
+        value: {
+          $in: categoryLink,
+        },
+      },
+    };
+  }
+  if (data?.productTypes) {
+    filter = {
+      ...filter,
+      product_types: {
+        value: {
+          $in: data.productTypes,
+        },
+      },
+    };
+  }
+  if (data?.productBrands) {
+    filter = {
+      ...filter,
+      product_brands: {
+        value: {
+          $in: data.productBrands,
+        },
+      },
+    };
+  }
+  if (data?.isExclusive) {
+    filter = {
+      ...filter,
+      deals: {
+        is_exclusive: true,
+        is_revision: {
+          $not: true
+        }
+      }
+    }
+  }
+
+  if (data?.limit) {
+    pagination.pageSize = data.limit;
+  }
+  if (data?.page) {
+    pagination.page = data.page;
+  }
+
+  const params = {
+    filters: {
+      ...filter,
+    },
+    pagination: {
+      ...pagination,
+    },
+    populate: {
+      user_listing_follows: {
+        id: true,
+      },
+      user_listing_favourites: {
+        id: true,
+      },
+      categories: {
+        name: true,
+      },
+      tags: {
+        id: true,
+      },
+      reviews: {
+        id: true,
+      },
+    },
+  };
+  const query = qs.stringify(params, {
+    encodeValuesOnly: true, // prettify url
+  });
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+};
+
 const bizListingApi = {
+  getListingCustom,
   getFavouriteDeals,
   getListingBySlug,
   getAllBizlitingByCategorySlug,

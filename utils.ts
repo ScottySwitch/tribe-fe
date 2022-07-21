@@ -3,6 +3,7 @@ import { IOption } from "type";
 import moment from "moment";
 import parseISO from "date-fns/parseISO";
 import { locations } from "constant";
+import { format } from "path";
 
 export const getIndex = (id, list) => {
   return list.findIndex((item) => item.id === id);
@@ -169,3 +170,42 @@ export const isEmptyObject = (item: any) => {
   }
   return false
 }
+
+export const formatBizlistingArray = (rawListing) => 
+  Array.isArray(rawListing)
+  ? rawListing.map((item) => ({
+      id: item.id,
+      images: item.attributes.images || [],
+      title: item.attributes.name,
+      slug: item.attributes.slug,
+      isVerified: item.attributes.is_verified,
+      address: item.attributes.address,
+      country: item.attributes.country,
+      description: item.attributes.description,
+      followerNumber: item.attributes.user_listing_follows.data.length,
+      tags: arrayLabeltags(item.attributes.tags.data),
+      categories: arrayLabelCategory(item.attributes.categories.data),
+      price: item.attributes.min_price || "",
+      currency: item.attributes.currency || "",
+      rate: calcRateNumber(item.attributes.tags.data),
+      rateNumber: item.attributes.tags.data.length,
+    }))
+  : [];
+
+export const formatBanner = (rawBanner) => 
+  Array.isArray(rawBanner)
+  ? rawBanner.map((item) => ({
+      imgUrl: item.attributes.image.data.attributes.url,
+      linkActive: item.attributes.link_active,
+  }))
+: [];
+
+export const arrayLabeltags = (rawTag) => 
+  Array.isArray(rawTag)
+  ? rawTag.map((item) => item.attributes.label)
+  : [];
+
+  export const arrayLabelCategory = (rawCategory) => 
+  Array.isArray(rawCategory)
+  ? rawCategory.map((item) => item.attributes.name)
+  : [];
