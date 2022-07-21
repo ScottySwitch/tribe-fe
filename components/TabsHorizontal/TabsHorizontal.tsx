@@ -1,9 +1,8 @@
 import classNames from "classnames";
-import { useRouter } from "next/router";
+import { isEqual } from "lodash";
 import React, { ReactNode, useState } from "react";
 import { useEffect } from "react";
 import styles from "./TabsHorizontal.module.scss";
-import {ProfileTabs} from "enums"
 
 export interface ITab {
   className?: string;
@@ -22,6 +21,8 @@ const TabNav = (props: ITab) => {
     currentTab,
     onSelectedTab = () => "",
   } = props;
+
+  console.log("currentTab-tabNav", currentTab);
 
   const selectedClassNames = classNames(styles.tab_nav, className, {
     [styles.selected]: currentTab === value,
@@ -58,29 +59,17 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     tablist = [],
     onCurrentTab = () => "",
   } = props;
-  const router = useRouter()
-  const { slug } = router.query
-  const [currentTab, setCurrentTab] = useState<string | number>();
+  
+  console.log("currentTab", selectedTab);
 
+  const [currentTab, setCurrentTab] = useState<string | number | undefined>(
+    selectedTab
+  );
   useEffect(() => {
-    console.log(slug)
-    switch (slug) {
-      case ProfileTabs.SAVED_DEALS:
-        setCurrentTab(ProfileTabs.SAVED_DEALS)
-        break;
-      case ProfileTabs.FAVOURITED:
-        setCurrentTab(ProfileTabs.FAVOURITED)
-        break;
-      case ProfileTabs.ABOUT:
-        setCurrentTab(ProfileTabs.ABOUT)
-        break;
-      default:
-        setCurrentTab(selectedTab || tablist[0]?.value)
-        break;
+    if (!isEqual(selectedTab, currentTab)) {
+      setCurrentTab(selectedTab);
     }
-  }, [slug])
-
-
+  }, [selectedTab]);
   const getCurrentTabIndex = tablist.findIndex(
     (item) => item.value === currentTab
   );
@@ -101,6 +90,7 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     <React.Fragment>
       <div className={`${className} ${styles.tab_container}`}>
         {tablist?.map((tab: ITab) => {
+          console.log("tab index currentTab", currentTab);
           return (
             <TabNav
               className={typeClassName}

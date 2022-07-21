@@ -65,11 +65,6 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     },
   ];
 
-
-  useEffect(() => {
-    setSortingReviews(reviews);
-  }, [reviews]);
-
   // const handleSetReplyReview = (value) => {
   //   if (value.length <= 100) {
   //     setReplyReview(value)

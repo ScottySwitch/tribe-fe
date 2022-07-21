@@ -32,7 +32,19 @@ const AddReviewPage = () => {
   const [reviews, setReviews] = useState<any>();
   const [bizListing, setBizListing] = useState<any>();
 
-  
+  const resultType = [
+    {
+      title: "Thank you",
+      message:
+        "Thank you for sharing your experience and helping to improve this listing!",
+      textButton: "Close",
+    },
+    {
+      title: "Uh...oh...",
+      message: "Something went wrong. Let’s give it another try!",
+      textButton: "Try again",
+    },
+  ];
 
   const dividerVerticalClassName = classNames({
     [styles.divider_vertical]: isRecent,
@@ -178,6 +190,7 @@ const AddReviewPage = () => {
         </SectionLayout>
 
         <ResultModal
+          resultType={resultType}
           visible={isShowResultModal}
           isSuccess={isSuccess}
           onClose={handleCloseModal}

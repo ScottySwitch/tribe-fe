@@ -25,6 +25,20 @@ const ReviewsPage = () => {
   const [listingOptions, setListingOptions] = useState<any>([])
   const [listingSearchResult, setListingSearchResult] = useState<any>([])
     
+  const resultType = [
+    {
+      title: "Thank you",
+      message:
+        "Thank you for sharing your experience and helping to improve this listing!",
+      textButton: "Close",
+    },
+    {
+      title: "Uh...oh...",
+      message: "Something went wrong. Let’s give it another try!",
+      textButton: "Try again",
+    },
+  ];
+
   useEffect(() => {
     const getBizListingCountries = async () => {
       const data = await BizListingApi.getBizListingCountries()
@@ -165,7 +179,7 @@ const ReviewsPage = () => {
         <TopSearches />
       </SectionLayout>
 
-      <ResultModal visible={isShowResultModal} isSuccess={isSuccess} onClose={handleCloseModal} />
+      <ResultModal resultType={resultType} visible={isShowResultModal} isSuccess={isSuccess} onClose={handleCloseModal} />
     </div>
   )
 }

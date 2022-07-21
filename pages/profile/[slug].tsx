@@ -98,6 +98,7 @@ const GroupHeadingTwo = (props: {
 
 const ProfilePage = () => {
   const router = useRouter();
+  const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
     email: "",
     phone_number: "",
@@ -107,14 +108,35 @@ const ProfilePage = () => {
     industry: "",
     birthday: "",
   });
+  
+  const [selectedTab, setSelectedTab] = useState<string>();
 
   useEffect(() => {
+    console.log('slug', slug)
+
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    if (!localStorage.getItem("user")) {
+
+    if (!userInfo || !userInfo?.token) {
       router.push("/");
     }
+
+    switch (slug) {
+      case ProfileTabs.SAVED_DEALS:
+        console.log("run", slug, ProfileTabs.SAVED_DEALS);
+        setSelectedTab("saved-deals");
+        break;
+      case ProfileTabs.FAVOURITED:
+        console.log("run", slug, ProfileTabs.FAVOURITED);
+        setSelectedTab(ProfileTabs.FAVOURITED);
+        break;
+      case ProfileTabs.ABOUT:
+        console.log("run", slug, ProfileTabs.ABOUT);
+        setSelectedTab(ProfileTabs.ABOUT);
+        break;
+    }
+
     setUserInfo(userInfo);
-  }, []);
+  }, [router]);
 
   const TabList: ITab[] = [
     {
@@ -161,6 +183,7 @@ const ProfilePage = () => {
           points={0}
         />
         <TabsHorizontal
+          selectedTab={selectedTab}
           tablist={TabList}
           type="secondary-no-outline"
           className={styles.profile_tab}

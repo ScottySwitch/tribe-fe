@@ -30,10 +30,7 @@ const Menu = (props: MenuMenuProps) => {
 
   const checkLogin = (href: string) => {
     onShowHamModal?.();
-    if (user && user.token) {
-      router.push(`/profile/${href}`);
-      return;
-    }
+    user && user.token ? router.push(`/profile/${href}`) : onShowAuthPopup?.()
     onShowAuthPopup?.();
   };
 

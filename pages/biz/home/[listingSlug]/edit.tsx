@@ -634,6 +634,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             </>
             <Break />
             <HomepageReviews
+              key={get(reviews, "length")}
               bizListingId={bizListing.id}
               listingSlug={listingSlug}
               listingRate={listingRate}
