@@ -4,10 +4,11 @@ import styles from "./CoverImage.module.scss";
 interface CoverImageProps {
   className?: string;
   imageUrl?: string;
+  layout?: "fixed" | "fill" | "intrinsic" | "responsive" | "raw";
 }
 
 const CoverImage = (props: CoverImageProps) => {
-  const { className = "", imageUrl } = props;
+  const { className = "", imageUrl, layout = "responsive"} = props;
 
   return (
     <div className={`${className} ${styles.container}`}>
@@ -16,9 +17,11 @@ const CoverImage = (props: CoverImageProps) => {
           src={imageUrl || "cover_default"}
           height="100%"
           width="100%"
-          layout="responsive"
+          // layout="responsive"
           alt="cover_image"
           objectFit="cover"
+          layout={layout}
+          objectPosition= 'cover'
         />
       </div>
     </div>

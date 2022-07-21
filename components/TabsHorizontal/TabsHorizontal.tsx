@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { isEqual } from "lodash";
 import React, { ReactNode, useState } from "react";
 import { useEffect } from "react";
 import styles from "./TabsHorizontal.module.scss";
@@ -57,10 +58,14 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     onCurrentTab = () => "",
   } = props;
 
-  const [currentTab, setCurrentTab] = useState<string | number>(
-    selectedTab || tablist[0]?.value
+  const [currentTab, setCurrentTab] = useState<string | number | undefined>(
+    selectedTab
   );
-
+  useEffect(() => {
+    if (!isEqual(selectedTab, currentTab)) {
+      setCurrentTab(selectedTab);
+    }
+  }, [selectedTab]);
   const getCurrentTabIndex = tablist.findIndex(
     (item) => item.value === currentTab
   );
@@ -81,6 +86,7 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     <React.Fragment>
       <div className={`${className} ${styles.tab_container}`}>
         {tablist?.map((tab: ITab) => {
+          console.log("tab index currentTab", currentTab);
           return (
             <TabNav
               className={typeClassName}

@@ -1904,7 +1904,7 @@ export const optionsReportPhoto = [
   { id: "photo-3", label: "Privacy concern" },
   { id: "photo-4", label: "Poor quality" },
   { id: "photo-5", label: "Not a photo of the place" },
-  { id: "other", label: "Other" },
+  { id: "other-photo", label: "Other" },
 ];
 
 export const optionsReportReview = [

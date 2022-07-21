@@ -139,7 +139,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
             className={`${styles.btn_cancel} text-sm font-medium no-underline`}
             width="max-content"
             onClick={() => {
-              onClose;
+              onClose && onClose();
               setIsFavourite(false);
             }}
           />
