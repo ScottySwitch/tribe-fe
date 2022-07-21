@@ -1752,12 +1752,14 @@ export const dummySavedDeals = [
       "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 17, 2022",
     type: 2,
+    startDate: "",
     favourite: true,
   },
   {
     imgUrl: "https://picsum.photos/300/600",
     title:
       "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    startDate: "",
     expiredAt: "April 17, 2022 - April 30, 2022",
     type: 2,
     favourite: true,
@@ -1767,6 +1769,7 @@ export const dummySavedDeals = [
     title:
       "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 24, 2022",
+    startDate: "",
     type: 2,
     favourite: true,
   },

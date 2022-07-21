@@ -91,21 +91,21 @@ export const calcDistanceFromNow = (time) => {
 export const formatListingArray = (rawListing) =>
   Array.isArray(rawListing)
     ? rawListing.map((item) => ({
-        images: item.images || [],
-        title: item.name,
-        slug: item.slug,
-        isVerified: item.is_verified,
-        address: item.address,
-        country: item.country,
-        description: item.description,
-        followerNumber: item.user_listing_follows.length,
-        tags: item.tags,
-        categories: item.categories,
-        price: item.min_price || "",
-        // currency: get(item, "price_range.currency") || "",
-        currency: item.currency || "",
-        rate: item.rate,
-        rateNumber: item.rate_number,
+        images: get(item,"images") || [],
+        title: get(item,"name"),
+        slug: get(item,"slug"),
+        isVerified: get(item,"is_verified"),
+        address: get(item,"address"),
+        country: get(item,"country"),
+        description: get(item,"description"),
+        followerNumber: get(item,"user_listing_follows.length"),
+        tags: get(item,"tags"),
+        categories: get(item,"categories"),
+        price: get(item,"min_price") || "",
+        // currency: get(get(item, "price_range.currency") || "",
+        currency: get(item,"currency") || "",
+        rate: get(item,"rate"),
+        rateNumber: get(item,"rate_number"),
       }))
     : [];
 
@@ -176,37 +176,37 @@ export const formatBizlistingArray = (rawListing) =>
   Array.isArray(rawListing)
   ? rawListing.map((item) => ({
       id: item.id,
-      images: item.attributes.images || [],
-      title: item.attributes.name,
-      slug: item.attributes.slug,
-      isVerified: item.attributes.is_verified,
-      address: item.attributes.address,
-      country: item.attributes.country,
-      description: item.attributes.description,
-      followerNumber: 0,
-      tags: arrayLabeltags(item.attributes.tags.data),
-      categories: arrayLabelCategory(item.attributes.categories.data),
-      price: item.attributes.min_price || "",
-      currency: item.attributes.currency || "",
-      rate: 0,
-      rateNumber: item.attributes.tags.data.length,
+      images: get(item,"attributes.images") || [],
+      title: get(item,"attributes.name"),
+      slug: get(item,"attributes.slug"),
+      isVerified: get(item,"attributes.is_verified"),
+      address: get(item,"attributes.address"),
+      country: get(item,"attributes.country"),
+      description: get(item,"attributes.description"),
+      followerNumber: get(item,"attributes.user_listing_follows"),
+      tags: arrayLabeltags(get(item,"attributes.tags.data")),
+      categories: arrayLabelCategory(get(item,"attributes.categories.data")),
+      price: get(item,"attributes.min_price") || "",
+      currency: get(item,"attributes.currency") || "",
+      rate: calcRateNumber(get(item,"attributes.tags.data.length")),
+      rateNumber: get(item,"attributes.tags.data.length"),
     }))
   : [];
 
 export const formatBanner = (rawBanner) => 
   Array.isArray(rawBanner)
   ? rawBanner.map((item) => ({
-      imgUrl: item.attributes.image.data.attributes.url,
-      linkActive: item.attributes.link_active,
+      imgUrl: get(item, 'attributes.image.data.attributes.url'),
+      linkActive: get(item, "attributes.link_active"),
   }))
 : [];
 
 export const formatCollections = (rawCollections) => 
   Array.isArray(rawCollections)
   ? rawCollections.map((item) => ({
-      imgUrl: item.attributes.thumbnail.data.attributes.url,
-      slug: item.attributes.slug,
-      title: item.attributes.name,
+      imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+      slug: get(item, "attributes.slug"),
+      title: get(item, "attributes.name"),
   }))
 : [];
 
@@ -231,10 +231,10 @@ export const formatCategoryLink = (rawCategoryLink) =>
 
 export const arrayLabeltags = (rawTag) => 
   Array.isArray(rawTag)
-  ? rawTag.map((item) => item.attributes.label)
+  ? rawTag.map((item) => get(item, "attributes.label"))
   : [];
 
 export const arrayLabelCategory = (rawCategory) => 
   Array.isArray(rawCategory)
-  ? rawCategory.map((item) => item.attributes.name)
+  ? rawCategory.map((item) => get(item, "attributes.name"))
   : [];
