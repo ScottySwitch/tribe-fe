@@ -35,7 +35,6 @@ const ListingSearchBox = (props: ListingSearchBoxProps) => {
   } = props;
 
   const { user, updateUser } = useContext(UserInforContext);
-  console.log('user',user)
   const { location } = user;
 
   return (

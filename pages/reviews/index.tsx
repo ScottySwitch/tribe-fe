@@ -14,17 +14,20 @@ import get from "lodash/get"
 import ReviewApi from "../../services/review"
 import ContributeApi from "services/contribute"
 import { UserInforContext } from "Context/UserInforContext";
+import { useDebounce } from "usehooks-ts";
+import { changeToSlugify } from "utils";
 
 
 const ReviewsPage = () => {
   const { user } = useContext(UserInforContext);
-  const { location } = user;
   const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
-  const [locationList, setLocationList] = useState<any>([])
+  const [location, setLocation] = useState();
   const [listingOptions, setListingOptions] = useState<any>([])
+  const [searchKey, setSearchKey] = useState("");
   const [listingSearchResult, setListingSearchResult] = useState<any>([])
-    
+  const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
+
   const resultType = [
     {
       title: "Thank you",
@@ -50,17 +53,18 @@ const ReviewsPage = () => {
     }
   }, [])
 
-  const handleOnLocationChange = async ({ value }: any) => {
-    const result = await BizListingApi.getBizListingByCountry(value)
-    const data = get(result, "data.data")
-    setListingOptions(data)
-  }
+  useEffect(() => {
+    const getBizListing = async () => {
+      const data = await BizListingApi.getListingBySlug(
+        debouncedSearchTerm,
+        location,
+        20
+      );
+      setListingOptions(get(data, "data.data"));
+    };
 
-  const handleOnListingSearchChange = async (option: any) => {
-    const result = await BizListingApi.getBizListingBySlug(option.attributes.slug)
-    const data = get(result, "data.data")
-    setListingSearchResult(data)
-  }
+    debouncedSearchTerm ? getBizListing() : setListingSearchResult([]);
+  }, [debouncedSearchTerm, location]);
 
   const calcRateNumber = (reviews) => {
     // TODO: rateNumber not work on FE
@@ -117,6 +121,7 @@ const ReviewsPage = () => {
           width="100%"
           height="30%"
           layout="responsive"
+          objectFit="cover"
           alt=""
         />
         <SectionLayout
@@ -126,10 +131,13 @@ const ReviewsPage = () => {
         >
           <ReviewSearchBox
             title="Review a place you've visited"
-            // locationList={locationList}
-            onLocationChange={handleOnLocationChange}
+            onListingSearchChange={(e) => {setListingSearchResult([e])}}
+            onInputChange={(e) => {
+              console.log(e)
+              setSearchKey(e)
+            }}
+            onLocationChange={(e) => setLocation(e.value)}
             listingOptions={listingOptions}
-            onListingSearchChange={handleOnListingSearchChange}
           />
         </SectionLayout>
       </div>
@@ -144,6 +152,7 @@ const ReviewsPage = () => {
           <div className="review-list">
             {listingSearchResult?.map((review) => (
               <ReviewCard
+                slug={get(review, "attributes.slug")}
                 key={review.id}
                 id={review.id}
                 title={get(review, "attributes.name")}
