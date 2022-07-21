@@ -65,7 +65,7 @@ const ReviewsPage = () => {
       setListingOptions(get(data, "data.data"));
     };
 
-    debouncedSearchTerm ? getBizListing() : setListingSearchResult([]);
+    debouncedSearchTerm ? getBizListing() : setListingOptions([]);
   }, [debouncedSearchTerm, location]);
 
   const calcRateNumber = (reviews) => {
