@@ -182,12 +182,12 @@ export const formatBizlistingArray = (rawListing) =>
       address: item.attributes.address,
       country: item.attributes.country,
       description: item.attributes.description,
-      followerNumber: item.attributes.user_listing_follows.data.length,
+      followerNumber: 0,
       tags: arrayLabeltags(item.attributes.tags.data),
       categories: arrayLabelCategory(item.attributes.categories.data),
       price: item.attributes.min_price || "",
       currency: item.attributes.currency || "",
-      rate: calcRateNumber(item.attributes.tags.data),
+      rate: 0,
       rateNumber: item.attributes.tags.data.length,
     }))
   : [];

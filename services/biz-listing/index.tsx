@@ -582,21 +582,21 @@ const getListingCustom = async (data: any) => {
       ...pagination,
     },
     populate: {
-      user_listing_follows: {
-        id: true,
-      },
-      user_listing_favourites: {
-        id: true,
-      },
+      // user_listing_follows: {
+      //   id: true,
+      // },
+      // user_listing_favourites: {
+      //   id: true,
+      // },
       categories: {
         name: true,
       },
       tags: {
         id: true,
       },
-      reviews: {
-        id: true,
-      },
+      // reviews: {
+      //   id: true,
+      // },
     },
   };
   const query = qs.stringify(params, {
