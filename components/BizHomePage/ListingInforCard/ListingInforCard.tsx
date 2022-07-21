@@ -65,7 +65,7 @@ const ReviewsFollowers = (props: {
       setIsFollow(checkIsFollow);
       setIsFavourite(checkIsFavourite);
     }
-  }, []);
+  }, [userInfo]);
 
   const handleAddFollow = async () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");

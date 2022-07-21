@@ -5,6 +5,7 @@ import parseISO from "date-fns/parseISO";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
+import Loader from "components/Loader/Loader";
 import Icon from "components/Icon/Icon";
 import Details from "components/BizHomePage/Details/Details";
 import EditAction from "components/BizHomePage/EditAction/EditAction";
@@ -85,7 +86,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     {
       title: "Success!",
       message:
-        "Thank you for your report. We will review the report and take action within 24 hours.!",
+        "Thank you for your report. We will review the report and take action within 24 hours!",
       textButton: "Close",
     },
     {
@@ -246,9 +247,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           setPhoneNumber(defaultPhone);
         }
       }
+      setIsLoading(false)
     };
 
     if (listingSlug) {
+      setIsLoading(true)
       getListingData(listingSlug);
     }
   }, [listingSlug, isViewPage]);
@@ -540,6 +543,14 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     return null;
   }
 
+  if (isLoading) {
+    return (
+      <div className="w-full flex justify-center mt-20">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.listing_homepage}>
       <SectionLayout show={screen === ListingHomePageScreens.HOME}>
@@ -555,6 +566,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           {bizListing.name}
         </div>
         <ListingInforCard
+          key={userInfo}
           isPaid={isPaid}
           isViewPage={isViewPage}
           logo={logo}

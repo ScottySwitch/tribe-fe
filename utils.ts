@@ -115,8 +115,9 @@ export const isArray = (item) => {
 
 export const changeToSlugify = (str) => {
   return str
-    .toLowerCase()
     .trim()
+    .toLowerCase()
+    .replace(" ", "-")
     .replace("'", "-")
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
