@@ -200,12 +200,40 @@ export const formatBanner = (rawBanner) =>
   }))
 : [];
 
+export const formatCollections = (rawCollections) => 
+  Array.isArray(rawCollections)
+  ? rawCollections.map((item) => ({
+      imgUrl: item.attributes.thumbnail.data.attributes.url,
+      slug: item.attributes.slug,
+      title: item.attributes.name,
+  }))
+: [];
+
+export const formatArticle = (rawArticle) => 
+  Array.isArray(rawArticle)
+  ? rawArticle.map((item) => ({
+      title: get(item, "attributes.name") || null,
+      imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+      time: get(item, "attributes.createdAt"),
+      slug: get(item, "attributes.slug"),
+  }))
+: [];
+
+export const formatCategoryLink = (rawCategoryLink) => 
+  Array.isArray(rawCategoryLink)
+  ? rawCategoryLink.map((item) => ({
+    icon: get(item, "attributes.logo.data.attributes.url") || null,
+    label: get(item, "attributes.label"),
+    slug: get(item, "attributes.value"),
+  }))
+: [];
+
 export const arrayLabeltags = (rawTag) => 
   Array.isArray(rawTag)
   ? rawTag.map((item) => item.attributes.label)
   : [];
 
-  export const arrayLabelCategory = (rawCategory) => 
+export const arrayLabelCategory = (rawCategory) => 
   Array.isArray(rawCategory)
   ? rawCategory.map((item) => item.attributes.name)
   : [];

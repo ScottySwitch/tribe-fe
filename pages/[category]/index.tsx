@@ -34,6 +34,9 @@ import {
   formatBizlistingArray,
   isArray,
   formatBanner,
+  formatCollections,
+  formatArticle,
+  formatCategoryLink
 } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 
@@ -51,7 +54,6 @@ const Category = (props: any) => {
     listCategoryLink,
     listCategoryArticles,
   } = props;
-  console.log("listingBanners", listingBanners);
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
   const [loading, setLoading] = useState(true);
@@ -78,6 +80,7 @@ const Category = (props: any) => {
         ...pagination,
         total: get(dataQuery, "data.meta.pagination.total"),
       });
+      setLoading(false)
     };
 
     let defaultCategoryInfor = {};
@@ -123,7 +126,6 @@ const Category = (props: any) => {
     }
 
     setCategoryInfor(defaultCategoryInfor);
-    setLoading(false);
     location && getData(category, pagination.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, category, location]);
@@ -338,63 +340,40 @@ export async function getServerSideProps(context) {
   const dataExclusiveDeal = await BizListingApi.getListingCustom({
     categories: categoryslug,
     isExclusive: true,
-    limit: 16,
+    limit: 12,
     page: 1,
   });
   const dataBanners = await BannerApi.getBannerCustom({
     categories: categoryslug,
-    limit: 16,
+    limit: 12,
     page: 1,
   });
-  // const dataCollections = await CollectionApi.getCollection({
-  //   category: category,
+  const dataCollections = await CollectionApi.getCollectionCustom({
+    categories: category,
+    page: 1,
+    limit: 12,
+  });
+  const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+  // const dataCategoryArticles = await ArticleApi.getArticleCustomer({
+  //   categories: category,
+  //   page: 1,
+  //   limit: 16,
   // });
-  // const dataCategoryLinks =
-  //   await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
   const rawListingExclusiveDealAray = formatBizlistingArray(
     get(dataExclusiveDeal, "data.data")
   );
   const rawListBanners = formatBanner(get(dataBanners, "data.data"));
-  console.log(rawListBanners);
-  // const rawListCollections = get(dataCollections, "data.data");
-  // const rawListCategory = get(dataCategoryLinks, "data.data");
-  // // const rawCategoryArticles = get(dataCategoryArticles, "data.data");
-
-  // const bannerArray =
-  //   Array.isArray(rawListBanners) &&
-  //   rawListBanners.map((item) => ({
-  //     imgUrl: item.image_url,
-  //     linkActive: item.link_active,
-  //   }));
-  // const collectionArray =
-  //   Array.isArray(rawListCollections) &&
-  //   rawListCollections.map((item) => ({
-  //     imgUrl: item.thumbnail || null,
-  //     slug: item.slug,
-  //     title: item.name,
-  //   }));
-  // const categoryLinkArray =
-  //   Array.isArray(rawListCategory) &&
-  //   rawListCategory.map((item) => ({
-  //     icon: get(item, "attributes.logo.data.attributes.url") || null,
-  //     label: get(item, "attributes.label"),
-  //     slug: get(item, "attributes.value"),
-  //   }));
-  // const categoryArticleArray =
-  //   Array.isArray(rawCategoryArticles) &&
-  //   rawCategoryArticles.map((item) => ({
-  //     title: get(item, "attributes.name") || null,
-  //     imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
-  //     time: get(item, "attributes.createdAt"),
-  //     slug: get(item, "attributes.slug"),
-  //   }));
+  const rawListCollections = formatCollections(
+    get(dataCollections, "data.data")
+  );
+  const rawListCategory = formatCategoryLink(get(dataCategoryLinks, "data.data"));
+  // const rawCategoryArticles = formatArticle(get(dataCategoryArticles, "data.data"))
   return {
     props: {
       listingExclusiveDeal: rawListingExclusiveDealAray,
       listingBanners: rawListBanners,
-      listCollections: [],
-      listCategoryLink: [],
+      listCollections: rawListCollections,
+      listCategoryLink: rawListCategory,
       listCategoryArticles: [],
     },
   };
