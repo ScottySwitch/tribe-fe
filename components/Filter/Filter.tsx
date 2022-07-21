@@ -11,7 +11,7 @@ import Tabs from "components/Tabs/Tabs";
 import { Filters } from "./enums";
 import styles from "./Filter.module.scss";
 import { UserInforContext } from "Context/UserInforContext";
-import { locations } from "constant";
+import { categories, locations } from "constant";
 import { isArray } from "lodash";
 
 const sortList = [
@@ -85,7 +85,7 @@ const Other = ({ productTypes }: { productTypes?: any[] }) => (
   </>
 );
 
-const Location = () => (
+const OtherOther = () => (
   <div>
     <Input
       size="large"
@@ -96,11 +96,13 @@ const Location = () => (
 );
 
 export interface FilterProps extends ModalProps {
+  finalTabLabel?: string;
+  finalTabList?: any[];
   otherList?: any[];
 }
 
 const Filter = (props: FilterProps) => {
-  const { visible, otherList, onClose } = props;
+  const { visible, otherList, finalTabLabel, finalTabList, onClose } = props;
 
   const tabList = [
     { label: "Sort", value: Filters.SORT, content: <Sort /> },
@@ -115,7 +117,11 @@ const Filter = (props: FilterProps) => {
       value: Filters.OTHER,
       content: <Other productTypes={otherList} />,
     },
-    // { label: "Location", value: Filters.LOCATION, content: <Location /> },
+    {
+      label: finalTabLabel,
+      value: Filters.OTHER_OTHER,
+      content: <Other productTypes={finalTabList} />,
+    },
   ];
 
   return (

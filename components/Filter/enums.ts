@@ -3,5 +3,5 @@ export enum Filters {
   RATING = "rating",
   PRICE_RANGE = "price-range",
   OTHER = "other",
-  // LOCATION = "location",
+  OTHER_OTHER = "other-other",
 }

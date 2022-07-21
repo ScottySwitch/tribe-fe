@@ -979,6 +979,7 @@ export const categories = [
     description: "Explore stores to shop",
     value: Categories.BUY,
     slug: CategoryText.BUY,
+    finalTabLabel: "Product categories",
     options: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Coffee & Tea", value: "coffee-tea" },
@@ -994,6 +995,7 @@ export const categories = [
     label: "Eat",
     value: Categories.EAT,
     slug: CategoryText.EAT,
+    finalTabLabel: "Neighbourhoods",
     options: [
       { label: "Quick bites", value: "quick-bites" },
       { label: "Restaurant", value: "restaurant" },
@@ -1009,6 +1011,7 @@ export const categories = [
     description: "Discover things to do",
     value: Categories.SEE_AND_DO,
     slug: CategoryText.SEE_AND_DO,
+    finalTabLabel: "Suitable For",
     options: [
       { label: "Coffee & Tea", value: "coffee-tea" },
       { label: "Restaurant", value: "restaurant" },
@@ -1039,6 +1042,7 @@ export const categories = [
     label: "Stay",
     value: Categories.STAY,
     slug: CategoryText.STAY,
+    finalTabLabel: "Stars",
     options: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Quick bites", value: "quick-bites" },

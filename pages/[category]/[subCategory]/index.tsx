@@ -11,7 +11,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import Select from "components/Select/Select";
 import TabsHorizontal from "components/TabsHorizontal/TabsHorizontal";
 import TopSearches from "components/TopSearches/TopSearches";
-import { homeBannerResponsive, inforCardList } from "constant";
+import { categories, homeBannerResponsive, inforCardList } from "constant";
 import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
@@ -27,15 +27,12 @@ import Filter from "components/Filter/Filter";
 import ProductTypeApi from "services/product-type";
 
 const SubCategoryPage = (props: any) => {
-  const { bizListings, listingBanners, categoryLink, listCategoryLink } = props;
+  const { listingBanners, category, categoryLink } = props;
 
   const trans = useTrans();
   const router = useRouter();
   const { user } = useContext(UserInforContext);
   const { location } = user;
-
-  const { query } = router;
-  const { category, subCategory }: any = query;
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
@@ -44,6 +41,12 @@ const SubCategoryPage = (props: any) => {
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [showFilter, setShowFilter] = useState(false);
   const [productTypes, setProductTypes] = useState<any[]>([]);
+
+  const finalTabLabel = categories.find(
+    (cat) => cat.slug === category
+  )?.finalTabLabel;
+
+  console.log(categories, finalTabLabel);
 
   useEffect(() => {
     const getProductTypes = async () => {
@@ -55,7 +58,6 @@ const SubCategoryPage = (props: any) => {
         label: item.attributes.label,
         value: item.attributes.value,
       }));
-      console.log("formatProductTypes", formatProductTypes, rawProductTypes);
       setProductTypes(formatProductTypes);
     };
 
@@ -103,7 +105,7 @@ const SubCategoryPage = (props: any) => {
           Home <Icon icon="carret-right" size={14} color="#7F859F" />
           {category}
           <Icon icon="carret-right" size={14} color="#7F859F" />
-          {subCategory}
+          {categoryLink}
         </div>
         {isArray(listingBanners) && (
           <Carousel responsive={homeBannerResponsive}>
@@ -169,6 +171,8 @@ const SubCategoryPage = (props: any) => {
           onClose={() => setShowFilter(false)}
           visible={showFilter}
           otherList={productTypes}
+          finalTabList={[]}
+          finalTabLabel={finalTabLabel}
         />
       </SectionLayout>
     </div>
@@ -197,6 +201,7 @@ export async function getServerSideProps(context) {
       imgUrl: item.image_url,
       linkActive: item.link_active,
     }));
+  console.log(listBannerArray);
   let arrayRawListCategoryLink =
     Array.isArray(rawListCategory) &&
     rawListCategory.map((item) => ({
