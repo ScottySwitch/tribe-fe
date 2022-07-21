@@ -39,6 +39,7 @@ import {
   formatCategoryLink
 } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
+import ProductApi from "services/product-type"
 
 const Category = (props: any) => {
   const trans = useTrans();
@@ -46,41 +47,78 @@ const Category = (props: any) => {
   const {
     query: { category },
   } = router;
-  const {
-    // listingArray,
-    listingExclusiveDeal,
-    listingBanners,
-    listCollections,
-    listCategoryLink,
-    listCategoryArticles,
-  } = props;
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
   const [categoryInfor, setCategoryInfor] = useState<Ilisting>({});
-  const [listingArray, setListingArray] = useState<{ [key: string]: any }[]>(
-    []
-  );
+  const [listingArray, setListingArray] = useState<{ [key: string]: any }[]>([]);
+  const [bannerArray, setBannergArray] = useState<{ [key: string]: any }[]>([]);
+  const [collectionArray, setCollectionArray] = useState<{ [key: string]: any }[]>([]);
+  const [articleArray, setArticleArray] = useState<{ [key: string]: any }[]>([]);
+  const [dealArray, setDealArray] = useState<{ [key: string]: any }[]>([]);
+  const [categoryLinkArray, setCategoryLinkArray] = useState<{ [key: string]: any }[]>([]);
   const { user } = useContext(UserInforContext);
   const { location } = user;
 
   useEffect(() => {
     const getData = async (categoryId, page) => {
+      const data = await ProductApi.getProductTypeByCategoryLinkSlug('dessert')
+
       const dataQuery = await BizListingApi.getListingCustom({
         country: location,
         categories: categoryId,
         page: page,
         limit: 28,
       });
-
       const listings = formatBizlistingArray(get(dataQuery, "data.data"));
       setListingArray(listings);
       setPagination({
         ...pagination,
         total: get(dataQuery, "data.meta.pagination.total"),
       });
-      setLoading(false)
+
+      const dataExclusiveDeal = await BizListingApi.getListingCustom({
+        categories: categoryId,
+        isExclusive: true,
+        limit: 12,
+        page: 1,
+      });
+      const rawListingExclusiveDealAray = formatBizlistingArray(
+        get(dataExclusiveDeal, "data.data")
+      );
+      setDealArray(rawListingExclusiveDealAray)
+
+      const dataBanners = await BannerApi.getBannerCustom({
+        categories: categoryId,
+        limit: 12,
+        page: 1,
+      });
+      const rawListBanners = formatBanner(get(dataBanners, "data.data"));
+      setBannergArray(rawListBanners)
+
+      const dataCollections = await CollectionApi.getCollectionCustom({
+        categories: category,
+        page: 1,
+        limit: 12,
+      });
+      const rawListCollections = formatCollections(
+        get(dataCollections, "data.data")
+      );
+      setCollectionArray(rawListCollections)
+
+      const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+      const rawListCategoryLink = formatCategoryLink(get(dataCategoryLinks, "data.data"));
+      setCategoryLinkArray(rawListCategoryLink)
+
+      const dataArticles = await ArticleApi.getArticleCustomer({
+        categories: category,
+        page: 1,
+        limit: 16,
+      });
+      const rawArticle = formatArticle(get(dataArticles, "data.data"))
+      setArticleArray(rawArticle)
+      // setLoading(false)
     };
 
     let defaultCategoryInfor = {};
@@ -135,14 +173,6 @@ const Category = (props: any) => {
       pathname: `${category}/${slug}`,
     });
 
-  if (loading) {
-    return (
-      <SectionLayout childrenClassName="flex justify-center">
-        <Loader />
-      </SectionLayout>
-    );
-  }
-
   return (
     <div>
       <SectionLayout className={styles.collection_banner}>
@@ -164,9 +194,9 @@ const Category = (props: any) => {
           </div>
         </div>
       </SectionLayout>
-      <SectionLayout show={isArray(listingBanners)}>
+      <SectionLayout show={isArray(bannerArray)}>
         <Carousel responsive={homeBannerResponsive}>
-          {listingBanners.map((img, index) => (
+          {bannerArray.map((img, index) => (
             <div key={index} className={styles.banner_card}>
               <Image
                 layout="intrinsic"
@@ -183,8 +213,8 @@ const Category = (props: any) => {
         title="Explore by Top Categories"
         childrenClassName="flex gap-y-[20px] gap-x-[50px] flex-wrap"
       >
-        {Array.isArray(listCategoryLink) &&
-          listCategoryLink.map((item, index) => (
+        {Array.isArray(categoryLinkArray) &&
+          categoryLinkArray.map((item, index) => (
             <div
               key={index}
               className={styles.sub_category}
@@ -201,10 +231,10 @@ const Category = (props: any) => {
             </div>
           ))}
       </SectionLayout>
-      {isArray(listingExclusiveDeal) && (
+      {isArray(dealArray) && (
         <SectionLayout title="Brands With Exclusive Deals For You">
           <Carousel responsive={infoCardResponsive}>
-            {listingExclusiveDeal?.map((card) => (
+            {dealArray?.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={card.images[0]}
@@ -225,10 +255,10 @@ const Category = (props: any) => {
           </Carousel>
         </SectionLayout>
       )}
-      {Array.isArray(listCollections) && listCollections.length > 0 && (
+      {Array.isArray(collectionArray) && collectionArray.length > 0 && (
         <SectionLayout backgroundColor title="Specially Curated For You">
           <Carousel responsive={homeCuratedResponsive}>
-            {listCollections?.map((item, index) => (
+            {collectionArray?.map((item, index) => (
               <div key={index} className="pb-5 pt-3 pl-3">
                 <CollectionCard
                   slug={item.slug}
@@ -273,10 +303,10 @@ const Category = (props: any) => {
       {/* <SectionLayout childrenClassName="flex justify-center">
         <Button variant="outlined" text="Load more" width={400} />
       </SectionLayout> */}
-      {Array.isArray(listCategoryArticles) && listCategoryArticles.length > 0 && (
+      {Array.isArray(articleArray) && articleArray.length > 0 && (
         <SectionLayout backgroundColor title="Articles">
           <Carousel responsive={homeCuratedResponsive}>
-            {listCategoryArticles?.map((item, index) => (
+            {articleArray?.map((item, index) => (
               <Link href={`/articles/${item.slug}`} passHref key={index}>
                 <div className="pb-5 pt-3 pl-3">
                   <ArticleCard
@@ -313,70 +343,5 @@ const Category = (props: any) => {
     </div>
   );
 };
-
-export async function getServerSideProps(context) {
-  // Pass data to the page via props
-  const category = context.query.category;
-
-  let categoryslug;
-  switch (category) {
-    case CategoryText.BUY:
-      categoryslug = CategoryText.BUY;
-      break;
-    case CategoryText.EAT:
-      categoryslug = CategoryText.EAT;
-      break;
-    case CategoryText.SEE_AND_DO:
-      categoryslug = CategoryText.SEE_AND_DO;
-      break;
-    case CategoryText.STAY:
-      categoryslug = CategoryText.STAY;
-      break;
-    case CategoryText.TRANSPORT:
-      categoryslug = CategoryText.TRANSPORT;
-      break;
-  }
-
-  const dataExclusiveDeal = await BizListingApi.getListingCustom({
-    categories: categoryslug,
-    isExclusive: true,
-    limit: 12,
-    page: 1,
-  });
-  const dataBanners = await BannerApi.getBannerCustom({
-    categories: categoryslug,
-    limit: 12,
-    page: 1,
-  });
-  const dataCollections = await CollectionApi.getCollectionCustom({
-    categories: category,
-    page: 1,
-    limit: 12,
-  });
-  const dataCategoryLinks = await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  // const dataCategoryArticles = await ArticleApi.getArticleCustomer({
-  //   categories: category,
-  //   page: 1,
-  //   limit: 16,
-  // });
-  const rawListingExclusiveDealAray = formatBizlistingArray(
-    get(dataExclusiveDeal, "data.data")
-  );
-  const rawListBanners = formatBanner(get(dataBanners, "data.data"));
-  const rawListCollections = formatCollections(
-    get(dataCollections, "data.data")
-  );
-  const rawListCategory = formatCategoryLink(get(dataCategoryLinks, "data.data"));
-  // const rawCategoryArticles = formatArticle(get(dataCategoryArticles, "data.data"))
-  return {
-    props: {
-      listingExclusiveDeal: rawListingExclusiveDealAray,
-      listingBanners: rawListBanners,
-      listCollections: rawListCollections,
-      listCategoryLink: rawListCategory,
-      listCategoryArticles: [],
-    },
-  };
-}
 
 export default Category;
