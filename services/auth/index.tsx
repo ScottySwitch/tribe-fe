@@ -9,7 +9,6 @@ import {
   AuthForgetPasswordByPhone,
 } from "../../types/auth";
 import { UsersTypes } from "../../enums";
-import { userInfo } from "os";
 const qs = require("qs");
 
 const signUpByEmail = async (params: AuthEmailPayload) => {

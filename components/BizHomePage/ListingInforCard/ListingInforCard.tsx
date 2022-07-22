@@ -1,6 +1,6 @@
 import { get, isArray } from "lodash";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import classNames from "classnames";
 
 import Button from "components/Button/Button";
@@ -9,6 +9,7 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Upload from "components/Upload/Upload";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import { UserInforContext } from "Context/UserInforContext";
 
 import UserFollowApi from "services/user-listing-follow";
 import UserFavouriteApi from "services/user-listing-favourite";
@@ -45,17 +46,21 @@ const ReviewsFollowers = (props: {
     styles.reviews_followers_container,
     className
   );
+  const { user } = useContext(UserInforContext);
+  const {listing_follow_ids, listing_favourite_ids} = user
+
   const bizListingReviewCount = get(bizListing, "reviews.length") || 0;
   const bizListingFollowerCount =
     get(bizListing, "user_listing_follows.length") || 0;
   const [isFollow, setIsFollow] = useState<boolean>(false);
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
+    console.log('user', user)
 
   useEffect(() => {
-    if (userInfo) {
-      const userFollowList = userInfo.listing_follow_ids;
-      const userFavoriteList = userInfo.listing_favourite_ids;
+    if (user) {
+      const userFollowList = listing_follow_ids;
+      const userFavoriteList = listing_favourite_ids;
       let checkIsFollow =
         Array.isArray(userFollowList) &&
         userFollowList.some((item) => item === bizListing.id);
@@ -65,7 +70,7 @@ const ReviewsFollowers = (props: {
       setIsFollow(checkIsFollow);
       setIsFavourite(checkIsFavourite);
     }
-  }, [userInfo]);
+  }, [user]);
 
   const handleAddFollow = async () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");

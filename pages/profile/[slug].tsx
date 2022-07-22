@@ -7,6 +7,7 @@ import CoverImage from "components/UserProfilePage/CoverImage/CoverImage";
 import PanelAbout, {
   UserPropsData,
 } from "components/UserProfilePage/PanelAbout/PanelAbout";
+import { UserInforContext } from "Context/UserInforContext";
 import ContributedPanel from "components/UserProfilePage/PanelContributed/PanelContributed";
 import FavouriedPanel from "components/UserProfilePage/PanelFavouried/PanelFavouried";
 import SavedDealsPanel from "components/UserProfilePage/PanelSavedDeals/PanelSavedDeals";
@@ -23,8 +24,6 @@ import Router, { useRouter } from "next/router";
 import React, { useEffect, useState, useContext } from "react";
 import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
-import { userInfo } from "os";
-import { UserInforContext } from "Context/UserInforContext";
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props;
@@ -98,6 +97,9 @@ const GroupHeadingTwo = (props: {
 };
 
 const ProfilePage = () => {
+  const { user } = useContext(UserInforContext);
+  console.log('user', user)
+  const {listing_follow_ids, listing_favourite_ids} = user
   const router = useRouter();
   const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
@@ -122,15 +124,12 @@ const ProfilePage = () => {
 
     switch (slug) {
       case ProfileTabs.SAVED_DEALS:
-        console.log("run", slug, ProfileTabs.SAVED_DEALS);
-        setSelectedTab("saved-deals");
+        setSelectedTab(ProfileTabs.SAVED_DEALS);
         break;
       case ProfileTabs.FAVOURITED:
-        console.log("run", slug, ProfileTabs.FAVOURITED);
         setSelectedTab(ProfileTabs.FAVOURITED);
         break;
       case ProfileTabs.ABOUT:
-        console.log("run", slug, ProfileTabs.ABOUT);
         setSelectedTab(ProfileTabs.ABOUT);
         break;
     }
@@ -179,7 +178,7 @@ const ProfilePage = () => {
         />
         <GroupHeadingTwo
           contributions={0}
-          following={get(userInfor, "user_listing_follows.length")}
+          following={get(listing_follow_ids, "length")}
           points={0}
         />
         <TabsHorizontal
