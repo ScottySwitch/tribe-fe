@@ -40,7 +40,6 @@ export const UserInforProvider = ({ children }) => {
         // first_name: localLoginInfo.first_name,
         last_name: localLoginInfo.last_name,
         avatar: localLoginInfo.avatar,
-        listing_follow_ids: localLoginInfo.listing_follow_ids,
       });
     };
     setDefaulUserInfor();
