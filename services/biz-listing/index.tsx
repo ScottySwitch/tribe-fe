@@ -228,6 +228,7 @@ const getOwnerListingRoleByUserId = async (userId: any) => {
 };
 
 const getBizListingBySlug = async (bizListingSlug: any) => {
+  console.log('dwwd')
   const query = qs.stringify(
     {
       filters: {
@@ -414,11 +415,16 @@ const checkListingHaveOwner = async (bizListingSlug: any) => {
   return await Api.get(url);
 };
 
-const getBizListingForYou = async (limit) => {
+const getBizListingForYou = async (params: any) => {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+  const getParams = {
+    userId: userInfo.id,
+    limit: params.limit,
+    country: params?.country,
+  };
   if (userInfo.id) {
-    const url = `/api/biz-listings/bizlisting-for-you/?userId=${userInfo.id}&limit=${limit}`;
-    return await Api.get(url);
+    const url = `/api/biz-listings/bizlisting-for-you/`;
+    return await Api.get(url, { params: getParams });
   }
 };
 
