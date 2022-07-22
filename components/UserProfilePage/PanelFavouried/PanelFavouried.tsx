@@ -17,7 +17,6 @@ const ListCard = (props: {
 }) => {
   const { data, onRemoveFavourite } = props;
   const router = useRouter();
-  console.log('data', data)
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
       {Array.isArray(data) &&

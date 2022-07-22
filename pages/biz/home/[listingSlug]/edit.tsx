@@ -594,8 +594,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             />
           </div>
           <div className={styles.left_col}>
-            <Break show={!isViewPage} />
-            {!isViewPage && <OnboardChecklist />}
+            {/* <Break show={!isViewPage} /> */}
+            {/* {!isViewPage && <OnboardChecklist />} */}
             <Break show={!isViewPage} />
             <Details
               isViewPage={isViewPage}

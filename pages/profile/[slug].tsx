@@ -7,6 +7,8 @@ import CoverImage from "components/UserProfilePage/CoverImage/CoverImage";
 import PanelAbout, {
   UserPropsData,
 } from "components/UserProfilePage/PanelAbout/PanelAbout";
+import { useContext } from "react";
+import { UserInforContext } from "Context/UserInforContext";
 import ContributedPanel from "components/UserProfilePage/PanelContributed/PanelContributed";
 import FavouriedPanel from "components/UserProfilePage/PanelFavouried/PanelFavouried";
 import SavedDealsPanel from "components/UserProfilePage/PanelSavedDeals/PanelSavedDeals";
@@ -97,6 +99,9 @@ const GroupHeadingTwo = (props: {
 };
 
 const ProfilePage = () => {
+  const { user } = useContext(UserInforContext);
+  console.log('user', user)
+  const {listing_follow_ids, listing_favourite_ids} = user
   const router = useRouter();
   const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
@@ -112,7 +117,6 @@ const ProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState<string>();
 
   useEffect(() => {
-    console.log('slug', slug)
 
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -122,15 +126,12 @@ const ProfilePage = () => {
 
     switch (slug) {
       case ProfileTabs.SAVED_DEALS:
-        console.log("run", slug, ProfileTabs.SAVED_DEALS);
-        setSelectedTab("saved-deals");
+        setSelectedTab(ProfileTabs.SAVED_DEALS);
         break;
       case ProfileTabs.FAVOURITED:
-        console.log("run", slug, ProfileTabs.FAVOURITED);
         setSelectedTab(ProfileTabs.FAVOURITED);
         break;
       case ProfileTabs.ABOUT:
-        console.log("run", slug, ProfileTabs.ABOUT);
         setSelectedTab(ProfileTabs.ABOUT);
         break;
     }
@@ -179,7 +180,7 @@ const ProfilePage = () => {
         />
         <GroupHeadingTwo
           contributions={0}
-          following={get(userInfor, "user_listing_follows.length")}
+          following={get(listing_follow_ids, "length")}
           points={0}
         />
         <TabsHorizontal
