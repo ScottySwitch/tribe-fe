@@ -7,7 +7,6 @@ import CoverImage from "components/UserProfilePage/CoverImage/CoverImage";
 import PanelAbout, {
   UserPropsData,
 } from "components/UserProfilePage/PanelAbout/PanelAbout";
-import { useContext } from "react";
 import { UserInforContext } from "Context/UserInforContext";
 import ContributedPanel from "components/UserProfilePage/PanelContributed/PanelContributed";
 import FavouriedPanel from "components/UserProfilePage/PanelFavouried/PanelFavouried";
@@ -22,7 +21,7 @@ import {
 import { ProfileTabs } from "enums";
 import Image from "next/image";
 import Router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
 

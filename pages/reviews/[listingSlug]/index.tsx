@@ -76,6 +76,7 @@ const AddReviewPage = () => {
 
   const handleCloseModal = () => {
     setIsShowResultModal(false);
+    router.push(`/biz/home/${listingSlug}`)
   };
 
   const handleSubmit = async (dataSend) => {

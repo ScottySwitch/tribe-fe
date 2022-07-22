@@ -161,6 +161,18 @@
   }
 }
 
+@media screen and (max-width: 1400px) {
+  .infor_card {
+    width: 245px;
+  }
+}
+
+@media screen and (max-width: 1315px) {
+  .infor_card {
+    width: 235px;
+  }
+}
+
 @media screen and (max-width: $big-tablet) {
   .infor_card {
     width: 220px;
