@@ -19,10 +19,10 @@ import {
 import CategoryApi from "services/category";
 import "../styles/globals.css";
 import { locations } from "constant";
-import { getBrowserLocation } from "utils";
 
 import styles from "styles/App.module.scss";
 import Toast from "components/Toast/Toast";
+import Button from "components/Button/Button";
 
 export type ILoginInfor = {
   token?: string;
@@ -54,24 +54,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [navList, setNavList] = useState<{ [key: string]: any }[]>([]);
 
-  const { updateUser } = useContext(UserInforContext);
-
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
-    const localLocation = localLoginInfo.location;
-
-    ///get location
-    const setDefaultLocation = async () => {
-      const browserLocation = await getBrowserLocation();
-      updateUser({
-        location: localLocation || browserLocation || locations[0].value,
-        token: localLoginInfo.token,
-        first_name: localLoginInfo.first_name,
-        last_name: localLoginInfo.last_name,
-        avatar: localLoginInfo.avatar,
-      });
-    };
 
     const getMenuList = async () => {
       const dataCategories = await CategoryApi.getItemCategory();
@@ -97,11 +82,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       setNavList(categoryArray);
     };
 
+    window.scrollTo(0, 0);
     setIsMobile(screen.width < 501);
     setLoginInfo(localLoginInfo.token ? localLoginInfo : {});
     setShowAuthPopup(!localLoginInfo.token);
     getMenuList();
-    setDefaultLocation();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -125,24 +110,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       return () => window.removeEventListener("scroll", handleScroll);
     }
   }, [showHamModal, isAuthPage]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    const getMe = async () => {
-      await AuthApi.getMe();
-      const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
-      userInfo = {
-        ...userInfo,
-        owner_listings: dataOwnerListing.data.data,
-      };
-      localStorage.setItem("user", JSON.stringify(userInfo));
-    };
-
-    userInfo && userInfo.token && getMe().catch((e) => console.log(e));
-    //scroll to top
-    window.scrollTo(0, 0);
-  }, [router]);
 
   return (
     <UserInforProvider>
