@@ -15,6 +15,7 @@ import styles from "./Header.module.scss";
 import AuthApi from "services/auth";
 import bizListingApi from "services/biz-listing";
 import { UserInforContext } from "Context/UserInforContext";
+import { isArray } from "lodash";
 
 export const Categories = (props: {
   currentCategory?: string;
@@ -71,20 +72,12 @@ export const ContributeContent = () => {
 };
 
 export const SwitchAccountsContent = () => {
-  const [ownerListing, setOwnerListing] = useState<any[]>([]);
-  const [userInfor, setUserInfor] = useState<any>({});
   const router = useRouter();
-  const { user } = useContext(UserInforContext);
+  const { user, updateUser } = useContext(UserInforContext);
 
-  console.log(user);
-
-  useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    const userOwnerListing = userInfo.owner_listings || [];
-    const ownerListing = userOwnerListing.map((item) => item.attributes);
-    setUserInfor(userInfo);
-    setOwnerListing(ownerListing);
-  }, [router.pathname]);
+  const ownerListing = isArray(get(user, "owner_listings"))
+    ? get(user, "owner_listings").map((item) => item.attributes)
+    : [];
 
   const { query } = router;
   const { listingSlug } = query;
@@ -93,13 +86,19 @@ export const SwitchAccountsContent = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.type = UsersTypes.NORMAL_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    await router.push("/");
-    router.reload();
+    updateUser({
+      avatar: user.user_avatar,
+      current_listing_slug: undefined,
+    });
+    window.location.href = "/";
   };
 
-  const handleGotoOwnedListing = async (item) => {
-    await router.push(`/biz/home/${item.slug}/edit`);
-    router.reload();
+  const handleSwitchListing = async (item) => {
+    updateUser({
+      avatar: get(item, "logo[0]"),
+      current_listing_slug: get(item, "slug"),
+    });
+    router.push(`/biz/home/${item.slug}/edit`);
   };
 
   return (
@@ -108,7 +107,7 @@ export const SwitchAccountsContent = () => {
         <div
           key={item.name}
           className={`${styles.wrapper_content} flex gap-3 cursor-pointer`}
-          onClick={() => handleGotoOwnedListing(item)}
+          onClick={() => handleSwitchListing(item)}
         >
           <Image
             src={
@@ -132,7 +131,7 @@ export const SwitchAccountsContent = () => {
         onClick={handleSwitchToNormalUser}
       >
         <Image
-          src={userInfor.avatar || require("public/images/avatar.png")}
+          src={user.user_avatar || require("public/images/avatar.png")}
           alt=""
           width={30}
           height={30}
@@ -140,7 +139,7 @@ export const SwitchAccountsContent = () => {
         />
         <div>
           <strong>
-            {userInfor.first_name} {userInfor.last_name}
+            {user.first_name} {user.last_name}
           </strong>
           <p className="text-xs">User account</p>
         </div>
@@ -152,22 +151,32 @@ export const SwitchAccountsContent = () => {
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter();
   const { pathname, locale } = router;
+  const { user, updateUser } = useContext(UserInforContext);
 
-  const handleSwitchToBizUser = () => {
+  const handleSwitchToBizUser = async () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.type = UsersTypes.BIZ_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
+
     const firstOwnedListingSlug = get(
-      userInfo,
+      user,
       "owner_listings[0].attributes.slug"
     );
+    const firstOnwedListingLogo = get(
+      user,
+      "owner_listings[0].attributes.logo[0]"
+    );
+    console.log("---------------", firstOwnedListingSlug, {
+      avatar: firstOnwedListingLogo,
+      current_listing_slug: firstOwnedListingSlug,
+    });
     if (firstOwnedListingSlug) {
-      router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
-      const url =
-        `/${locale && locale !== "en" ? locale + "/" : ""}` +
-        `biz/home/${firstOwnedListingSlug}/edit`;
-      window.location.href = url;
-      // router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
+      updateUser({
+        avatar: firstOnwedListingLogo,
+        current_listing_slug: firstOwnedListingSlug,
+      });
+      await router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
+      router.reload();
     } else {
       router.push("/claim");
     }
@@ -196,7 +205,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           position="bottom-left"
         >
           <Image
-            src={loginInfor.avatar || require("public/images/avatar.png")}
+            src={user.avatar || require("public/images/avatar.png")}
             alt=""
             width={40}
             height={40}
@@ -216,22 +225,12 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           </div>
         </Popover>
         <Image
-          src={
-            get(
-              JSON.parse(localStorage.getItem("user") || "{}"),
-              "now_biz_listing.logo[0]"
-            ) || require("public/images/page-avatar.png")
-          }
+          src={user.avatar || require("public/images/page-avatar.png")}
           alt=""
           width={40}
           height={40}
           onClick={() =>
-            router.push(
-              `/biz/information/${get(
-                JSON.parse(localStorage.getItem("user") || "{}"),
-                "now_biz_listing.slug"
-              )}`
-            )
+            router.push(`/biz/information/${user.current_listing_slug}`)
           }
           className={`${styles.avatar} cursor-pointer`}
         />

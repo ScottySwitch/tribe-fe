@@ -3,7 +3,7 @@ import get from "lodash/get";
 import moment from "moment";
 import parseISO from "date-fns/parseISO";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Loader from "components/Loader/Loader";
 import Icon from "components/Icon/Icon";
@@ -43,9 +43,12 @@ import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
 import ReportApi from "../../../../services/report";
 import { censoredPhoneNumber, isArray, isEmptyObject } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
+  const { user } = useContext(UserInforContext);
+
   const [userInfo, setUserInfo] = useState<any>({});
   const [category, setCategory] = useState(Categories.EAT);
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
@@ -73,12 +76,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const [bizListing, setBizListing] = useState<any>({});
   const [listingImages, setListingImages] = useState<any>([]);
-  const [logo, setLogo] = useState<any>([]);
+  const [logo, setLogo] = useState<any>([user.avatar]);
 
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
-  
 
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
   const [showResultModal, setShowResultModal] = useState<boolean>(false);
@@ -248,11 +250,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           setPhoneNumber(defaultPhone);
         }
       }
-      setIsLoading(false)
+      setIsLoading(false);
     };
 
     if (listingSlug) {
-      setIsLoading(true)
+      setIsLoading(true);
       getListingData(listingSlug);
     }
   }, [listingSlug, isViewPage]);

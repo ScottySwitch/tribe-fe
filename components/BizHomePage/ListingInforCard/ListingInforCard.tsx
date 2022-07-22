@@ -64,13 +64,13 @@ const ReviewsFollowers = (props: {
       let checkIsFollow =
         Array.isArray(userFollowList) &&
         userFollowList.some(
-          (item) => get(item, 'attributes.biz_listing.data.id') == bizListing.id
+          (item) => get(item, "attributes.biz_listing.data.id") == bizListing.id
         );
       let checkIsFavourite =
-      Array.isArray(userFavouriteList) &&
-      userFavouriteList.some(
-        (item) => get(item, 'attributes.biz_listing.data.id') == bizListing.id
-      );
+        Array.isArray(userFavouriteList) &&
+        userFavouriteList.some(
+          (item) => get(item, "attributes.biz_listing.data.id") == bizListing.id
+        );
       setIsFollow(checkIsFollow);
       setIsFavourite(checkIsFavourite);
     };
@@ -269,16 +269,21 @@ const ListingInforCard = (props: ListingInforCardProps) => {
       <Icon icon="camera-color" size={40} />
     </div>
   );
+  const listingLogo = get(logo, "[0]")
+    ? logo
+    : [require("public/images/page-avatar.png")];
+
   return (
     <div className={styles.listing_infor_card}>
       <div className={styles.listing_infor_container}>
         <div className="flex justify-between items-center">
           <div className={styles.box_avatar}>
             <Upload
+              key={logo}
               type="avatar"
               className={styles.small_avatar}
               centerIcon={<CenterIcon />}
-              fileList={logo}
+              fileList={listingLogo}
               disabled={isViewPage}
               onChange={handleChangeLogo}
             />

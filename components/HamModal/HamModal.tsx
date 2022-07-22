@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
@@ -69,6 +69,12 @@ const HamModal = (props: HamModalProps) => {
   const [showSwitchModal, setShowSwitchModal] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    setShowSwitchModal(false);
+    onSetShowHamModal(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath]);
 
   const gotoLogin = () => {
     onSetShowHamModal(false);

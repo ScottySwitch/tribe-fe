@@ -31,7 +31,7 @@ export type ILoginInfor = {
   avatar?: string;
   first_name?: string;
   last_name?: string;
-  listing_follow_ids?: any
+  listing_follow_ids?: any;
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -91,6 +91,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [router.pathname]);
 
   //handle logic hide header when scroll, not hide when in desktop || when setShowOpenHoursModal ham modal || in unAuthPages
   useEffect(() => {
