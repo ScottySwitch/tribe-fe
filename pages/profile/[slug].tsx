@@ -98,8 +98,6 @@ const GroupHeadingTwo = (props: {
 };
 
 const ProfilePage = () => {
-  const { user } = useContext(UserInforContext);
-  console.log('user', user)
   const router = useRouter();
   const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
