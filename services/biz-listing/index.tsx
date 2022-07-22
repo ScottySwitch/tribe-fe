@@ -228,6 +228,7 @@ const getOwnerListingRoleByUserId = async (userId: any) => {
 };
 
 const getBizListingBySlug = async (bizListingSlug: any) => {
+  console.log('dwwd')
   const query = qs.stringify(
     {
       filters: {
@@ -419,11 +420,11 @@ const getBizListingForYou = async (params: any) => {
   const getParams = {
     userId: userInfo.id,
     limit: params.limit,
-    country: params?.country
+    country: params?.country,
   };
   if (userInfo.id) {
     const url = `/api/biz-listings/bizlisting-for-you/`;
-    return await Api.get(url, { params: getParams});
+    return await Api.get(url, { params: getParams });
   }
 };
 
@@ -579,7 +580,6 @@ const getListingCustom = async (data: any) => {
       },
     };
   }
-  
 
   if (data?.limit) {
     pagination.pageSize = data.limit;

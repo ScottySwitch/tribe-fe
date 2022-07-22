@@ -41,7 +41,6 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     onSubmitReply,
     // onChangeReviewsSequence,
   } = props;
-  console.log('reviews',reviews)
   const [sortingReviews, setSortingReviews] = useState(reviews);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
@@ -177,7 +176,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
               <UserReviewCard
                 isPaid={isPaid}
                 actions={!isViewPage}
-                user={get(review, "user")}
+                user={get(review, "user.data.attributes") || get(review, "user")}
                 listImage={get(review, "images")}
                 content={get(review, "content")}
                 dateVisit={get(review, "visited_date")}
