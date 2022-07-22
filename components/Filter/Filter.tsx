@@ -182,7 +182,7 @@ export interface FilterProps extends ModalProps {
   finalTabList?: IOption[];
   otherList?: IOption[];
   filter?: IFilter;
-  categoryLink?: string;
+  categoryLink?: string | undefined;
   onSubmitFilter: (e?: IFilter) => void;
 }
 

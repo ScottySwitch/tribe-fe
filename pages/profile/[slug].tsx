@@ -7,6 +7,7 @@ import CoverImage from "components/UserProfilePage/CoverImage/CoverImage";
 import PanelAbout, {
   UserPropsData,
 } from "components/UserProfilePage/PanelAbout/PanelAbout";
+import { UserInforContext } from "Context/UserInforContext";
 import ContributedPanel from "components/UserProfilePage/PanelContributed/PanelContributed";
 import FavouriedPanel from "components/UserProfilePage/PanelFavouried/PanelFavouried";
 import SavedDealsPanel from "components/UserProfilePage/PanelSavedDeals/PanelSavedDeals";
@@ -20,10 +21,10 @@ import {
 import { ProfileTabs } from "enums";
 import Image from "next/image";
 import Router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
-import { userInfo } from "os";
+import FollowApi from "services/user-listing-follow";
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props;
@@ -54,11 +55,20 @@ const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
 
 const GroupHeadingTwo = (props: {
   contributions: number;
-  following: number;
+  following?: number;
   points: number;
 }) => {
   const { contributions, following, points } = props;
   const router = useRouter();
+  const [numberFollow, setNumberFollow] = useState<number>(0)
+  useEffect(() => {
+    const getData = async () => {
+      const dataFollow = await FollowApi.getFollowByUserId();
+      setNumberFollow(get(dataFollow, 'data.meta.pagination.total'))
+    };
+    getData();
+  }, []);
+
   return (
     <React.Fragment>
       <div className={styles.group_heading_two}>
@@ -69,7 +79,7 @@ const GroupHeadingTwo = (props: {
           </div>
           <div className={styles.outstanding_criteria}>
             <h5>Following</h5>
-            <span>{following}</span>
+            <span>{numberFollow}</span>
           </div>
           {/* <div className={styles.outstanding_criteria}>
             <h5>Points</h5>
@@ -97,6 +107,7 @@ const GroupHeadingTwo = (props: {
 };
 
 const ProfilePage = () => {
+  const { user } = useContext(UserInforContext);
   const router = useRouter();
   const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
@@ -108,12 +119,10 @@ const ProfilePage = () => {
     industry: "",
     birthday: "",
   });
-  
+
   const [selectedTab, setSelectedTab] = useState<string>();
 
   useEffect(() => {
-    console.log('slug', slug)
-
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
     if (!userInfo || !userInfo?.token) {
@@ -122,15 +131,12 @@ const ProfilePage = () => {
 
     switch (slug) {
       case ProfileTabs.SAVED_DEALS:
-        console.log("run", slug, ProfileTabs.SAVED_DEALS);
-        setSelectedTab("saved-deals");
+        setSelectedTab(ProfileTabs.SAVED_DEALS);
         break;
       case ProfileTabs.FAVOURITED:
-        console.log("run", slug, ProfileTabs.FAVOURITED);
         setSelectedTab(ProfileTabs.FAVOURITED);
         break;
       case ProfileTabs.ABOUT:
-        console.log("run", slug, ProfileTabs.ABOUT);
         setSelectedTab(ProfileTabs.ABOUT);
         break;
     }
@@ -179,7 +185,6 @@ const ProfilePage = () => {
         />
         <GroupHeadingTwo
           contributions={0}
-          following={get(userInfor, "user_listing_follows.length")}
           points={0}
         />
         <TabsHorizontal

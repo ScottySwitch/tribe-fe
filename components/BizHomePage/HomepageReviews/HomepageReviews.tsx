@@ -176,7 +176,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
               <UserReviewCard
                 isPaid={isPaid}
                 actions={!isViewPage}
-                user={get(review, "user.data.attributes")}
+                user={get(review, "user.data.attributes") || get(review, "user")}
                 listImage={get(review, "images")}
                 content={get(review, "content")}
                 dateVisit={get(review, "visited_date")}

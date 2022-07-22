@@ -32,8 +32,6 @@ const Home: NextPage = (props: any) => {
   const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
     props;
 
-  const { updateUser } = useContext(UserInforContext);
-
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState<number>(16);
   const [listingForYou, setListingForYou] = useState<Ilisting[]>([]);
@@ -75,18 +73,21 @@ const Home: NextPage = (props: any) => {
     };
 
     location && getListings();
-    userInfo && userInfo.token && getBizListingForYou();
+    userInfo && userInfo.token && getBizListingForYou(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
-  const getBizListingForYou = async () => {
+  const getBizListingForYou = async (isChangeLocation?: boolean) => {
     setLoading(true);
 
-    const dataListing = await BizListingApi.getBizListingForYou(limit);
+    const dataListing = await BizListingApi.getBizListingForYou({
+      limit: isChangeLocation ? 16 : limit,
+      country: location || "singapore",
+    });
     const rawForYouListing = get(dataListing, "data.data");
-    const listingArray = listingForYou.concat(
-      formatListingArray(rawForYouListing)
-    );
+    const listingArray = isChangeLocation
+      ? formatListingArray(rawForYouListing)
+      : listingForYou.concat(formatListingArray(rawForYouListing));
 
     setListingForYou(listingArray);
     setLimit(limit + 16);
@@ -361,7 +362,7 @@ const Home: NextPage = (props: any) => {
               variant={loading ? "primary" : "outlined"}
               text="Load more"
               width={400}
-              onClick={getBizListingForYou}
+              onClick={() => getBizListingForYou()}
             />
           </SectionLayout>
         </div>

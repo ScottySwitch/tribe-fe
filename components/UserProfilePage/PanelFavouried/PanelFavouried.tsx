@@ -22,7 +22,7 @@ const ListCard = (props: {
       {Array.isArray(data) &&
         data.map((card, index) => (
           <InforCard
-            key={index}
+            key={card.slug}
             imgUrl={card.imgUrl}
             title={card.title}
             rate={card.rate}
@@ -63,6 +63,7 @@ const FavouriedPanel = () => {
           rawData.map((item) => ({
             id: item.id,
             images: item.images || [],
+            imgUrl: get(item, 'images[0]') || 'https://picsum.photos/200/300',
             title: item.name,
             slug: item.slug,
             isVerified: item.is_verified,
@@ -161,6 +162,7 @@ const FavouriedPanel = () => {
   return (
     <div className={styles.favouried_panel}>
       <TabsHorizontal
+        selectedTab={ProfileTabFavourited.EAT}
         type="primary-outline"
         tablist={TabList}
         className={styles.favouried_tab}

@@ -78,6 +78,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
+  
 
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
   const [showResultModal, setShowResultModal] = useState<boolean>(false);
@@ -594,8 +595,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             />
           </div>
           <div className={styles.left_col}>
-            <Break show={!isViewPage} />
-            {!isViewPage && <OnboardChecklist />}
+            {/* <Break show={!isViewPage} /> */}
+            {/* {!isViewPage && <OnboardChecklist />} */}
             <Break show={!isViewPage} />
             <Details
               isViewPage={isViewPage}
