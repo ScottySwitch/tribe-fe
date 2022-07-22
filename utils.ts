@@ -225,6 +225,7 @@ export const formatCategoryLink = (rawCategoryLink) =>
   ? rawCategoryLink.map((item) => ({
     icon: get(item, "attributes.logo.data.attributes.url") || null,
     label: get(item, "attributes.label"),
+    value: get(item, "attributes.value"),
     slug: get(item, "attributes.value"),
   }))
 : [];

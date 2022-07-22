@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { dummyKeywords } from "constant";
+import { dummyKeywords, user } from "constant";
 import TopSearches from "components/TopSearches/TopSearches";
 import ListingSearchBox from "components/ListingSearchBox/ListingSearchBox";
 
@@ -25,7 +25,7 @@ const RightColumn = (props: { listing: { [key: string]: any } }) => {
   const { listing } = props;
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     const listingRolesArray =
@@ -33,7 +33,7 @@ const RightColumn = (props: { listing: { [key: string]: any } }) => {
     const isBeingClaimed =
       get(listing, "attributes.claim_listings.data.length") > 0;
     const doesHasOwners = listingRolesArray.some(
-      (item) => get(item, "attributes.name") === "Owner"
+      (item) => get(item, "attributes.name") == "owner"
     );
     if (isBeingClaimed || doesHasOwners) setIsDisabled(true);
   }, []);
@@ -52,7 +52,9 @@ const RightColumn = (props: { listing: { [key: string]: any } }) => {
         onClick={handleClick}
         disabled={isDisabled}
       />
-      <span>Not your business?</span>
+      <span onClick={() => router.push("/add-listing")}>
+        Not your business?
+      </span>
       <AuthPopup
         onClose={() => setShowAuthPopup(false)}
         visible={showAuthPopup}
@@ -67,6 +69,16 @@ const ClaimPage = () => {
   const [searchKey, setSearchKey] = useState("");
   const [location, setLocation] = useState();
   const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
+  const getRandomListing = async () => {
+    const result = await BizListingApi.getListingBySlug("", location || 'singapore', 7)
+    const data = get(result, "data.data")
+    setBizListing(data)
+  }
+  useEffect(() => {
+    if (bizListing.length === 0) {
+      getRandomListing()
+    }
+  }, [])
 
   useEffect(() => {
     const getBizListing = async () => {
@@ -78,7 +90,7 @@ const ClaimPage = () => {
       setBizListing(get(data, "data.data"));
     };
 
-    debouncedSearchTerm ? getBizListing() : setBizListing([]);
+    debouncedSearchTerm ? getBizListing() : getRandomListing();
   }, [debouncedSearchTerm, location]);
 
   const handleSetListing = (e) => {

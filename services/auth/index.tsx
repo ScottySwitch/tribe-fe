@@ -9,7 +9,6 @@ import {
   AuthForgetPasswordByPhone,
 } from "../../types/auth";
 import { UsersTypes } from "../../enums";
-import { userInfo } from "os";
 const qs = require("qs");
 
 const signUpByEmail = async (params: AuthEmailPayload) => {
@@ -118,7 +117,6 @@ const getMe = async () => {
   me.data.role = userInfo.role || "";
   me.data.now_biz_listing = userInfo.now_biz_listing || {};
   me.data.location = userInfo.location || "";
-  console.log('me.data', me.data)
   localStorage.setItem("user", JSON.stringify(me.data));
 };
 

@@ -33,19 +33,18 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [backImageIdentity, setBackImageIdentity] = useState<string>("");
   const [payPrice, setPayPrice] = useState<string>("");
   const [time, setTime] = useState<number>(30);
-  const [type, setType] = useState<any>({})
+  const [type, setType] = useState<any>({});
 
   const idTypeOptions = [
     {
       label: "Driving License",
-      value: "Driving License"
+      value: "Driving License",
     },
     {
       label: "ID card",
-      value: "ID card"
-    }
-  ]
-
+      value: "ID card",
+    },
+  ];
 
   const router = useRouter();
   let baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -199,7 +198,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     //submit otp to check
     if (tier === Tiers.FREE) {
       const result = await AuthApi.otpPhoneConfirm({ otp });
-      let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (result.data.success) {
         const result1 = ClaimListingApi.createClaimListing({
           paymentMethod: "free",
@@ -387,12 +386,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               options={idTypeOptions}
               className="mt-3"
               placeholder="Driving Licence"
-              onChange={(e) =>
-                {
-                  console.log(e)
-                  setType(e)
-                }
-              }
+              onChange={(e) => {
+                console.log(e);
+                setType(e);
+              }}
             />
           </div>
           <div className={styles.field_group}>
@@ -470,7 +467,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 className="css style"
                 type="button"
                 id="SS_ProductCheckout"
-                data-id={payPrice === "600" ? 4 : 3}
+                data-id={payPrice === "600" ? 2 : 1}
                 data-url={baseURL}
                 text="Next"
                 onClick={handleSubmit}
