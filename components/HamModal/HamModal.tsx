@@ -23,6 +23,7 @@ const HamModalHeader = ({
   gotoSignup: () => void;
 }) => {
   const { user } = useContext(UserInforContext);
+  console.log('user', user)
 
   return !!loginInfor.token ? (
     <div className={styles.user_profile}>
