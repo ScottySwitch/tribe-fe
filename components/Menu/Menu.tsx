@@ -28,10 +28,10 @@ const Menu = (props: MenuMenuProps) => {
   const { user } = useContext(UserInforContext);
   const { location } = user;
 
+  console.log('user',user)
   const checkLogin = (href: string) => {
     onShowHamModal?.();
-    user && user.token ? router.push(`/profile/${href}`) : onShowAuthPopup?.()
-    onShowAuthPopup?.();
+    (user && user.token) ? router.push(`/profile/${href}`) : onShowAuthPopup?.()
   };
 
   const menuItems = [
