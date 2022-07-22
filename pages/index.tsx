@@ -25,7 +25,7 @@ import {
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-import {CategoryText} from "enums"
+import { CategoryText } from "enums";
 import styles from "styles/Home.module.scss";
 
 const Home: NextPage = (props: any) => {
@@ -73,14 +73,17 @@ const Home: NextPage = (props: any) => {
     };
 
     location && getListings();
-    (userInfo && userInfo.token) && getBizListingForYou();
+    userInfo && userInfo.token && getBizListingForYou();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const getBizListingForYou = async () => {
     setLoading(true);
 
-    const dataListing = await BizListingApi.getBizListingForYou(limit);
+    const dataListing = await BizListingApi.getBizListingForYou(
+      limit,
+      location
+    );
     const rawForYouListing = get(dataListing, "data.data");
     const listingArray = listingForYou.concat(
       formatListingArray(rawForYouListing)
@@ -140,7 +143,10 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listingExclusiveDeal) && (
-        <SectionLayout title="Brands With Exclusive Deals For You" seeMore="/deals">
+        <SectionLayout
+          title="Brands With Exclusive Deals For You"
+          seeMore="/deals"
+        >
           <Carousel responsive={infoCardResponsive}>
             {listingExclusiveDeal?.map((card) => (
               <div key={card.name} className="pb-5 pt-3 pl-3">
@@ -264,7 +270,10 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.transport) && (
-        <SectionLayout title="Access to Transport" seeMore={CategoryText.TRANSPORT}>
+        <SectionLayout
+          title="Access to Transport"
+          seeMore={CategoryText.TRANSPORT}
+        >
           <Carousel responsive={infoCardResponsive}>
             {listings?.transport.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">

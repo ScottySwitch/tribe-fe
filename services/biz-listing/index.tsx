@@ -414,10 +414,11 @@ const checkListingHaveOwner = async (bizListingSlug: any) => {
   return await Api.get(url);
 };
 
-const getBizListingForYou = async (limit) => {
+const getBizListingForYou = async (limit, location) => {
+  console.log('location', location)
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
   if (userInfo.id) {
-    const url = `/api/biz-listings/bizlisting-for-you/?userId=${userInfo.id}&limit=${limit}`;
+    const url = `/api/biz-listings/bizlisting-for-you/?userId=${userInfo.id}&limit=${limit}&country=${location || 'singapore'}`;
     return await Api.get(url);
   }
 };

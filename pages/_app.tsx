@@ -25,8 +25,11 @@ export type ILoginInfor = {
   type?: UsersTypes;
   tier?: Tiers;
   avatar?: string;
-  first_name?: string
-  last_name?: string
+  first_name?: string;
+  last_name?: string;
+  listing_follow_ids?: any;
+  listing_favourite_ids?: any;
+  listing_favourite_deal_ids?: any;
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -79,14 +82,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     ///get location
     const setDefaultLocation = async () => {
       const browserLocation = await getBrowserLocation();
-      console.log()
       updateUser({
         ...user,
         location: localLocation || browserLocation || locations[0].value,
         token: localLoginInfo.token,
         first_name: localLoginInfo.first_name,
         last_name: localLoginInfo.last_name,
-        avatar: localLoginInfo.avatar
+        avatar: localLoginInfo.avatar,
       });
     };
 
@@ -145,6 +147,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    const { user, updateUser } = contextDefaultValue;
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
       await AuthApi.getMe();

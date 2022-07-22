@@ -59,7 +59,7 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
   } = props;
 
   const [currentTab, setCurrentTab] = useState<string | number | undefined>(
-    selectedTab
+    selectedTab || tablist[0]?.value
   );
   useEffect(() => {
     if (!isEqual(selectedTab, currentTab)) {
@@ -86,7 +86,6 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     <React.Fragment>
       <div className={`${className} ${styles.tab_container}`}>
         {tablist?.map((tab: ITab) => {
-          console.log("tab index currentTab", currentTab);
           return (
             <TabNav
               className={typeClassName}
