@@ -25,7 +25,6 @@ import Router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
-import { userInfo } from "os";
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props;

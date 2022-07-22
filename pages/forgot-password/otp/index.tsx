@@ -3,7 +3,6 @@ import Button from "components/Button/Button"
 import Input from "components/Input/Input"
 import Modal, { ModalHeader } from "components/Modal/Modal"
 import { useRouter } from "next/router"
-import { userInfo } from "os"
 import { useState, useEffect } from "react"
 import user from "services/user"
 
