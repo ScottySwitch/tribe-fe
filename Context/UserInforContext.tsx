@@ -5,7 +5,7 @@ export interface IUser {
 }
 
 export const UserInforContext = React.createContext({
-  user: {},
+  user:  {},
   updateUser: (infor: IUser) => {},
   deleteUser: () => {},
 });
