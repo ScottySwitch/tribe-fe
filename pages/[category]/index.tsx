@@ -67,6 +67,7 @@ const Category = (props: any) => {
   const { location } = user;
 
   useEffect(() => {
+    console.log(location)
     const getData = async (categoryId, page) => {
       const dataQuery = await BizListingApi.getListingCustom({
         country: location,

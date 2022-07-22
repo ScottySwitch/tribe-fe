@@ -1,6 +1,6 @@
 import { get, isArray } from "lodash";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import classNames from "classnames";
 
 import Button from "components/Button/Button";
@@ -9,6 +9,7 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Upload from "components/Upload/Upload";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import { UserInforContext } from "Context/UserInforContext";
 
 import UserFollowApi from "services/user-listing-follow";
 import UserFavouriteApi from "services/user-listing-favourite";
@@ -45,6 +46,8 @@ const ReviewsFollowers = (props: {
     styles.reviews_followers_container,
     className
   );
+  const { user } = useContext(UserInforContext);
+
   const bizListingReviewCount = get(bizListing, "reviews.length") || 0;
   const bizListingFollowerCount =
     get(bizListing, "user_listing_follows.length") || 0;
@@ -53,19 +56,26 @@ const ReviewsFollowers = (props: {
   const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   useEffect(() => {
-    if (userInfo) {
-      const userFollowList = userInfo.listing_follow_ids;
-      const userFavoriteList = userInfo.listing_favourite_ids;
+    const getData = async () => {
+      const dataFollow = await UserFollowApi.getFollowByUserId();
+      const dataFavourite = await UserFavouriteApi.getFavouriteByUserId();
+      const userFollowList = get(dataFollow, "data.data");
+      const userFavouriteList = get(dataFavourite, "data.data");
       let checkIsFollow =
         Array.isArray(userFollowList) &&
-        userFollowList.some((item) => item === bizListing.id);
+        userFollowList.some(
+          (item) => get(item, 'attributes.biz_listing.data.id') == bizListing.id
+        );
       let checkIsFavourite =
-        Array.isArray(userFavoriteList) &&
-        userFavoriteList.some((item) => item === bizListing.id);
+      Array.isArray(userFavouriteList) &&
+      userFavouriteList.some(
+        (item) => get(item, 'attributes.biz_listing.data.id') == bizListing.id
+      );
       setIsFollow(checkIsFollow);
       setIsFavourite(checkIsFavourite);
-    }
-  }, [userInfo]);
+    };
+    getData();
+  }, []);
 
   const handleAddFollow = async () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");

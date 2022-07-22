@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { get } from "lodash";
 
 import type { AppProps } from "next/app";
@@ -11,22 +11,27 @@ import BizApi from "services/biz-listing";
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
 import { Tiers, UsersTypes } from "enums";
 import AuthApi from "../services/auth";
-import { IUser, UserInforProvider } from "Context/UserInforContext";
+import {
+  IUser,
+  UserInforContext,
+  UserInforProvider,
+} from "Context/UserInforContext";
 import CategoryApi from "services/category";
 import "../styles/globals.css";
 import { locations } from "constant";
-import { getBrowserLocation } from "utils";
 
 import styles from "styles/App.module.scss";
 import Toast from "components/Toast/Toast";
+import Button from "components/Button/Button";
 
 export type ILoginInfor = {
   token?: string;
   type?: UsersTypes;
   tier?: Tiers;
   avatar?: string;
-  first_name?: string
-  last_name?: string
+  first_name?: string;
+  last_name?: string;
+  listing_follow_ids?: any
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -44,51 +49,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   ];
   const isAuthPage = !notAuthPages.includes(pathname);
 
-  const defaultUserInformation: { [key: string]: any } = {
-    token: undefined,
-    avatar: undefined,
-    location: undefined,
-  };
-
-  const [user, setUser] = useState<IUser>(defaultUserInformation);
   const [loginInfor, setLoginInfo] = useState<ILoginInfor>({});
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [showHamModal, setShowHamModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [navList, setNavList] = useState<{ [key: string]: any }[]>([]);
 
-  const contextDefaultValue = {
-    user: user,
-    deleteUser: () => setUser({}),
-    updateUser: (infor) => {
-      const localStringyUserInfor = localStorage.getItem("user") || "{}";
-      const localUserInfor = JSON.parse(localStringyUserInfor);
-      const newUserInfor = { ...localUserInfor, ...infor };
-      const stringyNewLocalUserInfor = JSON.stringify(newUserInfor);
-      localStorage.setItem("user", stringyNewLocalUserInfor);
-      setUser({ ...user, ...infor });
-    },
-  };
-
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
-    const localLocation = localLoginInfo.location;
-    const { user, updateUser } = contextDefaultValue;
-
-    ///get location
-    const setDefaultLocation = async () => {
-      const browserLocation = await getBrowserLocation();
-      console.log()
-      updateUser({
-        ...user,
-        location: localLocation || browserLocation || locations[0].value,
-        token: localLoginInfo.token,
-        first_name: localLoginInfo.first_name,
-        last_name: localLoginInfo.last_name,
-        avatar: localLoginInfo.avatar
-      });
-    };
 
     const getMenuList = async () => {
       const dataCategories = await CategoryApi.getItemCategory();
@@ -114,11 +83,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       setNavList(categoryArray);
     };
 
+    window.scrollTo(0, 0);
     setIsMobile(screen.width < 501);
     setLoginInfo(localLoginInfo.token ? localLoginInfo : {});
     setShowAuthPopup(!localLoginInfo.token);
     getMenuList();
-    setDefaultLocation();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -143,26 +112,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [showHamModal, isAuthPage]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    const getMe = async () => {
-      await AuthApi.getMe();
-      const dataOwnerListing = await BizApi.getOwnerBizListing(userInfo.id);
-      userInfo = {
-        ...userInfo,
-        owner_listings: dataOwnerListing.data.data,
-      };
-      localStorage.setItem("user", JSON.stringify(userInfo));
-    };
-
-    userInfo && userInfo.token && getMe().catch((e) => console.log(e));
-    //scroll to top
-    window.scrollTo(0, 0);
-  }, [router]);
-
   return (
-    <UserInforProvider value={contextDefaultValue}>
+    <UserInforProvider>
       <div className={styles.app}>
         <Header
           id="header"

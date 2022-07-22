@@ -55,7 +55,9 @@ const RightColumn = (props: {
             : onShowUpcomingFeature()
         }
       />
-      <span>Not your business?</span>
+      <span onClick={() => router.push("/add-listing")}>
+        Not your business?
+      </span>
     </>
   );
 };
@@ -79,7 +81,7 @@ const SearchListing = ({
       ...userInfo,
       biz_id: get(listing, "id"),
       biz_slug: get(listing, "attributes.slug"),
-      type_handle: 'Claim'
+      type_handle: "Claim",
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
   }
@@ -88,7 +90,11 @@ const SearchListing = ({
   switch (listing) {
     case undefined:
       return (
-        <ListingSearch isClaimListing={isClaimListing} listingOptions={bizListing} onChange={setListing} />
+        <ListingSearch
+          isClaimListing={isClaimListing}
+          listingOptions={bizListing}
+          onChange={setListing}
+        />
       );
     case YesNo.NO:
       return (
