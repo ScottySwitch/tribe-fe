@@ -25,6 +25,7 @@ import ListingSearch, {
 import bizListingApi from "services/biz-listing";
 import { changeToSlugify } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
+import AuthApi from "services/auth";
 
 export interface HeaderProps {
   id: string;
@@ -46,6 +47,21 @@ const Header = (props: HeaderProps) => {
 
   const { user, updateUser } = useContext(UserInforContext);
   const { location } = user;
+
+
+  useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    const getMe = async () => {
+      await AuthApi.getMe();
+      const dataOwnerListing = await bizListingApi.getOwnerBizListing(userInfo.id);
+      userInfo = {
+        ...userInfo,
+        owner_listings: dataOwnerListing.data.data,
+      };
+      localStorage.setItem("user", JSON.stringify(userInfo));
+    };
+    userInfo && userInfo.token && getMe().catch((e) => console.log(e));
+  }, [router]);
 
   useEffect(() => {
     const getBizListing = async () => {

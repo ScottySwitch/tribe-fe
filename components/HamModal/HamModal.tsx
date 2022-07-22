@@ -23,7 +23,7 @@ const HamModalHeader = ({
   gotoSignup: () => void;
 }) => {
   const { user } = useContext(UserInforContext);
-  
+
   return !!loginInfor.token ? (
     <div className={styles.user_profile}>
       <Image
@@ -36,7 +36,9 @@ const HamModalHeader = ({
         objectFit="cover"
       />
       <div className={styles.user_infor}>
-        <div className={styles.name}>{user.first_name} {user.last_name}</div>
+        <div className={styles.name}>
+          {user.first_name} {user.last_name}
+        </div>
         <div className={styles.see_profile}>See profile</div>
       </div>
     </div>
