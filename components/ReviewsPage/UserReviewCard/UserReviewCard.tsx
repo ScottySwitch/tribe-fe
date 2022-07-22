@@ -152,7 +152,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {content && <p className={styles.content}>{content}</p>}
-        {listImage && listImage.length && (
+        {listImage && listImage.length > 0 && (
           <ul className={styles.image_list}>
             {listImage?.map((image, index) => (
               <li key={index} className={styles.image_item}>

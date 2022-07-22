@@ -47,7 +47,6 @@ const ReviewsFollowers = (props: {
     className
   );
   const { user } = useContext(UserInforContext);
-  const {listing_follow_ids, listing_favourite_ids} = user
 
   const bizListingReviewCount = get(bizListing, "reviews.length") || 0;
   const bizListingFollowerCount =
@@ -55,22 +54,28 @@ const ReviewsFollowers = (props: {
   const [isFollow, setIsFollow] = useState<boolean>(false);
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-    console.log('user', user)
 
   useEffect(() => {
-    if (user) {
-      const userFollowList = listing_follow_ids;
-      const userFavoriteList = listing_favourite_ids;
+    const getData = async () => {
+      const dataFollow = await UserFollowApi.getFollowByUserId();
+      const dataFavourite = await UserFavouriteApi.getFavouriteByUserId();
+      const userFollowList = get(dataFollow, "data.data");
+      const userFavouriteList = get(dataFavourite, "data.data");
       let checkIsFollow =
         Array.isArray(userFollowList) &&
-        userFollowList.some((item) => item === bizListing.id);
+        userFollowList.some(
+          (item) => get(item, 'attributes.biz_listing.data.id') == bizListing.id
+        );
       let checkIsFavourite =
-        Array.isArray(userFavoriteList) &&
-        userFavoriteList.some((item) => item === bizListing.id);
+      Array.isArray(userFavouriteList) &&
+      userFavouriteList.some(
+        (item) => get(item, 'attributes.biz_listing.data.id') == bizListing.id
+      );
       setIsFollow(checkIsFollow);
       setIsFavourite(checkIsFavourite);
-    }
-  }, [user]);
+    };
+    getData();
+  }, []);
 
   const handleAddFollow = async () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
