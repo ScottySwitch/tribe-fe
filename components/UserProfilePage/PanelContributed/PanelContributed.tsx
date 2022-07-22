@@ -9,6 +9,8 @@ import UserReviewCard, {
 } from "components/ReviewsPage/UserReviewCard/UserReviewCard";
 import { get, isEmpty } from "lodash";
 import { format } from "date-fns";
+import { isLocalURL } from "next/dist/shared/lib/router/router";
+import Loader from "components/Loader/Loader";
 interface IBiz {
   title: string;
   imgUrl: string;
@@ -76,14 +78,17 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
   const [listCard, setListCard] = useState<ListCardProps[] | any>();
   const [currentTab, setCurrentTab] = useState<string>();
   const [total, setTotal] = useState<number>();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [contributions, setContributions] = useState<{ [key: string]: any }>(
     []
   );
+
 
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo &&
       userInfo?.token &&
+      setIsLoading(true)
       ContributeApi.getUserContribute()
         .then((res) => {
           const contributionRawData = get(res, "data.data");
@@ -109,7 +114,7 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
           console.log("contributionData", contributionData);
         })
         .catch((error) => console.log(error))
-        .finally();
+        .finally(() => {setIsLoading(false)});
   }, []);
 
   const TabList: ITab[] = [
@@ -141,10 +146,19 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
     setTotal(listCard?.length);
   }, [currentTab]);
 
+  if (isLoading) {
+    return (
+      <div className="w-full flex justify-center mt-20">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.contributed_panel}>
       {total && <div className={styles.total}>Total: {total}</div>}
       <TabsHorizontal
+        selectedTab={"pending"}
         tablist={TabList}
         type="primary-outline"
         className={styles.contributed_tab}
