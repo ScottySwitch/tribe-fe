@@ -12,6 +12,8 @@ import { ILoginInfor } from "pages/_app";
 import { UsersTypes } from "enums";
 
 import styles from "./Header.module.scss";
+import AuthApi from "services/auth";
+import bizListingApi from "services/biz-listing";
 
 export const Categories = (props: {
   currentCategory?: string;
@@ -137,7 +139,8 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     if (firstOwnedListingSlug) {
       router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
       const url =
-        `/${(locale && locale !== 'en') ? (locale + '/') : ''}` + `biz/home/${firstOwnedListingSlug}/edit`;
+        `/${locale && locale !== "en" ? locale + "/" : ""}` +
+        `biz/home/${firstOwnedListingSlug}/edit`;
       window.location.href = url;
       // router.push(`/biz/home/${get(userInfo, 'owner_listings[0].attributes.slug')}/edit`)
     } else {

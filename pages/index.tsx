@@ -32,6 +32,8 @@ const Home: NextPage = (props: any) => {
   const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
     props;
 
+  const { updateUser } = useContext(UserInforContext);
+
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState<number>(16);
   const [listingForYou, setListingForYou] = useState<Ilisting[]>([]);
