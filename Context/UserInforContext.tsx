@@ -24,7 +24,6 @@ export const UserInforContext = React.createContext({
 
 export const UserInforProvider = ({ children }) => {
   const [user, setUser] = useState<IUser>(defaultUserInformation);
-  const router = useRouter();
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
@@ -42,7 +41,7 @@ export const UserInforProvider = ({ children }) => {
       });
     };
     setDefaulUserInfor();
-  }, [router.pathname]);
+  }, []);
 
   const deleteUser = () => setUser({});
 
