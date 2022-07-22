@@ -40,7 +40,7 @@ export const Album = (props: AlbumProps) => {
   const resultType = [
     {
       title: "Success!",
-      message:  
+      message:
         "Thank you for your report. We will review the report and take action within 24 hours!",
       textButton: "Close",
     },
@@ -127,16 +127,16 @@ export const Album = (props: AlbumProps) => {
     await reportApi
       .createReport(body)
       .then((res) => {
-        setSubmitResult(true)
+        setSubmitResult(true);
       })
       .catch((error) => {
-        setSubmitResult(false)
+        setSubmitResult(false);
       })
       .finally(() => {
-        setShowReportModal(false)
-        setShowResultModal(true)
+        setShowReportModal(false);
+        setShowResultModal(true);
       });
-    };
+  };
 
   return (
     <div className={styles.slider_syncing}>

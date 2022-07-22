@@ -4,17 +4,20 @@ export interface IUser {
   [key: string]: any;
 }
 
-export const UserInforContext = React.createContext({
-  user: {},
-  updateUser: (infor: IUser) => {},
-  deleteUser: () => {},
-});
-
 const defaultUserInformation: { [key: string]: any } = {
+  id: undefined,
+  last_name: undefined,
+  first_name: undefined,
   token: undefined,
   avatar: undefined,
   location: undefined,
 };
+
+export const UserInforContext = React.createContext({
+  user: defaultUserInformation,
+  updateUser: (infor: IUser) => {},
+  deleteUser: () => {},
+});
 
 export const UserInforProvider = ({ children }) => {
   const [user, setUser] = useState<IUser>(defaultUserInformation);
@@ -27,7 +30,7 @@ export const UserInforProvider = ({ children }) => {
       const localUserInfor = JSON.parse(localStringyUserInfor);
       const newUserInfor = { ...localUserInfor, ...infor };
       const stringyNewLocalUserInfor = JSON.stringify(newUserInfor);
-      
+
       localStorage.setItem("user", stringyNewLocalUserInfor);
       setUser({ ...user, ...infor });
     },
