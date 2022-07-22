@@ -46,6 +46,7 @@ const Home: NextPage = (props: any) => {
   const router = useRouter();
   const { user } = useContext(UserInforContext);
   const { location } = user;
+  console.log('user homepage', user)
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("user") || "{}");

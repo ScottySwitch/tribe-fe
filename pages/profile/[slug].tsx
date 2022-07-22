@@ -20,10 +20,11 @@ import {
 import { ProfileTabs } from "enums";
 import Image from "next/image";
 import Router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
 import { userInfo } from "os";
+import { UserInforContext } from "Context/UserInforContext";
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props;
@@ -97,6 +98,8 @@ const GroupHeadingTwo = (props: {
 };
 
 const ProfilePage = () => {
+  const { user } = useContext(UserInforContext);
+  console.log('user', user)
   const router = useRouter();
   const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
@@ -112,7 +115,6 @@ const ProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState<string>();
 
   useEffect(() => {
-    console.log('slug', slug)
 
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
