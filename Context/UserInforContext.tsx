@@ -1,4 +1,5 @@
-import { locations } from "constant";
+import { locations, loginInforItem } from "constant";
+import { Router, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { getBrowserLocation } from "utils";
 
@@ -23,19 +24,18 @@ export const UserInforContext = React.createContext({
 
 export const UserInforProvider = ({ children }) => {
   const [user, setUser] = useState<IUser>(defaultUserInformation);
-
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
     const localLocation = localLoginInfo.location;
-
     ///get location
     const setDefaulUserInfor = async () => {
       const browserLocation = await getBrowserLocation();
       updateUser({
+        ...localLoginInfo,
         location: localLocation || browserLocation || locations[0].value,
         token: localLoginInfo.token,
-        first_name: localLoginInfo.first_name,
+        // first_name: localLoginInfo.first_name,
         last_name: localLoginInfo.last_name,
         avatar: localLoginInfo.avatar,
       });

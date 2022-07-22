@@ -31,6 +31,7 @@ export type ILoginInfor = {
   avatar?: string;
   first_name?: string;
   last_name?: string;
+  listing_follow_ids?: any
 };
 
 function MyApp({ Component, pageProps }: AppProps) {

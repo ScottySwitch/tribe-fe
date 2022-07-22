@@ -9,6 +9,8 @@ import UserReviewCard, {
 } from "components/ReviewsPage/UserReviewCard/UserReviewCard";
 import { get, isEmpty } from "lodash";
 import { format } from "date-fns";
+import { isLocalURL } from "next/dist/shared/lib/router/router";
+import Loader from "components/Loader/Loader";
 interface IBiz {
   title: string;
   imgUrl: string;
@@ -55,7 +57,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
           >
             <ListingInfoCardInReview
               title={bizListing.name}
-              imgUrl={get(bizListing, 'images[0]')}
+              imgUrl={get(bizListing, "images[0]")}
               location={`${bizListing.address}, ${bizListing.country}`}
               rate={bizListing.rate}
               rateNumber={bizListing.rate_number}
@@ -76,39 +78,43 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
   const [listCard, setListCard] = useState<ListCardProps[] | any>();
   const [currentTab, setCurrentTab] = useState<string>();
   const [total, setTotal] = useState<number>();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [contributions, setContributions] = useState<{ [key: string]: any }>(
     []
   );
 
+
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    (userInfo && userInfo?.token) &&
-    ContributeApi.getUserContribute()
-      .then((res) => {
-        const contributionRawData = get(res, "data.data");
+    userInfo &&
+      userInfo?.token &&
+      setIsLoading(true)
+      ContributeApi.getUserContribute()
+        .then((res) => {
+          const contributionRawData = get(res, "data.data");
 
-        let contributionData: { pending: any[]; approved: any[] } = {
-          pending: [],
-          approved: [],
-        };
+          let contributionData: { pending: any[]; approved: any[] } = {
+            pending: [],
+            approved: [],
+          };
 
-        Array.isArray(contributionRawData) &&
-          contributionRawData.forEach((cont) => {
-            switch (cont.status) {
-              case "Pending":
-                contributionData.pending.push(cont);
-                break;
-              case "Approved":
-                contributionData.approved.push(cont);
-                break;
-            }
-          });
+          Array.isArray(contributionRawData) &&
+            contributionRawData.forEach((cont) => {
+              switch (cont.status) {
+                case "Pending":
+                  contributionData.pending.push(cont);
+                  break;
+                case "Approved":
+                  contributionData.approved.push(cont);
+                  break;
+              }
+            });
 
-        setContributions(contributionData);
-        console.log("contributionData", contributionData);
-      })
-      .catch((error) => console.log(error))
-      .finally();
+          setContributions(contributionData);
+          console.log("contributionData", contributionData);
+        })
+        .catch((error) => console.log(error))
+        .finally(() => {setIsLoading(false)});
   }, []);
 
   const TabList: ITab[] = [
@@ -140,10 +146,19 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
     setTotal(listCard?.length);
   }, [currentTab]);
 
+  if (isLoading) {
+    return (
+      <div className="w-full flex justify-center mt-20">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.contributed_panel}>
       {total && <div className={styles.total}>Total: {total}</div>}
       <TabsHorizontal
+        selectedTab={"pending"}
         tablist={TabList}
         type="primary-outline"
         className={styles.contributed_tab}

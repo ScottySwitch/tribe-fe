@@ -24,6 +24,7 @@ import Router, { useRouter } from "next/router";
 import React, { useEffect, useState, useContext } from "react";
 import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
+import FollowApi from "services/user-listing-follow";
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props;
@@ -54,11 +55,20 @@ const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
 
 const GroupHeadingTwo = (props: {
   contributions: number;
-  following: number;
+  following?: number;
   points: number;
 }) => {
   const { contributions, following, points } = props;
   const router = useRouter();
+  const [numberFollow, setNumberFollow] = useState<number>(0)
+  useEffect(() => {
+    const getData = async () => {
+      const dataFollow = await FollowApi.getFollowByUserId();
+      setNumberFollow(get(dataFollow, 'data.meta.pagination.total'))
+    };
+    getData();
+  }, []);
+
   return (
     <React.Fragment>
       <div className={styles.group_heading_two}>
@@ -69,7 +79,7 @@ const GroupHeadingTwo = (props: {
           </div>
           <div className={styles.outstanding_criteria}>
             <h5>Following</h5>
-            <span>{following}</span>
+            <span>{numberFollow}</span>
           </div>
           {/* <div className={styles.outstanding_criteria}>
             <h5>Points</h5>
@@ -98,8 +108,6 @@ const GroupHeadingTwo = (props: {
 
 const ProfilePage = () => {
   const { user } = useContext(UserInforContext);
-  console.log('user', user)
-  const {listing_follow_ids, listing_favourite_ids} = user
   const router = useRouter();
   const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
@@ -111,11 +119,10 @@ const ProfilePage = () => {
     industry: "",
     birthday: "",
   });
-  
+
   const [selectedTab, setSelectedTab] = useState<string>();
 
   useEffect(() => {
-
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
     if (!userInfo || !userInfo?.token) {
@@ -178,7 +185,6 @@ const ProfilePage = () => {
         />
         <GroupHeadingTwo
           contributions={0}
-          following={get(listing_follow_ids, "length")}
           points={0}
         />
         <TabsHorizontal
