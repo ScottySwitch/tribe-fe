@@ -80,10 +80,10 @@ const Home: NextPage = (props: any) => {
   const getBizListingForYou = async () => {
     setLoading(true);
 
-    const dataListing = await BizListingApi.getBizListingForYou(
+    const dataListing = await BizListingApi.getBizListingForYou({
       limit,
-      location
-    );
+      country: location || "singapore",
+    });
     const rawForYouListing = get(dataListing, "data.data");
     const listingArray = listingForYou.concat(
       formatListingArray(rawForYouListing)

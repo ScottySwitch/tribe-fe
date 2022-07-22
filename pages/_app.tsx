@@ -147,7 +147,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    const { user, updateUser } = contextDefaultValue;
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
       await AuthApi.getMe();
