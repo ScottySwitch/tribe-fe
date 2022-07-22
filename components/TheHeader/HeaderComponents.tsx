@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
@@ -14,6 +14,7 @@ import { UsersTypes } from "enums";
 import styles from "./Header.module.scss";
 import AuthApi from "services/auth";
 import bizListingApi from "services/biz-listing";
+import { UserInforContext } from "Context/UserInforContext";
 
 export const Categories = (props: {
   currentCategory?: string;
@@ -69,20 +70,45 @@ export const ContributeContent = () => {
   );
 };
 
-export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
+export const SwitchAccountsContent = () => {
+  const [ownerListing, setOwnerListing] = useState<any[]>([]);
+  const [userInfor, setUserInfor] = useState<any>({});
   const router = useRouter();
-  const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-  const userOwnerListing = userInfo.owner_listings || [];
-  const ownerListing = userOwnerListing.map((item) => item.attributes);
-  const {
-    query: { listingSlug },
-  } = router;
+  const { user } = useContext(UserInforContext);
+
+  console.log(user);
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    const userOwnerListing = userInfo.owner_listings || [];
+    const ownerListing = userOwnerListing.map((item) => item.attributes);
+    setUserInfor(userInfo);
+    setOwnerListing(ownerListing);
+  }, [router.pathname]);
+
+  const { query } = router;
+  const { listingSlug } = query;
+
+  const handleSwitchToNormalUser = async () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.type = UsersTypes.NORMAL_USER;
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    await router.push("/");
+    router.reload();
+  };
+
+  const handleGotoOwnedListing = async (item) => {
+    await router.push(`/biz/home/${item.slug}/edit`);
+    router.reload();
+  };
+
   return (
     <React.Fragment>
       {ownerListing.map((item) => (
         <div
           key={item.name}
-          className={`${styles.wrapper_content} cursor-pointer`}
+          className={`${styles.wrapper_content} flex gap-3 cursor-pointer`}
+          onClick={() => handleGotoOwnedListing(item)}
         >
           <Image
             src={
@@ -91,13 +117,9 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
             alt=""
             width={30}
             height={30}
-            onClick={() => router.push(`/biz/information/${item.slug}`)}
             style={{ borderRadius: "50%" }}
           />
-          <div
-            onClick={() => router.push(`/biz/home/${item.slug}/edit`)}
-            className={styles.name}
-          >
+          <div className={styles.name}>
             {item.name}
             {listingSlug === item.slug && (
               <Icon icon="icon-check-bold" size={14} color="#4acc8f" />
@@ -105,9 +127,12 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
           </div>
         </div>
       ))}
-      <div className="cursor-pointer flex" onClick={onSwitchToNormalUser}>
+      <div
+        className="cursor-pointer flex items-center gap-3"
+        onClick={handleSwitchToNormalUser}
+      >
         <Image
-          src={userInfo.avatar || require("public/images/avatar.png")}
+          src={userInfor.avatar || require("public/images/avatar.png")}
           alt=""
           width={30}
           height={30}
@@ -115,7 +140,7 @@ export const SwitchAccountsContent = ({ onSwitchToNormalUser }) => {
         />
         <div>
           <strong>
-            {userInfo.first_name} {userInfo.last_name}
+            {userInfor.first_name} {userInfor.last_name}
           </strong>
           <p className="text-xs">User account</p>
         </div>
@@ -146,14 +171,6 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
     } else {
       router.push("/claim");
     }
-  };
-
-  const handleSwitchToNormalUser = () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.type = UsersTypes.NORMAL_USER;
-    localStorage.setItem("user", JSON.stringify(userInfo));
-    router.push("/");
-    router.reload();
   };
 
   if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {
@@ -192,14 +209,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   if (!!loginInfor.token && loginInfor.type === UsersTypes.BIZ_USER) {
     return (
       <>
-        <Popover
-          content={
-            <SwitchAccountsContent
-              onSwitchToNormalUser={handleSwitchToNormalUser}
-            />
-          }
-          position="bottom-left"
-        >
+        <Popover content={<SwitchAccountsContent />} position="bottom-left">
           <div className="flex gap-2 items-center">
             <Icon icon="user-color" size={20} />
             Switch accounts

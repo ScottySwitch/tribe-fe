@@ -545,7 +545,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center mt-20">
+      <div className="w-full flex justify-center items-center my-20">
         <Loader />
       </div>
     );

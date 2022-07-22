@@ -129,14 +129,14 @@ const UserReviewCard = (props: UserReviewCardProps) => {
                 <span className="font-normal ml-2">{censorshipLabel}</span>
               )}
             </h6>
-            {(
+            {
               <Popover
                 content={<div onClick={onReportClick}>Report review</div>}
                 position="bottom-left"
               >
                 <Icon icon="toolbar" />
               </Popover>
-            )}
+            }
           </div>
           <div className={styles.status_date}>
             {status && <div className={statusClassName}>{status}</div>}
@@ -152,17 +152,19 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {content && <p className={styles.content}>{content}</p>}
-        {listImage && listImage.length && (
+        {Array.isArray(listImage) && listImage.length > 0 && (
           <ul className={styles.image_list}>
-            {listImage?.map((image, index) => (
+            {listImage.map((image, index) => (
               <li key={index} className={styles.image_item}>
-                <Image
-                  src={image}
-                  height={106}
-                  width={106}
-                  className="rounded-2xl"
-                  alt=""
-                />
+                {typeof image === "string" && (
+                  <Image
+                    src={image}
+                    height={106}
+                    width={106}
+                    className="rounded-2xl"
+                    alt=""
+                  />
+                )}
               </li>
             ))}
           </ul>
@@ -201,7 +203,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {actions && (
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-y-0 gap-3">
             <Button
               variant="secondary"
               text="Reply review"

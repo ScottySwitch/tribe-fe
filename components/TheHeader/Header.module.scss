@@ -46,14 +46,6 @@
           border-radius: 50%;
         }
 
-        .name {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 30px;
-          width: calc(100% - 40px);
-        }
-
         .wrapper_content {
           align-items: unset !important;
         }
@@ -144,6 +136,14 @@
       }
     }
   }
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  width: calc(100% - 40px);
 }
 
 @media screen and (max-width: $tablet) {
