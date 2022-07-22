@@ -14,7 +14,6 @@ const defaultUserInformation: { [key: string]: any } = {
   token: undefined,
   avatar: undefined,
   location: undefined,
-  listing_follow_ids: [11, 12],
 };
 
 export const UserInforContext = React.createContext({
