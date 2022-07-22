@@ -1,4 +1,4 @@
-import { locations } from "constant";
+import { locations, loginInforItem } from "constant";
 import React, { useEffect, useState } from "react";
 import { getBrowserLocation } from "utils";
 
@@ -13,6 +13,7 @@ const defaultUserInformation: { [key: string]: any } = {
   token: undefined,
   avatar: undefined,
   location: undefined,
+  listing_follow_ids: undefined,
 };
 
 export const UserInforContext = React.createContext({
@@ -38,6 +39,7 @@ export const UserInforProvider = ({ children }) => {
         first_name: localLoginInfo.first_name,
         last_name: localLoginInfo.last_name,
         avatar: localLoginInfo.avatar,
+        listing_follow_ids: localLoginInfo.listing_follow_ids,
       });
     };
     setDefaulUserInfor();
