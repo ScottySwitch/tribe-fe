@@ -92,11 +92,12 @@ const getMe = async () => {
     localStorage.removeItem("user");
     window.location.href = "/";
   }
-  if (!me.data.avatar) {
-    me.data.avatar = "https://picsum.photos/200";
-  } else {
-    me.data.avatar = me.data.avatar;
-  }
+  // if (!me.data.avatar) {
+  //   me.data.avatar = "https://picsum.photos/200";
+  // } else {
+  //   me.data.avatar = me.data.avatar;
+  // }
+  me.data.user_avatar = me.data.avatar || undefined;
   if (localStorage.getItem("user")) {
     if (!userInfo.type) {
       me.data.type = UsersTypes.NORMAL_USER;

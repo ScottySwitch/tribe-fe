@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MouseEventHandler, useEffect, useState } from "react";
+import { MouseEventHandler, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 
 import Button from "components/Button/Button";
@@ -20,6 +20,8 @@ import ClaimListingApi from "services/claim-listing";
 import { formattedAreaCodes, phoneAreaCodes } from "constant";
 import SelectInput from "components/SelectInput/SelectInput";
 import { get } from "lodash";
+import bizListingApi from "services/biz-listing";
+import { UserInforContext } from "Context/UserInforContext";
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -52,6 +54,7 @@ const LoginPage = (context) => {
   const [isLoginError, setIsLoginError] = useState<boolean>(false);
 
   const router = useRouter();
+  const { user, updateUser } = useContext(UserInforContext);
 
   useEffect(() => {
     const loginButton = document.getElementById("login-button");
@@ -66,6 +69,13 @@ const LoginPage = (context) => {
     return () => window?.removeEventListener("keypress", clickLoginButton);
   }, []);
 
+  const getOwnerListing = async (userId) => {
+    const dataOwnerListing = await bizListingApi.getOwnerBizListing(userId);
+    updateUser({
+      owner_listings: dataOwnerListing.data.data,
+    });
+  };
+
   const handleLogin = async () => {
     let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}");
     setIsLoading(true);
@@ -79,17 +89,20 @@ const LoginPage = (context) => {
         });
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(get(err, "response.data.error"));
         setIsLoading(false);
         setIsLoginError(true);
         return false;
       }
 
       if (result.data) {
-        let { jwt } = result.data;
+        let {
+          jwt,
+          user: { id },
+        } = result.data;
         userInfoLogin.token = jwt;
         localStorage.setItem("user", JSON.stringify(userInfoLogin));
         await AuthApi.getMe();
+        getOwnerListing(id);
       }
     } else {
       let result: any = null;
@@ -107,10 +120,14 @@ const LoginPage = (context) => {
       }
 
       if (result.data) {
-        let { jwt } = result.data;
+        let {
+          jwt,
+          user: { id },
+        } = result.data;
         userInfoLogin.token = jwt;
         localStorage.setItem("user", JSON.stringify(userInfoLogin));
         await AuthApi.getMe();
+        getOwnerListing(id);
       }
     }
     const finalPreviousPage = [

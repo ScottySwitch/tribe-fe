@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { rateType } from "../ReviewCard/ReviewCard";
 import classNames from "classnames";
 import Icon from "components/Icon/Icon";
@@ -8,6 +8,10 @@ import styles from "./UserReviewCard.module.scss";
 import Popover from "components/Popover/Popover";
 import Button from "components/Button/Button";
 import { calcDistanceFromNow } from "utils";
+import Upload from "components/Upload/Upload";
+import Album from "components/Album/Album";
+import { get } from "lodash";
+import Modal from "components/Modal/Modal";
 export interface UserReviewCardProps {
   reply?: string;
   replyAt?: string;
@@ -30,6 +34,7 @@ export interface UserReviewCardProps {
   publishedAt?: string;
   createdDate?: string;
   isDivier?: boolean;
+  bizListingId?: number | string;
   user?: any;
   onReplyClick?(): void;
   onReportClick?(): void;
@@ -37,6 +42,7 @@ export interface UserReviewCardProps {
 
 const UserReviewCard = (props: UserReviewCardProps) => {
   const {
+    bizListingId,
     reply,
     replyAt,
     className = "",
@@ -59,6 +65,8 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     onReportClick,
     isDivier = false,
   } = props;
+
+  const [showAlbumModal, setShowAlbumModal] = useState(false);
 
   const userReviewCardClassName = classNames(
     styles.review_completed,
@@ -129,14 +137,14 @@ const UserReviewCard = (props: UserReviewCardProps) => {
                 <span className="font-normal ml-2">{censorshipLabel}</span>
               )}
             </h6>
-            {(
+            {
               <Popover
                 content={<div onClick={onReportClick}>Report review</div>}
                 position="bottom-left"
               >
                 <Icon icon="toolbar" />
               </Popover>
-            )}
+            }
           </div>
           <div className={styles.status_date}>
             {status && <div className={statusClassName}>{status}</div>}
@@ -152,17 +160,23 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {content && <p className={styles.content}>{content}</p>}
-        {listImage && listImage.length > 0 && (
+        {Array.isArray(listImage) && listImage.length > 0 && (
           <ul className={styles.image_list}>
-            {listImage?.map((image, index) => (
-              <li key={index} className={styles.image_item}>
-                <Image
-                  src={image}
-                  height={106}
-                  width={106}
-                  className="rounded-2xl"
-                  alt=""
-                />
+            {listImage.map((image, index) => (
+              <li
+                key={index}
+                className={styles.image_item}
+                onClick={() => setShowAlbumModal(true)}
+              >
+                {typeof image === "string" && (
+                  <Image
+                    src={image}
+                    height={106}
+                    width={106}
+                    className="rounded-2xl cursor-pointer"
+                    alt=""
+                  />
+                )}
               </li>
             ))}
           </ul>
@@ -201,7 +215,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {actions && (
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-y-0 gap-3">
             <Button
               variant="secondary"
               text="Reply review"
@@ -222,6 +236,23 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
       </div>
+      <Modal
+        visible={showAlbumModal}
+        title=" "
+        width="90%"
+        // maxHeight="90%"
+        mobilePosition="center"
+        onClose={() => setShowAlbumModal(false)}
+        contentClassName="pb-3"
+      >
+        <Album
+          id="listing-review-album"
+          reportMedia={false}
+          key={get(listImage, "length")}
+          images={listImage}
+          listingId={bizListingId}
+        />
+      </Modal>
     </div>
   );
 };

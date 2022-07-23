@@ -47,16 +47,15 @@ const Banner = (props: BannerProps) => {
         width="90%"
         // maxHeight="90%"
         mobilePosition="center"
+        contentClassName="pb-3"
         onClose={() => setShowAlbumModal(false)}
       >
-        <div className="p-5">
-          <Album
-            id="banner-album"
-            key={get(listingImages, "length")}
-            images={listingImages}
-            listingId={listingId}
-          />
-        </div>
+        <Album
+          id="banner-album"
+          key={get(listingImages, "length")}
+          images={listingImages}
+          listingId={listingId}
+        />
       </Modal>
     </React.Fragment>
   );

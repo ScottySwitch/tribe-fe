@@ -7,6 +7,7 @@ import VideoThumbnail from "react-video-thumbnail";
 import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./Upload.module.scss";
 import Popover from "components/Popover/Popover";
+import { detectIsVideo } from "utils";
 
 export interface UploadProps {
   name?: string;
@@ -212,6 +213,10 @@ const Upload = (props: UploadProps) => {
     [styles.hide]: type === "avatar",
   });
 
+  useEffect(() => {
+    console.log(type, showedImages);
+  });
+
   return (
     <div className={containerClassName}>
       {Array.isArray(showedImages) &&
@@ -230,8 +235,11 @@ const Upload = (props: UploadProps) => {
             <div className={styles.add_icon}>{centerIcon}</div>
             <div className={styles.loader} />
             <Input onChange={(e) => handleChange(e, src)} multiple={false} />
-            {src && <Image src={src} alt="" layout="fill" objectFit="cover" />}
-            {/* <VideoThumbnail videoUrl={src} /> */}
+            {detectIsVideo(src) ? (
+              <video id="video" src={src} controls className={styles.video} />
+            ) : (
+              <Image src={src} alt="" layout="fill" objectFit="cover" />
+            )}
           </div>
         ))}
 

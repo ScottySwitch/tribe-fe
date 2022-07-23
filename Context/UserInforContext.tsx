@@ -13,6 +13,7 @@ const defaultUserInformation: { [key: string]: any } = {
   first_name: undefined,
   token: undefined,
   avatar: undefined,
+  user_avatar: undefined,
   location: undefined,
 };
 
@@ -35,9 +36,10 @@ export const UserInforProvider = ({ children }) => {
         ...localLoginInfo,
         location: localLocation || browserLocation || locations[0].value,
         token: localLoginInfo.token,
-        // first_name: localLoginInfo.first_name,
+        first_name: localLoginInfo.first_name,
         last_name: localLoginInfo.last_name,
         avatar: localLoginInfo.avatar,
+        user_avatar: localLoginInfo.user_avatar,
       });
     };
     setDefaulUserInfor();
