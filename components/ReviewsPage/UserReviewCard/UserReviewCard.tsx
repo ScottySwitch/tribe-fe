@@ -173,7 +173,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
                     src={image}
                     height={106}
                     width={106}
-                    className="rounded-2xl"
+                    className="rounded-2xl cursor-pointer"
                     alt=""
                   />
                 )}

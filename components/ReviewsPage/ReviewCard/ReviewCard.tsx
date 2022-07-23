@@ -13,6 +13,8 @@ import classNames from "classnames";
 import Break from "components/Break/Break";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 import { useRouter } from "next/router";
+import moment from "moment";
+import { monthOfTwoYearsOptions } from "utils";
 
 const dummyDate = [
   { label: "April 2022", value: "April 2022" },
@@ -62,11 +64,12 @@ export const ReviewForm = (props) => {
       <div className={styles.form_group}>
         <div className={styles.form_label}>Add images/ videos ( up to 3 )</div>
         <Upload
+          isPaid
           multiple={true}
           accept="images"
           type="media"
           centerIcon={<Icon icon="plus" />}
-          onChange={(urls) => setImages([...images, urls || ''])}
+          onChange={(urls) => setImages([...images, urls || ""])}
         />
       </div>
       <div className={styles.form_group}>
@@ -74,7 +77,7 @@ export const ReviewForm = (props) => {
           label="When did you purchase item / use services?"
           placeholder="Select one"
           size="large"
-          options={dummyDate}
+          options={monthOfTwoYearsOptions()}
           onChange={(e: any) => {
             setVisitedDate(e.value);
           }}
@@ -127,7 +130,7 @@ const ReviewCard = (props: IReviewCardProps) => {
   const [ratingReadonly, setRatingReadonly] = useState<boolean>(true);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -163,7 +166,10 @@ const ReviewCard = (props: IReviewCardProps) => {
           />
         </div>
         <div className={styles.display_mobile}>
-          <h4 className={styles.title} onClick={() => router.push(`/biz/home/${slug}`)}>
+          <h4
+            className={styles.title}
+            onClick={() => router.push(`/biz/home/${slug}`)}
+          >
             {title}
           </h4>
           <div className={styles.location}>{location}</div>
@@ -190,7 +196,10 @@ const ReviewCard = (props: IReviewCardProps) => {
       </div>
       <div className="w-full">
         <div className={styles.display_desktop}>
-          <h4 className={styles.title} onClick={() => router.push(`/biz/home/${slug}`)}>
+          <h4
+            className={styles.title}
+            onClick={() => router.push(`/biz/home/${slug}`)}
+          >
             {title}
           </h4>
           <div className={styles.location}>{location}</div>

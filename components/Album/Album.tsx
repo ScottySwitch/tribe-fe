@@ -8,7 +8,7 @@ import Radio from "components/Radio/Radio";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 import { reportReasons } from "constant";
 import { UserInforContext } from "Context/UserInforContext";
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
 import Slider, { Settings } from "react-slick";
@@ -175,16 +175,19 @@ export const Album = (props: AlbumProps) => {
           {...configThumbnail}
           className={styles.slider_thumbnail}
         >
-          {images?.map((image, index) => (
-            <div key={index} className={styles.slider_thumbnail_item}>
-              <Image
-                src={image}
-                layout="fill"
-                alt={`thumbnail-${index}`}
-                objectFit="contain"
-              />
-            </div>
-          ))}
+          {isArray(images) &&
+            images.map((image, index) => (
+              <div key={index} className={styles.slider_thumbnail_item}>
+                {typeof image === "string" && (
+                  <Image
+                    src={image}
+                    layout="fill"
+                    alt={`thumbnail-${index}`}
+                    objectFit="contain"
+                  />
+                )}
+              </div>
+            ))}
         </Slider>
         <div onClick={handleNextThumbnail} className={styles.btn_next}>
           <Icon icon="carret-right" size={40} color="#FFFFFF" />
@@ -199,16 +202,19 @@ export const Album = (props: AlbumProps) => {
           {...configGallery}
           className={styles.slider_gallery}
         >
-          {images?.map((image, index) => (
-            <div key={index} className={styles.slider_gallery_item}>
-              <Image
-                src={image}
-                layout="fill"
-                alt={`gallery-${index}`}
-                objectFit="contain"
-              />
-            </div>
-          ))}
+          {isArray(images) &&
+            images.map((image, index) => (
+              <div key={index} className={styles.slider_gallery_item}>
+                {typeof image === "string" && (
+                  <Image
+                    src={image}
+                    layout="fill"
+                    alt={`gallery-${index}`}
+                    objectFit="contain"
+                  />
+                )}
+              </div>
+            ))}
         </Slider>
         <div onClick={handleNextGallery} className={galleryNextBtnClassName}>
           <Icon icon="carret-right" size={30} color="#FFFFFF" />
