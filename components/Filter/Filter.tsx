@@ -22,6 +22,7 @@ import { get, isArray } from "lodash";
 import { IOption } from "type";
 import ProductTypeApi from "services/product-type";
 import ProductBrandApi from "services/product-brand";
+import { useRouter } from "next/router";
 
 export interface IFilter {
   productTypes: string[];
@@ -196,6 +197,8 @@ const Filter = (props: FilterProps) => {
     onClose,
   } = props;
 
+  const router = useRouter();
+
   const [localFilter, setLocalFilter] = useState<IFilter | undefined>(filter);
   const [productTypes, setProductTypes] = useState<IOption[]>([]);
   const [productBrands, setProductBrands] = useState<IOption[]>([]);
@@ -228,7 +231,7 @@ const Filter = (props: FilterProps) => {
     getProductTypes();
     getProductBrands();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localFilter?.productTypes]);
+  }, [router.asPath, categoryLink, localFilter?.productTypes]);
 
   const handleFilter = (e) => {
     setLocalFilter?.({ ...localFilter, ...e });
@@ -255,7 +258,7 @@ const Filter = (props: FilterProps) => {
       value: Filters.OTHER,
       content: (
         <Other
-          key="productTypes"
+          key={"productTypes" + get(productTypes, "length")}
           filter={localFilter}
           filterKey="productTypes"
           options={productTypes}
@@ -268,7 +271,7 @@ const Filter = (props: FilterProps) => {
       value: Filters.OTHER_OTHER,
       content: (
         <Other
-          key="productBrands"
+          key={"productBrands" + get(productBrands, "length")}
           filter={localFilter}
           filterKey="productBrands"
           options={productBrands}

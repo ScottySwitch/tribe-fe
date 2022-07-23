@@ -48,7 +48,7 @@ const SubCategoryPage = (context) => {
   };
 
   const [bannerArray, setBannergArray] = useState<IType[]>([]);
-  const [categoryLinkArray, setCategoryLinkArray] = useState<ITab[]>([])
+  const [categoryLinkArray, setCategoryLinkArray] = useState<ITab[]>([]);
   const [currentSubCategory, setCurrentSubCategory] = useState(categoryLink);
 
   const [loading, setLoading] = useState(true);
@@ -72,7 +72,7 @@ const SubCategoryPage = (context) => {
       setBannergArray(rawListBanners);
 
       const dataCategoryLinks =
-      await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+        await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
       let categoryLinkArray: any = [
         {
           label: "All",
@@ -82,13 +82,14 @@ const SubCategoryPage = (context) => {
         },
       ];
       // const rawListBanners = get(dataBanners, "data.data");
-      const rawListCategory = formatCategoryLink(get(dataCategoryLinks, "data.data"));
+      const rawListCategory = formatCategoryLink(
+        get(dataCategoryLinks, "data.data")
+      );
       categoryLinkArray =
-      isArray(rawListCategory) &&
-      categoryLinkArray.concat(rawListCategory);
-      setCategoryLinkArray(categoryLinkArray)
+        isArray(rawListCategory) && categoryLinkArray.concat(rawListCategory);
+      setCategoryLinkArray(categoryLinkArray);
     };
-    getData()
+    getData();
   }, []);
 
   useEffect(() => {
@@ -130,22 +131,14 @@ const SubCategoryPage = (context) => {
   }
 
   const handleFilter = (e?: IFilter) => {
-    console.log({ ...filter, ...e });
     e && setFilter({ ...filter, ...e });
   };
 
   const handleChangeSubCategory = (e) => {
     setCurrentSubCategory(e);
-    router.replace(
-      {
-        pathname: `/${category}/${e}`,
-      },
-      undefined,
-      { shallow: true }
-    );
+    router.replace(`/${category}/${e}`);
     // getDataBizlisting(category, e, page)
   };
-
 
   return (
     <div>
@@ -156,8 +149,11 @@ const SubCategoryPage = (context) => {
           <Icon icon="carret-right" size={14} color="#7F859F" />
           {categoryLink}
         </div>
-        <Carousel responsive={homeBannerResponsive}>
-          {bannerArray?.map((img, index) => (
+        <Carousel
+          responsive={homeBannerResponsive}
+          isShow={isArray(bannerArray) && !!bannerArray.length}
+        >
+          {bannerArray.map((img, index) => (
             <div
               key={index}
               className={styles.banner_card}
@@ -177,7 +173,7 @@ const SubCategoryPage = (context) => {
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
-        <div className="flex">
+          <div className="flex flex-wrap justify-between pt-3">
             <TabsHorizontal
               tablist={
                 Array.isArray(categoryLinkArray)
@@ -187,7 +183,7 @@ const SubCategoryPage = (context) => {
               type="secondary-no-outline"
               selectedTab={currentSubCategory}
               className="pt-[6px]"
-              onCurrentTab={handleChangeSubCategory}
+              onChangeTab={handleChangeSubCategory}
             />
             {/* <Select
               placeholder="More"
@@ -207,15 +203,15 @@ const SubCategoryPage = (context) => {
               }}
               onChange={(e) => handleChangeSubCategory(e.value)}
             /> */}
+            <Button
+              width={150}
+              size="small"
+              text="Filter & Sort"
+              variant="secondary"
+              prefix={<Icon icon="filter-1" />}
+              onClick={() => setShowFilter(true)}
+            />
           </div>
-          <Button
-            width={180}
-            size="small"
-            text="Filter & Sort"
-            variant="secondary"
-            prefix={<Icon icon="filter-1" />}
-            onClick={() => setShowFilter(true)}
-          />
         </div>
       </SectionLayout>
       <SectionLayout show={isArray(listings)}>

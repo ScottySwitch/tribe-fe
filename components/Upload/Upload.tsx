@@ -213,10 +213,6 @@ const Upload = (props: UploadProps) => {
     [styles.hide]: type === "avatar",
   });
 
-  useEffect(() => {
-    console.log(type, showedImages);
-  });
-
   return (
     <div className={containerClassName}>
       {Array.isArray(showedImages) &&

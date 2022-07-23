@@ -7,12 +7,8 @@ import { format } from "path";
 
 export const detectIsVideo = (src: string | Blob) => {
   if (typeof src === "string") {
-    const result = videoExtensions.some((item) => src?.includes(item));
-    console.log("checkkkkk", src, result);
-    result && console.log("+++++++++++++++++++++++++++++++++++++++=", src);
-    return result;
+    return videoExtensions.some((item) => src?.includes(item));
   } else {
-    console.log("------------", src);
     return false;
   }
 };
