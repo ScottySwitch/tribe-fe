@@ -26,6 +26,14 @@ export const user = "user";
 export const userId = "user_id";
 export const token = "token";
 
+export const sortOptions = [
+  // { label: "Price (Low to high)" },
+  // { label: "Price (High to low)" },
+  { label: "Rating (High to low)", value: "desc" },
+  { label: "Rating (Low to high)", value: "asc" },
+  // { label: "Recently added" },
+];
+
 export const curatedList = [
   {
     title: "Find relevant and timely products and services to suit your needs",

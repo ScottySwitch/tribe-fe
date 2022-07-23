@@ -59,6 +59,12 @@
   cursor: pointer;
 }
 
+.filter_badge {
+  border: 1px solid $primary-500;
+  background-color: $primary-20;
+  color: $primary-500;
+}
+
 .for_you {
   padding: 10px 0;
 

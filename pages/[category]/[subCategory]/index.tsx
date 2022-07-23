@@ -9,7 +9,12 @@ import InforCard from "components/InforCard/InforCard";
 import Pagination from "components/Pagination/Pagination";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
-import { categories, homeBannerResponsive, inforCardList } from "constant";
+import {
+  categories,
+  homeBannerResponsive,
+  inforCardList,
+  sortOptions,
+} from "constant";
 import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
@@ -19,10 +24,11 @@ import { formatBanner, formatCategoryLink, formatListingArray } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import Button from "components/Button/Button";
 import Filter, { IFilter } from "components/Filter/Filter";
+import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 
 import styles from "styles/Home.module.scss";
-import Select from "components/Select/Select";
-import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
+import Badge from "components/Badge/Badge";
+import useGetCountry from "hooks/useGetCountry";
 interface IType {
   [key: string]: any;
 }
@@ -31,7 +37,6 @@ interface IType {
 const SubCategoryPage = (context) => {
   const { category, categoryLink } = context;
 
-  const trans = useTrans();
   const router = useRouter();
   const { user } = useContext(UserInforContext);
   const { location } = user;
@@ -40,10 +45,10 @@ const SubCategoryPage = (context) => {
   const defaultFilterOptions: IFilter = {
     productTypes: [],
     productBrands: [],
-    minPrice: undefined,
+    minPrice: 0,
     maxPrice: undefined,
     sort: undefined,
-    minRating: undefined,
+    minRating: 0,
     maxRating: undefined,
   };
 
@@ -57,9 +62,34 @@ const SubCategoryPage = (context) => {
   const [showFilter, setShowFilter] = useState(false);
   const [filter, setFilter] = useState(defaultFilterOptions);
 
+  const { currency } = useGetCountry();
+
   const finalTabLabel = categories.find(
     (cat) => cat.slug === category
   )?.finalTabLabel;
+
+  const filterLabels = [
+    {
+      keys: ["sort"],
+      isShow: !!filter.sort,
+      label: "Sort: ",
+      value: sortOptions.find((item) => item.value === filter.sort)?.label,
+    },
+    {
+      keys: ["minRating", "maxRating"],
+      isShow: !!filter.minRating,
+      label: "Rating: ",
+      value: `${filter.minRating || "0"} - ${filter.maxRating}`,
+    },
+    {
+      keys: ["minPrice", "maxPrice"],
+      isShow: !!filter.maxPrice && !!currency,
+      label: "Price: ",
+      value: `${currency + " " + filter.minPrice} - ${
+        currency + " " + filter.maxPrice
+      }`,
+    },
+  ];
 
   useEffect(() => {
     const getData = async () => {
@@ -140,6 +170,21 @@ const SubCategoryPage = (context) => {
     // getDataBizlisting(category, e, page)
   };
 
+  const handleRemoveFilter = (keys) => {};
+
+  const FilterBadge = (item) => {
+    return (
+      item.isShow && (
+        <Badge size="small" className={styles.filter_badge}>
+          <div className="flex gap-2">
+            {item.label} {item.value}
+            <div onClick={() => handleRemoveFilter(item.keys)}>&#x2715;</div>
+          </div>
+        </Badge>
+      )
+    );
+  };
+
   return (
     <div>
       <SectionLayout className="pt-0">
@@ -211,6 +256,11 @@ const SubCategoryPage = (context) => {
               prefix={<Icon icon="filter-1" />}
               onClick={() => setShowFilter(true)}
             />
+          </div>
+          <div className="flex gap-3 flex-wrap mt-1">
+            {filterLabels.map((item) => (
+              <FilterBadge key={item.label} item={item} />
+            ))}
           </div>
         </div>
       </SectionLayout>
