@@ -5,6 +5,7 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
+import { reportReasons } from "constant";
 import { UserInforContext } from "Context/UserInforContext";
 import { get } from "lodash";
 import Image from "next/image";
@@ -32,7 +33,7 @@ export const Album = (props: AlbumProps) => {
   const [navThumbnail, setNavThumbnail] = useState<any>();
   const [navGallery, setNavGallery] = useState<any>();
   const [isMobile, setIsMobile] = useState(false);
-  const [reason, setReason] = useState();
+  const [reason, setReason] = useState<string>("");
   const [showReportModal, setShowReportModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [submitResult, setSubmitResult] = useState(false);
@@ -128,6 +129,8 @@ export const Album = (props: AlbumProps) => {
       .createReport(body)
       .then((res) => {
         setSubmitResult(true);
+        setReason("");
+        console.log("success");
       })
       .catch((error) => {
         setSubmitResult(false);
@@ -137,6 +140,8 @@ export const Album = (props: AlbumProps) => {
         setShowResultModal(true);
       });
   };
+
+  const notOtherReason = reportReasons.slice(0, 5).map((item) => item.value);
 
   return (
     <div className={styles.slider_syncing}>
@@ -202,20 +207,22 @@ export const Album = (props: AlbumProps) => {
         onClose={() => setShowReportModal(false)}
       >
         <div className="p-[30px] flex flex-col gap-5">
-          {reportReasons.map((reason) => (
+          {reportReasons.map((item) => (
             <Radio
-              id={`${id} - ${reason.label}`}
-              key={reason.value}
-              label={reason.label}
-              value={reason.value}
+              id={`${id} - ${item.label}`}
+              key={item.value}
+              label={item.label}
+              value={item.value}
+              checked={reason === item.value}
               name="report-media"
               onChange={(e: any) => setReason(e.target.value)}
             />
           ))}
           <Input
+            value={notOtherReason.includes(reason) ? "" : reason}
             placeholder="Your reason"
             onChange={(e: any) => setReason(e.target.value)}
-            disabled={reason !== reportReasons[5].value}
+            disabled={reason === "" || notOtherReason.includes(reason)}
           />
           <div className="flex justify-end gap-3">
             <Button
@@ -237,32 +244,5 @@ export const Album = (props: AlbumProps) => {
     </div>
   );
 };
-
-const reportReasons = [
-  {
-    label: "Offensive, hateful or sexually explicit",
-    value: "Offensive, hateful or sexually explicit",
-  },
-  {
-    label: "Legal issue",
-    value: "Legal issue",
-  },
-  {
-    label: "Privacy concern",
-    value: "Privacy concern",
-  },
-  {
-    label: "Poor quality",
-    value: "Poor quality",
-  },
-  {
-    label: "Not a photo of the place",
-    value: "Not a photo of the place",
-  },
-  {
-    label: "Other",
-    value: "Other",
-  },
-];
 
 export default Album;

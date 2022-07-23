@@ -971,6 +971,33 @@ export const dummySubCategories = [
   },
 ];
 
+export const reportReasons = [
+  {
+    label: "Offensive, hateful or sexually explicit",
+    value: "Offensive, hateful or sexually explicit",
+  },
+  {
+    label: "Legal issue",
+    value: "Legal issue",
+  },
+  {
+    label: "Privacy concern",
+    value: "Privacy concern",
+  },
+  {
+    label: "Poor quality",
+    value: "Poor quality",
+  },
+  {
+    label: "Not a photo of the place",
+    value: "Not a photo of the place",
+  },
+  {
+    label: "Other",
+    value: "Your reason",
+  },
+];
+
 export const categories = [
   {
     width: "w-[30px]",
