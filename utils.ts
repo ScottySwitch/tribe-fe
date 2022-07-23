@@ -2,8 +2,20 @@ import { get } from "lodash";
 import { IOption } from "type";
 import moment from "moment";
 import parseISO from "date-fns/parseISO";
-import { locations } from "constant";
+import { locations, videoExtensions } from "constant";
 import { format } from "path";
+
+export const detectIsVideo = (src: string | Blob) => {
+  if (typeof src === "string") {
+    const result = videoExtensions.some((item) => src?.includes(item));
+    console.log("checkkkkk", src, result);
+    result && console.log("+++++++++++++++++++++++++++++++++++++++=", src);
+    return result;
+  } else {
+    console.log("------------", src);
+    return false;
+  }
+};
 
 export const getIndex = (id, list) => {
   return list.findIndex((item) => item.id === id);

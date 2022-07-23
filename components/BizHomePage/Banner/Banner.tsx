@@ -47,6 +47,7 @@ const Banner = (props: BannerProps) => {
         width="90%"
         // maxHeight="90%"
         mobilePosition="center"
+        contentClassName="pb-3"
         onClose={() => setShowAlbumModal(false)}
       >
         <Album

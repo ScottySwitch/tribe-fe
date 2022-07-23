@@ -10,6 +10,17 @@ import {
 import { IAddListingForm } from "pages/add-listing";
 import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed";
 
+export const videoExtensions = [
+  ".flv",
+  ".mp4",
+  ".m3u8",
+  ".ts",
+  ".3gp",
+  ".mov",
+  ".avi",
+  ".wmv",
+];
+
 export const loginInforItem = "login_infor";
 export const user = "user";
 export const userId = "user_id";

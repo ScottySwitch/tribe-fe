@@ -4,6 +4,7 @@ import moment from "moment";
 import parseISO from "date-fns/parseISO";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
+import VideoThumbnail from "react-video-thumbnail";
 
 import Loader from "components/Loader/Loader";
 import Icon from "components/Icon/Icon";

@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
 import Slider, { Settings } from "react-slick";
 import reportApi from "services/report";
+import { detectIsVideo } from "utils";
 
 import styles from "./Album.module.scss";
 
@@ -30,7 +31,7 @@ export const Album = (props: AlbumProps) => {
     listingId,
     reportMedia = true,
     images = [],
-    showedPicsNumber = { slidesToShow: 12, slidesToScroll: 12 },
+    showedPicsNumber = { slidesToShow: 8, slidesToScroll: 8 },
   } = props;
 
   const [navThumbnail, setNavThumbnail] = useState<any>();
@@ -176,11 +177,18 @@ export const Album = (props: AlbumProps) => {
           className={styles.slider_thumbnail}
         >
           {isArray(images) &&
-            images.map((image, index) => (
+            images.map((src, index) => (
               <div key={index} className={styles.slider_thumbnail_item}>
-                {typeof image === "string" && (
+                {detectIsVideo(src) ? (
+                  <video
+                    id="video"
+                    src={src}
+                    controls
+                    className={styles.video}
+                  />
+                ) : (
                   <Image
-                    src={image}
+                    src={src}
                     layout="fill"
                     alt={`thumbnail-${index}`}
                     objectFit="contain"
@@ -203,11 +211,13 @@ export const Album = (props: AlbumProps) => {
           className={styles.slider_gallery}
         >
           {isArray(images) &&
-            images.map((image, index) => (
+            images.map((src, index) => (
               <div key={index} className={styles.slider_gallery_item}>
-                {typeof image === "string" && (
+                {detectIsVideo(src) ? (
+                  <video src={src} className={styles.video} />
+                ) : (
                   <Image
-                    src={image}
+                    src={src}
                     layout="fill"
                     alt={`gallery-${index}`}
                     objectFit="contain"

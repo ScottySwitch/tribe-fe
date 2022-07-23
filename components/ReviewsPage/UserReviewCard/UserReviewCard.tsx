@@ -243,6 +243,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
         // maxHeight="90%"
         mobilePosition="center"
         onClose={() => setShowAlbumModal(false)}
+        contentClassName="pb-3"
       >
         <Album
           id="listing-review-album"
