@@ -244,15 +244,13 @@ const UserReviewCard = (props: UserReviewCardProps) => {
         mobilePosition="center"
         onClose={() => setShowAlbumModal(false)}
       >
-        <div className="p-5">
-          <Album
-            id="listing-review-album"
-            reportMedia={false}
-            key={get(listImage, "length")}
-            images={listImage}
-            listingId={bizListingId}
-          />
-        </div>
+        <Album
+          id="listing-review-album"
+          reportMedia={false}
+          key={get(listImage, "length")}
+          images={listImage}
+          listingId={bizListingId}
+        />
       </Modal>
     </div>
   );
