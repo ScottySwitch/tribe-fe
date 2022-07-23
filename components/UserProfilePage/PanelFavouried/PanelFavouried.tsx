@@ -29,7 +29,7 @@ const ListCard = (props: {
             rateNumber={card.rateNumber}
             followerNumber={card.followerNumber}
             price={card.price}
-            currency={(card.currency)?.toUpperCase()}
+            currency={card.currency?.toUpperCase()}
             categories={card.categories}
             tags={card.tags}
             iconTag={true}
@@ -63,7 +63,7 @@ const FavouriedPanel = () => {
           rawData.map((item) => ({
             id: item.id,
             images: item.images || [],
-            imgUrl: get(item, 'images[0]') || 'https://picsum.photos/200/300',
+            imgUrl: get(item, "images[0]") || "https://picsum.photos/200/300",
             title: item.name,
             slug: item.slug,
             isVerified: item.is_verified,
@@ -74,7 +74,7 @@ const FavouriedPanel = () => {
             tags: item.tags,
             categories: item.categories,
             price: item.min_price || "",
-            currency: (item.currency)?.toUpperCase() || "",
+            currency: item.currency?.toUpperCase() || "",
             rate: item.rate,
             rateNumber: item.rate_number,
           }))) ||
@@ -84,7 +84,7 @@ const FavouriedPanel = () => {
       setLoading(false);
     };
 
-    (userInfo && userInfo?.token) && getListingFavourite(currentTab);
+    userInfo && userInfo?.token && getListingFavourite(currentTab);
   }, [currentTab, loading]);
 
   const handleRemoveFavorite = async (removedListing) => {
@@ -166,10 +166,7 @@ const FavouriedPanel = () => {
         type="primary-outline"
         tablist={TabList}
         className={styles.favouried_tab}
-        onCurrentTab={(e) => {
-          console.log(e);
-          setCurrentTab(e);
-        }}
+        onChangeTab={(e) => setCurrentTab(e)}
       />
       {total > 0 && <div className={styles.total}>Total: {total}</div>}
     </div>

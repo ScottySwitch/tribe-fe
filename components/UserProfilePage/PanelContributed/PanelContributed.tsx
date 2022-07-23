@@ -162,7 +162,7 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
         tablist={TabList}
         type="primary-outline"
         className={styles.contributed_tab}
-        onCurrentTab={(e) => setCurrentTab(e)}
+        onChangeTab={(e) => setCurrentTab(e)}
       />
     </div>
   );

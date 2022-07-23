@@ -108,7 +108,7 @@ const Deals = () => {
             type="secondary-no-outline"
             selectedTab={selectedTab}
             className="pt-[6px]"
-            onCurrentTab={(e: Categories) => setSelectedTab(e)}
+            onChangeTab={(e: Categories) => setSelectedTab(e)}
           />
         </div>
         <div className="flex gap-5">
@@ -141,7 +141,7 @@ const Deals = () => {
                   rateNumber={item.rateNumber}
                   followerNumber={item.followerNumber}
                   price={item.price}
-                  currency={(item.currency)?.toUpperCase()}
+                  currency={item.currency?.toUpperCase()}
                   categories={item.categories}
                   tags={item.tags}
                   isVerified={item.isVerified}
