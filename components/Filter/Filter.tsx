@@ -1,27 +1,22 @@
-import {
-  ReactElement,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
-import Modal, { ModalFooter, ModalProps } from "components/Modal/Modal";
+import Modal, { ModalProps } from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Range from "components/Range/Range";
 import Tabs from "components/Tabs/Tabs";
 import { Filters } from "./enums";
 import styles from "./Filter.module.scss";
-import { UserInforContext } from "Context/UserInforContext";
-import { categories, locations } from "constant";
 import { get, isArray } from "lodash";
 import { IOption } from "type";
 import ProductTypeApi from "services/product-type";
 import ProductBrandApi from "services/product-brand";
+import { useRouter } from "next/router";
+import useGetCountry from "hooks/useGetCountry";
+import { sortOptions } from "constant";
 
 export interface IFilter {
   productTypes: string[];
@@ -33,28 +28,9 @@ export interface IFilter {
   maxRating?: number;
 }
 
-const sortList = [
-  // { label: "Price (Low to high)" },
-  // { label: "Price (High to low)" },
-  { label: "Rating (High to low)", value: "desc" },
-  { label: "Rating (Low to high)", value: "asc" },
-  // { label: "Recently added" },
-];
-
-export const otherList = [
-  { label: "Halal Certified" },
-  { label: "Kosher options available" },
-  { label: "Halal Ingredients Used" },
-  { label: "Mulism Owned" },
-  { label: "Seafood options available " },
-  { label: "Vegetarian" },
-  { label: "Alcohol served in premise" },
-  { label: "Vegetarian options available" },
-];
-
 const Sort = ({ filter, onFilter }) => (
   <div className="flex flex-col gap-2">
-    {sortList.map((sort) => (
+    {sortOptions.map((sort) => (
       <Radio
         key={sort.label}
         label={sort.label}
@@ -80,11 +56,7 @@ const PriceRange = ({ filter, onFilter }) => {
     maxPrice: 0,
   });
 
-  const { user } = useContext(UserInforContext);
-  const { location } = user;
-
-  const country =
-    locations.find((item) => item.value === location) || locations[0];
+  const country = useGetCountry();
 
   const handleChangeRange = (value) => {
     onFilter(value);
@@ -196,6 +168,8 @@ const Filter = (props: FilterProps) => {
     onClose,
   } = props;
 
+  const router = useRouter();
+
   const [localFilter, setLocalFilter] = useState<IFilter | undefined>(filter);
   const [productTypes, setProductTypes] = useState<IOption[]>([]);
   const [productBrands, setProductBrands] = useState<IOption[]>([]);
@@ -228,7 +202,7 @@ const Filter = (props: FilterProps) => {
     getProductTypes();
     getProductBrands();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localFilter?.productTypes]);
+  }, [router.asPath, categoryLink, localFilter?.productTypes]);
 
   const handleFilter = (e) => {
     setLocalFilter?.({ ...localFilter, ...e });
@@ -255,7 +229,7 @@ const Filter = (props: FilterProps) => {
       value: Filters.OTHER,
       content: (
         <Other
-          key="productTypes"
+          key={"productTypes" + get(productTypes, "length")}
           filter={localFilter}
           filterKey="productTypes"
           options={productTypes}
@@ -268,7 +242,7 @@ const Filter = (props: FilterProps) => {
       value: Filters.OTHER_OTHER,
       content: (
         <Other
-          key="productBrands"
+          key={"productBrands" + get(productBrands, "length")}
           filter={localFilter}
           filterKey="productBrands"
           options={productBrands}

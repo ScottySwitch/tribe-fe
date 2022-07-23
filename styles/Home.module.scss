@@ -1,12 +1,13 @@
 @import "styles/variables.scss";
 
 .breadcrumbs {
-  padding-top: 20px;
+  padding: 20px 0;
   display: flex;
   gap: 6px;
   color: $bg-400;
   font-size: $text-sm;
   align-items: center;
+  cursor: pointer;
 }
 
 .banner,
@@ -56,6 +57,12 @@
   left: 0;
   padding: 0;
   cursor: pointer;
+}
+
+.filter_badge {
+  border: 1px solid $primary-500;
+  background-color: $primary-20;
+  color: $primary-500;
 }
 
 .for_you {

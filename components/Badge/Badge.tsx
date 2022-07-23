@@ -4,10 +4,11 @@ import styles from "./Badge.module.scss";
 
 export interface BadgeProps {
   selected?: boolean;
-  text?: string;
+  text?: string | ReactNode | ReactNode[];
   value?: string;
   className?: string;
   children?: ReactNode;
+  size?: "default" | "small";
   variant?: "default" | "no-outlined";
   onClick?: (e?: string) => void;
 }
@@ -20,9 +21,11 @@ const Badge = (props: BadgeProps) => {
     value,
     children,
     className,
+    size,
     onClick,
   } = props;
   const badgeClassName = classNames(styles.badge, className, {
+    [styles.small]: size === "small",
     [styles.selected]: selected,
     [styles.no_outlined]: variant === "no-outlined",
   });

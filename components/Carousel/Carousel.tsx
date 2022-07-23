@@ -8,10 +8,11 @@ import styles from "./Carousel.module.scss";
 interface CarouselProps {
   children?: ReactElement | ReactElement[];
   responsive?: { [key: string]: number };
+  isShow?: boolean;
 }
 
 const Carousel = (props: CarouselProps) => {
-  const { children, responsive } = props;
+  const { children, responsive, isShow = true } = props;
 
   const horizontalSliderRef = useRef<any>(null);
 

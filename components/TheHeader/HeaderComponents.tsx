@@ -166,10 +166,6 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
       user,
       "owner_listings[0].attributes.logo[0]"
     );
-    console.log("---------------", firstOwnedListingSlug, {
-      avatar: firstOnwedListingLogo,
-      current_listing_slug: firstOwnedListingSlug,
-    });
     if (firstOwnedListingSlug) {
       updateUser({
         avatar: firstOnwedListingLogo,
