@@ -54,7 +54,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   const resultType = [
     {
       title: "Success!",
-      message:  
+      message:
         "Thank you for your report. We will review the report and take action within 24 hours!",
       textButton: "Close",
     },
@@ -103,19 +103,17 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
       biz_listing: bizListingId,
     };
 
-
-    await ReportApi
-    .createReport(body)
-    .then((res) => {
-      setSubmitResult(true)
-    })
-    .catch((error) => {
-      setSubmitResult(false)
-    })
-    .finally(() => {
-      setShowReportModal(false)
-      setShowResultModal(true)
-    });
+    await ReportApi.createReport(body)
+      .then((res) => {
+        setSubmitResult(true);
+      })
+      .catch((error) => {
+        setSubmitResult(false);
+      })
+      .finally(() => {
+        setShowReportModal(false);
+        setShowResultModal(true);
+      });
   };
 
   const checkLogin = () => {
@@ -176,7 +174,10 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
               <UserReviewCard
                 isPaid={isPaid}
                 actions={!isViewPage}
-                user={get(review, "user.data.attributes") || get(review, "user")}
+                user={
+                  get(review, "user.data.attributes") || get(review, "user")
+                }
+                bizListingId={bizListingId}
                 listImage={get(review, "images")}
                 content={get(review, "content")}
                 dateVisit={get(review, "visited_date")}
@@ -229,6 +230,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
           <UserReviewCard
             isPaid={isPaid}
             actions={false}
+            bizListingId={bizListingId}
             user={get(selectedReview, "user.data.attributes")}
             listImage={get(selectedReview, "images")}
             content={get(selectedReview, "content")}

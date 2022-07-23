@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
@@ -18,6 +19,7 @@ import styles from "./Album.module.scss";
 interface AlbumProps {
   id?: string;
   listingId?: string | number;
+  reportMedia?: boolean;
   images?: any[];
   showedPicsNumber?: { slidesToShow: number; slidesToScroll: number };
 }
@@ -26,6 +28,7 @@ export const Album = (props: AlbumProps) => {
   const {
     id,
     listingId,
+    reportMedia = true,
     images = [],
     showedPicsNumber = { slidesToShow: 12, slidesToScroll: 12 },
   } = props;
@@ -33,7 +36,7 @@ export const Album = (props: AlbumProps) => {
   const [navThumbnail, setNavThumbnail] = useState<any>();
   const [navGallery, setNavGallery] = useState<any>();
   const [isMobile, setIsMobile] = useState(false);
-  const [reason, setReason] = useState<string>("");
+  const [reason, setReason] = useState<string>("default");
   const [showReportModal, setShowReportModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [submitResult, setSubmitResult] = useState(false);
@@ -116,6 +119,11 @@ export const Album = (props: AlbumProps) => {
     setShowReportModal(true);
   };
 
+  const handleCloseReportModal = () => {
+    setShowReportModal(false);
+    setReason("default");
+  };
+
   const onSubmit = async () => {
     setShowReportModal(false);
     const body = {
@@ -129,8 +137,7 @@ export const Album = (props: AlbumProps) => {
       .createReport(body)
       .then((res) => {
         setSubmitResult(true);
-        setReason("");
-        console.log("success");
+        setReason("default");
       })
       .catch((error) => {
         setSubmitResult(false);
@@ -142,13 +149,24 @@ export const Album = (props: AlbumProps) => {
   };
 
   const notOtherReason = reportReasons.slice(0, 5).map((item) => item.value);
+  notOtherReason.push("default");
+
+  const galleryPrevBtnClassName = classNames(styles.btn_prev, {
+    hide: get(images, "length") > 12,
+  });
+
+  const galleryNextBtnClassName = classNames(styles.btn_next, {
+    hide: get(images, "length") > 12,
+  });
 
   return (
     <div className={styles.slider_syncing}>
       <div className={styles.slider_thumbnail_container}>
-        <div onClick={handleShowReportModal} className={styles.btn_report}>
-          <Icon icon="flag" size={25} color="#FFFFFF" />
-        </div>
+        {reportMedia && (
+          <div onClick={handleShowReportModal} className={styles.btn_report}>
+            <Icon icon="flag" size={25} color="#FFFFFF" />
+          </div>
+        )}
         <div onClick={handlePrevThumbnail} className={styles.btn_prev}>
           <Icon icon="carret-left" size={40} color="#FFFFFF" />
         </div>
@@ -173,11 +191,9 @@ export const Album = (props: AlbumProps) => {
         </div>
       </div>
       <div className={styles.slider_gallery_container}>
-        {get(images, "length") > 12 && (
-          <div onClick={handlePrevGallery} className={styles.btn_prev}>
-            <Icon icon="carret-left" size={30} color="#FFFFFF" />
-          </div>
-        )}
+        <div onClick={handlePrevGallery} className={galleryPrevBtnClassName}>
+          <Icon icon="carret-left" size={30} color="#FFFFFF" />
+        </div>
         <Slider
           ref={refSlider2}
           {...configGallery}
@@ -194,17 +210,15 @@ export const Album = (props: AlbumProps) => {
             </div>
           ))}
         </Slider>
-        {get(images, "length") > 12 && (
-          <div onClick={handleNextGallery} className={styles.btn_next}>
-            <Icon icon="carret-right" size={30} color="#FFFFFF" />
-          </div>
-        )}
+        <div onClick={handleNextGallery} className={galleryNextBtnClassName}>
+          <Icon icon="carret-right" size={30} color="#FFFFFF" />
+        </div>
       </div>
       <Modal
         visible={showReportModal}
         title="Why do you report this photo/video?"
         width={780}
-        onClose={() => setShowReportModal(false)}
+        onClose={handleCloseReportModal}
       >
         <div className="p-[30px] flex flex-col gap-5">
           {reportReasons.map((item) => (
@@ -213,23 +227,27 @@ export const Album = (props: AlbumProps) => {
               key={item.value}
               label={item.label}
               value={item.value}
-              checked={reason === item.value}
-              name="report-media"
+              name={`${id}-report-media`}
               onChange={(e: any) => setReason(e.target.value)}
+              checked={
+                notOtherReason.includes(reason)
+                  ? reason === item.value
+                  : undefined
+              }
             />
           ))}
           <Input
             value={notOtherReason.includes(reason) ? "" : reason}
             placeholder="Your reason"
             onChange={(e: any) => setReason(e.target.value)}
-            disabled={reason === "" || notOtherReason.includes(reason)}
+            disabled={notOtherReason.includes(reason)}
           />
           <div className="flex justify-end gap-3">
             <Button
               variant="no-outlined"
               text="Cancel"
               width={100}
-              onClick={() => setShowReportModal(false)}
+              onClick={handleCloseReportModal}
             />
             <Button text="Submit" width={150} onClick={onSubmit} />
           </div>

@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { rateType } from "../ReviewCard/ReviewCard";
 import classNames from "classnames";
 import Icon from "components/Icon/Icon";
@@ -8,6 +8,10 @@ import styles from "./UserReviewCard.module.scss";
 import Popover from "components/Popover/Popover";
 import Button from "components/Button/Button";
 import { calcDistanceFromNow } from "utils";
+import Upload from "components/Upload/Upload";
+import Album from "components/Album/Album";
+import { get } from "lodash";
+import Modal from "components/Modal/Modal";
 export interface UserReviewCardProps {
   reply?: string;
   replyAt?: string;
@@ -30,6 +34,7 @@ export interface UserReviewCardProps {
   publishedAt?: string;
   createdDate?: string;
   isDivier?: boolean;
+  bizListingId?: number | string;
   user?: any;
   onReplyClick?(): void;
   onReportClick?(): void;
@@ -37,6 +42,7 @@ export interface UserReviewCardProps {
 
 const UserReviewCard = (props: UserReviewCardProps) => {
   const {
+    bizListingId,
     reply,
     replyAt,
     className = "",
@@ -59,6 +65,8 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     onReportClick,
     isDivier = false,
   } = props;
+
+  const [showAlbumModal, setShowAlbumModal] = useState(false);
 
   const userReviewCardClassName = classNames(
     styles.review_completed,
@@ -155,7 +163,11 @@ const UserReviewCard = (props: UserReviewCardProps) => {
         {Array.isArray(listImage) && listImage.length > 0 && (
           <ul className={styles.image_list}>
             {listImage.map((image, index) => (
-              <li key={index} className={styles.image_item}>
+              <li
+                key={index}
+                className={styles.image_item}
+                onClick={() => setShowAlbumModal(true)}
+              >
                 {typeof image === "string" && (
                   <Image
                     src={image}
@@ -224,6 +236,24 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
       </div>
+      <Modal
+        visible={showAlbumModal}
+        title=" "
+        width="90%"
+        // maxHeight="90%"
+        mobilePosition="center"
+        onClose={() => setShowAlbumModal(false)}
+      >
+        <div className="p-5">
+          <Album
+            id="listing-review-album"
+            reportMedia={false}
+            key={get(listImage, "length")}
+            images={listImage}
+            listingId={bizListingId}
+          />
+        </div>
+      </Modal>
     </div>
   );
 };
