@@ -138,7 +138,7 @@ export const formatListingArray = (rawListing) =>
     : [];
 
 export const isArray = (item) => {
-  return Array.isArray(item) && item.length > 0 ? true : false;
+  return Array.isArray(item) && item.length > 0;
 };
 
 export const changeToSlugify = (str) => {

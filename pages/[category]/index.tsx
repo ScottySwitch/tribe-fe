@@ -67,7 +67,7 @@ const Category = (props: any) => {
   const { location } = user;
 
   useEffect(() => {
-    console.log(location)
+    console.log(location);
     const getData = async (categoryId, page) => {
       const dataQuery = await BizListingApi.getListingCustom({
         country: location,
@@ -132,14 +132,16 @@ const Category = (props: any) => {
     switch (category) {
       case CategoryText.BUY:
         defaultCategoryInfor = {
-          bannerSrc: "/images/buy-banner.svg",
+          bannerSrc: "/images/buy-banner-1.svg",
+          bannerMobileSrc: "/images/buy-banner-mobile.svg",
           categoryName: "Buy",
           categoryDescription: "Explore a range of items.",
         };
         break;
       case CategoryText.EAT:
         defaultCategoryInfor = {
-          bannerSrc: "/images/eat-banner.svg",
+          bannerSrc: "/images/eat-banner-1.svg",
+          bannerMobileSrc: "/images/eat-banner-mobile.svg",
           categoryName: "Eat",
           categoryDescription:
             "Explore a wide array of cuisine types across different cultures.",
@@ -147,7 +149,8 @@ const Category = (props: any) => {
         break;
       case CategoryText.SEE_AND_DO:
         defaultCategoryInfor = {
-          bannerSrc: "/images/see-and-do-banner.svg",
+          bannerSrc: "/images/see-and-do-banner-1.svg",
+          bannerMobileSrc: "/images/see-and-do-banner-mobile.svg",
           categoryName: "See and Do",
           categoryDescription:
             "Explore a wide array of cuisine types across different cultures.",
@@ -155,7 +158,8 @@ const Category = (props: any) => {
         break;
       case CategoryText.STAY:
         defaultCategoryInfor = {
-          bannerSrc: "/images/stay-banner.svg",
+          bannerSrc: "/images/stay-banner-1.svg",
+          bannerMobileSrc: "/images/stay-banner-mobile.svg",
           categoryName: "Stay",
           categoryDescription:
             "Explore famous attractions, key landmarks and experience localized activities. ",
@@ -163,7 +167,8 @@ const Category = (props: any) => {
         break;
       case CategoryText.TRANSPORT:
         defaultCategoryInfor = {
-          bannerSrc: "/images/transport-banner.svg",
+          bannerSrc: "/images/transport-banner-1.svg",
+          bannerMobileSrc: "/images/transport-banner-mobile.svg",
           categoryName: "Transport",
           categoryDescription: "Find the best way to get around.",
         };
@@ -182,14 +187,22 @@ const Category = (props: any) => {
 
   return (
     <div>
-      <SectionLayout className={styles.collection_banner}>
+      <SectionLayout className={styles.main_catbanner}>
         {categoryInfor.bannerSrc && (
           <Image
             src={categoryInfor.bannerSrc}
             alt=""
             layout="fill"
             objectFit="cover"
-            className={styles.collection_banner_img}
+            className={`${styles.collection_banner_img} ${styles.banner_desktop}`}
+          />
+        )}
+        {categoryInfor.bannerMobileSrc && (
+          <Image
+            src={categoryInfor.bannerMobileSrc}
+            layout="fill"
+            objectFit="cover"
+            className={`${styles.collection_banner_img} ${styles.banner_mobile}`}
           />
         )}
         <div className={styles.collection_context_container}>

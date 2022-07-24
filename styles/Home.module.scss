@@ -18,6 +18,23 @@
   position: relative;
 }
 
+.main_catbanner {
+  color: white;
+  width: 100%;
+  aspect-ratio: 1440/164;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .banner_desktop {
+    display: block !important;
+  }
+
+  .banner_mobile {
+    display: none !important;
+  }
+}
+
 .collection_banner {
   color: white;
   width: 100vw;
@@ -279,6 +296,16 @@
   }
   .for_you_container {
     gap: 6px;
+  }
+
+  .main_catbanner {
+    .banner_desktop {
+      display: none !important
+    }
+
+    .banner_mobile {
+      display: block !important;
+    }
   }
 }
 
