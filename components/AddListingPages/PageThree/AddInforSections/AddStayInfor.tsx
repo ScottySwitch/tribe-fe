@@ -47,7 +47,14 @@ const AddStayInfor = (props: AddStayInforProps) => {
   const { isEdit, facilityMode, data, show, onEdit, onPrevPage, onPreview } =
     props;
 
-  const { register, handleSubmit, setValue, getValues } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { isValid },
+  } = useForm({
+    mode: "onChange",
     defaultValues: {
       categoryLinks: data?.categoryLinks,
       productTypes: data?.productTypes,
@@ -314,10 +321,12 @@ const AddStayInfor = (props: AddStayInforProps) => {
           <Question show={!isEdit}>
             <br /> <br /> <br />
             <Checkbox
-              register={register("agreePolicies")}
+              register={register("agreePolicies", {
+                required: true,
+              })}
               label={
                 data?.relationship === YesNo.NO
-                  ? "I certify that this is a genuine attraction  "
+                  ? "I certify that this is a genuine business"
                   : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
               }
             />
@@ -330,7 +339,13 @@ const AddStayInfor = (props: AddStayInforProps) => {
               width="fit-content"
               onClick={onPrevPage}
             />
-            <Button text="Continue" size="small" width={270} type="submit" />
+            <Button
+              text="Continue"
+              size="small"
+              width={270}
+              type="submit"
+              disabled={!isValid}
+            />
           </div>
         </form>
       </SectionLayout>

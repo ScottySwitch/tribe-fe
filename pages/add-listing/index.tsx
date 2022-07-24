@@ -107,16 +107,16 @@ const AddListing = () => {
     if (!formData.isOnline) {
       address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`;
     }
-    let socialType: any = {}
+    let socialType: any = {};
     switch (formData.typeMedia) {
-      case 'facebook':
-        socialType.facebook = formData.socialMedia
+      case "facebook":
+        socialType.facebook = formData.socialMedia;
         break;
-      case 'instagram':
-        socialType.instagram = formData.socialMedia
+      case "instagram":
+        socialType.instagram = formData.socialMedia;
         break;
-      case 'twitter':
-        socialType.twitter = formData.socialMedia
+      case "twitter":
+        socialType.twitter = formData.socialMedia;
         break;
       default:
         break;
@@ -137,9 +137,13 @@ const AddListing = () => {
       //   min: formData.minPrice,
       //   max: formData.maxPrice,
       // },
-      min_price: isNaN(parseFloat(formData.minPrice)) ? parseFloat(formData.minPrice) : 0,
-      max_price: isNaN(parseFloat(formData.maxPrice)) ? parseFloat(formData.maxPrice) : 0,
-      currency: get(formData, 'currency.value') || null,
+      min_price: isNaN(parseFloat(formData.minPrice))
+        ? parseFloat(formData.minPrice)
+        : 0,
+      max_price: isNaN(parseFloat(formData.maxPrice))
+        ? parseFloat(formData.maxPrice)
+        : 0,
+      currency: get(formData, "currency.value") || null,
       images: formData.images,
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,
@@ -168,7 +172,7 @@ const AddListing = () => {
       is_accepted: false,
     };
     // get(dataSend, `social_info[${formData.typeMedia}]`, formData.socialMedia)
-    console.log(get(dataSend, `social_info[${formData.typeMedia}]`))
+    console.log(get(dataSend, `social_info[${formData.typeMedia}]`));
     const role = get(formData, "role.label");
     let result;
     let dataSendContribute: any = {
@@ -295,7 +299,7 @@ const AddListing = () => {
               </div>
             );
           })}
-          <div className="flex justify-end px-[30px] py-3">
+          <div className="flex justify-end md:py-3 pb-10">
             <Button
               text="Cancel"
               size="small"
