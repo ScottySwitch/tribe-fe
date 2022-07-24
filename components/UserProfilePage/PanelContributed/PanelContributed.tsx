@@ -40,7 +40,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
         return (
           <UserReviewCard
             key={index}
-            isDivier
+            layout="split"
             avatarUrl={reviewListing.avatar || "https://picsum.photos/200/300"}
             listImage={
               reviewListing.images || ["https://picsum.photos/200/300"]

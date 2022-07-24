@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import styles from "./PanelAbout.module.scss";
-export interface UserPropsData {
+export interface IUserData {
   first_name?: string;
   last_name?: string;
   avatar?: string;
@@ -41,7 +41,7 @@ const AboutInfor = (props: {
   );
 };
 
-const PanelAbout = (props: { data: UserPropsData }) => {
+const PanelAbout = (props: { data: { [key: string]: any } }) => {
   const {
     email,
     phone_number,
@@ -64,14 +64,14 @@ const PanelAbout = (props: { data: UserPropsData }) => {
     <div className={styles.about_panel}>
       <div className={containerClassName}>
         <div className={styles.field}>
-          <AboutInfor label="Email" text={email} blankText="Add email" />
-        </div>
-        <div className={col2ClassName}>
           <AboutInfor
             label="Phone number"
             text={phone_number}
             blankText="Add phone number"
           />
+        </div>
+        <div className={col2ClassName}>
+          <AboutInfor label="Email" text={email} blankText="Add email" />
         </div>
         <div className={styles.field}>
           <AboutInfor label="Country" text={country} blankText="Add country" />

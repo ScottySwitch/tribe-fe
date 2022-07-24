@@ -34,9 +34,9 @@ export interface UserReviewCardProps {
   approvedDate?: string;
   publishedAt?: string;
   createdDate?: string;
-  isDivier?: boolean;
   bizListingId?: number | string;
   user?: any;
+  layout?: "default" | "split";
   onReplyClick?(): void;
   onReportClick?(): void;
 }
@@ -51,7 +51,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     content,
     listImage,
     dateVisit,
-    listingCard,
+    layout = "default",
     replyAccepted,
     rating,
     isPaid,
@@ -65,7 +65,6 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     createdDate,
     onReplyClick,
     onReportClick,
-    isDivier = false,
   } = props;
 
   const [showAlbumModal, setShowAlbumModal] = useState(false);
@@ -74,7 +73,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     styles.review_completed,
     className,
     {
-      [styles.divider]: isDivier,
+      [styles.divider]: layout === "split",
     }
   );
   const showReply = reply
@@ -94,6 +93,38 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     ["justify-end"]: status === "Denied",
   });
 
+  const UserReviewHeader = ({ show }) =>
+    show ? (
+      <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
+        <div className={styles.header}>
+          <h6 className={styles.name}>
+            <span>
+              {(user?.first_name || "") + " " + (user?.last_name || "")}
+            </span>
+            {censorshipLabel && (
+              <span className="font-normal ml-2">{censorshipLabel}</span>
+            )}
+          </h6>
+          {actions && (
+            <Popover
+              content={<div onClick={onReportClick}>Report review</div>}
+              position="bottom-left"
+            >
+              <Icon icon="toolbar" />
+            </Popover>
+          )}
+        </div>
+        <div className={styles.status_date}>
+          {status && <div className={statusClassName}>{status}</div>}
+          {(createdDate || date) && (
+            <div className={styles.date}>{createdDate || date}</div>
+          )}
+        </div>
+      </div>
+    ) : (
+      <div />
+    );
+
   return (
     <div className={userReviewCardClassName}>
       <div className={styles.group_heading}>
@@ -108,60 +139,10 @@ const UserReviewCard = (props: UserReviewCardProps) => {
             />
           )}
         </div>
-        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
-          <div className={styles.header}>
-            <h6 className={styles.name}>
-              <span>
-                {(user?.first_name || "") + " " + (user?.last_name || "")}
-              </span>
-              {censorshipLabel && (
-                <span className="font-normal ml-2">{censorshipLabel}</span>
-              )}
-            </h6>
-            {actions && (
-              <Popover
-                content={<div onClick={onReportClick}>Report review</div>}
-                position="bottom-left"
-              >
-                <Icon icon="toolbar" />
-              </Popover>
-            )}
-          </div>
-          <div className={styles.status_date}>
-            {status && <div className={statusClassName}>{status}</div>}
-            {(createdDate || date) && (
-              <div className={styles.date}>{createdDate || date}</div>
-            )}
-          </div>
-        </div>
+        <UserReviewHeader show={layout === "split"} />
       </div>
       <div className={styles.review_summary}>
-        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
-          <div className={styles.header}>
-            <h6 className={styles.name}>
-              <span>
-                {(user?.first_name || "") + " " + (user?.last_name || "")}
-              </span>
-              {censorshipLabel && (
-                <span className="font-normal ml-2">{censorshipLabel}</span>
-              )}
-            </h6>
-            {
-              <Popover
-                content={<div onClick={onReportClick}>Report review</div>}
-                position="bottom-left"
-              >
-                <Icon icon="toolbar" />
-              </Popover>
-            }
-          </div>
-          <div className={styles.status_date}>
-            {status && <div className={statusClassName}>{status}</div>}
-            {(createdDate || date) && (
-              <div className={styles.date}>{createdDate || date}</div>
-            )}
-          </div>
-        </div>
+        <UserReviewHeader show={layout === "default"} />
         {rating && (
           <div className={styles.rating_group}>
             <Rate readonly={true} initialRating={rating} />
