@@ -34,8 +34,6 @@ export const Album = (props: AlbumProps) => {
     images = [],
     showedPicsNumber = { slidesToShow: 8, slidesToScroll: 8 },
   } = props;
-  console.log("images", images);
-  console.log("isArray", isArray(images));
 
   const [navThumbnail, setNavThumbnail] = useState<any>();
   const [navGallery, setNavGallery] = useState<any>();

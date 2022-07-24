@@ -88,7 +88,6 @@ const FavouriedPanel = () => {
   }, [currentTab, loading]);
 
   const handleRemoveFavorite = async (removedListing) => {
-    console.log("removedListing", removedListing);
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
     await UserApi.removeListingFavourite({

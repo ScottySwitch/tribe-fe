@@ -1,25 +1,27 @@
-import Break from "components/Break/Break"
-import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import Upload from "components/Upload/Upload"
-import { ListingHomePageScreens } from "enums"
-import { useState } from "react"
-import { getIndex, randomId } from "utils"
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import Upload from "components/Upload/Upload";
+import { ListingHomePageScreens } from "enums";
+import { useState } from "react";
+import { getIndex, randomId } from "utils";
 
-import styles from "./AddMenu.module.scss"
+import styles from "./AddMenu.module.scss";
 
 interface AddItemsProps {
-  isPaid?: boolean
-  menuList: { [key: string]: any }[]
-  multiple?: boolean
-  onCancel: () => void
-  onSubmit: (menuList: { [key: string]: any }[]) => void
+  isPaid?: boolean;
+  menuList: { [key: string]: any }[];
+  multiple?: boolean;
+  onCancel: () => void;
+  onSubmit: (menuList: { [key: string]: any }[]) => void;
 }
 
 const AddMenu = (props: AddItemsProps) => {
-  const { isPaid, multiple, menuList, onCancel, onSubmit } = props
-  const [localMenuList, setLocalMenuList] = useState<{ [key: string]: any }[]>(menuList || [])
+  const { isPaid, multiple, menuList, onCancel, onSubmit } = props;
+  const [localMenuList, setLocalMenuList] = useState<{ [key: string]: any }[]>(
+    menuList || []
+  );
 
   const CancelButton = () => (
     <Button
@@ -28,32 +30,32 @@ const AddMenu = (props: AddItemsProps) => {
       width={50}
       size="small"
       onClick={() => {
-        setLocalMenuList(menuList)
-        onCancel()
+        setLocalMenuList(menuList);
+        onCancel();
       }}
     />
-  )
+  );
 
   const handleRemoveMenu = (id: number) => {
-    const newArray = [...localMenuList].filter((item) => item.id !== id)
-    setLocalMenuList(newArray)
-  }
+    const newArray = [...localMenuList].filter((item) => item.id !== id);
+    setLocalMenuList(newArray);
+  };
 
   const handleChangeMenu = (
     id: number,
     type: string,
     value: string | number | string[] | { [key: string]: any }
   ) => {
-    const index = getIndex(id, localMenuList)
-    const newArray = [...localMenuList]
-    newArray[index][type] = value
-    newArray[index].isEdited = true
-    setLocalMenuList(newArray)
-  }
+    const index = getIndex(id, localMenuList);
+    const newArray = [...localMenuList];
+    newArray[index][type] = value;
+    newArray[index].isEdited = true;
+    setLocalMenuList(newArray);
+  };
 
   const handleAddMenu = () => {
-    setLocalMenuList([...localMenuList, { id: randomId(), isNew: true }])
-  }
+    setLocalMenuList([...localMenuList, { id: randomId(), isNew: true }]);
+  };
 
   const AddItemButton = () => (
     <Button
@@ -64,7 +66,7 @@ const AddMenu = (props: AddItemsProps) => {
       size="small"
       onClick={handleAddMenu}
     />
-  )
+  );
 
   return (
     <div>
@@ -76,7 +78,10 @@ const AddMenu = (props: AddItemsProps) => {
               <div className={styles.header}>
                 <p className="text-left">Add images</p>
                 {multiple && (
-                  <div className={styles.close} onClick={() => handleRemoveMenu(item.id)}>
+                  <div
+                    className={styles.close}
+                    onClick={() => handleRemoveMenu(item.id)}
+                  >
                     <Icon icon="cancel" />
                   </div>
                 )}
@@ -84,16 +89,18 @@ const AddMenu = (props: AddItemsProps) => {
               <Upload
                 isPaid={isPaid}
                 multiple
-                fileList={item.images || [ ]}
+                fileList={item.images || []}
                 centerIcon={<Icon icon="plus" size={20} />}
                 onChange={(e) => {
-                  handleChangeMenu(item.id, "images", e)
+                  handleChangeMenu(item.id, "images", e);
                 }}
               />
               <Input
                 value={item.name}
                 placeholder="Menu name"
-                onChange={(e: any) => handleChangeMenu(item.id, "name", e.target.value)}
+                onChange={(e: any) =>
+                  handleChangeMenu(item.id, "name", e.target.value)
+                }
               />
               {multiple && <AddItemButton />}
               <Break />
@@ -111,14 +118,11 @@ const AddMenu = (props: AddItemsProps) => {
           text="Create menu"
           width={280}
           size="small"
-          onClick={() => {
-            console.log(localMenuList)
-            onSubmit(localMenuList)
-          }}
+          onClick={() => onSubmit(localMenuList)}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AddMenu
+export default AddMenu;

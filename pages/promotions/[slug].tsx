@@ -194,7 +194,6 @@ const PromotionsPage = () => {
   }, [slug]);
 
   const checkLogin = () => {
-    console.log('check login')
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     if (userInfo.token) {
       handleDealsDetails(true, promotion)

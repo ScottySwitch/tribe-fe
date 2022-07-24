@@ -42,7 +42,6 @@ const AboutInfor = (props: {
 };
 
 const PanelAbout = (props: { data: UserPropsData }) => {
-  console.log(props.data);
   const {
     email,
     phone_number,

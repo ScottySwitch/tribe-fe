@@ -44,7 +44,9 @@ const BizInformation = (props) => {
       //TODO: Check listing is owned by user before returning biz listing data on BE
       if (
         isArray(userInfo.owner_listings) &&
-        userInfo.owner_listings.some((item) => item.id == get(data, "data.data[0].id"))
+        userInfo.owner_listings.some(
+          (item) => item.id == get(data, "data.data[0].id")
+        )
       ) {
         const listing = get(data, "data.data[0]") || {};
         userInfo.now_biz_listing = listing;
@@ -59,11 +61,10 @@ const BizInformation = (props) => {
     };
 
     listingSlug && getListingData(listingSlug);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, loading]);
 
   const onSubmit = async (data) => {
-    console.log("submitData", data);
     listing.id &&
       (await BizListing.updateBizListing(listing.id, {
         ...listing,

@@ -36,7 +36,6 @@ const ClaimListing = (context) => {
   } = useRouter();
 
   useEffect(() => {
-    console.log(listingId)
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getListingData = async (listingId) => {
       let data =
@@ -70,7 +69,6 @@ const ClaimListing = (context) => {
     if (typeof localStorage.getItem("user") !== null) {
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
-    console.log(form);
     let role = get(form, "role.value");
 
     if (!role) {
@@ -85,8 +83,8 @@ const ClaimListing = (context) => {
     userInfo = {
       ...userInfo,
       role: get(form, "role.value"),
-      pay_price: "600"
-    }
+      pay_price: "600",
+    };
     localStorage.setItem("user", JSON.stringify(userInfo));
   };
 
@@ -98,7 +96,6 @@ const ClaimListing = (context) => {
         tier: tier,
       },
     });
-    console.log("asdjaskdjn");
   };
 
   return (

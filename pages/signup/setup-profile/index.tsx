@@ -82,7 +82,6 @@ const StepOne = ({
   }, [socialUser]);
 
   const handleUploadAvatar = useCallback((srcAvatar) => {
-    console.log("srcAvatar", srcAvatar);
     setUploadAvatar(srcAvatar[0]);
   }, []);
 
@@ -194,7 +193,6 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
 
   const getCategoryLinks = async () => {
     const data = await CategoryLinkAPi.getCategoryLinks();
-    console.log(data);
     if (get(data, "data.data")) {
       const rawInterestingList = get(data, "data.data") || [];
       const interestListingArray = rawInterestingList.map((item) => ({
@@ -225,7 +223,6 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
 
   const handleSubmit = () => {
     setIsLoading(true);
-    // console.log(interest)
     onSubmit(interest);
     setIsLoading(false);
   };
@@ -299,7 +296,6 @@ const SetupProfilePage = () => {
 
   const handleNextStep = (data) => {
     setFormData({ ...formData, ...data });
-    console.log({ ...formData, ...data });
     setStep(ProfileSteps.STEP_TWO);
   };
 

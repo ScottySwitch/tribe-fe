@@ -51,13 +51,6 @@ export const ReviewForm = (props) => {
     onSubmit(dataSend);
   };
 
-  const handleAddImage = (urls: any) => {
-    console.log("urls", urls);
-    if (urls) {
-      setImages(images.concat(urls));
-    }
-  };
-
   return (
     <div className={styles.form_review}>
       <div className={styles.form_group}>
@@ -77,11 +70,7 @@ export const ReviewForm = (props) => {
           accept="images"
           type="media"
           centerIcon={<Icon icon="plus" />}
-          onChange={(urls) => {
-            console.log("images", images);
-            setImages([...images, ...urls]);
-          }}
-          // onChange={(urls) => handleAddImage(urls)}
+          onChange={(urls) => setImages([...images, ...urls])}
         />
       </div>
       <div className={styles.form_group}>

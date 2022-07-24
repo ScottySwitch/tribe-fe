@@ -142,7 +142,6 @@ const SubCategoryPage = (context) => {
   };
 
   const handleRemoveFilter = (keyLabel) => {
-    console.log(keyLabel);
     switch (keyLabel) {
       case "Sort":
         return setFilter({ ...filter, sort: undefined });

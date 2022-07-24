@@ -30,21 +30,18 @@ export interface IFilter {
 
 const Sort = ({ filter, onFilter }) => (
   <div className="flex flex-col gap-2">
-    {sortOptions.map((sort) => {
-      console.log("filter", filter.sort);
-      return (
-        <Radio
-          key={sort.label}
-          label={sort.label}
-          value={sort.value}
-          checked={filter?.sort === sort.value}
-          name="sort"
-          onClick={(e) =>
-            onFilter({ sort: (e.target as HTMLInputElement).value })
-          }
-        />
-      );
-    })}
+    {sortOptions.map((sort) => (
+      <Radio
+        key={sort.label}
+        label={sort.label}
+        value={sort.value}
+        checked={filter?.sort === sort.value}
+        name="sort"
+        onClick={(e) =>
+          onFilter({ sort: (e.target as HTMLInputElement).value })
+        }
+      />
+    ))}
   </div>
 );
 

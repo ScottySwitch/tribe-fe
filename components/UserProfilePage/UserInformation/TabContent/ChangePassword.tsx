@@ -17,7 +17,6 @@ const ChangePassword = () => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
 
   const onSubmit = async (data) => {
-    console.log('data',data)
     if (data.newPassword.length < 6) {
       setIsError({
         oldPassword: '',

@@ -72,7 +72,6 @@ const OtpPage = (context) => {
         return false;
       }
       let { success } = result.data;
-      console.log(result);
       if (success) {
         await router.push("/signup/setup-profile");
       } else {

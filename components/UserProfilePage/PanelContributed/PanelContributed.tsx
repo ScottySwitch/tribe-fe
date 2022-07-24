@@ -110,10 +110,8 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
                 break;
             }
           });
-        console.log("total", get(contributionData, "pending.length"));
         setTotal(get(contributionData, "pending.length"));
         setContributions(contributionData);
-        console.log("contributionData", contributionData);
       })
       .catch((error) => console.log(error))
       .finally(() => {
@@ -138,11 +136,9 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
   const onChangeTab = (newCurrentTab) => {
     switch (newCurrentTab) {
       case "pending":
-        console.log("tab1", get(contributions, "pending.length"));
         setTotal(get(contributions, "pending.length"));
         break;
       case "approved":
-        console.log("tab2", get(contributions, "approved.length"));
         setTotal(get(contributions, "approved.length"));
         break;
     }

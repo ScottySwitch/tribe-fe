@@ -91,7 +91,6 @@ const OpenHours = (props: OpeningHoursProps) => {
     const subOpenHours = [...openHours][index].openHours
     const hoursIndex = getIndex(id, subOpenHours)
     subOpeningHours[index].openHours[hoursIndex][type] = value
-    console.log(index, hoursIndex, type, value)
     setOpeningHours(subOpeningHours)
   }
 
