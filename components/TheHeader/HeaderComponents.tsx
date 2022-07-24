@@ -9,7 +9,7 @@ import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
 import Menu from "components/Menu/Menu";
 import { ILoginInfor } from "pages/_app";
-import { UsersTypes } from "enums";
+import { UserType } from "enums";
 
 import styles from "./Header.module.scss";
 import AuthApi from "services/auth";
@@ -17,6 +17,8 @@ import bizListingApi from "services/biz-listing";
 import { UserInforContext } from "Context/UserInforContext";
 import { isArray } from "lodash";
 import Modal from "components/Modal/Modal";
+import classNames from "classnames";
+import { route } from "next/dist/server/router";
 
 export const Categories = (props: {
   currentCategory?: string;
@@ -84,14 +86,12 @@ export const SwitchAccountsContent = () => {
   const { listingSlug } = query;
 
   const handleSwitchToNormalUser = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.type = UsersTypes.NORMAL_USER;
-    localStorage.setItem("user", JSON.stringify(userInfo));
     updateUser({
       avatar: user.user_avatar,
       current_listing_slug: undefined,
+      user_type: UserType.NORMAL_USER,
     });
-    window.location.href = "/";
+    router.push("/");
   };
 
   const handleSwitchListing = async (item) => {
@@ -156,10 +156,6 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const [showSwitchModal, setShowSwitchModal] = useState(false);
 
   const handleSwitchToBizUser = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.type = UsersTypes.BIZ_USER;
-    localStorage.setItem("user", JSON.stringify(userInfo));
-
     const firstOwnedListingSlug = get(
       user,
       "owner_listings[0].attributes.slug"
@@ -172,19 +168,25 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
       updateUser({
         avatar: firstOnwedListingLogo,
         current_listing_slug: firstOwnedListingSlug,
+        user_type: UserType.BIZ_USER,
       });
-      await router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
-      router.reload();
+      router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
     } else {
       router.push("/claim");
     }
   };
 
-  if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {
-    return (
-      <>
+  return (
+    <>
+      <div
+        className={classNames(styles.gadget_group, {
+          [styles.hide]: !(
+            user.token && user.user_type === UserType.NORMAL_USER
+          ),
+        })}
+      >
         <div
-          className="flex gap-2 cursor-pointer mr-[32px]"
+          className="flex gap-2 cursor-pointer"
           onClick={handleSwitchToBizUser}
         >
           <Icon icon="business" size={20} />
@@ -226,14 +228,14 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
             <SwitchAccountsContent />
           </div>
         </Modal> */}
-      </>
-    );
-  }
-  if (!!loginInfor.token && loginInfor.type === UsersTypes.BIZ_USER) {
-    return (
-      <>
+      </div>
+      <div
+        className={classNames(styles.gadget_group, {
+          [styles.hide]: !(user.token && user.user_type === UserType.BIZ_USER),
+        })}
+      >
         <Popover content={<SwitchAccountsContent />} position="bottom-left">
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center w-max">
             <Icon icon="user-color" size={20} />
             Switch accounts
           </div>
@@ -248,17 +250,19 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           }
           className={`${styles.avatar} cursor-pointer`}
         />
-      </>
-    );
-  }
-  return (
-    <>
-      <Button
-        text="Sign up"
-        variant="outlined"
-        onClick={() => router.push("/signup")}
-      />
-      <Button text="Login" onClick={() => router.push("/login")} />
+      </div>
+      <div
+        className={classNames(styles.gadget_group, {
+          [styles.hide]: user.token,
+        })}
+      >
+        <Button
+          text="Sign up"
+          variant="outlined"
+          onClick={() => router.push("/signup")}
+        />
+        <Button text="Login" onClick={() => router.push("/login")} />
+      </div>
     </>
   );
 };

@@ -1,4 +1,5 @@
 import { locations, loginInforItem } from "constant";
+import { UserType } from "enums";
 import { Router, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { getBrowserLocation } from "utils";
@@ -40,8 +41,11 @@ export const UserInforProvider = ({ children }) => {
         last_name: localLoginInfo.last_name,
         avatar: localLoginInfo.avatar,
         user_avatar: localLoginInfo.user_avatar,
+        owner_listings: localLoginInfo.owner_listings,
+        user_type: localLoginInfo.user_type || UserType.NORMAL_USER,
       });
     };
+    
     setDefaulUserInfor();
   }, []);
 

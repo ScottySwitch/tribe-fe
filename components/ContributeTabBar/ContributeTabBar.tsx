@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import styles from "./ContributeTabBar.module.scss";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { Tiers, UsersTypes } from "enums";
-import {ProfileTabs} from "enums"
+import { Tiers, UserType } from "enums";
+import { ProfileTabs } from "enums";
 
 export interface ContributeProps {
   id?: string;
@@ -15,7 +15,7 @@ export interface ContributeProps {
 
 export type ILoginInfor = {
   token?: string;
-  type?: UsersTypes;
+  type?: UserType;
   tier?: Tiers;
   avatar?: string;
 };
@@ -29,12 +29,11 @@ const ContributeTabBar = (props: ContributeProps) => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
     if (localLoginInfo.token) {
-      router.push(href)
+      router.push(href);
     } else {
       setShowAuthPopup(true);
     }
-  }
-
+  };
 
   const content = (
     <React.Fragment>

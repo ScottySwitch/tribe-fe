@@ -10,6 +10,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import { fakeSubCateList } from "constant";
 import { IAddListingForm } from "pages/add-listing";
 import React, { useState } from "react";
+import { isArray } from "utils";
 
 interface BusinessDetailProps {
   formData: { [key: string]: any };
@@ -49,9 +50,10 @@ const BusinessDetailSeeAndDo = (props: BusinessDetailProps) => {
           question="What type of products does this store offer?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {viewProductTypes?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item.label} />
-          ))}
+          {isArray(viewProductTypes) &&
+            viewProductTypes?.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item.label} />
+            ))}
         </Question>
         <Question question="What are the opening hours?" optional>
           <PreviewValue valueKey="openHours" value={openHours} />
@@ -61,9 +63,10 @@ const BusinessDetailSeeAndDo = (props: BusinessDetailProps) => {
           childrenClassName="flex flex-wrap gap-3"
           optional
         >
-           {viewDescribeTags?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item} />
-          ))}
+          {isArray(viewDescribeTags) &&
+            viewDescribeTags?.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question question="What’s the average price range of a meal?">
           {currency &&

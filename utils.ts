@@ -9,7 +9,7 @@ export const detectIsVideo = (src: string | Blob) => {
   if (typeof src === "string") {
     return videoExtensions.some((item) => src?.includes(item));
   } else {
-    return false;
+    console.log(src.type);
   }
 };
 

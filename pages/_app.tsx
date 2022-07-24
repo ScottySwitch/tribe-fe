@@ -9,7 +9,7 @@ import Header from "components/TheHeader/Header";
 import HamModal from "components/HamModal/HamModal";
 import BizApi from "services/biz-listing";
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
-import { Tiers, UsersTypes } from "enums";
+import { Tiers, UserType } from "enums";
 import AuthApi from "../services/auth";
 import {
   IUser,
@@ -26,7 +26,7 @@ import Button from "components/Button/Button";
 
 export type ILoginInfor = {
   token?: string;
-  type?: UsersTypes;
+  type?: UserType;
   tier?: Tiers;
   avatar?: string;
   first_name?: string;
