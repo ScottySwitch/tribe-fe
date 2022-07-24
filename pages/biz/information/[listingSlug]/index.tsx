@@ -1,5 +1,5 @@
 import { get, isArray } from "lodash";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation";
 import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals";
@@ -22,6 +22,7 @@ import {
 
 import styles from "styles/BizInformation.module.scss";
 import { Router, useRouter } from "next/router";
+import { UserInforContext } from "Context/UserInforContext";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -34,6 +35,7 @@ const BizInformation = (props) => {
   const [selectedTab, setSelectedTab] = useState(informationList[0].label);
 
   const router = useRouter();
+  const { deleteUser } = useContext(UserInforContext);
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
@@ -123,7 +125,7 @@ const BizInformation = (props) => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    deleteUser();
     window.location.href = "/";
   };
 

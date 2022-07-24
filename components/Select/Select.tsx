@@ -213,7 +213,10 @@ const Select = (props: SelectProps) => {
             id={id}
             options={options}
             value={options?.find(
-              (opt) => opt === selected || opt.value === selected
+              (opt) =>
+                opt === selected ||
+                opt.value === selected ||
+                opt.value === (selected as IOption)?.value
             )}
             placeholder={placeholder}
             isClearable={isClearable}

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { userInformationList } from "constant";
 import { UserInformationList } from "enums";
@@ -10,6 +10,7 @@ import ChangePassword from "components/UserProfilePage/UserInformation/TabConten
 
 import styles from "styles/BizInformation.module.scss";
 import style from "styles/Profile.module.scss";
+import { UserInforContext } from "Context/UserInforContext";
 
 const ProfileInformationPage = () => {
   const [selectedTab, setSelectedTab] = useState<string>(
@@ -17,6 +18,7 @@ const ProfileInformationPage = () => {
   );
 
   const router = useRouter();
+  const { deleteUser } = useContext(UserInforContext);
 
   const tabContent = () => {
     switch (selectedTab) {
@@ -30,7 +32,7 @@ const ProfileInformationPage = () => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    deleteUser();
     window.location.href = "/";
   };
 
@@ -48,7 +50,11 @@ const ProfileInformationPage = () => {
               <div
                 className="flex gap-3 justify-between"
                 key={item.label}
-                onClick={() => setSelectedTab(item.label)}
+                onClick={() => {
+                  item.directUrl
+                    ? router.push(item.directUrl)
+                    : setSelectedTab(item.label);
+                }}
               >
                 <Heading
                   icon={item.icon}

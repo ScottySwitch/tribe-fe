@@ -28,10 +28,7 @@ const Menu = (props: MenuMenuProps) => {
     onShowHamModal,
   } = props;
   const router = useRouter();
-  const { user } = useContext(UserInforContext);
-  const { location } = user;
-
-  const [showSwitchModal, setShowSwitchModal] = useState(false);
+  const { user, deleteUser } = useContext(UserInforContext);
 
   const checkLogin = (href: string) => {
     onShowHamModal?.();
@@ -76,10 +73,8 @@ const Menu = (props: MenuMenuProps) => {
   ];
 
   const handleLogout = () => {
-    localStorage.clear();
-    localStorage.removeItem("user");
-    router.push("/");
-    router.reload();
+    deleteUser();
+    window.location.href = "/";
   };
 
   const handleOpenSwitchAccountModal = () => {};

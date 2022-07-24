@@ -224,12 +224,12 @@ const UserInformation = () => {
               }
               defaultValue={getValues("phone_number")}
             />
-            <div
+            {/* <div
               className={styles.cta_change}
               onClick={() => setShowModalNew(true)}
             >
               Change phone number
-            </div>
+            </div> */}
           </div>
           <div className={styles.form_group}>
             <Input
@@ -237,7 +237,7 @@ const UserInformation = () => {
               size="large"
               placeholder="Email"
             />
-            <div className={styles.cta_change}>Change email</div>
+            {/* <div className={styles.cta_change}>Change email</div> */}
           </div>
           <div className={styles.form_group}>
             <div className={styles.form_label}>Gender</div>

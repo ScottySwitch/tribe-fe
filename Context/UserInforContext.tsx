@@ -45,7 +45,10 @@ export const UserInforProvider = ({ children }) => {
     setDefaulUserInfor();
   }, []);
 
-  const deleteUser = () => setUser({});
+  const deleteUser = () => {
+    localStorage.removeItem("user");
+    setUser({});
+  };
 
   const updateUser = (infor) => {
     const localStringyUserInfor = localStorage.getItem("user") || "{}";

@@ -9,6 +9,7 @@ import {
 } from "enums";
 import { IAddListingForm } from "pages/add-listing";
 import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed";
+import { useRouter } from "next/router";
 
 export const videoExtensions = [
   ".flv",
@@ -466,9 +467,21 @@ export const userInformationList = [
   // { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
   // { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
   // { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
-  { label: UserInformationList.TRIBES_FOR_BUSINESSES, icon: "user-color-2" },
-  { label: UserInformationList.SUPPORT, icon: "support-color" },
-  { label: UserInformationList.TERMS_CONDITIONS, icon: "user-color-2" },
+  {
+    label: UserInformationList.TRIBES_FOR_BUSINESSES,
+    icon: "user-color-2",
+    directUrl: "/",
+  },
+  {
+    label: UserInformationList.SUPPORT,
+    icon: "support-color",
+    directUrl: "/support",
+  },
+  {
+    label: UserInformationList.TERMS_CONDITIONS,
+    icon: "user-color-2",
+    directUrl: "/terms-conditions",
+  },
 ];
 
 export const eatTabList = [
