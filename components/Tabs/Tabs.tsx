@@ -6,11 +6,13 @@ import styles from "./Tabs.module.scss";
 const TabPane = (props: {
   icon?: string;
   label: ReactNode | ReactNode[];
+  subLabel: ReactNode | ReactNode[];
   value: string;
   currentTab: string;
+
   setCurrentTab: (e: string) => void;
 }) => {
-  const { label, value, currentTab, icon, setCurrentTab } = props;
+  const { label, subLabel, value, currentTab, icon, setCurrentTab } = props;
   const tabClassNames = classNames(styles.tab_label, {
     [styles.selected]: currentTab === value,
   });
@@ -22,8 +24,11 @@ const TabPane = (props: {
     >
       <div className={styles.left_border} />
       <div className={styles.tab_label_content}>
-        {icon && <Icon icon={icon} size={20} />}
-        {label}
+        <div className={styles.label}>
+          {icon && <Icon icon={icon} size={20} />}
+          {label}
+        </div>
+        <p className={styles.sub_label}>{subLabel}</p>
       </div>
     </div>
   );
@@ -33,6 +38,7 @@ const Tabs = (props: {
   tabList: {
     icon?: string;
     label: ReactNode | ReactNode[];
+    subLabel?: ReactNode | ReactNode[];
     value: string;
     content?: ReactNode | ReactNode[];
   }[];
@@ -51,6 +57,7 @@ const Tabs = (props: {
               key={tab.value}
               icon={tab.icon}
               label={tab.label}
+              subLabel={tab.subLabel}
               value={tab.value}
               currentTab={currentTab}
               setCurrentTab={(e) => setCurrentTab(e)}

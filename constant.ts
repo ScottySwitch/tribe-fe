@@ -34,6 +34,26 @@ export const sortOptions = [
   // { label: "Recently added" },
 ];
 
+export const getFilterLabels = (filter, currency) => [
+  {
+    isShow: !!filter.sort,
+    label: "Sort",
+    value: sortOptions.find((item) => item.value === filter.sort)?.label,
+  },
+  {
+    isShow: !!filter.minRating,
+    label: "Rating",
+    value: `${filter.minRating || "0"} - ${filter.maxRating}`,
+  },
+  {
+    isShow: !!filter.maxPrice && !!currency,
+    label: "Price",
+    value: `${currency + " " + filter.minPrice} - ${
+      currency + " " + filter.maxPrice
+    }`,
+  },
+];
+
 export const curatedList = [
   {
     title: "Find relevant and timely products and services to suit your needs",

@@ -57,12 +57,35 @@
   left: 0;
   padding: 0;
   cursor: pointer;
-}
 
-.filter_badge {
-  border: 1px solid $primary-500;
-  background-color: $primary-20;
-  color: $primary-500;
+  .filter {
+    &_badge {
+      border: 1px solid $primary-500;
+      background-color: $primary-20;
+      color: $primary-500;
+    }
+    &_number {
+      background-color: $primary-500;
+      color: white;
+      font-size: $font-bold;
+      padding: 0 6px;
+      border-radius: $border-radius;
+    }
+  }
+  .quick_filter_container {
+    overflow-x: auto;
+    width: 100%;
+    .scroll_box {
+      padding: 4px 0 10px 0;
+      display: flex;
+      width: max-content;
+      gap: 6px;
+    }
+  }
+
+  .mobile_filter_button {
+    display: none;
+  }
 }
 
 .for_you {
@@ -269,6 +292,13 @@
     left: 0;
     padding: 0;
     cursor: pointer;
+
+    .desktop_filter_button {
+      display: none;
+    }
+    .mobile_filter_button {
+      display: flex;
+    }
   }
 
   .collection_banner {
