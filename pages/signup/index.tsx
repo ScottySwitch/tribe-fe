@@ -73,7 +73,6 @@ const SignupPage = () => {
       receive_promotions: form.receivePromotions,
       agree_policies: form.agreePolicies,
     };
-    console.log(formData);
     if (method === LoginMethod.EMAIL) {
       try {
         const result = await AuthApi.signUpByEmail({

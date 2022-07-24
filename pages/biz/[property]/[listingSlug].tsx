@@ -32,7 +32,6 @@ const PropertiesContainer = ({
     <div className="flex flex-wrap gap-10">
       {Array.isArray(list) && list.length > 0 ? (
         list.map((item) => {
-          console.log(item);
           const id = get(item, "attributes.id") || item.id;
           const images = item?.images || item.menu_file || [];
           const firstImage = item.imgUrl || images[0];

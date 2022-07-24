@@ -1,5 +1,5 @@
 import { get, isArray } from "lodash";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation";
 import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals";
@@ -22,6 +22,7 @@ import {
 
 import styles from "styles/BizInformation.module.scss";
 import { Router, useRouter } from "next/router";
+import { UserInforContext } from "Context/UserInforContext";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -34,6 +35,7 @@ const BizInformation = (props) => {
   const [selectedTab, setSelectedTab] = useState(informationList[0].label);
 
   const router = useRouter();
+  const { deleteUser } = useContext(UserInforContext);
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
@@ -44,7 +46,9 @@ const BizInformation = (props) => {
       //TODO: Check listing is owned by user before returning biz listing data on BE
       if (
         isArray(userInfo.owner_listings) &&
-        userInfo.owner_listings.some((item) => item.id == get(data, "data.data[0].id"))
+        userInfo.owner_listings.some(
+          (item) => item.id == get(data, "data.data[0].id")
+        )
       ) {
         const listing = get(data, "data.data[0]") || {};
         userInfo.now_biz_listing = listing;
@@ -59,11 +63,10 @@ const BizInformation = (props) => {
     };
 
     listingSlug && getListingData(listingSlug);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, loading]);
 
   const onSubmit = async (data) => {
-    console.log("submitData", data);
     listing.id &&
       (await BizListing.updateBizListing(listing.id, {
         ...listing,
@@ -122,7 +125,7 @@ const BizInformation = (props) => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    deleteUser();
     window.location.href = "/";
   };
 

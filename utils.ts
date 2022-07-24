@@ -60,6 +60,7 @@ export const removeZeroInPhoneNumber = (e) => {
   } else {
     phoneNumber = e?.select?.value + e?.input;
   }
+  console.log("phone string", phoneNumber);
   return phoneNumber;
 };
 
@@ -138,7 +139,7 @@ export const formatListingArray = (rawListing) =>
     : [];
 
 export const isArray = (item) => {
-  return Array.isArray(item) && item.length > 0 ? true : false;
+  return Array.isArray(item) && item.length > 0;
 };
 
 export const changeToSlugify = (str) => {

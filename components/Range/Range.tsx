@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import styles from "./Range.module.scss";
 
 export interface MultiRangeProps {
-  value: { minPrice?: number; maxPrice?: number };
   min?: number;
   max?: number;
   onChange?: ({
@@ -17,7 +16,7 @@ export interface MultiRangeProps {
 }
 
 const MultiRangeSlider = (props: MultiRangeProps) => {
-  const { min = 0, max = 0, value, onChange } = props;
+  const { min = 0, max = 0, onChange } = props;
 
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);

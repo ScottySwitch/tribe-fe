@@ -16,6 +16,7 @@ import AuthApi from "services/auth";
 import bizListingApi from "services/biz-listing";
 import { UserInforContext } from "Context/UserInforContext";
 import { isArray } from "lodash";
+import Modal from "components/Modal/Modal";
 
 export const Categories = (props: {
   currentCategory?: string;
@@ -152,6 +153,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter();
   const { pathname, locale } = router;
   const { user, updateUser } = useContext(UserInforContext);
+  const [showSwitchModal, setShowSwitchModal] = useState(false);
 
   const handleSwitchToBizUser = async () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -197,7 +199,12 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
         </Popover>
         {/* <Icon icon="noti-color" size={20} /> */}
         <Popover
-          content={<Menu loginInfor={loginInfor} />}
+          content={
+            <Menu
+              loginInfor={loginInfor}
+              // onShowSwitchModal={() => setShowSwitchModal(true)}
+            />
+          }
           position="bottom-left"
         >
           <Image
@@ -208,6 +215,17 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
             className={styles.avatar}
           />
         </Popover>
+        {/* <Modal
+          title="Switch account"
+          width={600}
+          visible={showSwitchModal}
+          mobilePosition="center"
+          onClose={() => setShowSwitchModal(false)}
+        >
+          <div className="p-[30px] pt-0 flex flex-col gap-5">
+            <SwitchAccountsContent />
+          </div>
+        </Modal> */}
       </>
     );
   }

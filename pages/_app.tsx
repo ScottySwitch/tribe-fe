@@ -94,7 +94,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [router.pathname]);
+  }, [router]);
 
   //handle logic hide header when scroll, not hide when in desktop || when setShowOpenHoursModal ham modal || in unAuthPages
   useEffect(() => {

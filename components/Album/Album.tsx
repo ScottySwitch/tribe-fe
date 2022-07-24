@@ -8,12 +8,13 @@ import Radio from "components/Radio/Radio";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 import { reportReasons } from "constant";
 import { UserInforContext } from "Context/UserInforContext";
-import { get, isArray } from "lodash";
+import { get } from "lodash";
 import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
 import Slider, { Settings } from "react-slick";
 import reportApi from "services/report";
 import { detectIsVideo } from "utils";
+import { isArray } from "utils";
 
 import styles from "./Album.module.scss";
 
@@ -171,13 +172,13 @@ export const Album = (props: AlbumProps) => {
         <div onClick={handlePrevThumbnail} className={styles.btn_prev}>
           <Icon icon="carret-left" size={40} color="#FFFFFF" />
         </div>
-        <Slider
-          ref={refSlider1}
-          {...configThumbnail}
-          className={styles.slider_thumbnail}
-        >
-          {isArray(images) &&
-            images.map((src, index) => (
+        {Array.isArray(images) && images.length > 0 && (
+          <Slider
+            ref={refSlider1}
+            {...configThumbnail}
+            className={styles.slider_thumbnail}
+          >
+            {images.map((src, index) => (
               <div key={index} className={styles.slider_thumbnail_item}>
                 {detectIsVideo(src) ? (
                   <video
@@ -196,7 +197,8 @@ export const Album = (props: AlbumProps) => {
                 )}
               </div>
             ))}
-        </Slider>
+          </Slider>
+        )}
         <div onClick={handleNextThumbnail} className={styles.btn_next}>
           <Icon icon="carret-right" size={40} color="#FFFFFF" />
         </div>

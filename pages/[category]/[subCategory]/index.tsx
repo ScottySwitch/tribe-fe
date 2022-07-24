@@ -11,6 +11,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
 import {
   categories,
+  getFilterLabels,
   homeBannerResponsive,
   inforCardList,
   sortOptions,
@@ -45,51 +46,22 @@ const SubCategoryPage = (context) => {
   const defaultFilterOptions: IFilter = {
     productTypes: [],
     productBrands: [],
-    minPrice: 0,
+    minPrice: undefined,
     maxPrice: undefined,
     sort: undefined,
-    minRating: 0,
+    minRating: undefined,
     maxRating: undefined,
   };
 
+  const { currency } = useGetCountry();
+
   const [bannerArray, setBannergArray] = useState<IType[]>([]);
   const [categoryLinkArray, setCategoryLinkArray] = useState<ITab[]>([]);
-  const [currentSubCategory, setCurrentSubCategory] = useState(categoryLink);
-
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [showFilter, setShowFilter] = useState(false);
   const [filter, setFilter] = useState(defaultFilterOptions);
-
-  const { currency } = useGetCountry();
-
-  const finalTabLabel = categories.find(
-    (cat) => cat.slug === category
-  )?.finalTabLabel;
-
-  const filterLabels = [
-    {
-      keys: ["sort"],
-      isShow: !!filter.sort,
-      label: "Sort: ",
-      value: sortOptions.find((item) => item.value === filter.sort)?.label,
-    },
-    {
-      keys: ["minRating", "maxRating"],
-      isShow: !!filter.minRating,
-      label: "Rating: ",
-      value: `${filter.minRating || "0"} - ${filter.maxRating}`,
-    },
-    {
-      keys: ["minPrice", "maxPrice"],
-      isShow: !!filter.maxPrice && !!currency,
-      label: "Price: ",
-      value: `${currency + " " + filter.minPrice} - ${
-        currency + " " + filter.maxPrice
-      }`,
-    },
-  ];
 
   useEffect(() => {
     const getData = async () => {
@@ -98,11 +70,9 @@ const SubCategoryPage = (context) => {
         limit: 12,
         page: 1,
       });
-      const rawListBanners = formatBanner(get(dataBanners, "data.data"));
-      setBannergArray(rawListBanners);
-
       const dataCategoryLinks =
         await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+
       let categoryLinkArray: any = [
         {
           label: "All",
@@ -111,15 +81,18 @@ const SubCategoryPage = (context) => {
           icon: "https://picsum.photos/200/300",
         },
       ];
-      // const rawListBanners = get(dataBanners, "data.data");
+
+      const rawListBanners = formatBanner(get(dataBanners, "data.data"));
       const rawListCategory = formatCategoryLink(
-        get(dataCategoryLinks, "data.data")
+        get(dataCategoryLinks, "data.data") || []
       );
-      categoryLinkArray =
-        isArray(rawListCategory) && categoryLinkArray.concat(rawListCategory);
-      setCategoryLinkArray(categoryLinkArray);
+
+      setBannergArray(rawListBanners);
+      setCategoryLinkArray(categoryLinkArray.concat(rawListCategory));
     };
+
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -148,9 +121,8 @@ const SubCategoryPage = (context) => {
 
     //get subCategory data
     location && getBizListings();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, location, pagination.page, currentSubCategory]);
+  }, [filter, location, categoryLink, pagination.page]);
 
   if (loading) {
     return (
@@ -165,25 +137,49 @@ const SubCategoryPage = (context) => {
   };
 
   const handleChangeSubCategory = (e) => {
-    setCurrentSubCategory(e);
     router.replace(`/${category}/${e}`);
     // getDataBizlisting(category, e, page)
   };
 
-  const handleRemoveFilter = (keys) => {};
-
-  const FilterBadge = (item) => {
-    return (
-      item.isShow && (
-        <Badge size="small" className={styles.filter_badge}>
-          <div className="flex gap-2">
-            {item.label} {item.value}
-            <div onClick={() => handleRemoveFilter(item.keys)}>&#x2715;</div>
-          </div>
-        </Badge>
-      )
-    );
+  const handleRemoveFilter = (keyLabel) => {
+    switch (keyLabel) {
+      case "Sort":
+        return setFilter({ ...filter, sort: undefined });
+      case "Rating":
+        return setFilter({ ...filter, minRating: 0, maxRating: undefined });
+      case "Price":
+        return setFilter({ ...filter, minPrice: 0, maxPrice: undefined });
+    }
   };
+
+  const FilterBadge = ({ item }) =>
+    item.isShow && (
+      <Badge size="small" className={styles.filter_badge}>
+        <div className="flex gap-2">
+          {item.label}: {item.value}
+          <div onClick={() => handleRemoveFilter(item.label)}>&#x2715;</div>
+        </div>
+      </Badge>
+    );
+
+  const filterLabels = getFilterLabels(filter, currency);
+  const filterNumber = filterLabels.filter((item) => item.isShow).length;
+
+  const FilterButton = ({ className }) => (
+    <Button
+      width="fit-content"
+      size="small"
+      variant="secondary"
+      prefix={<Icon icon="filter-1" />}
+      className={className}
+      onClick={() => setShowFilter(true)}
+    >
+      Filter & Sort
+      {!!filterNumber && (
+        <span className={styles.filter_number}>{filterNumber}</span>
+      )}
+    </Button>
+  );
 
   return (
     <div>
@@ -196,7 +192,7 @@ const SubCategoryPage = (context) => {
         </div>
         <Carousel
           responsive={homeBannerResponsive}
-          isShow={isArray(bannerArray) && !!bannerArray.length}
+          isShow={isArray(bannerArray) && bannerArray.length > 0}
         >
           {bannerArray.map((img, index) => (
             <div
@@ -226,7 +222,7 @@ const SubCategoryPage = (context) => {
                   : []
               }
               type="secondary-no-outline"
-              selectedTab={currentSubCategory}
+              selectedTab={categoryLink}
               className="pt-[6px]"
               onChangeTab={handleChangeSubCategory}
             />
@@ -248,19 +244,15 @@ const SubCategoryPage = (context) => {
               }}
               onChange={(e) => handleChangeSubCategory(e.value)}
             /> */}
-            <Button
-              width={150}
-              size="small"
-              text="Filter & Sort"
-              variant="secondary"
-              prefix={<Icon icon="filter-1" />}
-              onClick={() => setShowFilter(true)}
-            />
+            <FilterButton className={styles.desktop_filter_button} />
           </div>
-          <div className="flex gap-3 flex-wrap mt-1">
-            {filterLabels.map((item) => (
-              <FilterBadge key={item.label} item={item} />
-            ))}
+          <div className={styles.quick_filter_container}>
+            <div className={styles.scroll_box}>
+              <FilterButton className={styles.mobile_filter_button} />
+              {filterLabels.map((item) => (
+                <FilterBadge key={item.label} item={item} />
+              ))}
+            </div>
           </div>
         </div>
       </SectionLayout>
@@ -296,9 +288,9 @@ const SubCategoryPage = (context) => {
         )}
         <TopSearches />
         <Filter
+          // make Filter rerender when filter state change
+          key={JSON.stringify(filter)}
           visible={showFilter}
-          categoryLink={categoryLink}
-          finalTabLabel={finalTabLabel}
           filter={filter}
           onClose={() => setShowFilter(false)}
           onSubmitFilter={handleFilter}

@@ -234,7 +234,7 @@ const Upload = (props: UploadProps) => {
             {detectIsVideo(src) ? (
               <video id="video" src={src} controls className={styles.video} />
             ) : (
-              <Image src={src} alt="" layout="fill" objectFit="cover" />
+              src && <Image src={src} alt="" layout="fill" objectFit="cover" />
             )}
           </div>
         ))}

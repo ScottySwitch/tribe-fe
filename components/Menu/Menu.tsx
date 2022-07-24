@@ -8,7 +8,6 @@ import React, { useContext, useState } from "react";
 import { ProfileTabs, UsersTypes } from "enums";
 import styles from "./Menu.module.scss";
 import Modal from "components/Modal/Modal";
-import { SwitchAccountsContent } from "components/TheHeader/HeaderComponents";
 
 interface MenuMenuProps {
   loginInfor: ILoginInfor;
@@ -29,9 +28,7 @@ const Menu = (props: MenuMenuProps) => {
     onShowHamModal,
   } = props;
   const router = useRouter();
-  const { user } = useContext(UserInforContext);
-  const { location } = user;
-
+  const { user, deleteUser } = useContext(UserInforContext);
 
   const checkLogin = (href: string) => {
     onShowHamModal?.();
@@ -76,10 +73,8 @@ const Menu = (props: MenuMenuProps) => {
   ];
 
   const handleLogout = () => {
-    localStorage.clear();
-    localStorage.removeItem("user");
-    router.push("/");
-    router.reload();
+    deleteUser();
+    window.location.href = "/";
   };
 
   const handleOpenSwitchAccountModal = () => {};
@@ -111,10 +106,10 @@ const Menu = (props: MenuMenuProps) => {
       })}
       {!!loginInfor.token && (
         <React.Fragment>
-          <div onClick={onShowSwitchModal} className={styles.menu_item}>
+          {/* <div onClick={onShowSwitchModal} className={styles.menu_item}>
             <Icon icon="user-color" size={20} />
             <div>Switch account</div>
-          </div>
+          </div> */}
           <div onClick={handleLogout} className={styles.logout}>
             <Icon icon="log-out" size={20} color="#e60112" />
             <div>Logout</div>

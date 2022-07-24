@@ -121,6 +121,10 @@ const getMe = async () => {
   localStorage.setItem("user", JSON.stringify(me.data));
 };
 
+const getUserInformation = () => {
+  return Api.get(`/api/users/me`);
+};
+
 const forgetPasswordByEmail = async (params: AuthForgetPassword) => {
   const url = `/api/auth/forgot-password`;
   return await Api.post(url, {
@@ -201,6 +205,7 @@ const loginGoogleCallback = async (accessToken: any) => {
 };
 
 const AuthApi = {
+  getUserInformation,
   resetPasswordByOldPassword,
   signUpByEmail,
   otpEmailGenerate,

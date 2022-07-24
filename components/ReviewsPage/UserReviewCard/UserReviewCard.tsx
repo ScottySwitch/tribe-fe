@@ -10,7 +10,7 @@ import Button from "components/Button/Button";
 import { calcDistanceFromNow } from "utils";
 import Upload from "components/Upload/Upload";
 import Album from "components/Album/Album";
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import Modal from "components/Modal/Modal";
 export interface UserReviewCardProps {
   reply?: string;
@@ -99,7 +99,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
             />
           )}
         </div>
-        {/* <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
+        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
           <div className={styles.header}>
             <h6 className={styles.name}>
               <span>
@@ -124,7 +124,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
               <div className={styles.date}>{createdDate || date}</div>
             )}
           </div>
-        </div> */}
+        </div>
       </div>
       <div className={styles.review_summary}>
         <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
@@ -236,23 +236,25 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
       </div>
-      <Modal
-        visible={showAlbumModal}
-        title=" "
-        width="90%"
-        // maxHeight="90%"
-        mobilePosition="center"
-        onClose={() => setShowAlbumModal(false)}
-        contentClassName="pb-3"
-      >
-        <Album
-          id="listing-review-album"
-          reportMedia={false}
-          key={get(listImage, "length")}
-          images={listImage}
-          listingId={bizListingId}
-        />
-      </Modal>
+      {isArray(listImage) && 
+        <Modal
+          visible={showAlbumModal}
+          title=" "
+          width="90%"
+          // maxHeight="90%"
+          mobilePosition="center"
+          onClose={() => setShowAlbumModal(false)}
+          contentClassName="pb-3"
+        >
+          <Album
+            id="listing-review-album"
+            reportMedia={false}
+            key={get(listImage, "length")}
+            images={listImage}
+            listingId={bizListingId}
+          />
+        </Modal>
+      }
     </div>
   );
 };

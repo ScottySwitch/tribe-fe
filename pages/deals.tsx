@@ -19,11 +19,12 @@ import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
 import useTrans from "hooks/useTrans";
 
-const categoryTabList: ITab[] = categories.map((item) => ({
+const allTab = [{ label: "All", value: undefined }];
+const categoryTabList: any[] = categories.map((item) => ({
   label: item.slug,
   value: item.value,
-  content: <div></div>,
 }));
+const tabList: any[] = allTab.concat(categoryTabList);
 
 const Deals = () => {
   const trans = useTrans();
@@ -33,7 +34,6 @@ const Deals = () => {
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
   const [loading, setLoading] = useState(true);
-  const [showFilter, setShowFilter] = useState(false);
   const [selectedTab, setSelectedTab] = useState<Categories>(Categories.BUY);
   const [pagination, setPagination] = useState(defaultPagination);
   const [listingsHaveDeals, setListingsHaveDeals] = useState<{
@@ -104,28 +104,11 @@ const Deals = () => {
       <SectionLayout childrenClassName="flex justify-between flex-wrap">
         <div className="flex">
           <TabsHorizontal
-            tablist={categoryTabList}
+            tablist={tabList}
             type="secondary-no-outline"
             selectedTab={selectedTab}
             className="pt-[6px]"
             onChangeTab={(e: Categories) => setSelectedTab(e)}
-          />
-        </div>
-        <div className="flex gap-5">
-          <Button
-            width={100}
-            size="small"
-            text="Price range"
-            variant="secondary"
-          />
-          <Button width={60} size="small" text="Rating" variant="secondary" />
-          <Button
-            width={130}
-            size="small"
-            text="Filter & Sort"
-            variant="secondary"
-            prefix={<Icon icon="filter-1" />}
-            onClick={() => setShowFilter(true)}
           />
         </div>
       </SectionLayout>
@@ -151,10 +134,9 @@ const Deals = () => {
               </div>
             ))}
         </div>
-
         <TopSearches />
       </SectionLayout>
-      <SectionLayout>
+      <SectionLayout show={pagination.page > 1}>
         <Pagination
           limit={30}
           total={pagination.total}
@@ -163,7 +145,6 @@ const Deals = () => {
           }
         />
       </SectionLayout>
-      {/* <Filter onClose={() => setShowFilter(false)} visible={showFilter} /> */}
     </div>
   );
 };

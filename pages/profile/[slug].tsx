@@ -158,7 +158,7 @@ const ProfilePage = () => {
     {
       label: ProfileTabs.CONTRIBUTED,
       value: ProfileTabs.CONTRIBUTED,
-      content: <ContributedPanel userInfor={userInfor} />,
+      content: <ContributedPanel userInfor={userInfor}/>,
     },
     {
       label: ProfileTabs.ABOUT,

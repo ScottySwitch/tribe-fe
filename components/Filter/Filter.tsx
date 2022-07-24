@@ -16,14 +16,14 @@ import ProductTypeApi from "services/product-type";
 import ProductBrandApi from "services/product-brand";
 import { useRouter } from "next/router";
 import useGetCountry from "hooks/useGetCountry";
-import { sortOptions } from "constant";
+import { categories, getFilterLabels, sortOptions } from "constant";
 
 export interface IFilter {
   productTypes: string[];
   productBrands: string[];
   minPrice?: number;
   maxPrice?: number;
-  sort?: "asc" | "desc";
+  sort?: "asc" | "desc" | undefined;
   minRating?: number;
   maxRating?: number;
 }
@@ -52,8 +52,8 @@ const PriceRange = ({ filter, onFilter }) => {
     minPrice: number;
     maxPrice: number;
   }>({
-    minPrice: 0,
-    maxPrice: 0,
+    minPrice: filter.minPrice || 0,
+    maxPrice: filter.maxPrice || 0,
   });
 
   const country = useGetCountry();
@@ -71,12 +71,7 @@ const PriceRange = ({ filter, onFilter }) => {
         <div>{`${country.currency} ${rangeValues?.maxPrice}`}</div>
       </div>
       <div className="flex flex-start mt-5">
-        <Range
-          value={{ minPrice: 0, maxPrice: 1000 }}
-          min={0}
-          max={country.max}
-          onChange={handleChangeRange}
-        />
+        <Range min={0} max={country.max} onChange={handleChangeRange} />
       </div>
     </div>
   );
@@ -150,29 +145,26 @@ const Other = ({
 };
 
 export interface FilterProps extends ModalProps {
-  finalTabLabel?: string;
   finalTabList?: IOption[];
   otherList?: IOption[];
   filter?: IFilter;
-  categoryLink?: string | undefined;
   onSubmitFilter: (e?: IFilter) => void;
 }
 
 const Filter = (props: FilterProps) => {
-  const {
-    visible,
-    filter,
-    finalTabLabel,
-    categoryLink,
-    onSubmitFilter,
-    onClose,
-  } = props;
-
-  const router = useRouter();
+  const { visible, filter, onSubmitFilter, onClose } = props;
 
   const [localFilter, setLocalFilter] = useState<IFilter | undefined>(filter);
   const [productTypes, setProductTypes] = useState<IOption[]>([]);
   const [productBrands, setProductBrands] = useState<IOption[]>([]);
+
+  const router = useRouter();
+  const { category, subCategory: categoryLink }: any = router.query;
+  const { currency } = useGetCountry();
+  const filterLabels = getFilterLabels(localFilter, currency);
+  const finalTabLabel = categories.find(
+    (cat) => cat.slug === category
+  )?.finalTabLabel;
 
   useEffect(() => {
     const getProductTypes = async () => {
@@ -208,28 +200,54 @@ const Filter = (props: FilterProps) => {
     setLocalFilter?.({ ...localFilter, ...e });
   };
 
+  const handleCloseFilterModal = () => {
+    setLocalFilter(filter);
+    onClose?.();
+  };
+
+  const handleApplyFilter = () => {
+    onClose?.();
+    onSubmitFilter(localFilter);
+  };
+
+  const productBrandFilterNumber = get(localFilter, "productBrands.length")
+    ? `${get(localFilter, "productBrands.length")} selected`
+    : "";
+
+  const productTypeFilterNumber = get(localFilter, "productTypes.length")
+    ? `${get(localFilter, "productTypes.length")} selected`
+    : "";
+
   const tabList = [
     {
       label: "Sort",
+      subLabel: filterLabels[0].isShow && filterLabels[0].value,
       value: Filters.SORT,
       content: <Sort filter={localFilter} onFilter={handleFilter} />,
     },
     {
       label: "Rating",
+      subLabel: filterLabels[1].isShow && filterLabels[1].value,
       value: Filters.RATING,
       content: <Rating filter={localFilter} onFilter={handleFilter} />,
     },
     {
       label: "Price range",
+      subLabel: filterLabels[2].isShow && filterLabels[2].value,
       value: Filters.PRICE_RANGE,
       content: <PriceRange filter={localFilter} onFilter={handleFilter} />,
     },
     {
       label: "Other",
+      subLabel: productTypeFilterNumber,
       value: Filters.OTHER,
       content: (
         <Other
-          key={"productTypes" + get(productTypes, "length")}
+          key={
+            "productTypes" +
+            get(productTypes, "length") +
+            localFilter?.productTypes
+          }
           filter={localFilter}
           filterKey="productTypes"
           options={productTypes}
@@ -239,10 +257,15 @@ const Filter = (props: FilterProps) => {
     },
     {
       label: finalTabLabel,
+      subLabel: productBrandFilterNumber,
       value: Filters.OTHER_OTHER,
       content: (
         <Other
-          key={"productBrands" + get(productBrands, "length")}
+          key={
+            "productBrands" +
+            get(productBrands, "length") +
+            localFilter?.productBrands
+          }
           filter={localFilter}
           filterKey="productBrands"
           options={productBrands}
@@ -256,7 +279,7 @@ const Filter = (props: FilterProps) => {
     <Modal
       width="700px"
       visible={visible}
-      onClose={onClose}
+      onClose={handleCloseFilterModal}
       title="Filter & Sort"
     >
       <Tabs tabList={tabList} />
@@ -265,10 +288,7 @@ const Filter = (props: FilterProps) => {
         <Button
           text="Apply"
           className={styles.apply_btn}
-          onClick={() => {
-            onClose?.();
-            onSubmitFilter(localFilter);
-          }}
+          onClick={handleApplyFilter}
         />
       </div>
     </Modal>
