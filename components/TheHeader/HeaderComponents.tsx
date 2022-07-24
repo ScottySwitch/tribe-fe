@@ -98,6 +98,7 @@ export const SwitchAccountsContent = () => {
     updateUser({
       avatar: get(item, "logo[0]"),
       current_listing_slug: get(item, "slug"),
+      user_type: UserType.BIZ_USER,
     });
     router.push(`/biz/home/${item.slug}/edit`);
   };
@@ -151,28 +152,16 @@ export const SwitchAccountsContent = () => {
 
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter();
-  const { pathname, locale } = router;
   const { user, updateUser } = useContext(UserInforContext);
   const [showSwitchModal, setShowSwitchModal] = useState(false);
 
-  const handleSwitchToBizUser = async () => {
-    const firstOwnedListingSlug = get(
-      user,
-      "owner_listings[0].attributes.slug"
-    );
-    const firstOnwedListingLogo = get(
-      user,
-      "owner_listings[0].attributes.logo[0]"
-    );
-    if (firstOwnedListingSlug) {
-      updateUser({
-        avatar: firstOnwedListingLogo,
-        current_listing_slug: firstOwnedListingSlug,
-        user_type: UserType.BIZ_USER,
-      });
-      router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
+  const handleSwitchToBizUser = () => {
+    const hasOwnedListings = get(user, "owner_listings.length") > 0;
+    if (hasOwnedListings) {
+      return true;
     } else {
       router.push("/claim");
+      return false;
     }
   };
 
@@ -185,13 +174,16 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           ),
         })}
       >
-        <div
-          className="flex gap-2 cursor-pointer"
-          onClick={handleSwitchToBizUser}
+        <Popover
+          content={<SwitchAccountsContent />}
+          position="bottom-left"
+          onBeforePopUp={handleSwitchToBizUser}
         >
-          <Icon icon="business" size={20} />
-          Business
-        </div>
+          <div className="flex gap-2 items-center w-max">
+            <Icon icon="business" size={20} />
+            Business
+          </div>
+        </Popover>
         <Popover content={<ContributeContent />}>
           <Button
             prefix={<Icon icon="plus" size={20} />}
@@ -201,12 +193,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
         </Popover>
         {/* <Icon icon="noti-color" size={20} /> */}
         <Popover
-          content={
-            <Menu
-              loginInfor={loginInfor}
-              // onShowSwitchModal={() => setShowSwitchModal(true)}
-            />
-          }
+          content={<Menu loginInfor={loginInfor} />}
           position="bottom-left"
         >
           <Image
@@ -217,7 +204,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
             className={styles.avatar}
           />
         </Popover>
-        {/* <Modal
+        <Modal
           title="Switch account"
           width={600}
           visible={showSwitchModal}
@@ -227,7 +214,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           <div className="p-[30px] pt-0 flex flex-col gap-5">
             <SwitchAccountsContent />
           </div>
-        </Modal> */}
+        </Modal>
       </div>
       <div
         className={classNames(styles.gadget_group, {

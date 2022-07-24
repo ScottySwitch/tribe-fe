@@ -39,13 +39,16 @@ export const UserInforProvider = ({ children }) => {
         token: localLoginInfo.token,
         first_name: localLoginInfo.first_name,
         last_name: localLoginInfo.last_name,
-        avatar: localLoginInfo.avatar,
+        avatar:
+          localLoginInfo.user_type === UserType.NORMAL_USER
+            ? localLoginInfo.user_avatar
+            : localLoginInfo.avatar,
         user_avatar: localLoginInfo.user_avatar,
         owner_listings: localLoginInfo.owner_listings,
         user_type: localLoginInfo.user_type || UserType.NORMAL_USER,
       });
     };
-    
+
     setDefaulUserInfor();
   }, []);
 

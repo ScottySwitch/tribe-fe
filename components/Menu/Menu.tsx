@@ -106,7 +106,10 @@ const Menu = (props: MenuMenuProps) => {
       })}
       {!!loginInfor.token && (
         <React.Fragment>
-          <div onClick={onShowSwitchModal} className={styles.menu_item}>
+          <div
+            onClick={onShowSwitchModal}
+            className={styles.switch_account_button}
+          >
             <Icon icon="user-color" size={20} />
             <div>Switch account</div>
           </div>

@@ -97,7 +97,6 @@ const getMe = async () => {
   // } else {
   //   me.data.avatar = me.data.avatar;
   // }
-  me.data.user_avatar = me.data.avatar || undefined;
   if (localStorage.getItem("user")) {
     if (!userInfo.user_type) {
       me.data.user_type = UserType.NORMAL_USER;
@@ -105,6 +104,7 @@ const getMe = async () => {
       me.data.user_type = userInfo.user_type;
     }
   }
+  me.data.user_avatar = me.data.avatar || undefined;
   me.data.avatar = userInfo.avatar;
   me.data.token = userInfo.token;
   me.data.owner_listings = userInfo.owner_listings || [];
