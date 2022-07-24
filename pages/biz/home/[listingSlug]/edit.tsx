@@ -98,7 +98,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       let data;
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       if (isViewPage) {
-        //if normal user go to normal listing homepage  
+        //if normal user go to normal listing homepage
         data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
       } else {
         //if normal users go to edit listing homepage
@@ -172,7 +172,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         const tagArray = formatOptions(rawTags);
 
         const rawReview = listing.reviews || [];
-        let reviewArray: any = []
+        let reviewArray: any = [];
         rawReview.map((item) => {
           if (!item.is_revision) {
             reviewArray.push({
@@ -184,7 +184,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               date_create_reply: item.date_create_reply,
               user: item.user,
               visited_date: item.visited_date,
-            })
+            });
           }
         });
         const rawTagOptions = listing.tag_options || [];
@@ -204,7 +204,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setPriceRange({
           min: listing.min_price,
           max: listing.max_price,
-          currency: listing.currency ? (listing.currency)?.toUpperCase() : ''
+          currency: listing.currency ? listing.currency?.toUpperCase() : "",
         });
         setSocialInfo(listing.social_info);
         setKlookUrl(listing.klook_url);
@@ -220,10 +220,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
         if (listing.expiration_date) {
-          setIsPaid(isPaidUser(listing.expiration_date))
-        }
-        else {
-          setIsPaid(false)
+          setIsPaid(isPaidUser(listing.expiration_date));
+        } else {
+          setIsPaid(false);
         }
       }
     };
@@ -310,13 +309,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       (item) => !item.isNew && item.isEdited
     );
     if (isRevision) {
-      console.log('priceRange',priceRange)
+      console.log("priceRange", priceRange);
       await BizListingRevision.updateBizListingRevision(bizListing.id, {
         description: description,
         // price_range: priceRange,
         min_price: parseFloat(priceRange.min),
         max_price: parseFloat(priceRange.max),
-        currency: (priceRange.currency).toLocaleLowerCase(),
+        currency: priceRange.currency.toLocaleLowerCase(),
         action: action,
         images: listingImages,
         social_info: socialInfo,
@@ -331,6 +330,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         products: currentItemList.map((item) => item.id) || [],
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
+        reviews: reviews.map((item) => item.id) || [],
       }).then((response) => {
         console.log(response);
       });
@@ -344,7 +344,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         // price_range: priceRange,
         min_price: parseFloat(priceRange.min),
         max_price: parseFloat(priceRange.max),
-        currency: (priceRange.currency).toLocaleLowerCase(),
+        currency: priceRange.currency.toLocaleLowerCase(),
         action: action,
         images: listingImages,
         social_info: socialInfo,
@@ -503,9 +503,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           reply_reviews: item.reply_reviews,
           date_create_reply: item.date_create_reply,
           parent_id: item.id,
-          is_revision: true
+          is_revision: true,
         };
-        await ReviewApi.addReview(dataSend)
+        await ReviewApi.addReview(dataSend);
       })
     );
     window.location.reload();
