@@ -1,3 +1,5 @@
+import { isArray } from "lodash";
+import classNames from "classnames";
 import get from "lodash/get";
 import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
@@ -11,14 +13,10 @@ import Menu from "components/Menu/Menu";
 import { ILoginInfor } from "pages/_app";
 import { UserType } from "enums";
 
-import styles from "./Header.module.scss";
-import AuthApi from "services/auth";
-import bizListingApi from "services/biz-listing";
 import { UserInforContext } from "Context/UserInforContext";
-import { isArray } from "lodash";
 import Modal from "components/Modal/Modal";
-import classNames from "classnames";
-import { route } from "next/dist/server/router";
+
+import styles from "./Header.module.scss";
 
 export const Categories = (props: {
   currentCategory?: string;
@@ -140,7 +138,7 @@ export const SwitchAccountsContent = () => {
           style={{ borderRadius: "50%" }}
         />
         <div>
-          <strong>
+          <strong className={styles.user_name}>
             {user.first_name} {user.last_name}
           </strong>
           <p className="text-xs">User account</p>
