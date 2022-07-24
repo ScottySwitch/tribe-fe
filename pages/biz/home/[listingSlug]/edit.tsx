@@ -38,11 +38,8 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
-<<<<<<< HEAD
 import { isPaidUser } from "utils";
-=======
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
->>>>>>> staging
 
 import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
