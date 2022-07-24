@@ -19,6 +19,7 @@ export interface UserReviewCardProps {
   className?: string;
   isPaid?: boolean;
   actions?: boolean;
+  replyAccepted?: boolean;
   children?: ReactElement | ReactNode;
   listingCard?: ReactElement | ReactNode;
   avatarUrl?: string;
@@ -51,6 +52,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     listImage,
     dateVisit,
     listingCard,
+    replyAccepted,
     rating,
     isPaid,
     actions,
@@ -75,6 +77,13 @@ const UserReviewCard = (props: UserReviewCardProps) => {
       [styles.divider]: isDivier,
     }
   );
+  const showReply = reply
+    ? actions
+      ? true
+      : replyAccepted
+      ? true
+      : false
+    : false;
 
   const statusClassName = classNames(styles.status, {
     [styles.pending]: status === "Pending",
@@ -203,7 +212,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
             )}
           </div>
         )}
-        {reply && (
+        {showReply && (
           <div className={styles.reply_review}>
             <div className={styles.head_review}>
               <p className={styles.title}>Response from the owner</p>
@@ -236,7 +245,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
       </div>
-      {isArray(listImage) && 
+      {isArray(listImage) && (
         <Modal
           visible={showAlbumModal}
           title=" "
@@ -254,7 +263,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
             listingId={bizListingId}
           />
         </Modal>
-      }
+      )}
     </div>
   );
 };
