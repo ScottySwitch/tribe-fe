@@ -55,7 +55,7 @@ const Upload = (props: UploadProps) => {
   }, [fileList, multiple]);
 
   const showedImages =
-    type === "banner"
+    type === "banner" || type === "media"
       ? isPaid
         ? Array.isArray(srcList) && srcList.slice(0, 4)
         : Array.isArray(srcList) && srcList.slice(0, 3)
@@ -109,15 +109,20 @@ const Upload = (props: UploadProps) => {
       )
       .then((res) => {
         const responseUrls = get(res, "data.urls") || [];
+        console.log("responseUrls--------", responseUrls);
         if (responseUrls.length > 0) {
           let newFileList = Array.isArray(fileList) ? [...fileList] : [];
           if (!multiple) {
             newFileList = [...responseUrls];
+            console.log("responseUrls--------1", newFileList);
           } else if (imgIndex !== -1) {
             newFileList[imgIndex] = responseUrls[0];
+            console.log("responseUrls--------2", newFileList);
           } else {
             newFileList = [...newFileList, ...responseUrls];
+            console.log("responseUrls--------3", newFileList);
           }
+          console.log("finallllll--------------", newFileList);
           setLocalFileList(newFileList);
           onChange?.(newFileList);
         }
@@ -212,6 +217,8 @@ const Upload = (props: UploadProps) => {
   const deleteIconClassName = classNames(styles.close, {
     [styles.hide]: type === "avatar",
   });
+
+  useEffect(() => console.log("showedImages", showedImages), [showedImages]);
 
   return (
     <div className={containerClassName}>

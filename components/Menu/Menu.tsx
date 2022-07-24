@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { ILoginInfor } from "pages/_app";
 import { UserInforContext } from "Context/UserInforContext";
 import React, { useContext, useState } from "react";
-import { ProfileTabs, UsersTypes } from "enums";
+import { ProfileTabs, UserType } from "enums";
 import styles from "./Menu.module.scss";
 import Modal from "components/Modal/Modal";
 
@@ -81,7 +81,7 @@ const Menu = (props: MenuMenuProps) => {
 
   const handleSwitchToNormalUser = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.type = UsersTypes.NORMAL_USER;
+    userInfo.type = UserType.NORMAL_USER;
     localStorage.setItem("user", JSON.stringify(userInfo));
     router.push("/");
     router.reload();
@@ -106,10 +106,13 @@ const Menu = (props: MenuMenuProps) => {
       })}
       {!!loginInfor.token && (
         <React.Fragment>
-          {/* <div onClick={onShowSwitchModal} className={styles.menu_item}>
+          <div
+            onClick={onShowSwitchModal}
+            className={styles.switch_account_button}
+          >
             <Icon icon="user-color" size={20} />
             <div>Switch account</div>
-          </div> */}
+          </div>
           <div onClick={handleLogout} className={styles.logout}>
             <Icon icon="log-out" size={20} color="#e60112" />
             <div>Logout</div>

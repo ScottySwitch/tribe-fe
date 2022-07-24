@@ -6,6 +6,7 @@ interface PopoverProps {
   children: ReactElement | ReactElement[];
   content?: ReactElement;
   contentClassName?: string;
+  onBeforePopUp?: () => boolean;
   position?:
     | "top"
     | "bottom"
@@ -20,6 +21,7 @@ const Popover = (props: PopoverProps) => {
     children,
     contentClassName,
     content,
+    onBeforePopUp = () => true,
     position = "bottom-right",
   } = props;
   const [isPoppedUp, setIsPoppedUp] = useState(false);
@@ -39,7 +41,7 @@ const Popover = (props: PopoverProps) => {
       onBlur={() => setIsPoppedUp(false)}
     >
       <div
-        onClick={() => setIsPoppedUp(!isPoppedUp)}
+        onClick={() => onBeforePopUp() && setIsPoppedUp(!isPoppedUp)}
         className={styles.children}
       >
         {children}

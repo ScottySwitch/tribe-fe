@@ -185,7 +185,7 @@ const UserInformation = () => {
               fileList={[
                 userInfor.avatar || require("public/images/avatar.png"),
               ]}
-              onChange={(imgs) => setValue("logo", imgs[0])}
+              onChange={(imgs) => setValue("avatar", imgs[0])}
             />
           </div>
           <div className={styles.form_group}>

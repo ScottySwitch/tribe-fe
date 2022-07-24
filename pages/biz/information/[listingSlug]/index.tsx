@@ -30,39 +30,46 @@ const BizInformation = (props) => {
   const [isPaid, setIsPaid] = useState(true);
   const [listing, setListing] = useState(defaultAddlistingForm);
   const [isPayYearly, setIsPayYearly] = useState(false);
+  const [revisionId, setRevisionId] = useState();
 
   const informationList = isPaid ? paidInformationList : freeInformationList;
   const [selectedTab, setSelectedTab] = useState(informationList[0].label);
 
   const router = useRouter();
-  const { deleteUser } = useContext(UserInforContext);
+  const { user, deleteUser } = useContext(UserInforContext);
 
   useEffect(() => {
-    const getListingData = async (listingSlug) => {
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    const checkRevision = async () => {
+      const data = await BizListingApi.getInfoOwnerBizListingBySlug(
+        listingSlug
+      );
+      setRevisionId(get(data, "data.data[0].id"));
+    };
 
+    const getListingData = async () => {
       const data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
 
       //TODO: Check listing is owned by user before returning biz listing data on BE
-      if (
-        isArray(userInfo.owner_listings) &&
-        userInfo.owner_listings.some(
-          (item) => item.id == get(data, "data.data[0].id")
-        )
-      ) {
-        const listing = get(data, "data.data[0]") || {};
-        userInfo.now_biz_listing = listing;
-        localStorage.setItem("user", JSON.stringify(userInfo));
-        const isPaidListing = get(listing, "biz_invoices.length") > 0;
-        setIsPaid(isPaidListing);
-        setListing(listing);
-        setLoading(false);
-      } else {
-        router.push("/");
-      }
+      const listing = get(data, "data.data[0]") || {};
+      const isPaidListing = get(listing, "biz_invoices.length") > 0;
+      setIsPaid(isPaidListing);
+      setListing(listing);
+      setLoading(false);
     };
 
-    listingSlug && getListingData(listingSlug);
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    const ownedListingSlugs = isArray(userInfo.owner_listings)
+      ? userInfo.owner_listings.map((item) => get(item, "attributes.slug"))
+      : [];
+    const isOwned = ownedListingSlugs.some((item) => item === listingSlug);
+
+    if (listingSlug && isOwned) {
+      getListingData();
+      checkRevision();
+    } else {
+      router.push("/");
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, loading]);
 
@@ -95,7 +102,13 @@ const BizInformation = (props) => {
       case InformationList.PRODUCT_LISTING:
         return <ProductListing isPaid={isPaid} bizListingId={listing.id} />;
       case InformationList.PHOTOS_VIDEOS:
-        return <PhotosVideos isPaid={isPaid} />;
+        return (
+          <PhotosVideos
+            isPaid={isPaid}
+            listing={listing}
+            revisionId={revisionId}
+          />
+        );
       case InformationList.MANAGE_DEALS:
         return <ManageDeals bizListingId={listing.id} />;
       case InformationList.ANALYTICS:

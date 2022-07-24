@@ -12,6 +12,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import { fakeSubCateList } from "constant";
 import { IAddListingForm } from "pages/add-listing";
 import React, { useState } from "react";
+import { isArray } from "utils";
 
 interface BusinessDetailProps {
   formData: { [key: string]: any };
@@ -57,9 +58,10 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           question="What areas best associated with this service?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {viewProductTypes?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item.label} />
-          ))}
+          {isArray(viewProductTypes) &&
+            viewProductTypes.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item.label} />
+            ))}
         </Question>
         <Question question="What are the opening hours?" optional>
           <PreviewValue valueKey="openHours" value={openHours} />
@@ -68,9 +70,10 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           question="What tags best describe this accommodation?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {viewDescribeTags?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item} />
-          ))}
+          {isArray(viewDescribeTags) &&
+            viewDescribeTags.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question question="What’s the average price range of a meal?">
           {currency &&
@@ -82,34 +85,38 @@ const BusinessDetailStay = (props: BusinessDetailProps) => {
           question="What are the Halal food options available?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {foodOptions?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item} />
-          ))}
+          {isArray(foodOptions) &&
+            foodOptions.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question
           question="What are the prayer facilities available?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {paryerFacilities?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item} />
-          ))}
+          {isArray(paryerFacilities) &&
+            paryerFacilities.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question
           question="What are the Halal food options available?"
           instruction="Services during Ramadan"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {foodOptionsRamadan?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item} />
-          ))}
+          {isArray(foodOptionsRamadan) &&
+            foodOptionsRamadan.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Question
           question="What are the non-Halal activities in the hotel?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {nonHalalActivities?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item} />
-          ))}
+          {isArray(nonHalalActivities) &&
+            nonHalalActivities.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item} />
+            ))}
         </Question>
         <Break />
         <div>

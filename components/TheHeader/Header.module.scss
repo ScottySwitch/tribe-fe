@@ -40,7 +40,21 @@
       }
 
       .right_col {
-        gap: 20px;
+        .gadget_group {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          max-width: 300px;
+          transition: all 1s;
+
+          &.hide {
+            padding: 0;
+            margin: 0;
+            height: 0;
+            max-width: 0 !important;
+            overflow: hidden;
+          }
+        }
 
         .avatar {
           border-radius: 50%;

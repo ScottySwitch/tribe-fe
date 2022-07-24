@@ -9,7 +9,7 @@ export const detectIsVideo = (src: string | Blob) => {
   if (typeof src === "string") {
     return videoExtensions.some((item) => src?.includes(item));
   } else {
-    return false;
+    console.log(src.type);
   }
 };
 
@@ -152,6 +152,13 @@ export const changeToSlugify = (str) => {
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 };
+
+export const isPaidUser = (time) => {
+  const timeCalcDistance = parseISO(moment(time).format("YYYY-MM-DD HH:mm:ss"));
+  let diff_in_minutes = moment().diff(moment(timeCalcDistance), "minutes");
+  return diff_in_minutes < 0 ? true : false
+};
+
 
 export const censoredPhoneNumber = (phoneNumber) => {
   const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];

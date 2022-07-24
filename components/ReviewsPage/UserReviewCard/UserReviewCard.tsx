@@ -19,6 +19,7 @@ export interface UserReviewCardProps {
   className?: string;
   isPaid?: boolean;
   actions?: boolean;
+  replyAccepted?: boolean;
   children?: ReactElement | ReactNode;
   listingCard?: ReactElement | ReactNode;
   avatarUrl?: string;
@@ -33,9 +34,9 @@ export interface UserReviewCardProps {
   approvedDate?: string;
   publishedAt?: string;
   createdDate?: string;
-  isDivier?: boolean;
   bizListingId?: number | string;
   user?: any;
+  layout?: "default" | "split";
   onReplyClick?(): void;
   onReportClick?(): void;
 }
@@ -50,7 +51,8 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     content,
     listImage,
     dateVisit,
-    listingCard,
+    layout = "default",
+    replyAccepted,
     rating,
     isPaid,
     actions,
@@ -63,7 +65,6 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     createdDate,
     onReplyClick,
     onReportClick,
-    isDivier = false,
   } = props;
 
   const [showAlbumModal, setShowAlbumModal] = useState(false);
@@ -72,9 +73,16 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     styles.review_completed,
     className,
     {
-      [styles.divider]: isDivier,
+      [styles.divider]: layout === "split",
     }
   );
+  const showReply = reply
+    ? actions
+      ? true
+      : replyAccepted
+      ? true
+      : false
+    : false;
 
   const statusClassName = classNames(styles.status, {
     [styles.pending]: status === "Pending",
@@ -84,6 +92,38 @@ const UserReviewCard = (props: UserReviewCardProps) => {
   const censoredStatusClassName = classNames(styles.censored_status, "flex", {
     ["justify-end"]: status === "Denied",
   });
+
+  const UserReviewHeader = ({ show }) =>
+    show ? (
+      <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
+        <div className={styles.header}>
+          <h6 className={styles.name}>
+            <span>
+              {(user?.first_name || "") + " " + (user?.last_name || "")}
+            </span>
+            {censorshipLabel && (
+              <span className="font-normal ml-2">{censorshipLabel}</span>
+            )}
+          </h6>
+          {actions && (
+            <Popover
+              content={<div onClick={onReportClick}>Report review</div>}
+              position="bottom-left"
+            >
+              <Icon icon="toolbar" />
+            </Popover>
+          )}
+        </div>
+        <div className={styles.status_date}>
+          {status && <div className={statusClassName}>{status}</div>}
+          {(createdDate || date) && (
+            <div className={styles.date}>{createdDate || date}</div>
+          )}
+        </div>
+      </div>
+    ) : (
+      <div />
+    );
 
   return (
     <div className={userReviewCardClassName}>
@@ -99,60 +139,10 @@ const UserReviewCard = (props: UserReviewCardProps) => {
             />
           )}
         </div>
-        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
-          <div className={styles.header}>
-            <h6 className={styles.name}>
-              <span>
-                {(user?.first_name || "") + " " + (user?.last_name || "")}
-              </span>
-              {censorshipLabel && (
-                <span className="font-normal ml-2">{censorshipLabel}</span>
-              )}
-            </h6>
-            {actions && (
-              <Popover
-                content={<div onClick={onReportClick}>Report review</div>}
-                position="bottom-left"
-              >
-                <Icon icon="toolbar" />
-              </Popover>
-            )}
-          </div>
-          <div className={styles.status_date}>
-            {status && <div className={statusClassName}>{status}</div>}
-            {(createdDate || date) && (
-              <div className={styles.date}>{createdDate || date}</div>
-            )}
-          </div>
-        </div>
+        <UserReviewHeader show={layout === "split"} />
       </div>
       <div className={styles.review_summary}>
-        <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
-          <div className={styles.header}>
-            <h6 className={styles.name}>
-              <span>
-                {(user?.first_name || "") + " " + (user?.last_name || "")}
-              </span>
-              {censorshipLabel && (
-                <span className="font-normal ml-2">{censorshipLabel}</span>
-              )}
-            </h6>
-            {
-              <Popover
-                content={<div onClick={onReportClick}>Report review</div>}
-                position="bottom-left"
-              >
-                <Icon icon="toolbar" />
-              </Popover>
-            }
-          </div>
-          <div className={styles.status_date}>
-            {status && <div className={statusClassName}>{status}</div>}
-            {(createdDate || date) && (
-              <div className={styles.date}>{createdDate || date}</div>
-            )}
-          </div>
-        </div>
+        <UserReviewHeader show={layout === "default"} />
         {rating && (
           <div className={styles.rating_group}>
             <Rate readonly={true} initialRating={rating} />
@@ -203,7 +193,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
             )}
           </div>
         )}
-        {reply && (
+        {showReply && (
           <div className={styles.reply_review}>
             <div className={styles.head_review}>
               <p className={styles.title}>Response from the owner</p>
@@ -236,7 +226,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
       </div>
-      {isArray(listImage) && 
+      {isArray(listImage) && (
         <Modal
           visible={showAlbumModal}
           title=" "
@@ -254,7 +244,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
             listingId={bizListingId}
           />
         </Modal>
-      }
+      )}
     </div>
   );
 };

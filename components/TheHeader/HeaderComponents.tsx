@@ -9,7 +9,7 @@ import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
 import Menu from "components/Menu/Menu";
 import { ILoginInfor } from "pages/_app";
-import { UsersTypes } from "enums";
+import { UserType } from "enums";
 
 import styles from "./Header.module.scss";
 import AuthApi from "services/auth";
@@ -17,6 +17,8 @@ import bizListingApi from "services/biz-listing";
 import { UserInforContext } from "Context/UserInforContext";
 import { isArray } from "lodash";
 import Modal from "components/Modal/Modal";
+import classNames from "classnames";
+import { route } from "next/dist/server/router";
 
 export const Categories = (props: {
   currentCategory?: string;
@@ -84,20 +86,19 @@ export const SwitchAccountsContent = () => {
   const { listingSlug } = query;
 
   const handleSwitchToNormalUser = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.type = UsersTypes.NORMAL_USER;
-    localStorage.setItem("user", JSON.stringify(userInfo));
     updateUser({
       avatar: user.user_avatar,
       current_listing_slug: undefined,
+      user_type: UserType.NORMAL_USER,
     });
-    window.location.href = "/";
+    router.push("/");
   };
 
   const handleSwitchListing = async (item) => {
     updateUser({
       avatar: get(item, "logo[0]"),
       current_listing_slug: get(item, "slug"),
+      user_type: UserType.BIZ_USER,
     });
     router.push(`/biz/home/${item.slug}/edit`);
   };
@@ -151,45 +152,38 @@ export const SwitchAccountsContent = () => {
 
 export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
   const router = useRouter();
-  const { pathname, locale } = router;
   const { user, updateUser } = useContext(UserInforContext);
   const [showSwitchModal, setShowSwitchModal] = useState(false);
 
-  const handleSwitchToBizUser = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.type = UsersTypes.BIZ_USER;
-    localStorage.setItem("user", JSON.stringify(userInfo));
-
-    const firstOwnedListingSlug = get(
-      user,
-      "owner_listings[0].attributes.slug"
-    );
-    const firstOnwedListingLogo = get(
-      user,
-      "owner_listings[0].attributes.logo[0]"
-    );
-    if (firstOwnedListingSlug) {
-      updateUser({
-        avatar: firstOnwedListingLogo,
-        current_listing_slug: firstOwnedListingSlug,
-      });
-      await router.push(`/biz/home/${firstOwnedListingSlug}/edit`);
-      router.reload();
+  const handleSwitchToBizUser = () => {
+    const hasOwnedListings = get(user, "owner_listings.length") > 0;
+    if (hasOwnedListings) {
+      return true;
     } else {
       router.push("/claim");
+      return false;
     }
   };
 
-  if (!!loginInfor.token && loginInfor.type === UsersTypes.NORMAL_USER) {
-    return (
-      <>
-        <div
-          className="flex gap-2 cursor-pointer mr-[32px]"
-          onClick={handleSwitchToBizUser}
+  return (
+    <>
+      <div
+        className={classNames(styles.gadget_group, {
+          [styles.hide]: !(
+            user.token && user.user_type === UserType.NORMAL_USER
+          ),
+        })}
+      >
+        <Popover
+          content={<SwitchAccountsContent />}
+          position="bottom-left"
+          onBeforePopUp={handleSwitchToBizUser}
         >
-          <Icon icon="business" size={20} />
-          Business
-        </div>
+          <div className="flex gap-2 items-center w-max">
+            <Icon icon="business" size={20} />
+            Business
+          </div>
+        </Popover>
         <Popover content={<ContributeContent />}>
           <Button
             prefix={<Icon icon="plus" size={20} />}
@@ -199,12 +193,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
         </Popover>
         {/* <Icon icon="noti-color" size={20} /> */}
         <Popover
-          content={
-            <Menu
-              loginInfor={loginInfor}
-              // onShowSwitchModal={() => setShowSwitchModal(true)}
-            />
-          }
+          content={<Menu loginInfor={loginInfor} />}
           position="bottom-left"
         >
           <Image
@@ -215,7 +204,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
             className={styles.avatar}
           />
         </Popover>
-        {/* <Modal
+        <Modal
           title="Switch account"
           width={600}
           visible={showSwitchModal}
@@ -225,15 +214,15 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           <div className="p-[30px] pt-0 flex flex-col gap-5">
             <SwitchAccountsContent />
           </div>
-        </Modal> */}
-      </>
-    );
-  }
-  if (!!loginInfor.token && loginInfor.type === UsersTypes.BIZ_USER) {
-    return (
-      <>
+        </Modal>
+      </div>
+      <div
+        className={classNames(styles.gadget_group, {
+          [styles.hide]: !(user.token && user.user_type === UserType.BIZ_USER),
+        })}
+      >
         <Popover content={<SwitchAccountsContent />} position="bottom-left">
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center w-max">
             <Icon icon="user-color" size={20} />
             Switch accounts
           </div>
@@ -248,17 +237,19 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           }
           className={`${styles.avatar} cursor-pointer`}
         />
-      </>
-    );
-  }
-  return (
-    <>
-      <Button
-        text="Sign up"
-        variant="outlined"
-        onClick={() => router.push("/signup")}
-      />
-      <Button text="Login" onClick={() => router.push("/login")} />
+      </div>
+      <div
+        className={classNames(styles.gadget_group, {
+          [styles.hide]: user.token,
+        })}
+      >
+        <Button
+          text="Sign up"
+          variant="outlined"
+          onClick={() => router.push("/signup")}
+        />
+        <Button text="Login" onClick={() => router.push("/login")} />
+      </div>
     </>
   );
 };

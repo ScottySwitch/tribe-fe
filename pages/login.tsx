@@ -12,7 +12,7 @@ import { removeZeroInPhoneNumber } from "utils";
 import styles from "styles/Auth.module.scss";
 import { useRouter } from "next/router";
 import { loginInforItem } from "constant";
-import { UsersTypes } from "enums";
+import { UserType } from "enums";
 import AuthApi from "../services/auth";
 import BizApi from "services/biz-listing";
 import BizInvoice from "services/biz-invoice";

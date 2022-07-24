@@ -13,7 +13,7 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import styles from "./HamModal.module.scss";
 import { SwitchAccountsContent } from "components/TheHeader/HeaderComponents";
-import { UsersTypes } from "enums";
+import { UserType } from "enums";
 
 const HamModalHeader = ({
   loginInfor,

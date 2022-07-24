@@ -54,23 +54,30 @@ const AddEatInfor = (props: AddEatInforProps) => {
     onEdit,
   } = props;
 
-  const { register, handleSubmit, setValue, getValues } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { isValid },
+  } = useForm({
+    mode: "onChange",
     defaultValues: {
-      categoryLinks: get(data, 'categoryLinks'),
-      productTypes: get(data, 'productTypes'),
-      describeTags: get(data,'describeTags'),
-      minPrice: get(data,'minPrice'),
-      maxPrice: get(data,'maxPrice'),
-      mealsKind: get(data,'mealsKind'),
-      images: get(data,'images'),
-      placeGoodFor: get(data,'placeGoodFor'),
-      parking: get(data,'parking'),
-      atmosphere: get(data,'atmosphere'),
-      payment: get(data,'payment'),
-      additionalServices: get(data,'additionalServices'),
-      agreePolicies: get(data,'agreePolicies'),
-      currency: get(data,'currency'),
-      openHours: get(data,'openHours'),
+      categoryLinks: get(data, "categoryLinks"),
+      productTypes: get(data, "productTypes"),
+      describeTags: get(data, "describeTags"),
+      minPrice: get(data, "minPrice"),
+      maxPrice: get(data, "maxPrice"),
+      mealsKind: get(data, "mealsKind"),
+      images: get(data, "images"),
+      placeGoodFor: get(data, "placeGoodFor"),
+      parking: get(data, "parking"),
+      atmosphere: get(data, "atmosphere"),
+      payment: get(data, "payment"),
+      additionalServices: get(data, "additionalServices"),
+      agreePolicies: get(data, "agreePolicies"),
+      currency: get(data, "currency"),
+      openHours: get(data, "openHours"),
     },
   });
 
@@ -357,10 +364,12 @@ const AddEatInfor = (props: AddEatInforProps) => {
           <Question show={!isEdit}>
             <br /> <br /> <br />
             <Checkbox
-              register={register("agreePolicies")}
+              register={register("agreePolicies", {
+                required: true,
+              })}
               label={
                 data?.relationship === YesNo.NO
-                  ? "I certify that this is a genuine attraction  "
+                  ? "I certify that this is a genuine business"
                   : "Check this box to certify that you are an official representative of the property for which you are submitting this listing and that the information you have submitted is correct. In submitting a photo, you also certify that you have the right to use the photo on the web and agree to hold Tribes or harmless for any and all copyright issues arising from your use of the image"
               }
             />
@@ -378,6 +387,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               size="small"
               width={270}
               type="submit"
+              disabled={!isValid}
             />
           </div>
         </form>

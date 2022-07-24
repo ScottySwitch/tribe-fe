@@ -36,8 +36,12 @@ const BusinessDetail = (props: BusinessDetailProps) => {
     minPrice: get(listing, "min_price"),
     maxPrice: get(listing, "max_price"),
     currency: get(listing, "currency"),
-    describeTags: get(listing, "tags").map((item) => item.id.toString()),
-    viewDescribeTags: get(listing, "tags").map((item) => item.label),
+    describeTags: Array.isArray(get(listing, "tags"))
+      ? get(listing, "tags").map((item) => item.id.toString())
+      : [],
+    viewDescribeTags: Array.isArray(get(listing, "tags"))
+      ? get(listing, "tags").map((item) => item.label)
+      : [],
     productTypes:
       Array.isArray(rawProductTypes) &&
       rawProductTypes.map((type) =>

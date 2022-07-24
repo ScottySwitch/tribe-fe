@@ -8,7 +8,7 @@ import {
   AuthPhonePayload,
   AuthForgetPasswordByPhone,
 } from "../../types/auth";
-import { UsersTypes } from "../../enums";
+import { UserType } from "../../enums";
 const qs = require("qs");
 
 const signUpByEmail = async (params: AuthEmailPayload) => {
@@ -97,14 +97,15 @@ const getMe = async () => {
   // } else {
   //   me.data.avatar = me.data.avatar;
   // }
-  me.data.user_avatar = me.data.avatar || undefined;
   if (localStorage.getItem("user")) {
-    if (!userInfo.type) {
-      me.data.type = UsersTypes.NORMAL_USER;
+    if (!userInfo.user_type) {
+      me.data.user_type = UserType.NORMAL_USER;
     } else {
-      me.data.type = userInfo.type;
+      me.data.user_type = userInfo.user_type;
     }
   }
+  me.data.user_avatar = me.data.avatar || undefined;
+  me.data.avatar = userInfo.avatar;
   me.data.token = userInfo.token;
   me.data.owner_listings = userInfo.owner_listings || [];
   me.data.biz_listings = userInfo.biz_listings || [];
@@ -118,6 +119,7 @@ const getMe = async () => {
   me.data.role = userInfo.role || "";
   me.data.now_biz_listing = userInfo.now_biz_listing || {};
   me.data.location = userInfo.location || "";
+  me.data.current_listing_slug = userInfo.current_listing_slug || "";
   localStorage.setItem("user", JSON.stringify(me.data));
 };
 
