@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Input from "components/Input/Input";
 import Icon from "components/Icon/Icon";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import moment from "moment";
 import { monthOfTwoYearsOptions } from "utils";
 import { url } from "inspector";
+import { UserInforContext } from "Context/UserInforContext";
 
 const dummyDate = [
   { label: "April 2022", value: "April 2022" },
@@ -130,20 +131,17 @@ const ReviewCard = (props: IReviewCardProps) => {
   const [ratingType, setRatingType] = useState<string>("");
   const [ratingReadonly, setRatingReadonly] = useState<boolean>(true);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const router = useRouter();
+  const { user } = useContext(UserInforContext);
 
-  useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.token ? setIsLoggedIn(true) : false;
-  });
+  const isLoggedIn = user.token ? false : true;
 
   const handleReview = () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    isLoggedIn ? setExpanded(!expanded) : setShowAuthPopup(true);
+    isLoggedIn ? setShowAuthPopup(true) : setExpanded(!expanded);
   };
 
   const handleCickRating = (value: number) => {
+    console.log("click rating");
     setRating(value);
     setRatingType(rateType[value]);
   };
@@ -180,7 +178,7 @@ const ReviewCard = (props: IReviewCardProps) => {
               readonly={isLoggedIn}
               initialRating={rating}
               placeholderRating={rateNumber}
-              onClick={handleCickRating}
+              onClick={(value) => handleCickRating(value)}
             />
             {expanded ? (
               <div className={styles.cta_click}>{ratingType}</div>
@@ -210,7 +208,7 @@ const ReviewCard = (props: IReviewCardProps) => {
             readonly={isLoggedIn}
             initialRating={rating}
             placeholderRating={rateNumber}
-            onClick={handleCickRating}
+            onChange={(value) => handleCickRating(value)}
           />
           {expanded ? (
             <div className={styles.cta_click}>{ratingType}</div>
