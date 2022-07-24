@@ -214,6 +214,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               date_create_reply: item.date_create_reply,
               user: item.user,
               visited_date: item.visited_date,
+              reply_accepted: item?.reply_accepted,
             });
           }
         });
@@ -295,6 +296,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     const indexReviewSelected = newReviewArray.findIndex(
       (item: any) => item.id === review.id
     );
+    newReviewArray[indexReviewSelected].isEdit = true;
     newReviewArray[indexReviewSelected].reply_reviews = reply;
     newReviewArray[indexReviewSelected].date_create_reply = new Date();
     setReviews(newReviewArray);
@@ -536,17 +538,18 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     //API Reviews
     await Promise.all(
       reviews.map(async (item) => {
-        const dataSend = {
-          images: item.images,
-          visited_date: item.visited_date,
-          rating: item.rating,
-          content: item.content,
-          reply_reviews: item.reply_reviews,
-          date_create_reply: item.date_create_reply,
-          parent_id: item.id,
-          is_revision: true,
-        };
-        await ReviewApi.addReview(dataSend);
+        if (item.isEdit) {
+          const updateData = {
+            images: item.images,
+            visited_date: item.visited_date,
+            rating: item.rating,
+            content: item.content,
+            reply_reviews: item.reply_reviews,
+            date_create_reply: item.date_create_reply,
+            reply_accepted: false,
+          };
+          await ReviewApi.updateReviews(item.id, updateData);
+        }
       })
     );
     window.location.reload();

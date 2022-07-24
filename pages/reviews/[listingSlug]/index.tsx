@@ -18,7 +18,7 @@ import BizListingApi from "../../../services/biz-listing";
 import get from "lodash/get";
 import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard";
 import { dummyTopSearchKeywords } from "constant";
-import ContributeApi from "services/contribute"
+import ContributeApi from "services/contribute";
 
 const AddReviewPage = () => {
   const router = useRouter();
@@ -76,7 +76,7 @@ const AddReviewPage = () => {
 
   const handleCloseModal = () => {
     setIsShowResultModal(false);
-    router.push(`/biz/home/${listingSlug}`)
+    router.push(`/biz/home/${listingSlug}`);
   };
 
   const handleSubmit = async (dataSend) => {
@@ -88,19 +88,18 @@ const AddReviewPage = () => {
       content: dataSend.content,
       visited_date: dataSend.visitedDate,
       images: dataSend.images,
-      is_revision: true
+      is_revision: true,
     };
-    const data = await ReviewApi.addReview(dataSendApi)
+    const data = await ReviewApi.addReview(dataSendApi);
     if (data) {
       const dataSendContribute = {
         user: userInfo.id,
         biz_listing: bizListing.id,
         type: "Review",
         status: "Pending",
-        review: get(data, "data.data.id")
-      }
-      await ContributeApi.createContribute(dataSendContribute).then(() => {
-      });
+        review: get(data, "data.data.id"),
+      };
+      await ContributeApi.createContribute(dataSendContribute).then(() => {});
       setIsShowResultModal(true);
       setIsSuccess(true);
     }

@@ -185,6 +185,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
                 rating={get(review, "rating")}
                 reply={get(review, "reply_reviews")}
                 replyAt={get(review, "date_create_reply")}
+                replyAccepted={get(review, "reply_accepted")}
                 onReplyClick={() => {
                   setSelectedReview(review);
                   setShowReplyModal(true);
