@@ -60,6 +60,7 @@ export const removeZeroInPhoneNumber = (e) => {
   } else {
     phoneNumber = e?.select?.value + e?.input;
   }
+  console.log("phone string", phoneNumber);
   return phoneNumber;
 };
 

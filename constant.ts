@@ -54,6 +54,12 @@ export const getFilterLabels = (filter, currency) => [
   },
 ];
 
+export const genderOptions = [
+  { label: "Male", value: "male" },
+  { label: "Female", value: "female" },
+  { label: "Others", value: "others" },
+];
+
 export const curatedList = [
   {
     title: "Find relevant and timely products and services to suit your needs",
@@ -457,9 +463,9 @@ export const freeInformationList = [
 export const userInformationList = [
   { label: UserInformationList.USER_INFORMATION, icon: "user-color-2" },
   { label: UserInformationList.CHANGE_PASSWORD, icon: "password" },
-  { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
-  { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
-  { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
+  // { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
+  // { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
+  // { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
   { label: UserInformationList.TRIBES_FOR_BUSINESSES, icon: "user-color-2" },
   { label: UserInformationList.SUPPORT, icon: "support-color" },
   { label: UserInformationList.TERMS_CONDITIONS, icon: "user-color-2" },

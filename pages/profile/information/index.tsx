@@ -12,9 +12,8 @@ import styles from "styles/BizInformation.module.scss";
 import style from "styles/Profile.module.scss";
 
 const ProfileInformationPage = () => {
-  const informationList = userInformationList;
   const [selectedTab, setSelectedTab] = useState<string>(
-    informationList[0].label
+    userInformationList[0].label
   );
 
   const router = useRouter();
@@ -32,8 +31,7 @@ const ProfileInformationPage = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    router.push("/");
-    router.reload();
+    window.location.href = "/";
   };
 
   return (
@@ -46,7 +44,7 @@ const ProfileInformationPage = () => {
         <div className={`${styles.left_col} ${style.menu_sidebar}`}>
           <div className={`${styles.left_col_bottom}  mt-0`}>
             <div>View profile</div>
-            {informationList.map((item) => (
+            {userInformationList.map((item) => (
               <div
                 className="flex gap-3 justify-between"
                 key={item.label}
