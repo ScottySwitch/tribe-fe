@@ -73,7 +73,7 @@
     .content {
       width: 100%;
       height: 100%;
-      overflow-y: scroll;
+      overflow-y: hidden;
       overscroll-behavior: none;
 
       -ms-overflow-style: none; /* IE and Edge */
@@ -177,7 +177,7 @@
 
   .full_height {
     &.show {
-      z-index: 5;
+      z-index: 4;
     }
     .container {
       width: 80%;

@@ -9,6 +9,16 @@
   border-radius: $border-radius;
   background-color: white;
 
+  .hide {
+    display: none !important;
+  }
+
+  .video {
+    height: 100%;
+    width: 100%;
+    background: black;
+  }
+
   .image,
   .input,
   .edit_banner_add_more_btn {
@@ -36,12 +46,12 @@
       top: 0;
       left: 0;
       opacity: 0;
-      z-index: 2;
+      z-index: 1;
       cursor: pointer;
     }
 
     .add_icon {
-      z-index: 2;
+      z-index: 1;
       display: none;
       position: absolute;
       top: 50%;

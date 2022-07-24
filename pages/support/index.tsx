@@ -102,7 +102,7 @@ const SupportPage = () => {
             tablist={TabList}
             type="secondary-no-outline"
             className="mb-0"
-            onCurrentTab={(e) => setCurrentTab(e)}
+            onChangeTab={(e) => setCurrentTab(e)}
           />
         </div>
         <div className="flex justify-between mt-[34px]">

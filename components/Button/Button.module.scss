@@ -12,6 +12,7 @@
   font-size: $text-md;
   border-radius: $border-radius;
   padding: $p-md;
+  gap: 6px;
 
   &[type="submit"],
   &[type="button"] {

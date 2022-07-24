@@ -3,10 +3,11 @@ import Image from "next/image";
 import Modal, { ModalProps } from "components/Modal/Modal";
 import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./DealDetailModal.module.scss";
 import get from "lodash/get";
 import DealFavouriteApi from "services/user-deal-favourite";
+import ShareModal from "components/ShareModal/ShareModal";
 
 export interface IDealsDetails {
   name: string;
@@ -24,6 +25,7 @@ interface DealDetailModalProps extends ModalProps {
 const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props;
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -43,102 +45,112 @@ const DealDetailModal = (props: DealDetailModalProps) => {
     }
   };
 
-  console.log(data);
+  const handleOpenShareModal = () => {
+    onShare?.();
+    setShowShareModal(true);
+  };
 
   return (
-    <Modal
-      visible={visible}
-      width="100%"
-      maxWidth={678}
-      mobilePosition="center"
-      onClose={onClose}
-    >
-      <div className={styles.header}>
-        <div className="flex items-center min-w-0">
-          <div className={styles.icon}>
-            <Icon icon="deals-color" size={22} />
+    <React.Fragment>
+      <Modal
+        visible={visible}
+        width="100%"
+        maxWidth={678}
+        mobilePosition="center"
+        onClose={onClose}
+      >
+        <div className={styles.header}>
+          <div className="flex items-center min-w-0">
+            <div className={styles.icon}>
+              <Icon icon="deals-color" size={22} />
+            </div>
+            <div className={`${styles.title} truncate`}>{data.name}</div>
           </div>
-          <div className={`${styles.title} truncate`}>{data.name}</div>
+          <div className={styles.close} onClick={onClose}>
+            <Icon icon="cancel-mobile" />
+          </div>
         </div>
-        <div className={styles.close} onClick={onClose}>
-          <Icon icon="cancel-mobile" />
+        <div className={styles.cover_image}>
+          <Image
+            src={data.images ? data.images[0] : "https://picsum.photos/678/169"}
+            alt={data.name}
+            layout="fill"
+            objectFit="contain"
+          />
         </div>
-      </div>
-      <div className={styles.cover_image}>
-        <Image
-          src={data.images ? data.images[0] : "https://picsum.photos/678/169"}
-          alt={data.name}
-          layout="fill"
-          objectFit="contain"
-        />
-      </div>
-      <div className={styles.content}>
-        {data.description ||
-          (data.information && (
+        <div className={styles.content}>
+          {data.description ||
+            (data.information && (
+              <div className={styles.item}>
+                <h6 className={styles.label}>Offers</h6>
+                <p className="text-left">
+                  {data.description || data.information}
+                </p>
+              </div>
+            ))}
+          {(data.end_date || data.validUntil) && (
             <div className={styles.item}>
-              <h6 className={styles.label}>Offers</h6>
+              <h6 className={styles.label}>Valid</h6>
               <p className="text-left">
-                {data.description || data.information}
+                {data.start_date && data.start_date + " - "}
+                {data.end_date}
+                {new Date(data.validUntil).toLocaleString()}
               </p>
             </div>
-          ))}
-        {(data.end_date || data.validUntil) && (
-          <div className={styles.item}>
-            <h6 className={styles.label}>Valid</h6>
-            <p className="text-left">
-              {data.start_date && data.start_date + " - "}
-              {data.end_date}
-              {new Date(data.validUntil).toLocaleString()}
-            </p>
+          )}
+          {(get(data, "attributes.terms_conditions") ||
+            data.conditions ||
+            data.terms_conditions ||
+            data.termsConditions) && (
+            <div className={styles.item}>
+              <h6 className={styles.label}>Terms & Conditions</h6>
+              <p className="text-left">
+                {get(data, "attributes.terms_conditions") ||
+                  data.terms_conditions ||
+                  data.conditions ||
+                  data.termsConditions}
+              </p>
+            </div>
+          )}
+        </div>
+        <div className={styles.footer}>
+          <div className="flex">
+            <Button
+              variant="secondary"
+              text="Share"
+              className="text-sm	font-bold mr-[17px]"
+              width={115}
+              prefix={<Icon icon="share" />}
+              onClick={handleOpenShareModal}
+            />
+            <Button
+              variant="primary"
+              text="Add to favourite"
+              className="text-sm	font-bold"
+              width="max-content"
+              prefix={<Icon icon="like-stroke" color="#ffffff" />}
+              onClick={() => handleAddFavouriteDeal(data.id)}
+              disabled={isFavourite}
+            />
           </div>
-        )}
-        {(get(data, "attributes.terms_conditions") ||
-          data.conditions ||
-          data.terms_conditions ||
-          data.termsConditions) && (
-          <div className={styles.item}>
-            <h6 className={styles.label}>Terms & Conditions</h6>
-            <p className="text-left">
-              {get(data, "attributes.terms_conditions") ||
-                data.terms_conditions ||
-                data.conditions ||
-                data.termsConditions}
-            </p>
-          </div>
-        )}
-      </div>
-      <div className={styles.footer}>
-        <div className="flex">
           <Button
-            variant="secondary"
-            text="Share"
-            className="text-sm	font-bold mr-[17px]"
-            width={115}
-            prefix={<Icon icon="share" />}
-            onClick={onShare}
-          />
-          <Button
-            variant="primary"
-            text="Add to favourite"
-            className="text-sm	font-bold"
+            variant="underlined"
+            text="Cancel"
+            className={`${styles.btn_cancel} text-sm font-medium no-underline`}
             width="max-content"
-            prefix={<Icon icon="like-stroke" color="#ffffff" />}
-            onClick={() => handleAddFavouriteDeal(data.id)}
-            disabled={isFavourite}
+            onClick={() => {
+              onClose && onClose();
+              setIsFavourite(false);
+            }}
           />
         </div>
-        <Button
-          variant="underlined"
-          text="Cancel"
-          className={`${styles.btn_cancel} text-sm font-medium no-underline`}
-          width="max-content"
-          onClick={() => {
-            onClose;
-            setIsFavourite(false);
-          }}
-        />
-      </div>
-    </Modal>
+      </Modal>
+      <ShareModal
+        url=""
+        onClose={() => setShowShareModal(false)}
+        visible={showShareModal}
+      />
+    </React.Fragment>
   );
 };
 

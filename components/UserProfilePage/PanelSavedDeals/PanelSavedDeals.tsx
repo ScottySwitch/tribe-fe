@@ -12,9 +12,10 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
   const [total, setTotal] = useState<number>();
 
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     // setTotal(data.length)
-    getData();
-  }, [data]);
+    (userInfo && userInfo?.token) && getData();
+  }, []);
 
   const getData = async () => {
     const data = await BizlistingApi.getFavouriteDeals();

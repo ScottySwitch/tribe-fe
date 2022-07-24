@@ -5,24 +5,23 @@ import Image from "next/image";
 import { Router, useRouter } from "next/router";
 import { useState } from "react";
 
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 
 import styles from "styles/Auth.module.scss";
 
 import AuthApi from "../../../services/auth";
 
 interface ResetPasswordProps {
-  data: { [key: string]: any }
-  onPreview: (data: { [key: string]: any }) => void
+  data: { [key: string]: any };
+  onPreview: (data: { [key: string]: any }) => void;
 }
 
 const ResetPasswordPage = (props: ResetPasswordProps) => {
-  const { data, onPreview } = props
+  const { data, onPreview } = props;
   const [status, setStatus] = useState<string>("in-progress");
   const router = useRouter();
 
-  const { register, handleSubmit, setValue, getValues } = useForm({
-  })
+  const { register, handleSubmit, setValue, getValues } = useForm({});
   const Success = () => {
     return (
       <div className={styles.form_container}>
@@ -59,31 +58,29 @@ const ResetPasswordPage = (props: ResetPasswordProps) => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
-    if ( data.newPasswordValue === data.confirmPasswordValue ) {
+    if (data.newPasswordValue === data.confirmPasswordValue) {
       let result: any = null;
-      let userInfo = JSON.parse(localStorage.getItem("user") || '{}')
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       try {
         result = await AuthApi.resetPassword({
           password: data.newPasswordValue,
           passwordConfirm: data.confirmPasswordValue,
-          userId: userInfo.id
-        })
-        console.log(result);
+          userId: userInfo.id,
+        });
         if (result.data.ok) {
-          setStatus('success');
+          setStatus("success");
         } else {
-          alert(result.error.message)
-          setStatus('failed');
+          alert(result.error.message);
+          setStatus("failed");
         }
       } catch (err: any) {
         // TODO: notify error (missing template)
         console.log(err);
-        setStatus('failed');
+        setStatus("failed");
         return false;
       }
     }
-  }
+  };
 
   const InProgress = () => {
     return (
@@ -91,20 +88,20 @@ const ResetPasswordPage = (props: ResetPasswordProps) => {
         <div className={styles.form_container}>
           <ModalHeader alignTitle="center">Reset password</ModalHeader>
           <div className={styles.body}>
-            <Input 
-              size="large" 
-              placeholder="New password" 
+            <Input
+              size="large"
+              placeholder="New password"
               register={register("newPasswordValue")}
             />
-            <Input 
-              size="large" 
+            <Input
+              size="large"
               placeholder="Confirm password"
               register={register("confirmPasswordValue")}
             />
-            <Button 
+            <Button
               type="submit"
-              text="Next" 
-              // onClick={() => setStatus("success")} 
+              text="Next"
+              // onClick={() => setStatus("success")}
             />
           </div>
         </div>
@@ -129,7 +126,10 @@ const ResetPasswordPage = (props: ResetPasswordProps) => {
 export async function getServerSideProps(context) {
   // Pass data to the page via props
   return {
-    props: { method: context.query.method || "", otpReceiver: context.query.otpReceiver || "" },
-  }
+    props: {
+      method: context.query.method || "",
+      otpReceiver: context.query.otpReceiver || "",
+    },
+  };
 }
 export default ResetPasswordPage;

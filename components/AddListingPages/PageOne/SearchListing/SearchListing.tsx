@@ -28,7 +28,6 @@ const RightColumn = (props: {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
-    console.log("listing", listing);
     const listingRolesArray =
       get(listing, "attributes.listing_roles.data") || [];
     const isBeingClaimed =
@@ -55,7 +54,9 @@ const RightColumn = (props: {
             : onShowUpcomingFeature()
         }
       />
-      <span>Not your business?</span>
+      <span onClick={() => router.push("/add-listing")}>
+        Not your business?
+      </span>
     </>
   );
 };
@@ -65,11 +66,13 @@ const SearchListing = ({
   listing,
   bizListing,
   setListing,
+  isClaimListing,
 }: {
   setListing: (e: listingTypes) => void;
   listing: any;
   bizListing: any;
   relationship?: string;
+  isClaimListing?: boolean;
 }) => {
   if (listing) {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -77,7 +80,7 @@ const SearchListing = ({
       ...userInfo,
       biz_id: get(listing, "id"),
       biz_slug: get(listing, "attributes.slug"),
-      type_handle: 'Claim'
+      type_handle: "Claim",
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
   }
@@ -86,7 +89,11 @@ const SearchListing = ({
   switch (listing) {
     case undefined:
       return (
-        <ListingSearch listingOptions={bizListing} onChange={setListing} />
+        <ListingSearch
+          isClaimListing={isClaimListing}
+          listingOptions={bizListing}
+          onChange={setListing}
+        />
       );
     case YesNo.NO:
       return (

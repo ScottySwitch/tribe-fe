@@ -14,7 +14,7 @@ const TopSearches = (props: ITopSearchesProp) => {
   const { className } = props;
   const [keywords, setKeyWords] = useState<any>([]);
   const trans = useTrans();
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     getData();
@@ -38,13 +38,15 @@ const TopSearches = (props: ITopSearchesProp) => {
         <div className={`${styles.top_search} ${className}`}>
           <div className={styles.top_search_label}>{trans.topSearch}</div>
           <ul className={styles.top_search_list}>
-            {keywords?.map((keyword) => (
-              <li 
-                className={`${styles.top_search_item} cursor-pointer`} 
-                key={keyword.name}
+            {keywords?.map((keyword, index) => (
+              <li
+                className={`${styles.top_search_item} cursor-pointer`}
+                key={keyword.name + index}
                 onClick={() => router.push(`${keyword.link}`)}
               >
-                <span className={styles.top_search_keyword}>{keyword.name}</span>
+                <span className={styles.top_search_keyword}>
+                  {keyword.name}
+                </span>
                 <span className={styles.divider}>|</span>
               </li>
             ))}

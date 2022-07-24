@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 
 import Button from "components/Button/Button";
@@ -20,6 +20,8 @@ import ClaimListingApi from "services/claim-listing";
 import { formattedAreaCodes, phoneAreaCodes } from "constant";
 import SelectInput from "components/SelectInput/SelectInput";
 import { get } from "lodash";
+import bizListingApi from "services/biz-listing";
+import { UserInforContext } from "Context/UserInforContext";
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -42,14 +44,37 @@ const tabList = [
 
 const LoginPage = (context) => {
   const { prevPagePathname } = context;
+
+  const [isLoading, setIsLoading] = useState(false);
   const [method, setMethod] = useState(LoginMethod.EMAIL);
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoginError, setIsLoginError] = useState<boolean>(false);
+
+  const router = useRouter();
+  const { user, updateUser } = useContext(UserInforContext);
+
+  useEffect(() => {
+    const loginButton = document.getElementById("login-button");
+    function clickLoginButton(event) {
+      if (event.key === "Enter") {
+        loginButton?.click();
+      }
+    }
+    // Execute a function when the user presses a key on the keyboard
+    window?.addEventListener("keypress", clickLoginButton);
+    //clean up
+    return () => window?.removeEventListener("keypress", clickLoginButton);
+  }, []);
+
+  const getOwnerListing = async (userId) => {
+    const dataOwnerListing = await bizListingApi.getOwnerBizListing(userId);
+    updateUser({
+      owner_listings: dataOwnerListing.data.data,
+    });
+  };
 
   const handleLogin = async () => {
     let userInfoLogin = JSON.parse(localStorage.getItem("user") || "{}");
@@ -64,17 +89,20 @@ const LoginPage = (context) => {
         });
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(get(err, "response.data.error"));
         setIsLoading(false);
         setIsLoginError(true);
         return false;
       }
 
       if (result.data) {
-        let { jwt } = result.data;
+        let {
+          jwt,
+          user: { id },
+        } = result.data;
         userInfoLogin.token = jwt;
         localStorage.setItem("user", JSON.stringify(userInfoLogin));
         await AuthApi.getMe();
+        getOwnerListing(id);
       }
     } else {
       let result: any = null;
@@ -92,16 +120,21 @@ const LoginPage = (context) => {
       }
 
       if (result.data) {
-        let { jwt } = result.data;
+        let {
+          jwt,
+          user: { id },
+        } = result.data;
         userInfoLogin.token = jwt;
         localStorage.setItem("user", JSON.stringify(userInfoLogin));
         await AuthApi.getMe();
+        getOwnerListing(id);
       }
     }
     const finalPreviousPage = [
       "/forgot-password/reset",
       "/signup",
       "/signup/otp",
+      "/login",
     ].includes(prevPagePathname)
       ? "/"
       : prevPagePathname;
@@ -188,7 +221,13 @@ const LoginPage = (context) => {
               <Icon icon="facebook-color" size={20} className={styles.icon} />
             </a>
           </div>
-          <Button text="Log in" onClick={handleLogin} isLoading={isLoading} />
+          <Button
+            id="login-button"
+            text="Log in"
+            disabled={!((!!email || !!phoneNumber) && !!password)}
+            onClick={handleLogin}
+            isLoading={isLoading}
+          />
           <div className={styles.sign_up}>
             No account yet?
             <span>
@@ -208,10 +247,8 @@ const LoginPage = (context) => {
 export async function getServerSideProps(context) {
   const prevPage = context.req.headers.referer;
   const host = context.req.headers.host;
-  const index = prevPage.indexOf(host) + host.length;
+  const index = prevPage?.indexOf(host) + host.length;
   const prevPagePathname = prevPage.slice(index);
-
-  console.log("prevPagePathname", prevPagePathname);
 
   // Pass data to the page via props
   return {

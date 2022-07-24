@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 
 import Icon from "components/Icon/Icon";
 import InforCard from "components/InforCard/InforCard";
@@ -15,10 +15,20 @@ import CollectionApi from "services/collection";
 import styles from "styles/Home.module.scss";
 import useTrans from "hooks/useTrans";
 import { useRouter } from "next/router";
+import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
+import { Categories, CategoryText } from "enums";
+import { categories } from "constant";
 
 type Object = {
   [key: string]: any;
 };
+
+const allTab = [{ label: "All", value: undefined }];
+const categoryTabList: any[] = categories.map((item) => ({
+  label: item.slug,
+  value: item.slug,
+}));
+const tabList: any[] = allTab.concat(categoryTabList);
 
 const Collection = (props) => {
   const { collectionSlug } = props;
@@ -28,7 +38,7 @@ const Collection = (props) => {
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
   const [loading, setLoading] = useState(true);
-  const [showFilter, setShowFilter] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<CategoryText | undefined>();
   const [pagination, setPagination] = useState(defaultPagination);
   const [collection, setCollection] = useState<Object[]>([]);
   const [collectionDetail, setCollectionDetail] = useState<Object>({});
@@ -36,7 +46,8 @@ const Collection = (props) => {
   useEffect(() => {
     const getCollection = async () => {
       const response = await CollectionApi.getAllCollectionByCollectionSlug(
-        collectionSlug
+        collectionSlug,
+        selectedTab
       );
       const listingsOfCollection = get(
         response,
@@ -74,14 +85,15 @@ const Collection = (props) => {
           }))
         : [];
 
-      console.log("mappedListings", mappedListings);
-      setCollectionDetail(collectionDetailObject);
       setCollection(mappedListings);
       setLoading(false);
+      if (collectionName && description && banner) {
+        setCollectionDetail(collectionDetailObject);
+      }
     };
 
     getCollection();
-  }, [pagination, collectionSlug]);
+  }, [pagination, collectionSlug, selectedTab]);
 
   if (loading) {
     return (
@@ -119,21 +131,13 @@ const Collection = (props) => {
         </div>
       </SectionLayout>
       <SectionLayout>
-        <div className="flex gap-5 flex-wrap">
-          <Button
-            width={120}
-            size="small"
-            text="Price range"
-            variant="secondary"
-          />
-          <Button width={100} size="small" text="Rating" variant="secondary" />
-          <Button
-            width={180}
-            size="small"
-            text="Filter & Sort"
-            variant="secondary"
-            prefix={<Icon icon="filter-1" />}
-            onClick={() => setShowFilter(true)}
+        <div className="flex">
+          <TabsHorizontal
+            tablist={tabList}
+            type="secondary-no-outline"
+            selectedTab={selectedTab}
+            className="pt-[6px]"
+            onChangeTab={(e: CategoryText) => setSelectedTab(e)}
           />
         </div>
       </SectionLayout>
@@ -161,7 +165,7 @@ const Collection = (props) => {
         </div>
         <TopSearches />
       </SectionLayout>
-      <SectionLayout>
+      <SectionLayout show={pagination.page > 1}>
         <Pagination
           limit={30}
           total={pagination.total}
@@ -170,7 +174,7 @@ const Collection = (props) => {
           }
         />
       </SectionLayout>
-      <Filter onClose={() => setShowFilter(false)} visible={showFilter} />
+      {/* <Filter onClose={() => setShowFilter(false)} visible={showFilter} /> */}
     </div>
   );
 };

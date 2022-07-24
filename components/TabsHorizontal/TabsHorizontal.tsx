@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { isEqual } from "lodash";
 import React, { ReactNode, useState } from "react";
 import { useEffect } from "react";
 import styles from "./TabsHorizontal.module.scss";
@@ -45,7 +46,7 @@ interface TabsHorizontalProps {
     | "primary-outline";
   tablist?: ITab[];
   selectedTab?: string | number;
-  onCurrentTab?: (e) => void;
+  onChangeTab?: (e) => void;
 }
 
 const TabsHorizontal = (props: TabsHorizontalProps) => {
@@ -54,13 +55,17 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     selectedTab,
     type = "secondary-no-outline",
     tablist = [],
-    onCurrentTab = () => "",
+    onChangeTab = () => "",
   } = props;
 
-  const [currentTab, setCurrentTab] = useState<string | number>(
+  const [currentTab, setCurrentTab] = useState<string | number | undefined>(
     selectedTab || tablist[0]?.value
   );
-
+  useEffect(() => {
+    if (!isEqual(selectedTab, currentTab)) {
+      setCurrentTab(selectedTab);
+    }
+  }, [selectedTab]);
   const getCurrentTabIndex = tablist.findIndex(
     (item) => item.value === currentTab
   );
@@ -74,7 +79,7 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
 
   const handleSelectedTab = (e) => {
     setCurrentTab(e);
-    onCurrentTab(e);
+    onChangeTab(e);
   };
 
   return (

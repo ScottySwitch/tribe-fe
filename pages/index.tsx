@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { get } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -16,17 +16,17 @@ import CollectionApi from "services/collection";
 import BannerApi from "services/banner";
 import CategoryApi from "services/category";
 import Loader from "components/Loader/Loader";
+import { formatListingArray, isArray } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
+import { Ilisting } from "type";
 import {
   curatedList,
   homeBannerResponsive,
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-
+import { CategoryText } from "enums";
 import styles from "styles/Home.module.scss";
-import useLocation from "hooks/useLocation";
-import { Ilisting } from "type";
-import { formatListingArray, isArray } from "utils";
 
 const Home: NextPage = (props: any) => {
   const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
@@ -44,11 +44,12 @@ const Home: NextPage = (props: any) => {
   }>();
 
   const router = useRouter();
-  const { location } = useLocation();
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log(userInfo)
+
     const getListings = async () => {
       const data = await BizListingApi.getAllBizlitingPinnedByCategory(
         location
@@ -71,23 +72,22 @@ const Home: NextPage = (props: any) => {
       setLoading(false);
     };
 
-    if (location) {
-      getListings();
-      if (userInfo.token) {
-        getBizListingForYou();
-      }
-    }
+    location && getListings();
+    userInfo && userInfo.token && getBizListingForYou(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
-  const getBizListingForYou = async () => {
+  const getBizListingForYou = async (isChangeLocation?: boolean) => {
     setLoading(true);
 
-    const dataListing = await BizListingApi.getBizListingForYou(limit);
+    const dataListing = await BizListingApi.getBizListingForYou({
+      limit: isChangeLocation ? 16 : limit,
+      country: location || "singapore",
+    });
     const rawForYouListing = get(dataListing, "data.data");
-    const listingArray = listingForYou.concat(
-      formatListingArray(rawForYouListing)
-    );
+    const listingArray = isChangeLocation
+      ? formatListingArray(rawForYouListing)
+      : listingForYou.concat(formatListingArray(rawForYouListing));
 
     setListingForYou(listingArray);
     setLimit(limit + 16);
@@ -143,7 +143,10 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listingExclusiveDeal) && (
-        <SectionLayout title="Brands With Exclusive Deals For You">
+        <SectionLayout
+          title="Brands With Exclusive Deals For You"
+          seeMore="/deals"
+        >
           <Carousel responsive={infoCardResponsive}>
             {listingExclusiveDeal?.map((card) => (
               <div key={card.name} className="pb-5 pt-3 pl-3">
@@ -154,7 +157,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -182,7 +185,7 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.buy) && (
-        <SectionLayout title="Where to Buy">
+        <SectionLayout title="Where to Buy" seeMore={CategoryText.BUY}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.buy.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -193,7 +196,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -206,7 +209,7 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.seeAndDo) && (
-        <SectionLayout title="What to See">
+        <SectionLayout title="What to See" seeMore={CategoryText.SEE_AND_DO}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.seeAndDo.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -217,7 +220,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -243,7 +246,7 @@ const Home: NextPage = (props: any) => {
         </Carousel>
       </SectionLayout> */}
       {isArray(listings?.eat) && (
-        <SectionLayout title="What to Eat">
+        <SectionLayout title="What to Eat" seeMore={CategoryText.EAT}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.eat.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -254,7 +257,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -267,7 +270,10 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.transport) && (
-        <SectionLayout title="Access to Transport">
+        <SectionLayout
+          title="Access to Transport"
+          seeMore={CategoryText.TRANSPORT}
+        >
           <Carousel responsive={infoCardResponsive}>
             {listings?.transport.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -278,7 +284,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -293,7 +299,7 @@ const Home: NextPage = (props: any) => {
         </SectionLayout>
       )}
       {isArray(listings?.stay) && (
-        <SectionLayout title="Where to Stay">
+        <SectionLayout title="Where to Stay" seeMore={CategoryText.STAY}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.stay.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
@@ -304,7 +310,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -332,7 +338,7 @@ const Home: NextPage = (props: any) => {
           </SectionLayout>
           <SectionLayout childrenClassName={styles.for_you_container}>
             {listingForYou?.map((card) => (
-              <div key={card.title} className="pb-5 pt-3 pl-3">
+              <div key={card.title} className="pb-5 pt-3">
                 <InforCard
                   imgUrl={card.images[0]}
                   title={card.title}
@@ -340,7 +346,7 @@ const Home: NextPage = (props: any) => {
                   rateNumber={card.rateNumber}
                   followerNumber={card.followerNumber}
                   price={card.price}
-                  currency={(card.currency)?.toUpperCase()}
+                  currency={card?.currency?.toUpperCase()}
                   categories={card.categories}
                   tags={card.tags}
                   isVerified={card.isVerified}
@@ -356,7 +362,7 @@ const Home: NextPage = (props: any) => {
               variant={loading ? "primary" : "outlined"}
               text="Load more"
               width={400}
-              onClick={getBizListingForYou}
+              onClick={() => getBizListingForYou()}
             />
           </SectionLayout>
         </div>

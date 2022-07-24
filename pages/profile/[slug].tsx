@@ -7,6 +7,7 @@ import CoverImage from "components/UserProfilePage/CoverImage/CoverImage";
 import PanelAbout, {
   UserPropsData,
 } from "components/UserProfilePage/PanelAbout/PanelAbout";
+import { UserInforContext } from "Context/UserInforContext";
 import ContributedPanel from "components/UserProfilePage/PanelContributed/PanelContributed";
 import FavouriedPanel from "components/UserProfilePage/PanelFavouried/PanelFavouried";
 import SavedDealsPanel from "components/UserProfilePage/PanelSavedDeals/PanelSavedDeals";
@@ -15,18 +16,18 @@ import {
   dummySavedDeals,
   dummyUserInfo,
   inforCardList,
+  user,
 } from "constant";
 import { ProfileTabs } from "enums";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import Router, { useRouter } from "next/router";
+import React, { useEffect, useState, useContext } from "react";
 import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
-import { userInfo } from "os";
+import FollowApi from "services/user-listing-follow";
 
 const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
   const { name, imageUrl } = props;
-
   return (
     <div className={styles.group_heading_one}>
       <div className="flex items-end flex-wrap lg:flex-nowrap">
@@ -42,23 +43,32 @@ const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
         </div>
         <h2 className={styles.name}>{name}</h2>
       </div>
-      <CompleteProfileCard
+      {/* <CompleteProfileCard
         stepCurrent={3}
         stepCompleted={5}
         linkable="/profile/information"
         className={styles.CompleteProfileCard_desktop}
-      />
+      /> */}
     </div>
   );
 };
 
 const GroupHeadingTwo = (props: {
   contributions: number;
-  following: number;
+  following?: number;
   points: number;
 }) => {
   const { contributions, following, points } = props;
   const router = useRouter();
+  const [numberFollow, setNumberFollow] = useState<number>(0)
+  useEffect(() => {
+    const getData = async () => {
+      const dataFollow = await FollowApi.getFollowByUserId();
+      setNumberFollow(get(dataFollow, 'data.meta.pagination.total'))
+    };
+    getData();
+  }, []);
+
   return (
     <React.Fragment>
       <div className={styles.group_heading_two}>
@@ -69,12 +79,12 @@ const GroupHeadingTwo = (props: {
           </div>
           <div className={styles.outstanding_criteria}>
             <h5>Following</h5>
-            <span>{following}</span>
+            <span>{numberFollow}</span>
           </div>
-          <div className={styles.outstanding_criteria}>
+          {/* <div className={styles.outstanding_criteria}>
             <h5>Points</h5>
             <span>{points}</span>
-          </div>
+          </div> */}
         </div>
         <Button
           className={styles.btn_edit_profile}
@@ -86,17 +96,20 @@ const GroupHeadingTwo = (props: {
           }}
         />
       </div>
-      <CompleteProfileCard
+      {/* <CompleteProfileCard
         stepCurrent={3}
         stepCompleted={5}
         linkable="/profile/information"
         className={styles.CompleteProfileCard_mobile}
-      />
+      /> */}
     </React.Fragment>
   );
 };
 
 const ProfilePage = () => {
+  const { user } = useContext(UserInforContext);
+  const router = useRouter();
+  const { slug } = router.query;
   const [userInfor, setUserInfo] = useState<UserPropsData>({
     email: "",
     phone_number: "",
@@ -107,11 +120,29 @@ const ProfilePage = () => {
     birthday: "",
   });
 
+  const [selectedTab, setSelectedTab] = useState<string>();
+
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log("userInfo", userInfo);
+
+    if (!userInfo || !userInfo?.token) {
+      router.push("/");
+    }
+
+    switch (slug) {
+      case ProfileTabs.SAVED_DEALS:
+        setSelectedTab(ProfileTabs.SAVED_DEALS);
+        break;
+      case ProfileTabs.FAVOURITED:
+        setSelectedTab(ProfileTabs.FAVOURITED);
+        break;
+      case ProfileTabs.ABOUT:
+        setSelectedTab(ProfileTabs.ABOUT);
+        break;
+    }
+
     setUserInfo(userInfo);
-  }, []);
+  }, [router]);
 
   const TabList: ITab[] = [
     {
@@ -127,7 +158,7 @@ const ProfilePage = () => {
     {
       label: ProfileTabs.CONTRIBUTED,
       value: ProfileTabs.CONTRIBUTED,
-      content: <ContributedPanel userInfor={userInfor} />,
+      content: <ContributedPanel userInfor={userInfor}/>,
     },
     {
       label: ProfileTabs.ABOUT,
@@ -139,7 +170,10 @@ const ProfilePage = () => {
   return (
     <div className="wrapper-profile">
       <div className={styles.section_cover_image}>
-        <CoverImage imageUrl="https://picsum.photos/1440/360" />
+        <CoverImage
+          layout="fill"
+          imageUrl={require("../../public/images/default-banner-profile.png")}
+        />
       </div>
       <SectionLayout
         className={styles.section_profile}
@@ -151,10 +185,10 @@ const ProfilePage = () => {
         />
         <GroupHeadingTwo
           contributions={0}
-          following={get(userInfor, "user_listing_follows.length")}
           points={0}
         />
         <TabsHorizontal
+          selectedTab={selectedTab}
           tablist={TabList}
           type="secondary-no-outline"
           className={styles.profile_tab}

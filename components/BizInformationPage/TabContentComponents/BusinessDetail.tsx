@@ -60,8 +60,6 @@ const BusinessDetail = (props: BusinessDetailProps) => {
     placeGoodFor: get(listing, "facilities_data.placeGoodFor"),
   };
 
-  console.log("viewBusinessDetailData", viewBusinessDetailData);
-
   const submitFormData = (formData) => {
     const businessDetailFormattedData = {
       category_links: formData.categoryLinks,
@@ -70,7 +68,7 @@ const BusinessDetail = (props: BusinessDetailProps) => {
       //   min: formData.minPrice,
       //   max: formData.maxPrice,
       // },
-      currency: get(formData, 'currency?.value') || formData.currency,
+      currency: get(formData, "currency?.value") || formData.currency,
       min_price: formData.minPrice,
       max_price: formData.maxPrice,
       product_types:

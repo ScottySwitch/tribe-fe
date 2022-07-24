@@ -297,10 +297,7 @@ const RenderTabs = (props: {
               key={tab.text}
               selected={selectedTab === tab.value}
               text={tab.text}
-              onClick={() =>
-                !(tab.value === ListingTabs.DEAL && !isPaid) &&
-                setSelectedTab(tab.value)
-              }
+              onClick={() => setSelectedTab(tab.value)}
             />
           ))}
         </div>

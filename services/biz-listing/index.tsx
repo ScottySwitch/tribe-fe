@@ -1,69 +1,77 @@
+import { productTypes } from "components/AddListingPages/PageThree/constant";
 import { Categories, CategoryText } from "enums";
 import category from "services/category";
+import categoryLink from "services/category-link";
+import productType from "services/product-type";
 import Api from "../index";
 
 const qs = require("qs");
 
-const getBizListing = async (search?: string) => {
-  const query = qs.stringify(
-    {
-      filters: {
-        name: { $contains: search || "" },
+const getBizListing = async (search?: string, country?: string) => {
+  const params = {
+    filters: {
+      name: { $contains: search || "" },
+      country: country,
+    },
+    populate: {
+      user_listing_follows: {
+        fields: ["id"],
       },
-      populate: {
-        user_listing_follows: {
-          fields: ["id"],
-        },
-        reviews: {
-          fields: ["id"],
-        },
-        categories: {
-          data: ["id", "attributes"],
-        },
-        listing_roles: {
-          data: ["id", "attributes"],
-        },
-        claim_listings: {
-          data: ["id", "attributes"],
-        },
+      reviews: {
+        fields: ["id"],
+      },
+      categories: {
+        data: ["id", "attributes"],
+      },
+      listing_roles: {
+        data: ["id", "attributes"],
+      },
+      claim_listings: {
+        data: ["id", "attributes"],
       },
     },
-    {
-      encodeValuesOnly: true, // prettify url
-    }
-  );
+  };
+  const query = qs.stringify(params, {
+    encodeValuesOnly: true, // prettify url
+  });
   const url = `/api/biz-listings?${query}`;
   return await Api.get(url);
 };
 
-const getListingBySlug = async (search?: string) => {
-  const query = qs.stringify(
-    {
-      filters: {
-        slug: { $contains: search || "" },
+const getListingBySlug = async (
+  search?: string,
+  country?: string,
+  limit?: number
+) => {
+  const params = {
+    filters: {
+      slug: { $contains: search || "" },
+      country: country,
+    },
+    pagination: {
+      limit: limit,
+    },
+    populate: {
+      user_listing_follows: {
+        fields: ["id"],
       },
-      populate: {
-        user_listing_follows: {
-          fields: ["id"],
-        },
-        reviews: {
-          fields: ["id"],
-        },
-        categories: {
-          data: ["id", "attributes"],
-        },
-        listing_roles: {
-          data: ["id", "attributes"],
-        },
-        claim_listings: {
-          data: ["id", "attributes"],
-        },
+      reviews: {
+        fields: ["id"],
+      },
+      categories: {
+        data: ["id", "attributes"],
+      },
+      listing_roles: {
+        data: ["id", "attributes"],
+      },
+      claim_listings: {
+        data: ["id", "attributes"],
       },
     },
-    {
-      encodeValuesOnly: true, // prettify url
-    }
-  );
+  };
+  const query = qs.stringify(params, {
+    encodeValuesOnly: true, // prettify url
+  });
   const url = `/api/biz-listings?${query}`;
   return await Api.get(url);
 };
@@ -220,6 +228,7 @@ const getOwnerListingRoleByUserId = async (userId: any) => {
 };
 
 const getBizListingBySlug = async (bizListingSlug: any) => {
+  console.log('dwwd')
   const query = qs.stringify(
     {
       filters: {
@@ -406,11 +415,16 @@ const checkListingHaveOwner = async (bizListingSlug: any) => {
   return await Api.get(url);
 };
 
-const getBizListingForYou = async (limit) => {
+const getBizListingForYou = async (params: any) => {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+  const getParams = {
+    userId: userInfo.id,
+    limit: params.limit,
+    country: params?.country,
+  };
   if (userInfo.id) {
-    const url = `/api/biz-listings/bizlisting-for-you/?userId=${userInfo.id}&limit=${limit}`;
-    return await Api.get(url);
+    const url = `/api/biz-listings/bizlisting-for-you/`;
+    return await Api.get(url, { params: getParams });
   }
 };
 
@@ -429,14 +443,23 @@ const getExclusiveDealByCategory = async (category) => {
   return await Api.get(url);
 };
 
-const getBizlistingByCategoryLink = async (
-  category: string | number,
-  categoryLinks: any,
-  page: string | number,
-  country?: string
-) => {
-  const url = `/api/biz-listings/bizlisting-by-categorylink?country=${country}&category=${category}&categoryLinks=${categoryLinks}&page=${page}&price=${50}`;
-  return await Api.get(url);
+const getBizlistingByCategoryLink = async (params?: any) => {
+  const getParams = {
+    category: params?.category,
+    categoryLinks: params?.categoryLinks,
+    page: params?.page || 1,
+    country: params?.location,
+
+    sort: params?.sort,
+    productTypes: params?.productTypes,
+    productBrands: params?.productBrands,
+    minPrice: params?.minPrice,
+    maxPrice: params?.maxPrice,
+    minRating: params?.minRating,
+    maxRating: params?.maxRating,
+  };
+  const url = `/api/biz-listings/bizlisting-by-categorylink`;
+  return await Api.get(url, { params: getParams });
 };
 
 const getListingFavouriteByCategory = async (category) => {
@@ -502,7 +525,103 @@ const getFavouriteDeals = async () => {
   return await Api.get(url);
 };
 
+const getListingCustom = async (data: any) => {
+  let filter: any = {};
+  let pagination: any = {};
+  if (data?.country) {
+    filter.country = data.country;
+  }
+  if (data?.categories) {
+    filter = {
+      ...filter,
+      categories: {
+        slug: data.categories,
+      },
+    };
+  }
+  if (data?.categoryLinks && data?.categoryLinks !== "all") {
+    filter = {
+      ...filter,
+      category_links: {
+        value: {
+          $in: categoryLink,
+        },
+      },
+    };
+  }
+  if (data?.productTypes) {
+    filter = {
+      ...filter,
+      product_types: {
+        value: {
+          $in: data.productTypes,
+        },
+      },
+    };
+  }
+  if (data?.productBrands) {
+    filter = {
+      ...filter,
+      product_brands: {
+        value: {
+          $in: data.productBrands,
+        },
+      },
+    };
+  }
+  if (data?.isExclusive) {
+    filter = {
+      ...filter,
+      deals: {
+        is_exclusive: true,
+        is_revision: {
+          $not: true,
+        },
+      },
+    };
+  }
+
+  if (data?.limit) {
+    pagination.pageSize = data.limit;
+  }
+  if (data?.page) {
+    pagination.page = data.page;
+  }
+
+  const params = {
+    filters: {
+      ...filter,
+    },
+    pagination: {
+      ...pagination,
+    },
+    populate: {
+      user_listing_follows: {
+        id: true,
+      },
+      user_listing_favourites: {
+        id: true,
+      },
+      categories: {
+        name: true,
+      },
+      tags: {
+        id: true,
+      },
+      // reviews: {
+      //   id: true,
+      // },
+    },
+  };
+  const query = qs.stringify(params, {
+    encodeValuesOnly: true, // prettify url
+  });
+  const url = `/api/biz-listings?${query}`;
+  return await Api.get(url);
+};
+
 const bizListingApi = {
+  getListingCustom,
   getFavouriteDeals,
   getListingBySlug,
   getAllBizlitingByCategorySlug,

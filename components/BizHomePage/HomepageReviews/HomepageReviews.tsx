@@ -12,10 +12,11 @@ import { optionsReportReview, reviewSequenceOptions } from "constant";
 import { get } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IOption } from "type";
-import ReportApi from "services/report"
+import ReportApi from "services/report";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 
 import styles from "./HomepageReviews.module.scss";
 interface HomepageReviewsProps {
@@ -38,14 +39,32 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     isPaid,
     isViewPage,
     onSubmitReply,
-    onChangeReviewsSequence,
+    // onChangeReviewsSequence,
   } = props;
+  const [sortingReviews, setSortingReviews] = useState(reviews);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState<any>({});
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-  const router = useRouter();
   const [reply, setReply] = useState<string>("");
+  const router = useRouter();
+
+  const [showResultModal, setShowResultModal] = useState<boolean>(false);
+  const [submitResult, setSubmitResult] = useState<boolean>(false);
+  const resultType = [
+    {
+      title: "Success!",
+      message:
+        "Thank you for your report. We will review the report and take action within 24 hours!",
+      textButton: "Close",
+    },
+    {
+      title: "Fail!",
+      message: "Oops, something wrong. Please try again later.",
+      textButton: "Try again",
+    },
+  ];
+
   // const handleSetReplyReview = (value) => {
   //   if (value.length <= 100) {
   //     setReplyReview(value)
@@ -75,23 +94,48 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
     if (typeof localStorage.getItem("user") !== null) {
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
-    const userId = userInfo.id || "0";
-
-    await ReportApi.createReport({
+    const userId = userInfo.id || null;
+    const body = {
       type: "review",
       reason: data,
       user: userId,
       review: selectedReview.id,
-      biz_listing: bizListingId
-    })
-    setShowReportModal(false);
+      biz_listing: bizListingId,
+    };
+
+    await ReportApi.createReport(body)
+      .then((res) => {
+        setSubmitResult(true);
+      })
+      .catch((error) => {
+        setSubmitResult(false);
+      })
+      .finally(() => {
+        setShowReportModal(false);
+        setShowResultModal(true);
+      });
   };
 
   const checkLogin = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.token ? router.push(`/reviews/${listingSlug}`) : setShowAuthPopup(true)
-  }
+    userInfo.token
+      ? router.push(`/reviews/${listingSlug}`)
+      : setShowAuthPopup(true);
+  };
 
+  const handleChangeReviewSequence = (e) => {
+    const newSequenceReviews = [...reviews];
+    newSequenceReviews.sort((a, b) => {
+      if (e.value === "lowest") {
+        return a.rating - b.rating;
+      } else if (e.value === "highest") {
+        return b.rating - a.rating;
+      } else {
+        return 0;
+      }
+    });
+    setSortingReviews(newSequenceReviews);
+  };
 
   return (
     <div>
@@ -105,7 +149,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         </div>
       </div>
       {isViewPage && (
-        <div className="flex justify-between items-center mt-3">
+        <div className="flex justify-between items-center mt-3 gap-5">
           <Button
             variant="outlined"
             text="Add your review"
@@ -115,21 +159,25 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
           />
           <Select
             width={200}
+            menuWidth={200}
             options={reviewSequenceOptions}
             defaultValue={reviewSequenceOptions[0]}
-            onChange={onChangeReviewsSequence}
+            onChange={handleChangeReviewSequence}
           />
         </div>
       )}
       <br />
       <div>
-        {Array.isArray(reviews) && reviews.length > 0 ? (
-          reviews.map((review, index) => (
+        {Array.isArray(sortingReviews) && !!sortingReviews.length ? (
+          sortingReviews.map((review, index) => (
             <div key={index} className="mb-10">
               <UserReviewCard
                 isPaid={isPaid}
                 actions={!isViewPage}
-                user={get(review, "user.data.attributes")}
+                user={
+                  get(review, "user.data.attributes") || get(review, "user")
+                }
+                bizListingId={bizListingId}
                 listImage={get(review, "images")}
                 content={get(review, "content")}
                 dateVisit={get(review, "visited_date")}
@@ -138,13 +186,12 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
                 reply={get(review, "reply_reviews")}
                 replyAt={get(review, "date_create_reply")}
                 onReplyClick={() => {
-                  console.log("setSelectedReview", review);
                   setSelectedReview(review);
                   setShowReplyModal(true);
                 }}
                 onReportClick={() => {
                   setSelectedReview(review);
-                  setShowReportModal(true)
+                  setShowReportModal(true);
                 }}
               />
             </div>
@@ -167,6 +214,12 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         onClose={() => setShowReportModal(false)}
         onSubmit={handleSubmitReportReview}
       />
+      <ResultModal
+        resultType={resultType}
+        visible={showResultModal}
+        isSuccess={submitResult}
+        onClose={() => setShowResultModal(false)}
+      />
       <Modal
         visible={showReplyModal}
         title="Reply Review"
@@ -177,6 +230,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
           <UserReviewCard
             isPaid={isPaid}
             actions={false}
+            bizListingId={bizListingId}
             user={get(selectedReview, "user.data.attributes")}
             listImage={get(selectedReview, "images")}
             content={get(selectedReview, "content")}

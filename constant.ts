@@ -10,10 +10,55 @@ import {
 import { IAddListingForm } from "pages/add-listing";
 import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed";
 
+export const videoExtensions = [
+  ".flv",
+  ".mp4",
+  ".m3u8",
+  ".ts",
+  ".3gp",
+  ".mov",
+  ".avi",
+  ".wmv",
+];
+
 export const loginInforItem = "login_infor";
 export const user = "user";
 export const userId = "user_id";
 export const token = "token";
+
+export const sortOptions = [
+  // { label: "Price (Low to high)" },
+  // { label: "Price (High to low)" },
+  { label: "Rating (High to low)", value: "desc" },
+  { label: "Rating (Low to high)", value: "asc" },
+  // { label: "Recently added" },
+];
+
+export const getFilterLabels = (filter, currency) => [
+  {
+    isShow: !!filter.sort,
+    label: "Sort",
+    value: sortOptions.find((item) => item.value === filter.sort)?.label,
+  },
+  {
+    isShow: !!filter.minRating,
+    label: "Rating",
+    value: `${filter.minRating || "0"} - ${filter.maxRating}`,
+  },
+  {
+    isShow: !!filter.maxPrice && !!currency,
+    label: "Price",
+    value: `${currency + " " + filter.minPrice} - ${
+      currency + " " + filter.maxPrice
+    }`,
+  },
+];
+
+export const genderOptions = [
+  { label: "Male", value: "male" },
+  { label: "Female", value: "female" },
+  { label: "Others", value: "others" },
+];
 
 export const curatedList = [
   {
@@ -34,9 +79,27 @@ export const curatedList = [
 ];
 
 export const locations = [
-  { label: "Singapore", value: "singapore", code: "sg" },
-  { label: "Malaysia", value: "malaysia", code: "my" },
-  { label: "Indonesia", value: "indonesia", code: "id" },
+  {
+    label: "Singapore",
+    value: "singapore",
+    code: "sg",
+    currency: "SGD",
+    max: 15000,
+  },
+  {
+    label: "Malaysia",
+    value: "malaysia",
+    code: "my",
+    currency: "MYR",
+    max: 5000,
+  },
+  {
+    label: "Indonesia",
+    value: "indonesia",
+    code: "id",
+    currency: "IDR",
+    max: 5000,
+  },
   // { label: "India", value: "india" },
   // { label: "Thailand", value: "thailand" },
 ];
@@ -204,8 +267,9 @@ export const bizInformationDefaultFormData = {
 };
 
 export const reviewSequenceOptions = [
-  { label: "Top reviews", value: "top" },
   { label: "The lastest reviews", value: "latest" },
+  { label: "Rating: High to Low", value: "highest" },
+  { label: "Rating: Low to High", value: "lowest" },
 ];
 
 export const fakeAddlistingForm: IAddListingForm = {
@@ -399,9 +463,9 @@ export const freeInformationList = [
 export const userInformationList = [
   { label: UserInformationList.USER_INFORMATION, icon: "user-color-2" },
   { label: UserInformationList.CHANGE_PASSWORD, icon: "password" },
-  { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
-  { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
-  { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
+  // { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
+  // { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
+  // { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
   { label: UserInformationList.TRIBES_FOR_BUSINESSES, icon: "user-color-2" },
   { label: UserInformationList.SUPPORT, icon: "support-color" },
   { label: UserInformationList.TERMS_CONDITIONS, icon: "user-color-2" },
@@ -952,6 +1016,33 @@ export const dummySubCategories = [
   },
 ];
 
+export const reportReasons = [
+  {
+    label: "Offensive, hateful or sexually explicit",
+    value: "Offensive, hateful or sexually explicit",
+  },
+  {
+    label: "Legal issue",
+    value: "Legal issue",
+  },
+  {
+    label: "Privacy concern",
+    value: "Privacy concern",
+  },
+  {
+    label: "Poor quality",
+    value: "Poor quality",
+  },
+  {
+    label: "Not a photo of the place",
+    value: "Not a photo of the place",
+  },
+  {
+    label: "Other",
+    value: "Your reason",
+  },
+];
+
 export const categories = [
   {
     width: "w-[30px]",
@@ -960,6 +1051,7 @@ export const categories = [
     description: "Explore stores to shop",
     value: Categories.BUY,
     slug: CategoryText.BUY,
+    finalTabLabel: "Product categories",
     options: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Coffee & Tea", value: "coffee-tea" },
@@ -975,6 +1067,7 @@ export const categories = [
     label: "Eat",
     value: Categories.EAT,
     slug: CategoryText.EAT,
+    finalTabLabel: "Neighbourhoods",
     options: [
       { label: "Quick bites", value: "quick-bites" },
       { label: "Restaurant", value: "restaurant" },
@@ -990,6 +1083,7 @@ export const categories = [
     description: "Discover things to do",
     value: Categories.SEE_AND_DO,
     slug: CategoryText.SEE_AND_DO,
+    finalTabLabel: "Suitable For",
     options: [
       { label: "Coffee & Tea", value: "coffee-tea" },
       { label: "Restaurant", value: "restaurant" },
@@ -1020,6 +1114,7 @@ export const categories = [
     label: "Stay",
     value: Categories.STAY,
     slug: CategoryText.STAY,
+    finalTabLabel: "Stars",
     options: [
       { label: "Restaurant", value: "restaurant" },
       { label: "Quick bites", value: "quick-bites" },
@@ -1640,14 +1735,52 @@ export const socialMediaOptions = [
     value: "instagram",
   },
   {
+    icon: require("public/icons/facebook-color.svg"),
+    label: "Facebook",
+    value: "facebook",
+  },
+  // {
+  //   icon: require("public/icons/whatsapp-color.svg"),
+  //   label: "WhatsApp",
+  //   value: "whatsapp",
+  // },
+  // {
+  //   icon: require("public/icons/telegram-color.svg"),
+  //   label: "Telegram",
+  //   value: "telegram",
+  // },
+];
+
+export const shareOptions = [
+  {
+    icon: require("public/icons/facebook-color.svg"),
+    label: "Facebook",
+    url: "facebook.com",
+  },
+  {
+    icon: require("public/icons/instagram-color.svg"),
+    label: "Instagram",
+    url: "instagram.com",
+  },
+  {
+    icon: require("public/icons/twitter-color.svg"),
+    label: "Twitter",
+    url: "twitter.com",
+  },
+  {
     icon: require("public/icons/whatsapp-color.svg"),
     label: "WhatsApp",
-    value: "whatsapp",
+    url: "facebook.com",
   },
   {
     icon: require("public/icons/telegram-color.svg"),
     label: "Telegram",
-    value: "telegram",
+    url: "telegram.com",
+  },
+  {
+    icon: require("public/icons/line-color.svg"),
+    label: "Line",
+    url: "line.com",
   },
 ];
 
@@ -1691,12 +1824,14 @@ export const dummySavedDeals = [
       "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 17, 2022",
     type: 2,
+    startDate: "",
     favourite: true,
   },
   {
     imgUrl: "https://picsum.photos/300/600",
     title:
       "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
+    startDate: "",
     expiredAt: "April 17, 2022 - April 30, 2022",
     type: 2,
     favourite: true,
@@ -1706,6 +1841,7 @@ export const dummySavedDeals = [
     title:
       "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
     expiredAt: "April 17, 2022 - April 24, 2022",
+    startDate: "",
     type: 2,
     favourite: true,
   },
@@ -1862,7 +1998,7 @@ export const optionsReportPhoto = [
   { id: "photo-3", label: "Privacy concern" },
   { id: "photo-4", label: "Poor quality" },
   { id: "photo-5", label: "Not a photo of the place" },
-  { id: "other", label: "Other" },
+  { id: "other-photo", label: "Other" },
 ];
 
 export const optionsReportReview = [

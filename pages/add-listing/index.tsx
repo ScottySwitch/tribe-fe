@@ -15,7 +15,6 @@ import AddSeeAndDoInfor from "components/AddListingPages/PageThree/AddInforSecti
 import AddStayInfor from "components/AddListingPages/PageThree/AddInforSections/AddStayInfor";
 import AddTransportInfor from "components/AddListingPages/PageThree/AddInforSections/AddTransportInfor";
 import { IOpenHours } from "components/OpenHours/OpenHours";
-
 import styles from "styles/AddListing.module.scss";
 import { defaultAddlistingForm, fakeSubCateList, previewInfo } from "constant";
 import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
@@ -43,6 +42,7 @@ export interface IAddListingForm {
   contact: string;
   email: string;
   socialMedia: string;
+  typeMedia?: any;
   currency?: { label: string; value: string };
   minPrice: string;
   maxPrice: string;
@@ -107,7 +107,21 @@ const AddListing = () => {
     if (!formData.isOnline) {
       address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`;
     }
-    let dataSend = {
+    let socialType: any = {}
+    switch (formData.typeMedia) {
+      case 'facebook':
+        socialType.facebook = formData.socialMedia
+        break;
+      case 'instagram':
+        socialType.instagram = formData.socialMedia
+        break;
+      case 'twitter':
+        socialType.twitter = formData.socialMedia
+        break;
+      default:
+        break;
+    }
+    let dataSend: any = {
       user: userInfo.id,
       is_verified: false,
       is_online_store: !!formData.isOnline,
@@ -116,7 +130,6 @@ const AddListing = () => {
       description: formData.description,
       address,
       country: formData.country,
-      social_info: formData.socialMedia,
       phone_number: formData.contact,
       email: formData.email === "" ? null : formData.email,
       // price_range: {
@@ -124,9 +137,9 @@ const AddListing = () => {
       //   min: formData.minPrice,
       //   max: formData.maxPrice,
       // },
-      min_price: formData.minPrice,
-      max_price: formData.maxPrice,
-      currency: get(formData, 'currency.value'),
+      min_price: isNaN(parseFloat(formData.minPrice)) ? parseFloat(formData.minPrice) : 0,
+      max_price: isNaN(parseFloat(formData.maxPrice)) ? parseFloat(formData.maxPrice) : 0,
+      currency: get(formData, 'currency.value') || null,
       images: formData.images,
       open_hours: formData.openHours,
       category_links: formData.categoryLinks,
@@ -151,9 +164,11 @@ const AddListing = () => {
         payment: formData.payment,
         placeGoodFor: formData.placeGoodFor,
       },
+      social_info: socialType,
       is_accepted: false,
     };
-    console.log("Role", get(formData, "role.label"));
+    // get(dataSend, `social_info[${formData.typeMedia}]`, formData.socialMedia)
+    console.log(get(dataSend, `social_info[${formData.typeMedia}]`))
     const role = get(formData, "role.label");
     let result;
     let dataSendContribute: any = {

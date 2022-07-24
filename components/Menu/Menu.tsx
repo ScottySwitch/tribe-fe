@@ -3,18 +3,40 @@ import Icon from "components/Icon/Icon";
 import { loginInforItem, user, userId, token } from "constant";
 import { useRouter } from "next/router";
 import { ILoginInfor } from "pages/_app";
-
+import { UserInforContext } from "Context/UserInforContext";
+import React, { useContext, useState } from "react";
+import { ProfileTabs, UsersTypes } from "enums";
 import styles from "./Menu.module.scss";
+import Modal from "components/Modal/Modal";
 
 interface MenuMenuProps {
   loginInfor: ILoginInfor;
   mobile?: boolean;
+  onShowSwitchModal?: () => void;
   onShowCategoriesModal?: () => void;
+  onShowAuthPopup?: () => void;
+  onShowHamModal?: () => void;
 }
 
 const Menu = (props: MenuMenuProps) => {
-  const { loginInfor = {}, mobile, onShowCategoriesModal } = props;
+  const {
+    loginInfor = {},
+    mobile,
+    onShowCategoriesModal,
+    onShowSwitchModal,
+    onShowAuthPopup,
+    onShowHamModal,
+  } = props;
   const router = useRouter();
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
+
+  const [showSwitchModal, setShowSwitchModal] = useState(false);
+
+  const checkLogin = (href: string) => {
+    onShowHamModal?.();
+    user && user.token ? router.push(`/profile/${href}`) : onShowAuthPopup?.();
+  };
 
   const menuItems = [
     // {
@@ -25,18 +47,18 @@ const Menu = (props: MenuMenuProps) => {
     {
       icon: "deal",
       label: "Saved deals",
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(ProfileTabs.SAVED_DEALS),
     },
     {
       icon: "heart-color",
       label: "Favorited",
       borderBottom: true,
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(ProfileTabs.FAVOURITED),
     },
     {
       icon: "comment-color",
       label: "Edit profile",
-      onClick: () => router.push("/profile"),
+      onClick: () => checkLogin(ProfileTabs.ABOUT),
     },
     // { icon: "settings-color", label: "Settings", borderBottom: true },
     // { icon: "like-color-2", label: "Referral code" },
@@ -60,6 +82,16 @@ const Menu = (props: MenuMenuProps) => {
     router.reload();
   };
 
+  const handleOpenSwitchAccountModal = () => {};
+
+  const handleSwitchToNormalUser = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo.type = UsersTypes.NORMAL_USER;
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    router.push("/");
+    router.reload();
+  };
+
   return (
     <>
       {menuItems.map((item) => {
@@ -78,10 +110,16 @@ const Menu = (props: MenuMenuProps) => {
         );
       })}
       {!!loginInfor.token && (
-        <div onClick={handleLogout} className={styles.logout}>
-          <Icon icon="log-out" size={20} color="#e60112" />
-          <div>Logout</div>
-        </div>
+        <React.Fragment>
+          {/* <div onClick={onShowSwitchModal} className={styles.menu_item}>
+            <Icon icon="user-color" size={20} />
+            <div>Switch account</div>
+          </div> */}
+          <div onClick={handleLogout} className={styles.logout}>
+            <Icon icon="log-out" size={20} color="#e60112" />
+            <div>Logout</div>
+          </div>
+        </React.Fragment>
       )}
     </>
   );

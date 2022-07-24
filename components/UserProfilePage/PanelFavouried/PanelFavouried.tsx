@@ -22,14 +22,14 @@ const ListCard = (props: {
       {Array.isArray(data) &&
         data.map((card, index) => (
           <InforCard
-            key={index}
+            key={card.slug}
             imgUrl={card.imgUrl}
             title={card.title}
             rate={card.rate}
             rateNumber={card.rateNumber}
             followerNumber={card.followerNumber}
             price={card.price}
-            currency={(card.currency)?.toUpperCase()}
+            currency={card.currency?.toUpperCase()}
             categories={card.categories}
             tags={card.tags}
             iconTag={true}
@@ -54,6 +54,7 @@ const FavouriedPanel = () => {
   const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getListingFavourite = async (slug) => {
       const data = await BizlistingApi.getListingFavouriteByCategory(slug);
       const rawData = get(data, "data.data");
@@ -62,6 +63,7 @@ const FavouriedPanel = () => {
           rawData.map((item) => ({
             id: item.id,
             images: item.images || [],
+            imgUrl: get(item, "images[0]") || "https://picsum.photos/200/300",
             title: item.name,
             slug: item.slug,
             isVerified: item.is_verified,
@@ -72,7 +74,7 @@ const FavouriedPanel = () => {
             tags: item.tags,
             categories: item.categories,
             price: item.min_price || "",
-            currency: (item.currency)?.toUpperCase() || "",
+            currency: item.currency?.toUpperCase() || "",
             rate: item.rate,
             rateNumber: item.rate_number,
           }))) ||
@@ -82,11 +84,10 @@ const FavouriedPanel = () => {
       setLoading(false);
     };
 
-    getListingFavourite(currentTab);
+    userInfo && userInfo?.token && getListingFavourite(currentTab);
   }, [currentTab, loading]);
 
   const handleRemoveFavorite = async (removedListing) => {
-    console.log("removedListing", removedListing);
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
     await UserApi.removeListingFavourite({
@@ -160,13 +161,11 @@ const FavouriedPanel = () => {
   return (
     <div className={styles.favouried_panel}>
       <TabsHorizontal
+        selectedTab={ProfileTabFavourited.EAT}
         type="primary-outline"
         tablist={TabList}
         className={styles.favouried_tab}
-        onCurrentTab={(e) => {
-          console.log(e);
-          setCurrentTab(e);
-        }}
+        onChangeTab={(e) => setCurrentTab(e)}
       />
       {total > 0 && <div className={styles.total}>Total: {total}</div>}
     </div>

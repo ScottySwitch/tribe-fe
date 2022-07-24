@@ -43,7 +43,6 @@ const ProductListing = (props: ProductListingProps) => {
       bizListingId,
       "is_pinned:desc"
     );
-    console.log('result', result)
     if (get(result, 'data.data')) {
       let rawListing = get(result, 'data.data') || [];
       const listingArray = rawListing.map((item) => ({
@@ -61,7 +60,6 @@ const ProductListing = (props: ProductListingProps) => {
         klookUrl: get(item,'attributes.klook_url'),
         isEdited: false,
       }));
-      console.log('listingArray', listingArray)
       setProductList(listingArray);
     }
   };
@@ -71,7 +69,6 @@ const ProductListing = (props: ProductListingProps) => {
   }, [bizListingId]);
 
   const submitProduct = async (e: any) => {
-    console.log(e)
     if (e[0].isEdited) {
       const dataSend = { ...e[0] };
       await ProductApi.updateProduct(e[0].id, dataSend);

@@ -1,6 +1,6 @@
-import { get } from "lodash";
+import { get, isArray } from "lodash";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import classNames from "classnames";
 
 import Button from "components/Button/Button";
@@ -9,6 +9,7 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Upload from "components/Upload/Upload";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import { UserInforContext } from "Context/UserInforContext";
 
 import UserFollowApi from "services/user-listing-follow";
 import UserFavouriteApi from "services/user-listing-favourite";
@@ -16,6 +17,7 @@ import UserFavouriteApi from "services/user-listing-favourite";
 import styles from "./ListingInforCard.module.scss";
 
 interface ListingInforCardProps {
+  isPaid?: boolean;
   isViewPage?: boolean;
   bizListing: { [key: string]: any };
   priceRange: { min: string; max: string; currency: string };
@@ -44,6 +46,8 @@ const ReviewsFollowers = (props: {
     styles.reviews_followers_container,
     className
   );
+  const { user } = useContext(UserInforContext);
+
   const bizListingReviewCount = get(bizListing, "reviews.length") || 0;
   const bizListingFollowerCount =
     get(bizListing, "user_listing_follows.length") || 0;
@@ -52,18 +56,25 @@ const ReviewsFollowers = (props: {
   const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   useEffect(() => {
-    if (userInfo) {
-      const userFollowList = userInfo.listing_follow_ids;
-      const userFavoriteList = userInfo.listing_favourite_ids;
+    const getData = async () => {
+      const dataFollow = await UserFollowApi.getFollowByUserId();
+      const dataFavourite = await UserFavouriteApi.getFavouriteByUserId();
+      const userFollowList = get(dataFollow, "data.data");
+      const userFavouriteList = get(dataFavourite, "data.data");
       let checkIsFollow =
         Array.isArray(userFollowList) &&
-        userFollowList.some((item) => item === bizListing.id);
+        userFollowList.some(
+          (item) => get(item, "attributes.biz_listing.data.id") == bizListing.id
+        );
       let checkIsFavourite =
-        Array.isArray(userFavoriteList) &&
-        userFavoriteList.some((item) => item === bizListing.id);
+        Array.isArray(userFavouriteList) &&
+        userFavouriteList.some(
+          (item) => get(item, "attributes.biz_listing.data.id") == bizListing.id
+        );
       setIsFollow(checkIsFollow);
       setIsFavourite(checkIsFavourite);
-    }
+    };
+    getData();
   }, []);
 
   const handleAddFollow = async () => {
@@ -73,9 +84,8 @@ const ReviewsFollowers = (props: {
       if (get(data, "data")) {
         setIsFollow(true);
       }
-    }
-    else {
-      setShowAuthPopup(true)
+    } else {
+      setShowAuthPopup(true);
     }
   };
 
@@ -86,9 +96,8 @@ const ReviewsFollowers = (props: {
       if (get(data, "data")) {
         setIsFavourite(true);
       }
-    }
-    else {
-      setShowAuthPopup(true)
+    } else {
+      setShowAuthPopup(true);
     }
   };
 
@@ -165,6 +174,7 @@ const Price = ({ isViewPage, newPriceRange, onSetShowPriceRangeModal }) => {
 };
 
 const SocialInfo = ({
+  isPaid,
   isViewPage,
   newSocialInfo,
   onSetShowSocialInfoModal,
@@ -192,9 +202,25 @@ const SocialInfo = ({
   );
 };
 
-const PhoneNumber = ({ isViewPage, phoneNumber, onSetPhoneNumberModal }) => {
+const PhoneNumber = ({
+  isViewPage,
+  phoneNumber,
+  onSetPhoneNumberModal,
+  isPaid,
+}) => {
+  const handleHref = () => {
+    if (isPaid) {
+      window.open(`tel:${phoneNumber}`);
+    }
+  };
   if (isViewPage) {
-    return phoneNumber ? <div>{phoneNumber}</div> : <div>Not provided</div>;
+    return phoneNumber ? (
+      <div onClick={handleHref} className={isPaid && "cursor-pointer"}>
+        {phoneNumber}
+      </div>
+    ) : (
+      <div>Not provided</div>
+    );
   }
 
   return phoneNumber ? (
@@ -218,6 +244,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     socialInfo,
     logo,
     userInfo,
+    isPaid,
     handleChangeLogo,
     onSetSocialInfo,
     onSetPhoneNumber,
@@ -242,16 +269,21 @@ const ListingInforCard = (props: ListingInforCardProps) => {
       <Icon icon="camera-color" size={40} />
     </div>
   );
+  const listingLogo = get(logo, "[0]")
+    ? logo
+    : [require("public/images/page-avatar.png")];
+
   return (
     <div className={styles.listing_infor_card}>
       <div className={styles.listing_infor_container}>
         <div className="flex justify-between items-center">
           <div className={styles.box_avatar}>
             <Upload
+              key={logo}
               type="avatar"
               className={styles.small_avatar}
               centerIcon={<CenterIcon />}
-              fileList={logo}
+              fileList={listingLogo}
               disabled={isViewPage}
               onChange={handleChangeLogo}
             />
@@ -277,6 +309,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             <div className={styles.contact_right}>
               <Icon icon="phone-color" size={20} />
               <PhoneNumber
+                isPaid={isPaid}
                 isViewPage={isViewPage}
                 phoneNumber={phoneNumber}
                 onSetPhoneNumberModal={(e) => setPhoneNumberModal(e)}
@@ -293,6 +326,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             <div className={styles.contact_right}>
               <Icon icon="web-color" size={20} />
               <SocialInfo
+                isPaid={isPaid}
                 isViewPage={isViewPage}
                 newSocialInfo={newSocialInfo}
                 onSetShowSocialInfoModal={(e) => setShowSocialInfoModal(e)}

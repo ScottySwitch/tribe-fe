@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { dummyKeywords } from "constant";
+import { dummyKeywords, user } from "constant";
 import TopSearches from "components/TopSearches/TopSearches";
 import ListingSearchBox from "components/ListingSearchBox/ListingSearchBox";
 
@@ -17,19 +17,81 @@ import SearchListing, {
 } from "components/AddListingPages/PageOne/SearchListing/SearchListing";
 import get from "lodash/get";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import { UserInforContext } from "Context/UserInforContext";
+import { useDebounce } from "usehooks-ts";
+import { changeToSlugify } from "utils";
+
+const RightColumn = (props: { listing: { [key: string]: any } }) => {
+  const { listing } = props;
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const router = useRouter()
+
+  useEffect(() => {
+    const listingRolesArray =
+      get(listing, "attributes.listing_roles.data") || [];
+    const isBeingClaimed =
+      get(listing, "attributes.claim_listings.data.length") > 0;
+    const doesHasOwners = listingRolesArray.some(
+      (item) => get(item, "attributes.name") == "owner"
+    );
+    if (isBeingClaimed || doesHasOwners) setIsDisabled(true);
+  }, []);
+
+  const handleClick = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo && userInfo.token
+      ? router.push(`/claim/${listing.id}`)
+      : setShowAuthPopup(true);
+  };
+
+  return (
+    <>
+      <Button
+        text="Claim free listing"
+        onClick={handleClick}
+        disabled={isDisabled}
+      />
+      <span onClick={() => router.push("/add-listing")}>
+        Not your business?
+      </span>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
+    </>
+  );
+};
 
 const ClaimPage = () => {
   const [listing, setListing] = useState<{ [key: string]: any }>();
   const [bizListing, setBizListing] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
+  const [location, setLocation] = useState();
+  const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
+  const getRandomListing = async () => {
+    const result = await BizListingApi.getListingBySlug("", location || 'singapore', 7)
+    const data = get(result, "data.data")
+    setBizListing(data)
+  }
+  useEffect(() => {
+    if (bizListing.length === 0) {
+      getRandomListing()
+    }
+  }, [])
 
   useEffect(() => {
     const getBizListing = async () => {
-      const data = await BizListingApi.getBizListing();
+      const data = await BizListingApi.getListingBySlug(
+        debouncedSearchTerm,
+        location,
+        20
+      );
       setBizListing(get(data, "data.data"));
     };
 
-    getBizListing();
-  }, []);
+    debouncedSearchTerm ? getBizListing() : getRandomListing();
+  }, [debouncedSearchTerm, location]);
 
   const handleSetListing = (e) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -41,44 +103,6 @@ const ClaimPage = () => {
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
     setListing(e);
-  };
-
-  const RightColumn = (props: { listing: { [key: string]: any } }) => {
-    const { listing } = props;
-    const [isDisabled, setIsDisabled] = useState<boolean>(false);
-    const [showAuthPopup, setShowAuthPopup] = useState(false);
-
-    useEffect(() => {
-      const listingRolesArray =
-        get(listing, "attributes.listing_roles.data") || [];
-      const isBeingClaimed =
-        get(listing, "attributes.claim_listings.data.length") > 0;
-      const doesHasOwners = listingRolesArray.some(
-        (item) => get(item, "attributes.name") === "Owner"
-      );
-      if (isBeingClaimed || doesHasOwners) setIsDisabled(true);
-    }, []);
-    const router = useRouter();
-    const handleClick = () => {
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      userInfo && userInfo.token
-        ? router.push(`/claim/${listing.id}`)
-        : setShowAuthPopup(true);
-    };
-    return (
-      <>
-        <Button
-          text="Claim free listing"
-          onClick={handleClick}
-          disabled={isDisabled}
-        />
-        <span>Not your business?</span>
-        <AuthPopup
-          onClose={() => setShowAuthPopup(false)}
-          visible={showAuthPopup}
-        />
-      </>
-    );
   };
 
   return (
@@ -104,6 +128,8 @@ const ClaimPage = () => {
               title="Claim Your Free Listing"
               listingOptions={bizListing}
               onListingSearchChange={handleSetListing}
+              onInputChange={(e) => setSearchKey(e)}
+              onLocationChange={(e) => setLocation(e.value)}
             />
           )}
         </SectionLayout>

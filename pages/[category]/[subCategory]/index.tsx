@@ -1,53 +1,111 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { get, isArray } from "lodash";
+import { useContext, useEffect, useState } from "react";
+import { filter, get, isArray } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
 import InforCard from "components/InforCard/InforCard";
 import Pagination from "components/Pagination/Pagination";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import Select from "components/Select/Select";
-import TabsHorizontal from "components/TabsHorizontal/TabsHorizontal";
 import TopSearches from "components/TopSearches/TopSearches";
-import { homeBannerResponsive, inforCardList } from "constant";
+import {
+  categories,
+  getFilterLabels,
+  homeBannerResponsive,
+  inforCardList,
+  sortOptions,
+} from "constant";
 import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
 import Loader from "components/Loader/Loader";
-import useLocation from "hooks/useLocation";
 import useTrans from "hooks/useTrans";
-import { formatListingArray } from "utils";
+import { formatBanner, formatCategoryLink, formatListingArray } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
+import Button from "components/Button/Button";
+import Filter, { IFilter } from "components/Filter/Filter";
+import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 
 import styles from "styles/Home.module.scss";
+import Badge from "components/Badge/Badge";
+import useGetCountry from "hooks/useGetCountry";
+interface IType {
+  [key: string]: any;
+}
+[];
 
-const SubCategoryPage = (props: any) => {
-  const { bizListings, listingBanners, listCategoryLink } = props;
+const SubCategoryPage = (context) => {
+  const { category, categoryLink } = context;
 
-  const trans = useTrans();
   const router = useRouter();
-  const { location } = useLocation();
-
-  const { query } = router;
-  const { category, subCategory }: any = query;
+  const { user } = useContext(UserInforContext);
+  const { location } = user;
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
+  const defaultFilterOptions: IFilter = {
+    productTypes: [],
+    productBrands: [],
+    minPrice: undefined,
+    maxPrice: undefined,
+    sort: undefined,
+    minRating: undefined,
+    maxRating: undefined,
+  };
 
+  const { currency } = useGetCountry();
+
+  const [bannerArray, setBannergArray] = useState<IType[]>([]);
+  const [categoryLinkArray, setCategoryLinkArray] = useState<ITab[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
-  const [currentSubCategory, setCurrentSubCategory] = useState(subCategory);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
-  const [currenCategoryLink, setCurrentCategoryLink] = useState(subCategory);
   const [showFilter, setShowFilter] = useState(false);
+  const [filter, setFilter] = useState(defaultFilterOptions);
 
   useEffect(() => {
-    const getBizListings = async (category, subCategory, page) => {
-      const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(
+    const getData = async () => {
+      const dataBanners = await BannerApi.getBannerCustom({
+        categories: category,
+        limit: 12,
+        page: 1,
+      });
+      const dataCategoryLinks =
+        await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+
+      let categoryLinkArray: any = [
+        {
+          label: "All",
+          value: "all",
+          slug: "all",
+          icon: "https://picsum.photos/200/300",
+        },
+      ];
+
+      const rawListBanners = formatBanner(get(dataBanners, "data.data"));
+      const rawListCategory = formatCategoryLink(
+        get(dataCategoryLinks, "data.data") || []
+      );
+
+      setBannergArray(rawListBanners);
+      setCategoryLinkArray(categoryLinkArray.concat(rawListCategory));
+    };
+
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const getBizListings = async () => {
+      const params = {
         category,
-        subCategory,
-        page,
-        location
+        categoryLinks: categoryLink,
+        page: pagination.page,
+        location,
+        ...filter,
+      };
+      const dataBizlisting = await BizlistingApi.getBizlistingByCategoryLink(
+        params
       );
 
       const rawBizlistingArray = get(dataBizlisting, "data.data");
@@ -62,23 +120,9 @@ const SubCategoryPage = (props: any) => {
     };
 
     //get subCategory data
-    location && getBizListings(category, currenCategoryLink, pagination.page);
-
+    location && getBizListings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSubCategory, currenCategoryLink, location, pagination.page]);
-
-  const handleChangeSubCategory = (e) => {
-    setCurrentCategoryLink(e);
-    setCurrentSubCategory(e);
-    router.replace(
-      {
-        pathname: `/${category}/${e}`,
-      },
-      undefined,
-      { shallow: true }
-    );
-    // getDataBizlisting(category, e, page)
-  };
+  }, [filter, location, categoryLink, pagination.page]);
 
   if (loading) {
     return (
@@ -88,6 +132,55 @@ const SubCategoryPage = (props: any) => {
     );
   }
 
+  const handleFilter = (e?: IFilter) => {
+    e && setFilter({ ...filter, ...e });
+  };
+
+  const handleChangeSubCategory = (e) => {
+    router.replace(`/${category}/${e}`);
+    // getDataBizlisting(category, e, page)
+  };
+
+  const handleRemoveFilter = (keyLabel) => {
+    switch (keyLabel) {
+      case "Sort":
+        return setFilter({ ...filter, sort: undefined });
+      case "Rating":
+        return setFilter({ ...filter, minRating: 0, maxRating: undefined });
+      case "Price":
+        return setFilter({ ...filter, minPrice: 0, maxPrice: undefined });
+    }
+  };
+
+  const FilterBadge = ({ item }) =>
+    item.isShow && (
+      <Badge size="small" className={styles.filter_badge}>
+        <div className="flex gap-2">
+          {item.label}: {item.value}
+          <div onClick={() => handleRemoveFilter(item.label)}>&#x2715;</div>
+        </div>
+      </Badge>
+    );
+
+  const filterLabels = getFilterLabels(filter, currency);
+  const filterNumber = filterLabels.filter((item) => item.isShow).length;
+
+  const FilterButton = ({ className }) => (
+    <Button
+      width="fit-content"
+      size="small"
+      variant="secondary"
+      prefix={<Icon icon="filter-1" />}
+      className={className}
+      onClick={() => setShowFilter(true)}
+    >
+      Filter & Sort
+      {!!filterNumber && (
+        <span className={styles.filter_number}>{filterNumber}</span>
+      )}
+    </Button>
+  );
+
   return (
     <div>
       <SectionLayout className="pt-0">
@@ -95,40 +188,45 @@ const SubCategoryPage = (props: any) => {
           Home <Icon icon="carret-right" size={14} color="#7F859F" />
           {category}
           <Icon icon="carret-right" size={14} color="#7F859F" />
-          {subCategory}
+          {categoryLink}
         </div>
-        {isArray(listingBanners) && (
-          <Carousel responsive={homeBannerResponsive}>
-            {listingBanners.map((img, index) => (
-              <div key={index} className={styles.banner_card}>
-                <Image
-                  alt=""
-                  layout="intrinsic"
-                  src={img.imgUrl}
-                  objectFit="contain"
-                  width={500}
-                  height={200}
-                />
-              </div>
-            ))}
-          </Carousel>
-        )}
+        <Carousel
+          responsive={homeBannerResponsive}
+          isShow={isArray(bannerArray) && bannerArray.length > 0}
+        >
+          {bannerArray.map((img, index) => (
+            <div
+              key={index}
+              className={styles.banner_card}
+              onClick={() => router.push(`${img.linkActive}`)}
+            >
+              <Image
+                alt=""
+                layout="intrinsic"
+                src={img.imgUrl}
+                objectFit="contain"
+                width={500}
+                height={200}
+              />
+            </div>
+          ))}
+        </Carousel>
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap justify-between pt-3">
             <TabsHorizontal
               tablist={
-                Array.isArray(listCategoryLink)
-                  ? listCategoryLink.slice(0, 5)
+                Array.isArray(categoryLinkArray)
+                  ? categoryLinkArray.slice(0, 5)
                   : []
               }
               type="secondary-no-outline"
-              selectedTab={currentSubCategory}
+              selectedTab={categoryLink}
               className="pt-[6px]"
-              onCurrentTab={handleChangeSubCategory}
+              onChangeTab={handleChangeSubCategory}
             />
-            <Select
+            {/* <Select
               placeholder="More"
               isSearchable={false}
               width={50}
@@ -145,16 +243,17 @@ const SubCategoryPage = (props: any) => {
                 color: "#a4a8b7",
               }}
               onChange={(e) => handleChangeSubCategory(e.value)}
-            />
+            /> */}
+            <FilterButton className={styles.desktop_filter_button} />
           </div>
-          {/* <Button
-            width={180}
-            size="small"
-            text="Filter & Sort"
-            variant="secondary"
-            prefix={<Icon icon="filter-1" />}
-            onClick={() => setShowFilter(true)}
-          /> */}
+          <div className={styles.quick_filter_container}>
+            <div className={styles.scroll_box}>
+              <FilterButton className={styles.mobile_filter_button} />
+              {filterLabels.map((item) => (
+                <FilterBadge key={item.label} item={item} />
+              ))}
+            </div>
+          </div>
         </div>
       </SectionLayout>
       <SectionLayout show={isArray(listings)}>
@@ -168,7 +267,7 @@ const SubCategoryPage = (props: any) => {
                 rateNumber={item.rateNumber}
                 followerNumber={item.followerNumber}
                 price={item.price}
-                currency={(item.currency)?.toUpperCase()}
+                currency={item.currency?.toUpperCase()}
                 categories={item.categories}
                 tags={item.tags}
                 isVerified={item.isVerified}
@@ -180,7 +279,7 @@ const SubCategoryPage = (props: any) => {
         </div>
         {pagination.total > 0 && (
           <Pagination
-            limit={30}
+            limit={24}
             total={pagination.total}
             onPageChange={(selected) =>
               setPagination({ ...pagination, page: selected.selected })
@@ -188,7 +287,14 @@ const SubCategoryPage = (props: any) => {
           />
         )}
         <TopSearches />
-        {/* <Filter onClose={() => setShowFilter(false)} visible={true} /> */}
+        <Filter
+          // make Filter rerender when filter state change
+          key={JSON.stringify(filter)}
+          visible={showFilter}
+          filter={filter}
+          onClose={() => setShowFilter(false)}
+          onSubmitFilter={handleFilter}
+        />
       </SectionLayout>
     </div>
   );
@@ -196,41 +302,44 @@ const SubCategoryPage = (props: any) => {
 
 export async function getServerSideProps(context) {
   const category = context.query.category;
-  const dataBanners = await BannerApi.getBannerByCategory(category);
-  const dataCategoryLinks =
-    await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-  let categoryLinkArray: any = [
-    {
-      label: "All",
-      value: "all",
-      slug: "all",
-      icon: "https://picsum.photos/200/300",
-    },
-  ];
-  const rawListBanners = get(dataBanners, "data.data");
-  const rawListCategory = get(dataCategoryLinks, "data.data");
-  const listBannerArray =
-    Array.isArray(rawListBanners) &&
-    rawListBanners.map((item) => ({
-      imgUrl: item.image_url,
-      linkActive: item.link_active,
-    }));
-  let arrayRawListCategoryLink =
-    Array.isArray(rawListCategory) &&
-    rawListCategory.map((item) => ({
-      icon: get(item, "attributes.logo.url") || null,
-      label: get(item, "attributes.label"),
-      value: get(item, "attributes.value"),
-      slug: get(item, "attributes.value"),
-    }));
-  categoryLinkArray =
-    Array.isArray(arrayRawListCategoryLink) &&
-    categoryLinkArray.concat(arrayRawListCategoryLink);
+  const categoryLink = context.query.subCategory;
+  // const dataBanners = await BannerApi.getBannerByCategory(category);
+  // const dataCategoryLinks =
+  //   await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
+  // let categoryLinkArray: any = [
+  //   {
+  //     label: "All",
+  //     value: "all",
+  //     slug: "all",
+  //     icon: "https://picsum.photos/200/300",
+  //   },
+  // ];
+  // const rawListBanners = get(dataBanners, "data.data");
+  // const rawListCategory = get(dataCategoryLinks, "data.data");
+  // const listBannerArray =
+  //   Array.isArray(rawListBanners) &&
+  //   rawListBanners.map((item) => ({
+  //     imgUrl: item.image_url,
+  //     linkActive: item.link_active,
+  //   }));
+  // let arrayRawListCategoryLink =
+  //   Array.isArray(rawListCategory) &&
+  //   rawListCategory.map((item) => ({
+  //     icon: get(item, "attributes.logo.url") || null,
+  //     label: get(item, "attributes.label"),
+  //     value: get(item, "attributes.value"),
+  //     slug: get(item, "attributes.value"),
+  //   }));
+  // categoryLinkArray =
+  //   Array.isArray(arrayRawListCategoryLink) &&
+  //   categoryLinkArray.concat(arrayRawListCategoryLink);
   return {
     props: {
       // bizListings: listingArray,
-      listingBanners: listBannerArray,
-      listCategoryLink: categoryLinkArray,
+      category: category,
+      categoryLink: categoryLink,
+      // listingBanners: listBannerArray,
+      // listCategoryLink: categoryLinkArray,
     },
   };
 }

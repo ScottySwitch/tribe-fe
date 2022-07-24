@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { UserInforContext } from "Context/UserInforContext";
 
 import Button from "components/Button/Button";
 import Menu from "components/Menu/Menu";
@@ -8,8 +9,11 @@ import Modal from "components/Modal/Modal";
 import Tabs from "components/Tabs/Tabs";
 import { categories } from "constant";
 import { ILoginInfor } from "pages/_app";
+import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import styles from "./HamModal.module.scss";
+import { SwitchAccountsContent } from "components/TheHeader/HeaderComponents";
+import { UsersTypes } from "enums";
 
 const HamModalHeader = ({
   loginInfor,
@@ -20,18 +24,23 @@ const HamModalHeader = ({
   gotoLogin: () => void;
   gotoSignup: () => void;
 }) => {
+  const { user } = useContext(UserInforContext);
+
   return !!loginInfor.token ? (
     <div className={styles.user_profile}>
       <Image
-        src={require("public/images/avatar.png")}
+        src={user.avatar || require("public/images/avatar.png")}
         alt=""
         layout="fixed"
         width={50}
         height={50}
+        className={styles.avatar}
         objectFit="cover"
       />
       <div className={styles.user_infor}>
-        <div className={styles.name}>Anna Nhun</div>
+        <div className={styles.name}>
+          {user.first_name} {user.last_name}
+        </div>
         <div className={styles.see_profile}>See profile</div>
       </div>
     </div>
@@ -56,8 +65,16 @@ const HamModal = (props: HamModalProps) => {
   const { onSetShowHamModal, loginInfor, showHamModal } = props;
 
   const [showCategoriesModal, setShowCategoriesModal] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [showSwitchModal, setShowSwitchModal] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    setShowSwitchModal(false);
+    onSetShowHamModal(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath]);
 
   const gotoLogin = () => {
     onSetShowHamModal(false);
@@ -195,7 +212,10 @@ const HamModal = (props: HamModalProps) => {
           <Menu
             loginInfor={loginInfor}
             mobile
+            onShowHamModal={() => onSetShowHamModal(false)}
             onShowCategoriesModal={() => setShowCategoriesModal(true)}
+            onShowAuthPopup={() => setShowAuthPopup(true)}
+            onShowSwitchModal={() => setShowSwitchModal(true)}
           />
         </div>
       </Modal>
@@ -209,6 +229,20 @@ const HamModal = (props: HamModalProps) => {
       >
         <Tabs tabList={categoriesTabs} />
       </Modal>
+      <Modal
+        title="Switch account"
+        visible={showSwitchModal}
+        mobilePosition="center"
+        onClose={() => setShowSwitchModal(false)}
+      >
+        <div className="p-[10px] flex flex-col gap-5">
+          <SwitchAccountsContent />
+        </div>
+      </Modal>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </>
   );
 };

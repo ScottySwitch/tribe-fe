@@ -1,5 +1,5 @@
 import { randomId } from "utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Image from "next/image";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import ReviewSearchBox from "components/ListingSearchBox/ListingSearchBox";
@@ -13,92 +13,65 @@ import BizListingApi from "../../services/biz-listing";
 import get from "lodash/get";
 import ReviewApi from "../../services/review";
 import ContributeApi from "services/contribute";
-
-const dummyReviews = [
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-  {
-    id: randomId(),
-    title: "Evertop Hainanese Boneless Chicken",
-    images: ["https://picsum.photos/300/600"],
-    isVerified: true,
-    rateNumber: 0,
-    location: "50 Bussorah St, Singapore 199466",
-  },
-];
+import { UserInforContext } from "Context/UserInforContext";
+import { useDebounce } from "usehooks-ts";
+import { changeToSlugify } from "utils";
+import { useRouter } from "next/router";
 
 const ReviewsPage = () => {
+  const { user } = useContext(UserInforContext);
   const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [locationList, setLocationList] = useState<any>([]);
+  const [location, setLocation] = useState();
   const [listingOptions, setListingOptions] = useState<any>([]);
-  const [listingSearchResult, setListingSearchResult] = useState<any>();
+  const [searchKey, setSearchKey] = useState("");
+  const [listingSearchResult, setListingSearchResult] = useState<any>([]);
+  const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
+  const router = useRouter();
+
+  const resultType = [
+    {
+      title: "Thank you",
+      message:
+        "Thank you for sharing your experience and helping to improve this listing!",
+      textButton: "Close",
+    },
+    {
+      title: "Uh...oh...",
+      message: "Something went wrong. Let’s give it another try!",
+      textButton: "Try again",
+    },
+  ];
 
   useEffect(() => {
-    const getBizListingCountries = async () => {
-      const data = await BizListingApi.getBizListingCountries();
-      const countries = get(data, "data.data");
-      const countriesArr: any = [];
-      countries.map((country) => {
-        countriesArr.push({
-          label: country,
-          value: country,
-        });
-      });
-      setLocationList(countriesArr);
+    const getRandomListing = async () => {
+      const result = await BizListingApi.getListingBySlug("", location, 7);
+      const data = get(result, "data.data");
+      setListingSearchResult(data);
     };
-    getBizListingCountries().catch((e) => console.log(e));
+    if (listingSearchResult.length === 0) {
+      getRandomListing();
+    }
   }, []);
 
-  const handleOnLocationChange = async ({ value }: any) => {
-    const result = await BizListingApi.getBizListingByCountry(value);
-    const data = get(result, "data.data");
-    setListingOptions(data);
-  };
+  useEffect(() => {
+    const getBizListing = async () => {
+      const data = await BizListingApi.getListingBySlug(
+        debouncedSearchTerm,
+        location,
+        20
+      );
+      setListingOptions(get(data, "data.data"));
+    };
 
-  const handleOnListingSearchChange = async (option: any) => {
-    const result = await BizListingApi.getBizListingBySlug(
-      option.attributes.slug
-    );
-    const data = get(result, "data.data");
-    setListingSearchResult(data);
-  };
+    debouncedSearchTerm ? getBizListing() : setListingOptions([]);
+  }, [debouncedSearchTerm, location]);
 
   const calcRateNumber = (reviews) => {
     // TODO: rateNumber not work on FE
     const reviewsData = get(reviews, "data");
     let rateNumber = 0;
-    if (reviewsData.length > 0) {
+    if (reviewsData?.length > 0) {
       let sum = 0;
       reviewsData.map((review) => {
         sum += get(review, "attributes.rating") || 0;
@@ -111,6 +84,7 @@ const ReviewsPage = () => {
   };
 
   const handleCloseModal = () => {
+    router.push("/");
     setIsShowResultModal(false);
   };
 
@@ -149,6 +123,7 @@ const ReviewsPage = () => {
           width="100%"
           height="30%"
           layout="responsive"
+          objectFit="cover"
           alt=""
         />
         <SectionLayout
@@ -158,10 +133,12 @@ const ReviewsPage = () => {
         >
           <ReviewSearchBox
             title="Review a place you've visited"
-            locationList={locationList}
-            onLocationChange={handleOnLocationChange}
+            onListingSearchChange={(e) => {
+              setListingSearchResult([e]);
+            }}
+            onInputChange={(e) => setSearchKey(e)}
+            onLocationChange={(e) => setLocation(e.value)}
             listingOptions={listingOptions}
-            onListingSearchChange={handleOnListingSearchChange}
           />
         </SectionLayout>
       </div>
@@ -176,6 +153,7 @@ const ReviewsPage = () => {
           <div className="review-list">
             {listingSearchResult?.map((review) => (
               <ReviewCard
+                slug={get(review, "attributes.slug")}
                 key={review.id}
                 id={review.id}
                 title={get(review, "attributes.name")}
@@ -209,6 +187,7 @@ const ReviewsPage = () => {
       </SectionLayout>
 
       <ResultModal
+        resultType={resultType}
         visible={isShowResultModal}
         isSuccess={isSuccess}
         onClose={handleCloseModal}

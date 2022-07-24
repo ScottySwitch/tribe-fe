@@ -69,7 +69,6 @@ const ManageDeals = (props: ManageDealProps) => {
   }, [bizListingId]);
 
   const submitDeal = async (e) => {
-    console.log(e)
     if (e[0].isEdited) {
       const dataSend = { ...e[0] };
       await DealApi.updateDeal(e[0]?.id, dataSend);

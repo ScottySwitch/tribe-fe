@@ -141,9 +141,6 @@ const DesktopTierTable = ({
   setIsPayYearly?: (value: boolean) => void;
   isPayYearly: boolean;
 }) => {
-  useEffect(() => {
-    console.log(isPayYearly);
-  });
   const handleChangePayPrice = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     setIsPayYearly?.(!isPayYearly);
@@ -316,9 +313,6 @@ const TierTable = ({
   onSetIsPayYearly?: (e: any) => void;
   onDirectToVerification?(tier: Tiers): void;
 }) => {
-  useEffect(() => {
-    console.log("isPayYearly", isPayYearly);
-  });
   return (
     <div className={styles.tier}>
       <DesktopTierTable

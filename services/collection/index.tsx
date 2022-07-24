@@ -2,16 +2,62 @@ import Api from "../index";
 
 const qs = require("qs");
 
+const getCollectionCustom = async (data: any) => {
+  let filter: any = {};
+  let pagination: any = {};
+  if (data?.categories) {
+    filter = {
+      ...filter,
+      category: {
+        slug: data.categories,
+      },
+    };
+  }
+  if (data?.pinnedHomepage) {
+    {
+      filter.pinned_homepage = true;
+    }
+  }
+
+  if (data?.limit) {
+    pagination.pageSize = data.limit;
+  }
+  if (data?.page) {
+    pagination.page = data.page;
+  }
+
+  const params = {
+    filters: {
+      ...filter,
+    },
+    pagination: {
+      ...pagination,
+    },
+    populate: {
+      thumbnail: {
+        url: true,
+      },
+    },
+  };
+  const query = qs.stringify(params, {
+    encodeValuesOnly: true, // prettify url
+  });
+  const url = `/api/collections/?${query}`;
+  return await Api.get(url);
+};
+
 const getCollection = async (params: any) => {
   let query: any = {};
-  const {category, pinnedHomepage} = params
+  const { category, pinnedHomepage } = params;
   if (category) {
-    query.category = category
+    query.category = category;
   }
-  if (pinnedHomepage) {{
-    query.pinned_homepage = pinnedHomepage
-  }}
-  query = qs.stringify(query)
+  if (pinnedHomepage) {
+    {
+      query.pinned_homepage = pinnedHomepage;
+    }
+  }
+  query = qs.stringify(query);
   const url = `/api/collections/get-collection-custom?${query}`;
   return await Api.get(url);
 };
@@ -29,11 +75,17 @@ const getAllCollection = async () => {
   return await Api.get(url);
 };
 
-const getAllCollectionByCollectionSlug = async (collectionSlug: string) => {
+const getAllCollectionByCollectionSlug = async (
+  collectionSlug: string,
+  category?: string
+) => {
   const query = qs.stringify(
     {
       filters: {
         slug: collectionSlug,
+        category: {
+          slug: category,
+        },
       },
       populate: "*",
     },
@@ -46,6 +98,7 @@ const getAllCollectionByCollectionSlug = async (collectionSlug: string) => {
 };
 
 const CollectionApi = {
+  getCollectionCustom,
   getCollection,
   getAllCollection,
   getAllCollectionByCollectionSlug,
