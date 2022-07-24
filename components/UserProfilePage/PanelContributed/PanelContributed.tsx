@@ -159,7 +159,11 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
 
   return (
     <div className={styles.contributed_panel}>
-      {total && <div className={styles.total}>Total: {total}</div>}
+      {total && total > 0 ? (
+        <div className={styles.total}>Total: {total}</div>
+      ) : (
+        <div></div>
+      )}
       <TabsHorizontal
         selectedTab={"pending"}
         tablist={TabList}

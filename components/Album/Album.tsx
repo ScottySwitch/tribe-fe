@@ -174,7 +174,7 @@ export const Album = (props: AlbumProps) => {
         <div onClick={handlePrevThumbnail} className={styles.btn_prev}>
           <Icon icon="carret-left" size={40} color="#FFFFFF" />
         </div>
-        {/* {Array.isArray(images) && images.length > 0 && (
+        {Array.isArray(images) && images.length > 0 && (
           <Slider
             ref={refSlider1}
             {...configThumbnail}
@@ -200,7 +200,7 @@ export const Album = (props: AlbumProps) => {
               </div>
             ))}
           </Slider>
-        )} */}
+        )}
         <div onClick={handleNextThumbnail} className={styles.btn_next}>
           <Icon icon="carret-right" size={40} color="#FFFFFF" />
         </div>
@@ -209,7 +209,7 @@ export const Album = (props: AlbumProps) => {
         <div onClick={handlePrevGallery} className={galleryPrevBtnClassName}>
           <Icon icon="carret-left" size={30} color="#FFFFFF" />
         </div>
-        {/* <Slider
+        <Slider
           ref={refSlider2}
           {...configGallery}
           className={styles.slider_gallery}
@@ -229,7 +229,7 @@ export const Album = (props: AlbumProps) => {
                 )}
               </div>
             ))}
-        </Slider> */}
+        </Slider>
         <div onClick={handleNextGallery} className={galleryNextBtnClassName}>
           <Icon icon="carret-right" size={30} color="#FFFFFF" />
         </div>

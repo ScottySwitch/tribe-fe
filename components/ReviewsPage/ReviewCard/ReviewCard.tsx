@@ -15,6 +15,7 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 import { useRouter } from "next/router";
 import moment from "moment";
 import { monthOfTwoYearsOptions } from "utils";
+import { url } from "inspector";
 
 const dummyDate = [
   { label: "April 2022", value: "April 2022" },
@@ -50,6 +51,13 @@ export const ReviewForm = (props) => {
     onSubmit(dataSend);
   };
 
+  const handleAddImage = (urls: any) => {
+    console.log("urls", urls);
+    if (urls) {
+      setImages(images.concat(urls));
+    }
+  };
+
   return (
     <div className={styles.form_review}>
       <div className={styles.form_group}>
@@ -69,7 +77,11 @@ export const ReviewForm = (props) => {
           accept="images"
           type="media"
           centerIcon={<Icon icon="plus" />}
-          onChange={(urls) => setImages([...images, urls || ""])}
+          onChange={(urls) => {
+            console.log("images", images);
+            setImages([...images, ...urls]);
+          }}
+          // onChange={(urls) => handleAddImage(urls)}
         />
       </div>
       <div className={styles.form_group}>
