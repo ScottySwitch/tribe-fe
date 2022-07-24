@@ -77,7 +77,6 @@ const UserReviewCard = (props: UserReviewCardProps) => {
       [styles.divider]: isDivier,
     }
   );
-  console.log(reply, actions, replyAccepted);
   const showReply = reply
     ? actions
       ? true
