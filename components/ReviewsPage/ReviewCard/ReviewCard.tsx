@@ -145,11 +145,10 @@ const ReviewCard = (props: IReviewCardProps) => {
   const router = useRouter();
   const { user } = useContext(UserInforContext);
 
-  const isLoggedIn = user.token ? false : true
+  const isLoggedIn = user.token ? false : true;
 
   const handleReview = () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    isLoggedIn ? setExpanded(!expanded) : setShowAuthPopup(true);
+    isLoggedIn ? setShowAuthPopup(true) : setExpanded(!expanded);
   };
 
   const handleCickRating = (value: number) => {
@@ -220,10 +219,7 @@ const ReviewCard = (props: IReviewCardProps) => {
             readonly={isLoggedIn}
             initialRating={rating}
             placeholderRating={rateNumber}
-            onChange={(value) => {
-              console.log("click rating");
-              handleCickRating(value);
-            }}
+            onChange={(value) => handleCickRating(value)}
           />
           {expanded ? (
             <div className={styles.cta_click}>{ratingType}</div>
