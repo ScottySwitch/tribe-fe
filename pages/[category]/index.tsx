@@ -61,22 +61,8 @@ const Category = (props: any) => {
   const [categoryLinkArray, setCategoryLinkArray] = useState<IType[]>([]);
   const { user } = useContext(UserInforContext);
   const { location } = user;
-
   useEffect(() => {
-    const getData = async (categoryId, page) => {
-      const dataQuery = await BizListingApi.getListingCustom({
-        country: location,
-        categories: categoryId,
-        page: page,
-        limit: 28,
-      });
-      const listings = formatBizlistingArray(get(dataQuery, "data.data"));
-      setListingArray(listings);
-      setPagination({
-        ...pagination,
-        total: get(dataQuery, "data.meta.pagination.total"),
-      });
-
+    const getData = async (categoryId) => {
       const dataExclusiveDeal = await BizListingApi.getListingCustom({
         categories: categoryId,
         isExclusive: true,
@@ -169,10 +155,28 @@ const Category = (props: any) => {
         };
         break;
     }
-
+    getData(category);
     setCategoryInfor(defaultCategoryInfor);
-    location && getData(category, pagination.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const getDataListing = async (categoryId, page) => {
+      const dataQuery = await BizListingApi.getListingCustom({
+        country: location,
+        categories: categoryId,
+        page: page,
+        limit: 28,
+      });
+      const listings = formatBizlistingArray(get(dataQuery, "data.data"));
+      setListingArray(listings);
+      setPagination({
+        ...pagination,
+        total: get(dataQuery, "data.meta.pagination.total"),
+      });
+      window.scrollTo(0, 1800);
+    };
+    location && getDataListing(category, pagination.page);
   }, [pagination.page, category, location]);
 
   const handleSelectSubCategory = (slug) =>
@@ -188,7 +192,7 @@ const Category = (props: any) => {
             src={categoryInfor.bannerSrc}
             alt=""
             layout="fill"
-            objectFit="contain"
+            objectFit="cover"
             className={`${styles.collection_banner_img} ${styles.banner_desktop}`}
           />
         )}
@@ -197,7 +201,7 @@ const Category = (props: any) => {
             alt=""
             src={categoryInfor.bannerMobileSrc}
             layout="fill"
-            objectFit="contain"
+            objectFit="cover"
             className={`${styles.collection_banner_img} ${styles.banner_mobile}`}
           />
         )}

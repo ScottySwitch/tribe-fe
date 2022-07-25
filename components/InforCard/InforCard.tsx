@@ -85,70 +85,68 @@ const InforCard = (props: InforCardProps) => {
           <Icon icon="verified-tag" className={styles.verified_icon} />
         </div>
       )}
-      <div className="h-full">
-        <div className={styles.cover}>
-          {isFavourited && (
-            <div className={styles.favourited} onClick={onFavouritedClick}>
-              <Icon icon="like-solid" color="#e60112" />
-            </div>
-          )}
-          {imgUrl && (
-            <Image
-              src={src}
-              alt=""
-              layout="fill"
-              objectFit="cover"
-              objectPosition="center"
-              onErrorCapture={() => {
-                setSrc("https://picsum.photos/200/300");
-              }}
-            />
-          )}
-        </div>
-        <div className={styles.details}>
-          <div className={styles.title}>{title}</div>
-          <div className={styles.content}>
-            <div>
-              {!!rate && (
-                <div className={styles.reviews}>
-                  <Icon icon="red-star" size={14} />
-                  <div className={styles.rate}>{rate}</div>
-                  <div>({rateNumber})</div>
-                  <Icon icon="dot" size={10} className={styles.dot} />
-                </div>
-              )}
-              {!!followerNumber && <div>{followerNumber} followers</div>}
-              {description && (
-                <div className={styles.description}>{description}</div>
-              )}
-            </div>
-            <div>
-              {Array.isArray(categories) && (
-                <div className={styles.categories}>
-                  {categories.map((cate) => (
-                    <div key={cate} className={styles.category}>
-                      {cate}
-                    </div>
-                  ))}
-                </div>
-              )}
-              {(price || tags) && <div className={styles.break} />}
-            </div>
+      <div className={styles.cover}>
+        {isFavourited && (
+          <div className={styles.favourited} onClick={onFavouritedClick}>
+            <Icon icon="like-solid" color="#e60112" />
           </div>
-          <div className={styles.footer}>
-            {price && (
-              <div className={styles.price}>
-                From{" "}
-                <span>
-                  {price}
-                  {` ` + currency}
-                </span>
+        )}
+        {imgUrl && (
+          <Image
+            src={src}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            onErrorCapture={() => {
+              setSrc("https://picsum.photos/200/300");
+            }}
+          />
+        )}
+      </div>
+      <div className={styles.details}>
+        <div className={styles.title}>{title}</div>
+        <div className={styles.content}>
+          <div>
+            {!!rate && (
+              <div className={styles.reviews}>
+                <Icon icon="red-star" size={14} />
+                <div className={styles.rate}>{rate}</div>
+                <div>({rateNumber})</div>
+                <Icon icon="dot" size={10} className={styles.dot} />
               </div>
             )}
-            {sortingTags.length > 0 && (
-              <div className={styles.tags}>{renderSortingTags()}</div>
+            {followerNumber && <div>{followerNumber} followers</div>}
+            {description && (
+              <div className={styles.description}>{description}</div>
             )}
           </div>
+          <div>
+            {Array.isArray(categories) && (
+              <div className={styles.categories}>
+                {categories.map((cate) => (
+                  <div key={cate} className={styles.category}>
+                    {cate}
+                  </div>
+                ))}
+              </div>
+            )}
+            {(price || tags) && <div className={styles.break} />}
+          </div>
+        </div>
+        <div className={styles.footer}>
+          {price && (
+            <div className={styles.price}>
+              From{" "}
+              <span>
+                {price}
+                {` ` + currency}
+              </span>
+            </div>
+          )}
+          {sortingTags.length > 0 && (
+            <div className={styles.tags}>{renderSortingTags()}</div>
+          )}
         </div>
       </div>
     </div>
