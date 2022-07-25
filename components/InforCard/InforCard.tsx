@@ -114,9 +114,9 @@ const InforCard = (props: InforCardProps) => {
                 <div className={styles.rate}>{rate}</div>
                 <div>({rateNumber})</div>
                 <Icon icon="dot" size={10} className={styles.dot} />
-                <div>{followerNumber} followers</div>
               </div>
             )}
+            {followerNumber && <div>{followerNumber} followers</div>}
             {description && (
               <div className={styles.description}>{description}</div>
             )}
@@ -137,11 +137,7 @@ const InforCard = (props: InforCardProps) => {
         <div className={styles.footer}>
           {price && (
             <div className={styles.price}>
-              From{" "}
-              <span>
-                {price}
-                {currency}
-              </span>
+              From <span>{price + " " + currency}</span>
             </div>
           )}
           {sortingTags.length > 0 && (

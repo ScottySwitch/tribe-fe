@@ -1,17 +1,22 @@
+import React, { useEffect, useState } from "react";
+import { get } from "lodash";
+
 import Break from "components/Break/Break";
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import InforCard from "components/InforCard/InforCard";
 import Popover from "components/Popover/Popover";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { bizInformationDefaultFormData, getAddItemsFields } from "constant";
-import React, { useEffect, useState } from "react";
-import { randomId } from "utils";
+import { getAddItemsFields } from "constant";
 import AddItems from "./AddItems/AddItems";
-import styles from "./TabContent.module.scss";
 import ProductApi from "../../../services/product";
-import { get } from "lodash";
 import Modal, { ModalFooter } from "../../Modal/Modal";
+import { Categories } from "enums";
+
+import styles from "./TabContent.module.scss";
+import useCheckRevision from "hooks/useCheckRevision";
+import { useRouter } from "next/router";
+import Loader from "components/Loader/Loader";
 
 interface ProductListingProps {
   bizListingId?: number | string;
@@ -26,47 +31,54 @@ enum ProductListingScreens {
 
 const ProductListing = (props: ProductListingProps) => {
   const { isPaid, bizListingId } = props;
-  const [formData, setFormData] = useState(bizInformationDefaultFormData);
+
+  const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<any[]>([]);
-  const [screen, setScreen] = useState<ProductListingScreens>(
-    ProductListingScreens.LIST
-  );
-  const { category } = formData;
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const [deleteModalProductId, setDeleteModalProductId] = useState<number>(0);
   const [productList, setProductList] = useState<any>();
+  const [screen, setScreen] = useState<ProductListingScreens>(
+    ProductListingScreens.LIST
+  );
 
-  const getProductsByBizListingId = async (
-    bizListingId: number | string | undefined
-  ) => {
-    const result = await ProductApi.getProductsByBizListingId(
-      bizListingId,
-      "is_pinned:desc"
-    );
-    if (get(result, 'data.data')) {
-      let rawListing = get(result, 'data.data') || [];
-      const listingArray = rawListing.map((item) => ({
-        name: get(item,'attributes.name'),
-        is_revision: get(item,'attributes.is_revision'),
-        parent_id: get(item,'attributes.parent_id'),
-        price: get(item,'attributes.price'),
-        id: get(item,'attributes.id'),
-        description: get(item,'attributes.description'),
-        images: get(item,'attributes.images'),
-        imgUrl: get(item,'attributes, "images[0]")') || "https://picsum.photos/200/300",
-        discount: get(item,'attributes.discount_percent'),
-        tags: get(item,'attributes.tags'),
-        websiteUrl: get(item,'attributes.website_url'),
-        klookUrl: get(item,'attributes.klook_url'),
-        isEdited: false,
-      }));
-      setProductList(listingArray);
-    }
-  };
+  const { query } = useRouter();
+  const { listingSlug }: any = query;
+  const { isRevision, revisionId } = useCheckRevision(loading, listingSlug);
 
   useEffect(() => {
-    getProductsByBizListingId(bizListingId);
-  }, [bizListingId]);
+    const getProductsByBizListingId = async (
+      bizListingId: number | string | undefined
+    ) => {
+      const result = await ProductApi.getProductsByBizListingId(
+        bizListingId,
+        "is_pinned:desc"
+      );
+      if (get(result, "data.data")) {
+        let rawListing = get(result, "data.data") || [];
+        const listingArray = rawListing.map((item) => ({
+          name: get(item, "attributes.name"),
+          is_revision: get(item, "attributes.is_revision"),
+          parent_id: get(item, "attributes.parent_id"),
+          price: get(item, "attributes.price"),
+          id: get(item, "attributes.id"),
+          description: get(item, "attributes.description"),
+          images: get(item, "attributes.images"),
+          imgUrl:
+            get(item, 'attributes, "images[0]")') ||
+            "https://picsum.photos/200/300",
+          discount: get(item, "attributes.discount_percent"),
+          tags: get(item, "attributes.tags"),
+          websiteUrl: get(item, "attributes.website_url"),
+          klookUrl: get(item, "attributes.klook_url"),
+          isEdited: false,
+        }));
+        setProductList(listingArray);
+      }
+      setLoading(false);
+    };
+
+    loading && getProductsByBizListingId(bizListingId);
+  }, [bizListingId, loading]);
 
   const submitProduct = async (e: any) => {
     if (e[0].isEdited) {
@@ -80,20 +92,22 @@ const ProductListing = (props: ProductListingProps) => {
       };
       await ProductApi.createProduct(dataSend).then((result) => {
         const newProudct = {
-          name: get(result,'data.data.attributes.name'),
-          is_revision: get(result,'data.data.attributes.is_revision'),
-          parent_id: get(result,'data.data.attributes.parent_id'),
-          price: get(result,'data.data.attributes.price'),
-          id: get(result,'data.data.attributes.id'),
-          description: get(result,'data.data.attributes.description'),
-          images: get(result,'data.data.attributes.images'),
-          imgUrl: get(result,'data.data.attributes, "images[0]")') || "https://picsum.photos/200/300",
-          discount: get(result,'data.data.attributes.discount_percent'),
-          tags: get(result,'data.data.attributes.tags'),
-          websiteUrl: get(result,'data.data.attributes.website_url'),
-          klookUrl: get(result,'data.data.attributes.klook_url'),
+          name: get(result, "data.data.attributes.name"),
+          is_revision: get(result, "data.data.attributes.is_revision"),
+          parent_id: get(result, "data.data.attributes.parent_id"),
+          price: get(result, "data.data.attributes.price"),
+          id: get(result, "data.data.attributes.id"),
+          description: get(result, "data.data.attributes.description"),
+          images: get(result, "data.data.attributes.images"),
+          imgUrl:
+            get(result, 'data.data.attributes, "images[0]")') ||
+            "https://picsum.photos/200/300",
+          discount: get(result, "data.data.attributes.discount_percent"),
+          tags: get(result, "data.data.attributes.tags"),
+          websiteUrl: get(result, "data.data.attributes.website_url"),
+          klookUrl: get(result, "data.data.attributes.klook_url"),
           isEdited: false,
-        }
+        };
         setProductList([...productList, newProudct]);
       });
     }
@@ -112,7 +126,7 @@ const ProductListing = (props: ProductListingProps) => {
     await ProductApi.updateProduct(e.id, {
       is_pinned: e.is_pinned || false,
     });
-    await getProductsByBizListingId(bizListingId);
+    setLoading(true);
   };
 
   const PopoverContent = ({ item }) => (
@@ -136,6 +150,10 @@ const ProductListing = (props: ProductListingProps) => {
       </div>
     </React.Fragment>
   );
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <React.Fragment>
@@ -180,8 +198,7 @@ const ProductListing = (props: ProductListingProps) => {
           {productList &&
             productList.map((item: any, index) => {
               const imgUrl =
-                get(item, "images[0]") ||
-                require("public/images/avatar.svg");
+                get(item, "images[0]") || require("public/images/avatar.svg");
               return (
                 <div key={item.id} className={styles.info_card_container}>
                   <InforCard
@@ -199,10 +216,7 @@ const ProductListing = (props: ProductListingProps) => {
                     className={styles.pin}
                     onClick={() => handlePinToTop(item)}
                   >
-                    <Icon
-                      icon="pin"
-                      color={item.is_pinned || "white"}
-                    />
+                    <Icon icon="pin" color={item.is_pinned || "white"} />
                   </div>
                 </div>
               );
@@ -220,7 +234,7 @@ const ProductListing = (props: ProductListingProps) => {
           isEdit={screen === ProductListingScreens.EDIT}
           isPaid={isPaid}
           itemList={selectedItem}
-          placeholders={getAddItemsFields(category).placeholder}
+          placeholders={getAddItemsFields(Categories.BUY).placeholder}
           onCancel={() => setScreen(ProductListingScreens.LIST)}
           onSubmit={(e) => {
             setScreen(ProductListingScreens.LIST);

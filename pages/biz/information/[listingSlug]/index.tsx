@@ -30,7 +30,6 @@ const BizInformation = (props) => {
   const [isPaid, setIsPaid] = useState(true);
   const [listing, setListing] = useState(defaultAddlistingForm);
   const [isPayYearly, setIsPayYearly] = useState(false);
-  const [revisionId, setRevisionId] = useState();
 
   const informationList = isPaid ? paidInformationList : freeInformationList;
   const [selectedTab, setSelectedTab] = useState(informationList[0].label);
@@ -39,13 +38,6 @@ const BizInformation = (props) => {
   const { user, deleteUser } = useContext(UserInforContext);
 
   useEffect(() => {
-    const checkRevision = async () => {
-      const data = await BizListingApi.getInfoOwnerBizListingBySlug(
-        listingSlug
-      );
-      setRevisionId(get(data, "data.data[0].id"));
-    };
-
     const getListingData = async () => {
       const data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
 
@@ -65,7 +57,6 @@ const BizInformation = (props) => {
 
     if (listingSlug && isOwned) {
       getListingData();
-      checkRevision();
     } else {
       router.push("/");
     }
@@ -73,7 +64,7 @@ const BizInformation = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, loading]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data) => { 
     listing.id &&
       (await BizListing.updateBizListing(listing.id, {
         ...listing,
@@ -102,13 +93,7 @@ const BizInformation = (props) => {
       case InformationList.PRODUCT_LISTING:
         return <ProductListing isPaid={isPaid} bizListingId={listing.id} />;
       case InformationList.PHOTOS_VIDEOS:
-        return (
-          <PhotosVideos
-            isPaid={isPaid}
-            listing={listing}
-            revisionId={revisionId}
-          />
-        );
+        return <PhotosVideos />;
       case InformationList.MANAGE_DEALS:
         return <ManageDeals bizListingId={listing.id} />;
       case InformationList.ANALYTICS:
