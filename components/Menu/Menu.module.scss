@@ -29,6 +29,6 @@
 
 @media screen and (max-width: $mobile) {
   .switch_account_button {
-    display: flex;
+    display: flex !important;
   }
 }

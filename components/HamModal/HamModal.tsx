@@ -215,7 +215,10 @@ const HamModal = (props: HamModalProps) => {
             onShowHamModal={() => onSetShowHamModal(false)}
             onShowCategoriesModal={() => setShowCategoriesModal(true)}
             onShowAuthPopup={() => setShowAuthPopup(true)}
-            onShowSwitchModal={() => setShowSwitchModal(true)}
+            onShowSwitchModal={() => {
+              onSetShowHamModal(false)
+              setShowSwitchModal(true);
+            }}
           />
         </div>
       </Modal>
