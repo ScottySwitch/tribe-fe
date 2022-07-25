@@ -8,7 +8,7 @@ import Question from "components/Question/Question";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import Select from "components/Select/Select";
 import SelectInput from "components/SelectInput/SelectInput";
-import { countryList, formattedAreaCodes, socialMediaOptions } from "constant";
+import { countryList, locations, formattedAreaCodes, socialMediaOptions } from "constant";
 import Image from "next/image";
 import { IAddListingForm } from "pages/add-listing";
 import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils";
@@ -101,7 +101,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
                 required
                 label="Country"
                 placeholder="Singapore"
-                options={countryList}
+                options={locations}
                 value={getValues("country")}
                 onChange={(e) => {
                   setCountry(e.value);
@@ -127,7 +127,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
               required
               label="Country"
               placeholder="Singapore"
-              options={countryList}
+              options={locations}
               value={getValues("country")}
               onChange={(e) => {
                 setCountry(e.value);
@@ -151,6 +151,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
           />
           <br />
           <Input
+            type="email"
             register={register("email")}
             size="large"
             placeholder="Email (optional)"
