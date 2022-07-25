@@ -26,6 +26,11 @@
     font-weight: $font-semi-bold;
     z-index: 10;
   }
+
+  .skeleton {
+    height: 350px;
+    width: 270px;
+  }
 }
 
 // @media screen and (max-width: $big-tablet) {

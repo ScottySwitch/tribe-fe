@@ -53,7 +53,7 @@ const Header = (props: HeaderProps) => {
       const data = await bizListingApi.getListingBySlug(
         debouncedSearchTerm,
         location,
-        2
+        4
       );
       setBizListing(get(data, "data.data"));
     };

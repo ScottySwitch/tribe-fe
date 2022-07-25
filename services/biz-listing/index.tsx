@@ -45,7 +45,14 @@ const getListingBySlug = async (
 ) => {
   const params = {
     filters: {
-      slug: { $contains: search || "" },
+      $or: [
+        {
+          name: { $contains: search || "" },
+        },
+        {
+          slug: { $contains: search || "" },
+        },
+      ],
       country: country,
     },
     pagination: {
@@ -228,7 +235,7 @@ const getOwnerListingRoleByUserId = async (userId: any) => {
 };
 
 const getBizListingBySlug = async (bizListingSlug: any) => {
-  console.log('dwwd')
+  console.log("dwwd");
   const query = qs.stringify(
     {
       filters: {
