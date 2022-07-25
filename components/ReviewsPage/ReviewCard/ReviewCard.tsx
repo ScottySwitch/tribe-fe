@@ -52,6 +52,10 @@ export const ReviewForm = (props) => {
     onSubmit(dataSend);
   };
 
+  const checkDisabled = (rating: number, checkbox: boolean) => {
+    return rating && rating > 0 && checkbox ? true : false;
+  };
+
   return (
     <div className={styles.form_review}>
       <div className={styles.form_group}>
@@ -97,7 +101,7 @@ export const ReviewForm = (props) => {
         width="auto"
         className={styles.btn_submit}
         onClick={handleSubmit}
-        disabled={!checkbox}
+        disabled={!checkDisabled(rating, checkbox)}
       />
     </div>
   );

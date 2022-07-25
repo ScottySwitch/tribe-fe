@@ -223,7 +223,7 @@ export const formatBizlistingArray = (rawListing) =>
         categories: arrayLabelCategory(get(item, "attributes.categories.data")),
         price: get(item, "attributes.min_price") || "",
         currency: get(item, "attributes.currency") || "",
-        rate: calcRateNumber(get(item, "attributes.tags.data.length")),
+        rate: get(item, "attributes.rating"),
         rateNumber: get(item, "attributes.tags.data.length"),
       }))
     : [];
