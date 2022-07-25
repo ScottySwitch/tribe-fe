@@ -250,7 +250,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setDealList(dealArray);
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
-        if (listing.expiration_date) {
+        // if (listing.expiration_date) {
+        if (get(listing, "biz_invoices.length") > 0) {
           setIsPaid(isPaidUser(listing.expiration_date));
         } else {
           setIsPaid(false);
