@@ -218,7 +218,7 @@ export const formatBizlistingArray = (rawListing) =>
         address: get(item, "attributes.address"),
         country: get(item, "attributes.country"),
         description: get(item, "attributes.description"),
-        followerNumber: get(item, "attributes.user_listing_follows"),
+        followerNumber: get(item, "attributes.user_listing_follows.length"),
         tags: arrayLabeltags(get(item, "attributes.tags.data")),
         categories: arrayLabelCategory(get(item, "attributes.categories.data")),
         price: get(item, "attributes.min_price") || "",
