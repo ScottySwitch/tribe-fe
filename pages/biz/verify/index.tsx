@@ -263,10 +263,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
-      console.log(
-        "expiration_date",
-        expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z"
-      );
       await bizListingApi.updateBizListing(userInfo.biz_id, {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
       });

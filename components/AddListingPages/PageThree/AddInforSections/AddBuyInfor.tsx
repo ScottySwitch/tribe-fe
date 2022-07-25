@@ -188,6 +188,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             <PreviewValue valueKey="tags" value={getValues("productBrands")} />
             <br />
             <Button
+              disabled={!(get(productBrands,"length") > 0)}
               text="Edit product"
               width="fit-content"
               size="small"
