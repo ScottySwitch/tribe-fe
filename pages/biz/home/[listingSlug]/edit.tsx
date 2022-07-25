@@ -3,7 +3,8 @@ import get from "lodash/get";
 import moment from "moment";
 import parseISO from "date-fns/parseISO";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import VideoThumbnail from "react-video-thumbnail";
 
 import Loader from "components/Loader/Loader";
 import Icon from "components/Icon/Icon";
@@ -37,15 +38,19 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
+import { isPaidUser } from "utils";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 
 import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
 import ReportApi from "../../../../services/report";
 import { censoredPhoneNumber, isArray, isEmptyObject } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
+  const { user } = useContext(UserInforContext);
+
   const [userInfo, setUserInfo] = useState<any>({});
   const [category, setCategory] = useState(Categories.EAT);
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
@@ -73,12 +78,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const [bizListing, setBizListing] = useState<any>({});
   const [listingImages, setListingImages] = useState<any>([]);
-  const [logo, setLogo] = useState<any>([]);
+  const [logo, setLogo] = useState<any>([user.avatar]);
 
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
-  
 
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
   const [showResultModal, setShowResultModal] = useState<boolean>(false);
@@ -198,17 +202,22 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         const tagArray = formatOptions(rawTags);
 
         const rawReview = listing.reviews || [];
-        const reviewArray = rawReview.map((item) => ({
-          id: item.id,
-          content: item.content,
-          rating: item.rating,
-          images: item.images,
-          reply_reviews: item.reply_reviews,
-          date_create_reply: item.date_create_reply,
-          user: item.user,
-          visited_date: item.visited_date,
-        }));
-
+        let reviewArray: any = [];
+        rawReview.map((item) => {
+          if (!item.is_revision) {
+            reviewArray.push({
+              id: item.id,
+              content: item.content,
+              rating: item.rating,
+              images: item.images,
+              reply_reviews: item.reply_reviews,
+              date_create_reply: item.date_create_reply,
+              user: item.user,
+              visited_date: item.visited_date,
+              reply_accepted: item?.reply_accepted,
+            });
+          }
+        });
         const rawTagOptions = listing.tag_options || [];
         const tagOptionsArray = rawTagOptions.map((item) => ({
           label: item.label,
@@ -241,18 +250,17 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setDealList(dealArray);
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
-        if (bizInvoicesArray.length > 0) {
-          setIsPaid(true);
-          setPhoneNumber(rawPhoneNumber);
+        if (listing.expiration_date) {
+          setIsPaid(isPaidUser(listing.expiration_date));
         } else {
-          setPhoneNumber(defaultPhone);
+          setIsPaid(false);
         }
       }
-      setIsLoading(false)
+      setIsLoading(false);
     };
 
     if (listingSlug) {
-      setIsLoading(true)
+      setIsLoading(true);
       getListingData(listingSlug);
     }
   }, [listingSlug, isViewPage]);
@@ -288,6 +296,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     const indexReviewSelected = newReviewArray.findIndex(
       (item: any) => item.id === review.id
     );
+    newReviewArray[indexReviewSelected].isEdit = true;
     newReviewArray[indexReviewSelected].reply_reviews = reply;
     newReviewArray[indexReviewSelected].date_create_reply = new Date();
     setReviews(newReviewArray);
@@ -360,9 +369,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         is_verified: false,
         logo: logo,
         is_accepted: false,
+        expiration_date: bizListing.expiration_date,
         products: currentItemList.map((item) => item.id) || [],
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
+        reviews: reviews.map((item) => item.id) || [],
       }).then((response) => {
         console.log(response);
       });
@@ -387,6 +398,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         is_verified: false,
         is_accepted: false,
         logo: logo,
+        expiration_date: bizListing.expiration_date,
         products: currentItemList.map((item) => item.id) || [],
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
@@ -526,15 +538,18 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     //API Reviews
     await Promise.all(
       reviews.map(async (item) => {
-        const updateData = {
-          images: item.images,
-          visited_date: item.visited_date,
-          rating: item.rating,
-          content: item.content,
-          reply_reviews: item.reply_reviews,
-          date_create_reply: item.date_create_reply,
-        };
-        await ReviewApi.updateReviews(item.id, updateData);
+        if (item.isEdit) {
+          const updateData = {
+            images: item.images,
+            visited_date: item.visited_date,
+            rating: item.rating,
+            content: item.content,
+            reply_reviews: item.reply_reviews,
+            date_create_reply: item.date_create_reply,
+            reply_accepted: false,
+          };
+          await ReviewApi.updateReviews(item.id, updateData);
+        }
       })
     );
     window.location.reload();
@@ -546,7 +561,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center mt-20">
+      <div className="w-full flex justify-center items-center my-20">
         <Loader />
       </div>
     );

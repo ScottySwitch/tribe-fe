@@ -1,12 +1,6 @@
+import React, { useContext, useEffect, useState } from "react";
 import { get } from "lodash";
 import Image from "next/image";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 import { useRouter } from "next/router";
 import { useDebounce } from "usehooks-ts";
 
@@ -14,18 +8,16 @@ import useTrans from "hooks/useTrans";
 import Icon from "components/Icon/Icon";
 import Select from "components/Select/Select";
 import { Categories, UserInfor } from "./HeaderComponents";
-
-import styles from "./Header.module.scss";
 import { categories, languages, locations } from "constant";
-import useLocation from "hooks/useLocation";
 import ListingSearch, {
-  formatListingResultOption,
   ListingMenuFooter,
 } from "components/ListingSearch/ListingSearch";
 import bizListingApi from "services/biz-listing";
 import { changeToSlugify } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import AuthApi from "services/auth";
+
+import styles from "./Header.module.scss";
 
 export interface HeaderProps {
   id: string;
@@ -48,17 +40,10 @@ const Header = (props: HeaderProps) => {
   const { user, updateUser } = useContext(UserInforContext);
   const { location } = user;
 
-
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const getMe = async () => {
       await AuthApi.getMe();
-      const dataOwnerListing = await bizListingApi.getOwnerBizListing(userInfo.id);
-      userInfo = {
-        ...userInfo,
-        owner_listings: dataOwnerListing.data.data,
-      };
-      localStorage.setItem("user", JSON.stringify(userInfo));
     };
     userInfo && userInfo.token && getMe().catch((e) => console.log(e));
   }, [router]);
@@ -122,7 +107,7 @@ const Header = (props: HeaderProps) => {
     get(item, "attributes.slug") &&
       router.push(`/biz/home/${item.attributes.slug}`);
   };
-
+  console.log("locale", locale);
   return (
     <div id={id} className={styles.header}>
       <div className={styles.header_top}>

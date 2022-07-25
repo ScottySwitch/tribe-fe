@@ -46,7 +46,7 @@ interface TabsHorizontalProps {
     | "primary-outline";
   tablist?: ITab[];
   selectedTab?: string | number;
-  onCurrentTab?: (e) => void;
+  onChangeTab?: (e) => void;
 }
 
 const TabsHorizontal = (props: TabsHorizontalProps) => {
@@ -55,7 +55,7 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
     selectedTab,
     type = "secondary-no-outline",
     tablist = [],
-    onCurrentTab = () => "",
+    onChangeTab = () => "",
   } = props;
 
   const [currentTab, setCurrentTab] = useState<string | number | undefined>(
@@ -79,7 +79,7 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
 
   const handleSelectedTab = (e) => {
     setCurrentTab(e);
-    onCurrentTab(e);
+    onChangeTab(e);
   };
 
   return (

@@ -13,6 +13,17 @@
     display: none !important;
   }
 
+  .video {
+    height: 100%;
+    width: 100%;
+    background: black;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 0px;
+    position: absolute;
+    inset: 0px;
+  }
+
   .image,
   .input,
   .edit_banner_add_more_btn {
@@ -193,7 +204,7 @@
 
 .loader {
   display: none;
-  z-index: 4;
+  z-index: 3;
   border: 5px solid #f3f3f3; /* Light grey */
   border-top: 5px solid $bg-500; /* Blue */
   border-radius: 50%;
@@ -228,7 +239,7 @@
   position: relative;
 
   .edit_banner_add_more_btn {
-    z-index: 4;
+    z-index: 3;
     display: block;
     border-radius: 10px;
     width: max-content;

@@ -4,9 +4,7 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import TopSearches from "components/TopSearches/TopSearches";
 import CompleteProfileCard from "components/UserProfilePage/CompleteProfileCard/CompleteProfileCard";
 import CoverImage from "components/UserProfilePage/CoverImage/CoverImage";
-import PanelAbout, {
-  UserPropsData,
-} from "components/UserProfilePage/PanelAbout/PanelAbout";
+import PanelAbout from "components/UserProfilePage/PanelAbout/PanelAbout";
 import { UserInforContext } from "Context/UserInforContext";
 import ContributedPanel from "components/UserProfilePage/PanelContributed/PanelContributed";
 import FavouriedPanel from "components/UserProfilePage/PanelFavouried/PanelFavouried";
@@ -26,7 +24,7 @@ import { get } from "lodash";
 import styles from "styles/Profile.module.scss";
 import FollowApi from "services/user-listing-follow";
 
-const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
+const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
   const { name, imageUrl } = props;
   return (
     <div className={styles.group_heading_one}>
@@ -34,7 +32,7 @@ const GroupHeadingOne = (props: { name: string; imageUrl: string }) => {
         <div className={styles.avatar}>
           <Image
             className={styles.avatar_img}
-            src={imageUrl || "avatar_default"}
+            src={imageUrl || require("public/images/page-avatar.png")}
             width="100%"
             height="100%"
             layout="responsive"
@@ -60,11 +58,11 @@ const GroupHeadingTwo = (props: {
 }) => {
   const { contributions, following, points } = props;
   const router = useRouter();
-  const [numberFollow, setNumberFollow] = useState<number>(0)
+  const [numberFollow, setNumberFollow] = useState<number>(0);
   useEffect(() => {
     const getData = async () => {
       const dataFollow = await FollowApi.getFollowByUserId();
-      setNumberFollow(get(dataFollow, 'data.meta.pagination.total'))
+      setNumberFollow(get(dataFollow, "data.meta.pagination.total"));
     };
     getData();
   }, []);
@@ -107,28 +105,17 @@ const GroupHeadingTwo = (props: {
 };
 
 const ProfilePage = () => {
-  const { user } = useContext(UserInforContext);
-  const router = useRouter();
-  const { slug } = router.query;
-  const [userInfor, setUserInfo] = useState<UserPropsData>({
-    email: "",
-    phone_number: "",
-    country: "",
-    gender: "male",
-    educate_level: "",
-    industry: "",
-    birthday: "",
-  });
-
   const [selectedTab, setSelectedTab] = useState<string>();
+
+  const router = useRouter();
+  const { user } = useContext(UserInforContext);
+  const { slug } = router.query;
 
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-
     if (!userInfo || !userInfo?.token) {
       router.push("/");
     }
-
     switch (slug) {
       case ProfileTabs.SAVED_DEALS:
         setSelectedTab(ProfileTabs.SAVED_DEALS);
@@ -140,9 +127,8 @@ const ProfilePage = () => {
         setSelectedTab(ProfileTabs.ABOUT);
         break;
     }
-
-    setUserInfo(userInfo);
-  }, [router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath]);
 
   const TabList: ITab[] = [
     {
@@ -158,12 +144,12 @@ const ProfilePage = () => {
     {
       label: ProfileTabs.CONTRIBUTED,
       value: ProfileTabs.CONTRIBUTED,
-      content: <ContributedPanel userInfor={userInfor} />,
+      content: <ContributedPanel userInfor={user} />,
     },
     {
       label: ProfileTabs.ABOUT,
       value: ProfileTabs.ABOUT,
-      content: <PanelAbout data={userInfor} />,
+      content: <PanelAbout data={user} />,
     },
   ];
 
@@ -180,13 +166,10 @@ const ProfilePage = () => {
         containerClassName={styles.section_profile_container}
       >
         <GroupHeadingOne
-          name={`${userInfor.first_name} ${userInfor.last_name || ""}`}
-          imageUrl={userInfor.avatar || "https://picsum.photos/218"}
+          name={`${user.first_name} ${user.last_name || ""}`}
+          imageUrl={user.avatar}
         />
-        <GroupHeadingTwo
-          contributions={0}
-          points={0}
-        />
+        <GroupHeadingTwo contributions={0} points={0} />
         <TabsHorizontal
           selectedTab={selectedTab}
           tablist={TabList}

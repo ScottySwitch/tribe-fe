@@ -77,14 +77,24 @@ interface ListingSearchProps extends SelectProps {
   isClaimListing?: boolean;
 }
 const ListingSearch = (props: ListingSearchProps) => {
-  const { onChange, onInputChange, listingOptions, menuFooter, isClaimListing = false,...rest } =
-    props;
+  const {
+    onChange,
+    onInputChange,
+    listingOptions,
+    menuFooter,
+    isClaimListing = false,
+    ...rest
+  } = props;
 
   const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const checkLogin = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.token ? (isClaimListing ? onChange?.(YesNo.NO) : Router.push(`/add-listing`)) : setShowAuthPopup(true);
+    userInfo.token
+      ? isClaimListing
+        ? onChange?.(YesNo.NO)
+        : Router.push(`/add-listing`)
+      : setShowAuthPopup(true);
   };
   // router.push('/add-listing')
 
@@ -103,10 +113,7 @@ const ListingSearch = (props: ListingSearchProps) => {
         {...rest}
       />
       <AuthPopup
-        onClose={() => {
-          console.log("close");
-          setShowAuthPopup(false);
-        }}
+        onClose={() => setShowAuthPopup(false)}
         visible={showAuthPopup}
       />
     </React.Fragment>

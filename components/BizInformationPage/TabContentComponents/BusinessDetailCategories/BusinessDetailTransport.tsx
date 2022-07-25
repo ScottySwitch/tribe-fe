@@ -11,6 +11,7 @@ import SectionLayout from "components/SectionLayout/SectionLayout";
 import { fakeSubCateList } from "constant";
 import { IAddListingForm } from "pages/add-listing";
 import React, { useState } from "react";
+import { isArray } from "utils";
 
 interface BusinessDetailProps {
   formData: { [key: string]: any };
@@ -50,9 +51,10 @@ const BusinessDetailTransport = (props: BusinessDetailProps) => {
           question="What areas best associated with this service?"
           childrenClassName="flex flex-wrap gap-3"
         >
-          {viewProductTypes?.map((item) => (
-            <Badge variant="no-outlined" key={item} text={item.label} />
-          ))}
+          {isArray(viewProductTypes) &&
+            viewProductTypes.map((item) => (
+              <Badge variant="no-outlined" key={item} text={item.label} />
+            ))}
         </Question>
         <Question question="What are the opening hours?" optional>
           <PreviewValue valueKey="openHours" value={openHours} />

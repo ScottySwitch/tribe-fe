@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
@@ -12,6 +12,8 @@ import { ILoginInfor } from "pages/_app";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 
 import styles from "./HamModal.module.scss";
+import { SwitchAccountsContent } from "components/TheHeader/HeaderComponents";
+import { UserType } from "enums";
 
 const HamModalHeader = ({
   loginInfor,
@@ -64,8 +66,15 @@ const HamModal = (props: HamModalProps) => {
 
   const [showCategoriesModal, setShowCategoriesModal] = useState(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [showSwitchModal, setShowSwitchModal] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    setShowSwitchModal(false);
+    onSetShowHamModal(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath]);
 
   const gotoLogin = () => {
     onSetShowHamModal(false);
@@ -206,6 +215,10 @@ const HamModal = (props: HamModalProps) => {
             onShowHamModal={() => onSetShowHamModal(false)}
             onShowCategoriesModal={() => setShowCategoriesModal(true)}
             onShowAuthPopup={() => setShowAuthPopup(true)}
+            onShowSwitchModal={() => {
+              onSetShowHamModal(false)
+              setShowSwitchModal(true);
+            }}
           />
         </div>
       </Modal>
@@ -218,6 +231,16 @@ const HamModal = (props: HamModalProps) => {
         mobilePosition="right"
       >
         <Tabs tabList={categoriesTabs} />
+      </Modal>
+      <Modal
+        title="Switch account"
+        visible={showSwitchModal}
+        mobilePosition="center"
+        onClose={() => setShowSwitchModal(false)}
+      >
+        <div className="p-[10px] flex flex-col gap-5">
+          <SwitchAccountsContent />
+        </div>
       </Modal>
       <AuthPopup
         onClose={() => setShowAuthPopup(false)}

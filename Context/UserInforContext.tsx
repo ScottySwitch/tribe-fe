@@ -1,4 +1,5 @@
 import { locations, loginInforItem } from "constant";
+import { UserType } from "enums";
 import { Router, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { getBrowserLocation } from "utils";
@@ -13,6 +14,7 @@ const defaultUserInformation: { [key: string]: any } = {
   first_name: undefined,
   token: undefined,
   avatar: undefined,
+  user_avatar: undefined,
   location: undefined,
 };
 
@@ -35,15 +37,25 @@ export const UserInforProvider = ({ children }) => {
         ...localLoginInfo,
         location: localLocation || browserLocation || locations[0].value,
         token: localLoginInfo.token,
-        // first_name: localLoginInfo.first_name,
+        first_name: localLoginInfo.first_name,
         last_name: localLoginInfo.last_name,
-        avatar: localLoginInfo.avatar,
+        avatar:
+          localLoginInfo.user_type === UserType.NORMAL_USER
+            ? localLoginInfo.user_avatar
+            : localLoginInfo.avatar,
+        user_avatar: localLoginInfo.user_avatar,
+        owner_listings: localLoginInfo.owner_listings,
+        user_type: localLoginInfo.user_type || UserType.NORMAL_USER,
       });
     };
+
     setDefaulUserInfor();
   }, []);
 
-  const deleteUser = () => setUser({});
+  const deleteUser = () => {
+    localStorage.removeItem("user");
+    setUser({});
+  };
 
   const updateUser = (infor) => {
     const localStringyUserInfor = localStorage.getItem("user") || "{}";

@@ -56,7 +56,6 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
               showedPicsNumber={{ slidesToShow: 6, slidesToScroll: 6 }}
             />
           </div>
-
           <div className={styles.container_info}>
             <h2 className={styles.title}>{data.name}</h2>
             <div className="flex items-center justify-between mb-[10px]">

@@ -9,11 +9,57 @@ import {
 } from "enums";
 import { IAddListingForm } from "pages/add-listing";
 import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed";
+import { useRouter } from "next/router";
+
+export const videoExtensions = [
+  ".flv",
+  ".mp4",
+  ".m3u8",
+  ".ts",
+  ".3gp",
+  ".mov",
+  ".avi",
+  ".wmv",
+];
 
 export const loginInforItem = "login_infor";
 export const user = "user";
 export const userId = "user_id";
 export const token = "token";
+
+export const sortOptions = [
+  // { label: "Price (Low to high)" },
+  // { label: "Price (High to low)" },
+  { label: "Rating (High to low)", value: "desc" },
+  { label: "Rating (Low to high)", value: "asc" },
+  // { label: "Recently added" },
+];
+
+export const getFilterLabels = (filter, currency) => [
+  {
+    isShow: !!filter.sort,
+    label: "Sort",
+    value: sortOptions.find((item) => item.value === filter.sort)?.label,
+  },
+  {
+    isShow: !!filter.minRating,
+    label: "Rating",
+    value: `${filter.minRating || "0"} - ${filter.maxRating}`,
+  },
+  {
+    isShow: !!filter.maxPrice && !!currency,
+    label: "Price",
+    value: `${currency + " " + filter.minPrice} - ${
+      currency + " " + filter.maxPrice
+    }`,
+  },
+];
+
+export const genderOptions = [
+  { label: "Male", value: "male" },
+  { label: "Female", value: "female" },
+  { label: "Others", value: "others" },
+];
 
 export const curatedList = [
   {
@@ -418,12 +464,24 @@ export const freeInformationList = [
 export const userInformationList = [
   { label: UserInformationList.USER_INFORMATION, icon: "user-color-2" },
   { label: UserInformationList.CHANGE_PASSWORD, icon: "password" },
-  { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
-  { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
-  { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
-  { label: UserInformationList.TRIBES_FOR_BUSINESSES, icon: "user-color-2" },
-  { label: UserInformationList.SUPPORT, icon: "support-color" },
-  { label: UserInformationList.TERMS_CONDITIONS, icon: "user-color-2" },
+  // { label: UserInformationList.NOTIFICATION_SETTINGS, icon: "noti-color" },
+  // { label: UserInformationList.REFERRAL_CODE, icon: "noti-color" },
+  // { label: UserInformationList.POINT_HISTORY, icon: "point-color" },
+  {
+    label: UserInformationList.TRIBES_FOR_BUSINESSES,
+    icon: "user-color-2",
+    directUrl: "/",
+  },
+  {
+    label: UserInformationList.SUPPORT,
+    icon: "support-color",
+    directUrl: "/support",
+  },
+  {
+    label: UserInformationList.TERMS_CONDITIONS,
+    icon: "user-color-2",
+    directUrl: "/terms-conditions",
+  },
 ];
 
 export const eatTabList = [
@@ -968,6 +1026,33 @@ export const dummySubCategories = [
     value: "restaurant",
     slug: "restaurant",
     icon: "https://picsum.photos/200/300",
+  },
+];
+
+export const reportReasons = [
+  {
+    label: "Offensive, hateful or sexually explicit",
+    value: "Offensive, hateful or sexually explicit",
+  },
+  {
+    label: "Legal issue",
+    value: "Legal issue",
+  },
+  {
+    label: "Privacy concern",
+    value: "Privacy concern",
+  },
+  {
+    label: "Poor quality",
+    value: "Poor quality",
+  },
+  {
+    label: "Not a photo of the place",
+    value: "Not a photo of the place",
+  },
+  {
+    label: "Other",
+    value: "Your reason",
   },
 ];
 

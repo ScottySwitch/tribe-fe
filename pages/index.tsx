@@ -102,6 +102,7 @@ const Home: NextPage = (props: any) => {
     );
   }
 
+  console.log("user-----", user);
   return (
     <div>
       {isArray(listBanners) && (

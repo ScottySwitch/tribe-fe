@@ -7,6 +7,7 @@ import VideoThumbnail from "react-video-thumbnail";
 import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./Upload.module.scss";
 import Popover from "components/Popover/Popover";
+import { detectIsVideo } from "utils";
 
 export interface UploadProps {
   name?: string;
@@ -54,7 +55,7 @@ const Upload = (props: UploadProps) => {
   }, [fileList, multiple]);
 
   const showedImages =
-    type === "banner"
+    type === "banner" || type === "media"
       ? isPaid
         ? Array.isArray(srcList) && srcList.slice(0, 4)
         : Array.isArray(srcList) && srcList.slice(0, 3)
@@ -108,15 +109,20 @@ const Upload = (props: UploadProps) => {
       )
       .then((res) => {
         const responseUrls = get(res, "data.urls") || [];
+        console.log("responseUrls--------", responseUrls);
         if (responseUrls.length > 0) {
           let newFileList = Array.isArray(fileList) ? [...fileList] : [];
           if (!multiple) {
             newFileList = [...responseUrls];
+            console.log("responseUrls--------1", newFileList);
           } else if (imgIndex !== -1) {
             newFileList[imgIndex] = responseUrls[0];
+            console.log("responseUrls--------2", newFileList);
           } else {
             newFileList = [...newFileList, ...responseUrls];
+            console.log("responseUrls--------3", newFileList);
           }
+          console.log("finallllll--------------", newFileList);
           setLocalFileList(newFileList);
           onChange?.(newFileList);
         }
@@ -212,6 +218,8 @@ const Upload = (props: UploadProps) => {
     [styles.hide]: type === "avatar",
   });
 
+  useEffect(() => console.log("showedImages", showedImages), [showedImages]);
+
   return (
     <div className={containerClassName}>
       {Array.isArray(showedImages) &&
@@ -230,8 +238,11 @@ const Upload = (props: UploadProps) => {
             <div className={styles.add_icon}>{centerIcon}</div>
             <div className={styles.loader} />
             <Input onChange={(e) => handleChange(e, src)} multiple={false} />
-            {src && <Image src={src} alt="" layout="fill" objectFit="cover" />}
-            {/* <VideoThumbnail videoUrl={src} /> */}
+            {detectIsVideo(src) ? (
+              <video id="video" src={src} controls className={styles.video} />
+            ) : (
+              src && <Image src={src} alt="" layout="fill" objectFit="cover" />
+            )}
           </div>
         ))}
 

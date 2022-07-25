@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
@@ -5,18 +6,22 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
+import { reportReasons } from "constant";
 import { UserInforContext } from "Context/UserInforContext";
 import { get } from "lodash";
 import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
 import Slider, { Settings } from "react-slick";
 import reportApi from "services/report";
+import { detectIsVideo } from "utils";
+import { isArray } from "utils";
 
 import styles from "./Album.module.scss";
 
 interface AlbumProps {
   id?: string;
   listingId?: string | number;
+  reportMedia?: boolean;
   images?: any[];
   showedPicsNumber?: { slidesToShow: number; slidesToScroll: number };
 }
@@ -25,14 +30,15 @@ export const Album = (props: AlbumProps) => {
   const {
     id,
     listingId,
+    reportMedia = true,
     images = [],
-    showedPicsNumber = { slidesToShow: 12, slidesToScroll: 12 },
+    showedPicsNumber = { slidesToShow: 8, slidesToScroll: 8 },
   } = props;
 
   const [navThumbnail, setNavThumbnail] = useState<any>();
   const [navGallery, setNavGallery] = useState<any>();
   const [isMobile, setIsMobile] = useState(false);
-  const [reason, setReason] = useState();
+  const [reason, setReason] = useState<string>("default");
   const [showReportModal, setShowReportModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [submitResult, setSubmitResult] = useState(false);
@@ -115,6 +121,11 @@ export const Album = (props: AlbumProps) => {
     setShowReportModal(true);
   };
 
+  const handleCloseReportModal = () => {
+    setShowReportModal(false);
+    setReason("default");
+  };
+
   const onSubmit = async () => {
     setShowReportModal(false);
     const body = {
@@ -128,6 +139,7 @@ export const Album = (props: AlbumProps) => {
       .createReport(body)
       .then((res) => {
         setSubmitResult(true);
+        setReason("default");
       })
       .catch((error) => {
         setSubmitResult(false);
@@ -138,91 +150,122 @@ export const Album = (props: AlbumProps) => {
       });
   };
 
+  const notOtherReason = reportReasons.slice(0, 5).map((item) => item.value);
+  notOtherReason.push("default");
+
+  const galleryPrevBtnClassName = classNames(styles.btn_prev, {
+    hide: get(images, "length") > 12,
+  });
+
+  const galleryNextBtnClassName = classNames(styles.btn_next, {
+    hide: get(images, "length") > 12,
+  });
+
   return (
     <div className={styles.slider_syncing}>
       <div className={styles.slider_thumbnail_container}>
-        <div onClick={handleShowReportModal} className={styles.btn_report}>
-          <Icon icon="flag" size={25} color="#FFFFFF" />
-        </div>
+        {reportMedia && (
+          <div onClick={handleShowReportModal} className={styles.btn_report}>
+            <Icon icon="flag" size={25} color="#FFFFFF" />
+          </div>
+        )}
         <div onClick={handlePrevThumbnail} className={styles.btn_prev}>
           <Icon icon="carret-left" size={40} color="#FFFFFF" />
         </div>
-        <Slider
-          ref={refSlider1}
-          {...configThumbnail}
-          className={styles.slider_thumbnail}
-        >
-          {images?.map((image, index) => (
-            <div key={index} className={styles.slider_thumbnail_item}>
-              <Image
-                src={image}
-                layout="fill"
-                alt={`thumbnail-${index}`}
-                objectFit="contain"
-              />
-            </div>
-          ))}
-        </Slider>
+        {Array.isArray(images) && images.length > 0 && (
+          <Slider
+            ref={refSlider1}
+            {...configThumbnail}
+            className={styles.slider_thumbnail}
+          >
+            {images.map((src, index) => (
+              <div key={index} className={styles.slider_thumbnail_item}>
+                {detectIsVideo(src) ? (
+                  <video
+                    id="video"
+                    src={src}
+                    controls
+                    className={styles.video}
+                  />
+                ) : (
+                  <Image
+                    src={src}
+                    layout="fill"
+                    alt={`thumbnail-${index}`}
+                    objectFit="contain"
+                  />
+                )}
+              </div>
+            ))}
+          </Slider>
+        )}
         <div onClick={handleNextThumbnail} className={styles.btn_next}>
           <Icon icon="carret-right" size={40} color="#FFFFFF" />
         </div>
       </div>
       <div className={styles.slider_gallery_container}>
-        {get(images, "length") > 12 && (
-          <div onClick={handlePrevGallery} className={styles.btn_prev}>
-            <Icon icon="carret-left" size={30} color="#FFFFFF" />
-          </div>
-        )}
+        <div onClick={handlePrevGallery} className={galleryPrevBtnClassName}>
+          <Icon icon="carret-left" size={30} color="#FFFFFF" />
+        </div>
         <Slider
           ref={refSlider2}
           {...configGallery}
           className={styles.slider_gallery}
         >
-          {images?.map((image, index) => (
-            <div key={index} className={styles.slider_gallery_item}>
-              <Image
-                src={image}
-                layout="fill"
-                alt={`gallery-${index}`}
-                objectFit="contain"
-              />
-            </div>
-          ))}
+          {isArray(images) &&
+            images.map((src, index) => (
+              <div key={index} className={styles.slider_gallery_item}>
+                {detectIsVideo(src) ? (
+                  <video src={src} className={styles.video} />
+                ) : (
+                  <Image
+                    src={src}
+                    layout="fill"
+                    alt={`gallery-${index}`}
+                    objectFit="contain"
+                  />
+                )}
+              </div>
+            ))}
         </Slider>
-        {get(images, "length") > 12 && (
-          <div onClick={handleNextGallery} className={styles.btn_next}>
-            <Icon icon="carret-right" size={30} color="#FFFFFF" />
-          </div>
-        )}
+        <div onClick={handleNextGallery} className={galleryNextBtnClassName}>
+          <Icon icon="carret-right" size={30} color="#FFFFFF" />
+        </div>
       </div>
       <Modal
         visible={showReportModal}
         title="Why do you report this photo/video?"
         width={780}
-        onClose={() => setShowReportModal(false)}
+        onClose={handleCloseReportModal}
       >
         <div className="p-[30px] flex flex-col gap-5">
-          {reportReasons.map((reason) => (
+          {reportReasons.map((item) => (
             <Radio
-              id={`${id} - ${reason.label}`}
-              key={reason.value}
-              label={reason.label}
-              value={reason.value}
-              name="report-media"
+              id={`${id} - ${item.label}`}
+              key={item.value}
+              label={item.label}
+              value={item.value}
+              name={`${id}-report-media`}
               onChange={(e: any) => setReason(e.target.value)}
+              checked={
+                notOtherReason.includes(reason)
+                  ? reason === item.value
+                  : undefined
+              }
             />
           ))}
           <Input
+            value={notOtherReason.includes(reason) ? "" : reason}
             placeholder="Your reason"
             onChange={(e: any) => setReason(e.target.value)}
-            disabled={reason !== reportReasons[5].value}
+            disabled={notOtherReason.includes(reason)}
           />
           <div className="flex justify-end gap-3">
             <Button
               variant="no-outlined"
               text="Cancel"
               width={100}
-              onClick={() => setShowReportModal(false)}
+              onClick={handleCloseReportModal}
             />
             <Button text="Submit" width={150} onClick={onSubmit} />
           </div>
@@ -237,32 +280,5 @@ export const Album = (props: AlbumProps) => {
     </div>
   );
 };
-
-const reportReasons = [
-  {
-    label: "Offensive, hateful or sexually explicit",
-    value: "Offensive, hateful or sexually explicit",
-  },
-  {
-    label: "Legal issue",
-    value: "Legal issue",
-  },
-  {
-    label: "Privacy concern",
-    value: "Privacy concern",
-  },
-  {
-    label: "Poor quality",
-    value: "Poor quality",
-  },
-  {
-    label: "Not a photo of the place",
-    value: "Not a photo of the place",
-  },
-  {
-    label: "Other",
-    value: "Other",
-  },
-];
 
 export default Album;

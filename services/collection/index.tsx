@@ -75,11 +75,17 @@ const getAllCollection = async () => {
   return await Api.get(url);
 };
 
-const getAllCollectionByCollectionSlug = async (collectionSlug: string) => {
+const getAllCollectionByCollectionSlug = async (
+  collectionSlug: string,
+  category?: string
+) => {
   const query = qs.stringify(
     {
       filters: {
         slug: collectionSlug,
+        category: {
+          slug: category,
+        },
       },
       populate: "*",
     },

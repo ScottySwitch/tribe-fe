@@ -11,6 +11,7 @@
     height: auto;
     display: flex;
     flex-direction: column;
+    width: 30%;
 
     &:last-child {
       flex-grow: 2;
@@ -20,7 +21,7 @@
       display: flex;
       align-items: center;
       padding: 9px 20px 9px 0;
-      height: 72px;
+      height: 20%;
       font-weight: $font-semi-bold;
       font-size: $text-md;
       cursor: pointer;
@@ -35,9 +36,18 @@
       }
 
       .tab_label_content {
-        display: flex;
-        gap: 6px;
         height: 100%;
+
+        .label {
+          display: flex;
+          gap: 6px;
+        }
+
+        .sub_label {
+          font-size: $text-sm;
+          font-weight: $font-normal;
+          color: $primary-500;
+        }
       }
 
       &:hover {
@@ -61,7 +71,7 @@
   .panel {
     padding: 0 24px;
     height: 400px;
-    width: 100%;
+    width: 70%;
     overscroll-behavior: none;
   }
 }
@@ -69,10 +79,20 @@
 @media screen and (max-width: $mobile) {
   .tabs {
     .tab_label_container {
+      width: 32%;
+      .tab_label {
+        .tab_label_content {
+          word-break: break-all;
+        }
+      }
       .tab {
         font-size: $text-md;
         font-weight: $font-semi-bold;
       }
+    }
+    .panel {
+      width: 68%;
+      height: 430px;
     }
   }
 }

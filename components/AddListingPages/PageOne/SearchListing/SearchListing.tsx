@@ -28,7 +28,6 @@ const RightColumn = (props: {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
-    console.log("listing", listing);
     const listingRolesArray =
       get(listing, "attributes.listing_roles.data") || [];
     const isBeingClaimed =

@@ -1,12 +1,13 @@
 @import "styles/variables.scss";
 
 .breadcrumbs {
-  padding-top: 20px;
+  padding: 20px 0;
   display: flex;
   gap: 6px;
   color: $bg-400;
   font-size: $text-sm;
   align-items: center;
+  cursor: pointer;
 }
 
 .banner,
@@ -15,6 +16,23 @@
   height: min-content;
   display: block;
   position: relative;
+}
+
+.main_catbanner {
+  color: white;
+  width: 100%;
+  aspect-ratio: 1440/164;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .banner_desktop {
+    display: block !important;
+  }
+
+  .banner_mobile {
+    display: none !important;
+  }
 }
 
 .collection_banner {
@@ -56,6 +74,35 @@
   left: 0;
   padding: 0;
   cursor: pointer;
+
+  .filter {
+    &_badge {
+      border: 1px solid $primary-500;
+      background-color: $primary-20;
+      color: $primary-500;
+    }
+    &_number {
+      background-color: $primary-500;
+      color: white;
+      font-size: $font-bold;
+      padding: 0 6px;
+      border-radius: $border-radius;
+    }
+  }
+  .quick_filter_container {
+    overflow-x: auto;
+    width: 100%;
+    .scroll_box {
+      padding: 4px 0 10px 0;
+      display: flex;
+      width: max-content;
+      gap: 6px;
+    }
+  }
+
+  .mobile_filter_button {
+    display: none;
+  }
 }
 
 .for_you {
@@ -250,6 +297,16 @@
   .for_you_container {
     gap: 6px;
   }
+
+  .main_catbanner {
+    .banner_desktop {
+      display: none !important
+    }
+
+    .banner_mobile {
+      display: block !important;
+    }
+  }
 }
 
 @media screen and (max-width: $mobile) {
@@ -262,6 +319,13 @@
     left: 0;
     padding: 0;
     cursor: pointer;
+
+    .desktop_filter_button {
+      display: none;
+    }
+    .mobile_filter_button {
+      display: flex;
+    }
   }
 
   .collection_banner {

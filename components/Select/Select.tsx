@@ -212,7 +212,12 @@ const Select = (props: SelectProps) => {
           <ReactSelect
             id={id}
             options={options}
-            value={selected}
+            value={options?.find(
+              (opt) =>
+                opt === selected ||
+                opt.value === selected ||
+                opt.value === (selected as IOption)?.value
+            )}
             placeholder={placeholder}
             isClearable={isClearable}
             closeMenuOnSelect={closeMenuOnSelect || !isMulti}

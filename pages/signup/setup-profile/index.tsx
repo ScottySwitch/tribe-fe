@@ -9,7 +9,12 @@ import Input from "components/Input/Input";
 import Modal, { ModalHeader } from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Select from "components/Select/Select";
-import { countryList, educationLevels, industryList } from "constant";
+import {
+  countryList,
+  educationLevels,
+  genderOptions,
+  industryList,
+} from "constant";
 
 import styles from "styles/Auth.module.scss";
 import DatePicker from "components/DatePicker/DatePicker";
@@ -82,7 +87,6 @@ const StepOne = ({
   }, [socialUser]);
 
   const handleUploadAvatar = useCallback((srcAvatar) => {
-    console.log("srcAvatar", srcAvatar);
     setUploadAvatar(srcAvatar[0]);
   }, []);
 
@@ -135,17 +139,15 @@ const StepOne = ({
         <div>
           Gender
           <div className="flex gap-[30px] mt-2">
-            <Radio label="Male" value="male" register={register("gender")} />
-            <Radio
-              label="Female"
-              value="female"
-              register={register("gender")}
-            />
-            <Radio
-              label="Others"
-              value="others"
-              register={register("gender")}
-            />
+            {genderOptions.map((item) => (
+              <Radio
+                key={item.value}
+                name="gender"
+                label={item.label}
+                value={item.value}
+                register={register("gender")}
+              />
+            ))}
           </div>
         </div>
         <DatePicker
@@ -194,7 +196,6 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
 
   const getCategoryLinks = async () => {
     const data = await CategoryLinkAPi.getCategoryLinks();
-    console.log(data);
     if (get(data, "data.data")) {
       const rawInterestingList = get(data, "data.data") || [];
       const interestListingArray = rawInterestingList.map((item) => ({
@@ -225,7 +226,6 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
 
   const handleSubmit = () => {
     setIsLoading(true);
-    // console.log(interest)
     onSubmit(interest);
     setIsLoading(false);
   };
@@ -299,7 +299,6 @@ const SetupProfilePage = () => {
 
   const handleNextStep = (data) => {
     setFormData({ ...formData, ...data });
-    console.log({ ...formData, ...data });
     setStep(ProfileSteps.STEP_TWO);
   };
 

@@ -37,7 +37,6 @@ const ForgotPasswordPage = () => {
       method: method,
       [method]: otpReceiver,
     }
-    console.log(formData)
     let check = false
     if (method === LoginMethod.EMAIL) {
       try {

@@ -36,8 +36,12 @@ const BusinessDetail = (props: BusinessDetailProps) => {
     minPrice: get(listing, "min_price"),
     maxPrice: get(listing, "max_price"),
     currency: get(listing, "currency"),
-    describeTags: get(listing, "tags").map((item) => item.id.toString()),
-    viewDescribeTags: get(listing, "tags").map((item) => item.label),
+    describeTags: Array.isArray(get(listing, "tags"))
+      ? get(listing, "tags").map((item) => item.id.toString())
+      : [],
+    viewDescribeTags: Array.isArray(get(listing, "tags"))
+      ? get(listing, "tags").map((item) => item.label)
+      : [],
     productTypes:
       Array.isArray(rawProductTypes) &&
       rawProductTypes.map((type) =>
@@ -60,8 +64,6 @@ const BusinessDetail = (props: BusinessDetailProps) => {
     placeGoodFor: get(listing, "facilities_data.placeGoodFor"),
   };
 
-  console.log("viewBusinessDetailData", viewBusinessDetailData);
-
   const submitFormData = (formData) => {
     const businessDetailFormattedData = {
       category_links: formData.categoryLinks,
@@ -70,7 +72,7 @@ const BusinessDetail = (props: BusinessDetailProps) => {
       //   min: formData.minPrice,
       //   max: formData.maxPrice,
       // },
-      currency: get(formData, 'currency?.value') || formData.currency,
+      currency: get(formData, "currency?.value") || formData.currency,
       min_price: formData.minPrice,
       max_price: formData.maxPrice,
       product_types:

@@ -9,7 +9,7 @@ import Header from "components/TheHeader/Header";
 import HamModal from "components/HamModal/HamModal";
 import BizApi from "services/biz-listing";
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
-import { Tiers, UsersTypes } from "enums";
+import { Tiers, UserType } from "enums";
 import AuthApi from "../services/auth";
 import {
   IUser,
@@ -26,12 +26,12 @@ import Button from "components/Button/Button";
 
 export type ILoginInfor = {
   token?: string;
-  type?: UsersTypes;
+  type?: UserType;
   tier?: Tiers;
   avatar?: string;
   first_name?: string;
   last_name?: string;
-  listing_follow_ids?: any
+  listing_follow_ids?: any;
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -91,6 +91,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [router]);
 
   //handle logic hide header when scroll, not hide when in desktop || when setShowOpenHoursModal ham modal || in unAuthPages
   useEffect(() => {

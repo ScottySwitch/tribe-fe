@@ -1,60 +1,36 @@
-import {
-  ReactElement,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
-import Modal, { ModalFooter, ModalProps } from "components/Modal/Modal";
+import Modal, { ModalProps } from "components/Modal/Modal";
 import Radio from "components/Radio/Radio";
 import Range from "components/Range/Range";
 import Tabs from "components/Tabs/Tabs";
 import { Filters } from "./enums";
 import styles from "./Filter.module.scss";
-import { UserInforContext } from "Context/UserInforContext";
-import { categories, locations } from "constant";
 import { get, isArray } from "lodash";
 import { IOption } from "type";
 import ProductTypeApi from "services/product-type";
 import ProductBrandApi from "services/product-brand";
+import { useRouter } from "next/router";
+import useGetCountry from "hooks/useGetCountry";
+import { categories, getFilterLabels, sortOptions } from "constant";
 
 export interface IFilter {
   productTypes: string[];
   productBrands: string[];
   minPrice?: number;
   maxPrice?: number;
-  sort?: "asc" | "desc";
+  sort?: "asc" | "desc" | undefined;
   minRating?: number;
   maxRating?: number;
 }
 
-const sortList = [
-  // { label: "Price (Low to high)" },
-  // { label: "Price (High to low)" },
-  { label: "Rating (High to low)", value: "desc" },
-  { label: "Rating (Low to high)", value: "asc" },
-  // { label: "Recently added" },
-];
-
-export const otherList = [
-  { label: "Halal Certified" },
-  { label: "Kosher options available" },
-  { label: "Halal Ingredients Used" },
-  { label: "Mulism Owned" },
-  { label: "Seafood options available " },
-  { label: "Vegetarian" },
-  { label: "Alcohol served in premise" },
-  { label: "Vegetarian options available" },
-];
-
 const Sort = ({ filter, onFilter }) => (
   <div className="flex flex-col gap-2">
-    {sortList.map((sort) => (
+    {sortOptions.map((sort) => (
       <Radio
         key={sort.label}
         label={sort.label}
@@ -76,15 +52,11 @@ const PriceRange = ({ filter, onFilter }) => {
     minPrice: number;
     maxPrice: number;
   }>({
-    minPrice: 0,
-    maxPrice: 0,
+    minPrice: filter.minPrice || 0,
+    maxPrice: filter.maxPrice || 0,
   });
 
-  const { user } = useContext(UserInforContext);
-  const { location } = user;
-
-  const country =
-    locations.find((item) => item.value === location) || locations[0];
+  const country = useGetCountry();
 
   const handleChangeRange = (value) => {
     onFilter(value);
@@ -99,12 +71,7 @@ const PriceRange = ({ filter, onFilter }) => {
         <div>{`${country.currency} ${rangeValues?.maxPrice}`}</div>
       </div>
       <div className="flex flex-start mt-5">
-        <Range
-          value={{ minPrice: 0, maxPrice: 1000 }}
-          min={0}
-          max={country.max}
-          onChange={handleChangeRange}
-        />
+        <Range min={0} max={country.max} onChange={handleChangeRange} />
       </div>
     </div>
   );
@@ -178,27 +145,26 @@ const Other = ({
 };
 
 export interface FilterProps extends ModalProps {
-  finalTabLabel?: string;
   finalTabList?: IOption[];
   otherList?: IOption[];
   filter?: IFilter;
-  categoryLink?: string | undefined;
   onSubmitFilter: (e?: IFilter) => void;
 }
 
 const Filter = (props: FilterProps) => {
-  const {
-    visible,
-    filter,
-    finalTabLabel,
-    categoryLink,
-    onSubmitFilter,
-    onClose,
-  } = props;
+  const { visible, filter, onSubmitFilter, onClose } = props;
 
   const [localFilter, setLocalFilter] = useState<IFilter | undefined>(filter);
   const [productTypes, setProductTypes] = useState<IOption[]>([]);
   const [productBrands, setProductBrands] = useState<IOption[]>([]);
+
+  const router = useRouter();
+  const { category, subCategory: categoryLink }: any = router.query;
+  const { currency } = useGetCountry();
+  const filterLabels = getFilterLabels(localFilter, currency);
+  const finalTabLabel = categories.find(
+    (cat) => cat.slug === category
+  )?.finalTabLabel;
 
   useEffect(() => {
     const getProductTypes = async () => {
@@ -228,34 +194,60 @@ const Filter = (props: FilterProps) => {
     getProductTypes();
     getProductBrands();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localFilter?.productTypes]);
+  }, [router.asPath, categoryLink, localFilter?.productTypes]);
 
   const handleFilter = (e) => {
     setLocalFilter?.({ ...localFilter, ...e });
   };
 
+  const handleCloseFilterModal = () => {
+    setLocalFilter(filter);
+    onClose?.();
+  };
+
+  const handleApplyFilter = () => {
+    onClose?.();
+    onSubmitFilter(localFilter);
+  };
+
+  const productBrandFilterNumber = get(localFilter, "productBrands.length")
+    ? `${get(localFilter, "productBrands.length")} selected`
+    : "";
+
+  const productTypeFilterNumber = get(localFilter, "productTypes.length")
+    ? `${get(localFilter, "productTypes.length")} selected`
+    : "";
+
   const tabList = [
     {
       label: "Sort",
+      subLabel: filterLabels[0].isShow && filterLabels[0].value,
       value: Filters.SORT,
       content: <Sort filter={localFilter} onFilter={handleFilter} />,
     },
     {
       label: "Rating",
+      subLabel: filterLabels[1].isShow && filterLabels[1].value,
       value: Filters.RATING,
       content: <Rating filter={localFilter} onFilter={handleFilter} />,
     },
     {
       label: "Price range",
+      subLabel: filterLabels[2].isShow && filterLabels[2].value,
       value: Filters.PRICE_RANGE,
       content: <PriceRange filter={localFilter} onFilter={handleFilter} />,
     },
     {
       label: "Other",
+      subLabel: productTypeFilterNumber,
       value: Filters.OTHER,
       content: (
         <Other
-          key="productTypes"
+          key={
+            "productTypes" +
+            get(productTypes, "length") +
+            localFilter?.productTypes
+          }
           filter={localFilter}
           filterKey="productTypes"
           options={productTypes}
@@ -265,10 +257,15 @@ const Filter = (props: FilterProps) => {
     },
     {
       label: finalTabLabel,
+      subLabel: productBrandFilterNumber,
       value: Filters.OTHER_OTHER,
       content: (
         <Other
-          key="productBrands"
+          key={
+            "productBrands" +
+            get(productBrands, "length") +
+            localFilter?.productBrands
+          }
           filter={localFilter}
           filterKey="productBrands"
           options={productBrands}
@@ -282,7 +279,7 @@ const Filter = (props: FilterProps) => {
     <Modal
       width="700px"
       visible={visible}
-      onClose={onClose}
+      onClose={handleCloseFilterModal}
       title="Filter & Sort"
     >
       <Tabs tabList={tabList} />
@@ -291,10 +288,7 @@ const Filter = (props: FilterProps) => {
         <Button
           text="Apply"
           className={styles.apply_btn}
-          onClick={() => {
-            onClose?.();
-            onSubmitFilter(localFilter);
-          }}
+          onClick={handleApplyFilter}
         />
       </div>
     </Modal>
