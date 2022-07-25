@@ -18,7 +18,7 @@ const CollectionCard = (props: CollectionCardProps) => {
     >
       <div className={styles.title}>{title}</div>
       {/* <div className={styles.banner}> */}
-      {imgUrl && (
+      {imgUrl ? (
         <Image
           alt=""
           layout="intrinsic"
@@ -27,6 +27,8 @@ const CollectionCard = (props: CollectionCardProps) => {
           src={imgUrl}
           objectFit="contain"
         />
+      ) : (
+        <div className={styles.skeleton} />
       )}
       {/* </div> */}
     </div>

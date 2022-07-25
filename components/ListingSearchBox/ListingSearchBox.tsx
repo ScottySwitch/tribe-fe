@@ -53,6 +53,9 @@ const ListingSearchBox = (props: ListingSearchBoxProps) => {
         </div>
         <div className="col-span-2">
           <ListingSearch
+            ellipsis
+            closeMenuOnSelect
+            isClearable
             listingOptions={listingOptions || listingSearchResult}
             onChange={onListingSearchChange}
             onInputChange={onInputChange}

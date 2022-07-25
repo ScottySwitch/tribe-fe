@@ -228,7 +228,7 @@ const getOwnerListingRoleByUserId = async (userId: any) => {
 };
 
 const getBizListingBySlug = async (bizListingSlug: any) => {
-  console.log('dwwd')
+  console.log("dwwd");
   const query = qs.stringify(
     {
       filters: {

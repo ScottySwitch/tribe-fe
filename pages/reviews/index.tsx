@@ -1,4 +1,4 @@
-import { randomId } from "utils";
+import { isArray, randomId } from "utils";
 import { useEffect, useState, useContext } from "react";
 import Image from "next/image";
 import SectionLayout from "components/SectionLayout/SectionLayout";
@@ -46,9 +46,10 @@ const ReviewsPage = () => {
   useEffect(() => {
     const getRandomListing = async () => {
       const result = await BizListingApi.getListingBySlug("", location, 7);
-      const data = get(result, "data.data");
+      const data = get(result, "data.data") || [];
       setListingSearchResult(data);
     };
+
     if (listingSearchResult.length === 0) {
       getRandomListing();
     }
@@ -151,22 +152,23 @@ const ReviewsPage = () => {
             Share your experiences with the Tribes community!
           </div>
           <div className="review-list">
-            {listingSearchResult?.map((review) => (
-              <ReviewCard
-                slug={get(review, "attributes.slug")}
-                key={review.id}
-                id={review.id}
-                title={get(review, "attributes.name")}
-                imgUrl={
-                  get(review, "attributes.images[0]") ||
-                  "https://picsum.photos/200/300"
-                }
-                isVerified={get(review, "attributes.is_verified")}
-                rateNumber={calcRateNumber(get(review, "attributes.reviews"))}
-                location={get(review, "attributes.address")}
-                onSubmit={handleSubmit}
-              />
-            ))}
+            {isArray(listingSearchResult) &&
+              listingSearchResult.map((review) => (
+                <ReviewCard
+                  slug={get(review, "attributes.slug")}
+                  key={review.id}
+                  id={review.id}
+                  title={get(review, "attributes.name")}
+                  imgUrl={
+                    get(review, "attributes.images[0]") ||
+                    "https://picsum.photos/200/300"
+                  }
+                  isVerified={get(review, "attributes.is_verified")}
+                  rateNumber={calcRateNumber(get(review, "attributes.reviews"))}
+                  location={get(review, "attributes.address")}
+                  onSubmit={handleSubmit}
+                />
+              ))}
           </div>
         </div>
         <div className={`${styles.advertisement} mt-8`}>
