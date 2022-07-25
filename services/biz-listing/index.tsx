@@ -45,14 +45,7 @@ const getListingBySlug = async (
 ) => {
   const params = {
     filters: {
-      $or: [
-        {
-          name: { $contains: search || "" },
-        },
-        {
-          slug: { $contains: search || "" },
-        },
-      ],
+      slug: { $contains: search || "" },
       country: country,
     },
     pagination: {
