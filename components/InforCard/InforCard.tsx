@@ -137,11 +137,7 @@ const InforCard = (props: InforCardProps) => {
         <div className={styles.footer}>
           {price && (
             <div className={styles.price}>
-              From{" "}
-              <span>
-                {price}
-                {` ` + currency}
-              </span>
+              From <span>{price + " " + currency}</span>
             </div>
           )}
           {sortingTags.length > 0 && (

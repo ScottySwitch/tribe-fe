@@ -192,7 +192,7 @@ const Category = (props: any) => {
             src={categoryInfor.bannerSrc}
             alt=""
             layout="fill"
-            objectFit="cover"
+            objectFit="contain"
             className={`${styles.collection_banner_img} ${styles.banner_desktop}`}
           />
         )}
@@ -201,7 +201,7 @@ const Category = (props: any) => {
             alt=""
             src={categoryInfor.bannerMobileSrc}
             layout="fill"
-            objectFit="cover"
+            objectFit="contain"
             className={`${styles.collection_banner_img} ${styles.banner_mobile}`}
           />
         )}
