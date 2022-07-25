@@ -1,3 +1,4 @@
+import AuthPopup from "components/AuthPopup/AuthPopup";
 import Badge from "components/Badge/Badge";
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
@@ -10,8 +11,9 @@ import { ClaimStep, YesNo } from "enums";
 import { get } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import BizListingApi from "services/biz-listing";
+import { UserInforContext } from "Context/UserInforContext";
 
 import styles from "./SearchListing.module.scss";
 
@@ -25,6 +27,9 @@ const RightColumn = (props: {
   const { listing, isRelationship, onShowUpcomingFeature } = props;
   const router = useRouter();
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const { user } = useContext(UserInforContext);
+
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
@@ -38,6 +43,17 @@ const RightColumn = (props: {
     if (isBeingClaimed || doesHasOwners) setIsDisabled(true);
   }, []);
 
+  const handleClick = () => {
+    user?.token
+      ? isRelationship
+        ? router.push({
+            pathname: `/claim/${listing.id}`,
+            query: { firstStep: ClaimStep.CLAIM_FREE_LISTING },
+          })
+        : onShowUpcomingFeature()
+      : setShowAuthPopup(true);
+  };
+
   return (
     <>
       <Button
@@ -45,18 +61,15 @@ const RightColumn = (props: {
         text={isRelationship ? "Claim free listing" : "Improve this listing"}
         size="small"
         variant={isRelationship ? "primary" : "outlined"}
-        onClick={() =>
-          isRelationship
-            ? router.push({
-                pathname: `/claim/${listing.id}`,
-                query: { firstStep: ClaimStep.CLAIM_FREE_LISTING },
-              })
-            : onShowUpcomingFeature()
-        }
+        onClick={handleClick}
       />
       <span onClick={() => router.push("/add-listing")}>
         Not your business?
       </span>
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </>
   );
 };

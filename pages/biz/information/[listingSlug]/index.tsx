@@ -64,7 +64,7 @@ const BizInformation = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, loading]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data) => { 
     listing.id &&
       (await BizListing.updateBizListing(listing.id, {
         ...listing,
