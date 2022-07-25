@@ -8,29 +8,26 @@ import ArticleCard from "components/ArticleCard/ArticleCard";
 import Carousel from "components/Carousel/Carousel";
 import CollectionCard from "components/CollectionCard/CollectionCard";
 import Icon from "components/Icon/Icon";
+import { UserInforContext } from "Context/UserInforContext";
 import InforCard from "components/InforCard/InforCard";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
+import { CategoryText } from "enums";
+import BizListingApi from "services/biz-listing";
+import BannerApi from "services/banner";
+import CollectionApi from "services/collection";
+import CategoryLinkApi from "services/category-link";
+import Pagination from "components/Pagination/Pagination";
+import useTrans from "hooks/useTrans";
+import ArticleApi from "../../services/article";
+import { Ilisting } from "type";
 import {
   curatedList,
   homeBannerResponsive,
   homeCuratedResponsive,
   infoCardResponsive,
 } from "constant";
-import { Categories, CategoryText } from "enums";
-import BizListingApi from "services/biz-listing";
-import BannerApi from "services/banner";
-import CollectionApi from "services/collection";
-import CategoryLinkApi from "services/category-link";
-import Loader from "components/Loader/Loader";
-import Pagination from "components/Pagination/Pagination";
-import styles from "styles/Home.module.scss";
-import useTrans from "hooks/useTrans";
-import ArticleApi from "../../services/article";
-import useLocation from "hooks/useLocation";
-import { Ilisting } from "type";
 import {
-  formatListingArray,
   formatBizlistingArray,
   isArray,
   formatBanner,
@@ -38,9 +35,8 @@ import {
   formatArticle,
   formatCategoryLink,
 } from "utils";
-import { UserInforContext } from "Context/UserInforContext";
-import ProductApi from "services/product-type";
 
+import styles from "styles/Home.module.scss";
 interface IType {
   [key: string]: any;
 }
@@ -291,10 +287,10 @@ const Category = (props: any) => {
           </Carousel>
         </SectionLayout>
       )}
-      <SectionLayout childrenClassName="flex flex-wrap gap-5">
+      <SectionLayout childrenClassName={styles.for_you_container}>
         {Array.isArray(listingArray) &&
           listingArray.map((card) => (
-            <div key={card.title} className="pb-5 pt-3 pl-3">
+            <div key={card.title} className="pb-5 pt-3">
               <InforCard
                 imgUrl={card.images[0]}
                 title={card.title}
