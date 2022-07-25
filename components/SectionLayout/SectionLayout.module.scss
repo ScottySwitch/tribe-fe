@@ -17,13 +17,14 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 30px;
+      gap: 50px;
 
       .title_container {
         .title {
           font-size: $text-xl;
           font-weight: $font-bold;
         }
-  
+
         .sub_title {
           margin-top: 8px;
           font-weight: $font-light;
@@ -35,11 +36,12 @@
       .wrapper_seemore {
         display: flex;
         align-items: center;
-
+        width: max-content;
         .see_more {
           font-size: $text-sm;
           font-weight: $font-bold;
           color: $primary-500;
+          width: max-content;
           cursor: pointer;
         }
 
@@ -54,7 +56,7 @@
           margin-left: 3px;
         }
       }
-  
+
       .children {
         width: 100%;
       }
@@ -69,7 +71,6 @@
     background-color: transparent;
   }
 }
-
 
 @media screen and (max-width: $mobile) {
   .section_layout {
@@ -95,7 +96,6 @@
         .title_container {
           .title {
             font-size: $text-md;
-            max-width: 200px;
           }
         }
 

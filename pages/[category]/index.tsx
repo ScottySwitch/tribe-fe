@@ -192,15 +192,16 @@ const Category = (props: any) => {
             src={categoryInfor.bannerSrc}
             alt=""
             layout="fill"
-            objectFit="cover"
+            objectFit="contain"
             className={`${styles.collection_banner_img} ${styles.banner_desktop}`}
           />
         )}
         {categoryInfor.bannerMobileSrc && (
           <Image
+            alt=""
             src={categoryInfor.bannerMobileSrc}
             layout="fill"
-            objectFit="cover"
+            objectFit="contain"
             className={`${styles.collection_banner_img} ${styles.banner_mobile}`}
           />
         )}
@@ -223,6 +224,7 @@ const Category = (props: any) => {
                 objectFit="contain"
                 width={500}
                 height={200}
+                alt=""
               />
             </div>
           ))}
@@ -230,7 +232,7 @@ const Category = (props: any) => {
       </SectionLayout>
       <SectionLayout
         title="Explore by Top Categories"
-        childrenClassName="flex gap-y-[20px] gap-x-[50px] flex-wrap"
+        childrenClassName="flex gap-y-[20px] gap-x-1 lg:gap-x-[50px] flex-wrap"
       >
         {Array.isArray(categoryLinkArray) &&
           categoryLinkArray.map((item, index) => (
