@@ -55,6 +55,39 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [navList, setNavList] = useState<{ [key: string]: any }[]>([]);
 
+  function Loading() {
+    const router = useRouter();
+
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      const handleStart = (url) => url !== router.asPath && setLoading(true);
+      const handleComplete = (url) =>
+        url === router.asPath &&
+        setTimeout(() => {
+          setLoading(false);
+        }, 5000);
+
+      router.events.on("routeChangeStart", handleStart);
+      router.events.on("routeChangeComplete", handleComplete);
+      router.events.on("routeChangeError", handleComplete);
+
+      return () => {
+        router.events.off("routeChangeStart", handleStart);
+        router.events.off("routeChangeComplete", handleComplete);
+        router.events.off("routeChangeError", handleComplete);
+      };
+    });
+
+    return loading ? (
+      <div className="spinner-wrapper">
+        <div className="spinner"></div>
+      </div>
+    ) : (
+      <div />
+    );
+  }
+
   useEffect(() => {
     const stringyLoginInfo = localStorage.getItem("user");
     const localLoginInfo = stringyLoginInfo ? JSON.parse(stringyLoginInfo) : {};
@@ -118,6 +151,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <UserInforProvider>
+      <Loading />
       <div className={styles.app}>
         <Header
           id="header"
