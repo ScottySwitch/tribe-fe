@@ -1,50 +1,58 @@
-import Break from "components/Break/Break"
-import Button from "components/Button/Button"
-import DatePicker from "components/DatePicker/DatePicker"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import Upload from "components/Upload/Upload"
-import { ListingHomePageScreens } from "enums"
-import React, { useState } from "react"
-import { getIndex, randomId } from "utils"
-import moment from "moment"
-import parseISO from 'date-fns/parseISO'
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import DatePicker from "components/DatePicker/DatePicker";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import Upload from "components/Upload/Upload";
+import { ListingHomePageScreens } from "enums";
+import React, { useState } from "react";
+import { getIndex, randomId } from "utils";
+import moment from "moment";
+import parseISO from "date-fns/parseISO";
 
-import styles from "./AddDeal.module.scss"
+import styles from "./AddDeal.module.scss";
 
 interface AddDealsProps {
-  isEdit?:boolean;
-  isPaid?: boolean
-  multiple?: boolean
-  dealList: { [key: string]: any }[]
-  onCancel: () => void
-  onSubmit: (dealList: { [key: string]: any }[]) => void
+  isEdit?: boolean;
+  isPaid?: boolean;
+  multiple?: boolean;
+  dealList: { [key: string]: any }[];
+  onCancel: () => void;
+  onSubmit: (dealList: { [key: string]: any }[]) => void;
 }
 
 const AddDeals = (props: AddDealsProps) => {
-  const { isEdit, dealList, isPaid, multiple, onCancel, onSubmit } = props
-  const [localDealList, setLocalDeaList] = useState(dealList || [])
+  const { isEdit, dealList, isPaid, multiple, onCancel, onSubmit } = props;
+  const [localDealList, setLocalDeaList] = useState(dealList || []);
+  console.log("dealList", dealList);
 
   const handleRemoveDeal = (id: number) => {
-    const newArray = [...localDealList].filter((deal) => deal.id !== id)
-    setLocalDeaList(newArray)
-  }
+    const newArray = [...localDealList].filter((deal) => deal.id !== id);
+    setLocalDeaList(newArray);
+  };
 
-  const handleChangeDeal = (id: number, type: string, value: string | number | string[]) => {
-    const index = getIndex(id, localDealList)
-    const newArray = [...localDealList]
+  const handleChangeDeal = (
+    id: number,
+    type: string,
+    value: string | number | string[]
+  ) => {
+    const index = getIndex(id, localDealList);
+    const newArray = [...localDealList];
     if (isEdit) {
-      newArray[index][type] = value
-      newArray[index].isEdited = true
+      newArray[index][type] = value;
+      newArray[index].isEdited = true;
     } else {
-      newArray[index][type] = value
+      newArray[index][type] = value;
     }
-    setLocalDeaList(newArray)
-  }
+    setLocalDeaList(newArray);
+  };
 
   const handleAddDeal = () => {
-    setLocalDeaList([...localDealList, { id: randomId(), isNew: true, validUntil: new Date() }])
-  }
+    setLocalDeaList([
+      ...localDealList,
+      { id: randomId(), isNew: true, validUntil: new Date() },
+    ]);
+  };
 
   const AddDealButton = () => (
     <Button
@@ -55,7 +63,7 @@ const AddDeals = (props: AddDealsProps) => {
       size="small"
       onClick={handleAddDeal}
     />
-  )
+  );
 
   const CancelButton = () => (
     <Button
@@ -64,11 +72,11 @@ const AddDeals = (props: AddDealsProps) => {
       width={50}
       size="small"
       onClick={() => {
-        setLocalDeaList(dealList)
-        onCancel()
+        setLocalDeaList(dealList);
+        onCancel();
       }}
     />
-  )
+  );
   return (
     <React.Fragment>
       <Break />
@@ -79,31 +87,40 @@ const AddDeals = (props: AddDealsProps) => {
               <div className={styles.header}>
                 <p className="text-left">Add images</p>
                 {multiple && (
-                  <div className={styles.close} onClick={() => handleRemoveDeal(deal.id)}>
+                  <div
+                    className={styles.close}
+                    onClick={() => handleRemoveDeal(deal.id)}
+                  >
                     <Icon icon="cancel" />
                   </div>
                 )}
               </div>
-              <Upload 
-                multiple 
-                isPaid={isPaid} 
-                centerIcon={<Icon icon="plus" size={20} />} 
+              <Upload
+                multiple
+                isPaid={isPaid}
+                centerIcon={<Icon icon="plus" size={20} />}
                 fileList={deal.images || []}
                 onChange={(e) => handleChangeDeal(deal.id, "images", e)}
               />
               <Input
                 value={deal.name}
                 placeholder="Deal name"
-                onChange={(e: any) => handleChangeDeal(deal.id, "name", e.target.value)}
+                onChange={(e: any) =>
+                  handleChangeDeal(deal.id, "name", e.target.value)
+                }
               />
               <Input
                 value={deal.information}
                 placeholder="Deal information"
-                onChange={(e: any) => handleChangeDeal(deal.id, "information", e.target.value)}
+                onChange={(e: any) =>
+                  handleChangeDeal(deal.id, "information", e.target.value)
+                }
               />
               <DatePicker
                 value={deal.validUntil || new Date()}
-                onChange={(e: any) => handleChangeDeal(deal.id, "validUntil", e)}
+                onChange={(e: any) =>
+                  handleChangeDeal(deal.id, "validUntil", e)
+                }
                 suffixIcon
                 label="Valid until"
               />
@@ -111,7 +128,9 @@ const AddDeals = (props: AddDealsProps) => {
                 value={deal.termsConditions}
                 label="Terms and Conditions"
                 placeholder="A valid tribe listing pass must be presented upon payment to enjoy the offer."
-                onChange={(e: any) => handleChangeDeal(deal.id, "termsConditions", e.target.value)}
+                onChange={(e: any) =>
+                  handleChangeDeal(deal.id, "termsConditions", e.target.value)
+                }
               />
               {multiple && <AddDealButton />}
               <Break />
@@ -125,10 +144,15 @@ const AddDeals = (props: AddDealsProps) => {
           )}
       <div className="flex gap-5">
         <CancelButton />
-        <Button text="Confirm" width={280} size="small" onClick={() => onSubmit(localDealList)} />
+        <Button
+          text="Confirm"
+          width={280}
+          size="small"
+          onClick={() => onSubmit(localDealList)}
+        />
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default AddDeals
+export default AddDeals;

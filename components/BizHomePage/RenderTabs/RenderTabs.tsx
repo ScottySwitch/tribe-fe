@@ -15,6 +15,7 @@ import { useState } from "react";
 import Heading from "../../Heading/Heading";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 import styles from "./RenderTabs.module.scss";
+import moment from "moment";
 
 const initSelectedTab = (category) => {
   switch (category) {
@@ -141,6 +142,8 @@ const TabContent = ({
             new Date(item.validUntil).toLocaleString() ||
             item.expireAt ||
             "";
+          const currency =
+            get(item, "attributes.expire_at") || item.currency || "";
           return (
             <div
               key={id}
@@ -154,6 +157,7 @@ const TabContent = ({
                 price={price}
                 description={description}
                 expiredAt={expiredAt}
+                currency={currency.toUpperCase()}
               />
               {isItem && (
                 <div className={styles.delete} onClick={() => onDelete(item)}>
@@ -271,14 +275,17 @@ const RenderTabs = (props: {
       break;
     case ListingTabs.DEAL:
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const blankText = (userInfo && userInfo.token) ? "There are no deal yet" : "Login/sign up to see deals"
+      const blankText =
+        userInfo && userInfo.token
+          ? "There are no deal yet"
+          : "Login/sign up to see deals";
       tabContent = (
         <TabContent
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={(userInfo && userInfo.token) ? dealList : []}
+          list={userInfo && userInfo.token ? dealList : []}
           blankImg={require("public/images/no-product.svg")}
           blankText={blankText}
           buttonText="Add deals now"

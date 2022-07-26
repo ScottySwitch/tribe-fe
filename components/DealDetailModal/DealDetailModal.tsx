@@ -26,6 +26,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props;
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  console.log("data", data);
 
   useEffect(() => {
     if (data) {
