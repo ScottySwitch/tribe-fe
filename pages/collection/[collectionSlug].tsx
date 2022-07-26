@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
+import { changeToSlugify, formatBizlistingArray, isArray } from "utils";
 
 type Object = {
   [key: string]: any;
@@ -42,12 +43,12 @@ const Collection = (props) => {
   const [pagination, setPagination] = useState(defaultPagination);
   const [collection, setCollection] = useState<Object[]>([]);
   const [collectionDetail, setCollectionDetail] = useState<Object>({});
+  const [listing, setListing] = useState<Object[]>([]);
 
   useEffect(() => {
     const getCollection = async () => {
       const response = await CollectionApi.getAllCollectionByCollectionSlug(
-        collectionSlug,
-        selectedTab
+        collectionSlug
       );
       const listingsOfCollection = get(
         response,
@@ -57,6 +58,11 @@ const Collection = (props) => {
         response,
         "data.data[0].attributes.banner.data.attributes.url"
       );
+      const bannerMobile =
+        get(
+          response,
+          "data.data[0].attributes.banner_mobile.data.attributes.url"
+        ) || banner;
       const collectionName = get(response, "data.data[0].attributes.name");
       const description = get(response, "data.data[0].attributes.description");
 
@@ -64,36 +70,48 @@ const Collection = (props) => {
         collectionName,
         description,
         banner,
+        bannerMobile,
       };
-
-      const mappedListings = Array.isArray(listingsOfCollection)
-        ? listingsOfCollection.map((item) => ({
-            images: get(item, "attributes.images") || [],
-            title: get(item, "attributes.name"),
-            slug: get(item, "attributes.slug"),
-            isVerified: get(item, "attributes.is_verified"),
-            address: get(item, "attributes.address"),
-            country: get(item, "attributes.country"),
-            description: get(item, "attributes.description"),
-            // followerNumber: get(item, "user_listing_follows.length"),
-            // tags: get(item, "attributes.tags"),
-            // categories: get(item, "attributes.categories"),
-            price: get(item, "attributes.price_range.min") || "",
-            currency: get(item, "attributes.price_range.currency") || "",
-            // rate: get(item, "attributes.rate"),
-            // rateNumber: get(item, "attributes.rate_number"),
-          }))
+      const mappedListings = isArray(listingsOfCollection)
+        ? formatBizlistingArray(listingsOfCollection)
         : [];
+      // const mappedListings = Array.isArray(listingsOfCollection)
+      //   ? listingsOfCollection.map((item) => ({
+      //       images: get(item, "attributes.images") || [],
+      //       title: get(item, "attributes.name"),
+      //       slug: get(item, "attributes.slug"),
+      //       isVerified: get(item, "attributes.is_verified"),
+      //       address: get(item, "attributes.address"),
+      //       country: get(item, "attributes.country"),
+      //       description: get(item, "attributes.description"),
+      //       followerNumber: get(item, "user_listing_follows.length"),
+      //       tags: get(item, "attributes.tags"),
+      //       categories: get(item, "attributes.categories"),
+      //       price: get(item, "attributes.min_price") || "",
+      //       currency: get(item, "attributes.currency") || "",
+      //       rate: get(item, "attributes.rating"),
+      //       rateNumber: get(item, "attributes.rate_number"),
+      //     }))
+      //   : [];
 
       setCollection(mappedListings);
+      setListing(mappedListings);
       setLoading(false);
+      console.log("collectionDetailObject", collectionDetailObject);
       if (collectionName && description && banner) {
         setCollectionDetail(collectionDetailObject);
       }
     };
 
     getCollection();
-  }, [pagination, collectionSlug, selectedTab]);
+  }, [pagination, collectionSlug]);
+
+  useEffect(() => {
+    const arrayFilterListing = collection.filter(
+      (item) => changeToSlugify(get(item, "categories[0]")) === selectedTab
+    );
+    selectedTab ? setListing(arrayFilterListing) : setListing(collection);
+  }, [selectedTab]);
 
   if (loading) {
     return (
@@ -118,7 +136,16 @@ const Collection = (props) => {
             alt=""
             layout="fill"
             objectFit="cover"
-            className={styles.collection_banner_img}
+            className={`${styles.collection_banner_img} ${styles.collection_banner_desktop}`}
+          />
+        )}
+        {collectionDetail.bannerMobile && (
+          <Image
+            src={collectionDetail.bannerMobile}
+            alt=""
+            layout="fill"
+            objectFit="cover"
+            className={styles.collection_banner_mobile}
           />
         )}
         <div className={styles.collection_context_container}>
@@ -143,8 +170,8 @@ const Collection = (props) => {
       </SectionLayout>
       <SectionLayout>
         <div className="flex flex-wrap gap-3 md:gap-2 lg:gap-5">
-          {Array.isArray(collection) &&
-            collection.map((item) => (
+          {Array.isArray(listing) &&
+            listing.map((item) => (
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   imgUrl={item.images[0]}

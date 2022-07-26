@@ -63,6 +63,10 @@
     z-index: -1;
     object-position: right;
   }
+
+  .collection_banner_mobile {
+    display: none !important;
+  }
 }
 
 .tab_filter,
@@ -346,6 +350,14 @@
       object-position: 50% 20%;
       object-fit: scale-down;
     }
+
+    .collection_banner_desktop {
+      display: none !important;
+    }
+
+    .collection_banner_mobile {
+      display: block !important;
+    }
   }
 
   .main_catbanner {
@@ -376,5 +388,20 @@
 
   .for_you_container {
     gap: 10px;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  .collection_banner {
+    .collection_context_container {
+      text-shadow: 2px 2px 3px #6a616152;
+
+      .collection_name {
+        font-size: 38px;
+      }
+      .collection_description {
+        font-size: $text-md;
+      }
+    }
   }
 }

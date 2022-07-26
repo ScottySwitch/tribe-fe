@@ -87,7 +87,15 @@ const getAllCollectionByCollectionSlug = async (
         //   slug: category,
         // },
       },
-      populate: "*",
+      populate: [
+        "category",
+        "biz_listings.categories",
+        "biz_listings.user_listing_follows",
+        "biz_listings.tags",
+        "biz_listings.reviews",
+        "banner",
+        "thumbnail",
+      ],
     },
     {
       encodeValuesOnly: true,
