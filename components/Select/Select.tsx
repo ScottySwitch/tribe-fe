@@ -25,6 +25,7 @@ export interface SelectProps {
   disabled?: boolean;
   placeholder?: string;
   isMulti?: boolean;
+  menuLeft?: string | number;
   isSearchable?: boolean;
   closeMenuOnSelect?: boolean;
   menuFooter?: ReactNode;
@@ -33,6 +34,7 @@ export interface SelectProps {
   menuWidth?: string | number;
   ellipsis?: boolean;
   isClearable?: boolean;
+  menuPortalTarget?: any;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
   inputRef?: any;
@@ -57,6 +59,8 @@ const Select = (props: SelectProps) => {
     options,
     value,
     isClearable,
+    menuLeft,
+    menuPortalTarget,
     shouldControlShowValue,
     placeholder,
     isSearchable = true,
@@ -149,7 +153,11 @@ const Select = (props: SelectProps) => {
       ...styles,
       width: "fit-content",
       top: "30px",
-      left: "-10px !important",
+      left: menuLeft || "-10px !important",
+    }),
+    menuPortal: (styles) => ({
+      ...styles,
+      zIndex: 2,
     }),
     valueContainer: (styles) => ({
       ...styles,
@@ -223,9 +231,11 @@ const Select = (props: SelectProps) => {
             closeMenuOnSelect={closeMenuOnSelect || !isMulti}
             isDisabled={disabled}
             styles={customStyles}
+            menuPortalTarget={menuPortalTarget}
             // @ts-ignore
             inputRef={inputRef}
             isMulti={isMulti}
+            menuPlacement="auto"
             isSearchable={isSearchable}
             onChange={handleChange}
             components={{ MenuList, SingleValue }}
