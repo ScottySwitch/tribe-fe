@@ -15,6 +15,8 @@ import UserFollowApi from "services/user-listing-follow";
 import UserFavouriteApi from "services/user-listing-favourite";
 
 import styles from "./ListingInforCard.module.scss";
+import Select from "components/Select/Select";
+import { currencyOptions } from "constant";
 
 interface ListingInforCardProps {
   isPaid?: boolean;
@@ -129,12 +131,10 @@ const ReviewsFollowers = (props: {
       <div className={reviewsFollowersClassName}>
         <div className={styles.reviews}>
           {/*// TODO: currently review star is image*/}
-          <Image
-            src={require("public/images/no-review-star.svg")}
-            width={80}
-            height={40}
-            alt=""
-          />
+          <div className={`flex flex-row items-center ${styles.rating}`}>
+            <Icon icon="red-star" size={16} color="white" />
+            <p>{bizListing.rating}</p>
+          </div>
           <p>
             ({bizListingReviewCount} review
             {bizListingReviewCount > 1 ? "s" : ""})
@@ -354,7 +354,19 @@ const ListingInforCard = (props: ListingInforCardProps) => {
         }}
       >
         <div className="px-[30px] py-5">
-          <Input
+          <Select
+            placeholder="Select a currency"
+            options={currencyOptions}
+            value={newPriceRange?.currency}
+            onChange={(e) => {
+              console.log("e", e);
+              setNewPriceRange({
+                ...newPriceRange,
+                currency: e.value,
+              });
+            }}
+          />
+          {/* <Input
             placeholder="Select a currency"
             value={newPriceRange?.currency}
             onChange={(e: any) =>
@@ -363,7 +375,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
                 currency: e.target.value,
               })
             }
-          />
+          /> */}
           <div className="flex gap-5 w-full mt-3">
             <Input
               width="50%"

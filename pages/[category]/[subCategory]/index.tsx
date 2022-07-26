@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { filter, get, isArray } from "lodash";
+import { filter, get } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
@@ -26,7 +26,7 @@ import { UserInforContext } from "Context/UserInforContext";
 import Button from "components/Button/Button";
 import Filter, { IFilter } from "components/Filter/Filter";
 import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
-
+import { isArray } from "utils";
 import styles from "styles/Home.module.scss";
 import Badge from "components/Badge/Badge";
 import useGetCountry from "hooks/useGetCountry";
@@ -66,7 +66,8 @@ const SubCategoryPage = (context) => {
   useEffect(() => {
     const getData = async () => {
       const dataBanners = await BannerApi.getBannerCustom({
-        categories: category,
+        // categories: category,
+        categoryLinks: categoryLink,
         limit: 12,
         page: 1,
       });
@@ -93,7 +94,7 @@ const SubCategoryPage = (context) => {
 
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [categoryLink]);
 
   useEffect(() => {
     const getBizListings = async () => {
@@ -180,7 +181,6 @@ const SubCategoryPage = (context) => {
       )}
     </Button>
   );
-
   return (
     <div>
       <SectionLayout className="pt-0">
@@ -190,27 +190,26 @@ const SubCategoryPage = (context) => {
           <Icon icon="carret-right" size={14} color="#7F859F" />
           {categoryLink}
         </div>
-        <Carousel
-          responsive={homeBannerResponsive}
-          isShow={isArray(bannerArray) && bannerArray.length > 0}
-        >
-          {bannerArray.map((img, index) => (
-            <div
-              key={index}
-              className={styles.banner_card}
-              onClick={() => router.push(`${img.linkActive}`)}
-            >
-              <Image
-                alt=""
-                layout="intrinsic"
-                src={img.imgUrl}
-                objectFit="contain"
-                width={500}
-                height={200}
-              />
-            </div>
-          ))}
-        </Carousel>
+        {isArray(bannerArray) && (
+          <Carousel responsive={homeBannerResponsive}>
+            {bannerArray.map((img, index) => (
+              <div
+                key={index}
+                className={styles.banner_card}
+                onClick={() => router.push(`${img.linkActive}`)}
+              >
+                <Image
+                  alt=""
+                  layout="intrinsic"
+                  src={img.imgUrl}
+                  objectFit="contain"
+                  width={500}
+                  height={200}
+                />
+              </div>
+            ))}
+          </Carousel>
+        )}
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>

@@ -16,6 +16,14 @@ const getBannerCustom = async (data: any) => {
       },
     };
   }
+  if (data?.categoryLinks) {
+    filter = {
+      ...filter,
+      category_links: {
+        value: data.categoryLinks,
+      },
+    };
+  }
 
   if (data?.limit) {
     pagination.pageSize = data.limit;
