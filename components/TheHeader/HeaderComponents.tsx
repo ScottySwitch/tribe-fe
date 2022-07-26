@@ -84,12 +84,13 @@ export const SwitchAccountsContent = () => {
   const { listingSlug } = query;
 
   const handleSwitchToNormalUser = async () => {
+    router.push("/");
     updateUser({
       avatar: user.user_avatar,
       current_listing_slug: undefined,
       user_type: UserType.NORMAL_USER,
     });
-    router.push("/");
+    console.log("jasndlkandanskjd");
   };
 
   const handleSwitchListing = async (item) => {
