@@ -133,6 +133,7 @@ export const Album = (props: AlbumProps) => {
       reason: reason,
       user: user.id,
       biz_listing: listingId,
+      link_media: images
     };
 
     await reportApi
