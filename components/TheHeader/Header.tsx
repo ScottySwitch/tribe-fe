@@ -74,8 +74,8 @@ const Header = (props: HeaderProps) => {
 
   const HeaderSearchMenuFooter = () => (
     <div>
-      {Array.isArray(categories) &&
-        categories.map((item: any) => (
+      {Array.isArray(navList) &&
+        navList.map((item: any) => (
           <div
             className={styles.category_suggestion}
             key={item.value}
