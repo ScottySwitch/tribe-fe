@@ -13,11 +13,13 @@ import ProductApi from "../../../services/product";
 import Modal, { ModalFooter } from "../../Modal/Modal";
 import { Categories } from "enums";
 
-import styles from "./TabContent.module.scss";
-import useCheckRevision from "hooks/useCheckRevision";
+import useCheckRevision from "hooks/useGetRevision";
 import { useRouter } from "next/router";
 import Loader from "components/Loader/Loader";
+import useGetRevision from "hooks/useGetRevision";
+import { isArray } from "utils";
 
+import styles from "./TabContent.module.scss";
 interface ProductListingProps {
   bizListingId?: number | string;
   isPaid: boolean;
@@ -32,7 +34,12 @@ enum ProductListingScreens {
 const ProductListing = (props: ProductListingProps) => {
   const { isPaid, bizListingId } = props;
 
-  const [loading, setLoading] = useState(true);
+  const { query } = useRouter();
+  const { listingSlug }: any = query;
+
+  const { loading, setLoading, revisionListing, isRevision, revisionId } =
+    useGetRevision(listingSlug);
+
   const [selectedItem, setSelectedItem] = useState<any[]>([]);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const [deleteModalProductId, setDeleteModalProductId] = useState<number>(0);
@@ -41,44 +48,35 @@ const ProductListing = (props: ProductListingProps) => {
     ProductListingScreens.LIST
   );
 
-  const { query } = useRouter();
-  const { listingSlug }: any = query;
-  const { isRevision, revisionId } = useCheckRevision(loading, listingSlug);
-
   useEffect(() => {
-    const getProductsByBizListingId = async (
-      bizListingId: number | string | undefined
-    ) => {
-      const result = await ProductApi.getProductsByBizListingId(
-        bizListingId,
-        "is_pinned:desc"
-      );
-      if (get(result, "data.data")) {
-        let rawListing = get(result, "data.data") || [];
-        const listingArray = rawListing.map((item) => ({
-          name: get(item, "attributes.name"),
-          is_revision: get(item, "attributes.is_revision"),
-          parent_id: get(item, "attributes.parent_id"),
-          price: get(item, "attributes.price"),
-          id: get(item, "attributes.id"),
-          description: get(item, "attributes.description"),
-          images: get(item, "attributes.images"),
-          imgUrl:
-            get(item, 'attributes, "images[0]")') ||
-            "https://picsum.photos/200/300",
-          discount: get(item, "attributes.discount_percent"),
-          tags: get(item, "attributes.tags"),
-          websiteUrl: get(item, "attributes.website_url"),
-          klookUrl: get(item, "attributes.klook_url"),
+    console.log(revisionListing);
+    const getProductsByBizListingId = async () => {
+      const productArray = get(revisionListing, "products");
+      if (isArray(productArray)) {
+        const listingArray = productArray.map((item) => ({
+          name: item.name,
+          is_revision: item.is_revision,
+          parent_id: item.parent_id,
+          price: item.price,
+          id: item.id,
+          description: item.description,
+          images: item.images,
+          imgUrl: get(item, "images[0]") || require("public/images/avatar.svg"),
+          discount: item.discount_percent,
+          tags: item.tags,
+          websiteUrl: item.website_url,
+          klookUrl: item.klook_url,
           isEdited: false,
         }));
+
         setProductList(listingArray);
       }
       setLoading(false);
     };
 
-    loading && getProductsByBizListingId(bizListingId);
-  }, [bizListingId, loading]);
+    getProductsByBizListingId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingSlug, revisionListing, loading]);
 
   const submitProduct = async (e: any) => {
     if (e[0].isEdited) {
