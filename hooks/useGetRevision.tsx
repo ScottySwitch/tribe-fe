@@ -2,18 +2,28 @@ import { get } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import bizListingApi from "services/biz-listing";
+import bizListingRevision from "services/biz-listing-revision";
 
-const useCheckRevision = (loading: boolean, listingSlug?: string) => {
+const useGetRevision = (listingSlug?: string) => {
+  const [loading, setLoading] = useState(true);
   const [revisionId, setRevisionId] = useState<number | undefined>(undefined);
   const [isRevision, setIsRevision] = useState(false);
+  const [revisionListing, setRevisionListing] = useState<any>({});
   const router = useRouter();
+
+  const getRevisionId = async () => {
+    const response = await bizListingRevision.createBizListingRevision(
+      revisionListing
+    );
+    return get(response, "data.data.id");
+  };
 
   useEffect(() => {
     const checkIsRevision = async () => {
       const data = await bizListingApi.getInfoOwnerBizListingBySlug(
         listingSlug
       );
-
+      const listingData = get(data, "data.data[0]");
       const currentRevisionId = get(data, "data.data[0].id");
       const currentIsRevision = get(data, "data.is_revision");
 
@@ -24,12 +34,21 @@ const useCheckRevision = (loading: boolean, listingSlug?: string) => {
         setIsRevision(false);
         setRevisionId(undefined);
       }
+      setRevisionListing(listingData);
+      setLoading(false);
     };
 
     loading && checkIsRevision();
   }, [loading, listingSlug]);
 
-  return { isRevision, revisionId };
+  return {
+    loading,
+    setLoading,
+    revisionListing,
+    isRevision,
+    revisionId,
+    getRevisionId,
+  };
 };
 
-export default useCheckRevision;
+export default useGetRevision;
