@@ -112,8 +112,8 @@
   @media screen and (max-width: $mobile) {
     &_nav {
       margin-right: 16px;
-      font-size: $text-sm;
-      margin-right: 20px !important;
+      font-size: $text-xs;
+      margin-right: 35px !important;
 
       &.secondary_outline {
         margin-right: 10px !important;

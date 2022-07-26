@@ -8,12 +8,6 @@ const getBannerCustom = async (data: any) => {
   // if (data?.country) {
   //   filter.country = data.country;
   // }
-  if (data?.pinnedHomepage) {
-    filter = {
-      ...filter,
-      pinned_home: true,
-    };
-  }
   if (data?.categories) {
     filter = {
       ...filter,

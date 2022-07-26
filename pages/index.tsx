@@ -16,7 +16,7 @@ import CollectionApi from "services/collection";
 import BannerApi from "services/banner";
 import CategoryApi from "services/category";
 import Loader from "components/Loader/Loader";
-import { formatBanner, formatListingArray, isArray } from "utils";
+import { formatListingArray, isArray } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import { Ilisting } from "type";
 import {
@@ -31,7 +31,6 @@ import styles from "styles/Home.module.scss";
 const Home: NextPage = (props: any) => {
   const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
     props;
-  console.log("listBanners", listBanners);
 
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState<number>(16);
@@ -396,9 +395,7 @@ export async function getServerSideProps(context) {
   // Pass data to the page via props
   const dataExclusiveDeal =
     await BizListingApi.getAllBizListingsHaveExclusiveDeal();
-  const dataBanners = await BannerApi.getBannerCustom({
-    pinnedHomepage: true,
-  });
+  const dataBanners = await BannerApi.getBanner();
   const dataCollections = await CollectionApi.getCollection({
     pinnedHomepage: true,
   });
@@ -414,7 +411,12 @@ export async function getServerSideProps(context) {
     get(dataExclusiveDeal, "data.data")
   );
 
-  const bannerArray = formatBanner(rawListBanners);
+  const bannerArray =
+    Array.isArray(rawListBanners) &&
+    rawListBanners.map((item) => ({
+      imgUrl: item.image_url,
+      linkActive: item.link_active,
+    }));
   const collectionArray =
     Array.isArray(rawListCollections) &&
     rawListCollections.map((item) => ({
@@ -441,7 +443,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       listingExclusiveDeal: exclusiveDealListingArray,
-      listBanners: JSON.parse(JSON.stringify(bannerArray)),
+      listBanners: bannerArray,
       listCollections: collectionArray,
       listCategories: categoryArray,
       // listHomeArticles: homeArticleArray,
