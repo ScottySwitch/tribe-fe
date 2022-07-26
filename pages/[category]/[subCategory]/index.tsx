@@ -181,7 +181,6 @@ const SubCategoryPage = (context) => {
       )}
     </Button>
   );
-
   return (
     <div>
       <SectionLayout className="pt-0">
@@ -191,27 +190,26 @@ const SubCategoryPage = (context) => {
           <Icon icon="carret-right" size={14} color="#7F859F" />
           {categoryLink}
         </div>
-        <Carousel
-          responsive={homeBannerResponsive}
-          isShow={isArray(bannerArray)}
-        >
-          {bannerArray.map((img, index) => (
-            <div
-              key={index}
-              className={styles.banner_card}
-              onClick={() => router.push(`${img.linkActive}`)}
-            >
-              <Image
-                alt=""
-                layout="intrinsic"
-                src={img.imgUrl}
-                objectFit="contain"
-                width={500}
-                height={200}
-              />
-            </div>
-          ))}
-        </Carousel>
+        {isArray(bannerArray) && (
+          <Carousel responsive={homeBannerResponsive}>
+            {bannerArray.map((img, index) => (
+              <div
+                key={index}
+                className={styles.banner_card}
+                onClick={() => router.push(`${img.linkActive}`)}
+              >
+                <Image
+                  alt=""
+                  layout="intrinsic"
+                  src={img.imgUrl}
+                  objectFit="contain"
+                  width={500}
+                  height={200}
+                />
+              </div>
+            ))}
+          </Carousel>
+        )}
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
