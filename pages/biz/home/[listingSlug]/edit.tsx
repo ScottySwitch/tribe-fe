@@ -190,12 +190,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           termsConditions: item.terms_conditions,
           // start_date: item.start_date,
           // end_date: moment(item.nd_date')).format("YYYY-MM-DD HH:mm:ss,
-          validUntil: item.end_date
-            ? parseISO(moment(item.end_date).format("YYYY-MM-DD"))
-            : null,
-          startDate: item.start_date
-            ? parseISO(moment(item.start_date).format("YYYY-MM-DD"))
-            : null,
+          validUntil: parseISO(
+            moment(item.end_date).format("YYYY-MM-DD HH:mm:ss")
+          ),
           isChange: false,
         }));
         const rawBizInvoices = listing.biz_invoices || [];
