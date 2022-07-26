@@ -33,7 +33,6 @@ const DealDetailModal = (props: DealDetailModalProps) => {
       const dataFavouriteDeal = await FavouriteDealApi.checkIsFavourite(
         data.id
       );
-      console.log("dataFavouriteDeal", dataFavouriteDeal);
       if (get(dataFavouriteDeal, "data.data.length") == 0) {
         setIsFavourite(false);
       }
