@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 
 import styles from "./Footer.module.scss";
+import { templateSettings } from "lodash";
+import { isArray } from "utils";
 
 const Footer = (props: {
   backgroundColor?: boolean;
@@ -15,8 +17,15 @@ const Footer = (props: {
 
   let newNavList;
   if (navList) {
+    const navListFooter = navList.map((item) => ({
+      category: item.category,
+      icon: item.icon,
+      slug: item.slug,
+      id: item.id,
+      items: isArray(item.items) ? item.items.slice(0, 5) : [],
+    }));
     newNavList = [
-      ...navList,
+      ...navListFooter,
       {
         category: "For Users",
         items: [
@@ -26,7 +35,7 @@ const Footer = (props: {
       },
       {
         category: "Business owners",
-        items: [{ label: "Claim yourself", value: "", href: '/claim' }],
+        items: [{ label: "Claim yourself", value: "", href: "/claim" }],
       },
       {
         category: "About",
@@ -48,21 +57,39 @@ const Footer = (props: {
             <Image src={require("public/logo.svg")} alt="logo" />
           </div>
           <div className={styles.social_row}>
-            <div className={styles.social_image} onClick={() => window.open('https://www.facebook.com/tribesbyhhwt' , '_blank')}>
+            <div
+              className={styles.social_image}
+              onClick={() =>
+                window.open("https://www.facebook.com/tribesbyhhwt", "_blank")
+              }
+            >
               <Image
                 src={require("public/images/facebook_svg.svg")}
                 alt=""
                 width={41}
               />
             </div>
-            <div className={styles.social_image} onClick={() => window.open('https://www.tiktok.com/@tribesbyhhwt?lang=en' , '_blank')}>
+            <div
+              className={styles.social_image}
+              onClick={() =>
+                window.open(
+                  "https://www.tiktok.com/@tribesbyhhwt?lang=en",
+                  "_blank"
+                )
+              }
+            >
               <Image
                 src={require("public/images/tiktok_svg.svg")}
                 alt=""
                 width={41}
               />
             </div>
-            <div className={styles.social_image} onClick={() => window.open('https://www.instagram.com/tribesbyhhwt/' , '_blank')}>
+            <div
+              className={styles.social_image}
+              onClick={() =>
+                window.open("https://www.instagram.com/tribesbyhhwt/", "_blank")
+              }
+            >
               <Image
                 src={require("public/images/instagram_svg.svg")}
                 alt=""

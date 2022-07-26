@@ -110,7 +110,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   "attributes.value"
                 )}`,
               }))
-              .slice(0, 5)
+              // .slice(0, 5)
           : [],
       }));
       setNavList(categoryArray);
