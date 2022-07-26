@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 import { get } from "lodash";
 
 import Break from "components/Break/Break";
@@ -12,9 +14,6 @@ import AddItems from "./AddItems/AddItems";
 import ProductApi from "../../../services/product";
 import Modal, { ModalFooter } from "../../Modal/Modal";
 import { Categories } from "enums";
-
-import useCheckRevision from "hooks/useGetRevision";
-import { useRouter } from "next/router";
 import Loader from "components/Loader/Loader";
 import useGetRevision from "hooks/useGetRevision";
 import { isArray } from "utils";
@@ -37,8 +36,14 @@ const ProductListing = (props: ProductListingProps) => {
   const { query } = useRouter();
   const { listingSlug }: any = query;
 
-  const { loading, setLoading, revisionListing, isRevision, revisionId } =
-    useGetRevision(listingSlug);
+  const {
+    loading,
+    revisionListing,
+    isRevision,
+    revisionId,
+    setLoading,
+    getRevisionId,
+  } = useGetRevision(listingSlug);
 
   const [selectedItem, setSelectedItem] = useState<any[]>([]);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
@@ -49,13 +54,12 @@ const ProductListing = (props: ProductListingProps) => {
   );
 
   useEffect(() => {
-    console.log(revisionListing);
     const getProductsByBizListingId = async () => {
       const productArray = get(revisionListing, "products");
       if (isArray(productArray)) {
         const listingArray = productArray.map((item) => ({
           name: item.name,
-          is_revision: item.is_revision,
+          is_revision: isRevision,
           parent_id: item.parent_id,
           price: item.price,
           id: item.id,
@@ -68,7 +72,6 @@ const ProductListing = (props: ProductListingProps) => {
           klookUrl: item.klook_url,
           isEdited: false,
         }));
-
         setProductList(listingArray);
       }
       setLoading(false);
@@ -78,37 +81,22 @@ const ProductListing = (props: ProductListingProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, revisionListing, loading]);
 
-  const submitProduct = async (e: any) => {
-    if (e[0].isEdited) {
-      const dataSend = { ...e[0] };
-      await ProductApi.updateProduct(e[0].id, dataSend);
-    } else {
-      const newProduct = e[0];
-      const dataSend = {
-        biz_listing: bizListingId,
-        ...newProduct,
-      };
-      await ProductApi.createProduct(dataSend).then((result) => {
-        const newProudct = {
-          name: get(result, "data.data.attributes.name"),
-          is_revision: get(result, "data.data.attributes.is_revision"),
-          parent_id: get(result, "data.data.attributes.parent_id"),
-          price: get(result, "data.data.attributes.price"),
-          id: get(result, "data.data.attributes.id"),
-          description: get(result, "data.data.attributes.description"),
-          images: get(result, "data.data.attributes.images"),
-          imgUrl:
-            get(result, 'data.data.attributes, "images[0]")') ||
-            "https://picsum.photos/200/300",
-          discount: get(result, "data.data.attributes.discount_percent"),
-          tags: get(result, "data.data.attributes.tags"),
-          websiteUrl: get(result, "data.data.attributes.website_url"),
-          klookUrl: get(result, "data.data.attributes.klook_url"),
-          isEdited: false,
-        };
-        setProductList([...productList, newProudct]);
-      });
-    }
+  const submitProduct = async (products: any) => {
+    const product = {
+      biz_listing_revision: isRevision ? bizListingId : await getRevisionId(),
+      ...products[0],
+    };
+
+    const submitProductApi = product.isEdited
+      ? ProductApi.updateProduct(product.id, product)
+      : ProductApi.createProduct(product);
+
+    submitProductApi
+      .then((res) =>
+        toast.success("Create product successfully!", { autoClose: 2000 })
+      )
+      .catch((err) => toast.error("Create product failed!"))
+      .finally(() => setLoading(true));
   };
 
   const handleDelete = async () => {

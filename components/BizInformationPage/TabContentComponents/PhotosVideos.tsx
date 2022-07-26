@@ -21,10 +21,11 @@ const PhotosVideos = () => {
     useGetRevision(listingSlug);
 
   const [images, setImages] = useState<string[]>([]);
-  
+
   const preMedia = useRef(revisionListing.images);
 
   useEffect(() => {
+    preMedia.current = revisionListing.images;
     setImages(revisionListing.images);
   }, [revisionListing]);
 

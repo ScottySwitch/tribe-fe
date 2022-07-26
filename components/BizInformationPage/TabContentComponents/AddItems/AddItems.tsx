@@ -1,69 +1,77 @@
-import Break from "components/Break/Break"
-import Button from "components/Button/Button"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import SelectInput from "components/SelectInput/SelectInput"
-import Upload from "components/Upload/Upload"
-import { currencyOptions, discountTypeOptions } from "constant"
-import { ListingHomePageScreens } from "enums"
-import { useRouter } from "next/router"
-import { useState } from "react"
-import { getIndex, randomId } from "utils"
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import SelectInput from "components/SelectInput/SelectInput";
+import Upload from "components/Upload/Upload";
+import { currencyOptions, discountTypeOptions } from "constant";
+import { ListingHomePageScreens } from "enums";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { getIndex, randomId } from "utils";
 
-import styles from "./AddItems.module.scss"
+import styles from "./AddItems.module.scss";
 
 interface AddItemsProps {
-  isEdit?: boolean
-  isPaid?: boolean
-  multiple?: boolean
-  itemList?: { [key: string]: any }[]
-  placeholders: string[]
-  onSubmit: (list: { [key: string]: any }[]) => void
-  onCancel: () => void
+  isEdit?: boolean;
+  isPaid?: boolean;
+  multiple?: boolean;
+  itemList?: { [key: string]: any }[];
+  placeholders: string[];
+  onSubmit: (list: { [key: string]: any }[]) => void;
+  onCancel: () => void;
 }
 
-const AddItems = (props: AddItemsProps) => {  
-  const { isEdit, itemList = [], isPaid, multiple, placeholders, onCancel, onSubmit } = props
-  const [localItemList, setLocalItemList] = useState(itemList || [])
-  const router = useRouter()
+const AddItems = (props: AddItemsProps) => {
+  const {
+    isEdit,
+    itemList = [],
+    isPaid,
+    multiple,
+    placeholders,
+    onCancel,
+    onSubmit,
+  } = props;
+  const [localItemList, setLocalItemList] = useState(itemList || []);
+  const router = useRouter();
 
-  console.log("itemList", itemList)
+  console.log("itemList", itemList);
 
   const handleRemoveItem = (id: number) => {
-    const newArray = [...localItemList].filter((item) => item.id !== id)
-    setLocalItemList(newArray)
-  }
+    const newArray = [...localItemList].filter((item) => item.id !== id);
+    setLocalItemList(newArray);
+  };
 
   const handleChangeItem = (
     id: number,
     type: string,
     value: string | number | string[] | { [key: string]: any }
   ) => {
-    const index = getIndex(id, localItemList)
-    const newArray = [...localItemList]
+    const index = getIndex(id, localItemList);
+    const newArray = [...localItemList];
     if (isEdit) {
-      newArray[index][type] = value
-      newArray[index].isEdited = true
+      newArray[index][type] = value;
+      newArray[index].isEdited = true;
     } else {
-      newArray[index][type] = value
+      newArray[index][type] = value;
     }
-    setLocalItemList(newArray)
-  }
+    setLocalItemList(newArray);
+  };
 
   const handleAddItem = () => {
-    setLocalItemList([...localItemList, { id: randomId(), isNew: true}])
-  }
+    setLocalItemList([...localItemList, { id: randomId(), isNew: true }]);
+  };
 
   const AddItemButton = () => (
     <Button
       prefix={<Icon icon="plus" />}
-      width={130}
+      width="max-content"
       variant="secondary"
       text="Add another"
       size="small"
       onClick={handleAddItem}
     />
-  )
+  );
 
   const CancelButton = () => (
     <Button
@@ -72,11 +80,11 @@ const AddItems = (props: AddItemsProps) => {
       width={50}
       size="small"
       onClick={() => {
-        setLocalItemList(itemList)
-        onCancel()
+        setLocalItemList(itemList);
+        onCancel();
       }}
     />
-  )
+  );
 
   return (
     <div>
@@ -86,9 +94,12 @@ const AddItems = (props: AddItemsProps) => {
             <div key={item.id} className={styles.add_items_container}>
               <div className={styles.break} />
               <div className={styles.header}>
-              <p className="text-left">{isEdit ? 'Edit' : 'Add'} images</p>
+                <p className="text-left">{isEdit ? "Edit" : "Add"} images</p>
                 {multiple && (
-                  <div className={styles.close} onClick={() => handleRemoveItem(item.id)}>
+                  <div
+                    className={styles.close}
+                    onClick={() => handleRemoveItem(item.id)}
+                  >
                     <Icon icon="cancel" />
                   </div>
                 )}
@@ -103,23 +114,27 @@ const AddItems = (props: AddItemsProps) => {
               <Input
                 value={item.name}
                 placeholder={placeholders[0]}
-                onChange={(e: any) => handleChangeItem(item.id, "name", e.target.value)}
+                onChange={(e: any) =>
+                  handleChangeItem(item.id, "name", e.target.value)
+                }
               />
               <Input
                 value={item.description}
                 placeholder={placeholders[1]}
-                onChange={(e: any) => handleChangeItem(item.id, "description", e.target.value)}
+                onChange={(e: any) =>
+                  handleChangeItem(item.id, "description", e.target.value)
+                }
               />
               <div className="flex gap-3">
                 <SelectInput
                   width="50%"
                   options={currencyOptions}
                   selectPosition="suffix"
-                  value={{input:item.price, select: item.currency}}
+                  value={{ input: item.price, select: item.currency }}
                   placeholder="Enter price"
                   onChange={(e: any) => {
-                    handleChangeItem(item.id, "price", e.input)
-                    handleChangeItem(item.id, "currency", e.select.value)
+                    handleChangeItem(item.id, "price", e.input);
+                    handleChangeItem(item.id, "currency", e.select.value);
                   }}
                 />
                 <SelectInput
@@ -127,10 +142,10 @@ const AddItems = (props: AddItemsProps) => {
                   options={discountTypeOptions}
                   selectPosition="suffix"
                   placeholder="Enter discount"
-                  value={{input:item.discount, select: item.discountType}}
+                  value={{ input: item.discount, select: item.discountType }}
                   onChange={(e: any) => {
-                    handleChangeItem(item.id, "discountType", e.select.value)
-                    handleChangeItem(item.id, "discount", e.input)
+                    handleChangeItem(item.id, "discountType", e.select.value);
+                    handleChangeItem(item.id, "discount", e.input);
                   }}
                   // onChange={(e: any) => console.log(e)}
                 />
@@ -145,14 +160,18 @@ const AddItems = (props: AddItemsProps) => {
                 label="Klook URL"
                 value={item.klookUrl}
                 placeholder="Enter URL"
-                onChange={(e: any) => handleChangeItem(item.id, "klookUrl", e.target.value)}
+                onChange={(e: any) =>
+                  handleChangeItem(item.id, "klookUrl", e.target.value)
+                }
               />
               {isPaid ? (
                 <Input
                   label="Website URL"
                   value={item.websiteUrl}
                   placeholder="Enter URL"
-                  onChange={(e: any) => handleChangeItem(item.id, "websiteUrl", e.target.value)}
+                  onChange={(e: any) =>
+                    handleChangeItem(item.id, "websiteUrl", e.target.value)
+                  }
                 />
               ) : (
                 <Input
@@ -187,7 +206,7 @@ const AddItems = (props: AddItemsProps) => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AddItems
+export default AddItems;

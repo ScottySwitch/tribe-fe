@@ -251,7 +251,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setBizInvoices(bizInvoicesArray);
         setListingRate(listing.rate);
         if (listing?.expiration_date) {
-        // if (get(listing, "biz_invoices.length") > 0) {
+          // if (get(listing, "biz_invoices.length") > 0) {
           setIsPaid(isPaidUser(listing.expiration_date));
         } else {
           setIsPaid(false);
@@ -408,7 +408,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         categories: bizListing.categories.map((item) => item.id) || [],
       }).then((response) => {
         console.log(response);
-        bizListingRevisionCreateId = response.data.data.id;
+        bizListingRevisionCreateId = get(response, "data.data.id");
       });
     }
 
