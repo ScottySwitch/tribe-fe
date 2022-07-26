@@ -102,7 +102,7 @@ const LoginPage = (context) => {
         userInfoLogin.token = jwt;
         localStorage.setItem("user", JSON.stringify(userInfoLogin));
         await AuthApi.getMe();
-        getOwnerListing(id);
+        await getOwnerListing(id);
       }
     } else {
       let result: any = null;
@@ -127,9 +127,10 @@ const LoginPage = (context) => {
         userInfoLogin.token = jwt;
         localStorage.setItem("user", JSON.stringify(userInfoLogin));
         await AuthApi.getMe();
-        getOwnerListing(id);
+        await getOwnerListing(id);
       }
     }
+    
     const finalPreviousPage = [
       "/forgot-password/reset",
       "/signup",

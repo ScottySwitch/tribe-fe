@@ -26,7 +26,7 @@ const Footer = (props: {
       },
       {
         category: "Business owners",
-        items: [{ label: "Claim yourself", value: "", href: '/claim' }],
+        items: [{ label: "Claim yourself", value: "", href: "/claim" }],
       },
       {
         category: "About",
@@ -34,6 +34,7 @@ const Footer = (props: {
           { label: "About us", value: "" },
           { label: "FAQ", value: "", href: "/support" },
           { label: "Contact us", value: "" },
+          { label: "Terms and conditions", href: "/terms-conditions" },
         ],
       },
     ];
@@ -48,21 +49,39 @@ const Footer = (props: {
             <Image src={require("public/logo.svg")} alt="logo" />
           </div>
           <div className={styles.social_row}>
-            <div className={styles.social_image} onClick={() => window.open('https://www.facebook.com/tribesbyhhwt' , '_blank')}>
+            <div
+              className={styles.social_image}
+              onClick={() =>
+                window.open("https://www.facebook.com/tribesbyhhwt", "_blank")
+              }
+            >
               <Image
                 src={require("public/images/facebook_svg.svg")}
                 alt=""
                 width={41}
               />
             </div>
-            <div className={styles.social_image} onClick={() => window.open('https://www.tiktok.com/@tribesbyhhwt?lang=en' , '_blank')}>
+            <div
+              className={styles.social_image}
+              onClick={() =>
+                window.open(
+                  "https://www.tiktok.com/@tribesbyhhwt?lang=en",
+                  "_blank"
+                )
+              }
+            >
               <Image
                 src={require("public/images/tiktok_svg.svg")}
                 alt=""
                 width={41}
               />
             </div>
-            <div className={styles.social_image} onClick={() => window.open('https://www.instagram.com/tribesbyhhwt/' , '_blank')}>
+            <div
+              className={styles.social_image}
+              onClick={() =>
+                window.open("https://www.instagram.com/tribesbyhhwt/", "_blank")
+              }
+            >
               <Image
                 src={require("public/images/instagram_svg.svg")}
                 alt=""
