@@ -18,6 +18,8 @@ import SelectInput from "components/SelectInput/SelectInput";
 import { formattedAreaCodes } from "constant";
 
 import styles from "styles/BizUserVerify.module.scss";
+import moment from "moment";
+import bizListingApi from "services/biz-listing";
 interface BizUserVerifyProps {
   tier: string;
 }
@@ -48,6 +50,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   const router = useRouter();
   let baseURL = process.env.NEXT_PUBLIC_API_URL;
+  // let baseURL =
+  //   "https://2584-2001-ee0-500d-3a90-ec3f-d03b-63d9-f470.ap.ngrok.io/";
 
   console.log(tier);
 
@@ -105,9 +109,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     const baseUrl = strapiStripe?.dataset.url || "";
     userInfo.strapiStripeUrl = baseUrl;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    const getProductApi = baseUrl + "/strapi-stripe/getProduct/" + productId;
-    const checkoutSessionUrl =
-      baseUrl + "/strapi-stripe/createCheckoutSession/";
+    const getProductApi = baseUrl + "strapi-stripe/getProduct/" + productId;
+    const checkoutSessionUrl = baseUrl + "strapi-stripe/createCheckoutSession/";
 
     fetch(getProductApi, {
       method: "get",
@@ -257,6 +260,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       transaction_id = "";
     }
     if (price != null) {
+      const nowDay = moment();
+      let expiration_date =
+        price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
+      await bizListingApi.updateBizListing(userInfo.biz_id, {
+        expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
+      });
       if (userInfo.type_handle === "Claim") {
         const result = await BizInvoinceApi.createBizInvoice({
           value: parseInt(price),
@@ -467,7 +476,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 className="css style"
                 type="button"
                 id="SS_ProductCheckout"
-                data-id={payPrice === "600" ? 4 : 3}
+                data-id={payPrice === "600" ? 2 : 1}
                 data-url={baseURL}
                 text="Next"
                 onClick={handleSubmit}

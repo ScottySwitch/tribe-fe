@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 
 import styles from "./Footer.module.scss";
+import { templateSettings } from "lodash";
+import { isArray } from "utils";
 
 const Footer = (props: {
   backgroundColor?: boolean;
@@ -15,8 +17,15 @@ const Footer = (props: {
 
   let newNavList;
   if (navList) {
+    const navListFooter = navList.map((item) => ({
+      category: item.category,
+      icon: item.icon,
+      slug: item.slug,
+      id: item.id,
+      items: isArray(item.items) ? item.items.slice(0, 5) : [],
+    }));
     newNavList = [
-      ...navList,
+      ...navListFooter,
       {
         category: "For Users",
         items: [

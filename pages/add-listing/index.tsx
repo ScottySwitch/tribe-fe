@@ -138,11 +138,11 @@ const AddListing = () => {
       //   max: formData.maxPrice,
       // },
       min_price: isNaN(parseFloat(formData.minPrice))
-        ? parseFloat(formData.minPrice)
-        : 0,
+        ? 0
+        : parseFloat(formData.minPrice),
       max_price: isNaN(parseFloat(formData.maxPrice))
-        ? parseFloat(formData.maxPrice)
-        : 0,
+        ? 0
+        : parseFloat(formData.maxPrice),
       currency: get(formData, "currency.value") || null,
       images: formData.images,
       open_hours: formData.openHours,
@@ -205,7 +205,7 @@ const AddListing = () => {
     await ContributeApi.createContribute(dataSendContribute);
     userInfo = {
       ...userInfo,
-      pay_price: "600",
+      pay_price: "150",
       biz_id: get(result, "data.data.id"),
       biz_slug: get(result, "data.data.attributes.slug"),
       role: get(formData, "role.label"),

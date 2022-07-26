@@ -42,7 +42,7 @@ const AddListingPageOne = (props: AddListingProps) => {
       setBizListing(data.data.data);
     };
 
-    if (category && relationship === "Yes") {
+    if (category && relationship) {
       getBizListingsByCategoryId(category).catch(console.error);
     }
   }, [category, relationship]);
