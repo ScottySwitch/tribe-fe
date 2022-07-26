@@ -133,7 +133,7 @@ export const formatListingArray = (rawListing) =>
         price: get(item, "min_price") || "",
         // currency: get(get(item, "price_range.currency") || "",
         currency: get(item, "currency") || "",
-        rate: get(item, "rate"),
+        rate: get(item, "rating"),
         rateNumber: get(item, "rate_number"),
       }))
     : [];
