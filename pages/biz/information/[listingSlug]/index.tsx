@@ -23,6 +23,7 @@ import {
 import styles from "styles/BizInformation.module.scss";
 import { Router, useRouter } from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
+import { isPaidUser } from "utils";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -44,7 +45,12 @@ const BizInformation = (props) => {
       //TODO: Check listing is owned by user before returning biz listing data on BE
       const listing = get(data, "data.data[0]") || {};
       const isPaidListing = get(listing, "biz_invoices.length") > 0;
-      setIsPaid(isPaidListing);
+      if (listing?.expiration_date) {
+        setIsPaid(isPaidUser(listing.expiration_date));
+      } else {
+        setIsPaid(false);
+      }
+      // setIsPaid(isPaidListing);
       setListing(listing);
       setLoading(false);
     };
@@ -64,7 +70,7 @@ const BizInformation = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, loading]);
 
-  const onSubmit = async (data) => { 
+  const onSubmit = async (data) => {
     listing.id &&
       (await BizListing.updateBizListing(listing.id, {
         ...listing,

@@ -143,7 +143,7 @@ const TabContent = ({
             item.expireAt ||
             "";
           const currency =
-            get(item, "attributes.expire_at") || item.currency || "";
+            get(item, "attributes.currency") || item.currency || "";
           return (
             <div
               key={id}
