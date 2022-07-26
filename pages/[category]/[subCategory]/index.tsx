@@ -187,7 +187,7 @@ const SubCategoryPage = (context) => {
     </Button>
   );
 
-  const showSubCategoryNumber = isMobile ? 3 : 5;
+  const showSubCategoryNumber = isMobile ? 1 : 5;
 
   const moreSubCategoryStyles = {
     fontWeight: "bold",
@@ -197,6 +197,10 @@ const SubCategoryPage = (context) => {
 
   const moreSubCategoryOptions = Array.isArray(categoryLinkArray)
     ? categoryLinkArray.slice(showSubCategoryNumber)
+    : [];
+
+  const subCategoryOptions = Array.isArray(categoryLinkArray)
+    ? categoryLinkArray.slice(0, showSubCategoryNumber)
     : [];
 
   return (
@@ -237,11 +241,7 @@ const SubCategoryPage = (context) => {
           >
             <div className={styles.scroll_box}>
               <TabsHorizontal
-                tablist={
-                  Array.isArray(categoryLinkArray)
-                    ? categoryLinkArray.slice(0, showSubCategoryNumber)
-                    : []
-                }
+                tablist={subCategoryOptions}
                 type="secondary-no-outline"
                 selectedTab={categoryLink}
                 className="pt-[6px]"
@@ -250,13 +250,11 @@ const SubCategoryPage = (context) => {
               <Select
                 placeholder="More"
                 isSearchable={false}
-                width={170}
+                width={250}
                 className={styles.sub_category_more}
-                variant="no-outlined"
+                variant="outlined"
                 size="small"
                 key={categoryLink}
-                menuWidth={170}
-                menuLeft="-50px !important"
                 menuPortalTarget={document.querySelector("body")}
                 value={categoryLink}
                 onChange={(e) => handleChangeSubCategory(e.value)}
