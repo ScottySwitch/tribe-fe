@@ -408,7 +408,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         categories: bizListing.categories.map((item) => item.id) || [],
       }).then((response) => {
         console.log(response);
-        bizListingRevisionCreateId = response.data.data.id;
+        bizListingRevisionCreateId = get(response, "data.data.id");
       });
     }
 

@@ -1807,25 +1807,17 @@ export const getAddItemsFields = (category, isEdit?: boolean) => {
     case Categories.BUY: // Buy
       return {
         title: isEdit ? "Edit product" : "Add products",
-        placeholder: [
-          "Product",
-          "describe your product (optional)",
-          "Create products",
-        ],
+        placeholder: ["Product", "describe your product (optional)", "Submit"],
       };
     case Categories.EAT: // Eat
       return {
         title: isEdit ? "Edit dish" : "Add dishes",
-        placeholder: ["Dish", "describe your dish (optional)", "Create dishes"],
+        placeholder: ["Dish", "describe your dish (optional)", "Submit"],
       };
     default:
       return {
         title: isEdit ? "Edit service" : "Add services",
-        placeholder: [
-          "Service",
-          "describe your service (optional)",
-          "Create services",
-        ],
+        placeholder: ["Service", "describe your service (optional)", "Submit"],
       };
   }
 };

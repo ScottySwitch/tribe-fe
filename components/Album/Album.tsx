@@ -151,7 +151,7 @@ export const Album = (props: AlbumProps) => {
       });
   };
 
-  const notOtherReason = reportReasons.slice(0, 5).map((item) => item.value);
+  const notOtherReason = reportReasons?.slice(0, 5).map((item) => item.value);
   notOtherReason.push("default");
 
   const galleryPrevBtnClassName = classNames(styles.btn_prev, {

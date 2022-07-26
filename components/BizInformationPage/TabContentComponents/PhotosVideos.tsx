@@ -1,49 +1,33 @@
-import Break from "components/Break/Break";
-import Button from "components/Button/Button";
-import InforCard from "components/InforCard/InforCard";
-import Loader from "components/Loader/Loader";
-import SectionLayout from "components/SectionLayout/SectionLayout";
-import Upload from "components/Upload/Upload";
-import { bizInformationDefaultFormData } from "constant";
-import useCheckRevision from "hooks/useCheckRevision";
 import _, { get, isArray } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import bizListingApi from "services/biz-listing";
+
+import Break from "components/Break/Break";
+import Button from "components/Button/Button";
+import Loader from "components/Loader/Loader";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import Upload from "components/Upload/Upload";
+import useGetRevision from "hooks/useGetRevision";
 import bizListingRevision from "services/biz-listing-revision";
-import { Ilisting } from "type";
+
 import styles from "./TabContent.module.scss";
 
 const PhotosVideos = () => {
-  const [loading, setLoading] = useState(true);
-  const [isPaid, setIsPaid] = useState(true);
-  const [listing, setListing] = useState<any>({});
-  const [images, setImages] = useState(
-    isArray(listing.images) ? listing.images : []
-  );
-
   const { query } = useRouter();
   const { listingSlug }: any = query;
 
-  const preMedia = useRef(listing.images);
-  const isSameMedia = !_.isEqual(images, preMedia.current);
-  const { isRevision, revisionId } = useCheckRevision(loading, listingSlug);
+  const { loading, setLoading, revisionListing, isRevision, revisionId } =
+    useGetRevision(listingSlug);
+
+  const [images, setImages] = useState<string[]>([]);
+
+  const preMedia = useRef(revisionListing.images);
 
   useEffect(() => {
-    const getListingData = async () => {
-      const data = await bizListingApi.getInfoBizListingBySlug(listingSlug);
-      const listing = get(data, "data.data[0]") || {};
-      const isPaidListing = get(listing, "biz_invoices.length") > 0;
-
-      setIsPaid(isPaidListing);
-      setListing(listing);
-      setLoading(false);
-    };
-
-    listingSlug && loading && getListingData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listingSlug, loading]);
+    preMedia.current = revisionListing.images;
+    setImages(revisionListing.images);
+  }, [revisionListing]);
 
   const updateListingImages = async () => {
     const updateMedia =
@@ -52,7 +36,7 @@ const PhotosVideos = () => {
             images: images,
           })
         : bizListingRevision.createBizListingRevision({
-            slug: listing.slug,
+            slug: revisionListing.slug,
             images: images,
           });
 
@@ -82,7 +66,7 @@ const PhotosVideos = () => {
         <Button
           text="Save change"
           width={200}
-          disabled={!isSameMedia}
+          disabled={_.isEqual(images, preMedia.current)}
           onClick={updateListingImages}
         />
       </div>
@@ -93,7 +77,7 @@ const PhotosVideos = () => {
           type="media"
           fileList={images}
           onChange={(imageList) => setImages(imageList)}
-          isPaid={isPaid}
+          isPaid={revisionListing.isPaid}
         />
       </div>
       <Break />

@@ -130,7 +130,7 @@ const LoginPage = (context) => {
         await getOwnerListing(id);
       }
     }
-    
+
     const finalPreviousPage = [
       "/forgot-password/reset",
       "/signup",
@@ -249,7 +249,7 @@ export async function getServerSideProps(context) {
   const prevPage = context.req.headers.referer;
   const host = context.req.headers.host;
   const index = prevPage?.indexOf(host) + host.length;
-  const prevPagePathname = prevPage.slice(index);
+  const prevPagePathname = prevPage?.slice(index);
 
   // Pass data to the page via props
   return {
