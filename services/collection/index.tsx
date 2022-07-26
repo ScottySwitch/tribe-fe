@@ -83,9 +83,9 @@ const getAllCollectionByCollectionSlug = async (
     {
       filters: {
         slug: collectionSlug,
-        category: {
-          slug: category,
-        },
+        // category: {
+        //   slug: category,
+        // },
       },
       populate: "*",
     },
