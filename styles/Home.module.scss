@@ -76,8 +76,6 @@
   background-color: white;
   z-index: 2;
   left: 0;
-  overflow-y: visible !important;
-
   padding: 0;
   cursor: pointer;
 
@@ -96,23 +94,13 @@
     }
   }
   .quick_filter_container {
-    height: max-content;
-    width: 100%;
     overflow-x: auto;
-    overflow-y: visible !important;
-
+    width: 100%;
     .scroll_box {
       padding: 4px 0 10px 0;
       display: flex;
       width: max-content;
       gap: 6px;
-      overflow-y: visible !important;
-
-      position: relative;
-
-      .sub_category_more {
-        position: relative;
-      }
     }
   }
 

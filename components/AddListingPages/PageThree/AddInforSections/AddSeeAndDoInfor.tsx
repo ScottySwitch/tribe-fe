@@ -254,7 +254,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
               size="small"
               width={270}
               type="submit"
-              disabled={!isEdit && !isValid}
+              disabled={!isValid}
             />
           </div>
         </form>

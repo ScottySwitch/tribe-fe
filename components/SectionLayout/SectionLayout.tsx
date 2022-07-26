@@ -7,7 +7,6 @@ import Icon from "components/Icon/Icon";
 import styles from "./SectionLayout.module.scss";
 
 export interface SectionLayoutProps {
-  id?: string;
   title?: string;
   loading?: boolean;
   className?: string;
@@ -23,7 +22,6 @@ export interface SectionLayoutProps {
 }
 const SectionLayout = (props: SectionLayoutProps) => {
   const {
-    id,
     loading,
     title,
     className,
@@ -42,7 +40,7 @@ const SectionLayout = (props: SectionLayoutProps) => {
     [styles.colored_background]: backgroundColor,
     [styles.transparent]: transparent,
   });
-  const router = useRouter();
+  const router = useRouter()
 
   const titleContainerClassNames = classNames(
     styles.title_container,
@@ -54,7 +52,7 @@ const SectionLayout = (props: SectionLayoutProps) => {
     return null;
   }
   return (
-    <div id={id} className={sectionlayoutClassName}>
+    <div className={sectionlayoutClassName}>
       <div className={`${styles.container} ${containerClassName}`}>
         {title && (
           <div className={styles.row}>
@@ -62,22 +60,17 @@ const SectionLayout = (props: SectionLayoutProps) => {
               <div className={styles.title}>{title}</div>
               {subTitle && <div className={styles.sub_title}>{subTitle}</div>}
             </div>
-            {seeMore && (
+            {seeMore &&
               <div className={styles.wrapper_seemore}>
-                <div
-                  className={styles.see_more}
-                  onClick={() => router.push(`/${seeMore}`)}
-                >
-                  See more
-                </div>
-                <Icon
+                <div className={styles.see_more} onClick={() => router.push(`/${seeMore}`)}>See more</div>
+                <Icon 
                   className={styles.icon_seemore}
                   size={16}
                   color="#e60112"
                   icon="next"
                 />
               </div>
-            )}
+            }
           </div>
         )}
         <div className={childrenClassNames}>
