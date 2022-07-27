@@ -61,7 +61,7 @@ const SubCategoryPage = (context) => {
   const [pagination, setPagination] = useState(defaultPagination);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [showFilter, setShowFilter] = useState(false);
-  const [filter, setFilter] = useState(defaultFilterOptions);
+  const [filter, setFilter] = useState<IFilter | {}>(defaultFilterOptions);
 
   useEffect(() => {
     const getData = async () => {
@@ -133,8 +133,8 @@ const SubCategoryPage = (context) => {
     );
   }
 
-  const handleFilter = (e?: IFilter) => {
-    e && setFilter({ ...filter, ...e });
+  const handleFilter = (e?: IFilter | {}) => {
+    e ? setFilter({ ...filter, ...e }) : setFilter({});
   };
 
   const handleChangeSubCategory = (e) => {
@@ -286,15 +286,15 @@ const SubCategoryPage = (context) => {
           />
         )}
         <TopSearches />
-        <Filter
-          // make Filter rerender when filter state change
-          key={JSON.stringify(filter)}
-          visible={showFilter}
-          filter={filter}
-          onClose={() => setShowFilter(false)}
-          onSubmitFilter={handleFilter}
-        />
       </SectionLayout>
+      <Filter
+        // make Filter rerender when filter state change
+        key={JSON.stringify(filter)}
+        visible={showFilter}
+        filter={filter}
+        onClose={() => setShowFilter(false)}
+        onSubmitFilter={handleFilter}
+      />
     </div>
   );
 };

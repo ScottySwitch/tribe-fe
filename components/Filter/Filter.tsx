@@ -83,12 +83,12 @@ const Other = ({
   options = [],
   onFilter,
 }: {
-  filter?: IFilter;
+  filter: IFilter | {};
   filterKey: string;
   options?: IOption[];
   onFilter: (e: { [key: string]: string[] }) => void;
 }) => {
-  const selectedArray = filter?.[filterKey];
+  const selectedArray = filter?.[filterKey] || [];
   const [filteredOptions, setFilteredOptions] = useState(options || []);
   const [selectedOptions, setSelectedOptions] =
     useState<string[]>(selectedArray);
@@ -108,7 +108,7 @@ const Other = ({
     const checkboxValue = e.target.value;
     let newSelectedOptions;
 
-    if (selectedOptions.includes(checkboxValue)) {
+    if (selectedOptions?.includes(checkboxValue)) {
       newSelectedOptions = [...selectedOptions].filter(
         (item) => item !== checkboxValue
       );
@@ -133,7 +133,7 @@ const Other = ({
           filteredOptions.map((opt, index) => (
             <Checkbox
               key={(opt.label as string) + index}
-              checked={selectedOptions.includes(opt.value)}
+              checked={selectedOptions?.includes(opt.value)}
               label={opt.label}
               value={opt.value}
               onChange={handleUpdateOptions}
@@ -147,14 +147,14 @@ const Other = ({
 export interface FilterProps extends ModalProps {
   finalTabList?: IOption[];
   otherList?: IOption[];
-  filter?: IFilter;
-  onSubmitFilter: (e?: IFilter) => void;
+  filter: IFilter | {};
+  onSubmitFilter: (e?: IFilter | {}) => void;
 }
 
 const Filter = (props: FilterProps) => {
   const { visible, filter, onSubmitFilter, onClose } = props;
 
-  const [localFilter, setLocalFilter] = useState<IFilter | undefined>(filter);
+  const [localFilter, setLocalFilter] = useState<IFilter | {}>(filter);
   const [productTypes, setProductTypes] = useState<IOption[]>([]);
   const [productBrands, setProductBrands] = useState<IOption[]>([]);
 
@@ -181,7 +181,7 @@ const Filter = (props: FilterProps) => {
 
     const getProductBrands = async () => {
       const data = await ProductBrandApi.getProductBrandByProductTypeSlug(
-        localFilter?.productTypes
+        (localFilter as IFilter)?.productTypes
       );
       const rawProductBrands = get(data, "data.data") || [];
       const formatProductBrands = rawProductBrands.map((item) => ({
@@ -194,7 +194,7 @@ const Filter = (props: FilterProps) => {
     getProductTypes();
     getProductBrands();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath, categoryLink, localFilter?.productTypes]);
+  }, [router.asPath, categoryLink, (localFilter as IFilter)?.productTypes]);
 
   const handleFilter = (e) => {
     setLocalFilter?.({ ...localFilter, ...e });
@@ -208,6 +208,12 @@ const Filter = (props: FilterProps) => {
   const handleApplyFilter = () => {
     onClose?.();
     onSubmitFilter(localFilter);
+  };
+
+  const handleResetFilter = () => {
+    setLocalFilter({});
+    onSubmitFilter();
+    onClose?.();
   };
 
   const productBrandFilterNumber = get(localFilter, "productBrands.length")
@@ -246,7 +252,7 @@ const Filter = (props: FilterProps) => {
           key={
             "productTypes" +
             get(productTypes, "length") +
-            localFilter?.productTypes
+            (localFilter as IFilter)?.productTypes
           }
           filter={localFilter}
           filterKey="productTypes"
@@ -264,7 +270,7 @@ const Filter = (props: FilterProps) => {
           key={
             "productBrands" +
             get(productBrands, "length") +
-            localFilter?.productBrands
+            (localFilter as IFilter)?.productBrands
           }
           filter={localFilter}
           filterKey="productBrands"
@@ -284,7 +290,9 @@ const Filter = (props: FilterProps) => {
     >
       <Tabs tabList={tabList} />
       <div className="flex justify-between p-[10px]">
-        <div className={styles.reset_btn}>Reset all</div>
+        <div className={styles.reset_btn} onClick={handleResetFilter}>
+          Reset all
+        </div>
         <Button
           text="Apply"
           className={styles.apply_btn}
