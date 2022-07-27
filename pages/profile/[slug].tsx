@@ -20,9 +20,10 @@ import { ProfileTabs } from "enums";
 import Image from "next/image";
 import Router, { useRouter } from "next/router";
 import React, { useEffect, useState, useContext } from "react";
-import { get } from "lodash";
-import styles from "styles/Profile.module.scss";
 import FollowApi from "services/user-listing-follow";
+import { get } from "lodash";
+
+import styles from "styles/Profile.module.scss";
 
 const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
   const { name, imageUrl } = props;
@@ -89,9 +90,7 @@ const GroupHeadingTwo = (props: {
           variant="secondary"
           text="Edit profile"
           width={164}
-          onClick={() => {
-            router.push("/profile/information");
-          }}
+          onClick={() => router.push("/profile/information")}
         />
       </div>
       {/* <CompleteProfileCard

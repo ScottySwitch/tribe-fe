@@ -37,6 +37,7 @@ export interface UserReviewCardProps {
   bizListingId?: number | string;
   user?: any;
   layout?: "default" | "split";
+  isDivider?: boolean;
   onReplyClick?(): void;
   onReportClick?(): void;
 }
@@ -60,6 +61,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     censorshipLabel,
     status,
     children,
+    isDivider,
     date,
     approvedDate,
     createdDate,
@@ -73,7 +75,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     styles.review_completed,
     className,
     {
-      [styles.divider]: layout === "split",
+      [styles.divider]: isDivider,
     }
   );
   const showReply = reply
@@ -105,21 +107,21 @@ const UserReviewCard = (props: UserReviewCardProps) => {
               <span className="font-normal ml-2">{censorshipLabel}</span>
             )}
           </h6>
-          {/* {actions && ( */}
-          <Popover
-            content={<div onClick={onReportClick}>Report review</div>}
-            position="bottom-left"
-          >
-            <Icon icon="toolbar" />
-          </Popover>
-          {/* )} */}
+          {actions && (
+            <Popover
+              content={<div onClick={onReportClick}>Report review</div>}
+              position="bottom-left"
+            >
+              <Icon icon="toolbar" />
+            </Popover>
+          )}
         </div>
-        <div className={styles.status_date}>
+        {/* <div className={styles.status_date}>
           {status && <div className={statusClassName}>{status}</div>}
           {(createdDate || date) && (
             <div className={styles.date}>{createdDate || date}</div>
           )}
-        </div>
+        </div> */}
       </div>
     ) : (
       <div />

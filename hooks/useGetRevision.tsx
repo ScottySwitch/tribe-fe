@@ -1,10 +1,8 @@
-import { Item } from "framer-motion/types/components/Reorder/Item";
 import { get } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import bizListingApi from "services/biz-listing";
 import bizListingRevision from "services/biz-listing-revision";
-import { isArray } from "utils";
 
 const useGetRevision = (listingSlug?: string) => {
   const [loading, setLoading] = useState(true);

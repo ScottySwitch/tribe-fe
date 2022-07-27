@@ -40,11 +40,10 @@ const ListCard = (props: { data: ListCardProps[] }) => {
         return (
           <UserReviewCard
             key={index}
-            layout="split"
-            avatarUrl={reviewListing.avatar || "https://picsum.photos/200/300"}
-            listImage={
-              reviewListing.images || ["https://picsum.photos/200/300"]
-            }
+            isDivider
+            avatarUrl={reviewListing.avatar}
+            listImage={reviewListing.images}
+            actions={false}
             content={reviewListing.content}
             dateVisit={reviewListing.visited_date}
             rating={reviewListing.rating}
@@ -60,7 +59,8 @@ const ListCard = (props: { data: ListCardProps[] }) => {
             <ListingInfoCardInReview
               title={bizListing.name}
               imgUrl={
-                get(bizListing, "images[0]") || "https://picsum.photos/200/300"
+                get(bizListing, "images[0]") ||
+                require("public/images/page-avatar.png")
               }
               location={`${bizListing.address}, ${bizListing.country}`}
               rate={bizListing.rate}
