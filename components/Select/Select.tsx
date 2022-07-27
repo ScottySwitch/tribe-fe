@@ -24,6 +24,7 @@ export interface SelectProps {
   helperText?: string;
   disabled?: boolean;
   placeholder?: string;
+  menuLeft?: string | number;
   isMulti?: boolean;
   isSearchable?: boolean;
   closeMenuOnSelect?: boolean;
@@ -31,6 +32,7 @@ export interface SelectProps {
   register?: UseFormRegisterReturn;
   width?: number | string;
   menuWidth?: string | number;
+  menuPortalTarget?: any;
   ellipsis?: boolean;
   isClearable?: boolean;
   variant?: "filled" | "outlined" | "no-outlined";
@@ -39,6 +41,7 @@ export interface SelectProps {
   shouldControlShowValue?: boolean;
   controlStyle?: any;
   placeholderStyle?: any;
+  singleValueStyles?: any;
   onChange?: (value: any) => void;
   onInputChange?: (e: string) => void;
 }
@@ -51,6 +54,8 @@ const Select = (props: SelectProps) => {
     helperText,
     id,
     width,
+    menuLeft,
+    menuPortalTarget,
     prefixIcon,
     disabled,
     isMulti = false,
@@ -63,6 +68,7 @@ const Select = (props: SelectProps) => {
     defaultValue,
     closeMenuOnSelect = false,
     menuWidth,
+    singleValueStyles,
     menuFooter,
     inputRef,
     controlStyle,
@@ -149,7 +155,11 @@ const Select = (props: SelectProps) => {
       ...styles,
       width: "fit-content",
       top: "30px",
-      left: "-10px !important",
+      left: menuLeft || "-10px !important",
+    }),
+    menuPortal: (styles) => ({
+      ...styles,
+      zIndex: 2,
     }),
     valueContainer: (styles) => ({
       ...styles,
@@ -163,14 +173,15 @@ const Select = (props: SelectProps) => {
       whiteSpace: "nowrap",
       overflow: "hidden",
       display: "initial",
+      ...singleValueStyles,
     }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
     indicatorsContainer: (styles) => ({ ...styles, alignItems: "center" }),
   };
 
   const handleChange = (dropdownValues: any) => {
-    dropdownValues && onChange?.(dropdownValues);
-    dropdownValues && setSelected(dropdownValues);
+    onChange?.(dropdownValues);
+    setSelected(dropdownValues);
   };
 
   const MenuList = (props: any) => {
@@ -223,6 +234,8 @@ const Select = (props: SelectProps) => {
             closeMenuOnSelect={closeMenuOnSelect || !isMulti}
             isDisabled={disabled}
             styles={customStyles}
+            menuPortalTarget={menuPortalTarget}
+            menuPlacement="auto"
             // @ts-ignore
             inputRef={inputRef}
             isMulti={isMulti}

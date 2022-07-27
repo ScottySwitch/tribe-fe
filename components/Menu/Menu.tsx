@@ -1,13 +1,15 @@
+import { useRouter } from "next/router";
+import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import classNames from "classnames";
 import Icon from "components/Icon/Icon";
-import { loginInforItem, user, userId, token } from "constant";
-import { useRouter } from "next/router";
+import { languages, locations } from "constant";
 import { ILoginInfor } from "pages/_app";
 import { UserInforContext } from "Context/UserInforContext";
-import React, { useContext, useState } from "react";
-import { ProfileTabs, UserType } from "enums";
+import { ProfileTabs } from "enums";
 import styles from "./Menu.module.scss";
-import Modal from "components/Modal/Modal";
+import Select from "components/Select/Select";
+import useTrans from "hooks/useTrans";
 
 interface MenuMenuProps {
   loginInfor: ILoginInfor;
@@ -15,7 +17,7 @@ interface MenuMenuProps {
   onShowSwitchModal?: () => void;
   onShowCategoriesModal?: () => void;
   onShowAuthPopup?: () => void;
-  onShowHamModal?: () => void;
+  onShowHamModal?: (value: boolean) => void;
 }
 
 const Menu = (props: MenuMenuProps) => {
@@ -28,10 +30,14 @@ const Menu = (props: MenuMenuProps) => {
     onShowHamModal,
   } = props;
   const router = useRouter();
-  const { user, deleteUser } = useContext(UserInforContext);
+  const { locale, pathname, asPath } = router;
+  const trans = useTrans();
+
+  const { user, deleteUser, updateUser } = useContext(UserInforContext);
+  const { location } = user;
 
   const checkLogin = (href: string) => {
-    onShowHamModal?.();
+    onShowHamModal?.(false);
     user && user.token ? router.push(`/profile/${href}`) : onShowAuthPopup?.();
   };
 
@@ -73,18 +79,33 @@ const Menu = (props: MenuMenuProps) => {
   ];
 
   const handleLogout = () => {
-    deleteUser();
     window.location.href = "/";
+    deleteUser();
   };
 
-  const handleOpenSwitchAccountModal = () => {};
+  // const handleOpenSwitchAccountModal = () => {};
 
-  const handleSwitchToNormalUser = () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo.type = UserType.NORMAL_USER;
-    localStorage.setItem("user", JSON.stringify(userInfo));
-    router.push("/");
-    router.reload();
+  // const handleSwitchToNormalUser = () => {
+  //   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+  //   userInfo.type = UserType.NORMAL_USER;
+  //   localStorage.setItem("user", JSON.stringify(userInfo));
+  //   router.push("/");
+  //   router.reload();
+  // };
+
+  const changeLanguage = async (language) => {
+    onShowHamModal?.(false);
+    router.isReady &&
+      (await router.push(pathname, asPath, { locale: language.value }));
+    toast.success("Change language successfully!", { autoClose: 1000 });
+  };
+
+  const handleChangeLocation = async (e) => {
+    onShowHamModal?.(false);
+    await updateUser({ location: e.value });
+    toast.success("Change location successfully!", {
+      autoClose: 1000,
+    });
   };
 
   return (
@@ -104,6 +125,38 @@ const Menu = (props: MenuMenuProps) => {
           </div>
         );
       })}
+      <div className="flex gap-2 items-center md:hidden">
+        <Icon icon="map" size={20} />
+        <Select
+          size="small"
+          className={styles.location}
+          variant="no-outlined"
+          placeholder={trans.location}
+          options={locations}
+          value={location}
+          singleValueStyles={{ fontSize: "16px", fontWeight: 500 }}
+          onChange={handleChangeLocation}
+          width={200}
+        />
+      </div>
+      <div className="flex gap-1 items-center  md:hidden">
+        <Icon
+          icon={languages.find((item) => item.value === locale)?.icon || ""}
+          size={26}
+        />
+        <Select
+          size="small"
+          width={200}
+          className={styles.menu_item}
+          options={languages}
+          isSearchable={false}
+          variant="no-outlined"
+          closeMenuOnSelect
+          onChange={changeLanguage}
+          value={locale}
+          singleValueStyles={{ fontSize: "16px", fontWeight: 500 }}
+        />
+      </div>
       {!!loginInfor.token && (
         <React.Fragment>
           <div

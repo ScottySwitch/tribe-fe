@@ -35,8 +35,6 @@ const AddItems = (props: AddItemsProps) => {
   const [localItemList, setLocalItemList] = useState(itemList || []);
   const router = useRouter();
 
-  console.log("itemList", itemList);
-
   const handleRemoveItem = (id: number) => {
     const newArray = [...localItemList].filter((item) => item.id !== id);
     setLocalItemList(newArray);
@@ -147,7 +145,6 @@ const AddItems = (props: AddItemsProps) => {
                     handleChangeItem(item.id, "discountType", e.select.value);
                     handleChangeItem(item.id, "discount", e.input);
                   }}
-                  // onChange={(e: any) => console.log(e)}
                 />
               </div>
               {/* <Input

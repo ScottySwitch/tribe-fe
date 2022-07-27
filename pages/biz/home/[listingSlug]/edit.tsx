@@ -80,6 +80,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [listingImages, setListingImages] = useState<any>([]);
   const [logo, setLogo] = useState<any>([user.avatar]);
 
+  const [isVerified, setIsVerified] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRevision, setIsRevision] = useState<boolean>(false);
@@ -141,7 +142,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       const listing = get(data, "data.data[0]");
       if (listing) {
         userInfo.now_biz_listing = listing;
-        // console.log('userInfo', userInfo)
         localStorage.setItem("user", JSON.stringify(userInfo));
         setUserInfo(userInfo);
         const rawTags = listing.tags || [];
@@ -188,11 +188,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           imgUrl: get(item, "images[0]") || "https://picsum.photos/200/300",
           information: item.description,
           termsConditions: item.terms_conditions,
-          // start_date: item.start_date,
-          // end_date: moment(item.nd_date')).format("YYYY-MM-DD HH:mm:ss,
-          validUntil: parseISO(
-            moment(item.end_date).format("YYYY-MM-DD HH:mm:ss")
-          ),
+          startDate: moment(item.start_date).format("YYYY/MM/DD"),
+          endDate: moment(item.end_date).format("YYYY/MM/DD"),
+          validUntil: moment(item.end_date).format("YYYY/MM/DD"),
           isChange: false,
         }));
         const rawBizInvoices = listing.biz_invoices || [];
@@ -228,7 +226,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setTagOptions(tagOptionsArray);
         setBizListing(listing);
         setAction(listing.action);
-        setListingImages(listing.images);
+        setListingImages(listing.images || []);
         setCategory(get(listing, "categories[0].id") || Categories.BUY);
         setDescription(listing.description);
         setOpenHours(listing.open_hours);
@@ -239,6 +237,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         });
         setSocialInfo(listing.website);
         setKlookUrl(listing.klook_url);
+        setIsVerified(listing.is_verified);
         // setDealList(listing.deals);
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
@@ -583,6 +582,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           {bizListing.name}
         </div>
         <ListingInforCard
+          isVerified={isVerified}
           key={userInfo}
           isPaid={isPaid}
           isViewPage={isViewPage}

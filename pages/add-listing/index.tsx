@@ -94,7 +94,6 @@ const AddListing = () => {
   };
 
   const handleUpdateFormData = (data) => {
-    console.log("handleUpdateFormData", data);
     setFormData({ ...formData, ...data });
   };
 
@@ -102,7 +101,6 @@ const AddListing = () => {
     setIsLoading(true);
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     ///do CRUD things here
-    console.log("data", formData);
     let address = "Online Business";
     if (!formData.isOnline) {
       address = ` ${formData.additionalAddress} - ${formData.address} - ${formData.city} - ${formData.country}`;
@@ -172,7 +170,6 @@ const AddListing = () => {
       is_accepted: false,
     };
     // get(dataSend, `social_info[${formData.typeMedia}]`, formData.socialMedia)
-    console.log(get(dataSend, `social_info[${formData.typeMedia}]`));
     const role = get(formData, "role.label");
     let result;
     let dataSendContribute: any = {

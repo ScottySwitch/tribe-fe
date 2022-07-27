@@ -145,7 +145,6 @@ const ReviewCard = (props: IReviewCardProps) => {
   };
 
   const handleCickRating = (value: number) => {
-    console.log("click rating");
     setRating(value);
     setRatingType(rateType[value]);
   };

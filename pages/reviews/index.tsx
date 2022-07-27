@@ -17,12 +17,14 @@ import { UserInforContext } from "Context/UserInforContext";
 import { useDebounce } from "usehooks-ts";
 import { changeToSlugify } from "utils";
 import { useRouter } from "next/router";
+import useGetCountry from "hooks/useGetCountry";
 
 const ReviewsPage = () => {
   const { user } = useContext(UserInforContext);
+  const country = useGetCountry();
   const [isShowResultModal, setIsShowResultModal] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState(country.value);
   const [listingOptions, setListingOptions] = useState<any>([]);
   const [searchKey, setSearchKey] = useState("");
   const [listingSearchResult, setListingSearchResult] = useState<any>([]);
@@ -153,22 +155,27 @@ const ReviewsPage = () => {
           </div>
           <div className="review-list">
             {isArray(listingSearchResult) &&
-              listingSearchResult.map((review) => (
-                <ReviewCard
-                  slug={get(review, "attributes.slug")}
-                  key={review.id}
-                  id={review.id}
-                  title={get(review, "attributes.name")}
-                  imgUrl={
-                    get(review, "attributes.images[0]") ||
-                    "https://picsum.photos/200/300"
-                  }
-                  isVerified={get(review, "attributes.is_verified")}
-                  rateNumber={calcRateNumber(get(review, "attributes.reviews"))}
-                  location={get(review, "attributes.address")}
-                  onSubmit={handleSubmit}
-                />
-              ))}
+              listingSearchResult.map(
+                (review) =>
+                  review && (
+                    <ReviewCard
+                      slug={get(review, "attributes.slug")}
+                      key={review.id}
+                      id={review.id}
+                      title={get(review, "attributes.name")}
+                      imgUrl={
+                        get(review, "attributes.images[0]") ||
+                        "https://picsum.photos/200/300"
+                      }
+                      isVerified={get(review, "attributes.is_verified")}
+                      rateNumber={calcRateNumber(
+                        get(review, "attributes.reviews")
+                      )}
+                      location={get(review, "attributes.address")}
+                      onSubmit={handleSubmit}
+                    />
+                  )
+              )}
           </div>
         </div>
         <div className={`${styles.advertisement} mt-8`}>

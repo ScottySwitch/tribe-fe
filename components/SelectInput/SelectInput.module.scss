@@ -25,13 +25,10 @@
     font-weight: $font-light;
     font-size: $text-md;
     text-overflow: ellipsis;
-    border: none;
     color: $bg-700;
     box-sizing: border-box;
     line-height: $line-height;
     background-color: transparent;
-    border-left: 1px solid $bg-400;
-    padding-left: 10px;
 
     &:disabled {
       color: $bg-400;
@@ -114,14 +111,13 @@
   }
 }
 
-.select_suffix {
-  input {
-    padding: 0 10px 0 0;
-    border-left: none;
-    border-right: 1px solid $bg-200;
-  }
+.left_border {
+  border-left: 1px solid $bg-200;
 }
 
+.right_border {
+  border-right: 1px solid $bg-200;
+}
 
 @media screen and (max-width: $mobile) {
   .collection_card {

@@ -10,7 +10,7 @@ import TopSearches from "components/TopSearches/TopSearches";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
 import Filter from "components/Filter/Filter";
-import CollectionApi from "services/collection";
+import BizlistingApi from "services/biz-listing";
 
 import styles from "styles/Home.module.scss";
 import useTrans from "hooks/useTrans";
@@ -32,7 +32,7 @@ const categoryTabList: any[] = categories.map((item) => ({
 const tabList: any[] = allTab.concat(categoryTabList);
 
 const Collection = (props) => {
-  const { collectionSlug } = props;
+  const { slug } = props;
   const trans = useTrans();
   const router = useRouter();
 
@@ -46,71 +46,30 @@ const Collection = (props) => {
   const [listing, setListing] = useState<Object[]>([]);
 
   useEffect(() => {
-    const getCollection = async () => {
-      const response = await CollectionApi.getAllCollectionByCollectionSlug(
-        collectionSlug
-      );
-      const listingsOfCollection = get(
-        response,
-        "data.data[0].attributes.biz_listings.data"
-      );
-      const banner = get(
-        response,
-        "data.data[0].attributes.banner.data.attributes.url"
-      );
-      const bannerMobile =
-        get(
-          response,
-          "data.data[0].attributes.banner_mobile.data.attributes.url"
-        ) || banner;
-      const collectionName = get(response, "data.data[0].attributes.name");
-      const description = get(response, "data.data[0].attributes.description");
+    getData(slug);
+  }, [pagination.page, slug, selectedTab]);
 
-      const collectionDetailObject = {
-        collectionName,
-        description,
-        banner,
-        bannerMobile,
-      };
-      const mappedListings = isArray(listingsOfCollection)
-        ? formatBizlistingArray(listingsOfCollection)
-        : [];
-      // const mappedListings = Array.isArray(listingsOfCollection)
-      //   ? listingsOfCollection.map((item) => ({
-      //       images: get(item, "attributes.images") || [],
-      //       title: get(item, "attributes.name"),
-      //       slug: get(item, "attributes.slug"),
-      //       isVerified: get(item, "attributes.is_verified"),
-      //       address: get(item, "attributes.address"),
-      //       country: get(item, "attributes.country"),
-      //       description: get(item, "attributes.description"),
-      //       followerNumber: get(item, "user_listing_follows.length"),
-      //       tags: get(item, "attributes.tags"),
-      //       categories: get(item, "attributes.categories"),
-      //       price: get(item, "attributes.min_price") || "",
-      //       currency: get(item, "attributes.currency") || "",
-      //       rate: get(item, "attributes.rating"),
-      //       rateNumber: get(item, "attributes.rate_number"),
-      //     }))
-      //   : [];
-
-      setCollection(mappedListings);
-      setListing(mappedListings);
-      setLoading(false);
-      if (collectionName && description && banner) {
-        setCollectionDetail(collectionDetailObject);
-      }
+  const getData = async (search) => {
+    setLoading(true);
+    let params: any = {
+      search: changeToSlugify(search),
+      page: pagination.page,
+      limit: pagination.limit,
     };
-
-    getCollection();
-  }, [pagination, collectionSlug]);
-
-  useEffect(() => {
-    const arrayFilterListing = collection.filter(
-      (item) => changeToSlugify(get(item, "categories[0]")) === selectedTab
-    );
-    selectedTab ? setListing(arrayFilterListing) : setListing(collection);
-  }, [selectedTab]);
+    if (selectedTab) {
+      params.categories = selectedTab;
+    }
+    const data = await BizlistingApi.getListingCustom(params);
+    if (data) {
+      const rawListing = formatBizlistingArray(get(data, "data.data"));
+      setListing(rawListing);
+      setLoading(false);
+      setPagination({
+        ...pagination,
+        total: get(data, "data.meta.pagination.total"),
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -128,33 +87,11 @@ const Collection = (props) => {
           Collection
         </div>
       </SectionLayout>
-      <SectionLayout className={styles.collection_banner}>
-        {collectionDetail.banner && (
-          <Image
-            src={collectionDetail.banner}
-            alt=""
-            layout="fill"
-            objectFit="cover"
-            className={`${styles.collection_banner_img} ${styles.collection_banner_desktop}`}
-          />
-        )}
-        {collectionDetail.bannerMobile && (
-          <Image
-            src={collectionDetail.bannerMobile}
-            alt=""
-            layout="fill"
-            objectFit="cover"
-            className={styles.collection_banner_mobile}
-          />
-        )}
-        <div className={styles.collection_context_container}>
-          <div className={styles.collection_name}>
-            {collectionDetail.collectionName}
-          </div>
-          <div className={styles.collection_description}>
-            {collectionDetail.description}
-          </div>
-        </div>
+      <SectionLayout title="Search">
+        <h5>
+          {pagination.total} Result{pagination.total > 0 && "s"} for{" "}
+          {'"' + slug + '"'}
+        </h5>
       </SectionLayout>
       <SectionLayout>
         <div className="flex">
@@ -191,9 +128,11 @@ const Collection = (props) => {
         </div>
         <TopSearches />
       </SectionLayout>
-      <SectionLayout show={pagination.page > 1}>
+      <SectionLayout show={pagination.total > 1}>
         <Pagination
-          limit={30}
+          limit={28}
+          currentPage={pagination.page}
+          key={pagination.page}
           total={pagination.total}
           onPageChange={(selected) =>
             setPagination({ ...pagination, page: selected.selected })
@@ -207,8 +146,8 @@ const Collection = (props) => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  const { collectionSlug } = context.query;
-  return { props: { collectionSlug: collectionSlug } };
+  const { slug } = context.query;
+  return { props: { slug: slug } };
 }
 
 export default Collection;

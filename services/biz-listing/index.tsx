@@ -580,6 +580,12 @@ const getListingCustom = async (data: any) => {
       },
     };
   }
+  if (data?.search) {
+    filter = {
+      ...filter,
+      slug: { $contains: data.search || "" },
+    };
+  }
 
   if (data?.limit) {
     pagination.pageSize = data.limit;

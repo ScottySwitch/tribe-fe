@@ -18,6 +18,7 @@ export interface SelectInputProps
   className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
+  isClearable?: boolean;
   helperText?: string;
   options?: any[];
   width?: string | number;
@@ -55,6 +56,7 @@ const SelectInput = (props: SelectInputProps) => {
     disabled,
     register,
     menuWidth,
+    isClearable,
     options = [],
     selectPlaceholder,
     isSearchable,
@@ -104,17 +106,25 @@ const SelectInput = (props: SelectInputProps) => {
               {...rest}
             />
           )}
-          <SelectField
-            value={value?.select}
-            isSearchable={isSearchable}
-            selectWidth={selectWidth}
-            menuWidth={menuWidth}
-            options={options}
-            placeholder={selectPlaceholder}
-            shouldControlShowValue={shouldControlShowValue}
-            onChange={(e) => handleChange("select", e)}
-            defaultValue={defaultValue?.select}
-          />
+          <div
+            className={classNames({
+              [styles.left_border]: selectPosition === "suffix",
+              [styles.right_border]: selectPosition === "prefix",
+            })}
+          >
+            <SelectField
+              isClearable={isClearable}
+              value={value?.select}
+              isSearchable={isSearchable}
+              selectWidth={selectWidth}
+              menuWidth={menuWidth}
+              options={options}
+              placeholder={selectPlaceholder}
+              shouldControlShowValue={shouldControlShowValue}
+              onChange={(e) => handleChange("select", e)}
+              defaultValue={defaultValue?.select}
+            />
+          </div>
           {selectPosition === "prefix" && (
             <input
               id={id}

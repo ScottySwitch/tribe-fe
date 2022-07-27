@@ -107,7 +107,7 @@ const InforCard = (props: InforCardProps) => {
       <div className={styles.details}>
         <div className={styles.title}>{title}</div>
         <div className={styles.content}>
-          <div>
+          <div className="flex items-center">
             {!!rate && (
               <div className={styles.reviews}>
                 <Icon icon="red-star" size={14} />
@@ -115,18 +115,18 @@ const InforCard = (props: InforCardProps) => {
                 <div>({rateNumber})</div>
               </div>
             )}
+            {!!rate && followerNumber && (
+              <Icon icon="dot" size={10} className={styles.dot} />
+            )}
             {followerNumber && followerNumber > 0 ? (
-              <div>
-                <Icon icon="dot" size={10} className={styles.dot} />
-                {followerNumber} followers
-              </div>
+              <div>{followerNumber} followers</div>
             ) : (
               <div></div>
             )}
-            {description && (
-              <div className={styles.description}>{description}</div>
-            )}
           </div>
+          {description && (
+            <div className={styles.description}>{description}</div>
+          )}
           <div>
             {Array.isArray(categories) && (
               <div className={styles.categories}>

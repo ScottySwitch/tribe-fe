@@ -122,10 +122,6 @@ const UserInformation = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  useEffect(() => {
-    console.log("userInfor", userInfor);
-  });
-
   const handleNext = () => {
     setShowModalNew(false);
     setShowModalOTP(true);
@@ -183,7 +179,7 @@ const UserInformation = () => {
               type="avatar"
               className="rounded-full max-w-max mx-auto"
               fileList={[
-                userInfor.avatar || require("public/images/avatar.png"),
+                userInfor.avatar || require("public/images/default-avatar.png"),
               ]}
               onChange={(imgs) => setValue("avatar", imgs[0])}
             />

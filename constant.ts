@@ -20,6 +20,7 @@ export const videoExtensions = [
   ".mov",
   ".avi",
   ".wmv",
+  ".quicktime",
 ];
 
 export const loginInforItem = "login_infor";
@@ -470,7 +471,7 @@ export const userInformationList = [
   {
     label: UserInformationList.TRIBES_FOR_BUSINESSES,
     icon: "user-color-2",
-    directUrl: "/",
+    directUrl: "/claim",
   },
   {
     label: UserInformationList.SUPPORT,

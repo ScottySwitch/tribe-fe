@@ -10,6 +10,7 @@ export interface ITab {
   value: string | number;
   content?: ReactNode | ReactNode[];
   currentTab?: string | number;
+  customSelected?: string;
   onSelectedTab?: (e: string | number) => void;
 }
 
@@ -19,11 +20,13 @@ const TabNav = (props: ITab) => {
     label,
     value,
     currentTab,
+    customSelected = "",
     onSelectedTab = () => "",
   } = props;
 
   const selectedClassNames = classNames(styles.tab_nav, className, {
     [styles.selected]: currentTab === value,
+    [styles[`${customSelected}`]]: currentTab === value,
   });
 
   const formatLabel = (value: string) => {
@@ -93,7 +96,8 @@ const TabsHorizontal = (props: TabsHorizontalProps) => {
               label={tab.label}
               value={tab.value}
               currentTab={currentTab}
-              onSelectedTab={(e: string | number) => handleSelectedTab(e)}
+              customSelected={tab.customSelected}
+              onSelectedTab={handleSelectedTab}
             />
           );
         })}

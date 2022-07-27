@@ -28,7 +28,6 @@ const Banner = (props: BannerProps) => {
   const { isPaid, isViewPage, listingImages, listingId, onChangeImages } =
     props;
   const [showAlbumModal, setShowAlbumModal] = useState(false);
-
   return (
     <React.Fragment>
       <Upload
@@ -58,25 +57,26 @@ const Banner = (props: BannerProps) => {
         isShow={isArray(listingImages)}
         className={styles.mobile_banner_card}
       >
-        {listingImages.map((img, index) => {
-          return detectIsVideo(img) ? (
-            <video
-              key={index}
-              id="video"
-              src={img}
-              className={styles.mobile_banner_card}
-              onClick={() => setShowAlbumModal(true)}
-            />
-          ) : (
-            <div
-              key={index}
-              className={styles.mobile_banner_card}
-              onClick={() => setShowAlbumModal(true)}
-            >
-              <Image alt="" layout="fill" src={img} objectFit="contain" />
-            </div>
-          );
-        })}
+        {isArray(listingImages) &&
+          listingImages.map((img, index) => {
+            return detectIsVideo(img) ? (
+              <video
+                key={index}
+                id="video"
+                src={img}
+                className={styles.mobile_banner_card}
+                onClick={() => setShowAlbumModal(true)}
+              />
+            ) : (
+              <div
+                key={index}
+                className={styles.mobile_banner_card}
+                onClick={() => setShowAlbumModal(true)}
+              >
+                <Image alt="" layout="fill" src={img} objectFit="contain" />
+              </div>
+            );
+          })}
       </Carousel>
       <Modal
         visible={showAlbumModal}

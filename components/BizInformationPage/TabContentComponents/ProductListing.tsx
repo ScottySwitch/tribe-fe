@@ -65,7 +65,9 @@ const ProductListing = (props: ProductListingProps) => {
           id: item.id,
           description: item.description,
           images: item.images,
-          imgUrl: get(item, "images[0]") || require("public/images/avatar.svg"),
+          imgUrl:
+            get(item, "images[0]") ||
+            require("public/images/default-avatar.png"),
           discount: item.discount_percent,
           tags: item.tags,
           websiteUrl: item.website_url,
@@ -83,6 +85,7 @@ const ProductListing = (props: ProductListingProps) => {
 
   const submitProduct = async (products: any) => {
     const product = {
+      is_revision: isRevision,
       biz_listing_revision: isRevision ? bizListingId : await getRevisionId(),
       ...products[0],
     };
@@ -154,7 +157,7 @@ const ProductListing = (props: ProductListingProps) => {
             <strong>Tips:</strong> Click the pin icon to put 5 products on the
             top.
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {!isPaid &&
               Array.isArray(productList) &&
               productList.length > 2 && (
@@ -162,7 +165,7 @@ const ProductListing = (props: ProductListingProps) => {
                   prefix={<Icon icon="star-2" color="#653fff" />}
                   variant="secondary"
                   text="Update to use full feature"
-                  width="fit-content"
+                  width="max-content"
                   onClick={() => null}
                 />
               )}
@@ -184,13 +187,15 @@ const ProductListing = (props: ProductListingProps) => {
           {productList &&
             productList.map((item: any, index) => {
               const imgUrl =
-                get(item, "images[0]") || require("public/images/avatar.svg");
+                get(item, "images[0]") ||
+                require("public/images/default-avatar.png");
               return (
                 <div key={item.id} className={styles.info_card_container}>
                   <InforCard
                     imgUrl={imgUrl}
                     title={item.name}
                     price={item.price}
+                    currency={item.currency}
                     description={item.description}
                   />
                   <div className={styles.toolbar}>

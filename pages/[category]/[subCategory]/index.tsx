@@ -30,6 +30,7 @@ import { isArray } from "utils";
 import styles from "styles/Home.module.scss";
 import Badge from "components/Badge/Badge";
 import useGetCountry from "hooks/useGetCountry";
+import Select from "components/Select/Select";
 interface IType {
   [key: string]: any;
 }
@@ -55,13 +56,14 @@ const SubCategoryPage = (context) => {
 
   const { currency } = useGetCountry();
 
+  const [isMobile, setIsMobile] = useState(false);
   const [bannerArray, setBannergArray] = useState<IType[]>([]);
   const [categoryLinkArray, setCategoryLinkArray] = useState<ITab[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [showFilter, setShowFilter] = useState(false);
-  const [filter, setFilter] = useState(defaultFilterOptions);
+  const [filter, setFilter] = useState<IFilter | {}>(defaultFilterOptions);
 
   useEffect(() => {
     const getData = async () => {
@@ -92,6 +94,7 @@ const SubCategoryPage = (context) => {
       setCategoryLinkArray(categoryLinkArray.concat(rawListCategory));
     };
 
+    setIsMobile(window.innerWidth < 430);
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryLink]);
@@ -133,8 +136,8 @@ const SubCategoryPage = (context) => {
     );
   }
 
-  const handleFilter = (e?: IFilter) => {
-    e && setFilter({ ...filter, ...e });
+  const handleFilter = (e?: IFilter | {}) => {
+    e ? setFilter({ ...filter, ...e }) : setFilter({});
   };
 
   const handleChangeSubCategory = (e) => {
@@ -181,6 +184,23 @@ const SubCategoryPage = (context) => {
       )}
     </Button>
   );
+
+  const showSubCategoryNumber = isMobile ? 1 : 5;
+
+  const moreSubCategoryStyles = {
+    fontWeight: "bold",
+    fontSize: "16px",
+    color: "#a4a8b7",
+  };
+
+  const moreSubCategoryOptions = Array.isArray(categoryLinkArray)
+    ? categoryLinkArray.slice(showSubCategoryNumber)
+    : [];
+
+  const subCategoryOptions = Array.isArray(categoryLinkArray)
+    ? categoryLinkArray.slice(0, showSubCategoryNumber)
+    : [];
+
   return (
     <div>
       <SectionLayout className="pt-0">
@@ -213,36 +233,34 @@ const SubCategoryPage = (context) => {
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
-          <div className="flex flex-wrap justify-between pt-3">
-            <TabsHorizontal
-              tablist={
-                Array.isArray(categoryLinkArray)
-                  ? categoryLinkArray.slice(0, 5)
-                  : []
-              }
-              type="secondary-no-outline"
-              selectedTab={categoryLink}
-              className="pt-[6px]"
-              onChangeTab={handleChangeSubCategory}
-            />
-            {/* <Select
-              placeholder="More"
-              isSearchable={false}
-              width={50}
-              className={styles.sub_category_more}
-              variant="no-outlined"
-              size="small"
-              options={
-                Array.isArray(listCategoryLink) ? listCategoryLink.slice(5) : []
-              }
-              controlStyle={{ fontWeight: "bold", fontSize: "16px" }}
-              placeholderStyle={{
-                fontWeight: "bold",
-                fontSize: "16px",
-                color: "#a4a8b7",
-              }}
-              onChange={(e) => handleChangeSubCategory(e.value)}
-            /> */}
+          <div
+            id="sub-cat-quick-filter"
+            className={styles.quick_filter_container}
+          >
+            <div className={styles.scroll_box}>
+              <TabsHorizontal
+                tablist={subCategoryOptions}
+                type="secondary-no-outline"
+                selectedTab={categoryLink}
+                className="pt-[6px]"
+                onChangeTab={handleChangeSubCategory}
+              />
+              <Select
+                placeholder="More"
+                isSearchable={false}
+                width={250}
+                className={styles.sub_category_more}
+                variant="outlined"
+                size="small"
+                key={categoryLink}
+                menuPortalTarget={document.querySelector("body")}
+                value={categoryLink}
+                onChange={(e) => handleChangeSubCategory(e.value)}
+                controlStyle={{ fontWeight: "bold", fontSize: "16px" }}
+                placeholderStyle={moreSubCategoryStyles}
+                options={moreSubCategoryOptions}
+              />
+            </div>
             <FilterButton className={styles.desktop_filter_button} />
           </div>
           <div className={styles.quick_filter_container}>
@@ -286,15 +304,15 @@ const SubCategoryPage = (context) => {
           />
         )}
         <TopSearches />
-        <Filter
-          // make Filter rerender when filter state change
-          key={JSON.stringify(filter)}
-          visible={showFilter}
-          filter={filter}
-          onClose={() => setShowFilter(false)}
-          onSubmitFilter={handleFilter}
-        />
       </SectionLayout>
+      <Filter
+        // make Filter rerender when filter state change
+        key={JSON.stringify(filter)}
+        visible={showFilter}
+        filter={filter}
+        onClose={() => setShowFilter(false)}
+        onSubmitFilter={handleFilter}
+      />
     </div>
   );
 };

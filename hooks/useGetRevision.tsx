@@ -12,8 +12,11 @@ const useGetRevision = (listingSlug?: string) => {
   const router = useRouter();
 
   const getRevisionId = async () => {
+    const formatBizListingData = {
+      is_accepted: false,
+    };
     const response = await bizListingRevision.createBizListingRevision(
-      revisionListing
+      formatBizListingData
     );
     return get(response, "data.data.id");
   };

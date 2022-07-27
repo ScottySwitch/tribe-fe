@@ -27,17 +27,19 @@ const PhotosVideos = () => {
   useEffect(() => {
     preMedia.current = revisionListing.images;
     setImages(revisionListing.images);
-  }, [revisionListing]);
+  }, [revisionListing.images]);
 
   const updateListingImages = async () => {
     const updateMedia =
       isRevision && revisionId
         ? bizListingRevision.updateBizListingRevision(revisionId, {
             images: images,
+            is_revision: isRevision,
           })
         : bizListingRevision.createBizListingRevision({
             slug: revisionListing.slug,
             images: images,
+            is_revision: isRevision,
           });
 
     updateMedia

@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-import { contributePopOverList } from "constant";
+import { contributePopOverList, languages } from "constant";
 import Popover from "components/Popover/Popover";
 import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
@@ -17,6 +17,17 @@ import { UserInforContext } from "Context/UserInforContext";
 import Modal from "components/Modal/Modal";
 
 import styles from "./Header.module.scss";
+
+export const formatLanguages = () => {
+  return languages.map((lang) => ({
+    label: (
+      <div className="flex gap-2 items-center">
+        <Icon icon={lang.icon} size={30} /> {lang.label}
+      </div>
+    ),
+    value: lang.value,
+  }));
+};
 
 export const Categories = (props: {
   currentCategory?: string;
@@ -90,7 +101,6 @@ export const SwitchAccountsContent = () => {
       current_listing_slug: undefined,
       user_type: UserType.NORMAL_USER,
     });
-    console.log("jasndlkandanskjd");
   };
 
   const handleSwitchListing = async (item) => {
@@ -112,7 +122,8 @@ export const SwitchAccountsContent = () => {
         >
           <Image
             src={
-              get(item, "logo[0]") || require("public/images/page-avatar.png")
+              get(item, "logo[0]") ||
+              require("public/images/default-page-avatar.png")
             }
             alt=""
             width={30}
@@ -132,7 +143,7 @@ export const SwitchAccountsContent = () => {
         onClick={handleSwitchToNormalUser}
       >
         <Image
-          src={user.user_avatar || require("public/images/avatar.png")}
+          src={user.user_avatar || require("public/images/default-avatar.png")}
           alt=""
           width={30}
           height={30}
@@ -196,7 +207,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           position="bottom-left"
         >
           <Image
-            src={user.avatar || require("public/images/avatar.png")}
+            src={user.avatar || require("public/images/default-avatar.png")}
             alt=""
             width={40}
             height={40}
@@ -227,7 +238,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           </div>
         </Popover>
         <Image
-          src={user.avatar || require("public/images/page-avatar.png")}
+          src={user.avatar || require("public/images/default-page-avatar.png")}
           alt=""
           width={40}
           height={40}

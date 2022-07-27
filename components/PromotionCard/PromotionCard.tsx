@@ -17,6 +17,7 @@ export interface PromotionProps {
   description?: string;
   onCardClick?: () => void;
   onClick?: () => void;
+  onUnSaveDeal?: () => void;
 }
 
 const PromotionCard = (props: PromotionProps) => {
@@ -30,6 +31,7 @@ const PromotionCard = (props: PromotionProps) => {
     type,
     favourite,
     size = "medium",
+    onUnSaveDeal,
     onCardClick,
     onClick,
   } = props;
@@ -66,7 +68,7 @@ const PromotionCard = (props: PromotionProps) => {
           />
         )}
         {favourite && (
-          <div className={styles.promotion_favourite}>
+          <div className={styles.promotion_favourite} onClick={onUnSaveDeal}>
             <Icon icon="like-solid" color="#e60112" />
           </div>
         )}

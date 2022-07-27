@@ -53,7 +53,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   // let baseURL =
   //   "https://2584-2001-ee0-500d-3a90-ec3f-d03b-63d9-f470.ap.ngrok.io/";
 
-  console.log(tier);
 
   useEffect(() => {
     const sessionId = router.query.sessionId;
@@ -63,7 +62,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       setVerifyStep(VerifySteps.ADD_PAYMENT);
       handleFinishVerifying("stripe");
       const checkoutSessionId = sessionId;
-      console.log(checkoutSessionId);
       if (checkoutSessionId) {
         SS_GetProductPaymentDetails(checkoutSessionId);
       }
@@ -95,7 +93,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   const handleSubmit = () => {
     const ssProduct = document.getElementById("SS_ProductCheckout");
-    console.log(ssProduct);
     SS_ProductCheckout();
   };
 
@@ -469,7 +466,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <div className="flex justify-center gap-5 w-full">
-            <Button width="30%" variant="no-outlined" text="Change tier" />
+            <Button 
+              width="30%" variant="no-outlined" text="Change tier" 
+                onClick={() => verifyStep}
+            />
             {paymentMethod === "stripe" ? (
               <Button
                 width="80%"

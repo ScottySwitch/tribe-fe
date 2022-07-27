@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { useRouter } from "next/router";
 import React from "react";
 import styles from "./PanelAbout.module.scss";
 export interface IUserData {
@@ -29,13 +30,19 @@ const AboutInfor = (props: {
   blankText: string;
 }) => {
   const { label, text, blankText } = props;
+  const router = useRouter();
   return (
     <React.Fragment>
       <h6 className={styles.label}>{label}</h6>
       {text ? (
         <span className={styles.value}>{text}</span>
       ) : (
-        <span className={styles.empty}>{blankText}</span>
+        <span
+          className={styles.empty}
+          onClick={() => router.push("/profile/information")}
+        >
+          {blankText}
+        </span>
       )}
     </React.Fragment>
   );

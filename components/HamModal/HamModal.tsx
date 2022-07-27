@@ -29,7 +29,7 @@ const HamModalHeader = ({
   return !!loginInfor.token ? (
     <div className={styles.user_profile}>
       <Image
-        src={user.avatar || require("public/images/avatar.png")}
+        src={user.avatar || require("public/images/default-avatar.png")}
         alt=""
         layout="fixed"
         width={50}
@@ -212,11 +212,11 @@ const HamModal = (props: HamModalProps) => {
           <Menu
             loginInfor={loginInfor}
             mobile
-            onShowHamModal={() => onSetShowHamModal(false)}
+            onShowHamModal={(value) => onSetShowHamModal(value)}
             onShowCategoriesModal={() => setShowCategoriesModal(true)}
             onShowAuthPopup={() => setShowAuthPopup(true)}
             onShowSwitchModal={() => {
-              onSetShowHamModal(false)
+              onSetShowHamModal(false);
               setShowSwitchModal(true);
             }}
           />

@@ -22,13 +22,15 @@ const ReviewBizInfoCard = (props) => {
   return (
     <div className={styles.biz_info}>
       <div className={styles.avatar} onClick={handleDirectToHomepage}>
-        <Image
-          src={imgUrl || "https://picsum.photos/48"}
-          height="100%"
-          width="100%"
-          layout="responsive"
-          alt=""
-        />
+        {imgUrl && (
+          <Image
+            src={imgUrl}
+            height="100%"
+            width="100%"
+            layout="responsive"
+            alt=""
+          />
+        )}
       </div>
       <div className={styles.summary}>
         {title && (
@@ -37,15 +39,19 @@ const ReviewBizInfoCard = (props) => {
           </h6>
         )}
         <div className={styles.group}>
-          <Icon icon="red-star" size={12} className="mr-2" />
-          <span className={styles.rate}>{rate}</span>
-          <span className="ml-1">({rateNumber})</span>
-          {followerNumber && (
+          {rate && (
+            <>
+              <Icon icon="red-star" size={12} className="mr-2" />
+              <span className={styles.rate}>{rate}</span>
+            </>
+          )}
+          {rateNumber && (
             <React.Fragment>
               <Icon icon="dot" size={10} color="#C6C8D2" className="mx-2" />
-              <div>{followerNumber} followers</div>
+              <span className="ml-1">{rateNumber}</span>
             </React.Fragment>
           )}
+          <div>{followerNumber} followers</div>
         </div>
         {location && (
           <div className={styles.group}>
