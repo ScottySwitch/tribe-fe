@@ -75,7 +75,7 @@ export const ReviewForm = (props) => {
           type="media"
           fileList={images}
           centerIcon={<Icon icon="plus" />}
-          onChange={(urls) => setImages([...images, ...urls])}
+          onChange={(imageList) => setImages(imageList)}
         />
       </div>
       <div className={styles.form_group}>
