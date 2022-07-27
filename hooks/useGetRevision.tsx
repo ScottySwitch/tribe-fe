@@ -12,7 +12,6 @@ const useGetRevision = (listingSlug?: string) => {
   const router = useRouter();
 
   const getRevisionId = async () => {
-    console.log(revisionListing);
     const formatBizListingData = {
       is_accepted: false,
     };

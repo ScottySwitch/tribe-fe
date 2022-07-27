@@ -113,7 +113,6 @@ const LoginPage = (context) => {
         });
       } catch (err: any) {
         // TODO: notify error (missing template)
-        console.log(err.response.data.error);
         setIsLoading(false);
         setIsLoginError(true);
         return false;

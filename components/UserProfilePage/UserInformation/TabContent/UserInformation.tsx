@@ -122,10 +122,6 @@ const UserInformation = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  useEffect(() => {
-    console.log("userInfor", userInfor);
-  });
-
   const handleNext = () => {
     setShowModalNew(false);
     setShowModalOTP(true);

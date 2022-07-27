@@ -1,25 +1,24 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import Modal from "components/Modal/Modal"
-import Icon from "components/Icon/Icon"
-import TagsSelection from "components/TagsSelection/TagsSelection"
-import { IOption } from "type"
-import Badge from "components/Badge/Badge"
-import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue"
+import Modal from "components/Modal/Modal";
+import Icon from "components/Icon/Icon";
+import TagsSelection from "components/TagsSelection/TagsSelection";
+import { IOption } from "type";
+import Badge from "components/Badge/Badge";
+import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
 
 interface TagsProps {
-  isViewPage?: boolean
-  tags: IOption[]
-  tagOptions: IOption[]
-  onSetTags: (tags: IOption[]) => void
+  isViewPage?: boolean;
+  tags: IOption[];
+  tagOptions: IOption[];
+  onSetTags: (tags: IOption[]) => void;
 }
 
 const Tags = (props: TagsProps) => {
-  const { isViewPage, tags = [], tagOptions, onSetTags } = props
-  const [showTagsModal, setShowTagsModal] = useState(false)
-  const [localTags, setLocalTags] = useState(tags)
+  const { isViewPage, tags = [], tagOptions, onSetTags } = props;
+  const [showTagsModal, setShowTagsModal] = useState(false);
+  const [localTags, setLocalTags] = useState(tags);
 
-  // console.log("tags", tags)
   return (
     <div>
       <div className="flex justify-between">
@@ -39,26 +38,26 @@ const Tags = (props: TagsProps) => {
         width={750}
         mobilePosition="center"
         onClose={() => {
-          setLocalTags(tags)
-          setShowTagsModal(false)
+          setLocalTags(tags);
+          setShowTagsModal(false);
         }}
       >
         <TagsSelection
           selectedList={tags}
           options={tagOptions}
           onCancel={() => {
-            setLocalTags(tags)
-            setShowTagsModal(false)
+            setLocalTags(tags);
+            setShowTagsModal(false);
           }}
           onSubmit={(localTags) => {
-            setLocalTags(localTags)
-            onSetTags(localTags)
-            setShowTagsModal(false)
+            setLocalTags(localTags);
+            onSetTags(localTags);
+            setShowTagsModal(false);
           }}
         />
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default Tags
+export default Tags;

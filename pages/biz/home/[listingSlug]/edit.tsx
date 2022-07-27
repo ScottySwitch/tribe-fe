@@ -141,7 +141,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       const listing = get(data, "data.data[0]");
       if (listing) {
         userInfo.now_biz_listing = listing;
-        // console.log('userInfo', userInfo)
         localStorage.setItem("user", JSON.stringify(userInfo));
         setUserInfo(userInfo);
         const rawTags = listing.tags || [];

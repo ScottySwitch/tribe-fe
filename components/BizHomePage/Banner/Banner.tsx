@@ -28,7 +28,6 @@ const Banner = (props: BannerProps) => {
   const { isPaid, isViewPage, listingImages, listingId, onChangeImages } =
     props;
   const [showAlbumModal, setShowAlbumModal] = useState(false);
-  console.log("listingImages", listingImages);
   return (
     <React.Fragment>
       <Upload

@@ -97,7 +97,6 @@ const Collection = (props) => {
       setCollection(mappedListings);
       setListing(mappedListings);
       setLoading(false);
-      console.log("collectionDetailObject", collectionDetailObject);
       if (collectionName && description && banner) {
         setCollectionDetail(collectionDetailObject);
       }
