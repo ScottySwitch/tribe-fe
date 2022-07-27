@@ -61,6 +61,20 @@ const Header = (props: HeaderProps) => {
     debouncedSearchTerm ? getBizListing() : setBizListing([]);
   }, [debouncedSearchTerm, location]);
 
+  useEffect(() => {
+    function handleDirect(event) {
+      if (event.key === "Enter") {
+        if (searchKey?.length > 0) {
+          router.push(`/search-results/${changeToSlugify(searchKey)}`);
+        }
+      }
+    }
+    // Execute a function when the user presses a key on the keyboard
+    window?.addEventListener("keypress", handleDirect);
+    //clean up
+    return () => window?.removeEventListener("keypress", handleDirect);
+  }, [searchKey]);
+
   const formatLanguages = () => {
     return languages.map((lang) => ({
       label: (
@@ -107,7 +121,7 @@ const Header = (props: HeaderProps) => {
     get(item, "attributes.slug") &&
       router.push(`/biz/home/${item.attributes.slug}`);
   };
-  console.log("locale", locale);
+
   return (
     <div id={id} className={styles.header}>
       <div className={styles.header_top}>
