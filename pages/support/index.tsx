@@ -416,7 +416,8 @@ const QuestionForUser = () => {
             <p className={styles.answer}>
               Reports are kept anonymous unless a direct follow-up from the
               report is required. Once our moderators have reviewed your
-              submitted report on a user/listing, you'll receive a notification.
+              submitted report on a user/listing, you will receive a
+              notification.
             </p>
           </div>
         </li>
