@@ -89,7 +89,8 @@ const Collection = (props) => {
       </SectionLayout>
       <SectionLayout title="Search">
         <h5>
-          {pagination.total} Result{pagination.total > 0 && "s"} for "{slug}"
+          {pagination.total} Result{pagination.total > 0 && "s"} for{" "}
+          {'"' + slug + '"'}
         </h5>
       </SectionLayout>
       <SectionLayout>
