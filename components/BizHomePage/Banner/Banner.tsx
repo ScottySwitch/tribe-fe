@@ -3,7 +3,7 @@ import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
 import Modal from "components/Modal/Modal";
 import Upload from "components/Upload/Upload";
-import { homeBannerResponsive } from "constant";
+import { homeBannerResponsive, homeCuratedResponsive } from "constant";
 import { get } from "lodash";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -45,38 +45,29 @@ const Banner = (props: BannerProps) => {
         }}
       />
       <Carousel
-        responsive={{
-          xsShow: 1,
-          xsScroll: 1,
-          smShow: 1,
-          smScroll: 1,
-          mdShow: 1,
-          mdScroll: 1,
-        }}
+        responsive={homeCuratedResponsive}
         key={get(listingImages, "length")}
         isShow={isArray(listingImages)}
         className={styles.mobile_banner_card}
       >
         {isArray(listingImages) &&
-          listingImages.map((img, index) => {
-            return detectIsVideo(img) ? (
-              <video
-                key={index}
-                id="video"
-                src={img}
-                className={styles.mobile_banner_card}
-                onClick={() => setShowAlbumModal(true)}
-              />
-            ) : (
-              <div
-                key={index}
-                className={styles.mobile_banner_card}
-                onClick={() => setShowAlbumModal(true)}
-              >
-                <Image alt="" layout="fill" src={img} objectFit="cover" />
-              </div>
-            );
-          })}
+          listingImages.map((img, index) => (
+            <div
+              key={index}
+              className={styles.mobile_banner_card}
+              onClick={() => setShowAlbumModal(true)}
+            >
+              {detectIsVideo(img) ? (
+                <video
+                  src={img}
+                  onClick={() => setShowAlbumModal(true)}
+                  // className={styles.mobile_banner_card_video}
+                />
+              ) : (
+                <Image alt="" layout="fill" objectFit="cover" src={img} />
+              )}
+            </div>
+          ))}
       </Carousel>
       <Modal
         visible={showAlbumModal}
