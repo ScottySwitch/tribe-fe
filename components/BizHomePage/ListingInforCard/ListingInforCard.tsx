@@ -25,6 +25,7 @@ interface ListingInforCardProps {
   priceRange: { min: string; max: string; currency: string };
   socialInfo: string;
   phoneNumber: string;
+  isVerified?: boolean;
   logo?: any;
   userInfo?: any;
   handleChangeLogo?: (srcImages: string[]) => void;
@@ -241,6 +242,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     bizListing,
     priceRange,
     phoneNumber,
+    isVerified,
     socialInfo,
     logo,
     userInfo,
@@ -277,7 +279,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     <div className={styles.listing_infor_card}>
       <div className={styles.listing_infor_container}>
         <div className="flex justify-between items-center">
-          <div className={styles.box_avatar}>
+          <div className="relative">
             <Upload
               key={logo}
               type="avatar"
@@ -287,6 +289,11 @@ const ListingInforCard = (props: ListingInforCardProps) => {
               disabled={isViewPage}
               onChange={handleChangeLogo}
             />
+            {isVerified && (
+              <div className={styles.verified}>
+                <Icon icon="verified-tag" className={styles.verified_icon} />
+              </div>
+            )}
           </div>
           {bizListing && (
             <ReviewsFollowers

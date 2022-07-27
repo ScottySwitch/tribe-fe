@@ -126,6 +126,7 @@ const TabContent = ({
       </div>
       <div className={styles.items_container}>
         {list.map((item) => {
+          console.log("item", item);
           const id = get(item, "attributes.id") || item.id;
           const images = item.images || [];
           const firstImage = item.imgUrl || images[0];
@@ -138,25 +139,25 @@ const TabContent = ({
             item.termsConditions ||
             "";
           const expiredAt =
-            get(item, "attributes.expire_at") ||
-            new Date(item.validUntil).toLocaleString() ||
-            item.expireAt ||
-            "";
+            get(item, "attributes.endDate") || item.endDate || "";
+          const startDate =
+            get(item, "attributes.startDate") || item.startDate || "";
           const currency =
             get(item, "attributes.currency") || item.currency || "";
           return (
             <div
               key={id}
               className={styles.info_card_container}
-              style={{ width: isDeal ? "50%" : "" }}
+              style={{ width: isDeal ? "100%" : "" }}
               onClick={() => handleOpenDetailModal(item)}
             >
               <CardItem
+                expiredAt={expiredAt}
+                startDate={startDate}
                 imgUrl={firstImage || "https://picsum.photos/200/300"}
                 title={name}
                 price={price}
                 description={description}
-                expiredAt={expiredAt}
                 currency={currency.toUpperCase()}
               />
               {isItem && (
