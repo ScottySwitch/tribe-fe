@@ -14,16 +14,13 @@ const useGetRevision = (listingSlug?: string) => {
   const router = useRouter();
 
   const getRevisionId = async () => {
-    const response = await bizListingRevision.createBizListingRevision({
-      ...revisionListing,
+    console.log(revisionListing);
+    const formatBizListingData = {
       is_accepted: false,
-      products: isArray(get(revisionListing, "products"))
-        ? get(revisionListing, "products").map((item) => item.id)
-        : [],
-      deals: isArray(get(revisionListing, "deals"))
-        ? get(revisionListing, "deals").map((item) => item.id)
-        : [],
-    });
+    };
+    const response = await bizListingRevision.createBizListingRevision(
+      formatBizListingData
+    );
     return get(response, "data.data.id");
   };
 

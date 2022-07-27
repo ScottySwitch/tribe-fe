@@ -94,7 +94,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
               <p className="text-left">
                 {data.start_date && data.start_date + " - "}
                 {data.end_date}
-                {new Date(data.validUntil).toLocaleString()}
+                {data.validUntil && new Date(data.validUntil).toLocaleString()}
               </p>
             </div>
           )}

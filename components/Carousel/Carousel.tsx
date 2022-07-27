@@ -7,7 +7,7 @@ import Slider from "react-slick";
 import styles from "./Carousel.module.scss";
 
 interface CarouselProps {
-  children?: ReactElement | ReactElement[];
+  children?: any;
   responsive?: { [key: string]: number };
   isShow?: boolean;
   className?: string;
@@ -92,6 +92,9 @@ const Carousel = (props: CarouselProps) => {
     if (horizontalSliderRef && horizontalSliderRef.current) {
       horizontalSliderRef.current.slickNext();
     }
+  }
+  if (!isShow) {
+    return <div />;
   }
 
   return (

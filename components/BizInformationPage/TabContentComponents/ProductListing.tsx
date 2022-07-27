@@ -155,7 +155,7 @@ const ProductListing = (props: ProductListingProps) => {
             <strong>Tips:</strong> Click the pin icon to put 5 products on the
             top.
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {!isPaid &&
               Array.isArray(productList) &&
               productList.length > 2 && (
@@ -163,7 +163,7 @@ const ProductListing = (props: ProductListingProps) => {
                   prefix={<Icon icon="star-2" color="#653fff" />}
                   variant="secondary"
                   text="Update to use full feature"
-                  width="fit-content"
+                  width="max-content"
                   onClick={() => null}
                 />
               )}
@@ -192,6 +192,7 @@ const ProductListing = (props: ProductListingProps) => {
                     imgUrl={imgUrl}
                     title={item.name}
                     price={item.price}
+                    currency={item.currency}
                     description={item.description}
                   />
                   <div className={styles.toolbar}>

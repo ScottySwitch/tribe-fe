@@ -5,16 +5,18 @@ import React, { useEffect, useState } from "react";
 import styles from "./PanelSavedDeals.module.scss";
 import BizlistingApi from "services/biz-listing";
 import { get } from "lodash";
+import DealDetailModal from "components/DealDetailModal/DealDetailModal";
 
 const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
   // const { data } = props
   const [data, setData] = useState<any>([]);
   const [total, setTotal] = useState<number>();
-
+  const [showDealDetailModal, setShowDealDetailModal] = useState(false);
+  const [selectedDeal, setSelectedDeal] = useState<any>({});
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     // setTotal(data.length)
-    (userInfo && userInfo?.token) && getData();
+    userInfo && userInfo?.token && getData();
   }, []);
 
   const getData = async () => {
@@ -45,9 +47,25 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
             type={item.type}
             favourite
             startDate={item.startDate}
+            onCardClick={() => {
+              setShowDealDetailModal(true);
+              setSelectedDeal(item);
+            }}
           />
         ))}
       </div>
+      <DealDetailModal
+        data={{
+          ...selectedDeal,
+          name: selectedDeal.title,
+          description: selectedDeal.description,
+          information: selectedDeal.information,
+          start_date: selectedDeal.startDate,
+          end_date: selectedDeal.expiredAt,
+        }}
+        visible={showDealDetailModal}
+        onClose={() => setShowDealDetailModal(false)}
+      />
     </div>
   );
 };
