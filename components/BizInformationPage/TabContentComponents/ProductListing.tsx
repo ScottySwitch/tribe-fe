@@ -83,6 +83,7 @@ const ProductListing = (props: ProductListingProps) => {
 
   const submitProduct = async (products: any) => {
     const product = {
+      is_revision: isRevision,
       biz_listing_revision: isRevision ? bizListingId : await getRevisionId(),
       ...products[0],
     };
