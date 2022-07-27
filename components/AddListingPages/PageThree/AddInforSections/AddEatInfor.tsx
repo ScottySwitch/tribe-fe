@@ -201,7 +201,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             question="What tags best describe this place? "
             optional
           >
-            <div className="flex flex-wrap gap-y-5 w-3/5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(describeTags) &&
                 describeTags.map((item) => (
                   <Checkbox
@@ -209,7 +209,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                     label={get(item, "attributes.label")}
                     // name="tags"
                     value={item.id}
-                    className="w-full sm:w-1/2"
+                    className="w-1/2"
                     register={register("describeTags")}
                   />
                 ))}
@@ -246,14 +246,14 @@ const AddEatInfor = (props: AddEatInforProps) => {
             question="What kind of meals does this place serve?"
             optional
           >
-            <div className="flex flex-wrap gap-y-5 w-3/5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(mealOptions) &&
                 mealOptions.map((item) => (
                   <Checkbox
                     key={item.label}
                     label={item.label}
                     value={item.label}
-                    className="w-full sm:w-1/2"
+                    className="w-1/2"
                     name="mealsKind"
                     register={register("mealsKind")}
                   />
@@ -261,7 +261,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             </div>
           </Question>
           <Question question="What is this place good for? " optional>
-            <div className="flex flex-wrap gap-y-5 w-3/5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(placeGoodFor) &&
                 placeGoodFor.map((item) => (
                   <Checkbox
@@ -269,7 +269,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                     label={item.label}
                     // name="placeGoodFor"
                     value={item.label}
-                    className="w-full sm:w-1/2"
+                    className="w-1/2"
                     register={register("placeGoodFor")}
                   />
                 ))}
@@ -293,7 +293,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             question="What best describe this place’s atmosphere? "
             optional
           >
-            <div className="flex flex-wrap gap-y-5 w-3/5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(atmosphere) &&
                 atmosphere.map((item) => (
                   <Checkbox
@@ -301,7 +301,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                     // name="atmosphere"
                     value={item.label}
                     label={item.label}
-                    className="w-full sm:w-1/2"
+                    className="w-1/2"
                     register={register("atmosphere")}
                   />
                 ))}
@@ -311,7 +311,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             question="What type of payment method is available?"
             optional
           >
-            <div className="flex flex-wrap gap-y-5 w-3/5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(paymentMethods) &&
                 paymentMethods.map((item) => (
                   <Checkbox
@@ -319,7 +319,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                     // name="payment"
                     label={item.label}
                     value={item.label}
-                    className="w-full sm:w-1/2"
+                    className="w-1/2"
                     register={register("payment")}
                   />
                 ))}
@@ -329,7 +329,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
             question="Any additional features/ services that are available? "
             optional
           >
-            <div className="flex flex-wrap gap-y-5 w-3/5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(additionalFeatures) &&
                 additionalFeatures.map((item) => (
                   <Checkbox
@@ -337,7 +337,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
                     // name="additionalServices"
                     label={item.label}
                     value={item.label}
-                    className="w-full sm:w-1/2"
+                    className="w-1/2"
                     register={register("additionalServices")}
                   />
                 ))}

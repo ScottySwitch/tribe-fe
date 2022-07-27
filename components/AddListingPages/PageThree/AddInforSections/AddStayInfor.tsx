@@ -194,14 +194,14 @@ const AddStayInfor = (props: AddStayInforProps) => {
             question="What tags best describe this place? "
             optional
           >
-            <div className="flex flex-wrap gap-y-5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(describeTags) &&
                 describeTags.map((item) => (
                   <Checkbox
                     key={item.id}
                     label={item.attributes.label}
                     value={item.id}
-                    className="w-full sm:w-1/2"
+                    className="w-1/2"
                     register={register("describeTags")}
                   />
                 ))}
@@ -238,13 +238,13 @@ const AddStayInfor = (props: AddStayInforProps) => {
             question="What are the Halal food options available?"
             optional
           >
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {foodOptions.map((item) => (
                 <Checkbox
                   key={item.label}
                   label={item.label}
                   value={item.label}
-                  className="w-full sm:w-1/2"
+                  className="w-1/2"
                   register={register("foodOptions")}
                 />
               ))}
@@ -254,13 +254,13 @@ const AddStayInfor = (props: AddStayInforProps) => {
             question="What are the prayer facilities available?"
             optional
           >
-            <div className="flex flex-col gap-y-5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {prayerFacilities.map((item) => (
                 <Checkbox
                   key={item.label}
                   label={item.label}
                   value={item.label}
-                  className="w-full sm:w-1/2"
+                  className="w-1/2"
                   register={register("paryerFacilities")}
                 />
               ))}
@@ -271,14 +271,14 @@ const AddStayInfor = (props: AddStayInforProps) => {
             instruction="Services during Ramadan: "
             optional
           >
-            <div className="flex flex-col gap-y-5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {prayerFacilities.map((item) => (
                 <Checkbox
                   key={item.label}
                   id={`${item.label} - ramadan`}
                   label={item.label}
                   value={item.label}
-                  className="w-full sm:w-1/2"
+                  className="w-1/2"
                   register={register("foodOptionsRamadan")}
                 />
               ))}
@@ -288,13 +288,13 @@ const AddStayInfor = (props: AddStayInforProps) => {
             question="What are the non-Halal activities in the hotel?"
             optional
           >
-            <div className="flex flex-col gap-y-5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {nonHalalActivities.map((item) => (
                 <Checkbox
                   key={item.label}
                   label={item.label}
                   value={item.label}
-                  className="w-full sm:w-1/2"
+                  className="w-1/2"
                   register={register("nonHalalActivities")}
                 />
               ))}

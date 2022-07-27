@@ -170,7 +170,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
             />
           </Question>
           <Question question="What tags best describe this place? " optional>
-            <div className="flex flex-wrap gap-y-5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(describeTags) &&
                 describeTags.map((item) => (
                   <Checkbox
@@ -178,7 +178,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
                     label={get(item, "attributes.label")}
                     // name="tags"
                     value={item.id}
-                    className="w-full sm:w-1/2"
+                    className="w-1/2"
                     register={register("describeTags")}
                   />
                 ))}

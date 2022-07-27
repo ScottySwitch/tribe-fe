@@ -166,7 +166,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             question="What type of products does this store offer?"
             optional
           >
-            <div className="flex flex-wrap gap-y-5 w-3/5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(productTypes) &&
                 productTypes.map((item) => (
                   <Checkbox
@@ -207,7 +207,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
             />
           </Question>
           <Question question="What tags best describe this place?" optional>
-            <div className="flex flex-wrap gap-y-5 w-3/5">
+            <div className="flex flex-wrap gap-y-5 w-100 sm:w-100 lg:w-5/6 xl:w-3/5">
               {Array.isArray(describeTags) &&
                 describeTags.map((item) => (
                   <Checkbox
