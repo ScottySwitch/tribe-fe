@@ -11,9 +11,15 @@ const removeListingFavourite = async (params: any) => {
   return await Api.post(url, params);
 } 
 
+const removeDealFavourite = async (params: any) => {
+  const url = `/api/auth/remove-deal-favourite`;
+  return await Api.post(url, params);
+} 
+
 const UserApi = {
   updateUser,
   removeListingFavourite,
+  removeDealFavourite,
 };
 
 export default UserApi;
