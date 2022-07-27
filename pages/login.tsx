@@ -140,7 +140,7 @@ const LoginPage = (context) => {
       ? "/"
       : prevPagePathname;
 
-    window.location.href = finalPreviousPage;
+    window.location.href = finalPreviousPage || "/";
   };
 
   const routeFacebookLogin =
@@ -175,6 +175,7 @@ const LoginPage = (context) => {
         <div className={styles.body}>
           {method === LoginMethod.PHONE_NUMBER ? (
             <SelectInput
+              selectWidth="max-content"
               isClearable
               label="Phone number"
               placeholder="Phone number"
@@ -255,7 +256,7 @@ export async function getServerSideProps(context) {
   // Pass data to the page via props
   return {
     props: {
-      prevPagePathname: prevPagePathname,
+      prevPagePathname: prevPagePathname || "/",
     },
   };
 }

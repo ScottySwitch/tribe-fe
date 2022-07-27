@@ -17,6 +17,7 @@ export interface SelectProps {
   options?: IOption[];
   disabled?: boolean;
   placeholder?: string;
+  className?: string;
   isMulti?: boolean;
   closeMenuOnSelect?: boolean;
   menuWidth?: string | number;
@@ -42,6 +43,7 @@ const SelectField = (props: SelectProps) => {
     onInputChange,
     onChange,
     defaultValue,
+    className,
     closeMenuOnSelect = false,
     menuWidth = "fit-content",
     selectWidth = "fit-content",
@@ -160,6 +162,7 @@ const SelectField = (props: SelectProps) => {
       closeMenuOnSelect={closeMenuOnSelect || !isMulti}
       isDisabled={disabled}
       styles={customStyles}
+      className={className}
       // @ts-ignore
       inputRef={inputRef}
       isMulti={isMulti}
