@@ -30,7 +30,7 @@ const Facilities = (props: FacilitiesProps) => {
     : [];
 
   //remove null, undefined, blank items
-  const filteredArray = _.filter(facilityArray, Boolean).slice(0, showNumber);
+  const filteredArray = _.filter(facilityArray, Boolean)?.slice(0, showNumber);
   const showMoreButton = get(facilityArray, "length") > showNumber;
 
   const HomepageViewFacilities = () => {

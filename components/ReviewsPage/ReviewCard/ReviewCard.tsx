@@ -71,9 +71,9 @@ export const ReviewForm = (props) => {
         <div className={styles.form_label}>Add images/ videos ( up to 3 )</div>
         <Upload
           isPaid
-          multiple={true}
-          accept="images"
+          multiple
           type="media"
+          fileList={images}
           centerIcon={<Icon icon="plus" />}
           onChange={(urls) => setImages([...images, ...urls])}
         />

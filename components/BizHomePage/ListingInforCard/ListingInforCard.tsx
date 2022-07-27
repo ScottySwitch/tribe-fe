@@ -133,7 +133,7 @@ const ReviewsFollowers = (props: {
           {/*// TODO: currently review star is image*/}
           <div className={`flex flex-row items-center ${styles.rating}`}>
             <Icon icon="red-star" size={16} color="white" />
-            <p>{bizListing.rating}</p>
+            <p>{bizListing.rating || 0}</p>
           </div>
           <p>
             ({bizListingReviewCount} review

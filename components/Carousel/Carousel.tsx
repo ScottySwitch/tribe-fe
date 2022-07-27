@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Icon from "components/Icon/Icon";
 import InforCard from "components/InforCard/InforCard";
 import React, { ReactElement, useRef } from "react";
@@ -9,10 +10,11 @@ interface CarouselProps {
   children?: ReactElement | ReactElement[];
   responsive?: { [key: string]: number };
   isShow?: boolean;
+  className?: string;
 }
 
 const Carousel = (props: CarouselProps) => {
-  const { children, responsive, isShow = true } = props;
+  const { children, responsive, className, isShow = true } = props;
 
   const horizontalSliderRef = useRef<any>(null);
 
@@ -93,7 +95,7 @@ const Carousel = (props: CarouselProps) => {
   }
 
   return (
-    <div className={styles.carousel}>
+    <div className={classNames(className, styles.carousel)}>
       <div onClick={handlePrevHorizontalSlide} className={styles.btn_prev}>
         <Icon icon="carret-left" size={20} />
       </div>

@@ -24,6 +24,7 @@ import AuthApi from "../../../services/auth";
 import CategoryLinkAPi from "services/category-link";
 import { get } from "lodash";
 import categoryLink from "services/category-link";
+import moment from "moment";
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
@@ -97,10 +98,13 @@ const StepOne = ({
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     }
     const userId = userInfo.id || "0";
+    let convertBirthday =
+      moment(data.birthday).format("YYYY-MM-DD") + "T:00:00.000Z";
+
     let dataSend: any = {
       first_name: data.name,
       gender: data.gender,
-      birthday: data.birthday,
+      birthday: convertBirthday,
       country: data.country?.value || null,
       confirmed: true,
     };

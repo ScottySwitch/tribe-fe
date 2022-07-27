@@ -109,20 +109,15 @@ const Upload = (props: UploadProps) => {
       )
       .then((res) => {
         const responseUrls = get(res, "data.urls") || [];
-        console.log("responseUrls--------", responseUrls);
         if (responseUrls.length > 0) {
           let newFileList = Array.isArray(fileList) ? [...fileList] : [];
           if (!multiple) {
             newFileList = [...responseUrls];
-            console.log("responseUrls--------1", newFileList);
           } else if (imgIndex !== -1) {
             newFileList[imgIndex] = responseUrls[0];
-            console.log("responseUrls--------2", newFileList);
           } else {
             newFileList = [...newFileList, ...responseUrls];
-            console.log("responseUrls--------3", newFileList);
           }
-          console.log("finallllll--------------", newFileList);
           setLocalFileList(newFileList);
           onChange?.(newFileList);
         }
@@ -218,7 +213,7 @@ const Upload = (props: UploadProps) => {
     [styles.hide]: type === "avatar",
   });
 
-  useEffect(() => console.log("showedImages", showedImages), [showedImages]);
+  // useEffect(() => console.log("showedImages", showedImages), [showedImages]);
 
   return (
     <div className={containerClassName}>
