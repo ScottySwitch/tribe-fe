@@ -142,9 +142,9 @@ const SignupPage = () => {
   };
 
   const routeFacebookLogin =
-    process.env.NEXT_PUBLIC_API_URL + "/api/connect/facebook";
+    process.env.NEXT_PUBLIC_API_URL + "api/connect/facebook";
   const routeGoogleLogin =
-    process.env.NEXT_PUBLIC_API_URL + "/api/connect/google";
+    process.env.NEXT_PUBLIC_API_URL + "api/connect/google";
 
   return (
     <div className={styles.auth}>
