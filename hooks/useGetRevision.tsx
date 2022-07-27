@@ -1,8 +1,10 @@
+import { Item } from "framer-motion/types/components/Reorder/Item";
 import { get } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import bizListingApi from "services/biz-listing";
 import bizListingRevision from "services/biz-listing-revision";
+import { isArray } from "utils";
 
 const useGetRevision = (listingSlug?: string) => {
   const [loading, setLoading] = useState(true);
@@ -12,9 +14,16 @@ const useGetRevision = (listingSlug?: string) => {
   const router = useRouter();
 
   const getRevisionId = async () => {
-    const response = await bizListingRevision.createBizListingRevision(
-      revisionListing
-    );
+    const response = await bizListingRevision.createBizListingRevision({
+      ...revisionListing,
+      is_accepted: false,
+      products: isArray(get(revisionListing, "products"))
+        ? get(revisionListing, "products").map((item) => item.id)
+        : [],
+      deals: isArray(get(revisionListing, "deals"))
+        ? get(revisionListing, "deals").map((item) => item.id)
+        : [],
+    });
     return get(response, "data.data.id");
   };
 
