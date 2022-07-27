@@ -18,12 +18,29 @@ const dummyBreadcrumbs: BreadcrumbsProps[] = [
 ];
 
 const dummyScrollspy = [
-  "Who is it for?",
-  "What is Tribes about?",
-  "How old is Tribes?",
-  "Is it available on my device?",
-  "Who are the people behind Tribes?",
+  "What is Tribes?",
+  "Who is Tribes for?",
+  "How can I contribute to the Tribes community?",
+  "What is Tribes relevance to HHWT?",
+  "Are the products listed on Tribes halal?",
+  "What do the different halal statuses mean?",
+  "Why am I unable to make a purchase on the platform?",
+  "What is unique in each category B, E, S, T, S?",
+  "Are the brand owners local or international?",
+  "How do I reset my password?",
+  "Who do I contact for more information with regards to the information listed on Tribes?",
+  "What do I do if I see a post against the community guidelines?",
+  "Where do I write in my suggestions and feedback regarding the Tribes platform?",
+  "How do I submit a review?",
+  "Why are some of my reviews not showing up under the business’s review section?",
+  "How long does a review take to be shown on Tribes?",
+  "Am I able to refer a friend to sign up for a Tribes account?",
+  "What benefits do I get if I refer a friend to sign up for a Tribes account?",
+  "What do I do if a business does not honour their deal as listed on Tribes?",
+  "How many times can I use a Deal?",
 ];
+
+const dummyScrollsp = ["1", "2", "3", "4", "5", "6", "8", "9", "7", "10"];
 
 const dummyQuestion = [
   {
@@ -445,37 +462,356 @@ const QuestionForUser = () => {
           </div>
         </li>
         <Break />
-        <div className={styles.question_item}>
-          <h5 className={styles.question}>
-            Why are some of my reviews not showing up under the business’s
-            review section?
-          </h5>
-          <p className={styles.answer}>
-            Your review is under review by Tribes.
-          </p>
-          <br />
-          <p className={styles.answer}>
-            Please wait for 1-3 working days for Tribes to verify your review.
-            If your review still does not show up, please refer to our community
-            guidelines (To include community guidelines/review guidelines) here
-            and resubmit a review.
-          </p>
-        </div>
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              Why are some of my reviews not showing up under the business’s
+              review section?
+            </h5>
+            <p className={styles.answer}>
+              Your review is under review by Tribes.
+            </p>
+            <br />
+            <p className={styles.answer}>
+              Please wait for 1-3 working days for Tribes to verify your review.
+              If your review still does not show up, please refer to our
+              community guidelines (To include community guidelines/review
+              guidelines) here and resubmit a review.
+            </p>
+          </div>
+        </li>
         <Break />
-        <div className={styles.question_item}>
-          <h5 className={styles.question}>
-            How long does a review take to be shown on Tribes?
-          </h5>
-          <p className={styles.answer}>
-            Once you have submitted a product listing for review, it will take
-            1-3 working days for the listing to be up. If your review process
-            takes longer than expected, reach out to us through our{" "}
-            <a href="mailto:tribes@havehalalwilltravel.com">
-              <u>tribes@havehalalwilltravel.com</u>
-            </a>
-          </p>
-        </div>
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              How long does a review take to be shown on Tribes?
+            </h5>
+            <p className={styles.answer}>
+              Once you have submitted a product listing for review, it will take
+              1-3 working days for the listing to be up. If your review process
+              takes longer than expected, reach out to us through our{" "}
+              <a href="mailto:tribes@havehalalwilltravel.com">
+                <u>tribes@havehalalwilltravel.com</u>
+              </a>
+            </p>
+          </div>
+        </li>
         <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              Am I able to refer a friend to sign up for a Tribes account?
+            </h5>
+            <p className={styles.answer}>
+              Yes, and we encourage you to do so! Each Tribes user has a unique
+              referral link which can be found in their profile
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              What benefits do I get if I refer a friend to sign up for a Tribes
+              account?
+            </h5>
+            <p className={styles.answer}>
+              The referrer will receive points which can be used to participate
+              in exclusive events and lucky draws after the referee has
+              successfully created their account
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              What do I do if a business does not honour their deal as listed on
+              Tribes?
+            </h5>
+            <p className={styles.answer}>
+              Take a screenshot of the deal on Tribes and email us at
+              <a href="mailto:tribes@havehalalwilltravel.com">
+                <u>tribes@havehalalwilltravel.com</u>
+              </a>
+              . We encourage users to confirm the deals with the business before
+              heading down to use the deal to avoid disappointment
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              How many times can I use a Deal?
+            </h5>
+            <p className={styles.answer}>
+              You may use the deal for as long as the brands posted on their
+              listing!
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+const QuestionForBusiness = () => {
+  return (
+    <div className="for-business">
+      <ul>
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              How can Tribes help me grow my business?
+            </h5>
+            <p className={styles.answer}>
+              Tribes is a platform that serves the Muslim community. Our goal is
+              to enrich our users' experiences by providing them with an array
+              of high-quality brands. By listing on Tribes, you can expose your
+              brand to the Muslim community in Singapore, Malaysia and
+              Indonesia.
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>Is it free?</h5>
+            <p className={styles.answer}>
+              There is a free and a paid version for businesses.
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              What is the difference between a free and basic listing?
+            </h5>
+            <p className={styles.answer}>
+              More features are available for brands who sign up for the basic
+              listing. For more information, please click here (put in the URL
+              to the diagram showing the difference between free and paid
+              listing)
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>What is a brand listing?</h5>
+            <p className={styles.answer}>
+              Brand listings are for business owners to promote their new
+              products and offer deals primarily for our main Muslim audience.
+              As Tribes aims to offer BUSINESS USERS the unique opportunity to
+              reach a Muslim audience, we encourage brand owners to claim their
+              listing if it is currently available on the platform or create a
+              listing if it is not currently available.
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              Will I be able to downgrade my tier in the future?
+            </h5>
+            <p className={styles.answer}>
+              We will be really sad to see you leave. Should you feel that the
+              basic tier does not meet your expectations, we would advise you to
+              speak to our customer success representatives, who will assist you
+              in optimising your listing. That said, you will have the option to
+              downgrade your tier at any point in time.
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              Who can I contact if I require support?
+            </h5>
+            <p className={styles.answer}>
+              Please feel free to drop us an email at{" "}
+              <a href="mailto:tribes@havehalalwilltravel.com">
+                <u>tribes@havehalalwilltravel.com</u>
+              </a>
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              <u>How do I claim a listing?</u>
+            </h5>
+            <p className={styles.answer}>
+              For a brand that has already been listed on Tribes?
+            </p>
+            <br />
+            <ul className={styles.small_answer}>
+              <li className={styles.answer}>
+                Sign up / Log in to Tribes FREE business account
+              </li>
+              <li className={styles.answer}>
+                Click on “Business” to find your listing to be claimed
+              </li>
+              <li className={styles.answer}>Proceed to claim your listing</li>
+              <li className={styles.answer}>
+                Click “Yes” if you are the owner or representative of the brand.
+                Please ensure to select your role accordingly, we at Tribes
+                trust that you are a legit representative and responsible for
+                claiming the brand listing
+              </li>
+              <li className={styles.answer}>
+                Choose the tiers to go for (Free or Basic)
+              </li>
+              <li className={styles.answer}>
+                Continue to verify your email/phone no.
+              </li>
+              <li className={styles.answer}>
+                Once verified, a successful message will indicate your listing
+                has been claimed
+              </li>
+            </ul>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              <u>How can I update the details on my listing page?</u>
+            </h5>
+            <ul className={styles.small_answer}>
+              <li className={styles.answer}>
+                Claim your listing if you haven’t already done so
+              </li>
+              <li className={styles.answer}>
+                Click on the ‘Business’ button to gain access to your business
+                listing dashboard
+              </li>
+              <li className={styles.answer}>
+                Click on “Contributes” and then “Update Listing”
+              </li>
+            </ul>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              <u>
+                What is the total number of products that I can list on my
+                listing?
+              </u>
+            </h5>
+            <p className={styles.answer}>
+              If you are using the free version, you will be able to list a
+              maximum of 3 products. If you are on the basic tier, you will be
+              able to list an UNLIMITED number of products.
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              <u>Why is my product deleted/suspended</u>
+            </h5>
+            <p className={styles.answer}>
+              If your product has been reported and found to violate the listing
+              guidelines, you would have received an email notification stating
+              that the product has been removed.
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              Do business listings need to be reviewed?
+            </h5>
+            <p className={styles.answer}>
+              Claimed business listings will have to undergo moderation and be
+              approved by the moderator before going live. We also encourage the
+              Tribes community to “raise a flag” should you see any suspicious
+              or non-legit business listings on the platform!
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              <u>Customer Service</u>
+            </h5>
+            <p className={styles.answer}>
+              Please feel free to drop us an email at{" "}
+              <a href="mailto:tribes@havehalalwilltravel.com">
+                <u>tribes@havehalalwilltravel.com</u>
+              </a>
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              <u>Deals</u>
+            </h5>
+            <ul className={styles.small_answer}>
+              <li className={styles.answer}>
+                FREE listings: brand owners will not have the option to promote
+                their deals
+              </li>
+              <li className={styles.answer}>
+                PAID listings: brand owners will have unlimited sharing of deals
+              </li>
+            </ul>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              How do I make payment for Paid Listing?
+            </h5>
+            <p className={styles.answer}>
+              Brand owners can make opt for quarterly or yearly tier
+              subscriptions to enjoy unlimited usage of uploading deals,
+              products, responding to reviews, etc
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>What details are required?</h5>
+            <p className={styles.answer}>
+              We will need either your Identification Card or Driver’s Licence
+              for account verification
+            </p>
+          </div>
+        </li>
+        <Break />
+        <li>
+          <div className={styles.question_item}>
+            <h5 className={styles.question}>
+              <u>Managing reviews and response</u>
+            </h5>
+            <ul className={styles.small_answer}>
+              <li className={styles.answer}>
+                FREE listings: Brand owners will not be able to respond to
+                reviews
+              </li>
+              <li className={styles.answer}>
+                PAID listings: Brand owners are entitled to review and respond
+                to unlimited user reviews
+              </li>
+            </ul>
+          </div>
+        </li>
       </ul>
     </div>
   );
@@ -496,7 +832,7 @@ const SupportPage = () => {
 
   useEffect(() => {
     setBreadcrumbs(dummyBreadcrumbs);
-    setCurrentTab(TabList[0]?.value);
+    // setCurrentTab(TabList[0]?.value);
     setQuestions(dummyQuestion);
   }, [currentTab]);
 
@@ -510,46 +846,36 @@ const SupportPage = () => {
             tablist={TabList}
             type="secondary-no-outline"
             className="mb-0"
-            onChangeTab={(e) => setCurrentTab(e)}
+            onChangeTab={(e) => {
+              console.log(e);
+              setCurrentTab(e);
+            }}
           />
         </div>
         <div className="flex justify-between mt-[34px]">
-          <div className={styles.left_col}>
+          {/* <div className={styles.left_col}>
             <div className={`${styles.left_col_bottom} mt-0`}>
               <Button
                 text="Contact admin"
                 width="max-content"
                 prefix={<Icon icon="chat" color="#ffffff" />}
               />
-              {dummyScrollspy?.map((item, index) => (
+              {dummyScrollsp?.map((item, index) => (
                 <div className="flex gap-3 justify-between" key={item}>
                   <Heading
                     icon={item}
                     type="tab"
                     text={item}
+                    onClick={() => setScrollspy(item)}
                     selected={scrollspy === item}
                   />
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
           <div className={styles.right_col}>
             {currentTab === "for-user" && <QuestionForUser />}
-            {currentTab === "for-business" && (
-              <div className="for-business">
-                <ul>
-                  {questions?.map((item, index) => (
-                    <li key={index}>
-                      <QuestionItem
-                        question={item.question}
-                        answer={item.answer}
-                      />
-                      {index < questions.length - 1 && <Break />}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {currentTab === "for-business" && <QuestionForBusiness />}
           </div>
         </div>
         <TopSearches className="mt-[80px]" />
