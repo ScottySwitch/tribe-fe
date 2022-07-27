@@ -416,7 +416,7 @@ const QuestionForUser = () => {
             <p className={styles.answer}>
               Reports are kept anonymous unless a direct follow-up from the
               report is required. Once our moderators have reviewed your
-              submitted report on a user/listing, you'll receive a notification.
+              submitted report on a user/listing, you'll receive a notification.
             </p>
           </div>
         </li>
@@ -567,7 +567,7 @@ const QuestionForBusiness = () => {
             </h5>
             <p className={styles.answer}>
               Tribes is a platform that serves the Muslim community. Our goal is
-              to enrich our users' experiences by providing them with an array
+              to enrich our users's experiences by providing them with an array
               of high-quality brands. By listing on Tribes, you can expose your
               brand to the Muslim community in Singapore, Malaysia and
               Indonesia.
