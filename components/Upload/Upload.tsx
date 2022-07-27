@@ -54,8 +54,10 @@ const Upload = (props: UploadProps) => {
     }
   }, [fileList, multiple]);
 
+
+  // setup for banner for not show all images even its paid listing
   const showedImages =
-    type === "banner" || type === "media"
+    type === "banner" 
       ? isPaid
         ? Array.isArray(srcList) && srcList.slice(0, 4)
         : Array.isArray(srcList) && srcList.slice(0, 3)
