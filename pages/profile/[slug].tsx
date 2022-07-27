@@ -24,6 +24,7 @@ import FollowApi from "services/user-listing-follow";
 import { get } from "lodash";
 
 import styles from "styles/Profile.module.scss";
+import ContributeApi from "services/contribute";
 
 const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
   const { name, imageUrl } = props;
@@ -33,7 +34,7 @@ const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
         <div className={styles.avatar}>
           <Image
             className={styles.avatar_img}
-            src={imageUrl || require("public/images/page-avatar.png")}
+            src={imageUrl || require("public/images/default-page-avatar.png")}
             width="100%"
             height="100%"
             layout="responsive"
@@ -103,31 +104,51 @@ const GroupHeadingTwo = (props: {
   );
 };
 
-const ProfilePage = () => {
-  const [selectedTab, setSelectedTab] = useState<string>();
+interface IContributions {
+  pending: any[];
+  approved: any[];
+}
 
+const ProfilePage = (context) => {
   const router = useRouter();
+  const { slug }: any = router.query;
+
   const { user } = useContext(UserInforContext);
-  const { slug } = router.query;
+
+  const [loading, setLoading] = useState(true);
+  const [selectedTab, setSelectedTab] = useState<string>(context.slug);
+  const [contributions, setContributions] = useState<IContributions>({
+    pending: [],
+    approved: [],
+  });
 
   useEffect(() => {
+    const getUserInfor = () =>
+      ContributeApi.getUserContribute()
+        .then(async (res) => {
+          const contributionRawData = get(res, "data.data");
+          let contributionData: IContributions = {
+            pending: [],
+            approved: [],
+          };
+          Array.isArray(contributionRawData) &&
+            contributionRawData.forEach((cont) => {
+              cont.status === "Pending" && contributionData.pending.push(cont);
+              cont.status === "Approved" &&
+                contributionData.approved.push(cont);
+            });
+          setContributions(contributionData);
+        })
+        .catch((error) => console.log(error))
+        .finally(() => setLoading(false));
+
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     if (!userInfo || !userInfo?.token) {
       router.push("/");
+    } else {
+      getUserInfor();
     }
-    switch (slug) {
-      case ProfileTabs.SAVED_DEALS:
-        setSelectedTab(ProfileTabs.SAVED_DEALS);
-        break;
-      case ProfileTabs.FAVOURITED:
-        setSelectedTab(ProfileTabs.FAVOURITED);
-        break;
-      case ProfileTabs.ABOUT:
-        setSelectedTab(ProfileTabs.ABOUT);
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath]);
+  }, [router]);
 
   const TabList: ITab[] = [
     {
@@ -143,7 +164,9 @@ const ProfilePage = () => {
     {
       label: ProfileTabs.CONTRIBUTED,
       value: ProfileTabs.CONTRIBUTED,
-      content: <ContributedPanel userInfor={user} />,
+      content: (
+        <ContributedPanel contributions={contributions} loading={loading} />
+      ),
     },
     {
       label: ProfileTabs.ABOUT,
@@ -151,6 +174,10 @@ const ProfilePage = () => {
       content: <PanelAbout data={user} />,
     },
   ];
+
+  const contributionNumber =
+    get(contributions, "pending.length", 0) +
+    get(contributions, "approved.length", 0);
 
   return (
     <div className="wrapper-profile">
@@ -168,17 +195,28 @@ const ProfilePage = () => {
           name={`${user.first_name} ${user.last_name || ""}`}
           imageUrl={user.avatar}
         />
-        <GroupHeadingTwo contributions={0} points={0} />
+        <GroupHeadingTwo contributions={contributionNumber || "0"} points={0} />
         <TabsHorizontal
           selectedTab={selectedTab}
           tablist={TabList}
           type="secondary-no-outline"
           className={styles.profile_tab}
+          onChangeTab={(tab) =>
+            router.push(`/profile/${tab}`, undefined, { shallow: false })
+          }
         />
         <TopSearches className={styles.top_searches} />
       </SectionLayout>
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      slug: context.query.slug || "",
+    },
+  };
+}
 
 export default ProfilePage;

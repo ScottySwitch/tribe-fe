@@ -271,7 +271,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
   );
   const listingLogo = get(logo, "[0]")
     ? logo
-    : [require("public/images/page-avatar.png")];
+    : [require("public/images/default-page-avatar.png")];
 
   return (
     <div className={styles.listing_infor_card}>

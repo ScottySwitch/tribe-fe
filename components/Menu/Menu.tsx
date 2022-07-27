@@ -79,8 +79,8 @@ const Menu = (props: MenuMenuProps) => {
   ];
 
   const handleLogout = () => {
-    deleteUser();
     window.location.href = "/";
+    deleteUser();
   };
 
   // const handleOpenSwitchAccountModal = () => {};
@@ -125,7 +125,7 @@ const Menu = (props: MenuMenuProps) => {
           </div>
         );
       })}
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center md:hidden">
         <Icon icon="map" size={20} />
         <Select
           size="small"
@@ -139,7 +139,7 @@ const Menu = (props: MenuMenuProps) => {
           width={200}
         />
       </div>
-      <div className="flex gap-1 items-center">
+      <div className="flex gap-1 items-center  md:hidden">
         <Icon
           icon={languages.find((item) => item.value === locale)?.icon || ""}
           size={26}

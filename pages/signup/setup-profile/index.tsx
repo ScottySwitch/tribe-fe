@@ -53,7 +53,9 @@ const StepOne = ({
     },
   });
 
-  const [avatar, setAvatar] = useState([require("public/images/avatar.png")]);
+  const [avatar, setAvatar] = useState([
+    require("public/images/default-avatar.png"),
+  ]);
   // If user is come from Facebook, Google
   useEffect(() => {
     const loginFacebookCallback = async (accessToken: any) => {

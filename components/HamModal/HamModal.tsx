@@ -29,7 +29,7 @@ const HamModalHeader = ({
   return !!loginInfor.token ? (
     <div className={styles.user_profile}>
       <Image
-        src={user.avatar || require("public/images/avatar.png")}
+        src={user.avatar || require("public/images/default-avatar.png")}
         alt=""
         layout="fixed"
         width={50}

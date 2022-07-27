@@ -122,7 +122,8 @@ export const SwitchAccountsContent = () => {
         >
           <Image
             src={
-              get(item, "logo[0]") || require("public/images/page-avatar.png")
+              get(item, "logo[0]") ||
+              require("public/images/default-page-avatar.png")
             }
             alt=""
             width={30}
@@ -142,7 +143,7 @@ export const SwitchAccountsContent = () => {
         onClick={handleSwitchToNormalUser}
       >
         <Image
-          src={user.user_avatar || require("public/images/avatar.png")}
+          src={user.user_avatar || require("public/images/default-avatar.png")}
           alt=""
           width={30}
           height={30}
@@ -206,7 +207,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           position="bottom-left"
         >
           <Image
-            src={user.avatar || require("public/images/avatar.png")}
+            src={user.avatar || require("public/images/default-avatar.png")}
             alt=""
             width={40}
             height={40}
@@ -237,7 +238,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
           </div>
         </Popover>
         <Image
-          src={user.avatar || require("public/images/page-avatar.png")}
+          src={user.avatar || require("public/images/default-page-avatar.png")}
           alt=""
           width={40}
           height={40}

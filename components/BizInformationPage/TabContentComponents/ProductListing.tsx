@@ -65,7 +65,9 @@ const ProductListing = (props: ProductListingProps) => {
           id: item.id,
           description: item.description,
           images: item.images,
-          imgUrl: get(item, "images[0]") || require("public/images/avatar.svg"),
+          imgUrl:
+            get(item, "images[0]") ||
+            require("public/images/default-avatar.png"),
           discount: item.discount_percent,
           tags: item.tags,
           websiteUrl: item.website_url,
@@ -185,7 +187,8 @@ const ProductListing = (props: ProductListingProps) => {
           {productList &&
             productList.map((item: any, index) => {
               const imgUrl =
-                get(item, "images[0]") || require("public/images/avatar.svg");
+                get(item, "images[0]") ||
+                require("public/images/default-avatar.png");
               return (
                 <div key={item.id} className={styles.info_card_container}>
                   <InforCard

@@ -11,6 +11,7 @@ import { get, isEmpty } from "lodash";
 import { format } from "date-fns";
 import { isLocalURL } from "next/dist/shared/lib/router/router";
 import Loader from "components/Loader/Loader";
+import { useRouter } from "next/router";
 interface IBiz {
   title: string;
   imgUrl: string;
@@ -60,7 +61,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
               title={bizListing.name}
               imgUrl={
                 get(bizListing, "images[0]") ||
-                require("public/images/page-avatar.png")
+                require("public/images/default-page-avatar.png")
               }
               location={`${bizListing.address}, ${bizListing.country}`}
               rate={bizListing.rate}
@@ -78,74 +79,32 @@ const ListCard = (props: { data: ListCardProps[] }) => {
   );
 };
 
-const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
-  const [listCard, setListCard] = useState<ListCardProps[] | any>();
-  const [currentTab, setCurrentTab] = useState<string>("pending");
-  const [total, setTotal] = useState<number>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [contributions, setContributions] = useState<{ [key: string]: any }>(
-    []
-  );
-
-  useEffect(() => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo && userInfo?.token && setIsLoading(true);
-    ContributeApi.getUserContribute()
-      .then(async (res) => {
-        const contributionRawData = get(res, "data.data");
-
-        let contributionData: { pending: any[]; approved: any[] } = {
-          pending: [],
-          approved: [],
-        };
-
-        (await Array.isArray(contributionRawData)) &&
-          contributionRawData.forEach((cont) => {
-            switch (cont.status) {
-              case "Pending":
-                contributionData.pending.push(cont);
-                break;
-              case "Approved":
-                contributionData.approved.push(cont);
-                break;
-            }
-          });
-        setTotal(get(contributionData, "pending.length"));
-        setContributions(contributionData);
-      })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+const ContributedPanel = ({
+  contributions,
+  loading,
+}: {
+  contributions: { pending: any[]; approved: any[] };
+  loading: boolean;
+}) => {
+  const router = useRouter();
 
   const TabList: ITab[] = [
     {
-      label: "Pending",
+      label: `Pending (${get(contributions, "pending.length")})`,
+      customSelected: "pending_selected",
       value: "pending",
       content: <ListCard data={contributions.pending} />,
     },
     {
-      label: "Approved",
+      label: `Approved (${get(contributions, "approved.length")})`,
+      customSelected: "approved_selected",
       value: "approved",
       content: <ListCard data={contributions.approved} />,
     },
     // { label: "Denied", value: "denied", content: <ListCard data={listCard} /> },
   ];
 
-  const onChangeTab = (newCurrentTab) => {
-    switch (newCurrentTab) {
-      case "pending":
-        setTotal(get(contributions, "pending.length"));
-        break;
-      case "approved":
-        setTotal(get(contributions, "approved.length"));
-        break;
-    }
-    setCurrentTab(newCurrentTab);
-  };
-
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="w-full flex justify-center mt-20">
         <Loader />
@@ -155,17 +114,11 @@ const ContributedPanel = ({ userInfor }: { userInfor: any }) => {
 
   return (
     <div className={styles.contributed_panel}>
-      {total && total > 0 ? (
-        <div className={styles.total}>Total: {total}</div>
-      ) : (
-        <div></div>
-      )}
       <TabsHorizontal
-        selectedTab={"pending"}
+        selectedTab={TabList[0].value}
         tablist={TabList}
         type="primary-outline"
         className={styles.contributed_tab}
-        onChangeTab={onChangeTab}
       />
     </div>
   );
