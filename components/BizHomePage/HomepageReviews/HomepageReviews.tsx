@@ -149,17 +149,18 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
         </div>
       </div>
       {isViewPage && (
-        <div className="flex justify-between items-center mt-3 gap-5">
+        <div className="flex justify-between items-center mt-3 gap-1">
           <Button
             variant="outlined"
             text="Add your review"
-            width={300}
+            width="max-content"
             prefix={<Icon icon="edit-color" />}
             onClick={checkLogin}
           />
           <Select
-            width={200}
-            menuWidth={200}
+            ellipsis
+            width={160}
+            menuWidth={160}
             options={reviewSequenceOptions}
             defaultValue={reviewSequenceOptions[0]}
             onChange={handleChangeReviewSequence}
