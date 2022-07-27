@@ -120,6 +120,7 @@ const ReviewsFollowers = (props: {
             text="Add to favourite "
             size="small"
             variant="secondary"
+            width="max-content"
             disabled={isFavourite}
             onClick={handleAddFavorite}
           />

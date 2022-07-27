@@ -1,20 +1,26 @@
 @import "styles/variables.scss";
-
-.mobile_banner_card {
+.mobile_banner {
   display: none;
-  video {
-    width: 100%;
+  &_card {
+    video {
+      height: 100%;
+      width: 100%;
+    }
   }
 }
 
 @media screen and (max-width: $mobile) {
-  .mobile_banner_card {
-    display: flex;
-    position: relative;
-    object-fit: contain;
-    width: 100%;
-    background-color: black;
-    justify-content: center;
+  .mobile_banner {
+    display: block;
+    &_card {
+      display: flex;
+      position: relative;
+      object-fit: contain;
+      height: 300px;
+      width: 100%;
+      background-color: black;
+      justify-content: center;
+    }
   }
   .banner {
     display: none;

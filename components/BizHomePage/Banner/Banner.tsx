@@ -48,6 +48,7 @@ const Banner = (props: BannerProps) => {
         responsive={homeCuratedResponsive}
         key={get(listingImages, "length")}
         isShow={isArray(listingImages)}
+        className={styles.mobile_banner}
       >
         {isArray(listingImages) &&
           listingImages.map((img, index) => (

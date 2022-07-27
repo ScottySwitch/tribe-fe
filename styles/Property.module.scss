@@ -6,13 +6,13 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: bottom;
-  height: 166px;
+  height: max-content;
   width: 100%;
-  padding: 0;
+  padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-
+  position: relative;
   color: white !important;
   path {
     fill: white;
