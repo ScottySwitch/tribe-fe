@@ -39,6 +39,7 @@ export interface SelectProps {
   shouldControlShowValue?: boolean;
   controlStyle?: any;
   placeholderStyle?: any;
+  singleValueStyles?: any;
   onChange?: (value: any) => void;
   onInputChange?: (e: string) => void;
 }
@@ -63,6 +64,7 @@ const Select = (props: SelectProps) => {
     defaultValue,
     closeMenuOnSelect = false,
     menuWidth,
+    singleValueStyles,
     menuFooter,
     inputRef,
     controlStyle,
@@ -163,6 +165,7 @@ const Select = (props: SelectProps) => {
       whiteSpace: "nowrap",
       overflow: "hidden",
       display: "initial",
+      ...singleValueStyles,
     }),
     indicatorSeparator: (styles) => ({ ...styles, display: "none" }),
     indicatorsContainer: (styles) => ({ ...styles, alignItems: "center" }),

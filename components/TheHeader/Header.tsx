@@ -7,7 +7,7 @@ import { useDebounce } from "usehooks-ts";
 import useTrans from "hooks/useTrans";
 import Icon from "components/Icon/Icon";
 import Select from "components/Select/Select";
-import { Categories, UserInfor } from "./HeaderComponents";
+import { Categories, formatLanguages, UserInfor } from "./HeaderComponents";
 import { categories, languages, locations } from "constant";
 import ListingSearch, {
   ListingMenuFooter,
