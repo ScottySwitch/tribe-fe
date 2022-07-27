@@ -105,14 +105,14 @@ const UserReviewCard = (props: UserReviewCardProps) => {
               <span className="font-normal ml-2">{censorshipLabel}</span>
             )}
           </h6>
-          {/* {actions && ( */}
-          <Popover
-            content={<div onClick={onReportClick}>Report review</div>}
-            position="bottom-left"
-          >
-            <Icon icon="toolbar" />
-          </Popover>
-          {/* )} */}
+          {actions && (
+            <Popover
+              content={<div onClick={onReportClick}>Report review</div>}
+              position="bottom-left"
+            >
+              <Icon icon="toolbar" />
+            </Popover>
+          )}
         </div>
         <div className={styles.status_date}>
           {status && <div className={statusClassName}>{status}</div>}
