@@ -16,7 +16,7 @@ import CollectionApi from "services/collection";
 import BannerApi from "services/banner";
 import CategoryApi from "services/category";
 import Loader from "components/Loader/Loader";
-import { formatListingArray, isArray } from "utils";
+import { formatBanner, formatListingArray, isArray } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import { Ilisting } from "type";
 import {
@@ -395,12 +395,13 @@ export async function getServerSideProps(context) {
   // Pass data to the page via props
   const dataExclusiveDeal =
     await BizListingApi.getAllBizListingsHaveExclusiveDeal();
-  const dataBanners = await BannerApi.getBanner();
+  const dataBanners = await BannerApi.getBannerCustom({
+    pinnedHomepage: true,
+  });
   const dataCollections = await CollectionApi.getCollection({
     pinnedHomepage: true,
   });
   const dataCategories = await CategoryApi.getCategories();
-
   // const dataArticlesPinHome = await ArticleApi.getArticlesPinHome();
   const rawListBanners = get(dataBanners, "data.data");
   const rawListCollections = get(dataCollections, "data.data");
@@ -411,12 +412,8 @@ export async function getServerSideProps(context) {
     get(dataExclusiveDeal, "data.data")
   );
 
-  const bannerArray =
-    Array.isArray(rawListBanners) &&
-    rawListBanners.map((item) => ({
-      imgUrl: item.image_url,
-      linkActive: item.link_active,
-    }));
+  const bannerArray = formatBanner(rawListBanners);
+
   const collectionArray =
     Array.isArray(rawListCollections) &&
     rawListCollections.map((item) => ({
@@ -443,7 +440,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       listingExclusiveDeal: exclusiveDealListingArray,
-      listBanners: bannerArray,
+      listBanners: JSON.parse(JSON.stringify(bannerArray)),
       listCollections: collectionArray,
       listCategories: categoryArray,
       // listHomeArticles: homeArticleArray,

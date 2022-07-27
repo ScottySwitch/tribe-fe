@@ -115,10 +115,8 @@ const InforCard = (props: InforCardProps) => {
                 <div>({rateNumber})</div>
               </div>
             )}
-            {!!rate && followerNumber && followerNumber > 0 ? (
+            {!!rate && followerNumber && (
               <Icon icon="dot" size={10} className={styles.dot} />
-            ) : (
-              <div />
             )}
             {followerNumber && followerNumber > 0 ? (
               <div>{followerNumber} followers</div>

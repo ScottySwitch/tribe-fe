@@ -24,6 +24,7 @@ export interface SelectProps {
   helperText?: string;
   disabled?: boolean;
   placeholder?: string;
+  menuLeft?: string | number;
   isMulti?: boolean;
   isSearchable?: boolean;
   closeMenuOnSelect?: boolean;
@@ -31,6 +32,7 @@ export interface SelectProps {
   register?: UseFormRegisterReturn;
   width?: number | string;
   menuWidth?: string | number;
+  menuPortalTarget?: any;
   ellipsis?: boolean;
   isClearable?: boolean;
   variant?: "filled" | "outlined" | "no-outlined";
@@ -52,6 +54,8 @@ const Select = (props: SelectProps) => {
     helperText,
     id,
     width,
+    menuLeft,
+    menuPortalTarget,
     prefixIcon,
     disabled,
     isMulti = false,
@@ -151,7 +155,11 @@ const Select = (props: SelectProps) => {
       ...styles,
       width: "fit-content",
       top: "30px",
-      left: "-10px !important",
+      left: menuLeft || "-10px !important",
+    }),
+    menuPortal: (styles) => ({
+      ...styles,
+      zIndex: 2,
     }),
     valueContainer: (styles) => ({
       ...styles,
@@ -226,6 +234,8 @@ const Select = (props: SelectProps) => {
             closeMenuOnSelect={closeMenuOnSelect || !isMulti}
             isDisabled={disabled}
             styles={customStyles}
+            menuPortalTarget={menuPortalTarget}
+            menuPlacement="auto"
             // @ts-ignore
             inputRef={inputRef}
             isMulti={isMulti}

@@ -228,8 +228,8 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
               onClick={onPrevPage}
             />
             <Button
-              disabled={!isValid}
-              text="Continue"
+              disabled={!isEdit && !isValid}
+              text={isEdit ? "Apply change" : "Continue"}
               size="small"
               width={270}
               type="submit"

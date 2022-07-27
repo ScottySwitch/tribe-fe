@@ -8,7 +8,7 @@ import styles from "./DealDetailModal.module.scss";
 import get from "lodash/get";
 import DealFavouriteApi from "services/user-deal-favourite";
 import ShareModal from "components/ShareModal/ShareModal";
-
+import FavouriteDealApi from "services/user-deal-favourite";
 export interface IDealsDetails {
   name: string;
   imgUrl: string;
@@ -24,19 +24,20 @@ interface DealDetailModalProps extends ModalProps {
 
 const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props;
-  const [isFavourite, setIsFavourite] = useState<boolean>(false);
+  const [isFavourite, setIsFavourite] = useState<boolean>(true);
   const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const userFavourite = userInfo.listing_favourite_deal_ids;
-      let checkIsFavourite =
-        Array.isArray(userFavourite) &&
-        userFavourite.some((item) => item === data.id);
-      setIsFavourite(checkIsFavourite);
-    }
-  }, [data]);
+    const checkFavouriteDeal = async () => {
+      const dataFavouriteDeal = await FavouriteDealApi.checkIsFavourite(
+        data.id
+      );
+      if (get(dataFavouriteDeal, "data.data.length") == 0) {
+        setIsFavourite(false);
+      }
+    };
+    checkFavouriteDeal();
+  }, []);
 
   const handleAddFavouriteDeal = async (id) => {
     const data = await DealFavouriteApi.createDealFavourite(id);
