@@ -42,7 +42,7 @@ const Footer = (props: {
         items: [
           { label: "About us", value: "" },
           { label: "FAQ", value: "", href: "/support" },
-          { label: "Contact us", value: "" },
+          { label: "Contact us", value: "", href: "/support" },
           { label: "Terms and conditions", href: "/terms-conditions" },
         ],
       },

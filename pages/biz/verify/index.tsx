@@ -469,7 +469,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <div className="flex justify-center gap-5 w-full">
-            <Button width="30%" variant="no-outlined" text="Change tier" />
+            <Button 
+              width="30%" variant="no-outlined" text="Change tier" 
+                onClick={() => verifyStep}
+            />
             {paymentMethod === "stripe" ? (
               <Button
                 width="80%"
