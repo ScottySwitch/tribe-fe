@@ -109,8 +109,8 @@ export const Album = (props: AlbumProps) => {
     arrows: true,
     infinite: true,
     speed: 500,
-    slidesToShow: isMobile ? 3 : showedPicsNumber.slidesToShow,
-    slidesToScroll: isMobile ? 3 : showedPicsNumber.slidesToScroll,
+    slidesToShow: isMobile ? 4 : showedPicsNumber.slidesToShow,
+    slidesToScroll: isMobile ? 4 : showedPicsNumber.slidesToScroll,
     cssEase: "linear",
     focusOnSelect: true,
     asNavFor: navThumbnail,
@@ -133,7 +133,7 @@ export const Album = (props: AlbumProps) => {
       reason: reason,
       user: user.id,
       biz_listing: listingId,
-      link_media: images
+      link_media: images,
     };
 
     await reportApi

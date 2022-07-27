@@ -334,6 +334,18 @@
   }
 }
 
+@media screen and (max-width: $tablet) {
+  .tab_filter,
+  .for_you {
+    .desktop_filter_button {
+      display: none;
+    }
+    .mobile_filter_button {
+      display: flex;
+    }
+  }
+}
+
 @media screen and (max-width: $mobile) {
   .tab_filter,
   .for_you {
@@ -345,12 +357,12 @@
     padding: 0;
     cursor: pointer;
 
-    .desktop_filter_button {
-      display: none;
-    }
-    .mobile_filter_button {
-      display: flex;
-    }
+    // .desktop_filter_button {
+    //   display: none;
+    // }
+    // .mobile_filter_button {
+    //   display: flex;
+    // }
   }
 
   .collection_banner {
