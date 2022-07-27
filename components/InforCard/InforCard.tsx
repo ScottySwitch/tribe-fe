@@ -115,18 +115,20 @@ const InforCard = (props: InforCardProps) => {
                 <div>({rateNumber})</div>
               </div>
             )}
-            {!!rate && followerNumber && followerNumber > 0 && (
+            {!!rate && followerNumber && followerNumber > 0 ? (
               <Icon icon="dot" size={10} className={styles.dot} />
+            ) : (
+              <div />
             )}
             {followerNumber && followerNumber > 0 ? (
               <div>{followerNumber} followers</div>
             ) : (
               <div></div>
             )}
-            {description && (
-              <div className={styles.description}>{description}</div>
-            )}
           </div>
+          {description && (
+            <div className={styles.description}>{description}</div>
+          )}
           <div>
             {Array.isArray(categories) && (
               <div className={styles.categories}>
