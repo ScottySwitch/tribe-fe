@@ -568,9 +568,9 @@ const QuestionForBusiness = () => {
             </h5>
             <p className={styles.answer}>
               Tribes is a platform that serves the Muslim community. Our goal is
-              to enrich our users's experiences by providing them with an array
-              of high-quality brands. By listing on Tribes, you can expose your
-              brand to the Muslim community in Singapore, Malaysia and
+              to enrich our users have experiences by providing them with an
+              array of high-quality brands. By listing on Tribes, you can expose
+              your brand to the Muslim community in Singapore, Malaysia and
               Indonesia.
             </p>
           </div>
