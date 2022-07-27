@@ -7,7 +7,7 @@ import ProductDetailModal from "components/ProductDetailModal/ProductDetailModal
 import PromotionCard from "components/PromotionCard/PromotionCard";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
-import { ListingTabs } from "enums";
+import { CategoryText, ListingTabs } from "enums";
 import { get, orderBy } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import BizListingApi from "services/biz-listing";
 import { calcRateNumber, censoredPhoneNumber } from "utils";
 
 import styles from "styles/Property.module.scss";
+import TabsHorizontal from "components/TabsHorizontal/TabsHorizontal";
 
 interface PropertiesContainerProps {
   cardItem?: any;
@@ -45,10 +46,7 @@ const PropertiesContainer = ({
           const expiredAt =
             get(item, "attributes.expire_at") ||
             item.expireAt ||
-            `${item?.start_date?.replaceAll(
-              "-",
-              "/"
-            )} - ${item?.end_date?.replaceAll("-", "/")} ` ||
+            item?.start_date?.replaceAll("-", "/") ||
             "";
           const endDate =
             get(item, "attributes.end_date") || item.end_date || "";
@@ -97,14 +95,36 @@ const Properties = () => {
   const [userInfo, setUserInfo] = useState<any>({});
   const [phoneNumber, setPhoneNumber] = useState<any>("");
   const [isPaid, setIsPaid] = useState<boolean>(false);
+  const [selectedTab, setSelectedTab] = useState<string>("products");
+  const [isEatListing, setIsEatListing] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+
+  const TabList: any[] = [
+    {
+      label: "Deals",
+      value: "deals",
+    },
+    {
+      label: isEatListing ? "Dishes" : "Products",
+      value: "products",
+    },
+    {
+      label: "Menu",
+      value: "menus",
+    },
+  ];
 
   useEffect(() => {
     const getProperties = async () => {
+      setLoading(true);
       let data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       const listingDetail = get(data, `data.data[0]`);
+      if (get(listingDetail, "categories[0].slug") === CategoryText.EAT) {
+        setIsEatListing(true);
+      }
       userInfo.now_biz_listing = listingDetail;
-      const bizInvoice = listingDetail.biz_invoices || []
+      const bizInvoice = listingDetail.biz_invoices || [];
       const rawPhoneNumber = listingDetail.phone_number;
       const defaultPhone = censoredPhoneNumber(rawPhoneNumber);
       if (bizInvoice.length > 0) {
@@ -113,13 +133,16 @@ const Properties = () => {
       } else {
         setPhoneNumber(defaultPhone);
       }
+      setIsVerified(listingDetail.is_verified);
       localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo);
       let handleProperties = "products";
       if (property === "menu") {
         handleProperties = "menus";
+        setSelectedTab("menus");
       } else if (property === "deals") {
         handleProperties = "deals";
+        setSelectedTab("deals");
       }
       let propertiesData = get(data, `data.data[0].${handleProperties}`);
 
@@ -201,6 +224,7 @@ const Properties = () => {
     <div>
       <SectionLayout className={styles.listing_container}>
         <ListingInforCard
+          isVerified={isVerified}
           isViewPage={true}
           logo={listingInformation.logo}
           isPaid={isPaid}
@@ -209,13 +233,27 @@ const Properties = () => {
           priceRange={{
             min: listingInformation.min_price,
             max: listingInformation.max_price,
-            currency: listingInformation.currecy
+            currency: listingInformation.currecy,
           }}
           bizListing={listingInformation}
           userInfo={userInfo}
         />
       </SectionLayout>
-      <SectionLayout title={upperCaseTitle}>{renderProperties()}</SectionLayout>
+      <SectionLayout>
+        <div className="flex">
+          <TabsHorizontal
+            tablist={TabList}
+            type="secondary-no-outline"
+            selectedTab={selectedTab}
+            className="pt-[6px]"
+            onChangeTab={(e) => {
+              router.push(`/biz/${e}/${listingSlug}`);
+              setSelectedTab(e);
+            }}
+          />
+        </div>
+      </SectionLayout>
+      <SectionLayout>{renderProperties()}</SectionLayout>
       <SectionLayout>
         <TopSearches />
       </SectionLayout>
