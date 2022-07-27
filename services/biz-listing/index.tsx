@@ -583,9 +583,7 @@ const getListingCustom = async (data: any) => {
   if (data?.search) {
     filter = {
       ...filter,
-      slug: {
-        $contains: data.search,
-      },
+      slug: { $contains: data.search || "" },
     };
   }
 

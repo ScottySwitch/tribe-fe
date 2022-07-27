@@ -146,7 +146,7 @@ const Collection = (props) => {
 export async function getServerSideProps(context) {
   // Pass data to the page via props
   const { slug } = context.query;
-  return { props: { slug: JSON.parse(JSON.stringify(slug)) } };
+  return { props: { slug: slug } };
 }
 
 export default Collection;
