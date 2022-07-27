@@ -73,7 +73,7 @@ const Banner = (props: BannerProps) => {
                 className={styles.mobile_banner_card}
                 onClick={() => setShowAlbumModal(true)}
               >
-                <Image alt="" layout="fill" src={img} objectFit="contain" />
+                <Image alt="" layout="fill" src={img} objectFit="cover" />
               </div>
             );
           })}
@@ -82,7 +82,7 @@ const Banner = (props: BannerProps) => {
         visible={showAlbumModal}
         title=" "
         width="90%"
-        // maxHeight="90%"
+        maxHeight="800px"
         mobilePosition="center"
         contentClassName="pb-3"
         onClose={() => setShowAlbumModal(false)}

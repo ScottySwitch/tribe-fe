@@ -94,7 +94,7 @@ const SubCategoryPage = (context) => {
       setCategoryLinkArray(categoryLinkArray.concat(rawListCategory));
     };
 
-    setIsMobile(window.innerWidth < 430);
+    setIsMobile(window.innerWidth < 500);
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryLink]);
