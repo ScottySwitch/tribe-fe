@@ -21,7 +21,6 @@ const Carousel = (props: CarouselProps) => {
   const horizontalSliderSettings = {
     className: styles.slick_slide,
     arrows: false,
-    centerPadding: "20px",
     infinite: true,
     speed: 500,
     slidesToShow: responsive?.show,
