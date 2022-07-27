@@ -20,6 +20,7 @@ export const videoExtensions = [
   ".mov",
   ".avi",
   ".wmv",
+  ".quicktime",
 ];
 
 export const loginInforItem = "login_infor";

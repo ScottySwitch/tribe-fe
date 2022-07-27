@@ -7,7 +7,7 @@ import { useDebounce } from "usehooks-ts";
 import useTrans from "hooks/useTrans";
 import Icon from "components/Icon/Icon";
 import Select from "components/Select/Select";
-import { Categories, UserInfor } from "./HeaderComponents";
+import { Categories, formatLanguages, UserInfor } from "./HeaderComponents";
 import { categories, languages, locations } from "constant";
 import ListingSearch, {
   ListingMenuFooter,
@@ -60,17 +60,6 @@ const Header = (props: HeaderProps) => {
 
     debouncedSearchTerm ? getBizListing() : setBizListing([]);
   }, [debouncedSearchTerm, location]);
-
-  const formatLanguages = () => {
-    return languages.map((lang) => ({
-      label: (
-        <div className="flex gap-2 items-center">
-          <Icon icon={lang.icon} size={30} /> {lang.label}
-        </div>
-      ),
-      value: lang.value,
-    }));
-  };
 
   const HeaderSearchMenuFooter = () => (
     <div>

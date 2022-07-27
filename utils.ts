@@ -159,7 +159,6 @@ export const isPaidUser = (time) => {
   return diff_in_minutes < 0 ? true : false
 };
 
-
 export const censoredPhoneNumber = (phoneNumber) => {
   const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
   const phoneArray = phoneNumber ? phoneNumber.split("") : [];

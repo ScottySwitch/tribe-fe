@@ -212,11 +212,11 @@ const HamModal = (props: HamModalProps) => {
           <Menu
             loginInfor={loginInfor}
             mobile
-            onShowHamModal={() => onSetShowHamModal(false)}
+            onShowHamModal={(value) => onSetShowHamModal(value)}
             onShowCategoriesModal={() => setShowCategoriesModal(true)}
             onShowAuthPopup={() => setShowAuthPopup(true)}
             onShowSwitchModal={() => {
-              onSetShowHamModal(false)
+              onSetShowHamModal(false);
               setShowSwitchModal(true);
             }}
           />
