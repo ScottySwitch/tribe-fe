@@ -175,6 +175,7 @@ const LoginPage = (context) => {
         <div className={styles.body}>
           {method === LoginMethod.PHONE_NUMBER ? (
             <SelectInput
+              isClearable
               label="Phone number"
               placeholder="Phone number"
               selectPlaceholder="Area code"

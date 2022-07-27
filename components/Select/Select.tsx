@@ -169,8 +169,8 @@ const Select = (props: SelectProps) => {
   };
 
   const handleChange = (dropdownValues: any) => {
-    dropdownValues && onChange?.(dropdownValues);
-    dropdownValues && setSelected(dropdownValues);
+    onChange?.(dropdownValues);
+    setSelected(dropdownValues);
   };
 
   const MenuList = (props: any) => {

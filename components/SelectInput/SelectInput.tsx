@@ -18,6 +18,7 @@ export interface SelectInputProps
   className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
+  isClearable?: boolean;
   helperText?: string;
   options?: any[];
   width?: string | number;
@@ -55,6 +56,7 @@ const SelectInput = (props: SelectInputProps) => {
     disabled,
     register,
     menuWidth,
+    isClearable,
     options = [],
     selectPlaceholder,
     isSearchable,
@@ -105,6 +107,7 @@ const SelectInput = (props: SelectInputProps) => {
             />
           )}
           <SelectField
+            isClearable={isClearable}
             value={value?.select}
             isSearchable={isSearchable}
             selectWidth={selectWidth}

@@ -21,10 +21,13 @@ export interface SelectProps {
   closeMenuOnSelect?: boolean;
   menuWidth?: string | number;
   onChange?: (value: any) => void;
+  onInputChange?: (e: string) => void;
   inputRef?: any;
   selectWidth?: string | number;
   isSearchable?: boolean;
   shouldControlShowValue?: boolean;
+  isClearable?: boolean;
+  menuFooter?: ReactNode;
 }
 
 const SelectField = (props: SelectProps) => {
@@ -33,8 +36,10 @@ const SelectField = (props: SelectProps) => {
     disabled,
     isMulti = false,
     options,
+    menuFooter,
     value,
     placeholder,
+    onInputChange,
     onChange,
     defaultValue,
     closeMenuOnSelect = false,
@@ -43,6 +48,7 @@ const SelectField = (props: SelectProps) => {
     shouldControlShowValue,
     isSearchable = true,
     inputRef,
+    isClearable,
   } = props;
 
   const [selected, setSelected] = useState<
@@ -118,20 +124,8 @@ const SelectField = (props: SelectProps) => {
   };
 
   const handleChange = (dropdownValues: any) => {
-    dropdownValues && onChange?.(dropdownValues);
-    dropdownValues && setSelected(dropdownValues);
-  };
-
-  const Control = ({ children, ...props }: ControlProps<any, false>) => {
-    return <components.Control {...props}>{children}</components.Control>;
-  };
-
-  const Option = (props: any) => {
-    return (
-      <React.Fragment>
-        <components.Option {...props}>{props.children}</components.Option>
-      </React.Fragment>
-    );
+    onChange?.(dropdownValues);
+    setSelected(dropdownValues);
   };
 
   const SingleValue = (props) => (
@@ -140,25 +134,39 @@ const SelectField = (props: SelectProps) => {
     </components.SingleValue>
   );
 
+  const MenuList = (props: any) => {
+    return (
+      <React.Fragment>
+        <components.MenuList {...props}>
+          {props.children}
+          {menuFooter}
+        </components.MenuList>
+      </React.Fragment>
+    );
+  };
+
   return (
     <ReactSelect
       id={id}
       options={options}
-      value={selected}
-      defaultValue={defaultValue}
-      onChange={handleChange}
+      value={options?.find(
+        (opt) =>
+          opt === selected ||
+          opt.value === selected ||
+          opt.value === (selected as IOption)?.value
+      )}
       placeholder={placeholder}
-      isClearable={true}
-      closeMenuOnSelect={closeMenuOnSelect}
+      isClearable={isClearable}
+      closeMenuOnSelect={closeMenuOnSelect || !isMulti}
       isDisabled={disabled}
       styles={customStyles}
-      controlShouldRenderValue={true}
       // @ts-ignore
       inputRef={inputRef}
-      // @ts-ignore
       isMulti={isMulti}
       isSearchable={isSearchable}
-      components={{ Control, Option, SingleValue }}
+      onChange={handleChange}
+      components={{ MenuList, SingleValue }}
+      onInputChange={onInputChange}
     />
   );
 };
