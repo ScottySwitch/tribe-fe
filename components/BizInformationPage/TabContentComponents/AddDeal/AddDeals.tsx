@@ -117,7 +117,9 @@ const AddDeals = (props: AddDealsProps) => {
                 }
               />
               <DatePicker
-                value={deal.validUntil || new Date()}
+                value={
+                  moment(deal.validUntil, "YYYY-MM-DD").toDate() || new Date()
+                }
                 onChange={(e: any) =>
                   handleChangeDeal(deal.id, "validUntil", e)
                 }
