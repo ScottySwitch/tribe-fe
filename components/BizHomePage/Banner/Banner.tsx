@@ -48,24 +48,31 @@ const Banner = (props: BannerProps) => {
         responsive={homeCuratedResponsive}
         key={get(listingImages, "length")}
         isShow={isArray(listingImages)}
-        className={styles.mobile_banner_card}
       >
         {isArray(listingImages) &&
           listingImages.map((img, index) => (
-            <div
-              key={index}
-              className={styles.mobile_banner_card}
-              onClick={() => setShowAlbumModal(true)}
-            >
-              {detectIsVideo(img) ? (
-                <video
-                  src={img}
-                  onClick={() => setShowAlbumModal(true)}
-                  // className={styles.mobile_banner_card_video}
-                />
-              ) : (
-                <Image alt="" layout="fill" objectFit="cover" src={img} />
-              )}
+            <div key={index}>
+              <div
+                className={styles.mobile_banner_card}
+                onClick={() => setShowAlbumModal(true)}
+              >
+                {detectIsVideo(img) ? (
+                  <video
+                    src={img}
+                    onClick={() => setShowAlbumModal(true)}
+                    // className={styles.mobile_banner_card_video}
+                  />
+                ) : (
+                  <Image
+                    alt=""
+                    layout="intrinsic"
+                    height={300}
+                    width={300}
+                    src={img}
+                    objectFit="cover"
+                  />
+                )}
+              </div>
             </div>
           ))}
       </Carousel>
