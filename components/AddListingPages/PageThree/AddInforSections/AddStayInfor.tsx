@@ -340,11 +340,11 @@ const AddStayInfor = (props: AddStayInforProps) => {
               onClick={onPrevPage}
             />
             <Button
-              text={isEdit ? "Apply change" : "Continue"}
+              text="Continue"
               size="small"
               width={270}
               type="submit"
-              disabled={!isEdit && !isValid}
+              disabled={!isValid}
             />
           </div>
         </form>

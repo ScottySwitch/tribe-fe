@@ -387,7 +387,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               size="small"
               width={270}
               type="submit"
-              disabled={!isEdit && !isValid}
+              disabled={!isValid}
             />
           </div>
         </form>
