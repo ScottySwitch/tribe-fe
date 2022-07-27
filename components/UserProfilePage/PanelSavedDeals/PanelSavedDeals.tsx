@@ -37,7 +37,7 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     // setTotal(data.length)
     userInfo && userInfo?.token && getData();
-  }, []);
+  }, [loading]);
 
   const handleRemoveFavorite = async (removedListing) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
