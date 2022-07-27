@@ -40,6 +40,57 @@ const dummyScrollspy = [
   "How many times can I use a Deal?",
 ];
 
+const dummyScrollsp = ["1", "2", "3", "4", "5", "6", "8", "9", "7", "10"];
+
+const dummyQuestion = [
+  {
+    question: "What is Tribes?",
+    answer:
+      "Tribes is a community-driven, lifestyle platform for Muslims to explore and discover new content in the areas of Buy, Eat, Stay, Transport, See & Do. All items listed on the platform are Muslim-friendly. As much as we have a team of dedicated members working tirelessly curating listings to help fellow community members make better travel and purchase decisions, we believe fully that each community member has the power and desire to contribute and share as well. This platform is designed in a way that allows each and every one of you to create and edit unclaimed listings, as well as to leave honest reviews and feedback on every brand listed on the platform. Our cumulative effort will enable the Tribes community and platform to become better!",
+    smallAnswer: "",
+  },
+  {
+    question: "Who is it for?",
+    answer:
+      "Tribes is for everyone and anyone, regardless of race, language or religion, who is interested to contribute and be a part of the Muslim community.",
+  },
+  {
+    question: "How can I contribute to the Tribes community?",
+    answer:
+      "There are currently 3 ways for you to contribute to the community! Every contribution will enable you to earn Tribes points.",
+  },
+  {
+    question: "How old is Tribes?",
+    answer:
+      "HHWT Tribes aims to be a safe space for Muslims to discover travel-related content and share their own meaningful experiences. In addition to that, Muslims are able to discover great listings of where to eat, where to stay, what to see and what to buy. (BESTS)",
+  },
+  {
+    question: "Is it available on my device?",
+    answer:
+      "HHWT Tribes aims to be a safe space for Muslims to discover travel-related content and share their own meaningful experiences. In addition to that, Muslims are able to discover great listings of where to eat, where to stay, what to see and what to buy. (BESTS)",
+  },
+  {
+    question: "Who are the people behind Tribes?",
+    answer:
+      "HHWT Tribes aims to be a safe space for Muslims to discover travel-related content and share their own meaningful experiences. In addition to that, Muslims are able to discover great listings of where to eat, where to stay, what to see and what to buy. (BESTS)",
+  },
+  {
+    question: "Who is it for?",
+    answer:
+      "HHWT Tribes aims to be a safe space for Muslims to discover travel-related content and share their own meaningful experiences. In addition to that, Muslims are able to discover great listings of where to eat, where to stay, what to see and what to buy. (BESTS)",
+  },
+];
+
+const QuestionItem = (props: { question: string; answer: string }) => {
+  const { question, answer } = props;
+  return (
+    <div className={styles.question_item}>
+      <h5 className={styles.question}>{question}</h5>
+      <p className={styles.answer}>{answer}</p>
+    </div>
+  );
+};
+
 const QuestionForUser = () => {
   return (
     <div className="for-user">
@@ -780,11 +831,11 @@ const SupportPage = () => {
     { label: "For business", value: "for-business", content: "" },
   ];
 
-  // useEffect(() => {
-  //   setBreadcrumbs(dummyBreadcrumbs);
-  //   // setCurrentTab(TabList[0]?.value);
-  //   setQuestions(dummyQuestion);
-  // }, [currentTab]);
+  useEffect(() => {
+    setBreadcrumbs(dummyBreadcrumbs);
+    // setCurrentTab(TabList[0]?.value);
+    setQuestions(dummyQuestion);
+  }, [currentTab]);
 
   return (
     <div className={styles.support}>
