@@ -7,6 +7,7 @@ import BizlistingApi from "services/biz-listing";
 import { get } from "lodash";
 import DealDetailModal from "components/DealDetailModal/DealDetailModal";
 import Loader from "components/Loader/Loader";
+import UserApi from "services/user";
 
 const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
   // const { data } = props
@@ -38,6 +39,16 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
     userInfo && userInfo?.token && getData();
   }, []);
 
+  const handleRemoveFavorite = async (removedListing) => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+
+    await UserApi.removeDealFavourite({
+      userId: userInfo.id,
+      dealFavouriteId: removedListing.key,
+    });
+    setLoading(true);
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -55,9 +66,7 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
             type={item.type}
             favourite
             startDate={item.startDate}
-            onUnSaveDeal={() => {
-              console.log("unsaved clicked!------");
-            }}
+            onUnSaveDeal={() => handleRemoveFavorite(item)}
             onCardClick={() => {
               setShowDealDetailModal(true);
               setSelectedDeal(item);
