@@ -1,4 +1,4 @@
-import { CategoryText } from "./enums";
+import { CategoryText, CurrencyValues } from "./enums";
 import { UserProps } from "components/UserProfilePage/PanelAbout/PanelAbout";
 import {
   Categories,
@@ -392,18 +392,18 @@ export const defaultAddlistingForm: IAddListingForm = {
 };
 
 export const currencyOptions = [
-  { label: "USD", value: "usd" },
-  { label: "MYR", value: "myr" },
-  { label: "SGD", value: "sgd" },
-  { label: "IDR", value: "idr" },
+  { label: "USD", value: CurrencyValues.USD },
+  { label: "MYR", value: CurrencyValues.MYR },
+  { label: "SGD", value: CurrencyValues.SGD },
+  { label: "IDR", value: CurrencyValues.IDR },
 ];
 
 export const discountTypeOptions = [
-  { label: "USD", value: "usd" },
-  { label: "MYR", value: "myr" },
-  { label: "SGD", value: "sgd" },
-  { label: "IDR", value: "idr" },
-  { label: "%", value: "%" },
+  { label: "USD", value: CurrencyValues.USD },
+  { label: "MYR", value: CurrencyValues.MYR },
+  { label: "SGD", value: CurrencyValues.SGD },
+  { label: "IDR", value: CurrencyValues.IDR },
+  { label: "%", value: CurrencyValues.PERCENTAGE },
 ];
 
 export const previewInfo = [

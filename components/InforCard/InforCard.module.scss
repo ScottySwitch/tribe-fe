@@ -132,15 +132,29 @@
 
     .footer {
       min-height: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
       .price {
         display: flex;
         align-items: center;
         gap: 6px;
+        font-size: $text-md;
+        font-weight: $font-bold;
+      }
 
-        span {
-          font-size: $text-md;
-          font-weight: $font-bold;
-        }
+      .discount {
+        color: $yellow-600;
+        border: 2px solid $yellow-500;
+        background-color: $yellow-50;
+        border-radius: $border-radius;
+        padding: 0 10px;
+      }
+
+      .discount_amount {
+        color: $bg-500;
+        text-decoration: line-through;
       }
 
       .tags {

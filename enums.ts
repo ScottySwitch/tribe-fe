@@ -7,6 +7,14 @@ export enum Categories {
   OTHER = "Other",
 }
 
+export enum CurrencyValues {
+  USD = "usd",
+  MYR = "myr",
+  SGD = "sgd",
+  IDR = "idr",
+  PERCENTAGE = "%",
+}
+
 export enum CategoryText {
   BUY = "buy",
   EAT = "eat",

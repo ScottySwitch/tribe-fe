@@ -20,7 +20,6 @@ import { isArray } from "utils";
 
 import styles from "./TabContent.module.scss";
 interface ProductListingProps {
-  bizListingId?: number | string;
   isPaid: boolean;
 }
 
@@ -31,7 +30,7 @@ enum ProductListingScreens {
 }
 
 const ProductListing = (props: ProductListingProps) => {
-  const { isPaid, bizListingId } = props;
+  const { isPaid } = props;
 
   const { query } = useRouter();
   const { listingSlug }: any = query;
@@ -60,6 +59,7 @@ const ProductListing = (props: ProductListingProps) => {
         const listingArray = productArray.map((item) => ({
           name: item.name,
           is_revision: isRevision,
+          isPinned: item.is_pinned,
           parent_id: item.parent_id,
           price: item.price,
           id: item.id,
@@ -68,8 +68,10 @@ const ProductListing = (props: ProductListingProps) => {
           imgUrl:
             get(item, "images[0]") ||
             require("public/images/default-avatar.png"),
-          discount: item.discount_percent,
+          discount: item.discount,
           tags: item.tags,
+          currency: item.currency,
+          discount_unit: item.discount_unit,
           websiteUrl: item.website_url,
           klookUrl: item.klook_url,
           isEdited: false,
@@ -84,9 +86,15 @@ const ProductListing = (props: ProductListingProps) => {
   }, [listingSlug, revisionListing, loading]);
 
   const submitProduct = async (products: any) => {
+    const currentProductIds = isArray(revisionListing.products)
+      ? revisionListing.products.map((item) => item.id)
+      : [];
+
     const product = {
       is_revision: isRevision,
-      biz_listing_revision: isRevision ? bizListingId : await getRevisionId(),
+      biz_listing_revision: isRevision
+        ? revisionListing.id
+        : await getRevisionId({ products: currentProductIds }),
       ...products[0],
     };
 
@@ -113,8 +121,10 @@ const ProductListing = (props: ProductListingProps) => {
 
   const handlePinToTop = async (e) => {
     await ProductApi.updateProduct(e.id, {
-      is_pinned: e.is_pinned || false,
-    });
+      is_pinned: !e.isPinned,
+    })
+      .then((res) => toast.success("Update successfully!", { autoClose: 1000 }))
+      .catch((error) => toast.error("Update failed!"));
     setLoading(true);
   };
 
@@ -185,33 +195,36 @@ const ProductListing = (props: ProductListingProps) => {
         <Break />
         <div className={styles.product_container}>
           {productList &&
-            productList.map((item: any, index) => {
-              const imgUrl =
-                get(item, "images[0]") ||
-                require("public/images/default-avatar.png");
-              return (
-                <div key={item.id} className={styles.info_card_container}>
-                  <InforCard
-                    imgUrl={imgUrl}
-                    title={item.name}
-                    price={item.price}
-                    currency={item.currency}
-                    description={item.description}
-                  />
-                  <div className={styles.toolbar}>
-                    <Popover content={<PopoverContent item={item} />}>
-                      <Icon icon="toolbar" color="white" />
-                    </Popover>
-                  </div>
-                  <div
-                    className={styles.pin}
-                    onClick={() => handlePinToTop(item)}
-                  >
-                    <Icon icon="pin" color={item.is_pinned || "white"} />
-                  </div>
+            productList.map((item: any) => (
+              <div key={item.id} className={styles.info_card_container}>
+                <InforCard
+                  imgUrl={
+                    get(item, "images[0]") ||
+                    require("public/images/default-avatar.png")
+                  }
+                  title={item.name}
+                  price={item.price}
+                  currency={item.currency}
+                  discount={item.discount}
+                  discount_unit={item.discount_unit}
+                  description={item.description}
+                />
+                <div className={styles.toolbar}>
+                  <Popover content={<PopoverContent item={item} />}>
+                    <Icon icon="toolbar" color="white" />
+                  </Popover>
                 </div>
-              );
-            })}
+                <div
+                  className={styles.pin}
+                  onClick={() => handlePinToTop(item)}
+                >
+                  <Icon
+                    icon="pin"
+                    color={item.isPinned ? undefined : "white"}
+                  />
+                </div>
+              </div>
+            ))}
         </div>
         <Break />
       </SectionLayout>
