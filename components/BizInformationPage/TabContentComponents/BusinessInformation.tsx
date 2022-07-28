@@ -9,11 +9,12 @@ import SelectInput from "components/SelectInput/SelectInput";
 import Upload from "components/Upload/Upload";
 import { formattedAreaCodes, phoneAreaCodes } from "constant";
 import { get } from "lodash";
+import { Router } from "next/router";
 import { IAddListingForm } from "pages/add-listing";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils";
-
+import { useRouter } from "next/router";
 import styles from "./TabContent.module.scss";
 
 export const socialMedias = [
@@ -30,6 +31,8 @@ interface BusinessInformationProps {
 
 const BusinessInformation = (props: BusinessInformationProps) => {
   const { listing: formData, loading, onSubmit } = props;
+  const router = useRouter();
+
   const [isEdit, setIsEdit] = useState(false);
   const isPaid = get(formData, "biz_invoices.length") > 0;
 
@@ -58,7 +61,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         ...data.socialInfo,
         twitter: data.twitter,
         facebook: data.facebook,
-        instagram: data.instagram
+        instagram: data.instagram,
       },
     });
     setIsEdit(false);
@@ -83,7 +86,12 @@ const BusinessInformation = (props: BusinessInformationProps) => {
           Chooose which social media to show on store page. Upgrade to Basic
           Tier to show all.
         </div>
-        <div className={styles.upgrade_now}>Upgrade now</div>
+        <div
+          className={styles.upgrade_now}
+          onClick={() => router.push(`/claim/${get(formData, "id_listing")}`)}
+        >
+          Upgrade now
+        </div>
       </div>
     );
 

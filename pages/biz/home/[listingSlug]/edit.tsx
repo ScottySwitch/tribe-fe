@@ -49,7 +49,7 @@ import { UserInforContext } from "Context/UserInforContext";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
-  const { user } = useContext(UserInforContext);
+  const { user, updateUser } = useContext(UserInforContext);
 
   const [userInfo, setUserInfo] = useState<any>({});
   const [category, setCategory] = useState(Categories.EAT);
@@ -600,6 +600,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         <div className={styles.body}>
           <div className={styles.right_col}>
             <EditAction
+              id={bizListing.id}
               klookUrl={klookUrl}
               isOwned={true}
               isViewPage={isViewPage}
