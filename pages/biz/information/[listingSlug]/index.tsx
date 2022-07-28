@@ -27,6 +27,7 @@ import { isPaidUser } from "utils";
 import moment from "moment";
 import ConfirmModal from "components/ConfirmModal";
 import EmailApi from "services/email";
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -35,6 +36,21 @@ const BizInformation = (props) => {
   const [listing, setListing] = useState(defaultAddlistingForm);
   const [isPayYearly, setIsPayYearly] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [submitResult, setSubmitResult] = useState(false);
+
+  const resultType = [
+    {
+      title: "Success!",
+      message: "You have downgraded your plan successfully!",
+      textButton: "Close",
+    },
+    {
+      title: "Fail!",
+      message: "You have upgraded your plan successfully!",
+      textButton: "Try again",
+    },
+  ];
 
   const informationList = isPaid ? paidInformationList : freeInformationList;
   const [selectedTab, setSelectedTab] = useState(informationList[0].label);
@@ -107,7 +123,13 @@ const BizInformation = (props) => {
 
   const handleDowngrade = () => {
     const data = EmailApi.downgrade(get(listing, "slug"));
-    setIsVisible(true);
+    if (get(data, "data.data.success")) {
+      setSubmitResult(true);
+    } else {
+      setSubmitResult(true);
+    }
+    setShowResultModal(true);
+    setIsVisible(false);
   };
 
   const tabContent = () => {
@@ -212,6 +234,12 @@ const BizInformation = (props) => {
         onsubmit={handleDowngrade}
         onClose={() => setIsVisible(false)}
         content={<Content />}
+      />
+      <ResultModal
+        resultType={resultType}
+        visible={showResultModal}
+        isSuccess={submitResult}
+        onClose={() => setShowResultModal(false)}
       />
     </SectionLayout>
   );
