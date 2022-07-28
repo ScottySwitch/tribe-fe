@@ -19,6 +19,7 @@ import { formattedAreaCodes } from "constant";
 import styles from "styles/BizUserVerify.module.scss";
 import moment from "moment";
 import bizListingApi from "services/biz-listing";
+import EmailApi from "services/email";
 interface BizUserVerifyProps {
   tier: string;
   id: string;
@@ -220,12 +221,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   };
 
   const handleConfirmEmail = async () => {
-    console.log("email", email);
-    console.log("id", id);
+    console.log("change email");
     await bizListingApi.updateBizListing(parseInt(id), {
-      email: email
-    })
-    setVerifyStep(VerifySteps.ADD_ID_CARD)
+      email: email,
+    });
+    setVerifyStep(VerifySteps.ADD_ID_CARD);
   };
 
   const handleDirectToStorePage = () => {
@@ -270,9 +270,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
-      await bizListingApi.updateBizListing(parseInt(id), {
+      await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
       });
+      const sendMail = EmailApi.paymentSuccess(userInfo.biz_slug);
       if (userInfo.type_handle === "Claim") {
         const result = await BizInvoinceApi.createBizInvoice({
           value: parseInt(price),

@@ -218,6 +218,11 @@ const Upload = (props: UploadProps) => {
 
   const handleHref = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo = {
+      ...userInfo,
+      type_handle: "Claim"
+    }
+    localStorage.setItem("user", JSON.stringify(userInfo));
     Router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
   };
 

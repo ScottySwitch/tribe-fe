@@ -8,6 +8,8 @@ import SelectInput from "components/SelectInput/SelectInput";
 import { formattedAreaCodes, phoneAreaCodes } from "constant";
 import { useRouter } from "next/router";
 import { removeZeroInPhoneNumber } from "utils";
+import Router from "next/router";
+import { get } from "lodash";
 
 interface EditActionProps {
   isOwned?: boolean;
@@ -159,6 +161,16 @@ const EditAction = (props: EditActionProps) => {
     }
   };
 
+  const handleHref = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo = {
+      ...userInfo,
+      type_handle: "Claim",
+    };
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    Router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
+  };
+
   return (
     <React.Fragment>
       {isViewPage && isPaid && action?.value && (
@@ -203,7 +215,7 @@ const EditAction = (props: EditActionProps) => {
             Upgrade to Basic Tier to access features that help grow your
             business!
           </p>
-          <a onClick={() => router.push(`/claim/${id}`)}>Upgrade now</a>
+          <a onClick={handleHref}>Upgrade now</a>
         </div>
       )}
       {klookUrl && (
