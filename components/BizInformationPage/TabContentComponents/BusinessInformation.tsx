@@ -40,8 +40,8 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   const { user, updateUser } = useContext(UserInforContext);
 
   const [isEdit, setIsEdit] = useState(false);
-  const isPaid = get(formData, "expiration_data")
-    ? isPaidUser(get(formData, "expiration_data"))
+  const isPaid = get(formData, "expiration_date")
+    ? isPaidUser(get(formData, "expiration_date"))
     : false;
 
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
