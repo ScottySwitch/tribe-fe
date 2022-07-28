@@ -71,6 +71,7 @@ export interface IAddListingForm {
   categoryKind?: string;
   tags?: any[];
   placeGoodFor?: string[];
+  expiration_date?: any;
 }
 
 const AddListing = () => {

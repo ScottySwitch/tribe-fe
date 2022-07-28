@@ -4,11 +4,12 @@ import Icon from "components/Icon/Icon";
 import { get } from "lodash";
 import Image from "next/image";
 import VideoThumbnail from "react-video-thumbnail";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import styles from "./Upload.module.scss";
 import Popover from "components/Popover/Popover";
 import { detectIsVideo } from "utils";
 import Router from "next/router";
+import { UserInforContext } from "Context/UserInforContext";
 
 export interface UploadProps {
   name?: string;
@@ -40,6 +41,9 @@ const Upload = (props: UploadProps) => {
     isViewPage,
     onImageClick,
   } = props;
+
+  const { user, updateUser } = useContext(UserInforContext);
+
 
   const [srcList, setSrcList] = useState<string[]>([]);
   const [localFileList, setLocalFileList] = useState<string[]>([]);
@@ -218,10 +222,9 @@ const Upload = (props: UploadProps) => {
 
   const handleHref = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo = {
-      ...userInfo,
+    updateUser({
       type_handle: "Claim"
-    }
+    });
     localStorage.setItem("user", JSON.stringify(userInfo));
     Router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
   };

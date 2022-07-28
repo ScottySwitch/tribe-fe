@@ -24,6 +24,7 @@ import styles from "styles/BizInformation.module.scss";
 import { Router, useRouter } from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
 import { isPaidUser } from "utils";
+import moment from "moment";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -78,6 +79,16 @@ const BizInformation = (props) => {
       }).then(() => setLoading(true)));
   };
 
+  const handleHref = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    userInfo = {
+      ...userInfo,
+      type_handle: "Claim",
+    };
+    localStorage.setItem("user", JSON.stringify(userInfo));
+    router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
+  }
+
   const tabContent = () => {
     switch (selectedTab) {
       case InformationList.BUSINESS_INFORMATION:
@@ -115,9 +126,12 @@ const BizInformation = (props) => {
       case InformationList.CHANGE_ACCOUNT_TIER:
         return (
           <TierTable
+            exexpirationDate={moment(listing?.expiration_date).format("YYYY/MM/DD")}
+            isChangeTier
             isPaid={isPaid}
             isPayYearly={isPayYearly}
             onSetIsPayYearly={(e) => setIsPayYearly(e)}
+            onDirectToVerification={handleHref}
           />
         );
       case InformationList.VERIFICATION:

@@ -20,6 +20,7 @@ import styles from "styles/BizUserVerify.module.scss";
 import moment from "moment";
 import bizListingApi from "services/biz-listing";
 import EmailApi from "services/email";
+import { result } from "lodash";
 interface BizUserVerifyProps {
   tier: string;
   id: string;
@@ -33,6 +34,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [subscription, setSubscription] = useState("");
   const [showResultModal, setShowResultModal] = useState(false);
   const [frontImageIdentity, setFrontImageIdentity] = useState<string>("");
   const [backImageIdentity, setBackImageIdentity] = useState<string>("");
@@ -146,7 +148,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const baseUrl = userInfo.strapiStripeUrl;
     const retrieveCheckoutSessionUrl =
-      baseUrl + "/strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId;
+      baseUrl + "strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId;
     fetch(retrieveCheckoutSessionUrl, {
       method: "get",
       mode: "cors",
@@ -166,7 +168,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             console.info("website reloded");
           } else {
             // store payment in strapi
-            const stripePaymentUrl = baseUrl + "/strapi-stripe/stripePayment";
+            const stripePaymentUrl = baseUrl + "strapi-stripe/stripePayment";
             fetch(stripePaymentUrl, {
               method: "post",
               body: JSON.stringify({
@@ -183,6 +185,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               headers: new Headers({
                 "Content-Type": "application/json",
               }),
+            }).then(async () => {
+              let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+              await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
+                subscription: response?.subscription,
+              });
             });
           }
         }
@@ -221,7 +228,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   };
 
   const handleConfirmEmail = async () => {
-    console.log("change email");
     await bizListingApi.updateBizListing(parseInt(id), {
       email: email,
     });
