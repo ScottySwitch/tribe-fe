@@ -97,7 +97,7 @@ const BizInformation = (props) => {
           />
         );
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing isPaid={isPaid} bizListingId={listing.id} />;
+        return <ProductListing isPaid={isPaid} />;
       case InformationList.PHOTOS_VIDEOS:
         return <PhotosVideos />;
       case InformationList.MANAGE_DEALS:
