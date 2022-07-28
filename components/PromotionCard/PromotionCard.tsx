@@ -7,9 +7,9 @@ import styles from "./PromotionCard.module.scss";
 
 export interface PromotionProps {
   imgUrl?: string;
-  title: string;
+  title?: string;
   startDate?: string;
-  expiredAt: string;
+  expiredAt?: string;
   type?: string | number;
   favourite?: boolean;
   width?: string | number;

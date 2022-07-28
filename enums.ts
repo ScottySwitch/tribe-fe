@@ -24,6 +24,7 @@ export enum YesNo {
 export enum VerifySteps {
   REQUEST_OTP = "request_otp",
   CONFIRM_OTP = "confirm_otp",
+  CONFIRM_EMAIL = "confirm_email",
   ADD_ID_CARD = "add_id_card",
   ADD_PAYMENT = "add_payment",
 }

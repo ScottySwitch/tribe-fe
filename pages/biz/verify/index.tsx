@@ -16,18 +16,20 @@ import BizInvoinceApi from "../../../services/biz-invoice";
 import ClaimListingApi from "../../../services/claim-listing";
 import SelectInput from "components/SelectInput/SelectInput";
 import { formattedAreaCodes } from "constant";
-
 import styles from "styles/BizUserVerify.module.scss";
 import moment from "moment";
 import bizListingApi from "services/biz-listing";
 interface BizUserVerifyProps {
   tier: string;
+  id: string;
 }
 
 const BizUserVerify = (props: BizUserVerifyProps) => {
-  const { tier } = props;
+  const { tier, id } = props;
+
   const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [showResultModal, setShowResultModal] = useState(false);
@@ -52,7 +54,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   let baseURL = process.env.NEXT_PUBLIC_API_URL;
   // let baseURL =
   //   "https://2584-2001-ee0-500d-3a90-ec3f-d03b-63d9-f470.ap.ngrok.io/";
-
 
   useEffect(() => {
     const sessionId = router.query.sessionId;
@@ -211,11 +212,20 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     } else {
       const result = await AuthApi.otpPhoneConfirm({ otp });
       if (result.data.success) {
-        setVerifyStep(VerifySteps.ADD_ID_CARD);
+        setVerifyStep(VerifySteps.CONFIRM_EMAIL);
       } else {
         alert("Wrong OTP");
       }
     }
+  };
+
+  const handleConfirmEmail = async () => {
+    console.log("email", email);
+    console.log("id", id);
+    await bizListingApi.updateBizListing(parseInt(id), {
+      email: email
+    })
+    setVerifyStep(VerifySteps.ADD_ID_CARD)
   };
 
   const handleDirectToStorePage = () => {
@@ -260,7 +270,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
-      await bizListingApi.updateBizListing(userInfo.biz_id, {
+      await bizListingApi.updateBizListing(parseInt(id), {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
       });
       if (userInfo.type_handle === "Claim") {
@@ -379,6 +389,20 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           />
         </div>
       )}
+      {verifyStep === VerifySteps.CONFIRM_EMAIL && (
+        <div className={styles.form}>
+          <div className={styles.header}>Email information</div>
+          <p>Please confirm your email to receive billing & invoice</p>
+          <Input
+            placeholder="Enter Email"
+            width="100%"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
+          />
+          <Button text="Save" onClick={handleConfirmEmail} disabled={!email} />
+        </div>
+      )}
       {verifyStep === VerifySteps.ADD_ID_CARD && (
         <div className={styles.form}>
           <div className={styles.header}>
@@ -466,9 +490,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <div className="flex justify-center gap-5 w-full">
-            <Button 
-              width="30%" variant="no-outlined" text="Change tier" 
-                onClick={() => verifyStep}
+            <Button
+              width="30%"
+              variant="no-outlined"
+              text="Change tier"
+              onClick={() => verifyStep}
             />
             {paymentMethod === "stripe" ? (
               <Button
@@ -524,7 +550,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  return { props: { tier: context.query.tier || Tiers.FREE } };
+  return {
+    props: {
+      tier: context.query.tier || Tiers.FREE,
+      id: context.query.id || null,
+    },
+  };
 }
 
 export default BizUserVerify;

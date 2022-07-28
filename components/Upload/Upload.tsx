@@ -8,6 +8,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./Upload.module.scss";
 import Popover from "components/Popover/Popover";
 import { detectIsVideo } from "utils";
+import Router from "next/router";
 
 export interface UploadProps {
   name?: string;
@@ -215,6 +216,10 @@ const Upload = (props: UploadProps) => {
     [styles.hide]: type === "avatar",
   });
 
+  const handleHref = () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    Router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
+  };
 
   return (
     <div className={containerClassName}>
@@ -257,7 +262,7 @@ const Upload = (props: UploadProps) => {
           <div className={styles.upgrade}>
             Upgrade to Basic Tier to upload more photos and video
           </div>
-          <a>Upgrade now</a>
+          <a onClick={handleHref}>Upgrade now</a>
         </div>
       )}
 
