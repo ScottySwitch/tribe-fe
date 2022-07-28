@@ -25,6 +25,8 @@ import { Router, useRouter } from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
 import { isPaidUser } from "utils";
 import moment from "moment";
+import ConfirmModal from "components/ConfirmModal";
+import EmailApi from "services/email";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -32,12 +34,24 @@ const BizInformation = (props) => {
   const [isPaid, setIsPaid] = useState(true);
   const [listing, setListing] = useState(defaultAddlistingForm);
   const [isPayYearly, setIsPayYearly] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const informationList = isPaid ? paidInformationList : freeInformationList;
   const [selectedTab, setSelectedTab] = useState(informationList[0].label);
 
   const router = useRouter();
-  const { user, deleteUser } = useContext(UserInforContext);
+  const { user, deleteUser, updateUser } = useContext(UserInforContext);
+
+  const Content = () => {
+    return (
+      <p className="text-sm mb-5">
+        Basic plan will continue until{" "}
+        <strong>{moment(listing.expiration_date).format("DD-MM-YYYY")}</strong>.
+        After that, you will no longer have access to Basic Tier feature.Basic
+        Tier information on your listing will be hidden.
+      </p>
+    );
+  };
 
   useEffect(() => {
     const getListingData = async () => {
@@ -79,15 +93,23 @@ const BizInformation = (props) => {
       }).then(() => setLoading(true)));
   };
 
-  const handleHref = () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    userInfo = {
-      ...userInfo,
-      type_handle: "Claim",
-    };
-    localStorage.setItem("user", JSON.stringify(userInfo));
-    router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
-  }
+  const handleHref = (e) => {
+    if (e === "free") {
+      setIsVisible(true);
+    } else {
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      updateUser({
+        type_handle: "Claim",
+      });
+      router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
+    }
+  };
+
+  const handleDowngrade = () => {
+    console.log("listing", listing);
+    const data = EmailApi.downgrade(get(listing, "slug"));
+    setIsVisible(true);
+  };
 
   const tabContent = () => {
     switch (selectedTab) {
@@ -126,7 +148,9 @@ const BizInformation = (props) => {
       case InformationList.CHANGE_ACCOUNT_TIER:
         return (
           <TierTable
-            exexpirationDate={moment(listing?.expiration_date).format("YYYY/MM/DD")}
+            expirationDate={moment(listing?.expiration_date).format(
+              "YYYY/MM/DD"
+            )}
             isChangeTier
             isPaid={isPaid}
             isPayYearly={isPayYearly}
@@ -183,6 +207,13 @@ const BizInformation = (props) => {
         </div>
         <div className={styles.right_col}>{tabContent()}</div>
       </div>
+      <ConfirmModal
+        title="Are you sure?"
+        visible={isVisible}
+        onsubmit={handleDowngrade}
+        onClose={() => setIsVisible(false)}
+        content={<Content />}
+      />
     </SectionLayout>
   );
 };

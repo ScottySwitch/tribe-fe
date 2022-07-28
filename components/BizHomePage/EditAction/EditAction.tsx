@@ -169,7 +169,6 @@ const EditAction = (props: EditActionProps) => {
     updateUser({
       type_handle: "Claim",
     });
-    localStorage.setItem("user", JSON.stringify(userInfo));
     Router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
   };
 

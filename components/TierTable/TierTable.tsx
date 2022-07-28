@@ -139,14 +139,14 @@ const DesktopTierTable = ({
   isPayYearly,
   isChangeTier,
   isPaid,
-  exexpirationDate,
+  expirationDate,
 }: {
   onDirectToVerification?(tier: Tiers): void;
   setIsPayYearly?: (value: boolean) => void;
   isPayYearly: boolean;
   isChangeTier?: boolean;
   isPaid?: boolean;
-  exexpirationDate?: any;
+  expirationDate?: any;
 }) => {
   const handleChangePayPrice = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -194,8 +194,8 @@ const DesktopTierTable = ({
                 <div>
                   <Link href={"/"}>View Demo page</Link>
                   {isChangeTier &&
-                    exexpirationDate &&
-                    tier.value !== Tiers.FREE && <p className="mt-[3px]">{exexpirationDate}</p>}
+                    expirationDate &&
+                    tier.value !== Tiers.FREE && <p className="mt-[3px]">{expirationDate}</p>}
                 </div>
                 <br />
                 {((tier.value !== Tiers.FREE && !isPaid) ||
@@ -212,7 +212,7 @@ const DesktopTierTable = ({
                     }
                     width="70%"
                     size="small"
-                    onClick={() => (!isChangeTier || tier.value === Tiers.BASIC) ? onDirectToVerification?.(tier.value) : console.log('test')}
+                    onClick={() => onDirectToVerification?.(tier.value)}
                   />
                 )}
               </th>
@@ -248,14 +248,14 @@ const MobileTierTable = ({
   isPayYearly,
   isPaid,
   isChangeTier,
-  exexpirationDate,
+  expirationDate,
 }: {
   onDirectToVerification?(tier: Tiers): void;
   setIsPayYearly?: (value: boolean) => void;
   isPayYearly: boolean;
   isChangeTier?: boolean;
   isPaid?: boolean;
-  exexpirationDate?: any;
+  expirationDate?: any;
 }) => {
   const [tierList, setTierList] = useState<string[]>([]);
   const handleChangePayPrice = () => {
@@ -340,19 +340,19 @@ const TierTable = ({
   isPayYearly,
   onSetIsPayYearly,
   onDirectToVerification,
-  exexpirationDate,
+  expirationDate,
 }: {
   isChangeTier?: boolean;
   isPaid?: boolean;
   isPayYearly: boolean;
   onSetIsPayYearly?: (e: any) => void;
   onDirectToVerification?(tier: Tiers): void;
-  exexpirationDate?: any;
+  expirationDate?: any;
 }) => {
   return (
     <div className={styles.tier}>
       <DesktopTierTable
-        exexpirationDate={exexpirationDate}
+        expirationDate={expirationDate}
         isPaid={isPaid}
         isChangeTier={isChangeTier}
         onDirectToVerification={onDirectToVerification}
@@ -360,7 +360,7 @@ const TierTable = ({
         setIsPayYearly={onSetIsPayYearly}
       />
       <MobileTierTable
-        exexpirationDate={exexpirationDate}
+        expirationDate={expirationDate}
         isPaid={isPaid}
         isChangeTier={isChangeTier}
         onDirectToVerification={onDirectToVerification}
