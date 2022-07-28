@@ -48,7 +48,7 @@ const Verification = (props: VerificationProps) => {
         width={300}
         suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
       />
-      <div className={styles.change_link}>Change phone number</div>
+      {/* <div className={styles.change_link}>Change phone number</div> */}
       {isPaid && (
         <React.Fragment>
           <br />
@@ -59,7 +59,7 @@ const Verification = (props: VerificationProps) => {
             width={300}
             suffix={<Icon icon={idCardStatusIcon()} style={{ width: 70 }} />}
           />
-          <div className={styles.change_link}>Resend ID Card</div>
+          {/* <div className={styles.change_link}>Resend ID Card</div> */}
         </React.Fragment>
       )}
     </SectionLayout>

@@ -139,7 +139,7 @@ const Properties = () => {
       let handleProperties = "products";
       if (property === "menu") {
         handleProperties = "menus";
-        setSelectedTab("menus");
+        setSelectedTab("menu");
       } else if (property === "deals") {
         handleProperties = "deals";
         setSelectedTab("deals");

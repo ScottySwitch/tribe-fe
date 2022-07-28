@@ -113,11 +113,10 @@ const BizInformation = (props) => {
     if (e === "free") {
       setIsVisible(true);
     } else {
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       updateUser({
         type_handle: "Claim",
       });
-      router.push(`/claim/${get(userInfo, "now_biz_listing.id_listing")}`);
+      router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
     }
   };
 
