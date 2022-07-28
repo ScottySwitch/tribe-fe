@@ -32,6 +32,7 @@ interface BusinessInformationProps {
 const BusinessInformation = (props: BusinessInformationProps) => {
   const { listing: formData, loading, onSubmit } = props;
   const router = useRouter();
+  console.log("props", formData);
 
   const [isEdit, setIsEdit] = useState(false);
   const isPaid = get(formData, "biz_invoices.length") > 0;
@@ -128,18 +129,37 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         >
           <UpgradeNow />
           <Input
+            value={
+              getValues("social_info")
+                ? getValues("social_info")["twitter"]
+                : ""
+            }
             readOnly
             prefix={<Icon icon="twitter-logo" />}
-            suffix={<SocialRadio type="" value="" />}
+            suffix={
+              <SocialRadio type="" value={getValues("social_info.twitter")} />
+            }
             placeholder="https://www.twitter.com/YourTwitter"
           />
           <Input
+            value={
+              getValues("social_info")
+                ? getValues("social_info")["facbook"]
+                : ""
+            }
             readOnly
             prefix={<Icon icon="facebook-color" />}
-            suffix={<SocialRadio type="facebook" value="" />}
+            suffix={
+              <SocialRadio type="facebook" value={getValues("social_info")} />
+            }
             placeholder="https://www.facebook.com/YourFacebook"
           />
           <Input
+            value={
+              getValues("social_info")
+                ? getValues("social_info")["instagram"]
+                : ""
+            }
             readOnly
             prefix={<Icon icon="instagram-outlined" />}
             suffix={<SocialRadio type="instagram" value="" />}
@@ -150,7 +170,10 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         <Button
           text="Edit information"
           width={300}
-          onClick={() => setIsEdit(true)}
+          onClick={() => {
+            console.log("social info", getValues("social_info")["facbook"]);
+            setIsEdit(true);
+          }}
         />
       </SectionLayout>
 
@@ -179,11 +202,11 @@ const BusinessInformation = (props: BusinessInformationProps) => {
             />
           </Question>
           <Question question="Address" childrenClassName="flex flex-col gap-3">
-            <Input
+            {/* <Input
               register={register("city")}
               label="City/Town, State/Province/Region"
               placeholder="City/Town, State/Province/Region of business"
-            />
+            /> */}
             <Input
               register={register("country")}
               label="Country"
@@ -194,10 +217,10 @@ const BusinessInformation = (props: BusinessInformationProps) => {
               label="Street address"
               placeholder="Address of business"
             />
-            <Input
+            {/* <Input
               register={register("additionalAddress")}
               placeholder="Additional address information (optional)"
-            />
+            /> */}
           </Question>
           <Question
             show
