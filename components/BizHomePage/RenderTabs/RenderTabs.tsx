@@ -154,7 +154,9 @@ const TabContent = ({
               <CardItem
                 expiredAt={expiredAt}
                 startDate={startDate}
-                imgUrl={firstImage || "https://picsum.photos/200/300"}
+                imgUrl={
+                  firstImage || require("public/images/default-avatar.svg")
+                }
                 title={name}
                 price={price}
                 description={description}
