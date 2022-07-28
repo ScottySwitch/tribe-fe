@@ -1,3 +1,8 @@
+import { get, isArray } from "lodash";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 import Button from "components/Button/Button";
 import DealDetailModal from "components/DealDetailModal/DealDetailModal";
 import Icon from "components/Icon/Icon";
@@ -8,14 +13,11 @@ import ProductDetailModal from "components/ProductDetailModal/ProductDetailModal
 import PromotionCard from "components/PromotionCard/PromotionCard";
 import { eatTabList, productTabList, serviceTabList } from "constant";
 import { Categories, ListingHomePageScreens, ListingTabs } from "enums";
-import { get } from "lodash";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useState } from "react";
 import Heading from "../../Heading/Heading";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import MenuDetailModal from "components/MenuDetailModal/MenuDetailModal";
+
 import styles from "./RenderTabs.module.scss";
-import moment from "moment";
 
 const initSelectedTab = (category) => {
   switch (category) {
@@ -113,6 +115,9 @@ const TabContent = ({
     case ListingTabs.DEAL:
       DetailModal = DealDetailModal;
       break;
+    case ListingTabs.MENU:
+      DetailModal = MenuDetailModal;
+      break;
   }
 
   return (
@@ -125,51 +130,52 @@ const TabContent = ({
         />
       </div>
       <div className={styles.items_container}>
-        {list.map((item) => {
-          console.log("item", item);
-          const id = get(item, "attributes.id") || item.id;
-          const images = item.images || [];
-          const firstImage = item.imgUrl || images[0];
-          const name = get(item, "attributes.name") || item.name || "";
-          const price = get(item, "attributes.price") || item.price || "";
-          const description =
-            get(item, "attributes.description") ||
-            item.information ||
-            item.description ||
-            item.termsConditions ||
-            "";
-          const expiredAt =
-            get(item, "attributes.endDate") || item.endDate || "";
-          const startDate =
-            get(item, "attributes.startDate") || item.startDate || "";
-          const currency =
-            get(item, "attributes.currency") || item.currency || "";
-          return (
-            <div
-              key={id}
-              className={styles.info_card_container}
-              style={{ width: isDeal ? "100%" : "" }}
-              onClick={() => handleOpenDetailModal(item)}
-            >
-              <CardItem
-                expiredAt={expiredAt}
-                startDate={startDate}
-                imgUrl={
-                  firstImage || require("public/images/default-avatar.svg")
-                }
-                title={name}
-                price={price}
-                description={description}
-                currency={currency.toUpperCase()}
-              />
-              {isItem && (
-                <div className={styles.delete} onClick={() => onDelete(item)}>
-                  <Icon icon="delete" />
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {isArray(list) &&
+          list.map((item) => {
+            console.log("-----------------", item);
+            const id = get(item, "attributes.id") || item.id;
+            const images = item.images || [];
+            const firstImage = item.imgUrl || images[0];
+            const name = get(item, "attributes.name") || item.name || "";
+            const price = get(item, "attributes.price") || item.price || "";
+            const description =
+              get(item, "attributes.description") ||
+              item.information ||
+              item.description ||
+              item.termsConditions ||
+              "";
+            const expiredAt =
+              get(item, "attributes.endDate") || item.endDate || "";
+            const startDate =
+              get(item, "attributes.startDate") || item.startDate || "";
+            const currency =
+              get(item, "attributes.currency") || item.currency || "";
+            return (
+              <div
+                key={id}
+                className={styles.info_card_container}
+                style={{ width: isDeal ? "100%" : "" }}
+                onClick={() => handleOpenDetailModal(item)}
+              >
+                <CardItem
+                  expiredAt={expiredAt}
+                  startDate={startDate}
+                  imgUrl={
+                    firstImage || require("public/images/default-avatar.svg")
+                  }
+                  title={name}
+                  price={price}
+                  description={description}
+                  currency={currency.toUpperCase()}
+                />
+                {isItem && (
+                  <div className={styles.delete} onClick={() => onDelete(item)}>
+                    <Icon icon="delete" />
+                  </div>
+                )}
+              </div>
+            );
+          })}
       </div>
       <div
         className={styles.see_all}

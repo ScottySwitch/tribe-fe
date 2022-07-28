@@ -19,7 +19,7 @@ import { isArray } from "utils";
 import styles from "./Album.module.scss";
 
 interface AlbumProps {
-  id?: string;
+  id: string;
   listingId?: string | number;
   reportMedia?: boolean;
   images?: any[];

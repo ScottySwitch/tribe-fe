@@ -60,7 +60,7 @@ const AddMenu = (props: AddItemsProps) => {
   const AddItemButton = () => (
     <Button
       prefix={<Icon icon="plus" />}
-      width={130}
+      width="max-content"
       variant="secondary"
       text="Add another"
       size="small"
