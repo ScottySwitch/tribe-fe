@@ -13,7 +13,12 @@ import { Router } from "next/router";
 import { IAddListingForm } from "pages/add-listing";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils";
+import {
+  censoredPhoneNumber,
+  formatSelectInputValue,
+  isPaidUser,
+  removeZeroInPhoneNumber,
+} from "utils";
 import { useRouter } from "next/router";
 import styles from "./TabContent.module.scss";
 
@@ -35,12 +40,28 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   console.log("props", formData);
 
   const [isEdit, setIsEdit] = useState(false);
-  const isPaid = get(formData, "biz_invoices.length") > 0;
+  const isPaid = get(formData, "expiration_date")
+    ? isPaidUser(get(formData, "expiration_date"))
+    : false;
 
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
   useEffect(() => {
-    reset({ ...formData, contact: formData.phone_number });
+    console.log("phone", formData.phone_number);
+    reset({
+      name: formData.name,
+      slug: formData.slug,
+      description: formData.description,
+      phoneNumber: formData.phone_number,
+      logo: formData.logo,
+      email: formData.email,
+      address: formData.address,
+      city: formData.city,
+      country: formData.country,
+      twitter: get(formData, "social_info.twitter"),
+      facebook: get(formData, "social_info.facebook"),
+      instagram: get(formData, "social_info.instagram"),
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
@@ -49,22 +70,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   };
 
   const onSubmitForm = (data) => {
-    onSubmit({
-      name: data.name,
-      description: data.description,
-      phone_number: data.contact,
-      logo: data.logo,
-      email: data.email,
-      address: data.address,
-      city: data.city,
-      country: data.country,
-      social_info: {
-        ...data.socialInfo,
-        twitter: data.twitter,
-        facebook: data.facebook,
-        instagram: data.instagram,
-      },
-    });
+    console.log("data", data);
     setIsEdit(false);
   };
 
@@ -121,7 +127,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         </Question>
         <Question question="Official contact" childrenClassName="flex gap-3">
           <Icon icon="phone-color" />
-          {formData.phone_number}
+          <p>{censoredPhoneNumber(formData.phone_number)}</p>
         </Question>
         <Question
           question="Social media"
@@ -234,10 +240,12 @@ const BusinessInformation = (props: BusinessInformationProps) => {
               options={formattedAreaCodes}
               shouldControlShowValue
               defaultValue={formatSelectInputValue(
-                getValues("contact"),
+                getValues("phoneNumber"),
                 phoneAreaCodes
               )}
-              onChange={(e) => setValue("contact", removeZeroInPhoneNumber(e))}
+              onChange={(e) =>
+                setValue("phoneNumber", removeZeroInPhoneNumber(e))
+              }
             />
             <Input
               register={register("email")}
