@@ -7,7 +7,7 @@ import Radio from "components/Radio/Radio";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import SelectInput from "components/SelectInput/SelectInput";
 import Upload from "components/Upload/Upload";
-import { formattedAreaCodes, phoneAreaCodes } from "constant";
+import { formattedAreaCodes, locations, phoneAreaCodes } from "constant";
 import { get } from "lodash";
 import { Router } from "next/router";
 import { IAddListingForm } from "pages/add-listing";
@@ -21,6 +21,9 @@ import {
 } from "utils";
 import { useRouter } from "next/router";
 import styles from "./TabContent.module.scss";
+import useGetRevision from "hooks/useGetRevision";
+import BizListingRevision from "services/biz-listing-revision";
+import Select from "components/Select/Select";
 
 export const socialMedias = [
   { label: <Icon icon="twitter-logo" />, value: "twitter" },
@@ -31,13 +34,13 @@ export const socialMedias = [
 interface BusinessInformationProps {
   listing: any;
   loading?: boolean;
+  isRevision?: boolean;
   onSubmit: (data: any) => void;
 }
 
 const BusinessInformation = (props: BusinessInformationProps) => {
-  const { listing: formData, loading, onSubmit } = props;
+  const { listing: formData, loading, isRevision, onSubmit } = props;
   const router = useRouter();
-  console.log("props", formData);
 
   const [isEdit, setIsEdit] = useState(false);
   const isPaid = get(formData, "expiration_date")
@@ -47,7 +50,6 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
   useEffect(() => {
-    console.log("phone", formData.phone_number);
     reset({
       name: formData.name,
       slug: formData.slug,
@@ -69,8 +71,64 @@ const BusinessInformation = (props: BusinessInformationProps) => {
     setIsEdit(false);
   };
 
-  const onSubmitForm = (data) => {
+  const onSubmitForm = async (data) => {
     console.log("data", data);
+    if (isRevision) {
+      await BizListingRevision.updateBizListingRevision(formData.id, {
+        description: data.description,
+        phone_number: data.phoneNumber,
+        logo: data.logo,
+        email: data.email,
+        address: data.address,
+        city: data.city,
+        country: data.country,
+        social_info: {
+          facebook: data.facebook ? data.facebook : null,
+          instagram: data.instagram ? data.instagram : null,
+          twitter: data.twitter ? data.twitter : null,
+        },
+        is_accepted: false,
+        expiration_date: formData.expiration_date,
+      });
+    } else {
+      await BizListingRevision.createBizListingRevision({
+        name: data.name,
+        slug: formData.slug,
+        description: data.description,
+        phone_number: data.phoneNumber,
+        logo: data.logo,
+        email: data.email,
+        address: data.address,
+        city: data.city,
+        country: data.country,
+        social_info: {
+          facebook: data.facebook ? data.facebook : null,
+          instagram: data.instagram ? data.instagram : null,
+          twitter: data.twitter ? data.twitter : null,
+        },
+        is_accepted: false,
+        expiration_date: formData.expiration_date,
+        biz_listing: formData.id.toString(),
+        parent_id: formData.id.toString(),
+        // price_range: priceRange,
+        min_price: parseFloat(formData?.min_price) || null,
+        max_price: parseFloat(formData?.max_price) || null,
+        currency: formData?.currency.toLocaleLowerCase() || null,
+        action: formData.action,
+        images: formData.images,
+        website: formData.website,
+        facilities_data: formData.facilities_data,
+        open_hours: formData.open_hours,
+        tags: formData.tags.map((item) => item.id),
+        is_verified: formData.is_verified,
+        products: formData.products.map((item) => item.id) || [],
+        menus: formData.menus.map((item) => item.id) || [],
+        deals: formData.deals.map((item) => item.id) || [],
+        biz_invoices: formData.bizInvoices.map((item) => item.id) || [],
+        reviews: formData.reviews.map((item) => item.id) || [],
+        categories: formData.categories.map((item) => item.id) || [],
+      });
+    }
     setIsEdit(false);
   };
 
@@ -119,15 +177,19 @@ const BusinessInformation = (props: BusinessInformationProps) => {
           fileList={getValues("logo")}
         />
         <br />
-        <div className={styles.name}>{formData.name}</div>
-        <p>{formData.description}</p>
+        <div className={styles.name}>{getValues("name")}</div>
+        <p>{getValues("description")}</p>
         <Question question="Address" childrenClassName="flex gap-3">
           <Icon icon="map" />
-          {formData.address}
+          {getValues("address")}
         </Question>
         <Question question="Official contact" childrenClassName="flex gap-3">
           <Icon icon="phone-color" />
-          <p>{censoredPhoneNumber(formData.phone_number)}</p>
+          <p>
+            {isPaid
+              ? getValues("phoneNumber")
+              : censoredPhoneNumber(getValues("phoneNumber"))}
+          </p>
         </Question>
         <Question
           question="Social media"
@@ -135,37 +197,23 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         >
           <UpgradeNow />
           <Input
-            value={
-              getValues("social_info")
-                ? getValues("social_info")["twitter"]
-                : ""
-            }
+            value={getValues("twitter")}
             readOnly
             prefix={<Icon icon="twitter-logo" />}
-            suffix={
-              <SocialRadio type="" value={getValues("social_info.twitter")} />
-            }
+            suffix={<SocialRadio type="" value={getValues("twitter")} />}
             placeholder="https://www.twitter.com/YourTwitter"
           />
           <Input
-            value={
-              getValues("social_info")
-                ? getValues("social_info")["facbook"]
-                : ""
-            }
+            value={getValues("facebook")}
             readOnly
             prefix={<Icon icon="facebook-color" />}
             suffix={
-              <SocialRadio type="facebook" value={getValues("social_info")} />
+              <SocialRadio type="facebook" value={getValues("facebook")} />
             }
             placeholder="https://www.facebook.com/YourFacebook"
           />
           <Input
-            value={
-              getValues("social_info")
-                ? getValues("social_info")["instagram"]
-                : ""
-            }
+            value={getValues("instagram")}
             readOnly
             prefix={<Icon icon="instagram-outlined" />}
             suffix={<SocialRadio type="instagram" value="" />}
@@ -177,7 +225,6 @@ const BusinessInformation = (props: BusinessInformationProps) => {
           text="Edit information"
           width={300}
           onClick={() => {
-            console.log("social info", getValues("social_info")["facbook"]);
             setIsEdit(true);
           }}
         />
@@ -193,6 +240,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         <form onSubmit={handleSubmit(onSubmitForm)}>
           <div>
             <Upload
+              key={getValues("logo")}
               type="avatar"
               className="justify-start"
               fileList={getValues("logo")}
@@ -213,11 +261,6 @@ const BusinessInformation = (props: BusinessInformationProps) => {
               label="City/Town, State/Province/Region"
               placeholder="City/Town, State/Province/Region of business"
             /> */}
-            <Input
-              register={register("country")}
-              label="Country"
-              placeholder="Country of business"
-            />
             <Input
               register={register("address")}
               label="Street address"
