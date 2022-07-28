@@ -110,7 +110,7 @@ const Properties = () => {
     },
     {
       label: "Menu",
-      value: "menus",
+      value: "menu",
     },
   ];
 
