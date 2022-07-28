@@ -18,6 +18,8 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 import MenuDetailModal from "components/MenuDetailModal/MenuDetailModal";
 
 import styles from "./RenderTabs.module.scss";
+import Popover from "components/Popover/Popover";
+import moment from "moment";
 
 const initSelectedTab = (category) => {
   switch (category) {
@@ -132,7 +134,6 @@ const TabContent = ({
       <div className={styles.items_container}>
         {isArray(list) &&
           list.map((item) => {
-            console.log("-----------------", item);
             const id = get(item, "attributes.id") || item.id;
             const images = item.images || [];
             const firstImage = item.imgUrl || images[0];
@@ -145,7 +146,11 @@ const TabContent = ({
               item.termsConditions ||
               "";
             const expiredAt =
-              get(item, "attributes.endDate") || item.endDate || "";
+              get(item, "attributes.endDate") ||
+              item.endDate ||
+              (item.validUntil &&
+                moment(item.validUntil).format("YYYY-MMM-DD")) ||
+              "";
             const startDate =
               get(item, "attributes.startDate") || item.startDate || "";
             const currency =
@@ -308,14 +313,28 @@ const RenderTabs = (props: {
     <div className="w-full">
       <div className="flex gap-5 items-center justify-between">
         <div className="flex gap-5 items-center">
-          {initSelectedTab(category).tabList.map((tab) => (
-            <Heading
-              key={tab.text}
-              selected={selectedTab === tab.value}
-              text={tab.text}
-              onClick={() => setSelectedTab(tab.value)}
-            />
-          ))}
+          {initSelectedTab(category).tabList.map((tab) =>
+            !isPaid && tab.value === ListingTabs.DEAL ? (
+              <Popover
+                contentClassName={styles.free_deals_popover}
+                content={
+                  <div className="p-0">
+                    <Icon icon="star-2" color="white" />
+                    Update to use feature!
+                  </div>
+                }
+              >
+                <Heading key={tab.text} text={tab.text} selected={false} />
+              </Popover>
+            ) : (
+              <Heading
+                key={tab.text}
+                selected={selectedTab === tab.value}
+                text={tab.text}
+                onClick={() => setSelectedTab(tab.value)}
+              />
+            )
+          )}
         </div>
         {!isViewPage && (
           <EditList

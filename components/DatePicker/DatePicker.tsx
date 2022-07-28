@@ -13,13 +13,24 @@ interface DatePickerProps {
   prefixIcon?: boolean;
   suffixIcon?: boolean;
   placeholder?: string;
+  maxDate?: Date;
+  minDate?: Date;
   onChange?: (e: Date) => void;
   name?: string;
 }
 
 const DatePicker = (props: DatePickerProps) => {
-  const { value, prefixIcon, suffixIcon, placeholder, size, label, onChange } =
-    props;
+  const {
+    value,
+    prefixIcon,
+    suffixIcon,
+    placeholder,
+    maxDate = new Date(),
+    minDate,
+    size,
+    label,
+    onChange,
+  } = props;
   const [localValue, setLocalValue] = useState(value);
   const datepickerClassNames = classNames(styles.date_picker_container, {
     [styles.small]: size === "small",
@@ -44,7 +55,8 @@ const DatePicker = (props: DatePickerProps) => {
           calendarClassName={styles.calendar}
           placeholderText={placeholder}
           popperPlacement="bottom"
-          maxDate={new Date()}
+          maxDate={maxDate}
+          minDate={minDate}
         />
         {suffixIcon && <Icon icon="calendar-2" color="#7F859F" />}
       </div>

@@ -117,14 +117,15 @@ const AddDeals = (props: AddDealsProps) => {
                 }
               />
               <DatePicker
+                maxDate={new Date("2100-12-30")}
+                suffixIcon
+                label="Valid until"
                 value={
                   moment(deal.validUntil, "YYYY-MM-DD").toDate() || new Date()
                 }
                 onChange={(e: any) =>
                   handleChangeDeal(deal.id, "validUntil", e)
                 }
-                suffixIcon
-                label="Valid until"
               />
               <Input
                 value={deal.termsConditions}

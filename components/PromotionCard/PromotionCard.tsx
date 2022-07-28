@@ -74,7 +74,7 @@ const PromotionCard = (props: PromotionProps) => {
         <div>
           <h3 className={styles.promotion_title}>{title}</h3>
           <div className={styles.promotion_date}>
-            {startDate} - {expiredAt}
+            {startDate} {startDate && expiredAt && `-`} {expiredAt}
           </div>
           <div className={styles.promotion_date}>{description}</div>
         </div>
