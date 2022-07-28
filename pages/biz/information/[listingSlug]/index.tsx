@@ -106,7 +106,6 @@ const BizInformation = (props) => {
   };
 
   const handleDowngrade = () => {
-    console.log("listing", listing);
     const data = EmailApi.downgrade(get(listing, "slug"));
     setIsVisible(true);
   };
