@@ -30,9 +30,11 @@
         background-color: $bg-50;
         border-radius: 50%;
         margin-right: 30px;
+        background-color: white;
+        z-index: 1;
+        border: 8px solid $bg-50 !important;
 
         &_img {
-          border: 8px solid $bg-0 !important;
           border-radius: 50%;
         }
       }

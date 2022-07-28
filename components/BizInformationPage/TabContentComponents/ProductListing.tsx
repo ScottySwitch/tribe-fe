@@ -67,7 +67,7 @@ const ProductListing = (props: ProductListingProps) => {
           images: item.images,
           imgUrl:
             get(item, "images[0]") ||
-            require("public/images/default-avatar.png"),
+            require("public/images/default-avatar.svg"),
           discount: item.discount,
           tags: item.tags,
           currency: item.currency,
@@ -200,7 +200,7 @@ const ProductListing = (props: ProductListingProps) => {
                 <InforCard
                   imgUrl={
                     get(item, "images[0]") ||
-                    require("public/images/default-avatar.png")
+                    require("public/images/default-avatar.svg")
                   }
                   title={item.name}
                   price={item.price}
