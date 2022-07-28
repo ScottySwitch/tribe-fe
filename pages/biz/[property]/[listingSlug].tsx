@@ -10,12 +10,14 @@ import TopSearches from "components/TopSearches/TopSearches";
 import { CategoryText, ListingTabs } from "enums";
 import { get, orderBy } from "lodash";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BizListingApi from "services/biz-listing";
 import { calcRateNumber, censoredPhoneNumber } from "utils";
 
 import styles from "styles/Property.module.scss";
 import TabsHorizontal from "components/TabsHorizontal/TabsHorizontal";
+import { UserInforContext } from "Context/UserInforContext";
+import MenuDetailModal from "components/MenuDetailModal/MenuDetailModal";
 
 interface PropertiesContainerProps {
   cardItem?: any;
@@ -33,45 +35,54 @@ const PropertiesContainer = ({
     <div className="flex flex-wrap gap-10">
       {Array.isArray(list) && list.length > 0 ? (
         list.map((item) => {
-          const id = get(item, "attributes.id") || item.id;
-          const images = item?.images || item.menu_file || [];
-          const firstImage = item.imgUrl || images[0];
-          const name = get(item, "attributes.name") || item.name || "";
-          const price = get(item, "attributes.price") || item.price || "";
-          const description =
-            get(item, "attributes.description") ||
-            item.information ||
-            item.description ||
-            "";
-          const expiredAt =
-            get(item, "attributes.expire_at") ||
-            item.expireAt ||
-            item?.start_date?.replaceAll("-", "/") ||
-            "";
-          const endDate =
-            get(item, "attributes.end_date") || item.end_date || "";
-          const startDate =
-            get(item, "attributes.start_date") || item.start_date || "";
-          const termsConditions =
-            get(item, "attributes.terms_conditions") ||
-            item.terms_conditions ||
-            item.conditions ||
-            "";
+          const formatItem = {
+            id: get(item, "attributes.id") || item.id,
+            images: item?.images || item.menu_file || [],
+            firstImage:
+              item.imgUrl ||
+              get(item, "images[0]") ||
+              get(item, "menu_file[0]"),
+            name: get(item, "attributes.name") || item.name || "",
+            price: get(item, "attributes.price") || item.price || "",
+            description:
+              get(item, "attributes.description") ||
+              item.information ||
+              item.description ||
+              "",
+            expiredAt:
+              get(item, "attributes.expire_at") ||
+              item.expireAt ||
+              item?.start_date?.replaceAll("-", "/") ||
+              "",
+            endDate: get(item, "attributes.end_date") || item.end_date || "",
+            startDate:
+              get(item, "attributes.start_date") || item.start_date || "",
+            termsConditions:
+              get(item, "attributes.terms_conditions") ||
+              item.terms_conditions ||
+              item.conditions ||
+              "",
+          };
+
           return (
-            <CardItem
-              key={id}
-              imgUrl={firstImage || "https://picsum.photos/200/300"}
-              title={name}
-              price={price}
-              description={description}
-              expiredAt={expiredAt}
-              termsConditions={termsConditions}
-              conditions={termsConditions}
-              endDate={endDate}
-              startDate={startDate}
-              onClick={() => onShowDetailModal?.(item)}
-              onCardClick={() => onShowDetailModal?.(item)}
-            />
+            <div
+              key={formatItem.id}
+              onClick={() => onShowDetailModal?.(formatItem)}
+            >
+              <CardItem
+                imgUrl={
+                  formatItem.firstImage || "https://picsum.photos/200/300"
+                }
+                title={formatItem.name}
+                price={formatItem.price}
+                description={formatItem.description}
+                expiredAt={formatItem.expiredAt}
+                termsConditions={formatItem.termsConditions}
+                conditions={formatItem.termsConditions}
+                endDate={formatItem.endDate}
+                startDate={formatItem.startDate}
+              />
+            </div>
           );
         })
       ) : (
@@ -81,23 +92,22 @@ const PropertiesContainer = ({
   );
 };
 
-const Properties = () => {
+const Properties = (context) => {
+  const { listingSlug, property } = context;
   const router = useRouter();
-  const { query } = router;
-  const { property, listingSlug }: any = query;
+  const { user, updateUser } = useContext(UserInforContext);
 
   const upperCaseTitle = property?.[0].toUpperCase() + property?.slice(1);
   const [loading, setLoading] = useState(true);
-  const [properties, setProperties] = useState<any[]>([]);
   const [selectedItem, setSelectedItem] = useState<any>({});
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [listingInformation, setListingInformation] = useState<any>({});
   const [userInfo, setUserInfo] = useState<any>({});
   const [phoneNumber, setPhoneNumber] = useState<any>("");
   const [isPaid, setIsPaid] = useState<boolean>(false);
-  const [selectedTab, setSelectedTab] = useState<string>("products");
   const [isEatListing, setIsEatListing] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [selectedTab, setSelectedTab] = useState<string>(ListingTabs.PRODUCT);
 
   const TabList: any[] = [
     {
@@ -110,7 +120,7 @@ const Properties = () => {
     },
     {
       label: "Menu",
-      value: "menu",
+      value: "menus",
     },
   ];
 
@@ -118,12 +128,16 @@ const Properties = () => {
     const getProperties = async () => {
       setLoading(true);
       let data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
+
       let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const listingDetail = get(data, `data.data[0]`);
+      const listingDetail = get(data, `data.data[0]`) || {};
+
       if (get(listingDetail, "categories[0].slug") === CategoryText.EAT) {
         setIsEatListing(true);
       }
-      userInfo.now_biz_listing = listingDetail;
+
+      updateUser({ now_biz_listing: listingDetail });
+
       const bizInvoice = listingDetail.biz_invoices || [];
       const rawPhoneNumber = listingDetail.phone_number;
       const defaultPhone = censoredPhoneNumber(rawPhoneNumber);
@@ -134,31 +148,21 @@ const Properties = () => {
         setPhoneNumber(defaultPhone);
       }
       setIsVerified(listingDetail.is_verified);
-      localStorage.setItem("user", JSON.stringify(userInfo));
       setUserInfo(userInfo);
-      let handleProperties = "products";
-      if (property === "menu") {
-        handleProperties = "menus";
-        setSelectedTab("menu");
+      if (property === "menus") {
+        setSelectedTab("menus");
       } else if (property === "deals") {
-        handleProperties = "deals";
         setSelectedTab("deals");
       }
-      let propertiesData = get(data, `data.data[0].${handleProperties}`);
 
       setListingInformation(listingDetail);
-      if (property === "products") {
-        propertiesData = orderBy(
-          propertiesData,
-          ["attributes.is_pinned"],
-          ["desc"]
-        );
-      }
-      setProperties(propertiesData);
+
       setLoading(false);
     };
-    listingSlug && getProperties();
-  }, [property, listingSlug]);
+
+    getProperties();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingSlug]);
 
   const handleShowDetailModal = (item) => {
     setSelectedItem(item);
@@ -172,7 +176,7 @@ const Properties = () => {
         return (
           <PropertiesContainer
             cardItem={InforCard}
-            list={properties}
+            list={listingInformation.products}
             onShowDetailModal={handleShowDetailModal}
           />
         );
@@ -180,7 +184,7 @@ const Properties = () => {
         return (
           <PropertiesContainer
             cardItem={InforCard}
-            list={properties}
+            list={listingInformation.products}
             onShowDetailModal={handleShowDetailModal}
           />
         );
@@ -188,7 +192,7 @@ const Properties = () => {
         return (
           <PropertiesContainer
             cardItem={InforCard}
-            list={properties}
+            list={listingInformation.products}
             onShowDetailModal={handleShowDetailModal}
           />
         );
@@ -197,15 +201,16 @@ const Properties = () => {
         return (
           <PropertiesContainer
             cardItem={PromotionCard}
-            list={properties}
+            list={listingInformation[property]}
             onShowDetailModal={handleShowDetailModal}
           />
         );
       case ListingTabs.MENU:
+        DetailModal = MenuDetailModal;
         return (
           <PropertiesContainer
             cardItem={MenuCard}
-            list={properties}
+            list={listingInformation[property]}
             onShowDetailModal={handleShowDetailModal}
           />
         );
@@ -247,8 +252,9 @@ const Properties = () => {
             selectedTab={selectedTab}
             className="pt-[6px]"
             onChangeTab={(e) => {
-              router.push(`/biz/${e}/${listingSlug}`);
-              setSelectedTab(e);
+              router.push(`/biz/${e}/${listingSlug}`, undefined, {
+                shallow: false,
+              });
             }}
           />
         </div>
@@ -266,4 +272,13 @@ const Properties = () => {
   );
 };
 
+export async function getServerSideProps(props) {
+  // Pass data to the page via props
+  return {
+    props: {
+      listingSlug: props.query.listingSlug || "",
+      property: props.query.property || "",
+    },
+  };
+}
 export default Properties;
