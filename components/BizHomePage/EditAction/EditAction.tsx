@@ -18,6 +18,7 @@ interface EditActionProps {
   isPaid?: boolean;
   isLoading?: boolean;
   klookUrl?: string;
+  id?: string;
 }
 
 const EditAction = (props: EditActionProps) => {
@@ -28,6 +29,7 @@ const EditAction = (props: EditActionProps) => {
     isPaid,
     isLoading,
     klookUrl,
+    id,
     onPublishPage,
     onApplyAction,
   } = props;
@@ -157,8 +159,6 @@ const EditAction = (props: EditActionProps) => {
     }
   };
 
-
-  
   return (
     <React.Fragment>
       {isViewPage && isPaid && action?.value && (
@@ -203,7 +203,7 @@ const EditAction = (props: EditActionProps) => {
             Upgrade to Basic Tier to access features that help grow your
             business!
           </p>
-          <a>Upgrade now</a>
+          <a onClick={() => router.push(`/claim/${id}`)}>Upgrade now</a>
         </div>
       )}
       {klookUrl && (

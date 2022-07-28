@@ -1,12 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import {
-  ChangeEvent,
-  useState,
-  useCallback,
-  useEffect,
-  useContext,
-} from "react";
+import { ChangeEvent, useState, useCallback, useEffect } from "react";
 
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
@@ -22,18 +16,16 @@ import BizInvoinceApi from "../../../services/biz-invoice";
 import ClaimListingApi from "../../../services/claim-listing";
 import SelectInput from "components/SelectInput/SelectInput";
 import { formattedAreaCodes } from "constant";
-
 import styles from "styles/BizUserVerify.module.scss";
 import moment from "moment";
 import bizListingApi from "services/biz-listing";
-import { UserInforContext } from "Context/UserInforContext";
 interface BizUserVerifyProps {
   tier: string;
+  id: string;
 }
 
 const BizUserVerify = (props: BizUserVerifyProps) => {
-  const { tier } = props;
-  const { user } = useContext(UserInforContext);
+  const { tier, id } = props;
 
   const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -228,11 +220,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   };
 
   const handleConfirmEmail = async () => {
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    await bizListingApi.updateBizListing(userInfo.biz_id, {
-      email: email,
-    });
-    setVerifyStep(VerifySteps.ADD_ID_CARD);
+    console.log("email", email);
+    console.log("id", id);
+    await bizListingApi.updateBizListing(parseInt(id), {
+      email: email
+    })
+    setVerifyStep(VerifySteps.ADD_ID_CARD)
   };
 
   const handleDirectToStorePage = () => {
@@ -277,7 +270,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
-      await bizListingApi.updateBizListing(userInfo.biz_id, {
+      await bizListingApi.updateBizListing(parseInt(id), {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
       });
       if (userInfo.type_handle === "Claim") {
@@ -398,16 +391,16 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       )}
       {verifyStep === VerifySteps.CONFIRM_EMAIL && (
         <div className={styles.form}>
-          <div className={styles.header}>Email Information</div>
+          <div className={styles.header}>Email information</div>
           <p>Please confirm your email to receive billing & invoice</p>
           <Input
-            placeholder="Type Email"
+            placeholder="Enter Email"
             width="100%"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEmail(e.target.value)
             }
           />
-          <Button text="Save" onClick={handleConfirmEmail} disabled={!otp} />
+          <Button text="Save" onClick={handleConfirmEmail} disabled={!email} />
         </div>
       )}
       {verifyStep === VerifySteps.ADD_ID_CARD && (
@@ -557,7 +550,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  return { props: { tier: context.query.tier || Tiers.FREE } };
+  return {
+    props: {
+      tier: context.query.tier || Tiers.FREE,
+      id: context.query.id || null,
+    },
+  };
 }
 
 export default BizUserVerify;
