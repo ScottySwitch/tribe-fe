@@ -196,12 +196,11 @@ const PromotionsPage = () => {
   const checkLogin = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     if (userInfo.token) {
-      handleDealsDetails(true, promotion)
+      handleDealsDetails(true, promotion);
+    } else {
+      setShowAuthPopup(true);
     }
-    else {
-      setShowAuthPopup(true)
-    }
-  }
+  };
 
   return (
     <div className={styles.wrapper_promotions}>
@@ -241,11 +240,7 @@ const PromotionsPage = () => {
                   <PromotionCard
                     key={index}
                     title={get(promotion, "attributes.name")}
-                    imgUrl={
-                      get(promotion, "attributes.images")
-                        ? promotion.attributes.images[0]
-                        : "https://picsum.photos/200/300"
-                    }
+                    imgUrl={get(promotion, "attributes.images[0]")}
                     expiredAt={`${get(
                       promotion,
                       "attributes.start_date"
@@ -302,11 +297,7 @@ const PromotionsPage = () => {
                   <PromotionCard
                     key={index}
                     title={get(promotion, "attributes.name")}
-                    imgUrl={
-                      get(promotion, "attributes.images")
-                        ? promotion.attributes.images[0]
-                        : "https://picsum.photos/200/300"
-                    }
+                    imgUrl={get(promotion, "attributes.images[0]")}
                     expiredAt={`${get(
                       promotion,
                       "attributes.start_date"
@@ -340,6 +331,7 @@ const PromotionsPage = () => {
                 {Array.isArray(get(bizListing, "biz_listings.data")) &&
                   get(bizListing, "biz_listings.data")?.map((card, index) => (
                     <Link
+                      passHref
                       href={`/biz/home/${get(card, "attributes.slug")}`}
                       key={index}
                     >
@@ -367,7 +359,11 @@ const PromotionsPage = () => {
                         }
                         description={get(card, "attributes.description")}
                         price={get(card, "attributes.min_price")}
-                        currency={get(card, "attributes.currency") ? get(card, "attributes.currency")?.toUpperCase() : ""}
+                        currency={
+                          get(card, "attributes.currency")
+                            ? get(card, "attributes.currency")?.toUpperCase()
+                            : ""
+                        }
                         categories={card.categories}
                         tags={get(card, "attributes.tags.data")}
                         iconTag={true}
@@ -397,11 +393,7 @@ const PromotionsPage = () => {
                   <PromotionCard
                     key={index}
                     title={get(promotion, "attributes.name")}
-                    imgUrl={
-                      get(promotion, "attributes.images")
-                        ? promotion.attributes.images[0]
-                        : "https://picsum.photos/200/300"
-                    }
+                    imgUrl={get(promotion, "attributes.images[0]")}
                     expiredAt={`${get(
                       promotion,
                       "attributes.start_date"

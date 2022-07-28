@@ -54,7 +54,7 @@ const StepOne = ({
   });
 
   const [avatar, setAvatar] = useState([
-    require("public/images/default-avatar.png"),
+    require("public/images/default-avatar.svg"),
   ]);
   // If user is come from Facebook, Google
   useEffect(() => {

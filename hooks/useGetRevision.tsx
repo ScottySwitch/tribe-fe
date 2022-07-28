@@ -11,9 +11,12 @@ const useGetRevision = (listingSlug?: string) => {
   const [revisionListing, setRevisionListing] = useState<any>({});
   const router = useRouter();
 
-  const getRevisionId = async () => {
+  const getRevisionId = async (currentAttributes) => {
     const formatBizListingData = {
+      name: revisionListing.name,
+      slug: revisionListing.slug,
       is_accepted: false,
+      ...currentAttributes,
     };
     const response = await bizListingRevision.createBizListingRevision(
       formatBizListingData

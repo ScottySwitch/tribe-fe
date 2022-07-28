@@ -51,19 +51,16 @@ const PromotionCard = (props: PromotionProps) => {
   };
 
   return (
-    <div
-      style={{ width }}
-      className={styles.promotion_card}
-      onClick={onCardClick}
-    >
+    <div style={{ width }} className={styles.promotion_card}>
       <div className={avatarClassName}>
         {imgUrl && (
           <Image
-            src={imgUrl}
+            src={imgUrl || require("public/images/default-avatar.svg")}
             width="100%"
             height="100%"
             alt="promotion-alt"
             layout="responsive"
+            objectFit="cover"
             className={styles.promotion_image}
           />
         )}
@@ -73,7 +70,7 @@ const PromotionCard = (props: PromotionProps) => {
           </div>
         )}
       </div>
-      <div className={styles.promotion_info}>
+      <div className={styles.promotion_info} onClick={onCardClick}>
         <div>
           <h3 className={styles.promotion_title}>{title}</h3>
           <div className={styles.promotion_date}>

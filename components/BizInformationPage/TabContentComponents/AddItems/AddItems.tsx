@@ -126,6 +126,7 @@ const AddItems = (props: AddItemsProps) => {
               <div className="flex gap-3">
                 <SelectInput
                   width="50%"
+                  type="number"
                   options={currencyOptions}
                   selectPosition="suffix"
                   value={{ input: item.price, select: item.currency }}
@@ -137,12 +138,13 @@ const AddItems = (props: AddItemsProps) => {
                 />
                 <SelectInput
                   width="50%"
+                  type="number"
                   options={discountTypeOptions}
                   selectPosition="suffix"
                   placeholder="Enter discount"
                   value={{ input: item.discount, select: item.discountType }}
                   onChange={(e: any) => {
-                    handleChangeItem(item.id, "discountType", e.select.value);
+                    handleChangeItem(item.id, "discount_unit", e.select.value);
                     handleChangeItem(item.id, "discount", e.input);
                   }}
                 />

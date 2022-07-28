@@ -3,6 +3,7 @@ import Icon from "components/Icon/Icon";
 import Image from "next/image";
 import styles from "./InforCard.module.scss";
 import { useState } from "react";
+import { CurrencyValues } from "enums";
 
 export interface InforCardProps {
   className?: string;
@@ -13,10 +14,12 @@ export interface InforCardProps {
   tags?: string[];
   iconTag?: boolean;
   price?: string | number;
-  currency?: string | number;
+  currency?: string;
   isVerified?: boolean;
+  discount?: string | number;
   rateNumber?: number;
   followerNumber?: number;
+  discount_unit?: string;
   description?: string;
   width?: string | number;
   validUntil?: any;
@@ -37,6 +40,8 @@ const InforCard = (props: InforCardProps) => {
     categories,
     tags,
     iconTag = false,
+    discount_unit,
+    discount,
     price,
     isVerified,
     width,
@@ -118,10 +123,8 @@ const InforCard = (props: InforCardProps) => {
             {!!rate && followerNumber && (
               <Icon icon="dot" size={10} className={styles.dot} />
             )}
-            {followerNumber && followerNumber > 0 ? (
+            {!!followerNumber && followerNumber > 0 && (
               <div>{followerNumber} followers</div>
-            ) : (
-              <div></div>
             )}
           </div>
           {description && (
@@ -141,11 +144,26 @@ const InforCard = (props: InforCardProps) => {
           </div>
         </div>
         <div className={styles.footer}>
-          {price && (
-            <div className={styles.price}>
-              From <span>{price + " " + currency}</span>
+          <div className="flex gap-1 items-center">
+            {price && (
+              <div className={styles.price}>
+                {price} {!!currency && currency.toUpperCase()}
+              </div>
+            )}
+            {typeof discount === "number" &&
+              typeof price === "number" &&
+              discount_unit === CurrencyValues.PERCENTAGE && (
+                <div className={styles.discount_amount}>
+                  {(price * (discount / 100 + 1)).toFixed(2)} {currency}
+                </div>
+              )}
+          </div>
+          {discount && (
+            <div className={styles.discount}>
+              {discount} {!!discount_unit && discount_unit.toUpperCase()} OFF
             </div>
           )}
+
           {sortingTags.length > 0 && (
             <div className={styles.tags}>{renderSortingTags()}</div>
           )}

@@ -73,7 +73,10 @@ const DealDetailModal = (props: DealDetailModalProps) => {
         </div>
         <div className={styles.cover_image}>
           <Image
-            src={data.images ? data.images[0] : "https://picsum.photos/678/169"}
+            src={
+              get(data, "images[0]") ||
+              require("public/images/default-avatar.svg")
+            }
             alt={data.name}
             layout="fill"
             objectFit="contain"

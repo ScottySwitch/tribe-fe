@@ -152,27 +152,14 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {content && <p className={styles.content}>{content}</p>}
-        {Array.isArray(listImage) && listImage.length > 0 && (
-          <ul className={styles.image_list}>
-            {listImage.map((image, index) => (
-              <li
-                key={index}
-                className={styles.image_item}
-                onClick={() => setShowAlbumModal(true)}
-              >
-                {typeof image === "string" && (
-                  <Image
-                    src={image}
-                    height={106}
-                    width={106}
-                    className="rounded-2xl cursor-pointer"
-                    alt=""
-                  />
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+        <Upload
+          onImageClick={() => setShowAlbumModal(true)}
+          disabled
+          type="media"
+          fileList={listImage}
+          isPaid={isPaid}
+          isViewPage
+        />
         {dateVisit && (
           <div className={styles.date_visit}>
             <strong>Date of visit: </strong>

@@ -1,3 +1,9 @@
+import React, { useEffect, useState } from "react";
+import { get } from "lodash";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { useContext } from "react";
+
 import {
   countryList,
   educationLevels,
@@ -13,17 +19,14 @@ import Select from "components/Select/Select";
 import SelectInput from "components/SelectInput/SelectInput";
 import Upload from "components/Upload/Upload";
 import Button from "components/Button/Button";
-import React, { useEffect, useState } from "react";
-import Modal, { ModalFooter, ModalHeader } from "components/Modal/Modal";
-import styles from "./TabContent.module.scss";
-import Api from "services";
+import Modal, { ModalFooter } from "components/Modal/Modal";
 import AuthApi from "services/auth";
-import { get } from "lodash";
-import { useForm } from "react-hook-form";
 import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils";
 import Loader from "components/Loader/Loader";
 import UserApi from "services/user";
-import { toast } from "react-toastify";
+import { UserInforContext } from "Context/UserInforContext";
+
+import styles from "./TabContent.module.scss";
 
 const ModalNewPhone = (props) => {
   const { visible, onClose, onNext } = props;
@@ -92,7 +95,10 @@ const UserInformation = () => {
   const [showModalOTP, setShowModalOTP] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<{ [key: string]: any }>({});
 
-  const { register, handleSubmit, setValue, getValues, reset } = useForm();
+  const { register, handleSubmit, setValue, getValues, formState, reset } =
+    useForm({ mode: "onChange" });
+
+  const { updateUser } = useContext(UserInforContext);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -142,6 +148,7 @@ const UserInformation = () => {
 
     UserApi.updateUser(userInfor.id, submitData)
       .then((res) => {
+        const userData = get(res, "data") || {};
         toast.success("Update successfully!", {
           autoClose: 2000,
           position: "top-right",
@@ -149,6 +156,7 @@ const UserInformation = () => {
           closeOnClick: true,
         });
         setLoading(true);
+        updateUser({ ...userData });
         window.scrollTo(0, 0);
       })
       .catch((err) =>
@@ -179,7 +187,7 @@ const UserInformation = () => {
               type="avatar"
               className="rounded-full max-w-max mx-auto"
               fileList={[
-                userInfor.avatar || require("public/images/default-avatar.png"),
+                userInfor.avatar || require("public/images/default-avatar.svg"),
               ]}
               onChange={(imgs) => setValue("avatar", imgs[0])}
             />
@@ -209,6 +217,7 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <SelectInput
+              isClearable
               key={getValues("phone_number")}
               label="Phone number"
               placeholder="Phone number"
@@ -237,7 +246,7 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <div className={styles.form_label}>Gender</div>
-            <div className="flex gap-[30px]">
+            <div className="flex gap-5 flex-wrap">
               {genderOptions.map((item) => (
                 <Radio
                   key={item.value}
