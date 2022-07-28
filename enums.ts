@@ -47,7 +47,7 @@ export enum ListingTabs {
   SERVICE = "services",
   PRODUCT = "products",
   DISH = "dishes",
-  MENU = "menu",
+  MENU = "menus",
   DEAL = "deals",
 }
 
