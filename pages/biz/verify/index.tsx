@@ -1,6 +1,12 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState, useCallback, useEffect } from "react";
+import {
+  ChangeEvent,
+  useState,
+  useCallback,
+  useEffect,
+  useContext,
+} from "react";
 
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
@@ -20,14 +26,18 @@ import { formattedAreaCodes } from "constant";
 import styles from "styles/BizUserVerify.module.scss";
 import moment from "moment";
 import bizListingApi from "services/biz-listing";
+import { UserInforContext } from "Context/UserInforContext";
 interface BizUserVerifyProps {
   tier: string;
 }
 
 const BizUserVerify = (props: BizUserVerifyProps) => {
   const { tier } = props;
+  const { user } = useContext(UserInforContext);
+
   const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [showResultModal, setShowResultModal] = useState(false);
@@ -52,7 +62,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   let baseURL = process.env.NEXT_PUBLIC_API_URL;
   // let baseURL =
   //   "https://2584-2001-ee0-500d-3a90-ec3f-d03b-63d9-f470.ap.ngrok.io/";
-
 
   useEffect(() => {
     const sessionId = router.query.sessionId;
@@ -211,11 +220,19 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     } else {
       const result = await AuthApi.otpPhoneConfirm({ otp });
       if (result.data.success) {
-        setVerifyStep(VerifySteps.ADD_ID_CARD);
+        setVerifyStep(VerifySteps.CONFIRM_EMAIL);
       } else {
         alert("Wrong OTP");
       }
     }
+  };
+
+  const handleConfirmEmail = async () => {
+    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+    await bizListingApi.updateBizListing(userInfo.biz_id, {
+      email: email,
+    });
+    setVerifyStep(VerifySteps.ADD_ID_CARD);
   };
 
   const handleDirectToStorePage = () => {
@@ -379,6 +396,20 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           />
         </div>
       )}
+      {verifyStep === VerifySteps.CONFIRM_EMAIL && (
+        <div className={styles.form}>
+          <div className={styles.header}>Email Information</div>
+          <p>Please confirm your email to receive billing & invoice</p>
+          <Input
+            placeholder="Type Email"
+            width="100%"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
+          />
+          <Button text="Save" onClick={handleConfirmEmail} disabled={!otp} />
+        </div>
+      )}
       {verifyStep === VerifySteps.ADD_ID_CARD && (
         <div className={styles.form}>
           <div className={styles.header}>
@@ -466,9 +497,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <div className="flex justify-center gap-5 w-full">
-            <Button 
-              width="30%" variant="no-outlined" text="Change tier" 
-                onClick={() => verifyStep}
+            <Button
+              width="30%"
+              variant="no-outlined"
+              text="Change tier"
+              onClick={() => verifyStep}
             />
             {paymentMethod === "stripe" ? (
               <Button

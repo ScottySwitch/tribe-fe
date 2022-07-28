@@ -49,7 +49,7 @@ import { UserInforContext } from "Context/UserInforContext";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
-  const { user } = useContext(UserInforContext);
+  const { user, updateUser } = useContext(UserInforContext);
 
   const [userInfo, setUserInfo] = useState<any>({});
   const [category, setCategory] = useState(Categories.EAT);

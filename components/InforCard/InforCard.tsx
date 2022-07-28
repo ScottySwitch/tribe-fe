@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export interface InforCardProps {
   className?: string;
-  imgUrl: string;
+  imgUrl?: string;
   title?: string;
   rate?: number;
   categories?: string[];
