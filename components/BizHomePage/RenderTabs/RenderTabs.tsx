@@ -302,12 +302,11 @@ const RenderTabs = (props: {
       break;
     case ListingTabs.DEAL:
       userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const blankTextDeal =
-        userInfo && userInfo.token
-          ? isPaid
-            ? "There are no deal yet"
-            : "Upgrade to upload"
-          : "Login/sign up to see deals";
+      const blankTextDeal = get(userInfo, "token")
+        ? isPaid
+          ? "There are no deal yet"
+          : "Upgrade to upload"
+        : "Login/sign up to see deals";
       tabContent = (
         <TabContent
           isPaid={isPaid}
@@ -315,7 +314,7 @@ const RenderTabs = (props: {
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={userInfo && userInfo.token ? (isPaid ? dealList : []) : []}
+          list={get(userInfo, "token") ? (isPaid ? dealList : []) : []}
           blankImg={require("public/images/no-product.svg")}
           blankText={blankTextDeal}
           buttonText="Add deals now"

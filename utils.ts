@@ -154,6 +154,7 @@ export const changeToSlugify = (str) => {
 };
 
 export const isPaidUser = (time) => {
+  if (!time) return false
   const timeCalcDistance = parseISO(moment(time).format("YYYY-MM-DD HH:mm:ss"));
   let diff_in_minutes = moment().diff(moment(timeCalcDistance), "minutes");
   return diff_in_minutes < 0 ? true : false;
