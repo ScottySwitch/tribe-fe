@@ -1,38 +1,38 @@
-import Break from "components/Break/Break"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import { bizInformationDefaultFormData } from "constant"
-import React, { useState } from "react"
-import styles from "./TabContent.module.scss"
+import Break from "components/Break/Break";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import { bizInformationDefaultFormData } from "constant";
+import React, { useState } from "react";
+import styles from "./TabContent.module.scss";
 
 interface VerificationProps {
-  isPaid: boolean
+  isPaid: boolean;
 }
 
 const Verification = (props: VerificationProps) => {
-  const { isPaid } = props
-  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
-  const { idVerificationStatus = "processing" } = formData
-  
+  const { isPaid } = props;
+  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData);
+  const { idVerificationStatus = "processing" } = formData;
+
   const idCardStatusIcon = () => {
-    let icon
+    let icon;
     switch (idVerificationStatus) {
       case "verified":
-        icon = "verified-tag"
-        break
+        icon = "verified-tag";
+        break;
       case "processing":
-        icon = "processing-tag"
-        break
+        icon = "processing-tag";
+        break;
       case "unverified":
-        icon = "unverified-tag"
-        break
+        icon = "unverified-tag";
+        break;
       default:
-        icon = ""
-        break
+        icon = "";
+        break;
     }
-    return icon
-  }
+    return icon;
+  };
   return (
     <SectionLayout
       title="Verification"
@@ -48,7 +48,6 @@ const Verification = (props: VerificationProps) => {
         width={300}
         suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
       />
-      {/* <div className={styles.change_link}>Change phone number</div> */}
       {isPaid && (
         <React.Fragment>
           <br />
@@ -59,11 +58,10 @@ const Verification = (props: VerificationProps) => {
             width={300}
             suffix={<Icon icon={idCardStatusIcon()} style={{ width: 70 }} />}
           />
-          {/* <div className={styles.change_link}>Resend ID Card</div> */}
         </React.Fragment>
       )}
     </SectionLayout>
-  )
-}
+  );
+};
 
-export default Verification
+export default Verification;
