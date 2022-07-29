@@ -155,7 +155,6 @@ const Category = (props: any) => {
         };
         break;
     }
-    console.log(defaultCategoryInfor);
     setCategoryInfor(defaultCategoryInfor);
     getData(category);
     // eslint-disable-next-line react-hooks/exhaustive-deps
