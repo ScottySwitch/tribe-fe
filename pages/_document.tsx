@@ -8,6 +8,12 @@ export default function Document() {
         things to do, where to stay and how to get there
       </title>
       <Head>
+        <meta property="og:title" content="TITLE OF YOUR WEBSITE" />
+        <meta property="og:image" content="https://YOUR_THUMBNAIL_IMAGE_URL" />
+        <meta property="og:description" content="DESCRIPTION OF YOUR SITE" />
+        <meta property="og:url" content="URL OF YOUR WEBSITE" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="627" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
