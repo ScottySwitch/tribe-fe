@@ -16,7 +16,7 @@ export default function Document() {
         <meta property="og:image:height" content="627" />
         <meta
           name="google-site-verification"
-          content="google-site-verification=2VDEkCpliYr8FkS2an1M0kvjTAL3iRJSiBedyiBTrLs"
+          content="2VDEkCpliYr8FkS2an1M0kvjTAL3iRJSiBedyiBTrLs"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
