@@ -11,7 +11,7 @@ import { formattedAreaCodes, locations, phoneAreaCodes } from "constant";
 import { get } from "lodash";
 import { Router } from "next/router";
 import { IAddListingForm } from "pages/add-listing";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   censoredPhoneNumber,
@@ -24,6 +24,7 @@ import styles from "./TabContent.module.scss";
 import useGetRevision from "hooks/useGetRevision";
 import BizListingRevision from "services/biz-listing-revision";
 import Select from "components/Select/Select";
+import { UserInforContext } from "Context/UserInforContext";
 
 export const socialMedias = [
   { label: <Icon icon="twitter-logo" />, value: "twitter" },
@@ -41,11 +42,10 @@ interface BusinessInformationProps {
 const BusinessInformation = (props: BusinessInformationProps) => {
   const { listing: formData, loading, isRevision, onSubmit } = props;
   const router = useRouter();
+  const { user, updateUser } = useContext(UserInforContext);
 
   const [isEdit, setIsEdit] = useState(false);
-  const isPaid = get(formData, "expiration_date")
-    ? isPaidUser(get(formData, "expiration_date"))
-    : false;
+  const isPaid = isPaidUser(get(formData, "expiration_date"));
 
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
 

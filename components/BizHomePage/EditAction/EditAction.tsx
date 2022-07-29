@@ -2,12 +2,15 @@ import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./EditAction.module.scss";
 import SelectInput from "components/SelectInput/SelectInput";
 import { formattedAreaCodes, phoneAreaCodes } from "constant";
 import { useRouter } from "next/router";
 import { removeZeroInPhoneNumber } from "utils";
+import Router from "next/router";
+import { get } from "lodash";
+import { UserInforContext } from "Context/UserInforContext";
 
 interface EditActionProps {
   isOwned?: boolean;
@@ -33,6 +36,8 @@ const EditAction = (props: EditActionProps) => {
     onPublishPage,
     onApplyAction,
   } = props;
+
+  const { user, updateUser } = useContext(UserInforContext);
 
   const [showEditActionModal, setShowEditActionModal] = useState(false);
   const [showBuyNow, setShowBuyNow] = useState(false);
@@ -159,6 +164,13 @@ const EditAction = (props: EditActionProps) => {
     }
   };
 
+  const handleHref = () => {
+    updateUser({
+      type_handle: "Claim",
+    });
+    Router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
+  };
+
   return (
     <React.Fragment>
       {isViewPage && isPaid && action?.value && (
@@ -203,7 +215,7 @@ const EditAction = (props: EditActionProps) => {
             Upgrade to Basic Tier to access features that help grow your
             business!
           </p>
-          <a onClick={() => router.push(`/claim/${id}`)}>Upgrade now</a>
+          <a onClick={handleHref}>Upgrade now</a>
         </div>
       )}
       {klookUrl && (

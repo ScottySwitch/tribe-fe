@@ -19,6 +19,8 @@ import { formattedAreaCodes } from "constant";
 import styles from "styles/BizUserVerify.module.scss";
 import moment from "moment";
 import bizListingApi from "services/biz-listing";
+import EmailApi from "services/email";
+import { result } from "lodash";
 interface BizUserVerifyProps {
   tier: string;
   id: string;
@@ -32,6 +34,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [subscription, setSubscription] = useState("");
   const [showResultModal, setShowResultModal] = useState(false);
   const [frontImageIdentity, setFrontImageIdentity] = useState<string>("");
   const [backImageIdentity, setBackImageIdentity] = useState<string>("");
@@ -145,7 +148,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const baseUrl = userInfo.strapiStripeUrl;
     const retrieveCheckoutSessionUrl =
-      baseUrl + "/strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId;
+      baseUrl + "strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId;
     fetch(retrieveCheckoutSessionUrl, {
       method: "get",
       mode: "cors",
@@ -165,7 +168,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             console.info("website reloded");
           } else {
             // store payment in strapi
-            const stripePaymentUrl = baseUrl + "/strapi-stripe/stripePayment";
+            const stripePaymentUrl = baseUrl + "strapi-stripe/stripePayment";
             fetch(stripePaymentUrl, {
               method: "post",
               body: JSON.stringify({
@@ -182,6 +185,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               headers: new Headers({
                 "Content-Type": "application/json",
               }),
+            }).then(async () => {
+              let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+              await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
+                subscription: response?.subscription,
+              });
             });
           }
         }
@@ -191,7 +199,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleRequestOTP = async () => {
     //send OPT
     await AuthApi.otpPhoneGenerate(phoneNumber);
-    console.log(phoneNumber);
+    bizListingApi.updateBizListing(parseInt(id), {
+      number_verify: phoneNumber,
+    });
     setVerifyStep(VerifySteps.CONFIRM_OTP);
   };
 
@@ -220,12 +230,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   };
 
   const handleConfirmEmail = async () => {
-    console.log("email", email);
-    console.log("id", id);
     await bizListingApi.updateBizListing(parseInt(id), {
-      email: email
-    })
-    setVerifyStep(VerifySteps.ADD_ID_CARD)
+      email: email,
+    });
+    setVerifyStep(VerifySteps.ADD_ID_CARD);
   };
 
   const handleDirectToStorePage = () => {
@@ -244,6 +252,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     if (frontImageIdentity != "" && backImageIdentity != "") {
       setVerifyStep(VerifySteps.ADD_PAYMENT);
       const userId = userInfo.id;
+      bizListingApi.updateBizListing(parseInt(id), {
+        provided: type.value,
+      });
       if (userId) {
         const result = UserApi.updateUser(parseInt(userId), {
           front_papers_identity: frontImageIdentity,
@@ -270,9 +281,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
-      await bizListingApi.updateBizListing(parseInt(id), {
+      await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
       });
+      const sendMail = EmailApi.paymentSuccess(userInfo.biz_slug);
       if (userInfo.type_handle === "Claim") {
         const result = await BizInvoinceApi.createBizInvoice({
           value: parseInt(price),

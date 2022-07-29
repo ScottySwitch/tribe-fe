@@ -82,8 +82,10 @@ const ClaimListing = (context) => {
     setClaimStep(ClaimStep.CHOOSE_TIER);
     userInfo = {
       ...userInfo,
+      biz_id: listingId,
+      biz_slug: get(listing, "attributes.slug"),
       role: get(form, "role.value"),
-      pay_price: "600",
+      pay_price: "150",
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
   };

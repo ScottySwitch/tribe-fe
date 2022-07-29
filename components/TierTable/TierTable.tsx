@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Switch from "react-switch";
+import { isPaidUser } from "utils";
 
 import styles from "./TierTable.module.scss";
 
@@ -136,10 +137,16 @@ const DesktopTierTable = ({
   onDirectToVerification,
   setIsPayYearly,
   isPayYearly,
+  isChangeTier,
+  isPaid,
+  expirationDate,
 }: {
   onDirectToVerification?(tier: Tiers): void;
   setIsPayYearly?: (value: boolean) => void;
   isPayYearly: boolean;
+  isChangeTier?: boolean;
+  isPaid?: boolean;
+  expirationDate?: any;
 }) => {
   const handleChangePayPrice = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -151,14 +158,18 @@ const DesktopTierTable = ({
     }
     localStorage.setItem("user", JSON.stringify(userInfo));
   };
+
   return (
     <div className={styles.tier_desktop}>
       <table>
         <colgroup>
           <col width="34%" />
-          <col width="23%" />
-          <col width="23%" style={{ backgroundColor: "#ECF7FF" }} />
-          <col width="20%" />
+          <col width={!isChangeTier ? "23%" : "33%"} />
+          <col
+            width={!isChangeTier ? "23%" : "33%"}
+            style={{ backgroundColor: "#ECF7FF" }}
+          />
+          {!isChangeTier && <col width="20%" />}
         </colgroup>
         <thead>
           <tr>
@@ -173,7 +184,7 @@ const DesktopTierTable = ({
               />
               <span>Pay yearly</span>
             </th>
-            {tiers.map((tier) => (
+            {tiers.map((tier, index) => (
               <th key={tier.name} style={{ position: "relative" }}>
                 {tier.recommended && <RecommendTag />}
                 <div className={styles.tier_name}>{tier.name}</div>
@@ -182,23 +193,38 @@ const DesktopTierTable = ({
                 </div>
                 <div>
                   <Link href={"/"}>View Demo page</Link>
+                  {isChangeTier &&
+                    expirationDate &&
+                    tier.value !== Tiers.FREE && <p className="mt-[3px]">{expirationDate}</p>}
                 </div>
                 <br />
-                <Button
-                  variant={tier.value === Tiers.FREE ? "outlined" : "primary"}
-                  text="Select"
-                  width="70%"
-                  size="small"
-                  onClick={() => onDirectToVerification?.(tier.value)}
-                />
+                {((tier.value !== Tiers.FREE && !isPaid) ||
+                  (tier.value === Tiers.FREE && isPaid) ||
+                  !isChangeTier) && (
+                  <Button
+                    variant={tier.value === Tiers.FREE ? "outlined" : "primary"}
+                    text={
+                      isChangeTier
+                        ? tier.value === Tiers.FREE
+                          ? "Downgrade"
+                          : "Upgrade now"
+                        : "Select"
+                    }
+                    width="70%"
+                    size="small"
+                    onClick={() => onDirectToVerification?.(tier.value)}
+                  />
+                )}
               </th>
             ))}
-            <th>
-              <div className={styles.tier_name}>Premium Tier</div>
-              <div className={styles.tier_price}>
-                <span>Comming soon</span>
-              </div>
-            </th>
+            {!isChangeTier && (
+              <th>
+                <div className={styles.tier_name}>Premium Tier</div>
+                <div className={styles.tier_price}>
+                  <span>Comming soon</span>
+                </div>
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -207,7 +233,7 @@ const DesktopTierTable = ({
               <td className={styles.tier_feature}>{row.feature}</td>
               <td>{row.free}</td>
               <td>{row.basic}</td>
-              <td>{row.premium}</td>
+              {!isChangeTier && <td>{row.premium}</td>}
             </tr>
           ))}
         </tbody>
@@ -220,10 +246,16 @@ const MobileTierTable = ({
   onDirectToVerification,
   setIsPayYearly,
   isPayYearly,
+  isPaid,
+  isChangeTier,
+  expirationDate,
 }: {
   onDirectToVerification?(tier: Tiers): void;
   setIsPayYearly?: (value: boolean) => void;
   isPayYearly: boolean;
+  isChangeTier?: boolean;
+  isPaid?: boolean;
+  expirationDate?: any;
 }) => {
   const [tierList, setTierList] = useState<string[]>([]);
   const handleChangePayPrice = () => {
@@ -303,24 +335,34 @@ const MobileTierTable = ({
 };
 
 const TierTable = ({
+  isChangeTier,
   isPaid,
   isPayYearly,
   onSetIsPayYearly,
   onDirectToVerification,
+  expirationDate,
 }: {
+  isChangeTier?: boolean;
   isPaid?: boolean;
   isPayYearly: boolean;
   onSetIsPayYearly?: (e: any) => void;
   onDirectToVerification?(tier: Tiers): void;
+  expirationDate?: any;
 }) => {
   return (
     <div className={styles.tier}>
       <DesktopTierTable
+        expirationDate={expirationDate}
+        isPaid={isPaid}
+        isChangeTier={isChangeTier}
         onDirectToVerification={onDirectToVerification}
         isPayYearly={isPayYearly}
         setIsPayYearly={onSetIsPayYearly}
       />
       <MobileTierTable
+        expirationDate={expirationDate}
+        isPaid={isPaid}
+        isChangeTier={isChangeTier}
         onDirectToVerification={onDirectToVerification}
         isPayYearly={isPayYearly}
         setIsPayYearly={onSetIsPayYearly}
