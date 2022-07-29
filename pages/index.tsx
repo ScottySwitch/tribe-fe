@@ -34,7 +34,7 @@ const Home: NextPage = (props: any) => {
 
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState<number>(16);
-  const [listingForYou, setListingForYou] = useState<Ilisting[]>([]);
+  // const [listingForYou, setListingForYou] = useState<Ilisting[]>([]);
   const [listings, setListings] = useState<{
     buy: Ilisting[];
     eat: Ilisting[];
@@ -73,26 +73,26 @@ const Home: NextPage = (props: any) => {
     };
 
     location && getListings();
-    userInfo && userInfo.token && getBizListingForYou(true);
+    // userInfo && userInfo.token && getBizListingForYou(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
-  const getBizListingForYou = async (isChangeLocation?: boolean) => {
-    setLoading(true);
+  // const getBizListingForYou = async (isChangeLocation?: boolean) => {
+  //   setLoading(true);
 
-    const dataListing = await BizListingApi.getBizListingForYou({
-      limit: isChangeLocation ? 16 : limit,
-      country: location || "singapore",
-    });
-    const rawForYouListing = get(dataListing, "data.data");
-    const listingArray = isChangeLocation
-      ? formatListingArray(rawForYouListing)
-      : listingForYou.concat(formatListingArray(rawForYouListing));
+  //   const dataListing = await BizListingApi.getBizListingForYou({
+  //     limit: isChangeLocation ? 16 : limit,
+  //     country: location || "singapore",
+  //   });
+  //   const rawForYouListing = get(dataListing, "data.data");
+  //   const listingArray = isChangeLocation
+  //     ? formatListingArray(rawForYouListing)
+  //     : listingForYou.concat(formatListingArray(rawForYouListing));
 
-    setListingForYou(listingArray);
-    setLimit(limit + 16);
-    setLoading(false);
-  };
+  //   setListingForYou(listingArray);
+  //   setLimit(limit + 16);
+  //   setLoading(false);
+  // };
 
   if (loading) {
     return (
@@ -324,7 +324,7 @@ const Home: NextPage = (props: any) => {
           </Carousel>
         </SectionLayout>
       )}
-      {isArray(listingForYou) && (
+      {/* {isArray(listingForYou) && (
         <div>
           <SectionLayout className={styles.for_you}>
             <div className={styles.for_you_tag}>
@@ -366,7 +366,7 @@ const Home: NextPage = (props: any) => {
             />
           </SectionLayout>
         </div>
-      )}
+      )} */}
       <div className={styles.introduction}>
         <SectionLayout transparent>
           <div className={styles.header}>
