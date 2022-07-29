@@ -91,7 +91,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         expiration_date: formData.expiration_date,
       });
     } else {
-      await BizListingRevision.createBizListingRevision({
+      await BizListingRevision.createCustom({
         name: data.name,
         slug: formData.slug,
         description: data.description,
@@ -106,27 +106,6 @@ const BusinessInformation = (props: BusinessInformationProps) => {
           instagram: data.instagram ? data.instagram : null,
           twitter: data.twitter ? data.twitter : null,
         },
-        is_accepted: false,
-        expiration_date: formData.expiration_date,
-        biz_listing: formData.id.toString(),
-        parent_id: formData.id.toString(),
-        // price_range: priceRange,
-        min_price: parseFloat(formData?.min_price) || null,
-        max_price: parseFloat(formData?.max_price) || null,
-        currency: formData?.currency.toLocaleLowerCase() || null,
-        action: formData.action,
-        images: formData.images,
-        website: formData.website,
-        facilities_data: formData.facilities_data,
-        open_hours: formData.open_hours,
-        tags: formData.tags.map((item) => item.id),
-        is_verified: formData.is_verified,
-        products: formData.products.map((item) => item.id) || [],
-        menus: formData.menus.map((item) => item.id) || [],
-        deals: formData.deals.map((item) => item.id) || [],
-        biz_invoices: formData.bizInvoices.map((item) => item.id) || [],
-        reviews: formData.reviews.map((item) => item.id) || [],
-        categories: formData.categories.map((item) => item.id) || [],
       });
     }
     setIsEdit(false);

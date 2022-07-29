@@ -12,44 +12,13 @@ const useGetRevision = (listingSlug?: string) => {
   const router = useRouter();
 
   const getRevisionId = async (currentAttributes) => {
-    console.log("revisionListing", revisionListing);
     const formatBizListingData = {
-      name: get(revisionListing, "name"),
-      slug: get(revisionListing, "slug"),
-      biz_listing: revisionListing.id.toString(),
-      email: revisionListing.email,
-      parent_id: revisionListing.id.toString(),
-      description: revisionListing.description,
-      // price_range: priceRange,
-      min_price: parseFloat(revisionListing?.min_price) || null,
-      max_price: parseFloat(revisionListing?.max_price) || null,
-      currency: revisionListing.currency
-        ? revisionListing.currency.toLocaleLowerCase()
-        : null,
-      action: revisionListing.action,
-      images: revisionListing.images,
-      city: revisionListing.city,
-      country: revisionListing.country,
-      address: revisionListing.address,
-      website: revisionListing.website,
-      phone_number: revisionListing.phone_number,
-      facilities_data: revisionListing.facilitiesData,
-      open_hours: revisionListing.openHours,
-      tags: revisionListing.tags.map((item) => item.id),
-      social_info: revisionListing.social_info,
-      is_verified: false,
+      name: revisionListing.name,
+      slug: revisionListing.slug,
       is_accepted: false,
-      logo: revisionListing.logo,
-      expiration_date: revisionListing.expiration_date,
-      products: revisionListing.products.map((item) => item.id) || [],
-      menus: revisionListing.menus.map((item) => item.id) || [],
-      deals: revisionListing.deals.map((item) => item.id) || [],
-      biz_invoices: revisionListing.biz_invoices.map((item) => item.id) || [],
-      reviews: revisionListing.reviews.map((item) => item.id) || [],
-      categories: revisionListing.categories.map((item) => item.id) || [],
       ...currentAttributes,
     };
-    const response = await bizListingRevision.createBizListingRevision(
+    const response = await bizListingRevision.createCustom(
       formatBizListingData
     );
     return get(response, "data.data.id");
