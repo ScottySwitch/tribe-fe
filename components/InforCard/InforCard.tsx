@@ -9,6 +9,8 @@ export interface InforCardProps {
   className?: string;
   imgUrl?: string;
   title?: string;
+  author?: string;
+  position?: string;
   rate?: number;
   categories?: string[];
   tags?: string[];
@@ -31,9 +33,11 @@ export interface InforCardProps {
 const InforCard = (props: InforCardProps) => {
   const {
     className,
-    imgUrl = "https://picsum.photos/200/300",
+    imgUrl,
     title,
     rate,
+    author,
+    position,
     description,
     rateNumber,
     followerNumber,
@@ -96,18 +100,13 @@ const InforCard = (props: InforCardProps) => {
             <Icon icon="like-solid" color="#e60112" />
           </div>
         )}
-        {imgUrl && (
-          <Image
-            src={src}
-            alt=""
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center"
-            onErrorCapture={() => {
-              setSrc("https://picsum.photos/200/300");
-            }}
-          />
-        )}
+        <Image
+          src={src || require("public/images/default-avatar.svg")}
+          alt=""
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+        />
       </div>
       <div className={styles.details}>
         <div className={styles.title}>{title}</div>
@@ -163,11 +162,12 @@ const InforCard = (props: InforCardProps) => {
               {discount} {!!discount_unit && discount_unit.toUpperCase()} OFF
             </div>
           )}
-
           {sortingTags.length > 0 && (
             <div className={styles.tags}>{renderSortingTags()}</div>
           )}
         </div>
+        {author && <div className={styles.author}>{author}</div>}
+        {position && <div className={styles.position}>{position}</div>}
       </div>
     </div>
   );

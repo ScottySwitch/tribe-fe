@@ -1,31 +1,26 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
+import { useDebounce } from "usehooks-ts";
+import get from "lodash/get";
+import { useRouter } from "next/router";
 import Image from "next/image";
 
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { dummyKeywords, user } from "constant";
 import TopSearches from "components/TopSearches/TopSearches";
 import ListingSearchBox from "components/ListingSearchBox/ListingSearchBox";
-
-import styles from "styles/Claim.module.scss";
 import ListingCard from "components/ListingCard/ListingCard";
 import Button from "components/Button/Button";
-import { useRouter } from "next/router";
 import BizListingApi from "services/biz-listing";
-import { Categories, YesNo } from "enums";
-import SearchListing, {
-  listingTypes,
-} from "components/AddListingPages/PageOne/SearchListing/SearchListing";
-import get from "lodash/get";
+import InforCard from "components/InforCard/InforCard";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { UserInforContext } from "Context/UserInforContext";
-import { useDebounce } from "usehooks-ts";
 import { changeToSlugify } from "utils";
+
+import styles from "styles/Claim.module.scss";
 
 const RightColumn = (props: { listing: { [key: string]: any } }) => {
   const { listing } = props;
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const listingRolesArray =
@@ -70,15 +65,19 @@ const ClaimPage = () => {
   const [location, setLocation] = useState();
   const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
   const getRandomListing = async () => {
-    const result = await BizListingApi.getListingBySlug("", location || 'singapore', 7)
-    const data = get(result, "data.data")
-    setBizListing(data)
-  }
+    const result = await BizListingApi.getListingBySlug(
+      "",
+      location || "singapore",
+      7
+    );
+    const data = get(result, "data.data");
+    setBizListing(data);
+  };
   useEffect(() => {
     if (bizListing.length === 0) {
-      getRandomListing()
+      getRandomListing();
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     const getBizListing = async () => {
@@ -105,6 +104,29 @@ const ClaimPage = () => {
     setListing(e);
   };
 
+  const whyTribes = [
+    {
+      imgUrl: require("public/images/why-tribes-1.png"),
+      author: "Meri Pipenbaher",
+      position: "Founder, Vidly",
+      description:
+        "I used to spend hours writing creative copy, but now all I do is tell Rytr what I need and it writes everything for me. It's the ultimate AI content writer, and a must-have tool for bloggers, marketers, & entrepreneurs. ",
+    },
+    {
+      imgUrl: require("public/images/why-tribes-3.png"),
+      author: "Meri Pipenbaher",
+      position: "Founder, Vidly",
+      description:
+        "I used to spend hours writing creative copy, but now all I do is tell Rytr what I need and it writes everything for me. It's the ultimate AI content writer, and a must-have tool for bloggers, marketers, & entrepreneurs. ",
+    },
+    {
+      imgUrl: require("public/images/why-tribes-2.png"),
+      author: "Meri Pipenbaher",
+      position: "Founder, Vidly",
+      description:
+        "I used to spend hours writing creative copy, but now all I do is tell Rytr what I need and it writes everything for me. It's the ultimate AI content writer, and a must-have tool for bloggers, marketers, & entrepreneurs. ",
+    },
+  ];
   return (
     <div className={styles.claim}>
       <div className="relative bg-white">
@@ -178,6 +200,18 @@ const ClaimPage = () => {
               determine if a product is performing poorly so that you can
               address the issues and work toward success.
             </p>
+          </div>
+        </div>
+      </SectionLayout>
+      <SectionLayout backgroundColor childrenClassName="overflow-hidden">
+        <div className={styles.why_tribes}>
+          <div className={styles.why_tribes_title}>Why Tribes?</div>
+          <div className={styles.why_tribes_container}>
+            <div className={styles.why_tribes_scrollbox}>
+              {whyTribes.map((card, index) => (
+                <InforCard key={index} {...card} />
+              ))}
+            </div>
           </div>
         </div>
       </SectionLayout>
