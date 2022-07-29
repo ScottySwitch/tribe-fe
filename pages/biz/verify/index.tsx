@@ -1,6 +1,14 @@
+import {
+  ChangeEvent,
+  useState,
+  useCallback,
+  useEffect,
+  useContext,
+} from "react";
+import moment from "moment";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState, useCallback, useEffect } from "react";
+import { get, result } from "lodash";
 
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
@@ -8,7 +16,7 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Select from "components/Select/Select";
 import Upload from "components/Upload/Upload";
-import { Tiers, VerifySteps } from "enums";
+import { Tiers, UserType, VerifySteps } from "enums";
 import { removeZeroInPhoneNumber } from "utils";
 import AuthApi from "../../../services/auth";
 import UserApi from "../../../services/user";
@@ -16,11 +24,11 @@ import BizInvoinceApi from "../../../services/biz-invoice";
 import ClaimListingApi from "../../../services/claim-listing";
 import SelectInput from "components/SelectInput/SelectInput";
 import { formattedAreaCodes } from "constant";
-import styles from "styles/BizUserVerify.module.scss";
-import moment from "moment";
 import bizListingApi from "services/biz-listing";
 import EmailApi from "services/email";
-import { result } from "lodash";
+import { UserInforContext } from "Context/UserInforContext";
+
+import styles from "styles/BizUserVerify.module.scss";
 interface BizUserVerifyProps {
   tier: string;
   id: string;
@@ -35,12 +43,17 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [otp, setOtp] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [subscription, setSubscription] = useState("");
+  const [claimedListing, setClaimedListing] = useState<{
+    [key: string]: any;
+  }>({});
   const [showResultModal, setShowResultModal] = useState(false);
   const [frontImageIdentity, setFrontImageIdentity] = useState<string>("");
   const [backImageIdentity, setBackImageIdentity] = useState<string>("");
   const [payPrice, setPayPrice] = useState<string>("");
   const [time, setTime] = useState<number>(30);
   const [type, setType] = useState<any>({});
+
+  const { user, updateUser } = useContext(UserInforContext);
 
   const idTypeOptions = [
     {
@@ -199,9 +212,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleRequestOTP = async () => {
     //send OPT
     await AuthApi.otpPhoneGenerate(phoneNumber);
-    bizListingApi.updateBizListing(parseInt(id), {
-      number_verify: phoneNumber,
-    });
+    bizListingApi
+      .updateBizListing(parseInt(id), {
+        number_verify: phoneNumber,
+      })
+      .then((res) => setClaimedListing(get(res, "data.data.attributes")));
     setVerifyStep(VerifySteps.CONFIRM_OTP);
   };
 
@@ -230,16 +245,30 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   };
 
   const handleConfirmEmail = async () => {
-    await bizListingApi.updateBizListing(parseInt(id), {
-      email: email,
-    });
+    await bizListingApi
+      .updateBizListing(parseInt(id), {
+        email: email,
+      })
+      .then((res) => setClaimedListing(get(res, "data.data.attributes")));
     setVerifyStep(VerifySteps.ADD_ID_CARD);
   };
 
-  const handleDirectToStorePage = () => {
+  const handleDirectToStorePage = async () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.isVeriFy = false;
     localStorage.setItem("user", JSON.stringify(userInfo));
+    console.log(userInfo, userInfo.id);
+
+    await bizListingApi.getOwnerBizListing().then((res) => {
+      const updatedUserInfor = {
+        owner_listings: res.data.data,
+        avatar: get(claimedListing, "logo[0]"),
+        current_listing_slug: claimedListing.slug,
+        user_type: UserType.BIZ_USER,
+      };
+      updateUser(updatedUserInfor);
+    });
+
     if (userInfo.role) {
       router.push(`/biz/home/${userInfo.biz_slug}/edit/`);
     } else {
