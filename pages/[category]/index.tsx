@@ -174,7 +174,6 @@ const Category = (props: any) => {
         ...pagination,
         total: get(dataQuery, "data.meta.pagination.total"),
       });
-      window.scrollTo(0, 1800);
     };
     location && getDataListing(category, pagination.page);
   }, [pagination.page, category, location]);

@@ -72,9 +72,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   };
 
   const onSubmitForm = async (data) => {
-    let createData = {
-      name: data.name,
-      slug: formData.slug,
+    let dataListing = {
       description: data.description,
       phone_number: data.phoneNumber,
       logo: data.logo,
@@ -88,8 +86,13 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         twitter: data.twitter ? data.twitter : null,
       },
     };
+    let createData = {
+      ...dataListing,
+      name: data.name,
+      slug: formData.slug,
+    };
     let updateData = {
-      ...createData,
+      ...dataListing,
       is_accepted: false,
       expiration_date: formData.expiration_date,
     };
