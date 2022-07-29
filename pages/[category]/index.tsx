@@ -155,10 +155,11 @@ const Category = (props: any) => {
         };
         break;
     }
-    getData(category);
+    console.log(defaultCategoryInfor);
     setCategoryInfor(defaultCategoryInfor);
+    getData(category);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [category]);
 
   useEffect(() => {
     const getDataListing = async (categoryId, page) => {
