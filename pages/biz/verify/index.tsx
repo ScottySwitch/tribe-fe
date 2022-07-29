@@ -199,7 +199,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleRequestOTP = async () => {
     //send OPT
     await AuthApi.otpPhoneGenerate(phoneNumber);
-    console.log(phoneNumber);
+    bizListingApi.updateBizListing(parseInt(id), {
+      number_verify: phoneNumber,
+    });
     setVerifyStep(VerifySteps.CONFIRM_OTP);
   };
 
@@ -250,6 +252,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     if (frontImageIdentity != "" && backImageIdentity != "") {
       setVerifyStep(VerifySteps.ADD_PAYMENT);
       const userId = userInfo.id;
+      bizListingApi.updateBizListing(parseInt(id), {
+        provided: type.value,
+      });
       if (userId) {
         const result = UserApi.updateUser(parseInt(userId), {
           front_papers_identity: frontImageIdentity,
