@@ -35,6 +35,7 @@ const BizInformation = (props) => {
   const [isPaid, setIsPaid] = useState(true);
   const [listing, setListing] = useState(defaultAddlistingForm);
   const [isPayYearly, setIsPayYearly] = useState(false);
+  const [isRevision, setIsRevision] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [submitResult, setSubmitResult] = useState(false);
@@ -71,10 +72,13 @@ const BizInformation = (props) => {
 
   useEffect(() => {
     const getListingData = async () => {
-      const data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
+      const data = await BizListingApi.getInfoOwnerBizListingBySlug(
+        listingSlug
+      );
 
       //TODO: Check listing is owned by user before returning biz listing data on BE
       const listing = get(data, "data.data[0]") || {};
+      updateUser({ now_biz_listing: listing });
       if (listing?.expiration_date) {
         setIsPaid(isPaidUser(listing.expiration_date));
       } else {
@@ -83,22 +87,15 @@ const BizInformation = (props) => {
       // setIsPaid(isPaidListing);
       setListing(listing);
       setLoading(false);
+      setIsRevision(get(data, "data.is_revision"));
+      const isOwned = get(data, "data.is_owner");
+
+      if (isOwned === false) {
+        router.push("/");
+      }
     };
-
-    let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    const ownedListingSlugs = isArray(userInfo.owner_listings)
-      ? userInfo.owner_listings.map((item) => get(item, "attributes.slug"))
-      : [];
-    const isOwned = ownedListingSlugs.some((item) => item === listingSlug);
-
-    if (listingSlug && isOwned) {
-      getListingData();
-    } else {
-      router.push("/");
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listingSlug, loading]);
+    getListingData();
+  }, []);
 
   const onSubmit = async (data) => {
     listing.id &&
@@ -135,6 +132,7 @@ const BizInformation = (props) => {
       case InformationList.BUSINESS_INFORMATION:
         return (
           <BusinessInformation
+            isRevision={isRevision}
             listing={listing}
             loading={loading}
             onSubmit={onSubmit}
@@ -193,10 +191,6 @@ const BizInformation = (props) => {
     <SectionLayout backgroundColor>
       <div className={styles.biz_information}>
         <div className={styles.left_col}>
-          <div className={styles.left_col_top}>
-            <div className={styles.progress_bar} />
-            <div>60% to complete your profile!</div>
-          </div>
           <div className={styles.left_col_bottom}>
             {informationList.map((item) => (
               <div
