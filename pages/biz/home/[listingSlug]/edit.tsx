@@ -141,8 +141,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       }
       const listing = get(data, "data.data[0]");
       if (listing) {
-        userInfo.now_biz_listing = listing;
-        localStorage.setItem("user", JSON.stringify(userInfo));
+        updateUser({ now_biz_listing: listing });
         setUserInfo(userInfo);
         const rawTags = listing.tags || [];
         const rawFacilities = listing.facilities_data || [];
@@ -185,7 +184,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           parent_id: item.parent_id,
           name: item.name,
           images: item.images,
-          imgUrl: get(item, "images[0]") ,
+          imgUrl: get(item, "images[0]"),
           information: item.description,
           termsConditions: item.terms_conditions,
           startDate: moment(item.start_date).format("YYYY/MM/DD"),
@@ -386,10 +385,14 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         parent_id: bizListing.id.toString(),
         description: description,
         // price_range: priceRange,
+        email: bizListing.email,
         min_price: parseFloat(priceRange?.min) || null,
         max_price: parseFloat(priceRange?.max) || null,
         currency: priceRange?.currency.toLocaleLowerCase() || null,
         action: action,
+        city: bizListing.city,
+        country: bizListing.country,
+        address: bizListing.address,
         images: listingImages,
         website: socialInfo,
         phone_number: phoneNumber,
@@ -401,6 +404,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         subscription: bizListing.subscription,
         logo: logo,
         expiration_date: bizListing.expiration_date,
+        social_info: bizListing.social_info,
         products: currentItemList.map((item) => item.id) || [],
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],

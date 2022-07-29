@@ -7,19 +7,23 @@ import Radio from "components/Radio/Radio";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import SelectInput from "components/SelectInput/SelectInput";
 import Upload from "components/Upload/Upload";
-import { formattedAreaCodes, phoneAreaCodes } from "constant";
+import { formattedAreaCodes, locations, phoneAreaCodes } from "constant";
 import { get } from "lodash";
 import { Router } from "next/router";
 import { IAddListingForm } from "pages/add-listing";
 import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  censoredPhoneNumber,
   formatSelectInputValue,
   isPaidUser,
   removeZeroInPhoneNumber,
 } from "utils";
 import { useRouter } from "next/router";
 import styles from "./TabContent.module.scss";
+import useGetRevision from "hooks/useGetRevision";
+import BizListingRevision from "services/biz-listing-revision";
+import Select from "components/Select/Select";
 import { UserInforContext } from "Context/UserInforContext";
 
 export const socialMedias = [
@@ -31,11 +35,12 @@ export const socialMedias = [
 interface BusinessInformationProps {
   listing: any;
   loading?: boolean;
+  isRevision?: boolean;
   onSubmit: (data: any) => void;
 }
 
 const BusinessInformation = (props: BusinessInformationProps) => {
-  const { listing: formData, loading, onSubmit } = props;
+  const { listing: formData, loading, isRevision, onSubmit } = props;
   const router = useRouter();
   const { user, updateUser } = useContext(UserInforContext);
 
@@ -45,7 +50,20 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
   useEffect(() => {
-    reset({ ...formData, contact: formData.phone_number });
+    reset({
+      name: formData.name,
+      slug: formData.slug,
+      description: formData.description,
+      phoneNumber: formData.phone_number,
+      logo: formData.logo,
+      email: formData.email,
+      address: formData.address,
+      city: formData.city,
+      country: formData.country,
+      twitter: get(formData, "social_info.twitter"),
+      facebook: get(formData, "social_info.facebook"),
+      instagram: get(formData, "social_info.instagram"),
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
@@ -53,30 +71,39 @@ const BusinessInformation = (props: BusinessInformationProps) => {
     setIsEdit(false);
   };
 
-  const handleHref = () => {
-    updateUser({
-      type_handle: "Claim",
-    });
-    router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
-  };
-
-  const onSubmitForm = (data) => {
-    onSubmit({
-      name: data.name,
+  const onSubmitForm = async (data) => {
+    let dataListing = {
       description: data.description,
-      phone_number: data.contact,
+      phone_number: data.phoneNumber,
       logo: data.logo,
       email: data.email,
       address: data.address,
       city: data.city,
       country: data.country,
       social_info: {
-        ...data.socialInfo,
-        twitter: data.twitter,
-        facebook: data.facebook,
-        instagram: data.instagram,
+        facebook: data.facebook ? data.facebook : null,
+        instagram: data.instagram ? data.instagram : null,
+        twitter: data.twitter ? data.twitter : null,
       },
-    });
+    };
+    let createData = {
+      ...dataListing,
+      name: data.name,
+      slug: formData.slug,
+    };
+    let updateData = {
+      ...dataListing,
+      is_accepted: false,
+      expiration_date: formData.expiration_date,
+    };
+    if (isRevision) {
+      await BizListingRevision.updateBizListingRevision(
+        formData.id,
+        updateData
+      );
+    } else {
+      await BizListingRevision.createCustom(createData);
+    }
     setIsEdit(false);
   };
 
@@ -99,7 +126,10 @@ const BusinessInformation = (props: BusinessInformationProps) => {
           Chooose which social media to show on store page. Upgrade to Basic
           Tier to show all.
         </div>
-        <div className={styles.upgrade_now} onClick={handleHref}>
+        <div
+          className={styles.upgrade_now}
+          onClick={() => router.push(`/claim/${get(formData, "id_listing")}`)}
+        >
           Upgrade now
         </div>
       </div>
@@ -122,15 +152,19 @@ const BusinessInformation = (props: BusinessInformationProps) => {
           fileList={getValues("logo")}
         />
         <br />
-        <div className={styles.name}>{formData.name}</div>
-        <p>{formData.description}</p>
+        <div className={styles.name}>{getValues("name")}</div>
+        <p>{getValues("description")}</p>
         <Question question="Address" childrenClassName="flex gap-3">
           <Icon icon="map" />
-          {formData.address}
+          {getValues("address")}
         </Question>
         <Question question="Official contact" childrenClassName="flex gap-3">
           <Icon icon="phone-color" />
-          {formData.phone_number}
+          <p>
+            {isPaid
+              ? getValues("phoneNumber")
+              : censoredPhoneNumber(getValues("phoneNumber"))}
+          </p>
         </Question>
         <Question
           question="Social media"
@@ -138,18 +172,23 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         >
           <UpgradeNow />
           <Input
+            value={getValues("twitter")}
             readOnly
             prefix={<Icon icon="twitter-logo" />}
-            suffix={<SocialRadio type="" value="" />}
+            suffix={<SocialRadio type="" value={getValues("twitter")} />}
             placeholder="https://www.twitter.com/YourTwitter"
           />
           <Input
+            value={getValues("facebook")}
             readOnly
             prefix={<Icon icon="facebook-color" />}
-            suffix={<SocialRadio type="facebook" value="" />}
+            suffix={
+              <SocialRadio type="facebook" value={getValues("facebook")} />
+            }
             placeholder="https://www.facebook.com/YourFacebook"
           />
           <Input
+            value={getValues("instagram")}
             readOnly
             prefix={<Icon icon="instagram-outlined" />}
             suffix={<SocialRadio type="instagram" value="" />}
@@ -160,7 +199,9 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         <Button
           text="Edit information"
           width={300}
-          onClick={() => setIsEdit(true)}
+          onClick={() => {
+            setIsEdit(true);
+          }}
         />
       </SectionLayout>
 
@@ -174,6 +215,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         <form onSubmit={handleSubmit(onSubmitForm)}>
           <div>
             <Upload
+              key={getValues("logo")}
               type="avatar"
               className="justify-start"
               fileList={getValues("logo")}
@@ -189,25 +231,20 @@ const BusinessInformation = (props: BusinessInformationProps) => {
             />
           </Question>
           <Question question="Address" childrenClassName="flex flex-col gap-3">
-            <Input
+            {/* <Input
               register={register("city")}
               label="City/Town, State/Province/Region"
               placeholder="City/Town, State/Province/Region of business"
-            />
-            <Input
-              register={register("country")}
-              label="Country"
-              placeholder="Country of business"
-            />
+            /> */}
             <Input
               register={register("address")}
               label="Street address"
               placeholder="Address of business"
             />
-            <Input
+            {/* <Input
               register={register("additionalAddress")}
               placeholder="Additional address information (optional)"
-            />
+            /> */}
           </Question>
           <Question
             show
@@ -221,10 +258,12 @@ const BusinessInformation = (props: BusinessInformationProps) => {
               options={formattedAreaCodes}
               shouldControlShowValue
               defaultValue={formatSelectInputValue(
-                getValues("contact"),
+                getValues("phoneNumber"),
                 phoneAreaCodes
               )}
-              onChange={(e) => setValue("contact", removeZeroInPhoneNumber(e))}
+              onChange={(e) =>
+                setValue("phoneNumber", removeZeroInPhoneNumber(e))
+              }
             />
             <Input
               register={register("email")}

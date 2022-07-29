@@ -18,7 +18,7 @@ const useGetRevision = (listingSlug?: string) => {
       is_accepted: false,
       ...currentAttributes,
     };
-    const response = await bizListingRevision.createBizListingRevision(
+    const response = await bizListingRevision.createCustom(
       formatBizListingData
     );
     return get(response, "data.data.id");

@@ -294,7 +294,13 @@ const checkListingHaveOwner = async (bizListingSlug: any) => {
   return await Api.get(url);
 };
 
+const createCustom = async (data: any) => {
+  const url = `/api/biz-listings-revisions/create-custom`;
+  return await Api.post(url, data);
+};
+
 export default {
+  createCustom,
   getBizListingRevision,
   getOwnerListingRevisionRoleByUserId,
   getBizListingRevisionByUserId,
