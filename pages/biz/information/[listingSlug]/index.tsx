@@ -78,6 +78,7 @@ const BizInformation = (props) => {
 
       //TODO: Check listing is owned by user before returning biz listing data on BE
       const listing = get(data, "data.data[0]") || {};
+      updateUser({ now_biz_listing: listing });
       if (listing?.expiration_date) {
         setIsPaid(isPaidUser(listing.expiration_date));
       } else {
