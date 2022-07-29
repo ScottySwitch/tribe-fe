@@ -128,7 +128,7 @@ const ArticlesDetailPage = (props: any) => {
       <div className={styles.cover}>
         <div className={styles.cover_container}>
           <Image
-            src={article.imgUrl || "https://picsum.photos/200/300"}
+            src={article.imgUrl || require("public/images/default-avatar.svg")}
             alt=""
             layout="fill"
             className={styles.cover_image}
@@ -141,9 +141,11 @@ const ArticlesDetailPage = (props: any) => {
             <div className={styles.articles_container}>
               <Breadcrumbs breadcrumbs={breadcrumbs} />
               <h1 className={styles.title}>{article.title}</h1>
-              <div className={styles.date}>
-                {moment(article.time).format("DD/MM/YYYY")}
-              </div>
+              {article.time && (
+                <div className={styles.date}>
+                  {moment(article.time).format("DD/MM/YYYY")}
+                </div>
+              )}
             </div>
           </SectionLayout>
         </div>
@@ -225,26 +227,28 @@ const ArticlesDetailPage = (props: any) => {
                 </h5>
                 <div className="my-7">
                   <Carousel responsive={infoCardResponsive}>
-                    {article.bizlisting?.map((card: any, index) => (
-                      <InforCard
-                        key={index}
-                        imgUrl={
-                          card?.images?.[0] || "https://picsum.photos/200/300"
-                        }
-                        description={card.description}
-                        title={card.title}
-                        rate={card.rate}
-                        rateNumber={card.rateNumber}
-                        followerNumber={card.followerNumber}
-                        price={card.price}
-                        categories={card.categories}
-                        tags={card.tags}
-                        iconTag={true}
-                        isVerified={card.isVerified}
-                        onClick={() => router.push(`/biz/home/${card.slug}`)}
-                        className="max-w-[95%] w-full"
-                      />
-                    ))}
+                    {isArray(article.bizlisting) &&
+                      article.bizlisting?.map((card: any, index) => (
+                        <InforCard
+                          key={index}
+                          imgUrl={
+                            card?.images?.[0] ||
+                            require("public/images/default-avatar.svg")
+                          }
+                          description={card.description}
+                          title={card.title}
+                          rate={card.rate}
+                          rateNumber={card.rateNumber}
+                          followerNumber={card.followerNumber}
+                          price={card.price}
+                          categories={card.categories}
+                          tags={card.tags}
+                          iconTag={true}
+                          isVerified={card.isVerified}
+                          onClick={() => router.push(`/biz/home/${card.slug}`)}
+                          className="max-w-[95%] w-full"
+                        />
+                      ))}
                   </Carousel>
                 </div>
               </>

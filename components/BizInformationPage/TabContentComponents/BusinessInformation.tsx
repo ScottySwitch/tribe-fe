@@ -72,41 +72,34 @@ const BusinessInformation = (props: BusinessInformationProps) => {
   };
 
   const onSubmitForm = async (data) => {
-    console.log("data", data);
+    let createData = {
+      name: data.name,
+      slug: formData.slug,
+      description: data.description,
+      phone_number: data.phoneNumber,
+      logo: data.logo,
+      email: data.email,
+      address: data.address,
+      city: data.city,
+      country: data.country,
+      social_info: {
+        facebook: data.facebook ? data.facebook : null,
+        instagram: data.instagram ? data.instagram : null,
+        twitter: data.twitter ? data.twitter : null,
+      },
+    };
+    let updateData = {
+      ...createData,
+      is_accepted: false,
+      expiration_date: formData.expiration_date,
+    };
     if (isRevision) {
-      await BizListingRevision.updateBizListingRevision(formData.id, {
-        description: data.description,
-        phone_number: data.phoneNumber,
-        logo: data.logo,
-        email: data.email,
-        address: data.address,
-        city: data.city,
-        country: data.country,
-        social_info: {
-          facebook: data.facebook ? data.facebook : null,
-          instagram: data.instagram ? data.instagram : null,
-          twitter: data.twitter ? data.twitter : null,
-        },
-        is_accepted: false,
-        expiration_date: formData.expiration_date,
-      });
+      await BizListingRevision.updateBizListingRevision(
+        formData.id,
+        updateData
+      );
     } else {
-      await BizListingRevision.createCustom({
-        name: data.name,
-        slug: formData.slug,
-        description: data.description,
-        phone_number: data.phoneNumber,
-        logo: data.logo,
-        email: data.email,
-        address: data.address,
-        city: data.city,
-        country: data.country,
-        social_info: {
-          facebook: data.facebook ? data.facebook : null,
-          instagram: data.instagram ? data.instagram : null,
-          twitter: data.twitter ? data.twitter : null,
-        },
-      });
+      await BizListingRevision.createCustom(createData);
     }
     setIsEdit(false);
   };
