@@ -111,9 +111,11 @@ const ProductListing = (props: ProductListingProps) => {
   };
 
   const handleDelete = async () => {
-    const newProductList = productList.filter((product) => {
-      return product.id !== deleteModalProductId;
-    });
+    const newProductList = isArray(productList)
+      ? productList.filter((product) => {
+          return product.id !== deleteModalProductId;
+        })
+      : [];
     await ProductApi.deleteProduct(deleteModalProductId);
     setProductList(newProductList);
     setIsShowDeleteModal(false);
@@ -124,8 +126,8 @@ const ProductListing = (props: ProductListingProps) => {
       is_pinned: !e.isPinned,
     })
       .then((res) => toast.success("Update successfully!", { autoClose: 1000 }))
-      .catch((error) => toast.error("Update failed!"));
-    setLoading(true);
+      .catch((error) => toast.error("Update failed!"))
+      .finally(() => setLoading(true));
   };
 
   const PopoverContent = ({ item }) => (

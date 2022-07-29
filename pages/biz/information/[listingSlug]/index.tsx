@@ -179,7 +179,6 @@ const BizInformation = (props) => {
         );
       case InformationList.VERIFICATION:
         return <Verification listing={listing} isPaid={isPaid} />;
-
       default:
         return <div />;
     }
