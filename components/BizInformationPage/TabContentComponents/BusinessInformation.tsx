@@ -11,11 +11,16 @@ import { formattedAreaCodes, phoneAreaCodes } from "constant";
 import { get } from "lodash";
 import { Router } from "next/router";
 import { IAddListingForm } from "pages/add-listing";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils";
+import {
+  formatSelectInputValue,
+  isPaidUser,
+  removeZeroInPhoneNumber,
+} from "utils";
 import { useRouter } from "next/router";
 import styles from "./TabContent.module.scss";
+import { UserInforContext } from "Context/UserInforContext";
 
 export const socialMedias = [
   { label: <Icon icon="twitter-logo" />, value: "twitter" },
@@ -32,9 +37,10 @@ interface BusinessInformationProps {
 const BusinessInformation = (props: BusinessInformationProps) => {
   const { listing: formData, loading, onSubmit } = props;
   const router = useRouter();
+  const { user, updateUser } = useContext(UserInforContext);
 
   const [isEdit, setIsEdit] = useState(false);
-  const isPaid = get(formData, "biz_invoices.length") > 0;
+  const isPaid = isPaidUser(get(formData, "expiration_date"));
 
   const { register, handleSubmit, setValue, getValues, reset } = useForm();
 
@@ -45,6 +51,13 @@ const BusinessInformation = (props: BusinessInformationProps) => {
 
   const handleCancel = () => {
     setIsEdit(false);
+  };
+
+  const handleHref = () => {
+    updateUser({
+      type_handle: "Claim",
+    });
+    router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
   };
 
   const onSubmitForm = (data) => {
@@ -86,10 +99,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
           Chooose which social media to show on store page. Upgrade to Basic
           Tier to show all.
         </div>
-        <div
-          className={styles.upgrade_now}
-          onClick={() => router.push(`/claim/${get(formData, "id_listing")}`)}
-        >
+        <div className={styles.upgrade_now} onClick={handleHref}>
           Upgrade now
         </div>
       </div>

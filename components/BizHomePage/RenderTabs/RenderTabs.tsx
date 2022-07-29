@@ -46,6 +46,7 @@ interface TabContentProps {
   blankImg: string;
   blankText: string;
   buttonText: string;
+  isPaid?: boolean;
   onClick: () => void;
   onDelete: (item: any) => void;
 }
@@ -54,6 +55,7 @@ const TabContent = ({
   isViewPage,
   selectedTab,
   cardItem,
+  isPaid,
   list,
   blankImg,
   blankText,
@@ -70,6 +72,8 @@ const TabContent = ({
   const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const isDeal = selectedTab === ListingTabs.DEAL;
+  const isProduct =
+    selectedTab === ListingTabs.PRODUCT || selectedTab === ListingTabs.DISH;
   const itemArray = [
     ListingTabs.DISH,
     ListingTabs.PRODUCT,
@@ -77,6 +81,7 @@ const TabContent = ({
   ];
   const isItem = selectedTab && itemArray.includes(selectedTab);
   const CardItem = cardItem;
+  const isDiabled = isPaid || isProduct;
 
   if (!(Array.isArray(list) && list.length)) {
     return (
@@ -85,6 +90,7 @@ const TabContent = ({
         <p>{blankText}</p>
         {!isViewPage && (
           <Button
+            disabled={!isDiabled}
             text={buttonText}
             size="small"
             width={300}
@@ -224,12 +230,12 @@ const RenderTabs = (props: {
   const [selectedTab, setSelectedTab] = useState<ListingTabs>(
     initSelectedTab(category).itemType
   );
-
   let tabContent;
   switch (selectedTab) {
     case ListingTabs.SERVICE:
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
@@ -245,6 +251,7 @@ const RenderTabs = (props: {
     case ListingTabs.PRODUCT:
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
@@ -260,6 +267,7 @@ const RenderTabs = (props: {
     case ListingTabs.DISH:
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
@@ -273,35 +281,42 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.MENU:
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const blankTextMenu = isPaid
+        ? "There are no menu yet"
+        : "Upgrade to upload";
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={MenuCard}
           onDelete={onDelete}
-          list={menuList}
+          list={isPaid ? menuList : []}
           blankImg={require("public/images/no-product.svg")}
-          blankText="There are no menu yet"
+          blankText={blankTextMenu}
           buttonText="Add menu now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_MENU)}
         />
       );
       break;
     case ListingTabs.DEAL:
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const blankText =
-        userInfo && userInfo.token
+      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const blankTextDeal = get(userInfo, "token")
+        ? isPaid
           ? "There are no deal yet"
-          : "Login/sign up to see deals";
+          : "Upgrade to upload"
+        : "Login/sign up to see deals";
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={userInfo && userInfo.token ? dealList : []}
+          list={get(userInfo, "token") ? (isPaid ? dealList : []) : []}
           blankImg={require("public/images/no-product.svg")}
-          blankText={blankText}
+          blankText={blankTextDeal}
           buttonText="Add deals now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEALS)}
         />
@@ -336,13 +351,16 @@ const RenderTabs = (props: {
             )
           )}
         </div>
-        {!isViewPage && (
-          <EditList
-            category={category}
-            selectedTab={selectedTab}
-            onSetScreen={onSetScreen}
-          />
-        )}
+        {!isViewPage &&
+          (isPaid ||
+            selectedTab === ListingTabs.PRODUCT ||
+            selectedTab === ListingTabs.DISH) && (
+            <EditList
+              category={category}
+              selectedTab={selectedTab}
+              onSetScreen={onSetScreen}
+            />
+          )}
       </div>
       {tabContent}
     </div>

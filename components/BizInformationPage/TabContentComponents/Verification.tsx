@@ -1,38 +1,20 @@
-import Break from "components/Break/Break"
-import Icon from "components/Icon/Icon"
-import Input from "components/Input/Input"
-import SectionLayout from "components/SectionLayout/SectionLayout"
-import { bizInformationDefaultFormData } from "constant"
-import React, { useState } from "react"
-import styles from "./TabContent.module.scss"
+import Break from "components/Break/Break";
+import Icon from "components/Icon/Icon";
+import Input from "components/Input/Input";
+import SectionLayout from "components/SectionLayout/SectionLayout";
+import { bizInformationDefaultFormData } from "constant";
+import React, { useState } from "react";
+import { numberVerify } from "utils";
+import styles from "./TabContent.module.scss";
 
 interface VerificationProps {
-  isPaid: boolean
+  isPaid: boolean;
+  listing: any;
 }
 
 const Verification = (props: VerificationProps) => {
-  const { isPaid } = props
-  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData)
-  const { idVerificationStatus = "processing" } = formData
-  
-  const idCardStatusIcon = () => {
-    let icon
-    switch (idVerificationStatus) {
-      case "verified":
-        icon = "verified-tag"
-        break
-      case "processing":
-        icon = "processing-tag"
-        break
-      case "unverified":
-        icon = "unverified-tag"
-        break
-      default:
-        icon = ""
-        break
-    }
-    return icon
-  }
+  const { isPaid, listing } = props;
+
   return (
     <SectionLayout
       title="Verification"
@@ -41,29 +23,29 @@ const Verification = (props: VerificationProps) => {
       containerClassName="w-full"
     >
       <Break />
-      <Input
-        label="Verify Personal phone number"
-        value="*********992"
-        size="large"
-        width={300}
-        suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
-      />
-      <div className={styles.change_link}>Change phone number</div>
+      {listing.number_verify && (
+        <Input
+          label="Verify Personal phone number"
+          value={numberVerify(listing.number_verify)}
+          size="large"
+          width={300}
+          suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
+        />
+      )}
       {isPaid && (
         <React.Fragment>
           <br />
           <Input
             label="Verify Personal phone number"
-            value="ID Card"
+            value={listing.provided}
             size="large"
             width={300}
-            suffix={<Icon icon={idCardStatusIcon()} style={{ width: 70 }} />}
+            suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
           />
-          <div className={styles.change_link}>Resend ID Card</div>
         </React.Fragment>
       )}
     </SectionLayout>
-  )
-}
+  );
+};
 
-export default Verification
+export default Verification;

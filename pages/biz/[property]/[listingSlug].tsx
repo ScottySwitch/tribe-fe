@@ -107,6 +107,7 @@ const Properties = (context) => {
   const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isEatListing, setIsEatListing] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [selectedTab, setSelectedTab] = useState<string>(ListingTabs.PRODUCT);
 
   const TabList: any[] = [
     {
@@ -148,6 +149,11 @@ const Properties = (context) => {
       }
       setIsVerified(listingDetail.is_verified);
       setUserInfo(userInfo);
+      if (property === "menus") {
+        setSelectedTab("menus");
+      } else if (property === "deals") {
+        setSelectedTab("deals");
+      }
 
       setListingInformation(listingDetail);
 
@@ -243,7 +249,7 @@ const Properties = (context) => {
           <TabsHorizontal
             tablist={TabList}
             type="secondary-no-outline"
-            selectedTab={property}
+            selectedTab={selectedTab}
             className="pt-[6px]"
             onChangeTab={(e) => {
               router.push(`/biz/${e}/${listingSlug}`, undefined, {
