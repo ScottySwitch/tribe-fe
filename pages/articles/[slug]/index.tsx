@@ -252,29 +252,27 @@ const ArticlesDetailPage = (props: any) => {
           </div>
         </SectionLayout>
         <Break show={isArray(article.relatedArticles)} />
-        {isArray(article.relatedArticles) && (
-          <SectionLayout
-            title="Related Articles"
-            className="pt-0"
-            containerClassName={styles.section_layout_container}
-          >
-            <Carousel responsive={homeCuratedResponsive}>
-              {article.relatedArticles?.map((item, index) => (
-                <Link href={`/articles/${item.slug}`} key={index} passHref>
-                  <div className="pb-5 pt-3 pl-3">
-                    <ArticleCard
-                      title={item.title}
-                      imgUrl={item.imgUrl}
-                      time={calcDistanceFromNow(item.time)}
-                      width="95%"
-                    />
-                  </div>
-                </Link>
-              ))}
-            </Carousel>
-          </SectionLayout>
-        )}
-
+        <SectionLayout
+          show={isArray(article.relatedArticles)}
+          title="Related Articles"
+          className="pt-0"
+          containerClassName={styles.section_layout_container}
+        >
+          <Carousel responsive={homeCuratedResponsive}>
+            {article.relatedArticles?.map((item, index) => (
+              <Link href={`/articles/${item.slug}`} key={index} passHref>
+                <div className="pb-5 pt-3 pl-3">
+                  <ArticleCard
+                    title={item.title}
+                    imgUrl={item.imgUrl}
+                    time={calcDistanceFromNow(item.time)}
+                    width="95%"
+                  />
+                </div>
+              </Link>
+            ))}
+          </Carousel>
+        </SectionLayout>
         <SectionLayout className="pt-0">
           <TopSearches />
         </SectionLayout>
