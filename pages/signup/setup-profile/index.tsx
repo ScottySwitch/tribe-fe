@@ -32,9 +32,11 @@ export enum ProfileSteps {
 }
 
 const StepOne = ({
+  show,
   formData,
   onNextStep,
 }: {
+  show?: boolean;
   formData: any;
   onNextStep: (e: FormEvent<HTMLFormElement>) => void;
 }) => {
@@ -107,8 +109,10 @@ const StepOne = ({
       first_name: data.name,
       gender: data.gender,
       birthday: convertBirthday,
-      country: data.country?.value || null,
+      country: data.country || null,
       confirmed: true,
+      industry: data.industry,
+      educate_level: data.education,
     };
     if (uploadAvatar !== "") {
       dataSend = { ...dataSend, avatar: uploadAvatar };
@@ -122,6 +126,11 @@ const StepOne = ({
     }
     onNextStep(data);
   };
+
+  if (!show) {
+    return null;
+  }
+
   return (
     <div>
       <ModalHeader alignTitle="center">
@@ -140,7 +149,7 @@ const StepOne = ({
           placeholder="Your country"
           options={countryList}
           value={getValues("country")}
-          onChange={(e) => setValue("country", e)}
+          onChange={(e) => setValue("country", e.value)}
         />
         <div>
           Gender
@@ -157,7 +166,8 @@ const StepOne = ({
           </div>
         </div>
         <DatePicker
-          placeholder="Birthday"
+          label="Birthday"
+          placeholder="dd/mm/yyyy"
           onChange={(e) => setValue("birthday", e)}
           value={getValues("birthday")}
         />
@@ -165,13 +175,13 @@ const StepOne = ({
           placeholder="Education level (Optional)"
           options={educationLevels}
           value={getValues("education")}
-          onChange={(e) => setValue("education", e)}
+          onChange={(e) => setValue("education", e.value)}
         />
         <Select
           placeholder="Industry (Optional)"
           options={industryList}
           value={getValues("industry")}
-          onChange={(e) => setValue("industry", e)}
+          onChange={(e) => setValue("industry", e.value)}
         />
         <div className="flex justify-end">
           {/* <div className={styles.skip} onClick={() => router.push("/signup/setup-profile")}>
@@ -189,7 +199,7 @@ const StepOne = ({
   );
 };
 
-const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
+const StepTwo = ({ show, onBackStep, onSubmit, formData }: any) => {
   const [interest, setInterest] = useState<{ [key: string]: any }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [interestingList, setInterestingList] = useState<
@@ -235,6 +245,10 @@ const StepTwo = ({ onBackStep, onSubmit, formData }: any) => {
     onSubmit(interest);
     setIsLoading(false);
   };
+
+  if (!show) {
+    return null;
+  }
 
   return (
     <div>
@@ -330,15 +344,18 @@ const SetupProfilePage = () => {
   return (
     <div className={styles.auth}>
       <div className={styles.form_container}>
-        {step === ProfileSteps.STEP_ONE ? (
-          <StepOne onNextStep={handleNextStep} formData={formData} />
-        ) : (
-          <StepTwo
-            onSubmit={handleSubmit}
-            onBackStep={handleBackStep}
-            formData={formData}
-          />
-        )}
+        <StepOne
+          show={step === ProfileSteps.STEP_ONE}
+          key={JSON.stringify(formData)}
+          onNextStep={handleNextStep}
+          formData={formData}
+        />
+        <StepTwo
+          show={step === ProfileSteps.STEP_TWO}
+          onSubmit={handleSubmit}
+          onBackStep={handleBackStep}
+          formData={formData}
+        />
       </div>
     </div>
   );
