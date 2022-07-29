@@ -217,7 +217,7 @@ export const formatBizlistingArray = (rawListing) =>
         address: get(item, "attributes.address"),
         country: get(item, "attributes.country"),
         description: get(item, "attributes.description"),
-        followerNumber: get(item, "attributes.user_listing_follows.length"),
+        followerNumber: get(item, "attributes.user_listing_follows.data.length"),
         tags: arrayLabeltags(get(item, "attributes.tags.data")),
         categories: arrayLabelCategory(get(item, "attributes.categories.data")),
         price: get(item, "attributes.min_price") || "",
@@ -245,13 +245,26 @@ export const formatCollections = (rawCollections) =>
     : [];
 
 export const formatArticle = (rawArticle) =>
+Array.isArray(rawArticle)
+  ? rawArticle.map((item) => ({
+      title: get(item, "attributes.name"),
+      imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+      time: get(item, "attributes.createdAt"),
+      slug: get(item, "attributes.slug"),
+      content: get(item, "attributes.content"),
+    }))
+  : [];
+
+export const formatArticleDetails = (rawArticle) =>
   Array.isArray(rawArticle)
     ? rawArticle.map((item) => ({
-        title: get(item, "attributes.name") || null,
+        title: get(item, "attributes.name"),
         imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
         time: get(item, "attributes.createdAt"),
         slug: get(item, "attributes.slug"),
-      }))
+        content: get(item, "attributes.content"),
+        bizlisting: formatBizlistingArray(get(item, "attributes.biz_listings.data")) || [],
+        relatedArticles: formatArticle(get(item, "attributes.related_articles.data")) || [],      }))
     : [];
 
 export const formatCategoryLink = (rawCategoryLink) =>
@@ -263,6 +276,8 @@ export const formatCategoryLink = (rawCategoryLink) =>
         slug: get(item, "attributes.value"),
       }))
     : [];
+
+
 
 export const arrayLabeltags = (rawTag) =>
   Array.isArray(rawTag)

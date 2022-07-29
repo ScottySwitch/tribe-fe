@@ -9,6 +9,7 @@ import get from "lodash/get";
 import DealFavouriteApi from "services/user-deal-favourite";
 import ShareModal from "components/ShareModal/ShareModal";
 import FavouriteDealApi from "services/user-deal-favourite";
+import moment from "moment";
 export interface IDealsDetails {
   name: string;
   imgUrl: string;
@@ -96,9 +97,11 @@ const DealDetailModal = (props: DealDetailModalProps) => {
             <div className={styles.item}>
               <h6 className={styles.label}>Valid</h6>
               <p className="text-left">
-                {data.start_date && data.start_date + " - "}
+                {data.start_date &&
+                  moment(data.start_date).format("YYYY-MMM-DD")}
                 {data.end_date}
-                {data.validUntil && new Date(data.validUntil).toLocaleString()}
+                {data.validUntil &&
+                  moment(data.validUntil).format("YYYY-MMM-DD")}
               </p>
             </div>
           )}
