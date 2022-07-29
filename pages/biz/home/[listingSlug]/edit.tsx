@@ -49,7 +49,7 @@ import { UserInforContext } from "Context/UserInforContext";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
-  const { user } = useContext(UserInforContext);
+  const { user, updateUser } = useContext(UserInforContext);
 
   const [userInfo, setUserInfo] = useState<any>({});
   const [category, setCategory] = useState(Categories.EAT);
@@ -158,7 +158,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           id: item.id,
           description: item.description,
           images: item.images,
-          imgUrl: get(item, "images[0]") || "https://picsum.photos/200/300",
+          imgUrl: get(item, "images[0]"),
           discount: item.discount_percent,
           tags: item.tags,
           websiteUrl: item.website_url,
@@ -185,7 +185,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           parent_id: item.parent_id,
           name: item.name,
           images: item.images,
-          imgUrl: get(item, "images[0]") || "https://picsum.photos/200/300",
+          imgUrl: get(item, "images[0]") ,
           information: item.description,
           termsConditions: item.terms_conditions,
           startDate: moment(item.start_date).format("YYYY/MM/DD"),
@@ -370,6 +370,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         logo: logo,
         is_accepted: false,
         expiration_date: bizListing.expiration_date,
+        subscription: bizListing.subscription,
         products: currentItemList.map((item) => item.id) || [],
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
@@ -397,6 +398,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         tags: tags.map((item) => item.id),
         is_verified: false,
         is_accepted: false,
+        subscription: bizListing.subscription,
         logo: logo,
         expiration_date: bizListing.expiration_date,
         products: currentItemList.map((item) => item.id) || [],
@@ -600,6 +602,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         <div className={styles.body}>
           <div className={styles.right_col}>
             <EditAction
+              id={bizListing.id}
               klookUrl={klookUrl}
               isOwned={true}
               isViewPage={isViewPage}

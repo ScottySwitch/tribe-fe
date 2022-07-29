@@ -34,7 +34,7 @@ const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
         <div className={styles.avatar}>
           <Image
             className={styles.avatar_img}
-            src={imageUrl || require("public/images/default-page-avatar.png")}
+            src={imageUrl || require("public/images/default-page-avatar.svg")}
             width="100%"
             height="100%"
             layout="responsive"

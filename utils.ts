@@ -55,7 +55,7 @@ export const calcRateNumber = (reviewsData) => {
 
 export const removeZeroInPhoneNumber = (e) => {
   let phoneNumber = "";
-  if (e.input[0] == 0) {
+  if (e.input?.[0] == 0) {
     phoneNumber = e?.select?.value + e?.input?.substr(1, e.input.length - 1);
   } else {
     phoneNumber = e?.select?.value + e?.input;
@@ -78,6 +78,19 @@ export const formatSelectInputValue = (e: string, selectOptions: IOption[]) => {
   const inputValue = e.substring(selectValue?.length);
   return { select: selectOptions[codeOptionIndex], input: inputValue };
 };
+
+export const numberVerify = (e) => {
+  let phoneNumber = "";
+  for (let index = 0; index < e.length; index++) {
+    if (index < 10) {
+      phoneNumber = phoneNumber + "*"
+    }
+    else {
+      phoneNumber = phoneNumber + e[index]
+    }
+  }
+  return phoneNumber
+}
 
 export const getOptionsMappedFromResponse = (res) => {
   const rawArray = get(res, "data.data") || [];
@@ -154,6 +167,7 @@ export const changeToSlugify = (str) => {
 };
 
 export const isPaidUser = (time) => {
+  if (!time) return false
   const timeCalcDistance = parseISO(moment(time).format("YYYY-MM-DD HH:mm:ss"));
   let diff_in_minutes = moment().diff(moment(timeCalcDistance), "minutes");
   return diff_in_minutes < 0 ? true : false;

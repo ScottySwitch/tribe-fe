@@ -7,9 +7,9 @@ import styles from "./PromotionCard.module.scss";
 
 export interface PromotionProps {
   imgUrl?: string;
-  title: string;
+  title?: string;
   startDate?: string;
-  expiredAt: string;
+  expiredAt?: string;
   type?: string | number;
   favourite?: boolean;
   width?: string | number;
@@ -51,19 +51,16 @@ const PromotionCard = (props: PromotionProps) => {
   };
 
   return (
-    <div
-      style={{ width }}
-      className={styles.promotion_card}
-      onClick={onCardClick}
-    >
+    <div style={{ width }} className={styles.promotion_card}>
       <div className={avatarClassName}>
         {imgUrl && (
           <Image
-            src={imgUrl}
+            src={imgUrl || require("public/images/default-avatar.svg")}
             width="100%"
             height="100%"
             alt="promotion-alt"
             layout="responsive"
+            objectFit="cover"
             className={styles.promotion_image}
           />
         )}
@@ -73,11 +70,11 @@ const PromotionCard = (props: PromotionProps) => {
           </div>
         )}
       </div>
-      <div className={styles.promotion_info}>
+      <div className={styles.promotion_info} onClick={onCardClick}>
         <div>
           <h3 className={styles.promotion_title}>{title}</h3>
           <div className={styles.promotion_date}>
-            {startDate} - {expiredAt}
+            {startDate} {startDate && expiredAt && `-`} {expiredAt}
           </div>
           <div className={styles.promotion_date}>{description}</div>
         </div>

@@ -57,7 +57,7 @@ const AddDeals = (props: AddDealsProps) => {
   const AddDealButton = () => (
     <Button
       prefix={<Icon icon="plus" />}
-      width={130}
+      width="max-content"
       variant="secondary"
       text="Add another"
       size="small"
@@ -117,12 +117,15 @@ const AddDeals = (props: AddDealsProps) => {
                 }
               />
               <DatePicker
-                value={deal.validUntil || new Date()}
+                maxDate={new Date("2100-12-30")}
+                suffixIcon
+                label="Valid until"
+                value={
+                  moment(deal.validUntil, "YYYY-MM-DD").toDate() || new Date()
+                }
                 onChange={(e: any) =>
                   handleChangeDeal(deal.id, "validUntil", e)
                 }
-                suffixIcon
-                label="Valid until"
               />
               <Input
                 value={deal.termsConditions}

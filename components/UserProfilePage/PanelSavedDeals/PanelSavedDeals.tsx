@@ -1,13 +1,14 @@
+import React, { useEffect, useState } from "react";
+import { get, isArray } from "lodash";
 import PromotionCard, {
   PromotionProps,
 } from "components/PromotionCard/PromotionCard";
-import React, { useEffect, useState } from "react";
-import styles from "./PanelSavedDeals.module.scss";
 import BizlistingApi from "services/biz-listing";
-import { get } from "lodash";
 import DealDetailModal from "components/DealDetailModal/DealDetailModal";
 import Loader from "components/Loader/Loader";
 import UserApi from "services/user";
+
+import styles from "./PanelSavedDeals.module.scss";
 
 const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
   // const { data } = props
@@ -22,13 +23,18 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
       const data = await BizlistingApi.getFavouriteDeals();
       if (get(data, "data.data")) {
         const rawDealFavourite = get(data, "data.data");
-        const favouriteDeals = rawDealFavourite.map((item) => ({
-          key: get(item, "attributes.deal.data.id"),
-          title: get(item, "attributes.deal.data.attributes.name"),
-          imgUrl: get(item, "attributes.deal.data.attributes.images[0"),
-          expiredAt: get(item, "attributes.deal.data.attributes.end_date"),
-          startDate: get(item, "attributes.deal.data.attributes.start_date"),
-        }));
+        const favouriteDeals = isArray(rawDealFavourite)
+          ? rawDealFavourite.map((item) => ({
+              key: get(item, "attributes.deal.data.id"),
+              title: get(item, "attributes.deal.data.attributes.name"),
+              imgUrl: get(item, "attributes.deal.data.attributes.images[0]"),
+              expiredAt: get(item, "attributes.deal.data.attributes.end_date"),
+              startDate: get(
+                item,
+                "attributes.deal.data.attributes.start_date"
+              ),
+            }))
+          : [];
         setData(favouriteDeals);
       }
       setLoading(false);
@@ -57,22 +63,23 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
     <div className={styles.save_deals_panel}>
       {total && <div className={styles.total}>Total: {total}</div>}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 xl:gap-x-16">
-        {data?.map((item: PromotionProps, index) => (
-          <PromotionCard
-            key={index}
-            title={item.title}
-            imgUrl={item.imgUrl}
-            expiredAt={item.expiredAt}
-            type={item.type}
-            favourite
-            startDate={item.startDate}
-            onUnSaveDeal={() => handleRemoveFavorite(item)}
-            onCardClick={() => {
-              setShowDealDetailModal(true);
-              setSelectedDeal(item);
-            }}
-          />
-        ))}
+        {isArray(data) &&
+          data.map((item: PromotionProps, index) => (
+            <PromotionCard
+              key={index}
+              title={item.title}
+              imgUrl={item.imgUrl}
+              expiredAt={item.expiredAt}
+              type={item.type}
+              favourite
+              startDate={item.startDate}
+              onUnSaveDeal={() => handleRemoveFavorite(item)}
+              onCardClick={() => {
+                setShowDealDetailModal(true);
+                setSelectedDeal(item);
+              }}
+            />
+          ))}
       </div>
       <DealDetailModal
         data={{

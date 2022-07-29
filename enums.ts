@@ -7,6 +7,14 @@ export enum Categories {
   OTHER = "Other",
 }
 
+export enum CurrencyValues {
+  USD = "usd",
+  MYR = "myr",
+  SGD = "sgd",
+  IDR = "idr",
+  PERCENTAGE = "%",
+}
+
 export enum CategoryText {
   BUY = "buy",
   EAT = "eat",
@@ -24,6 +32,7 @@ export enum YesNo {
 export enum VerifySteps {
   REQUEST_OTP = "request_otp",
   CONFIRM_OTP = "confirm_otp",
+  CONFIRM_EMAIL = "confirm_email",
   ADD_ID_CARD = "add_id_card",
   ADD_PAYMENT = "add_payment",
 }
@@ -38,7 +47,7 @@ export enum ListingTabs {
   SERVICE = "services",
   PRODUCT = "products",
   DISH = "dishes",
-  MENU = "menu",
+  MENU = "menus",
   DEAL = "deals",
 }
 

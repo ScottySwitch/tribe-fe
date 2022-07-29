@@ -1,3 +1,8 @@
+import { get, isArray } from "lodash";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 import Button from "components/Button/Button";
 import DealDetailModal from "components/DealDetailModal/DealDetailModal";
 import Icon from "components/Icon/Icon";
@@ -8,13 +13,12 @@ import ProductDetailModal from "components/ProductDetailModal/ProductDetailModal
 import PromotionCard from "components/PromotionCard/PromotionCard";
 import { eatTabList, productTabList, serviceTabList } from "constant";
 import { Categories, ListingHomePageScreens, ListingTabs } from "enums";
-import { get } from "lodash";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useState } from "react";
 import Heading from "../../Heading/Heading";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import MenuDetailModal from "components/MenuDetailModal/MenuDetailModal";
+
 import styles from "./RenderTabs.module.scss";
+import Popover from "components/Popover/Popover";
 import moment from "moment";
 
 const initSelectedTab = (category) => {
@@ -42,6 +46,7 @@ interface TabContentProps {
   blankImg: string;
   blankText: string;
   buttonText: string;
+  isPaid?: boolean;
   onClick: () => void;
   onDelete: (item: any) => void;
 }
@@ -50,6 +55,7 @@ const TabContent = ({
   isViewPage,
   selectedTab,
   cardItem,
+  isPaid,
   list,
   blankImg,
   blankText,
@@ -66,6 +72,8 @@ const TabContent = ({
   const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const isDeal = selectedTab === ListingTabs.DEAL;
+  const isProduct =
+    selectedTab === ListingTabs.PRODUCT || selectedTab === ListingTabs.DISH;
   const itemArray = [
     ListingTabs.DISH,
     ListingTabs.PRODUCT,
@@ -73,6 +81,7 @@ const TabContent = ({
   ];
   const isItem = selectedTab && itemArray.includes(selectedTab);
   const CardItem = cardItem;
+  const isDiabled = isPaid || isProduct;
 
   if (!(Array.isArray(list) && list.length)) {
     return (
@@ -81,6 +90,7 @@ const TabContent = ({
         <p>{blankText}</p>
         {!isViewPage && (
           <Button
+            disabled={!isDiabled}
             text={buttonText}
             size="small"
             width={300}
@@ -113,6 +123,9 @@ const TabContent = ({
     case ListingTabs.DEAL:
       DetailModal = DealDetailModal;
       break;
+    case ListingTabs.MENU:
+      DetailModal = MenuDetailModal;
+      break;
   }
 
   return (
@@ -125,49 +138,55 @@ const TabContent = ({
         />
       </div>
       <div className={styles.items_container}>
-        {list.map((item) => {
-          console.log("item", item);
-          const id = get(item, "attributes.id") || item.id;
-          const images = item.images || [];
-          const firstImage = item.imgUrl || images[0];
-          const name = get(item, "attributes.name") || item.name || "";
-          const price = get(item, "attributes.price") || item.price || "";
-          const description =
-            get(item, "attributes.description") ||
-            item.information ||
-            item.description ||
-            item.termsConditions ||
-            "";
-          const expiredAt =
-            get(item, "attributes.endDate") || item.endDate || "";
-          const startDate =
-            get(item, "attributes.startDate") || item.startDate || "";
-          const currency =
-            get(item, "attributes.currency") || item.currency || "";
-          return (
-            <div
-              key={id}
-              className={styles.info_card_container}
-              style={{ width: isDeal ? "100%" : "" }}
-              onClick={() => handleOpenDetailModal(item)}
-            >
-              <CardItem
-                expiredAt={expiredAt}
-                startDate={startDate}
-                imgUrl={firstImage || "https://picsum.photos/200/300"}
-                title={name}
-                price={price}
-                description={description}
-                currency={currency.toUpperCase()}
-              />
-              {isItem && (
-                <div className={styles.delete} onClick={() => onDelete(item)}>
-                  <Icon icon="delete" />
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {isArray(list) &&
+          list.map((item) => {
+            const id = get(item, "attributes.id") || item.id;
+            const images = item.images || [];
+            const firstImage = item.imgUrl || images[0];
+            const name = get(item, "attributes.name") || item.name || "";
+            const price = get(item, "attributes.price") || item.price || "";
+            const description =
+              get(item, "attributes.description") ||
+              item.information ||
+              item.description ||
+              item.termsConditions ||
+              "";
+            const expiredAt =
+              get(item, "attributes.endDate") ||
+              item.endDate ||
+              (item.validUntil &&
+                moment(item.validUntil).format("YYYY-MMM-DD")) ||
+              "";
+            const startDate =
+              get(item, "attributes.startDate") || item.startDate || "";
+            const currency =
+              get(item, "attributes.currency") || item.currency || "";
+            return (
+              <div
+                key={id}
+                className={styles.info_card_container}
+                style={{ width: isDeal ? "100%" : "" }}
+                onClick={() => handleOpenDetailModal(item)}
+              >
+                <CardItem
+                  expiredAt={expiredAt}
+                  startDate={startDate}
+                  imgUrl={
+                    firstImage || require("public/images/default-avatar.svg")
+                  }
+                  title={name}
+                  price={price}
+                  description={description}
+                  currency={currency.toUpperCase()}
+                />
+                {isItem && (
+                  <div className={styles.delete} onClick={() => onDelete(item)}>
+                    <Icon icon="delete" />
+                  </div>
+                )}
+              </div>
+            );
+          })}
       </div>
       <div
         className={styles.see_all}
@@ -211,12 +230,12 @@ const RenderTabs = (props: {
   const [selectedTab, setSelectedTab] = useState<ListingTabs>(
     initSelectedTab(category).itemType
   );
-
   let tabContent;
   switch (selectedTab) {
     case ListingTabs.SERVICE:
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
@@ -232,6 +251,7 @@ const RenderTabs = (props: {
     case ListingTabs.PRODUCT:
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
@@ -247,6 +267,7 @@ const RenderTabs = (props: {
     case ListingTabs.DISH:
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={InforCard}
@@ -260,35 +281,42 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.MENU:
+      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const blankTextMenu = isPaid
+        ? "There are no menu yet"
+        : "Upgrade to upload";
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={MenuCard}
           onDelete={onDelete}
-          list={menuList}
+          list={isPaid ? menuList : []}
           blankImg={require("public/images/no-product.svg")}
-          blankText="There are no menu yet"
+          blankText={blankTextMenu}
           buttonText="Add menu now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_MENU)}
         />
       );
       break;
     case ListingTabs.DEAL:
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const blankText =
-        userInfo && userInfo.token
+      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+      const blankTextDeal = get(userInfo, "token")
+        ? isPaid
           ? "There are no deal yet"
-          : "Login/sign up to see deals";
+          : "Upgrade to upload"
+        : "Login/sign up to see deals";
       tabContent = (
         <TabContent
+          isPaid={isPaid}
           selectedTab={selectedTab}
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={userInfo && userInfo.token ? dealList : []}
+          list={get(userInfo, "token") ? (isPaid ? dealList : []) : []}
           blankImg={require("public/images/no-product.svg")}
-          blankText={blankText}
+          blankText={blankTextDeal}
           buttonText="Add deals now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_DEALS)}
         />
@@ -300,22 +328,39 @@ const RenderTabs = (props: {
     <div className="w-full">
       <div className="flex gap-5 items-center justify-between">
         <div className="flex gap-5 items-center">
-          {initSelectedTab(category).tabList.map((tab) => (
-            <Heading
-              key={tab.text}
-              selected={selectedTab === tab.value}
-              text={tab.text}
-              onClick={() => setSelectedTab(tab.value)}
-            />
-          ))}
+          {initSelectedTab(category).tabList.map((tab) =>
+            !isPaid && tab.value === ListingTabs.DEAL ? (
+              <Popover
+                contentClassName={styles.free_deals_popover}
+                content={
+                  <div className="p-0">
+                    <Icon icon="star-2" color="white" />
+                    Update to use feature!
+                  </div>
+                }
+              >
+                <Heading key={tab.text} text={tab.text} selected={false} />
+              </Popover>
+            ) : (
+              <Heading
+                key={tab.text}
+                selected={selectedTab === tab.value}
+                text={tab.text}
+                onClick={() => setSelectedTab(tab.value)}
+              />
+            )
+          )}
         </div>
-        {!isViewPage && (
-          <EditList
-            category={category}
-            selectedTab={selectedTab}
-            onSetScreen={onSetScreen}
-          />
-        )}
+        {!isViewPage &&
+          (isPaid ||
+            selectedTab === ListingTabs.PRODUCT ||
+            selectedTab === ListingTabs.DISH) && (
+            <EditList
+              category={category}
+              selectedTab={selectedTab}
+              onSetScreen={onSetScreen}
+            />
+          )}
       </div>
       {tabContent}
     </div>

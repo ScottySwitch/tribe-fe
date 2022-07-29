@@ -16,20 +16,25 @@ import BizInvoinceApi from "../../../services/biz-invoice";
 import ClaimListingApi from "../../../services/claim-listing";
 import SelectInput from "components/SelectInput/SelectInput";
 import { formattedAreaCodes } from "constant";
-
 import styles from "styles/BizUserVerify.module.scss";
 import moment from "moment";
 import bizListingApi from "services/biz-listing";
+import EmailApi from "services/email";
+import { result } from "lodash";
 interface BizUserVerifyProps {
   tier: string;
+  id: string;
 }
 
 const BizUserVerify = (props: BizUserVerifyProps) => {
-  const { tier } = props;
+  const { tier, id } = props;
+
   const [verifyStep, setVerifyStep] = useState(VerifySteps.REQUEST_OTP);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [subscription, setSubscription] = useState("");
   const [showResultModal, setShowResultModal] = useState(false);
   const [frontImageIdentity, setFrontImageIdentity] = useState<string>("");
   const [backImageIdentity, setBackImageIdentity] = useState<string>("");
@@ -52,7 +57,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   let baseURL = process.env.NEXT_PUBLIC_API_URL;
   // let baseURL =
   //   "https://2584-2001-ee0-500d-3a90-ec3f-d03b-63d9-f470.ap.ngrok.io/";
-
 
   useEffect(() => {
     const sessionId = router.query.sessionId;
@@ -144,7 +148,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     const baseUrl = userInfo.strapiStripeUrl;
     const retrieveCheckoutSessionUrl =
-      baseUrl + "/strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId;
+      baseUrl + "strapi-stripe/retrieveCheckoutSession/" + checkoutSessionId;
     fetch(retrieveCheckoutSessionUrl, {
       method: "get",
       mode: "cors",
@@ -164,7 +168,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             console.info("website reloded");
           } else {
             // store payment in strapi
-            const stripePaymentUrl = baseUrl + "/strapi-stripe/stripePayment";
+            const stripePaymentUrl = baseUrl + "strapi-stripe/stripePayment";
             fetch(stripePaymentUrl, {
               method: "post",
               body: JSON.stringify({
@@ -181,6 +185,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               headers: new Headers({
                 "Content-Type": "application/json",
               }),
+            }).then(async () => {
+              let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+              await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
+                subscription: response?.subscription,
+              });
             });
           }
         }
@@ -190,7 +199,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const handleRequestOTP = async () => {
     //send OPT
     await AuthApi.otpPhoneGenerate(phoneNumber);
-    console.log(phoneNumber);
+    bizListingApi.updateBizListing(parseInt(id), {
+      number_verify: phoneNumber,
+    });
     setVerifyStep(VerifySteps.CONFIRM_OTP);
   };
 
@@ -211,11 +222,18 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     } else {
       const result = await AuthApi.otpPhoneConfirm({ otp });
       if (result.data.success) {
-        setVerifyStep(VerifySteps.ADD_ID_CARD);
+        setVerifyStep(VerifySteps.CONFIRM_EMAIL);
       } else {
         alert("Wrong OTP");
       }
     }
+  };
+
+  const handleConfirmEmail = async () => {
+    await bizListingApi.updateBizListing(parseInt(id), {
+      email: email,
+    });
+    setVerifyStep(VerifySteps.ADD_ID_CARD);
   };
 
   const handleDirectToStorePage = () => {
@@ -234,6 +252,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     if (frontImageIdentity != "" && backImageIdentity != "") {
       setVerifyStep(VerifySteps.ADD_PAYMENT);
       const userId = userInfo.id;
+      bizListingApi.updateBizListing(parseInt(id), {
+        provided: type.value,
+      });
       if (userId) {
         const result = UserApi.updateUser(parseInt(userId), {
           front_papers_identity: frontImageIdentity,
@@ -260,9 +281,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
-      await bizListingApi.updateBizListing(userInfo.biz_id, {
+      await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
       });
+      const sendMail = EmailApi.paymentSuccess(userInfo.biz_slug);
       if (userInfo.type_handle === "Claim") {
         const result = await BizInvoinceApi.createBizInvoice({
           value: parseInt(price),
@@ -379,6 +401,20 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           />
         </div>
       )}
+      {verifyStep === VerifySteps.CONFIRM_EMAIL && (
+        <div className={styles.form}>
+          <div className={styles.header}>Email information</div>
+          <p>Please confirm your email to receive billing & invoice</p>
+          <Input
+            placeholder="Enter Email"
+            width="100%"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
+          />
+          <Button text="Save" onClick={handleConfirmEmail} disabled={!email} />
+        </div>
+      )}
       {verifyStep === VerifySteps.ADD_ID_CARD && (
         <div className={styles.form}>
           <div className={styles.header}>
@@ -466,9 +502,11 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <div className="flex justify-center gap-5 w-full">
-            <Button 
-              width="30%" variant="no-outlined" text="Change tier" 
-                onClick={() => verifyStep}
+            <Button
+              width="30%"
+              variant="no-outlined"
+              text="Change tier"
+              onClick={() => verifyStep}
             />
             {paymentMethod === "stripe" ? (
               <Button
@@ -524,7 +562,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
 export async function getServerSideProps(context) {
   // Pass data to the page via props
-  return { props: { tier: context.query.tier || Tiers.FREE } };
+  return {
+    props: {
+      tier: context.query.tier || Tiers.FREE,
+      id: context.query.id || null,
+    },
+  };
 }
 
 export default BizUserVerify;

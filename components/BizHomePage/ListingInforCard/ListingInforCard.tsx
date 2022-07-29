@@ -274,7 +274,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
   );
   const listingLogo = get(logo, "[0]")
     ? logo
-    : [require("public/images/default-page-avatar.png")];
+    : [require("public/images/default-page-avatar.svg")];
 
   return (
     <div className={styles.listing_infor_card}>
@@ -292,7 +292,12 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             />
             {isVerified && (
               <div className={styles.verified}>
-                <Icon icon="verified-tag" className={styles.verified_icon} />
+                <Image
+                  src={require("public/icons/verify.svg")}
+                  className={styles.verified_icon}
+                  height={30}
+                  width={60}
+                />
               </div>
             )}
           </div>

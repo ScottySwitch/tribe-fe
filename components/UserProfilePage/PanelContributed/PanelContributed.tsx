@@ -61,7 +61,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
               title={bizListing.name}
               imgUrl={
                 get(bizListing, "images[0]") ||
-                require("public/images/default-page-avatar.png")
+                require("public/images/default-page-avatar.svg")
               }
               location={`${bizListing.address}, ${bizListing.country}`}
               rate={bizListing.rate}

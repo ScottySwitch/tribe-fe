@@ -24,6 +24,10 @@ import styles from "styles/BizInformation.module.scss";
 import { Router, useRouter } from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
 import { isPaidUser } from "utils";
+import moment from "moment";
+import ConfirmModal from "components/ConfirmModal";
+import EmailApi from "services/email";
+import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -31,12 +35,39 @@ const BizInformation = (props) => {
   const [isPaid, setIsPaid] = useState(true);
   const [listing, setListing] = useState(defaultAddlistingForm);
   const [isPayYearly, setIsPayYearly] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [submitResult, setSubmitResult] = useState(false);
+
+  const resultType = [
+    {
+      title: "Success!",
+      message: "You have downgraded your plan successfully!",
+      textButton: "Close",
+    },
+    {
+      title: "Fail!",
+      message: "You have upgraded your plan successfully!",
+      textButton: "Try again",
+    },
+  ];
 
   const informationList = isPaid ? paidInformationList : freeInformationList;
   const [selectedTab, setSelectedTab] = useState(informationList[0].label);
 
   const router = useRouter();
-  const { user, deleteUser } = useContext(UserInforContext);
+  const { user, deleteUser, updateUser } = useContext(UserInforContext);
+
+  const Content = () => {
+    return (
+      <p className="text-sm mb-5">
+        Basic plan will continue until{" "}
+        <strong>{moment(listing.expiration_date).format("DD-MM-YYYY")}</strong>.
+        After that, you will no longer have access to Basic Tier feature.Basic
+        Tier information on your listing will be hidden.
+      </p>
+    );
+  };
 
   useEffect(() => {
     const getListingData = async () => {
@@ -44,7 +75,6 @@ const BizInformation = (props) => {
 
       //TODO: Check listing is owned by user before returning biz listing data on BE
       const listing = get(data, "data.data[0]") || {};
-      const isPaidListing = get(listing, "biz_invoices.length") > 0;
       if (listing?.expiration_date) {
         setIsPaid(isPaidUser(listing.expiration_date));
       } else {
@@ -78,6 +108,28 @@ const BizInformation = (props) => {
       }).then(() => setLoading(true)));
   };
 
+  const handleHref = (e) => {
+    if (e === "free") {
+      setIsVisible(true);
+    } else {
+      updateUser({
+        type_handle: "Claim",
+      });
+      router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
+    }
+  };
+
+  const handleDowngrade = () => {
+    const data = EmailApi.downgrade(get(listing, "slug"));
+    if (get(data, "data.data.success")) {
+      setSubmitResult(true);
+    } else {
+      setSubmitResult(true);
+    }
+    setShowResultModal(true);
+    setIsVisible(false);
+  };
+
   const tabContent = () => {
     switch (selectedTab) {
       case InformationList.BUSINESS_INFORMATION:
@@ -97,7 +149,7 @@ const BizInformation = (props) => {
           />
         );
       case InformationList.PRODUCT_LISTING:
-        return <ProductListing isPaid={isPaid} bizListingId={listing.id} />;
+        return <ProductListing isPaid={isPaid} />;
       case InformationList.PHOTOS_VIDEOS:
         return <PhotosVideos />;
       case InformationList.MANAGE_DEALS:
@@ -115,13 +167,18 @@ const BizInformation = (props) => {
       case InformationList.CHANGE_ACCOUNT_TIER:
         return (
           <TierTable
+            expirationDate={moment(listing?.expiration_date).format(
+              "YYYY/MM/DD"
+            )}
+            isChangeTier
             isPaid={isPaid}
             isPayYearly={isPayYearly}
             onSetIsPayYearly={(e) => setIsPayYearly(e)}
+            onDirectToVerification={handleHref}
           />
         );
       case InformationList.VERIFICATION:
-        return <Verification isPaid={isPaid} />;
+        return <Verification listing={listing} isPaid={isPaid} />;
 
       default:
         return <div />;
@@ -169,6 +226,19 @@ const BizInformation = (props) => {
         </div>
         <div className={styles.right_col}>{tabContent()}</div>
       </div>
+      <ConfirmModal
+        title="Are you sure?"
+        visible={isVisible}
+        onsubmit={handleDowngrade}
+        onClose={() => setIsVisible(false)}
+        content={<Content />}
+      />
+      <ResultModal
+        resultType={resultType}
+        visible={showResultModal}
+        isSuccess={submitResult}
+        onClose={() => setShowResultModal(false)}
+      />
     </SectionLayout>
   );
 };

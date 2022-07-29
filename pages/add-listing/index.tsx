@@ -1,7 +1,7 @@
 import Image from "next/image";
 import get from "lodash/get";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import map from "lodash/map";
 
 import AddListingPageOne from "components/AddListingPages/PageOne/AddListingPageOne";
@@ -21,6 +21,7 @@ import PreviewValue from "components/AddListingPages/PreviewValue/PreviewValue";
 import BizListingApi from "../../services/biz-listing";
 import BizListingRevisionApi from "services/biz-listing-revision";
 import ContributeApi from "services/contribute";
+import { UserInforContext } from "Context/UserInforContext";
 
 export interface IAddListingForm {
   id?: number;
@@ -70,9 +71,12 @@ export interface IAddListingForm {
   categoryKind?: string;
   tags?: any[];
   placeGoodFor?: string[];
+  expiration_date?: any;
 }
 
 const AddListing = () => {
+  const { user, updateUser } = useContext(UserInforContext);
+
   const [pageNumber, setPageNumber] = useState(1); // TODO: remove
   const [formData, setFormData] = useState(defaultAddlistingForm);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
