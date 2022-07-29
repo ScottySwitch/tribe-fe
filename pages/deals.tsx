@@ -18,6 +18,7 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
 import useTrans from "hooks/useTrans";
+import { formatBizlistingArray } from "utils";
 
 const allTab = [{ label: "All", value: undefined }];
 const categoryTabList: any[] = categories.map((item) => ({
@@ -41,34 +42,26 @@ const Deals = () => {
   }>([]);
 
   useEffect(() => {
+    console.log("selected", selectedTab);
+
     const getListingsHaveDeals = async () => {
-      const response = await bizListingApi.getBizListingsHaveDealsByCategoryId(
-        selectedTab
-      );
-      const mappedData =
-        Array.isArray(get(response, "data.data")) &&
-        get(response, "data.data").map((item) => ({
-          images: get(item, "attributes.images") || [],
-          title: get(item, "attributes.name"),
-          slug: get(item, "attributes.slug"),
-          isVerified: get(item, "attributes.is_verified"),
-          address: get(item, "attributes.address"),
-          country: get(item, "attributes.country"),
-          description: get(item, "attributes.description"),
-          // followerNumber: get(item, "user_listing_follows.length"),
-          // tags: get(item, "attributes.tags"),
-          // categories: get(item, "attributes.categories"),
-          price: get(item, "attributes.min_price") || "",
-          currency: get(item, "attributes.currency") || "",
-          // rate: get(item, "attributes.rate"),
-          // rateNumber: get(item, "attributes.rate_number"),
-        }));
+      const response = await bizListingApi.getListingCustom({
+        idCategory: selectedTab,
+        limit: 28,
+        hasDeals: true,
+        page: pagination.page,
+      });
+      const mappedData = formatBizlistingArray(get(response, "data.data"));
+      setPagination({
+        ...pagination,
+        total: get(response, "data.meta.pagination.total"),
+      });
       setListingsHaveDeals(mappedData);
       setLoading(false);
     };
 
     getListingsHaveDeals();
-  }, [pagination, selectedTab]);
+  }, [pagination.page, selectedTab]);
 
   if (loading) {
     return (
@@ -136,7 +129,7 @@ const Deals = () => {
         </div>
         <TopSearches />
       </SectionLayout>
-      <SectionLayout show={pagination.page > 1}>
+      <SectionLayout show={pagination.total > 1}>
         <Pagination
           limit={30}
           total={pagination.total}
