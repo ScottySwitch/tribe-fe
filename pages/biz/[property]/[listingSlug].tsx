@@ -135,9 +135,6 @@ const Properties = (context) => {
       if (get(listingDetail, "categories[0].slug") === CategoryText.EAT) {
         setIsEatListing(true);
       }
-
-      updateUser({ now_biz_listing: listingDetail });
-
       const bizInvoice = listingDetail.biz_invoices || [];
       const rawPhoneNumber = listingDetail.phone_number;
       const defaultPhone = censoredPhoneNumber(rawPhoneNumber);
