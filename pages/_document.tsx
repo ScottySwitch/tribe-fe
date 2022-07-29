@@ -14,6 +14,10 @@ export default function Document() {
         <meta property="og:url" content="URL OF YOUR WEBSITE" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="627" />
+        <meta
+          name="google-site-verification"
+          content="google-site-verification=2VDEkCpliYr8FkS2an1M0kvjTAL3iRJSiBedyiBTrLs"
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
