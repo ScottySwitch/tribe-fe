@@ -4,35 +4,17 @@ import Input from "components/Input/Input";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import { bizInformationDefaultFormData } from "constant";
 import React, { useState } from "react";
+import { numberVerify } from "utils";
 import styles from "./TabContent.module.scss";
 
 interface VerificationProps {
   isPaid: boolean;
+  listing: any;
 }
 
 const Verification = (props: VerificationProps) => {
-  const { isPaid } = props;
-  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData);
-  const { idVerificationStatus = "processing" } = formData;
+  const { isPaid, listing } = props;
 
-  const idCardStatusIcon = () => {
-    let icon;
-    switch (idVerificationStatus) {
-      case "verified":
-        icon = "verified-tag";
-        break;
-      case "processing":
-        icon = "processing-tag";
-        break;
-      case "unverified":
-        icon = "unverified-tag";
-        break;
-      default:
-        icon = "";
-        break;
-    }
-    return icon;
-  };
   return (
     <SectionLayout
       title="Verification"
@@ -41,22 +23,24 @@ const Verification = (props: VerificationProps) => {
       containerClassName="w-full"
     >
       <Break />
-      <Input
-        label="Verify Personal phone number"
-        value="*********992"
-        size="large"
-        width={300}
-        suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
-      />
+      {listing.number_verify && (
+        <Input
+          label="Verify Personal phone number"
+          value={numberVerify(listing.number_verify)}
+          size="large"
+          width={300}
+          suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
+        />
+      )}
       {isPaid && (
         <React.Fragment>
           <br />
           <Input
             label="Verify Personal phone number"
-            value="ID Card"
+            value={listing.provided}
             size="large"
             width={300}
-            suffix={<Icon icon={idCardStatusIcon()} style={{ width: 70 }} />}
+            suffix={<Icon icon="verified-tag" style={{ width: 70 }} />}
           />
         </React.Fragment>
       )}

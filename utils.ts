@@ -79,6 +79,19 @@ export const formatSelectInputValue = (e: string, selectOptions: IOption[]) => {
   return { select: selectOptions[codeOptionIndex], input: inputValue };
 };
 
+export const numberVerify = (e) => {
+  let phoneNumber = "";
+  for (let index = 0; index < e.length; index++) {
+    if (index < 10) {
+      phoneNumber = phoneNumber + "*"
+    }
+    else {
+      phoneNumber = phoneNumber + e[index]
+    }
+  }
+  return phoneNumber
+}
+
 export const getOptionsMappedFromResponse = (res) => {
   const rawArray = get(res, "data.data") || [];
   if (Array.isArray(rawArray)) {

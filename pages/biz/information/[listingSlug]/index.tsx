@@ -75,7 +75,6 @@ const BizInformation = (props) => {
 
       //TODO: Check listing is owned by user before returning biz listing data on BE
       const listing = get(data, "data.data[0]") || {};
-      const isPaidListing = get(listing, "biz_invoices.length") > 0;
       if (listing?.expiration_date) {
         setIsPaid(isPaidUser(listing.expiration_date));
       } else {
@@ -179,7 +178,7 @@ const BizInformation = (props) => {
           />
         );
       case InformationList.VERIFICATION:
-        return <Verification isPaid={isPaid} />;
+        return <Verification listing={listing} isPaid={isPaid} />;
 
       default:
         return <div />;
