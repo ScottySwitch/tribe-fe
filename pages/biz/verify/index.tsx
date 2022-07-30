@@ -242,7 +242,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     userInfo.isVeriFy = false;
     localStorage.setItem("user", JSON.stringify(userInfo));
     if (userInfo.role) {
-      router.push(`/biz/home/${userInfo.biz_slug}/edit/`);
+      router.push(`/biz/home/${userInfo.current_listing_slug}/edit/`);
     } else {
       router.push(`/`);
     }
