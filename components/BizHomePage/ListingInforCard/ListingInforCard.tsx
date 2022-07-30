@@ -297,6 +297,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
                   className={styles.verified_icon}
                   height={30}
                   width={60}
+                  alt=""
                 />
               </div>
             )}

@@ -45,6 +45,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
     handleSubmit,
     setValue,
     getValues,
+    watch,
     formState: { isValid },
   } = useForm({
     mode: "onChange",
@@ -219,13 +220,10 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
             <Upload
               isPaid
               multiple={true}
-              accept="images"
-              fileList={getValues("images")}
+              fileList={watch("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) =>
-                setValue("images", [...(getValues("images") || []), ...urls])
-              }
+              onChange={(urls) => setValue("images", urls)}
             />
           </Question>
           <Question show={!isEdit}>
