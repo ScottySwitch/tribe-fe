@@ -49,6 +49,13 @@ const ClaimListing = (context) => {
     if (listingId) {
       getListingData(listingId);
     }
+    userInfo = {
+      ...userInfo,
+      biz_id: listingId,
+      biz_slug: get(listing, "attributes.slug"),
+      pay_price: "150",
+    };
+    localStorage.setItem("user", JSON.stringify(userInfo));
   }, [listingId]);
 
   const agreePolicies = (
@@ -82,10 +89,7 @@ const ClaimListing = (context) => {
     setClaimStep(ClaimStep.CHOOSE_TIER);
     userInfo = {
       ...userInfo,
-      biz_id: listingId,
-      biz_slug: get(listing, "attributes.slug"),
       role: get(form, "role.value"),
-      pay_price: "150",
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
   };

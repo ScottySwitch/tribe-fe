@@ -8,7 +8,7 @@ import Icon from "components/Icon/Icon";
 import Heading from "components/Heading/Heading";
 import BizListing from "services/biz-listing";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { InformationList } from "enums";
+import { ClaimStep, InformationList } from "enums";
 import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail";
 import TierTable from "components/TierTable/TierTable";
 import Verification from "components/BizInformationPage/TabContentComponents/Verification";
@@ -78,6 +78,9 @@ const BizInformation = (props) => {
 
       //TODO: Check listing is owned by user before returning biz listing data on BE
       const listing = get(data, "data.data[0]") || {};
+      updateUser({
+        now_biz_listing: listing,
+      });
       if (listing?.expiration_date) {
         setIsPaid(isPaidUser(listing.expiration_date));
       } else {
@@ -111,7 +114,12 @@ const BizInformation = (props) => {
       updateUser({
         type_handle: "Claim",
       });
-      router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
+      router.push({
+        pathname: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+        query: {
+          firstStep: ClaimStep.CHOOSE_TIER,
+        },
+      });
     }
   };
 

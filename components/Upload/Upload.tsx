@@ -10,6 +10,7 @@ import Popover from "components/Popover/Popover";
 import { detectIsVideo } from "utils";
 import Router from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
+import { ClaimStep } from "enums";
 
 export interface UploadProps {
   name?: string;
@@ -43,7 +44,6 @@ const Upload = (props: UploadProps) => {
   } = props;
 
   const { user, updateUser } = useContext(UserInforContext);
-
 
   const [srcList, setSrcList] = useState<string[]>([]);
   const [localFileList, setLocalFileList] = useState<string[]>([]);
@@ -222,9 +222,14 @@ const Upload = (props: UploadProps) => {
 
   const handleHref = () => {
     updateUser({
-      type_handle: "Claim"
+      type_handle: "Claim",
     });
-    Router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
+    Router.push({
+      href: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+      query: {
+        firstStep: ClaimStep.CHOOSE_TIER,
+      },
+    });
   };
 
   return (
