@@ -144,7 +144,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       }
       const listing = get(data, "data.data[0]");
       if (listing) {
-        updateUser({ now_biz_listing: listing });
         setUserInfo(userInfo);
         const rawTags = listing.tags || [];
         const rawFacilities = listing.facilities_data || [];

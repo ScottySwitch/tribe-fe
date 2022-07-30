@@ -539,6 +539,14 @@ const getListingCustom = async (data: any) => {
       },
     };
   }
+  if (data?.idCategory) {
+    filter = {
+      ...filter,
+      categories: {
+        id: data.idCategory,
+      },
+    };
+  }
   if (data?.categoryLinks && data?.categoryLinks !== "all") {
     filter = {
       ...filter,
@@ -565,6 +573,16 @@ const getListingCustom = async (data: any) => {
       product_brands: {
         value: {
           $in: data.productBrands,
+        },
+      },
+    };
+  }
+  if (data?.hasDeals) {
+    filter = {
+      ...filter,
+      deals: {
+        is_revision: {
+          $not: true,
         },
       },
     };
@@ -614,9 +632,9 @@ const getListingCustom = async (data: any) => {
       tags: {
         id: true,
       },
-      // reviews: {
-      //   id: true,
-      // },
+      reviews: {
+        id: true,
+      },
     },
   };
   const query = qs.stringify(params, {

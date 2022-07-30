@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { filter, get } from "lodash";
+import { filter, get, shuffle } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
@@ -113,7 +113,7 @@ const SubCategoryPage = (context) => {
       );
 
       const rawBizlistingArray = get(dataBizlisting, "data.data");
-      let listingArray = formatListingArray(rawBizlistingArray);
+      let listingArray = shuffle(formatListingArray(rawBizlistingArray));
 
       setListings(listingArray);
       setPagination({
