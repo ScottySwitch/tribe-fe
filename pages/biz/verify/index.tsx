@@ -23,7 +23,7 @@ import UserApi from "../../../services/user";
 import BizInvoinceApi from "../../../services/biz-invoice";
 import ClaimListingApi from "../../../services/claim-listing";
 import SelectInput from "components/SelectInput/SelectInput";
-import { formattedAreaCodes } from "constant";
+import { formattedAreaCodes, user } from "constant";
 import bizListingApi from "services/biz-listing";
 import EmailApi from "services/email";
 import { UserInforContext } from "Context/UserInforContext";
@@ -202,6 +202,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
               await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
                 subscription: response?.subscription,
+                customer_id: response.customer,
               });
             });
           }
@@ -257,7 +258,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.isVeriFy = false;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    console.log(userInfo, userInfo.id);
 
     await bizListingApi.getOwnerBizListing().then((res) => {
       const updatedUserInfor = {
@@ -269,8 +269,8 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       updateUser(updatedUserInfor);
     });
 
-    if (userInfo.role) {
-      router.push(`/biz/home/${userInfo.biz_slug}/edit/`);
+    if (userInfo.role || userInfo.type_handle) {
+      router.push(`/biz/home/${userInfo.current_listing_slug}/edit/`);
     } else {
       router.push(`/`);
     }
@@ -310,10 +310,12 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
+      const subscribe_plan = price == "600" ? "annual" : "quarterly";
       await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
+        subscribe_plan: subscribe_plan,
       });
-      const sendMail = EmailApi.paymentSuccess(userInfo.biz_slug);
+      const sendMail = EmailApi.paymentSuccess(userInfo.current_listing_slug);
       if (userInfo.type_handle === "Claim") {
         const result = await BizInvoinceApi.createBizInvoice({
           value: parseInt(price),
@@ -543,7 +545,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 className="css style"
                 type="button"
                 id="SS_ProductCheckout"
-                data-id={payPrice === "600" ? 2 : 1}
+                data-id={payPrice === "600" ? 10 : 9}
                 data-url={baseURL}
                 text="Next"
                 onClick={handleSubmit}

@@ -11,14 +11,16 @@ import { ClaimStep, Tiers } from "enums";
 import { get } from "lodash";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import BizListingApi from "../../../services/biz-listing";
 import BizListingRevisionApi from "services/biz-listing-revision";
+import { UserInforContext } from "Context/UserInforContext";
 
 const defaultListing = listingSearchResult[0];
 
 const ClaimListing = (context) => {
+  const { user, updateUser } = useContext(UserInforContext);
   const { firstStep } = context;
   const [listing, setListing] = useState<{ [key: string]: any }>({});
   const [claimStep, setClaimStep] = useState(firstStep);
@@ -45,6 +47,11 @@ const ClaimListing = (context) => {
           ? await BizListingApi.getBizListingById(listingId)
           : await BizListingRevisionApi.getBizListingRevisionById(listingId);
       setListing(data.data.data);
+      updateUser({
+        biz_id: listingId,
+        biz_slug: get(listing, "attributes.slug"),
+        pay_price: "150",
+      });
     };
     if (listingId) {
       getListingData(listingId);
@@ -82,10 +89,7 @@ const ClaimListing = (context) => {
     setClaimStep(ClaimStep.CHOOSE_TIER);
     userInfo = {
       ...userInfo,
-      biz_id: listingId,
-      biz_slug: get(listing, "attributes.slug"),
       role: get(form, "role.value"),
-      pay_price: "150",
     };
     localStorage.setItem("user", JSON.stringify(userInfo));
   };
