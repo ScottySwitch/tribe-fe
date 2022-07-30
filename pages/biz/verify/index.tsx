@@ -15,7 +15,7 @@ import UserApi from "../../../services/user";
 import BizInvoinceApi from "../../../services/biz-invoice";
 import ClaimListingApi from "../../../services/claim-listing";
 import SelectInput from "components/SelectInput/SelectInput";
-import { formattedAreaCodes } from "constant";
+import { formattedAreaCodes, user } from "constant";
 import styles from "styles/BizUserVerify.module.scss";
 import moment from "moment";
 import bizListingApi from "services/biz-listing";
@@ -241,7 +241,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     userInfo.isVeriFy = false;
     localStorage.setItem("user", JSON.stringify(userInfo));
-    if (userInfo.role) {
+    if (userInfo.role || userInfo.type_handle) {
       router.push(`/biz/home/${userInfo.current_listing_slug}/edit/`);
     } else {
       router.push(`/`);
