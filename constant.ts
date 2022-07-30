@@ -43,7 +43,7 @@ export const getFilterLabels = (filter, currency) => [
     value: sortOptions.find((item) => item.value === filter.sort)?.label,
   },
   {
-    isShow: !!filter.minRating,
+    isShow: !!filter.maxRating,
     label: "Rating",
     value: `${filter.minRating || "0"} - ${filter.maxRating}`,
   },

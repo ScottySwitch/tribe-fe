@@ -45,30 +45,66 @@ const Sort = ({ filter, onFilter }) => (
   </div>
 );
 
-const Rating = ({ setFilter }: any) => <div>Rating</div>;
+const Rating = ({ filter, onFilter }) => {
+  const [ratingValues, setRateValues] = useState<{
+    min: number;
+    max: number;
+  }>({
+    min: 0,
+    max: 5,
+  });
+
+  const handleChangeRate = (value) => {
+    onFilter({ minRating: value.min, maxRating: value.max });
+    setRateValues(value);
+  };
+
+  return (
+    <div>
+      <div className="flex">
+        <div className="flex gap-1">
+          <Icon icon="red-star" />
+          {ratingValues?.min}
+        </div>
+        {ratingValues?.max === 5 ? (
+          "+"
+        ) : (
+          <div className="flex gap-1">
+            &nbsp;-&nbsp;
+            <Icon icon="red-star" />
+            {ratingValues?.max}
+          </div>
+        )}
+      </div>
+      <div className="flex flex-start mt-5">
+        <Range min={0} max={5} onChange={handleChangeRate} />
+      </div>
+    </div>
+  );
+};
 
 const PriceRange = ({ filter, onFilter }) => {
   const [rangeValues, setRangeValues] = useState<{
-    minPrice: number;
-    maxPrice: number;
+    min: number;
+    max: number;
   }>({
-    minPrice: filter.minPrice || 0,
-    maxPrice: filter.maxPrice || 0,
+    min: filter.min || 0,
+    max: filter.max || 0,
   });
 
   const country = useGetCountry();
 
   const handleChangeRange = (value) => {
-    onFilter(value);
+    onFilter({ minPrice: value.min, maxPrice: value.max });
     setRangeValues(value);
   };
 
   return (
     <div>
       <div className="flex">
-        <div>{`${country.currency} ${rangeValues?.minPrice}`}</div>
+        <div>{`${country.currency} ${rangeValues?.min}`}</div>
         &nbsp;-&nbsp;
-        <div>{`${country.currency} ${rangeValues?.maxPrice}`}</div>
+        <div>{`${country.currency} ${rangeValues?.max}`}</div>
       </div>
       <div className="flex flex-start mt-5">
         <Range min={0} max={country.max} onChange={handleChangeRange} />
@@ -235,16 +271,28 @@ const Filter = (props: FilterProps) => {
       label: "Rating",
       subLabel: filterLabels[1].isShow && filterLabels[1].value,
       value: Filters.RATING,
-      content: <Rating filter={localFilter} onFilter={handleFilter} />,
+      content: (
+        <Rating
+          key={Filters.RATING}
+          filter={localFilter}
+          onFilter={handleFilter}
+        />
+      ),
     },
     {
       label: "Price range",
       subLabel: filterLabels[2].isShow && filterLabels[2].value,
       value: Filters.PRICE_RANGE,
-      content: <PriceRange filter={localFilter} onFilter={handleFilter} />,
+      content: (
+        <PriceRange
+          key={Filters.PRICE_RANGE}
+          filter={localFilter}
+          onFilter={handleFilter}
+        />
+      ),
     },
     {
-      label: "Other",
+      label: "Others",
       subLabel: productTypeFilterNumber,
       value: Filters.OTHER,
       content: (

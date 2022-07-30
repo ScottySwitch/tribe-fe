@@ -8,7 +8,6 @@ $trach-height: 2px;
 
   .slider {
     position: relative;
-    width: 200px;
     width: 450px;
     &__range,
     &__track {
@@ -87,10 +86,10 @@ $trach-height: 2px;
 @media screen and (max-width: $mobile) {
   .container {
     .slider {
-      width: 250px;
+      width: 220px;
     }
     .thumb {
-      width: 250px;
+      width: 220px;
     }
   }
 } ;
