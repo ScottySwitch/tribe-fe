@@ -10,6 +10,7 @@ import Popover from "components/Popover/Popover";
 import { detectIsVideo } from "utils";
 import Router from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
+import { ClaimStep } from "enums";
 import UpgradePopup from "components/UpgradePopup/UpgradePopup";
 import ConfirmModal from "components/ConfirmModal";
 import Modal from "components/Modal/Modal";
@@ -230,7 +231,12 @@ const Upload = (props: UploadProps) => {
     updateUser({
       type_handle: "Claim",
     });
-    Router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
+    Router.push({
+      href: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+      query: {
+        firstStep: ClaimStep.CHOOSE_TIER,
+      },
+    });
   };
 
   return (

@@ -11,6 +11,7 @@ import { removeZeroInPhoneNumber } from "utils";
 import Router from "next/router";
 import { get } from "lodash";
 import { UserInforContext } from "Context/UserInforContext";
+import { ClaimStep } from "enums";
 
 interface EditActionProps {
   isOwned?: boolean;
@@ -168,7 +169,12 @@ const EditAction = (props: EditActionProps) => {
     updateUser({
       type_handle: "Claim",
     });
-    Router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
+    Router.push({
+      pathname: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+      query: {
+        firstStep: ClaimStep.CHOOSE_TIER,
+      },
+    });
   };
 
   return (
