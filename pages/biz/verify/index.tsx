@@ -189,6 +189,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
               await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
                 subscription: response?.subscription,
+                customer_id: response.customer,
               });
             });
           }
@@ -281,8 +282,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "600" ? nowDay.add(365, "day") : nowDay.add(90, "day");
+      const subscribe_plan = price == "600" ? "annual" : "quarterly";
       await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
+        subscribe_plan: subscribe_plan,
       });
       const sendMail = EmailApi.paymentSuccess(userInfo.biz_slug);
       if (userInfo.type_handle === "Claim") {
@@ -514,7 +517,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 className="css style"
                 type="button"
                 id="SS_ProductCheckout"
-                data-id={payPrice === "600" ? 2 : 1}
+                data-id={payPrice === "600" ? 10 : 9}
                 data-url={baseURL}
                 text="Next"
                 onClick={handleSubmit}
