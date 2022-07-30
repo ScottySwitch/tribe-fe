@@ -273,7 +273,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     });
 
     if (userInfo.role || userInfo.type_handle) {
-      router.push(`/biz/home/${userInfo.biz_slug}/edit/`);
+      router.push(`/biz/home/${userInfo.current_listing_slug}/edit/`);
     } else {
       router.push(`/`);
     }
