@@ -4,6 +4,7 @@ import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Upload from "components/Upload/Upload";
 import { ListingHomePageScreens } from "enums";
+import { get } from "lodash";
 import { useState } from "react";
 import { getIndex, randomId } from "utils";
 
@@ -64,6 +65,7 @@ const AddMenu = (props: AddItemsProps) => {
       variant="secondary"
       text="Add another"
       size="small"
+      disabled={!isPaid && get(localMenuList, "length") > 2}
       onClick={handleAddMenu}
     />
   );

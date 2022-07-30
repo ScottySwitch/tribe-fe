@@ -19,6 +19,7 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 
 import styles from "./HomepageReviews.module.scss";
+
 interface HomepageReviewsProps {
   isPaid?: boolean;
   bizListingId?: number;
@@ -138,7 +139,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
   };
 
   return (
-    <div>
+    <div id="reviews" style={{ paddingTop: 130, marginTop: -130 }}>
       <Heading text="Reviews" />
       <br />
       <div className="flex gap-3 items-center">

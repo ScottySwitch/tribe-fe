@@ -49,7 +49,6 @@ const Home: NextPage = (props: any) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-
     const getListings = async () => {
       const data = await BizListingApi.getAllBizlitingPinnedByCategory(
         location

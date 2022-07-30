@@ -12,6 +12,7 @@ import Upload from "components/Upload/Upload";
 import Album from "components/Album/Album";
 import { get, isArray } from "lodash";
 import Modal from "components/Modal/Modal";
+import UpgradePopup from "components/UpgradePopup/UpgradePopup";
 export interface UserReviewCardProps {
   reply?: string;
   replyAt?: string;
@@ -194,25 +195,14 @@ const UserReviewCard = (props: UserReviewCardProps) => {
           </div>
         )}
         {actions && (
-          <div className="flex flex-wrap gap-y-0 gap-3">
+          <UpgradePopup>
             <Button
               variant="secondary"
               text="Reply review"
               width={150}
-              className="mt-4"
-              disabled={!isPaid}
-              onClick={onReplyClick}
+              onClick={() => isPaid && onReplyClick?.()}
             />
-            {!isPaid && (
-              <Button
-                text="Upgrade to reply reviews"
-                width={300}
-                className="mt-4"
-                backgroundColor="#3c4467"
-                prefix={<Icon icon="star-2" color="white" />}
-              />
-            )}
-          </div>
+          </UpgradePopup>
         )}
       </div>
       {isArray(listImage) && (

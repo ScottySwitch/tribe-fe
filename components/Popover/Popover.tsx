@@ -2,8 +2,8 @@ import classNames from "classnames";
 import { ReactElement, useState } from "react";
 import styles from "./Popover.module.scss";
 
-interface PopoverProps {
-  children: ReactElement | ReactElement[];
+export interface PopoverProps {
+  children: any;
   content?: ReactElement;
   contentClassName?: string;
   onBeforePopUp?: () => boolean;

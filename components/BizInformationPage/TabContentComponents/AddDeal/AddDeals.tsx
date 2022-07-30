@@ -11,6 +11,7 @@ import moment from "moment";
 import parseISO from "date-fns/parseISO";
 
 import styles from "./AddDeal.module.scss";
+import { get } from "lodash";
 
 interface AddDealsProps {
   isEdit?: boolean;
@@ -60,6 +61,7 @@ const AddDeals = (props: AddDealsProps) => {
       variant="secondary"
       text="Add another"
       size="small"
+      disabled={!isPaid && get(localDealList, "length") > 2}
       onClick={handleAddDeal}
     />
   );

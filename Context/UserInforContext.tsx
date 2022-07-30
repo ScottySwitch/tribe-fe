@@ -64,7 +64,7 @@ export const UserInforProvider = ({ children }) => {
     const stringyNewLocalUserInfor = JSON.stringify(newUserInfor);
 
     localStorage.setItem("user", stringyNewLocalUserInfor);
-    setUser({ ...user, ...infor });
+    setUser({ ...newUserInfor, ...infor });
   };
 
   const contextDefaultValue = {

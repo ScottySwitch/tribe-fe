@@ -81,14 +81,8 @@ const InforCard = (props: InforCardProps) => {
     ));
   };
 
-  const [src, setSrc] = useState(imgUrl);
-
   return (
-    <div
-      className={`${styles.infor_card} ${className}`}
-      style={{ width }}
-      onClick={onClick}
-    >
+    <div className={`${styles.infor_card} ${className}`} style={{ width }}>
       {isVerified && (
         <div className={styles.verified}>
           <Icon icon="verified-tag" className={styles.verified_icon} />
@@ -101,14 +95,14 @@ const InforCard = (props: InforCardProps) => {
           </div>
         )}
         <Image
-          src={src || require("public/images/default-avatar.svg")}
+          src={imgUrl || require("public/images/default-avatar.svg")}
           alt=""
           layout="fill"
           objectFit="cover"
           objectPosition="center"
         />
       </div>
-      <div className={styles.details}>
+      <div className={styles.details} onClick={onClick}>
         <div className={styles.title}>{title}</div>
         <div className={styles.content}>
           <div className="flex items-center">

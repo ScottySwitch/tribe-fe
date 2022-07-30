@@ -222,7 +222,7 @@ const BizInformation = (props) => {
       <ConfirmModal
         title="Are you sure?"
         visible={isVisible}
-        onsubmit={handleDowngrade}
+        onSubmit={handleDowngrade}
         onClose={() => setIsVisible(false)}
         content={<Content />}
       />
