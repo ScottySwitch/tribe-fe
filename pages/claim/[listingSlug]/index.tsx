@@ -45,17 +45,18 @@ const ClaimListing = (context) => {
           ? await BizListingApi.getBizListingById(listingId)
           : await BizListingRevisionApi.getBizListingRevisionById(listingId);
       setListing(data.data.data);
+      console.log("listing", listing);
+      userInfo = {
+        ...userInfo,
+        biz_id: listingId,
+        biz_slug: get(listing, "attributes.slug"),
+        pay_price: "150",
+      };
+      localStorage.setItem("user", JSON.stringify(userInfo));
     };
     if (listingId) {
       getListingData(listingId);
     }
-    userInfo = {
-      ...userInfo,
-      biz_id: listingId,
-      biz_slug: get(listing, "attributes.slug"),
-      pay_price: "150",
-    };
-    localStorage.setItem("user", JSON.stringify(userInfo));
   }, [listingId]);
 
   const agreePolicies = (

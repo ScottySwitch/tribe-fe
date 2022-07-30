@@ -287,7 +287,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
         subscribe_plan: subscribe_plan,
       });
-      const sendMail = EmailApi.paymentSuccess(userInfo.biz_slug);
+      const sendMail = EmailApi.paymentSuccess(userInfo.current_listing_slug);
       if (userInfo.type_handle === "Claim") {
         const result = await BizInvoinceApi.createBizInvoice({
           value: parseInt(price),
