@@ -44,6 +44,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
     register,
     handleSubmit,
     setValue,
+    watch,
     getValues,
     formState: { isValid },
   } = useForm({
@@ -197,13 +198,10 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
             <Upload
               isPaid
               multiple={true}
-              accept="images"
-              fileList={getValues("images")}
+              fileList={watch("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) =>
-                setValue("images", [...(getValues("images") || []), ...urls])
-              }
+              onChange={(urls) => setValue("images", urls)}
             />
           </Question>
           <Question show={!isEdit}>

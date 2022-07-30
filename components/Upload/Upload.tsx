@@ -11,6 +11,10 @@ import { detectIsVideo } from "utils";
 import Router from "next/router";
 import { UserInforContext } from "Context/UserInforContext";
 import { ClaimStep } from "enums";
+import UpgradePopup from "components/UpgradePopup/UpgradePopup";
+import ConfirmModal from "components/ConfirmModal";
+import Modal from "components/Modal/Modal";
+import Button from "components/Button/Button";
 
 export interface UploadProps {
   name?: string;
@@ -48,6 +52,7 @@ const Upload = (props: UploadProps) => {
   const [srcList, setSrcList] = useState<string[]>([]);
   const [localFileList, setLocalFileList] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   useEffect(() => {
     if (Array.isArray(fileList) && fileList.length > 0) {
@@ -206,7 +211,9 @@ const Upload = (props: UploadProps) => {
   });
 
   const handleOpenFileModal = () => {
-    document.getElementById("upload-input-btn")?.click();
+    isPaid
+      ? document.getElementById("upload-input-btn")?.click()
+      : setShowUpgradeModal(true);
   };
 
   const manageMedia = (
@@ -277,7 +284,7 @@ const Upload = (props: UploadProps) => {
         </div>
       )}
 
-      {type === "banner" && !isViewPage && get(srcList, "length") > 3 && (
+      {type === "banner" && !isViewPage && get(srcList, "length") > 2 && (
         <div className={styles.edit_banner_add_more_btn}>
           <Popover content={manageMedia} contentClassName="mt-3">
             <Icon icon="plus" />
@@ -285,6 +292,36 @@ const Upload = (props: UploadProps) => {
           </Popover>
         </div>
       )}
+      <Modal
+        visible={showUpgradeModal}
+        title="Upgrade to upload more!"
+        width={500}
+        onClose={() => setShowUpgradeModal(false)}
+      >
+        <div className="flex flex-col items-center">
+          <Image
+            src={require("public/images/upcoming-feature.svg")}
+            alt=""
+            layout="fixed"
+            height={150}
+            width={150}
+          />
+          <div className="flex gap-5 justify-end py-3 px-[30px] w-full">
+            <Button
+              width="max-content"
+              variant="secondary"
+              text="Cancel"
+              onClick={() => setShowUpgradeModal(false)}
+            />
+            <Button
+              width="max-content"
+              className="text-sm"
+              text="Ok"
+              onClick={handleHref}
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

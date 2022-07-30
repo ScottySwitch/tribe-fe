@@ -176,7 +176,7 @@ const ProductListing = (props: ProductListingProps) => {
                 <Button
                   prefix={<Icon icon="star-2" color="#653fff" />}
                   variant="secondary"
-                  text="Update to use full feature"
+                  text="Upgrade to use full feature"
                   width="max-content"
                   onClick={() => null}
                 />

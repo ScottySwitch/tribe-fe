@@ -6,6 +6,7 @@ import SelectInput from "components/SelectInput/SelectInput";
 import Upload from "components/Upload/Upload";
 import { currencyOptions, discountTypeOptions } from "constant";
 import { ListingHomePageScreens } from "enums";
+import { get } from "lodash";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { getIndex, randomId } from "utils";
@@ -66,6 +67,7 @@ const AddItems = (props: AddItemsProps) => {
       width="max-content"
       variant="secondary"
       text="Add another"
+      disabled={!isPaid && get(localItemList, "length") > 2}
       size="small"
       onClick={handleAddItem}
     />

@@ -22,7 +22,7 @@ interface EditActionProps {
   isPaid?: boolean;
   isLoading?: boolean;
   klookUrl?: string;
-  id?: string;
+  listingId?: string;
 }
 
 const EditAction = (props: EditActionProps) => {
@@ -33,7 +33,7 @@ const EditAction = (props: EditActionProps) => {
     isPaid,
     isLoading,
     klookUrl,
-    id,
+    listingId,
     onPublishPage,
     onApplyAction,
   } = props;
@@ -189,9 +189,14 @@ const EditAction = (props: EditActionProps) => {
         </div>
       )}
       {isViewPage && !isOwned && (
-        <div className={styles.action_modal_not_owned}>
-          <Button text="Claim listing" size="small" variant="outlined" />
-          Own this business?
+        <div className={styles.action_modal}>
+          <Button
+            text="Claim listing"
+            size="small"
+            variant="outlined"
+            onClick={() => router.push(`/claim/${listingId}`)}
+          />
+          <p className="text-left">Own this business?</p>
         </div>
       )}
       {!isViewPage && (

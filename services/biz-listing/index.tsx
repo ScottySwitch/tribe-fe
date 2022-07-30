@@ -295,7 +295,7 @@ const getInfoOwnerBizListingBySlug = async (bizListingSlug: any) => {
   return await Api.get(url);
 };
 
-const getOwnerBizListing = async (bizListingSlug: any) => {
+const getOwnerBizListing = async (bizListingSlug?: any) => {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
   const query = qs.stringify(
     {

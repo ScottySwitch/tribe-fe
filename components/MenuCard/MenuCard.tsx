@@ -4,12 +4,13 @@ import styles from "./MenuCard.module.scss";
 interface MenuCardProps {
   imgUrl?: string;
   title?: string;
+  onClick?: () => void;
 }
 
 const MenuCard = (props: MenuCardProps) => {
-  const { imgUrl, title } = props;
+  const { imgUrl, title, onClick } = props;
   return (
-    <div className={styles.menu_container}>
+    <div className={styles.menu_container} onClick={onClick}>
       {imgUrl && <Image src={imgUrl} alt="" width={200} height={200} />}
       <div className={styles.title}>{title}</div>
     </div>

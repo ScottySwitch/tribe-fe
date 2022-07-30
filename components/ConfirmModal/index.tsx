@@ -9,11 +9,11 @@ export interface IConfirmModal {
   title: string;
   content?: any;
   onClose?: () => void;
-  onsubmit?: () => void;
+  onSubmit?: () => void;
 }
 
 const ConfirmModal = (props: IConfirmModal) => {
-  const { visible = false, title, content, onClose, onsubmit } = props;
+  const { visible = false, title, content, onClose, onSubmit } = props;
 
   return (
     <Modal
@@ -40,7 +40,7 @@ const ConfirmModal = (props: IConfirmModal) => {
           </div>
           <div className="flex flex-row items-center justify-between">
             <Button variant="outlined" className={styles.button} text="No" onClick={onClose} />
-            <Button className={styles.button} text="Yes" onClick={onsubmit} />
+            <Button className={styles.button} text="Yes" onClick={onSubmit} />
           </div>
         </div>
       </div>

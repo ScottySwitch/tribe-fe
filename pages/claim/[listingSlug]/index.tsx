@@ -62,7 +62,7 @@ const ClaimListing = (context) => {
     <div>
       I have read and accept Tribes{" "}
       <span style={{ color: "#3faeff" }}>
-        <Link href="/terms">Terms of Use</Link>
+        <Link href="/terms-conditions">Terms of Use</Link>
       </span>{" "}
       and{" "}
       <span style={{ color: "#3faeff" }}>
