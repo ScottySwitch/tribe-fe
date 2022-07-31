@@ -18,6 +18,7 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
 import useTrans from "hooks/useTrans";
+import { formatCardItemProps } from "utils";
 
 const categoryTabList: ITab[] = categories.map((item) => ({
   label: item.slug,
@@ -117,17 +118,7 @@ const Deals = () => {
             listingsHaveDeals.map((item) => (
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={item.images[0]}
-                  title={item.title}
-                  rate={item.rate}
-                  rateNumber={item.rateNumber}
-                  followerNumber={item.followerNumber}
-                  price={item.price}
-                  currency={item.currency?.toUpperCase()}
-                  categories={item.categories}
-                  tags={item.tags}
-                  isVerified={item.isVerified}
-                  description={item.description}
+                  {...formatCardItemProps(item)}
                   onClick={() => router.push(`/biz/home/${item.slug}`)}
                 />
               </div>

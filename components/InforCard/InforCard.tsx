@@ -151,8 +151,7 @@ const InforCard = (props: InforCardProps) => {
               <div className={styles.discount_amount}>
                 {(_.toNumber(price) * (_.toNumber(discount) / 100 + 1)).toFixed(
                   2
-                )}{" "}
-                {currency}
+                )}
               </div>
             )}
           </div>

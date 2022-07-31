@@ -34,6 +34,7 @@ import {
   formatCollections,
   formatArticle,
   formatCategoryLink,
+  formatCardItemProps,
 } from "utils";
 
 import styles from "styles/Home.module.scss";
@@ -259,17 +260,7 @@ const Category = (props: any) => {
             {dealArray?.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={card.images[0]}
-                  description={card.description}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -297,17 +288,7 @@ const Category = (props: any) => {
           listingArray.map((card) => (
             <div key={card.title} className="pb-5 pt-3">
               <InforCard
-                imgUrl={card.images[0]}
-                title={card.title}
-                rate={card.rate}
-                rateNumber={card.rateNumber}
-                followerNumber={card.followerNumber}
-                price={card.price}
-                currency={card.currency?.toUpperCase()}
-                categories={card.categories}
-                description={card.description}
-                tags={card.tags}
-                isVerified={card.isVerified}
+                {...formatCardItemProps(card)}
                 onClick={() => router.push(`/biz/home/${card.slug}`)}
               />
             </div>

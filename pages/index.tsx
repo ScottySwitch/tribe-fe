@@ -16,7 +16,12 @@ import CollectionApi from "services/collection";
 import BannerApi from "services/banner";
 import CategoryApi from "services/category";
 import Loader from "components/Loader/Loader";
-import { formatBanner, formatListingArray, isArray } from "utils";
+import {
+  formatBanner,
+  formatCardItemProps,
+  formatListingArray,
+  isArray,
+} from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import { Ilisting } from "type";
 import {
@@ -150,17 +155,7 @@ const Home: NextPage = (props: any) => {
             {listingExclusiveDeal?.map((card) => (
               <div key={card.name} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -189,17 +184,7 @@ const Home: NextPage = (props: any) => {
             {listings?.buy.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -213,17 +198,7 @@ const Home: NextPage = (props: any) => {
             {listings?.seeAndDo.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -250,17 +225,7 @@ const Home: NextPage = (props: any) => {
             {listings?.eat.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -277,20 +242,8 @@ const Home: NextPage = (props: any) => {
             {listings?.transport.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  {...formatCardItemProps(card)}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))}
@@ -303,20 +256,8 @@ const Home: NextPage = (props: any) => {
             {listings?.stay.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  {...formatCardItemProps(card)}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))}

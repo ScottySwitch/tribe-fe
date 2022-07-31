@@ -6,7 +6,7 @@ import { locations, videoExtensions } from "constant";
 import { format } from "path";
 
 export const formatCardItemProps = (item) => ({
-  title: get(item, "attributes.name") || item.name || "",
+  title: get(item, "attributes.name") || item.name || item.title || "",
   price: get(item, "attributes.price") || item.price || "",
   discount: get(item, "attributes.discount") || item.discount,
   endDate:
@@ -31,6 +31,12 @@ export const formatCardItemProps = (item) => ({
     get(item, "attributes.terms_conditions") ||
     item.termsConditions ||
     item.terms_conditions,
+  rate: item.rate,
+  rateNumber: item.rateNumber,
+  followerNumber: item.followerNumber,
+  categories: item.categories,
+  tags: item.tags,
+  isVerified: item.isVerified,
 });
 
 export const getParentId = (item) => {

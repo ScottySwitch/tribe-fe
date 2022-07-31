@@ -12,7 +12,7 @@ import Button from "components/Button/Button";
 import BizListingApi from "services/biz-listing";
 import InforCard from "components/InforCard/InforCard";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { changeToSlugify } from "utils";
+import { changeToSlugify, formatCardItemProps } from "utils";
 
 import styles from "styles/Claim.module.scss";
 
@@ -209,7 +209,7 @@ const ClaimPage = () => {
           <div className={styles.why_tribes_container}>
             <div className={styles.why_tribes_scrollbox}>
               {whyTribes.map((card, index) => (
-                <InforCard key={index} {...card} />
+                <InforCard key={index} {...formatCardItemProps(card)} />
               ))}
             </div>
           </div>
