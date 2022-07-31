@@ -150,9 +150,9 @@ const ReviewsPage = () => {
         containerClassName={styles.section_children_reviews_container}
       >
         <div className={styles.main_content}>
-          <div className="font-semibold text-sm sm:text-base mb-8">
+          <h3 className="font-semibold text-sm sm:text-base mb-8">
             Share your experiences with the Tribes community!
-          </div>
+          </h3>
           <div className="review-list">
             {isArray(listingSearchResult) &&
               listingSearchResult.map(

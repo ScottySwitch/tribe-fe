@@ -13,7 +13,7 @@ import EditAction from "components/BizHomePage/EditAction/EditAction";
 import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard";
 import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { Categories, ListingHomePageScreens } from "enums";
+import { Categories, CategoryText, ListingHomePageScreens } from "enums";
 import BizListingApi from "../../../../services/biz-listing";
 import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu";
 import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems";
@@ -47,10 +47,16 @@ import Button from "components/Button/Button";
 import ShareModal from "components/ShareModal/ShareModal";
 
 import styles from "styles/BizHomepage.module.scss";
+import Head from "next/head";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
   const { user, updateUser } = useContext(UserInforContext);
+  const { locale } = useRouter();
+
+  const [title, setTitle] = useState(
+    "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
+  );
 
   const [showShareModal, setShowShareModal] = useState(false);
   const [userInfo, setUserInfo] = useState<any>({});
@@ -268,6 +274,28 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       getListingData(listingSlug);
     }
   }, [listingSlug, isViewPage]);
+
+  useEffect(() => {
+    if (get(bizListing, "categories[0].slug") === CategoryText.EAT) {
+      switch (locale) {
+        case "sg":
+          setTitle(
+            `Find Halal ${bizListing.name} and see ${bizListing.name} Menu Online | Tribes`
+          );
+          break;
+        case "id":
+          setTitle(
+            `Lihat ${bizListing.name} Halal dan cek ${bizListing.name} Menu Online | Tribes`
+          );
+          break;
+        default:
+          setTitle(
+            `Find Halal ${bizListing.name} and see ${bizListing.name} Menu Online | Tribes`
+          );
+          break;
+      }
+    }
+  }, [bizListing, locale]);
 
   // TODO: check function upload multiple images
   const handleChangeImages = (srcImages) => setListingImages(srcImages);
@@ -596,6 +624,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   return (
     <div className={styles.listing_homepage}>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <SectionLayout show={screen === ListingHomePageScreens.HOME}>
         <Banner
           isViewPage={isViewPage}
@@ -604,10 +635,10 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           listingId={bizListing.id}
           onChangeImages={handleChangeImages}
         />
-        <div className={styles.breadcrumbs}>
+        <h1 className={styles.breadcrumbs}>
           Home <Icon icon="carret-right" size={14} color="#7F859F" />
           {bizListing.name}
-        </div>
+        </h1>
         <ListingInforCard
           isVerified={isVerified}
           key={userInfo}

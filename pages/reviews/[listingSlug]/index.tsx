@@ -143,13 +143,13 @@ const AddReviewPage = () => {
                   </div>
                 </div>
               </div>
-              <p className={`${styles.note} mb-8`}>
+              <h2 className={`${styles.note} mb-8`}>
                 Your first-hand experiences would help and inspire our fellow
                 Tribes member to get ideas and make better planning. Thank you!
-              </p>
-              <p className={`${styles.note} mb-6`}>
-                Your overall rating of this place
-              </p>
+              </h2>
+              <h2 className={`${styles.note} mb-6`}>
+                Your overall rating of this h2lace
+              </h2>
               <div className="flex mb-6">
                 <Rate
                   readonly={false}

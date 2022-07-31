@@ -34,9 +34,9 @@ const TabNav = (props: ITab) => {
   };
 
   return (
-    <div className={selectedClassNames} onClick={() => onSelectedTab(value)}>
+    <h3 className={selectedClassNames} onClick={() => onSelectedTab(value)}>
       <span className="capitalize">{formatLabel(label)}</span>
-    </div>
+    </h3>
   );
 };
 
