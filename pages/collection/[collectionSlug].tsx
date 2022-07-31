@@ -148,12 +148,12 @@ const Collection = (props) => {
           />
         )}
         <div className={styles.collection_context_container}>
-          <div className={styles.collection_name}>
+          <h1 className={styles.collection_name}>
             {collectionDetail.collectionName}
-          </div>
-          <div className={styles.collection_description}>
+          </h1>
+          <h2 className={styles.collection_description}>
             {collectionDetail.description}
-          </div>
+          </h2>
         </div>
       </SectionLayout>
       <SectionLayout>

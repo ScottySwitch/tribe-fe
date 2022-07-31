@@ -222,9 +222,9 @@ const ArticlesDetailPage = (props: any) => {
             </div> */}
             {isArray(article.bizlisting) && (
               <>
-                <h5 className="mb-[24px] font-bold text-base">
+                <h3 className="mb-[24px] font-bold text-base">
                   Brands you can find:
-                </h5>
+                </h3>
                 <div className="my-7">
                   <Carousel responsive={infoCardResponsive}>
                     {isArray(article.bizlisting) &&

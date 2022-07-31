@@ -59,7 +59,7 @@ const SectionLayout = (props: SectionLayoutProps) => {
         {title && (
           <div className={styles.row}>
             <div className={titleContainerClassNames}>
-              <div className={styles.title}>{title}</div>
+              <h1 className={styles.title}>{title}</h1>
               {subTitle && <div className={styles.sub_title}>{subTitle}</div>}
             </div>
             {seeMore && (

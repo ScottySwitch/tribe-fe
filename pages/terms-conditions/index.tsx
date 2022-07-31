@@ -27,9 +27,9 @@ const TermsConditionsPage = () => {
         <h1 className={styles.title}>Term & Conditions</h1>
         <div className={styles.content}>
           <br />{" "}
-          <h6 className="underline font-bold">
+          <h2 className="underline font-bold">
             PRIVACY POLICY & PDPA COMPLIANCE STATEMENT
-          </h6>
+          </h2>
           <p>
             Thank you for visiting our web site and/or using our mobile
             application. This is the Privacy Policy & PDPA Compliance Statement
@@ -54,7 +54,7 @@ const TermsConditionsPage = () => {
             that you understand how any personal information you provide will be
             used.
           </p>
-          <br /> <h6 className="font-bold">Policy</h6>
+          <br /> <h2 className="font-bold">Policy</h2>
           <p>
             We are committed to protecting the privacy and accuracy of your
             personally identifiable information to a reasonable extent possible,
@@ -65,14 +65,14 @@ const TermsConditionsPage = () => {
             without your express consent. For avoidance of doubt, the use of the
             Properties shall constitute your express consent.
           </p>
-          <br /> <h6 className="font-bold">Compliance with the Law</h6>
+          <br /> <h2 className="font-bold">Compliance with the Law</h2>
           <p>
             We are committed to ensuring compliance with the applicable privacy
             laws, in particular the Personal Data Protection Act 2012 (No. 26 of
             2012). You can find a copy of the Act at http://statutes.agc.gov.sg.
           </p>
           <br />{" "}
-          <h6 className="font-bold">Personal Data Protection Act Statement</h6>
+          <h2 className="font-bold">Personal Data Protection Act Statement</h2>
           <p>
             The main purposes for which your personal data is collected, used or
             disclosed by us, its related entities and our service providers in
@@ -112,7 +112,7 @@ const TermsConditionsPage = () => {
             For more information about PDPA generally, please visit the Personal
             Data Protection Commission’s Properties at http://www.pdpc.gov.sg.
           </p>
-          <br /> <h6 className="font-bold">Information Collection and Use</h6>
+          <br /> <h2 className="font-bold">Information Collection and Use</h2>
           <p>
             Categories of personally identifiable information collected by us
             include all details submitted through the Properties or at our
@@ -145,9 +145,9 @@ const TermsConditionsPage = () => {
             troubleshooting purposes.
           </p>
           <br />{" "}
-          <h6 className="font-bold">
+          <h2 className="font-bold">
             Use of Non-Personally Identifiable Information (“Non PII”)
-          </h6>
+          </h2>
           <p>
             We may use your Non PII to personalize content and make suggestions
             for you by using the said information to understand how you use and
@@ -176,9 +176,9 @@ const TermsConditionsPage = () => {
             </li>
           </ol>
           <br />{" "}
-          <h6 className="font-bold underline">
+          <h2 className="font-bold underline">
             Sharing of Non-Personally Identifiable Information
-          </h6>
+          </h2>
           <p>
             We do not share personally identifiable information such as your
             name, address and/or contact number with our advertising,
@@ -203,9 +203,9 @@ const TermsConditionsPage = () => {
             academic research and surveys (which may be published).
           </p>
           <br />{" "}
-          <h6 className="font-bold">
+          <h2 className="font-bold">
             Use of Non-Personally Identifiable Information (“Non PII”)
-          </h6>
+          </h2>
           <p>
             Other than as set out in this policy, we will not disclose or share,
             without your express consent, personally identifiable information,
@@ -214,7 +214,7 @@ const TermsConditionsPage = () => {
             be distributed or sold to third-party organizations.
           </p>
           <br />{" "}
-          <h6 className="font-bold">Links to Other Sites or Applications</h6>
+          <h2 className="font-bold">Links to Other Sites or Applications</h2>
           <p>
             You may encounter links to other Web sites or applications of
             organizations not directly affiliated with us. Please be aware that
@@ -223,7 +223,7 @@ const TermsConditionsPage = () => {
             each external Web site or application that collects personal
             information.
           </p>
-          <br /> <h6 className="font-bold">Cookie/Tracking Technology</h6>
+          <br /> <h2 className="font-bold">Cookie/Tracking Technology</h2>
           <p>
             We may use cookie and tracking technology depending on the features
             offered. Cookie and tracking technology are useful for gathering
@@ -236,7 +236,7 @@ const TermsConditionsPage = () => {
             Aggregate cookie and tracking information may be shared with third
             parties.
           </p>
-          <br /> <h6 className="font-bold">Distribution of Information</h6>
+          <br /> <h2 className="font-bold">Distribution of Information</h2>
           <p>
             We may share information with governmental agencies or other
             companies assisting us in fraud prevention or investigation. We may
@@ -260,7 +260,7 @@ const TermsConditionsPage = () => {
             processed by us, we will take reasonable steps to safeguard the
             privacy of your personal information.
           </p>
-          <br /> <h6 className="font-bold">Data Security, Retention etc.</h6>
+          <br /> <h2 className="font-bold">Data Security, Retention etc.</h2>
           <p>
             The security, integrity and confidentiality of your information are
             extremely important to us. We have implemented technical,
@@ -274,7 +274,7 @@ const TermsConditionsPage = () => {
             outlined in the Privacy Policy unless a longer retention period is
             required or permitted by law.
           </p>
-          <br /> <h6 className="font-bold">Changes to Policy</h6>
+          <br /> <h2 className="font-bold">Changes to Policy</h2>
           <p>
             From time to time, we may change the Privacy Policy to accommodate
             new technologies, industry practices, regulatory requirements or for
@@ -283,7 +283,7 @@ const TermsConditionsPage = () => {
             consent.
           </p>
           <br />{" "}
-          <h6 className="font-bold">Contact / Enquiry / Data Amendment</h6>
+          <h2 className="font-bold">Contact / Enquiry / Data Amendment</h2>
           <p>
             If you have any concerns, issues or questions regarding the Privacy
             Policy, please feel free to contact us via email at

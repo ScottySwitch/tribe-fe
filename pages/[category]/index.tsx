@@ -38,6 +38,7 @@ import {
 } from "utils";
 
 import styles from "styles/Home.module.scss";
+import Head from "next/head";
 interface IType {
   [key: string]: any;
 }
@@ -46,11 +47,15 @@ interface IType {
 const Category = (props: any) => {
   const trans = useTrans();
   const router = useRouter();
+  const { locale } = useRouter();
   const {
     query: { category },
   } = router;
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
+  const [title, setTitle] = useState(
+    "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
+  );
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
   const [categoryInfor, setCategoryInfor] = useState<Ilisting>({});
@@ -62,6 +67,31 @@ const Category = (props: any) => {
   const [categoryLinkArray, setCategoryLinkArray] = useState<IType[]>([]);
   const { user } = useContext(UserInforContext);
   const { location } = user;
+
+  useEffect(() => {
+    switch (category) {
+      case CategoryText.EAT:
+        switch (locale) {
+          case "sg":
+            setTitle(
+              "Find Halal Restaurant in Singapore and Order Food Online | Tribes"
+            );
+            break;
+          case "id":
+            setTitle(
+              "Cari Restoran Halal di Singapura dan Pesan Makanan Online | Tribes"
+            );
+            break;
+          default:
+            setTitle(
+              "Find Halal Restaurant in Singapore and Order Food Online | Tribes"
+            );
+            break;
+        }
+        break;
+    }
+  }, [locale, category]);
+
   useEffect(() => {
     const getData = async (categoryId) => {
       const dataExclusiveDeal = await BizListingApi.getListingCustom({
@@ -188,6 +218,9 @@ const Category = (props: any) => {
 
   return (
     <div>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <SectionLayout className={styles.main_catbanner}>
         {categoryInfor.bannerSrc && (
           <Image
@@ -325,10 +358,10 @@ const Category = (props: any) => {
       )}
       <div className={styles.introduction}>
         <SectionLayout transparent>
-          <div className={styles.header}>
+          <h1 className={styles.header}>
             A <span>Curated Platform & Experience</span>
             <p>For The Muslim Lifestyle</p>
-          </div>
+          </h1>
           {curatedList.map((item, index) => (
             <div key={index} className="flex gap-3 mt-5">
               <Icon icon="star-2" color="#e60112" />

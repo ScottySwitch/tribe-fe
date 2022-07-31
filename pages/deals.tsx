@@ -88,10 +88,10 @@ const Deals = () => {
           className={styles.collection_banner_img}
         />
         <div className={styles.collection_context_container}>
-          <div className={styles.collection_name}>Exclusive deals</div>
-          <div className={styles.collection_description}>
+          <h1 className={styles.collection_name}>Exclusive deals</h1>
+          <h2 className={styles.collection_description}>
             Get the hottest and earliest promotions
-          </div>
+          </h2>
         </div>
       </SectionLayout>
       <SectionLayout childrenClassName="flex justify-between flex-wrap">

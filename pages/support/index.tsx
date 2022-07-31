@@ -85,7 +85,7 @@ const QuestionItem = (props: { question: string; answer: string }) => {
   const { question, answer } = props;
   return (
     <div className={styles.question_item}>
-      <h5 className={styles.question}>{question}</h5>
+      <h2 className={styles.question}>{question}</h2>
       <p className={styles.answer}>{answer}</p>
     </div>
   );
@@ -97,7 +97,7 @@ const QuestionForUser = () => {
       <ul>
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>What is Tribes?</h5>
+            <h2 className={styles.question}>What is Tribes?</h2>
             <p className={styles.answer}>
               Tribes is a community-driven, lifestyle platform for Muslims to
               explore and discover new content in the areas of{" "}
@@ -118,7 +118,7 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>Who is Tribes for?</h5>
+            <h2 className={styles.question}>Who is Tribes for?</h2>
             <p className={styles.answer}>
               Tribes is for everyone and anyone, regardless of race, language or
               religion, who is interested to contribute and be a part of the
@@ -129,9 +129,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               How can I contribute to the Tribes community?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               There are currently 3 ways for you to contribute to the community!
               Every contribution will enable you to earn Tribes points.
@@ -160,9 +160,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               What is Tribes relevance to HHWT?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Tribes is a product of Hello Travel Pte. Ltd. which owns Have
               Halal, Will Travel (HHWT). Over the years as a publication, the
@@ -177,9 +177,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Are the products listed on Tribes halal?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Yes, they are! Tribes is here to serve the Muslim community and
               therefore, the products listed on our platform are halal. That
@@ -195,9 +195,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               What do the different halal statuses mean?
-            </h5>
+            </h2>
             <ul className={styles.small_answer}>
               <li>
                 <p className={styles.answer}>
@@ -259,9 +259,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Why am I unable to make a purchase on the platform?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Tribes is not a marketplace and we do not offer direct purchase
               services. You will be able to make the purchases in 2 possible
@@ -281,9 +281,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               What is unique in each category B, E, S, T, S?
-            </h5>
+            </h2>
             <ul className={styles.small_answer}>
               <li className={styles.answer}>
                 BUY - Anything that you could purchase off the shelf. Includes
@@ -316,9 +316,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Are the brand owners local or international?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               The brand owners come from different parts of the world, mostly
               from Singapore, Malaysia and Indonesia.
@@ -328,7 +328,7 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>How do I reset my password?</h5>
+            <h2 className={styles.question}>How do I reset my password?</h2>
             <ul className={styles.small_answer}>
               <li className={styles.answer}>
                 Enter the email address or phone number that you signed up with
@@ -350,9 +350,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Will the point system restart if I reset my password?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               No, it will not affect the point system
             </p>
@@ -361,17 +361,17 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>Are my points transferable?</h5>
+            <h2 className={styles.question}>Are my points transferable?</h2>
             <p className={styles.answer}>Points are not transferable.</p>
           </div>
         </li>
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Who do I contact for more information with regards to the
               information listed on Tribes?
-            </h5>
+            </h2>
             <ul className={styles.small_answer}>
               <li className={styles.answer}>
                 For unclaimed businesses, there will be a button for users to
@@ -391,9 +391,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               What do I do if I see a post against the community guidelines?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               See something against our Community Guidelines? Report it to us!
               Be the eyes and ears of our community to keep our platform a safe
@@ -424,10 +424,10 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Where do I write in my suggestions and feedback regarding the
               Tribes platform?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               You may submit your suggestions and feedback now at{" "}
               <a href="mailto:Tribes@havehalalwilltravel.com">
@@ -439,7 +439,7 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>How do I submit a review?</h5>
+            <h2 className={styles.question}>How do I submit a review?</h2>
             <ul className={styles.small_answer}>
               <li className={styles.answer}>
                 Firstly be a member of Tribes by signing up to our platform to
@@ -465,10 +465,10 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Why are some of my reviews not showing up under the business’s
               review section?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Your review is under review by Tribes.
             </p>
@@ -484,9 +484,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               How long does a review take to be shown on Tribes?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Once you have submitted a product listing for review, it will take
               1-3 working days for the listing to be up. If your review process
@@ -500,9 +500,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Am I able to refer a friend to sign up for a Tribes account?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Yes, and we encourage you to do so! Each Tribes user has a unique
               referral link which can be found in their profile
@@ -512,10 +512,10 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               What benefits do I get if I refer a friend to sign up for a Tribes
               account?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               The referrer will receive points which can be used to participate
               in exclusive events and lucky draws after the referee has
@@ -526,10 +526,10 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               What do I do if a business does not honour their deal as listed on
               Tribes?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Take a screenshot of the deal on Tribes and email us at
               <a href="mailto:tribes@havehalalwilltravel.com">
@@ -543,9 +543,9 @@ const QuestionForUser = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               How many times can I use a Deal?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               You may use the deal for as long as the brands posted on their
               listing!
@@ -563,9 +563,9 @@ const QuestionForBusiness = () => {
       <ul>
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               How can Tribes help me grow my business?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Tribes is a platform that serves the Muslim community. Our goal is
               to enrich our users have experiences by providing them with an
@@ -578,7 +578,7 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>Is it free?</h5>
+            <h2 className={styles.question}>Is it free?</h2>
             <p className={styles.answer}>
               There is a free and a paid version for businesses.
             </p>
@@ -587,9 +587,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               What is the difference between a free and basic listing?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               More features are available for brands who sign up for the basic
               listing. For more information, please click here (put in the URL
@@ -601,7 +601,7 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>What is a brand listing?</h5>
+            <h2 className={styles.question}>What is a brand listing?</h2>
             <p className={styles.answer}>
               Brand listings are for business owners to promote their new
               products and offer deals primarily for our main Muslim audience.
@@ -615,9 +615,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Will I be able to downgrade my tier in the future?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               We will be really sad to see you leave. Should you feel that the
               basic tier does not meet your expectations, we would advise you to
@@ -630,9 +630,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Who can I contact if I require support?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Please feel free to drop us an email at{" "}
               <a href="mailto:tribes@havehalalwilltravel.com">
@@ -644,9 +644,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               <u>How do I claim a listing?</u>
-            </h5>
+            </h2>
             <p className={styles.answer}>
               For a brand that has already been listed on Tribes?
             </p>
@@ -681,9 +681,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               <u>How can I update the details on my listing page?</u>
-            </h5>
+            </h2>
             <ul className={styles.small_answer}>
               <li className={styles.answer}>
                 Claim your listing if you haven’t already done so
@@ -701,12 +701,12 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               <u>
                 What is the total number of products that I can list on my
                 listing?
               </u>
-            </h5>
+            </h2>
             <p className={styles.answer}>
               If you are using the free version, you will be able to list a
               maximum of 3 products. If you are on the basic tier, you will be
@@ -717,9 +717,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               <u>Why is my product deleted/suspended</u>
-            </h5>
+            </h2>
             <p className={styles.answer}>
               If your product has been reported and found to violate the listing
               guidelines, you would have received an email notification stating
@@ -730,9 +730,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               Do business listings need to be reviewed?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Claimed business listings will have to undergo moderation and be
               approved by the moderator before going live. We also encourage the
@@ -744,9 +744,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               <u>Customer Service</u>
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Please feel free to drop us an email at{" "}
               <a href="mailto:tribes@havehalalwilltravel.com">
@@ -758,9 +758,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               <u>Deals</u>
-            </h5>
+            </h2>
             <ul className={styles.small_answer}>
               <li className={styles.answer}>
                 FREE listings: brand owners will not have the option to promote
@@ -775,9 +775,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               How do I make payment for Paid Listing?
-            </h5>
+            </h2>
             <p className={styles.answer}>
               Brand owners can make opt for quarterly or yearly tier
               subscriptions to enjoy unlimited usage of uploading deals,
@@ -788,7 +788,7 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>What details are required?</h5>
+            <h2 className={styles.question}>What details are required?</h2>
             <p className={styles.answer}>
               We will need either your Identification Card or Driver’s Licence
               for account verification
@@ -798,9 +798,9 @@ const QuestionForBusiness = () => {
         <Break />
         <li>
           <div className={styles.question_item}>
-            <h5 className={styles.question}>
+            <h2 className={styles.question}>
               <u>Managing reviews and response</u>
-            </h5>
+            </h2>
             <ul className={styles.small_answer}>
               <li className={styles.answer}>
                 FREE listings: Brand owners will not be able to respond to
