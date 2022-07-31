@@ -150,7 +150,7 @@ const PromotionsPage = () => {
                     key={index}
                     title={get(promotion, "attributes.name")}
                     imgUrl={get(promotion, "attributes.images[0]")}
-                    expiredAt={`${get(
+                    endDate={`${get(
                       promotion,
                       "attributes.start_date"
                     )} - ${get(promotion, "attributes.end_date")}`}
@@ -207,7 +207,7 @@ const PromotionsPage = () => {
                     key={index}
                     title={get(promotion, "attributes.name")}
                     imgUrl={get(promotion, "attributes.images[0]")}
-                    expiredAt={`${get(
+                    endDate={`${get(
                       promotion,
                       "attributes.start_date"
                     )} - ${get(promotion, "attributes.end_date")}`}
@@ -303,7 +303,7 @@ const PromotionsPage = () => {
                     key={index}
                     title={get(promotion, "attributes.name")}
                     imgUrl={get(promotion, "attributes.images[0]")}
-                    expiredAt={`${get(
+                    endDate={`${get(
                       promotion,
                       "attributes.start_date"
                     )} - ${get(promotion, "attributes.end_date")}`}
