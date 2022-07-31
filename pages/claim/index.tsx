@@ -135,7 +135,7 @@ const ClaimPage = () => {
           width="100%"
           height="30%"
           layout="responsive"
-          alt=""
+          alt="banner"
           objectFit="cover"
         />
         <SectionLayout className={styles.section_claim_search_box}>
@@ -162,7 +162,7 @@ const ClaimPage = () => {
           <Image
             src={require("public/images/take-control.svg")}
             width={600}
-            alt=""
+            alt="take-control-alt"
           />
           <div className={styles.description}>
             <h2 className={styles.title}>Take control of your listing</h2>
@@ -176,7 +176,7 @@ const ClaimPage = () => {
           <Image
             src={require("public/images/respond-to-reviews.svg")}
             width={600}
-            alt=""
+            alt="respond-to-reviews-alt"
           />
           <div className={styles.description}>
             <h2 className={styles.title}>Respond to reviews</h2>
@@ -191,7 +191,7 @@ const ClaimPage = () => {
           <Image
             src={require("public/images/track-perfomance.svg")}
             width={600}
-            alt=""
+            alt="track-perfomance-alt"
           />
           <div className={styles.description}>
             <h2 className={styles.title}>Track your performance</h2>

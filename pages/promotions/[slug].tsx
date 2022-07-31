@@ -125,7 +125,7 @@ const PromotionsPage = () => {
             width={1188}
             height={400}
             layout="responsive"
-            alt="alt"
+            alt="banner"
           />
         </div>
       </SectionLayout>

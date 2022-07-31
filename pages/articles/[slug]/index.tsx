@@ -129,7 +129,7 @@ const ArticlesDetailPage = (props: any) => {
         <div className={styles.cover_container}>
           <Image
             src={article.imgUrl || require("public/images/default-avatar.svg")}
-            alt=""
+            alt="banner"
             layout="fill"
             className={styles.cover_image}
           />

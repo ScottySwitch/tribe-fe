@@ -137,7 +137,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
               src={user?.avatar || avatarUrl}
               height={56}
               width={56}
-              alt=""
+              alt="avatar"
               className="rounded-full"
             />
           )}

@@ -30,7 +30,7 @@ const HamModalHeader = ({
     <div className={styles.user_profile}>
       <Image
         src={user.avatar || require("public/images/default-avatar.svg")}
-        alt=""
+        alt="avatar"
         layout="fixed"
         width={50}
         height={50}
