@@ -9,7 +9,7 @@ export interface PromotionProps {
   imgUrl?: string;
   title?: string;
   startDate?: string;
-  expiredAt?: string;
+  endDate?: string;
   type?: string | number;
   favourite?: boolean;
   width?: string | number;
@@ -25,7 +25,7 @@ const PromotionCard = (props: PromotionProps) => {
     imgUrl,
     width,
     title,
-    expiredAt,
+    endDate,
     startDate,
     description,
     type,
@@ -74,7 +74,7 @@ const PromotionCard = (props: PromotionProps) => {
         <div>
           <h3 className={styles.promotion_title}>{title}</h3>
           <div className={styles.promotion_date}>
-            {startDate} {startDate && expiredAt && `-`} {expiredAt}
+            {startDate} {startDate && endDate && `-`} {endDate}
           </div>
           <div className={styles.promotion_date}>{description}</div>
         </div>

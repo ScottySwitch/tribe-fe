@@ -144,9 +144,9 @@ const AddItems = (props: AddItemsProps) => {
                   options={discountTypeOptions}
                   selectPosition="suffix"
                   placeholder="Enter discount"
-                  value={{ input: item.discount, select: item.discountType }}
+                  value={{ input: item.discount, select: item.discountUnit }}
                   onChange={(e: any) => {
-                    handleChangeItem(item.id, "discount_unit", e.select.value);
+                    handleChangeItem(item.id, "discountUnit", e.select.value);
                     handleChangeItem(item.id, "discount", e.input);
                   }}
                 />

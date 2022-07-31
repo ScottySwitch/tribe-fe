@@ -13,9 +13,9 @@ import moment from "moment";
 export interface IDealsDetails {
   name: string;
   imgUrl: string;
-  offers?: string;
-  valid?: string;
-  conditions?: string;
+  description?: string;
+  endDate?: Date;
+  termsConditions?: string;
 }
 interface DealDetailModalProps extends ModalProps {
   data: any;
@@ -27,7 +27,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props;
   const [isFavourite, setIsFavourite] = useState<boolean>(true);
   const [showShareModal, setShowShareModal] = useState(false);
-
+  console.log("data", data);
   useEffect(() => {
     const checkFavouriteDeal = async () => {
       const dataFavouriteDeal = await FavouriteDealApi.checkIsFavourite(
@@ -84,27 +84,20 @@ const DealDetailModal = (props: DealDetailModalProps) => {
           />
         </div>
         <div className={styles.content}>
-          {data.description ||
-            (data.information && (
-              <div className={styles.item}>
-                <h6 className={styles.label}>Offers</h6>
-                <p className="text-left">
-                  {data.description || data.information}
-                </p>
-              </div>
-            ))}
-          {(data.end_date || data.validUntil) && (
+          {data.description && (
             <div className={styles.item}>
-              <h6 className={styles.label}>Valid</h6>
-              <p className="text-left">
-                {data.start_date &&
-                  moment(data.start_date).format("YYYY-MMM-DD")}
-                {data.end_date}
-                {data.validUntil &&
-                  moment(data.validUntil).format("YYYY-MMM-DD")}
-              </p>
+              <h6 className={styles.label}>Offers</h6>
+              <p className="text-left">{data.description}</p>
             </div>
           )}
+          <div className={styles.item}>
+            <h6 className={styles.label}>Valid</h6>
+            <p className="text-left">
+              {data.startDate && moment(data.startDate).format("YYYY/MM/DD")}
+              {" - "}
+              {data.endDate && moment(data.endDate).format("YYYY/MM/DD")}
+            </p>
+          </div>
           {(get(data, "attributes.terms_conditions") ||
             data.conditions ||
             data.terms_conditions ||

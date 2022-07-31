@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./InforCard.module.scss";
 import { useState } from "react";
 import { CurrencyValues } from "enums";
+import _ from "lodash";
 
 export interface InforCardProps {
   className?: string;
@@ -21,7 +22,7 @@ export interface InforCardProps {
   discount?: string | number;
   rateNumber?: number;
   followerNumber?: number;
-  discount_unit?: string;
+  discountUnit?: string;
   description?: string;
   width?: string | number;
   validUntil?: any;
@@ -44,7 +45,7 @@ const InforCard = (props: InforCardProps) => {
     categories,
     tags,
     iconTag = false,
-    discount_unit,
+    discountUnit,
     discount,
     price,
     isVerified,
@@ -80,6 +81,9 @@ const InforCard = (props: InforCardProps) => {
       </div>
     ));
   };
+
+  const showDiscountAmount =
+    discount && price && discountUnit === CurrencyValues.PERCENTAGE;
 
   return (
     <div className={`${styles.infor_card} ${className}`} style={{ width }}>
@@ -143,17 +147,18 @@ const InforCard = (props: InforCardProps) => {
                 {price} {!!currency && currency.toUpperCase()}
               </div>
             )}
-            {typeof discount === "number" &&
-              typeof price === "number" &&
-              discount_unit === CurrencyValues.PERCENTAGE && (
-                <div className={styles.discount_amount}>
-                  {(price * (discount / 100 + 1)).toFixed(2)} {currency}
-                </div>
-              )}
+            {showDiscountAmount && (
+              <div className={styles.discount_amount}>
+                {(_.toNumber(price) * (_.toNumber(discount) / 100 + 1)).toFixed(
+                  2
+                )}{" "}
+                {currency}
+              </div>
+            )}
           </div>
           {discount && (
             <div className={styles.discount}>
-              {discount} {!!discount_unit && discount_unit.toUpperCase()} OFF
+              {discount} {!!discountUnit && discountUnit.toUpperCase()} OFF
             </div>
           )}
           {sortingTags.length > 0 && (

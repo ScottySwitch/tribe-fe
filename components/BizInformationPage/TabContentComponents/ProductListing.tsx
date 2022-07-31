@@ -16,9 +16,14 @@ import Modal, { ModalFooter } from "../../Modal/Modal";
 import { Categories } from "enums";
 import Loader from "components/Loader/Loader";
 import useGetRevision from "hooks/useGetRevision";
-import { isArray } from "utils";
+import {
+  formatCardItemProps,
+  formatSubmittedListingItem,
+  isArray,
+} from "utils";
 
 import styles from "./TabContent.module.scss";
+import UpgradePopup from "components/UpgradePopup/UpgradePopup";
 interface ProductListingProps {
   isPaid: boolean;
 }
@@ -56,26 +61,29 @@ const ProductListing = (props: ProductListingProps) => {
     const getProductsByBizListingId = async () => {
       const productArray = get(revisionListing, "products");
       if (isArray(productArray)) {
-        const listingArray = productArray.map((item) => ({
-          name: item.name,
-          is_revision: isRevision,
-          isPinned: item.is_pinned,
-          parent_id: item.parent_id,
-          price: item.price,
-          id: item.id,
-          description: item.description,
-          images: item.images,
-          imgUrl:
-            get(item, "images[0]") ||
-            require("public/images/default-avatar.svg"),
-          discount: item.discount,
-          tags: item.tags,
-          currency: item.currency,
-          discount_unit: item.discount_unit,
-          websiteUrl: item.website_url,
-          klookUrl: item.klook_url,
-          isEdited: false,
-        }));
+        const listingArray = productArray.map((item) => {
+          console.log("item", item);
+          return {
+            name: item.name,
+            is_revision: isRevision,
+            isPinned: item.is_pinned,
+            parent_id: item.parent_id,
+            price: item.price,
+            id: item.id,
+            description: item.description,
+            images: item.images,
+            imgUrl:
+              get(item, "images[0]") ||
+              require("public/images/default-avatar.svg"),
+            discount: item.discount,
+            tags: item.tags,
+            currency: item.currency,
+            discountUnit: item.discount_unit,
+            websiteUrl: item.website_url,
+            klookUrl: item.klook_url,
+            isEdited: false,
+          };
+        });
         setProductList(listingArray);
       }
       setLoading(false);
@@ -91,11 +99,12 @@ const ProductListing = (props: ProductListingProps) => {
       : [];
 
     const product = {
+      ...products[0],
+      discount_unit: get(products, "[0].discountUnit"),
       is_revision: isRevision,
       biz_listing_revision: isRevision
         ? revisionListing.id
         : await getRevisionId({ products: currentProductIds }),
-      ...products[0],
     };
 
     const submitProductApi = product.isEdited
@@ -170,28 +179,25 @@ const ProductListing = (props: ProductListingProps) => {
             top.
           </div>
           <div className="flex gap-2 flex-wrap">
-            {!isPaid &&
-              Array.isArray(productList) &&
-              productList.length > 2 && (
-                <Button
-                  prefix={<Icon icon="star-2" color="#653fff" />}
-                  variant="secondary"
-                  text="Upgrade to use full feature"
-                  width="max-content"
-                  onClick={() => null}
-                />
-              )}
-            <Button
-              disabled={
-                !isPaid && Array.isArray(productList) && productList.length > 2
-              }
-              text="Add new"
-              width={200}
-              onClick={() => {
-                setSelectedItem([{}]);
-                setScreen(ProductListingScreens.ADD);
-              }}
-            />
+            {!isPaid && Array.isArray(productList) && productList.length > 2 ? (
+              <UpgradePopup>
+                <Button text="Add new" width={200} />
+              </UpgradePopup>
+            ) : (
+              <Button
+                disabled={
+                  !isPaid &&
+                  Array.isArray(productList) &&
+                  productList.length > 2
+                }
+                text="Add new"
+                width={200}
+                onClick={() => {
+                  setSelectedItem([{}]);
+                  setScreen(ProductListingScreens.ADD);
+                }}
+              />
+            )}
           </div>
         </div>
         <Break />
@@ -199,18 +205,7 @@ const ProductListing = (props: ProductListingProps) => {
           {productList &&
             productList.map((item: any) => (
               <div key={item.id} className={styles.info_card_container}>
-                <InforCard
-                  imgUrl={
-                    get(item, "images[0]") ||
-                    require("public/images/default-avatar.svg")
-                  }
-                  title={item.name}
-                  price={item.price}
-                  currency={item.currency}
-                  discount={item.discount}
-                  discount_unit={item.discount_unit}
-                  description={item.description}
-                />
+                <InforCard {...formatCardItemProps(item)} />
                 <div className={styles.toolbar}>
                   <Popover content={<PopoverContent item={item} />}>
                     <Icon icon="toolbar" color="white" />
@@ -243,6 +238,7 @@ const ProductListing = (props: ProductListingProps) => {
           placeholders={getAddItemsFields(Categories.BUY).placeholder}
           onCancel={() => setScreen(ProductListingScreens.LIST)}
           onSubmit={(e) => {
+            console.log(e);
             setScreen(ProductListingScreens.LIST);
             submitProduct(e);
           }}

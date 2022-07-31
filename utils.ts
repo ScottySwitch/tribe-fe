@@ -5,6 +5,148 @@ import parseISO from "date-fns/parseISO";
 import { locations, videoExtensions } from "constant";
 import { format } from "path";
 
+export const formatCardItemProps = (item) => ({
+  title: get(item, "attributes.name") || item.name || "",
+  price: get(item, "attributes.price") || item.price || "",
+  discount: get(item, "attributes.discount") || item.discount,
+  endDate:
+    get(item, "attributes.endDate") ||
+    (item.endDate && moment(item.endDate).format("YYYY/MM/DD")) ||
+    (item.end_date && moment(item.end_date).format("YYYY/MM/DD")),
+  startDate:
+    get(item, "attributes.startDate") ||
+    (item.startDate && moment(item.startDate).format("YYYY/MM/DD")) ||
+    (item.start_date && moment(item.start_date).format("YYYY/MM/DD")),
+  imgUrl:
+    item.imgUrl ||
+    get(item, "images.[0]") ||
+    require("public/images/default-avatar.svg"),
+  description: get(item, "attributes.description") || item.description,
+  currency: (get(item, "attributes.currency") || item.currency)?.toUpperCase(),
+  discountUnit:
+    get(item, "attributes.discount_unit") ||
+    item.discountUnit ||
+    item.discount_unit,
+  termsConditions:
+    get(item, "attributes.terms_conditions") ||
+    item.termsConditions ||
+    item.terms_conditions,
+});
+
+export const getParentId = (item) => {
+  return !item?.is_revision
+    ? item?.id?.toString()
+    : item?.parent_id
+    ? item?.parent_id?.toString()
+    : "";
+};
+
+export const formatSubmittedListingItem = (
+  item,
+  bizListingRevisionCreateId,
+  bizListingId
+) => ({
+  id: item.id,
+  biz_listing_revision: bizListingRevisionCreateId || bizListingId,
+  name: item.name,
+  description: item.description,
+  price: item.price,
+  currency: item.currency,
+  discount: item.discount,
+  discount_unit: item.discountUnit,
+  tags: item.tags,
+  images: item.images,
+  website_url: item.websiteUrl,
+  klook_url: item.klookUrl,
+  is_revision: true,
+  isEdited: item.isEdit,
+});
+
+export const formatSubmittedDeals = (
+  item,
+  bizListingRevisionCreateId,
+  bizListing
+) => ({
+  biz_listing_revision: bizListingRevisionCreateId || bizListing?.id,
+  end_date: moment(item.endDate).format("YYYY-MM-DD") + "T:00:00.000Z",
+  name: item.name,
+  description: item.description,
+  images: item.images,
+  start_date: new Date(),
+  terms_conditions: item.termsConditions,
+  is_revision: true,
+  category: get(bizListing, "categories[0].id"),
+});
+
+export const formatDeals = (rawDeals) =>
+  isArray(rawDeals)
+    ? rawDeals.map((item) => ({
+        id: item.id,
+        is_revision: item.is_revision,
+        parent_id: item.parent_id,
+        name: item.name,
+        images: item.images,
+        imgUrl: get(item, "images[0]"),
+        description: item.description,
+        termsConditions: item.terms_conditions,
+        startDate: moment(item.start_date).format("YYYY/MM/DD"),
+        endDate: moment(item.end_date).format("YYYY/MM/DD"),
+        isChange: false,
+      }))
+    : [];
+
+export const formatMenu = (rawMenu) => {
+  return isArray(rawMenu)
+    ? rawMenu.map((item) => ({
+        id: item.id,
+        is_revision: item.is_revision,
+        parent_id: item.parent_id,
+        name: item.name,
+        images: item.menu_file,
+        imgUrl: item.menu_file[0],
+        isChange: false,
+      }))
+    : [];
+};
+
+export const formatListingItems = (rawListingItems) =>
+  rawListingItems.map((item) => ({
+    name: item.name,
+    is_revision: item.is_revision,
+    parent_id: item.parent_id,
+    price: item.price,
+    id: item.id,
+    description: item.description,
+    images: item.images,
+    imgUrl: get(item, "images[0]"),
+    discount: item.discount,
+    tags: item.tags,
+    websiteUrl: item.website_url,
+    klookUrl: item.klook_url,
+    isEdited: false,
+    currency: item.currency,
+    discountUnit: item.discount_unit,
+  }));
+
+export const checkHasSocialLink = (bizListing) => {
+  return bizListing.email ||
+    bizListing.website ||
+    get(bizListing, "social_info.twitter") ||
+    get(bizListing, "social_info.facebook") ||
+    get(bizListing, "social_info.instagram")
+    ? true
+    : false;
+};
+
+export const formatOptions = (list) =>
+  Array.isArray(list)
+    ? list.map((item: any) => ({
+        label: item.label,
+        value: item.value,
+        id: item.id,
+      }))
+    : [];
+
 export const detectIsVideo = (src: string | Blob) => {
   if (typeof src === "string") {
     return videoExtensions.some((item) => src?.includes(item));
@@ -14,7 +156,7 @@ export const detectIsVideo = (src: string | Blob) => {
 };
 
 export const getIndex = (id, list) => {
-  return list.findIndex((item) => item.id === id);
+  return isArray(list) ? list.findIndex((item) => item.id === id) : -1;
 };
 
 export const randomId = () => Math.floor(Math.random() * 10000000);
@@ -83,14 +225,13 @@ export const numberVerify = (e) => {
   let phoneNumber = "";
   for (let index = 0; index < e.length; index++) {
     if (index < 10) {
-      phoneNumber = phoneNumber + "*"
-    }
-    else {
-      phoneNumber = phoneNumber + e[index]
+      phoneNumber = phoneNumber + "*";
+    } else {
+      phoneNumber = phoneNumber + e[index];
     }
   }
-  return phoneNumber
-}
+  return phoneNumber;
+};
 
 export const getOptionsMappedFromResponse = (res) => {
   const rawArray = get(res, "data.data") || [];
@@ -167,7 +308,7 @@ export const changeToSlugify = (str) => {
 };
 
 export const isPaidUser = (time) => {
-  if (!time) return false
+  if (!time) return false;
   const timeCalcDistance = parseISO(moment(time).format("YYYY-MM-DD HH:mm:ss"));
   let diff_in_minutes = moment().diff(moment(timeCalcDistance), "minutes");
   return diff_in_minutes < 0 ? true : false;
@@ -231,7 +372,10 @@ export const formatBizlistingArray = (rawListing) =>
         address: get(item, "attributes.address"),
         country: get(item, "attributes.country"),
         description: get(item, "attributes.description"),
-        followerNumber: get(item, "attributes.user_listing_follows.data.length"),
+        followerNumber: get(
+          item,
+          "attributes.user_listing_follows.data.length"
+        ),
         tags: arrayLabeltags(get(item, "attributes.tags.data")),
         categories: arrayLabelCategory(get(item, "attributes.categories.data")),
         price: get(item, "attributes.min_price") || "",
@@ -259,15 +403,15 @@ export const formatCollections = (rawCollections) =>
     : [];
 
 export const formatArticle = (rawArticle) =>
-Array.isArray(rawArticle)
-  ? rawArticle.map((item) => ({
-      title: get(item, "attributes.name"),
-      imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
-      time: get(item, "attributes.createdAt"),
-      slug: get(item, "attributes.slug"),
-      content: get(item, "attributes.content"),
-    }))
-  : [];
+  Array.isArray(rawArticle)
+    ? rawArticle.map((item) => ({
+        title: get(item, "attributes.name"),
+        imgUrl: get(item, "attributes.thumbnail.data.attributes.url"),
+        time: get(item, "attributes.createdAt"),
+        slug: get(item, "attributes.slug"),
+        content: get(item, "attributes.content"),
+      }))
+    : [];
 
 export const formatArticleDetails = (rawArticle) =>
   Array.isArray(rawArticle)
@@ -277,8 +421,12 @@ export const formatArticleDetails = (rawArticle) =>
         time: get(item, "attributes.createdAt"),
         slug: get(item, "attributes.slug"),
         content: get(item, "attributes.content"),
-        bizlisting: formatBizlistingArray(get(item, "attributes.biz_listings.data")) || [],
-        relatedArticles: formatArticle(get(item, "attributes.related_articles.data")) || [],      }))
+        bizlisting:
+          formatBizlistingArray(get(item, "attributes.biz_listings.data")) ||
+          [],
+        relatedArticles:
+          formatArticle(get(item, "attributes.related_articles.data")) || [],
+      }))
     : [];
 
 export const formatCategoryLink = (rawCategoryLink) =>
@@ -290,8 +438,6 @@ export const formatCategoryLink = (rawCategoryLink) =>
         slug: get(item, "attributes.value"),
       }))
     : [];
-
-
 
 export const arrayLabeltags = (rawTag) =>
   Array.isArray(rawTag)
