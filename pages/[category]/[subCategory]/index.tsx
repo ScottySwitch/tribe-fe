@@ -63,7 +63,9 @@ const SubCategoryPage = (context) => {
   const [pagination, setPagination] = useState(defaultPagination);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [showFilter, setShowFilter] = useState(false);
-  const [filter, setFilter] = useState<IFilter | {}>(defaultFilterOptions);
+  const [filter, setFilter] = useState<IFilter | {} | any>(
+    defaultFilterOptions
+  );
 
   useEffect(() => {
     const getData = async () => {
@@ -101,6 +103,7 @@ const SubCategoryPage = (context) => {
 
   useEffect(() => {
     const getBizListings = async () => {
+      setLoading(true);
       const params = {
         category,
         categoryLinks: categoryLink,
@@ -113,7 +116,12 @@ const SubCategoryPage = (context) => {
       );
 
       const rawBizlistingArray = get(dataBizlisting, "data.data");
-      let listingArray = shuffle(formatListingArray(rawBizlistingArray));
+      // let listingArray = shuffle(formatListingArray(rawBizlistingArray));
+      let listingArray = formatListingArray(rawBizlistingArray);
+      if (!filter?.sort) {
+        console.log("shuffle");
+        listingArray = shuffle(listingArray);
+      }
 
       setListings(listingArray);
       setPagination({
