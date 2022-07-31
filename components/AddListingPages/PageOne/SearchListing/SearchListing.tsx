@@ -139,7 +139,7 @@ const SearchListing = ({
                 src={require("public/images/upcoming-feature.svg")}
                 width={100}
                 height={100}
-                alt="upcoming-feature"
+                alt="upcoming_feature"
                 objectFit="cover"
               />
               <div>

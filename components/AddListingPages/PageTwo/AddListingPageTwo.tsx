@@ -61,7 +61,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
   const formattedSocialMediaOptions = socialMediaOptions.map((item) => ({
     label: (
       <div className="flex gap-2 items-center">
-        <Image src={item.icon} width={20} alt="icon-social" layout="fixed" />{" "}
+        <Image src={item.icon} width={20} alt="icon_social" layout="fixed" />{" "}
         {item.label}
       </div>
     ),
