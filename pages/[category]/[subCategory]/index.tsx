@@ -119,7 +119,6 @@ const SubCategoryPage = (context) => {
       // let listingArray = shuffle(formatListingArray(rawBizlistingArray));
       let listingArray = formatListingArray(rawBizlistingArray);
       if (!filter?.sort) {
-        console.log("shuffle");
         listingArray = shuffle(listingArray);
       }
 
