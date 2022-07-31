@@ -20,6 +20,7 @@ import MenuDetailModal from "components/MenuDetailModal/MenuDetailModal";
 import styles from "./RenderTabs.module.scss";
 import Popover from "components/Popover/Popover";
 import moment from "moment";
+import UpgradePopup from "components/UpgradePopup/UpgradePopup";
 
 const initSelectedTab = (category) => {
   switch (category) {
@@ -166,9 +167,10 @@ const TabContent = ({
                 key={id}
                 className={styles.info_card_container}
                 style={{ width: isDeal ? "100%" : "" }}
-                onClick={() => handleOpenDetailModal(item)}
               >
                 <CardItem
+                  onClick={() => handleOpenDetailModal(item)}
+                  onCardClick={() => handleOpenDetailModal(item)}
                   expiredAt={expiredAt}
                   startDate={startDate}
                   imgUrl={
@@ -329,18 +331,12 @@ const RenderTabs = (props: {
       <div className="flex gap-5 items-center justify-between">
         <div className="flex gap-5 items-center">
           {initSelectedTab(category).tabList.map((tab) =>
-            !isPaid && tab.value === ListingTabs.DEAL ? (
-              <Popover
-                contentClassName={styles.free_deals_popover}
-                content={
-                  <div className="p-0">
-                    <Icon icon="star-2" color="white" />
-                    Update to use feature!
-                  </div>
-                }
-              >
+            !isPaid &&
+            (tab.value === ListingTabs.DEAL ||
+              tab.value === ListingTabs.MENU) ? (
+              <UpgradePopup>
                 <Heading key={tab.text} text={tab.text} selected={false} />
-              </Popover>
+              </UpgradePopup>
             ) : (
               <Heading
                 key={tab.text}
@@ -354,6 +350,7 @@ const RenderTabs = (props: {
         {!isViewPage &&
           (isPaid ||
             selectedTab === ListingTabs.PRODUCT ||
+            selectedTab === ListingTabs.SERVICE ||
             selectedTab === ListingTabs.DISH) && (
             <EditList
               category={category}

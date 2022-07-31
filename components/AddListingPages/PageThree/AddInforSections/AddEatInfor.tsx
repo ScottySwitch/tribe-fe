@@ -59,6 +59,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
     handleSubmit,
     setValue,
     getValues,
+    watch,
     formState: { isValid },
   } = useForm({
     mode: "onChange",
@@ -352,13 +353,10 @@ const AddEatInfor = (props: AddEatInforProps) => {
             <Upload
               isPaid
               multiple={true}
-              accept="images"
-              fileList={getValues("images")}
+              fileList={watch("images")}
               type="media"
               centerIcon={<Icon icon="plus" />}
-              onChange={(urls) =>
-                setValue("images", [...(getValues("images") || []), ...urls])
-              }
+              onChange={(urls) => setValue("images", urls)}
             />
           </Question>
           <Question show={!isEdit}>

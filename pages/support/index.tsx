@@ -822,7 +822,7 @@ const SupportPage = () => {
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbsProps[]>(
     [] as BreadcrumbsProps[]
   );
-  const [currentTab, setCurrentTab] = useState<string | number>();
+  const [currentTab, setCurrentTab] = useState<string | number>("for-user");
   const [scrollspy, setScrollspy] = useState<any>(dummyScrollspy[0]);
   const [questions, setQuestions] = useState<any>();
 
@@ -844,6 +844,7 @@ const SupportPage = () => {
         <h1 className={styles.title}>Support</h1>
         <div className={styles.tab_support}>
           <TabsHorizontal
+            selectedTab="for-user"
             tablist={TabList}
             type="secondary-no-outline"
             className="mb-0"

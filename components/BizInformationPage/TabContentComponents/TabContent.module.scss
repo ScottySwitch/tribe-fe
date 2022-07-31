@@ -78,6 +78,15 @@
 .manage_deals {
   padding: 30px;
 
+  .table_deal_name {
+    cursor: pointer;
+    &:hover {
+      .name {
+        text-decoration: underline;
+      }
+    }
+  }
+
   .tips_button {
     gap: 20px;
     display: flex;

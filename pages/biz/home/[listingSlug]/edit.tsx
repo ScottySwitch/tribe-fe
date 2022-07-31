@@ -11,7 +11,6 @@ import Icon from "components/Icon/Icon";
 import Details from "components/BizHomePage/Details/Details";
 import EditAction from "components/BizHomePage/EditAction/EditAction";
 import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard";
-import OnboardChecklist from "components/BizHomePage/OnboardChecklist/OnboardChecklist";
 import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import { Categories, ListingHomePageScreens } from "enums";
@@ -40,17 +39,20 @@ import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
 import { isPaidUser } from "utils";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
-
-import styles from "styles/BizHomepage.module.scss";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
 import ReportApi from "../../../../services/report";
 import { censoredPhoneNumber, isArray, isEmptyObject } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
+import Button from "components/Button/Button";
+import ShareModal from "components/ShareModal/ShareModal";
+
+import styles from "styles/BizHomepage.module.scss";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
   const { user, updateUser } = useContext(UserInforContext);
 
+  const [showShareModal, setShowShareModal] = useState(false);
   const [userInfo, setUserInfo] = useState<any>({});
   const [category, setCategory] = useState(Categories.EAT);
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
@@ -141,8 +143,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       }
       const listing = get(data, "data.data[0]");
       if (listing) {
-        userInfo.now_biz_listing = listing;
-        localStorage.setItem("user", JSON.stringify(userInfo));
+        updateUser({
+          now_biz_listing: listing,
+        });
         setUserInfo(userInfo);
         const rawTags = listing.tags || [];
         const rawFacilities = listing.facilities_data || [];
@@ -185,7 +188,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           parent_id: item.parent_id,
           name: item.name,
           images: item.images,
-          imgUrl: get(item, "images[0]") ,
+          imgUrl: get(item, "images[0]"),
           information: item.description,
           termsConditions: item.terms_conditions,
           startDate: moment(item.start_date).format("YYYY/MM/DD"),
@@ -243,6 +246,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setLogo(listing.logo);
         setTags(tagArray);
         setReviews(reviewArray);
+        setPhoneNumber(rawPhoneNumber);
         setFacilities(rawFacilities);
         setItemList(listingArray);
         setMenuList(menuArray);
@@ -386,10 +390,14 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         parent_id: bizListing.id.toString(),
         description: description,
         // price_range: priceRange,
+        email: bizListing.email,
         min_price: parseFloat(priceRange?.min) || null,
         max_price: parseFloat(priceRange?.max) || null,
         currency: priceRange?.currency.toLocaleLowerCase() || null,
         action: action,
+        city: bizListing.city,
+        country: bizListing.country,
+        address: bizListing.address,
         images: listingImages,
         website: socialInfo,
         phone_number: phoneNumber,
@@ -401,6 +409,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         subscription: bizListing.subscription,
         logo: logo,
         expiration_date: bizListing.expiration_date,
+        social_info: bizListing.social_info,
         products: currentItemList.map((item) => item.id) || [],
         menus: currentMenuList.map((item) => item.id) || [],
         deals: currentDealList.map((item) => item.id) || [],
@@ -569,6 +578,22 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     );
   }
 
+  const listingActions = [
+    {
+      text: "Reviews",
+      icon: "chat",
+      callBack: () => router.push(`#reviews`),
+    },
+    {
+      text: "Direction",
+      icon: "map-1",
+      callBack: () => window.open("some_url_here"),
+    },
+    { text: "Share", icon: "share", callBack: () => setShowShareModal(true) },
+  ];
+
+  console.log("bizListing", bizListing);
+
   return (
     <div className={styles.listing_homepage}>
       <SectionLayout show={screen === ListingHomePageScreens.HOME}>
@@ -599,12 +624,26 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           onSetPhoneNumber={handleSetPhoneNumber}
           userInfo={userInfo}
         />
+        <Break />
+        <div className="flex gap-2">
+          {listingActions.map((item) => (
+            <Button
+              size="small"
+              prefix={<Icon icon={item.icon} />}
+              key={item.text}
+              text={item.text}
+              variant="secondary"
+              width={130}
+              onClick={item.callBack}
+            />
+          ))}
+        </div>
         <div className={styles.body}>
           <div className={styles.right_col}>
             <EditAction
-              id={bizListing.id}
+              listingId={bizListing.id}
               klookUrl={klookUrl}
-              isOwned={true}
+              isOwned={get(bizListing, "listing_roles.length") > 0}
               isViewPage={isViewPage}
               isLoading={isLoading}
               isPaid={isPaid}
@@ -744,6 +783,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           dealList={dealList}
         />
       </SectionLayout>
+      <ShareModal
+        url=""
+        onClose={() => setShowShareModal(false)}
+        visible={showShareModal}
+      />
     </div>
   );
 };

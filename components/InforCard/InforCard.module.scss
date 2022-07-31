@@ -172,6 +172,15 @@
         }
       }
     }
+    .author {
+      font-weight: $font-bold;
+      font-size: $text-md;
+    }
+    .position {
+      color: $bg-400;
+      font-size: $text-sm;
+      font-weight: $font-light;
+    }
   }
 }
 

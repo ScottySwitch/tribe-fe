@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { get } from "lodash";
+import { get, shuffle } from "lodash";
 
 import ArticleCard from "components/ArticleCard/ArticleCard";
 import Carousel from "components/Carousel/Carousel";
@@ -155,10 +155,10 @@ const Category = (props: any) => {
         };
         break;
     }
-    getData(category);
     setCategoryInfor(defaultCategoryInfor);
+    getData(category);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [category]);
 
   useEffect(() => {
     const getDataListing = async (categoryId, page) => {
@@ -168,13 +168,14 @@ const Category = (props: any) => {
         page: page,
         limit: 28,
       });
-      const listings = formatBizlistingArray(get(dataQuery, "data.data"));
+      const listings = shuffle(
+        formatBizlistingArray(get(dataQuery, "data.data"))
+      );
       setListingArray(listings);
       setPagination({
         ...pagination,
         total: get(dataQuery, "data.meta.pagination.total"),
       });
-      window.scrollTo(0, 1800);
     };
     location && getDataListing(category, pagination.page);
   }, [pagination.page, category, location]);

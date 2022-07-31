@@ -9,6 +9,8 @@ export interface InforCardProps {
   className?: string;
   imgUrl?: string;
   title?: string;
+  author?: string;
+  position?: string;
   rate?: number;
   categories?: string[];
   tags?: string[];
@@ -31,9 +33,11 @@ export interface InforCardProps {
 const InforCard = (props: InforCardProps) => {
   const {
     className,
-    imgUrl = "https://picsum.photos/200/300",
+    imgUrl,
     title,
     rate,
+    author,
+    position,
     description,
     rateNumber,
     followerNumber,
@@ -77,14 +81,8 @@ const InforCard = (props: InforCardProps) => {
     ));
   };
 
-  const [src, setSrc] = useState(imgUrl);
-
   return (
-    <div
-      className={`${styles.infor_card} ${className}`}
-      style={{ width }}
-      onClick={onClick}
-    >
+    <div className={`${styles.infor_card} ${className}`} style={{ width }}>
       {isVerified && (
         <div className={styles.verified}>
           <Icon icon="verified-tag" className={styles.verified_icon} />
@@ -96,20 +94,15 @@ const InforCard = (props: InforCardProps) => {
             <Icon icon="like-solid" color="#e60112" />
           </div>
         )}
-        {imgUrl && (
-          <Image
-            src={src}
-            alt=""
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center"
-            onErrorCapture={() => {
-              setSrc("https://picsum.photos/200/300");
-            }}
-          />
-        )}
+        <Image
+          src={imgUrl || require("public/images/default-avatar.svg")}
+          alt=""
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+        />
       </div>
-      <div className={styles.details}>
+      <div className={styles.details} onClick={onClick}>
         <div className={styles.title}>{title}</div>
         <div className={styles.content}>
           <div className="flex items-center">
@@ -163,11 +156,12 @@ const InforCard = (props: InforCardProps) => {
               {discount} {!!discount_unit && discount_unit.toUpperCase()} OFF
             </div>
           )}
-
           {sortingTags.length > 0 && (
             <div className={styles.tags}>{renderSortingTags()}</div>
           )}
         </div>
+        {author && <div className={styles.author}>{author}</div>}
+        {position && <div className={styles.position}>{position}</div>}
       </div>
     </div>
   );

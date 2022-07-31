@@ -17,6 +17,7 @@ import UserFavouriteApi from "services/user-listing-favourite";
 import styles from "./ListingInforCard.module.scss";
 import Select from "components/Select/Select";
 import { currencyOptions } from "constant";
+import { censoredPhoneNumber } from "utils";
 
 interface ListingInforCardProps {
   isPaid?: boolean;
@@ -218,7 +219,7 @@ const PhoneNumber = ({
   if (isViewPage) {
     return phoneNumber ? (
       <div onClick={handleHref} className={isPaid && "cursor-pointer"}>
-        {phoneNumber}
+        {isPaid ? phoneNumber : censoredPhoneNumber(phoneNumber)}
       </div>
     ) : (
       <div>Not provided</div>
@@ -297,6 +298,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
                   className={styles.verified_icon}
                   height={30}
                   width={60}
+                  alt=""
                 />
               </div>
             )}

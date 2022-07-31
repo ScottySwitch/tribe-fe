@@ -1,19 +1,23 @@
-import Break from "components/Break/Break";
+import React, { useEffect, useState } from "react";
+import get from "lodash/get";
+import { useRouter } from "next/router";
+import { isArray } from "lodash";
+import { toast } from "react-toastify";
+import moment from "moment";
+
 import Button from "components/Button/Button";
 import Icon from "components/Icon/Icon";
-import InforCard from "components/InforCard/InforCard";
 import Popover from "components/Popover/Popover";
 import Question from "components/Question/Question";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import Table, { IColumn } from "components/Table/Table";
-import { bizInformationDefaultFormData } from "constant";
-import React, { useEffect, useState } from "react";
 import AddDeals from "./AddDeal/AddDeals";
-import get from "lodash/get";
-
-import styles from "./TabContent.module.scss";
 import DealApi from "services/deal";
 import Modal, { ModalFooter } from "../../Modal/Modal";
+import useGetRevision from "hooks/useGetRevision";
+
+import styles from "./TabContent.module.scss";
+import DealDetailModal from "components/DealDetailModal/DealDetailModal";
 
 interface ManageDealProps {
   bizListingId?: number | string;
@@ -28,80 +32,104 @@ enum ManageDealsScreens {
 const ManageDeals = (props: ManageDealProps) => {
   const { bizListingId } = props;
 
-  const [formData, setFormData] = useState<any>(bizInformationDefaultFormData);
-  const [selectedDeal, setSelectedDeal] = useState<any[]>([]);
+  const { query } = useRouter();
+  const { listingSlug }: any = query;
+
+  const {
+    loading,
+    revisionListing,
+    isRevision,
+    revisionId,
+    setLoading,
+    getRevisionId,
+  } = useGetRevision(listingSlug);
+
+  const [showDealDetailModal, setShowDealDetailModal] = useState(false);
+  const [selectedDeal, setSelectedDeal] = useState<any>({});
   const [screen, setScreen] = useState<ManageDealsScreens>(
     ManageDealsScreens.LIST
   );
-  const { activeDeals, pastDeals } = formData;
-  const [activeDealList, setActiveDealList] = useState<any>();
+  const [activeDealList, setActiveDealList] = useState<any[]>([]);
   const [pastDealList, setPastDealList] = useState<any>([]);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const [deleteModalDealId, setDeleteModalDealId] = useState<number>(0);
 
-  const getDealsByBizListingId = async (
-    bizListingId: number | string | undefined
-  ) => {
-    const result = await DealApi.getDealsByBizListingId(
-      bizListingId,
-      "is_pinned:desc"
-    );
+  const getDealsByBizListingId = async () => {
     const currentDate = new Date();
     const activeDeals: any = [];
     const pastDeals: any = [];
-    const dealList = get(result, "data.data");
+    const dealList = get(revisionListing, "deals");
+
     Array.isArray(dealList) &&
       dealList.forEach((deal: any) => {
-        const startDate = new Date(get(deal, "attributes.start_date"));
-        const endDate = new Date(get(deal, "attributes.end_date"));
+        const startDate =
+          get(deal, "start_date") && new Date(get(deal, "start_date"));
+        const endDate =
+          get(deal, "end_date") && new Date(get(deal, "end_date"));
         if (startDate <= currentDate && currentDate <= endDate) {
           activeDeals.push(deal);
         } else {
           pastDeals.push(deal);
         }
       });
+
+    setLoading(false);
     setActiveDealList(activeDeals);
     setPastDealList(pastDeals);
   };
 
   useEffect(() => {
-    getDealsByBizListingId(bizListingId);
-  }, [bizListingId]);
+    getDealsByBizListingId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingSlug, revisionListing, loading]);
 
-  const submitDeal = async (e) => {
-    if (e[0].isEdited) {
-      const dataSend = { ...e[0] };
-      await DealApi.updateDeal(e[0]?.id, dataSend);
-    } else {
-      const newDeal = e[0];
-      const dataSend = {
-        biz_listing: bizListingId,
-        start_date: new Date(),
-        end_date: newDeal.validUntil || new Date(),
-        ...newDeal,
-      };
-      await DealApi.createDeal(dataSend).then((result) => {
-        getDealsByBizListingId(bizListingId);
-      });
-    }
+  const submitDeal = async (deals) => {
+    const currentDealIds = isArray(revisionListing.deals)
+      ? revisionListing.deals.map((item) => item.id)
+      : [];
+    console.log(deals);
+    const deal = {
+      is_revision: isRevision,
+      biz_listing_revision: isRevision
+        ? revisionListing.id
+        : await getRevisionId({ products: currentDealIds }),
+      ...deals[0],
+    };
+
+    console.log(deal);
+
+    const submitDealApi = deal.isEdited
+      ? DealApi.updateDeal(deal.id, deal)
+      : DealApi.createDeal(deal);
+
+    submitDealApi
+      .then((res) => {
+        toast.success("Create deal successfully!", { autoClose: 2000 });
+        setScreen(ManageDealsScreens.LIST);
+      })
+      .catch((err) => toast.error("Create deal failed!"))
+      .finally(() => setLoading(true));
   };
 
   const handleDelete = async () => {
-    const newDealList =
-      Array.isArray(activeDealList) &&
-      activeDealList.filter((deal) => {
-        return deal.id !== deleteModalDealId;
+    await DealApi.deleteDeal(deleteModalDealId)
+      .then((res) => {
+        setIsShowDeleteModal(false);
+        toast.success("Delete deal successfully!", { autoClose: 2000 });
+      })
+      .catch((error) => toast.error("Delete deal failed!"))
+      .finally(() => {
+        setLoading(true);
       });
-    await DealApi.deleteDeal(deleteModalDealId);
-    setActiveDealList(newDealList);
-    setIsShowDeleteModal(false);
   };
 
   const handlePinToTop = async (e) => {
     await DealApi.updateDeal(e.id, {
-      is_pinned: get(e, "attributes.is_pinned"),
-    });
-    await getDealsByBizListingId(bizListingId);
+      is_pinned: !e.isPinned,
+    })
+      .then((res) => toast.success("Update successfully!", { autoClose: 1000 }))
+      .catch((error) => toast.error("Update failed!"))
+      .finally(() => setLoading(true));
   };
 
   const activeDealColumns: IColumn[] = [
@@ -109,32 +137,40 @@ const ManageDeals = (props: ManageDealProps) => {
       key: "name",
       title: "DEALS",
       render: (item: any) => (
-        <div>
-          <div className={styles.name}>{get(item, "attributes.name")}</div>
+        <div
+          className={styles.table_deal_name}
+          onClick={() => {
+            setSelectedDeal(item);
+            setShowDealDetailModal(true);
+          }}
+        >
+          <div className={styles.name}>{get(item, "name")}</div>
           <div className={styles.deal_information}>
-            {get(item, "attributes.description")}
+            {get(item, "description")}
           </div>
         </div>
       ),
-      width: "35%",
+      width: "45%",
     },
     {
       key: "date",
       title: "DATE",
-      render: (item: any) =>
-        `${get(item, "attributes.start_date")} - ${get(
-          item,
-          "attributes.end_date"
-        )}`,
-      width: "45%",
+      render: (item: any) => {
+        // console.timeLog(item.end_date);
+        // const endDate =
+        //   typeof item.end_date === "string"
+        //     ? item.end_date
+        //     : moment(new Date(item.end_date)).format("YYYY-MM-DD");
+        // return endDate;
+        return moment(item.end_date || "").format("YYYY-MMM-DD");
+      },
+      width: "30%",
     },
     {
       key: "clicks",
       title: "CLICKS",
       render: (item: any) => (
-        <div className={styles.click}>
-          {get(item, "attributes.click_counts") || 0}
-        </div>
+        <div className={styles.click}>{get(item, "click_counts") || 0}</div>
       ),
       width: "10%",
       textAlign: "right",
@@ -142,7 +178,8 @@ const ManageDeals = (props: ManageDealProps) => {
     {
       key: "action",
       title: "ACTIONS",
-      render: (item: any) => <TableAction item={item} />,
+      textAlign: "center",
+      render: (item: any) => <TableAction pin item={item} />,
       width: "10%",
     },
   ];
@@ -152,41 +189,52 @@ const ManageDeals = (props: ManageDealProps) => {
       key: "name",
       title: "DEALS",
       render: (item: any) => (
-        <div>
-          <div className={styles.name}>{get(item, "attributes.name")}</div>
+        <div
+          className={styles.table_deal_name}
+          onClick={() => {
+            setSelectedDeal(item);
+            setShowDealDetailModal(true);
+          }}
+        >
+          <div className={styles.name}>{get(item, "name")}</div>
           <div className={styles.deal_information}>
-            {get(item, "attributes.description")}
+            {get(item, "description")}
           </div>
         </div>
       ),
-      width: "35%",
+      width: "45%",
     },
     {
       key: "date",
       title: "DATE",
       render: () => <span className="text-gray-500">Ended</span>,
-      width: "45%",
+      width: "30%",
     },
     {
       key: "clicks",
       title: "CLICKS",
       render: (item: any) => (
-        <div className={styles.click}>
-          {get(item, "attributes.click_counts") || 0}
-        </div>
+        <div className={styles.click}>{get(item, "click_counts") || 0}</div>
       ),
       width: "10%",
       textAlign: "right",
     },
+    {
+      key: "action",
+      title: "ACTIONS",
+      textAlign: "right",
+      render: (item: any) => <TableAction item={item} />,
+      width: "10%",
+    },
   ];
 
   const TableAction = (props) => {
-    const { item } = props;
+    const { item, pin } = props;
     const content = (
       <React.Fragment>
         <div
           onClick={() => {
-            setSelectedDeal([item]);
+            setSelectedDeal(item);
             setScreen(ManageDealsScreens.EDIT);
           }}
         >
@@ -204,13 +252,15 @@ const ManageDeals = (props: ManageDealProps) => {
       </React.Fragment>
     );
     return (
-      <div className="flex gap-1">
-        <div className={styles.pin} onClick={() => handlePinToTop(item)}>
-          <Icon
-            icon="pin"
-            color={get(item, "attributes.is_pinned") ? undefined : "gray"}
-          />
-        </div>
+      <div className="flex gap-1 w-100 justify-end">
+        {pin && (
+          <div className={styles.pin} onClick={() => handlePinToTop(item)}>
+            <Icon
+              icon="pin"
+              color={get(item, "is_pinned") ? undefined : "gray"}
+            />
+          </div>
+        )}
         <Popover content={content} position="bottom-left">
           <Icon icon="toolbar" />
         </Popover>
@@ -234,7 +284,7 @@ const ManageDeals = (props: ManageDealProps) => {
             text="Create deal"
             width={200}
             onClick={() => {
-              setSelectedDeal([{}]);
+              setSelectedDeal({});
               setScreen(ManageDealsScreens.ADD);
             }}
           />
@@ -262,7 +312,7 @@ const ManageDeals = (props: ManageDealProps) => {
         <AddDeals
           isEdit={screen === ManageDealsScreens.EDIT}
           isPaid={true}
-          dealList={selectedDeal}
+          dealList={[selectedDeal]}
           onCancel={() => setScreen(ManageDealsScreens.LIST)}
           onSubmit={(e) => {
             setScreen(ManageDealsScreens.LIST);
@@ -274,6 +324,14 @@ const ManageDeals = (props: ManageDealProps) => {
         visible={isShowDeleteModal}
         onClose={() => setIsShowDeleteModal(false)}
         onSubmit={handleDelete}
+      />
+      <DealDetailModal
+        data={{
+          ...selectedDeal,
+          end_date: moment(selectedDeal.end_date || "").format("YYYY-MMM-DD"),
+        }}
+        visible={showDealDetailModal}
+        onClose={() => setShowDealDetailModal(false)}
       />
     </React.Fragment>
   );

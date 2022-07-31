@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { filter, get } from "lodash";
+import { filter, get, shuffle } from "lodash";
 
 import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
@@ -9,13 +9,7 @@ import InforCard from "components/InforCard/InforCard";
 import Pagination from "components/Pagination/Pagination";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import TopSearches from "components/TopSearches/TopSearches";
-import {
-  categories,
-  getFilterLabels,
-  homeBannerResponsive,
-  inforCardList,
-  sortOptions,
-} from "constant";
+import { getFilterLabels, homeBannerResponsive } from "constant";
 import BizlistingApi from "services/biz-listing";
 import CategoryLinkApi from "services/category-link";
 import BannerApi from "services/banner";
@@ -27,10 +21,12 @@ import Button from "components/Button/Button";
 import Filter, { IFilter } from "components/Filter/Filter";
 import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { isArray } from "utils";
-import styles from "styles/Home.module.scss";
 import Badge from "components/Badge/Badge";
 import useGetCountry from "hooks/useGetCountry";
 import Select from "components/Select/Select";
+
+import styles from "styles/Home.module.scss";
+
 interface IType {
   [key: string]: any;
 }
@@ -56,14 +52,16 @@ const SubCategoryPage = (context) => {
 
   const { currency } = useGetCountry();
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [viewWidth, setViewWidth] = useState<number>(0);
   const [bannerArray, setBannergArray] = useState<IType[]>([]);
   const [categoryLinkArray, setCategoryLinkArray] = useState<ITab[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
   const [listings, setListings] = useState<{ [key: string]: any }[]>([]);
   const [showFilter, setShowFilter] = useState(false);
-  const [filter, setFilter] = useState<IFilter | {}>(defaultFilterOptions);
+  const [filter, setFilter] = useState<IFilter | {} | any>(
+    defaultFilterOptions
+  );
 
   useEffect(() => {
     const getData = async () => {
@@ -94,13 +92,14 @@ const SubCategoryPage = (context) => {
       setCategoryLinkArray(categoryLinkArray.concat(rawListCategory));
     };
 
-    setIsMobile(window.innerWidth < 500);
+    setViewWidth(window.innerWidth);
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryLink]);
 
   useEffect(() => {
     const getBizListings = async () => {
+      setLoading(true);
       const params = {
         category,
         categoryLinks: categoryLink,
@@ -113,7 +112,11 @@ const SubCategoryPage = (context) => {
       );
 
       const rawBizlistingArray = get(dataBizlisting, "data.data");
+      // let listingArray = shuffle(formatListingArray(rawBizlistingArray));
       let listingArray = formatListingArray(rawBizlistingArray);
+      if (!filter?.sort) {
+        listingArray = shuffle(listingArray);
+      }
 
       setListings(listingArray);
       setPagination({
@@ -185,7 +188,8 @@ const SubCategoryPage = (context) => {
     </Button>
   );
 
-  const showSubCategoryNumber = isMobile ? 1 : 5;
+  const showSubCategoryNumber =
+    viewWidth > 1024 ? 5 : viewWidth > 768 ? 3 : viewWidth > 425 ? 2 : 1;
 
   const moreSubCategoryStyles = {
     fontWeight: "bold",
@@ -233,10 +237,7 @@ const SubCategoryPage = (context) => {
       </SectionLayout>
       <SectionLayout className={styles.tab_filter}>
         <div className={styles.tab_filter_container}>
-          <div
-            id="sub-cat-quick-filter"
-            className={styles.quick_filter_container}
-          >
+          <div className={styles.quick_filter_container}>
             <div className={styles.scroll_box}>
               <TabsHorizontal
                 tablist={subCategoryOptions}
@@ -249,6 +250,7 @@ const SubCategoryPage = (context) => {
                 placeholder="More"
                 isSearchable={false}
                 width={250}
+                menuWidth={300}
                 className={styles.sub_category_more}
                 variant="outlined"
                 size="small"

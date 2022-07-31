@@ -108,13 +108,12 @@ const Select = (props: SelectProps) => {
       cursor: "pointer",
       border: "none",
       boxShadow: "none",
-      fontSize: "14px",
+      fontSize: size === "small" ? "14px" : "16px",
       maxWidth: "100%",
       minWidth: ellipsis ? "unset" : "max-content",
       minHeight: "min-content",
       backgroundColor: "transparent",
       fontWeight: 300,
-
       ...controlStyle,
     }),
     option: (styles, { isSelected }) => {

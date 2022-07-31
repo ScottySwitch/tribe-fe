@@ -6,13 +6,7 @@ import styles from "./Range.module.scss";
 export interface MultiRangeProps {
   min?: number;
   max?: number;
-  onChange?: ({
-    minPrice,
-    maxPrice,
-  }: {
-    minPrice: number;
-    maxPrice: number;
-  }) => void;
+  onChange?: ({ min, max }: { min: number; max: number }) => void;
 }
 
 const MultiRangeSlider = (props: MultiRangeProps) => {
@@ -58,7 +52,7 @@ const MultiRangeSlider = (props: MultiRangeProps) => {
 
   // Get min and max values when their state changes
   useEffect(() => {
-    onChange?.({ minPrice: minVal, maxPrice: maxVal });
+    onChange?.({ min: minVal, max: maxVal });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minVal, maxVal]);
 

@@ -95,6 +95,8 @@
     }
   }
   .quick_filter_container {
+    display: flex;
+    justify-content: space-between;
     overflow-x: auto;
     height: max-content;
     width: 100%;
@@ -334,7 +336,7 @@
   }
 }
 
-@media screen and (max-width: $tablet) {
+@media screen and (max-width: $big-tablet) {
   .tab_filter,
   .for_you {
     .desktop_filter_button {

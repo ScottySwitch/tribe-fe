@@ -11,6 +11,7 @@ import { removeZeroInPhoneNumber } from "utils";
 import Router from "next/router";
 import { get } from "lodash";
 import { UserInforContext } from "Context/UserInforContext";
+import { ClaimStep } from "enums";
 
 interface EditActionProps {
   isOwned?: boolean;
@@ -21,7 +22,7 @@ interface EditActionProps {
   isPaid?: boolean;
   isLoading?: boolean;
   klookUrl?: string;
-  id?: string;
+  listingId?: string;
 }
 
 const EditAction = (props: EditActionProps) => {
@@ -32,7 +33,7 @@ const EditAction = (props: EditActionProps) => {
     isPaid,
     isLoading,
     klookUrl,
-    id,
+    listingId,
     onPublishPage,
     onApplyAction,
   } = props;
@@ -168,7 +169,12 @@ const EditAction = (props: EditActionProps) => {
     updateUser({
       type_handle: "Claim",
     });
-    Router.push(`/claim/${get(user, "now_biz_listing.id_listing")}`);
+    Router.push({
+      pathname: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+      query: {
+        firstStep: ClaimStep.CHOOSE_TIER,
+      },
+    });
   };
 
   return (
@@ -183,9 +189,14 @@ const EditAction = (props: EditActionProps) => {
         </div>
       )}
       {isViewPage && !isOwned && (
-        <div className={styles.action_modal_not_owned}>
-          <Button text="Claim listing" size="small" variant="outlined" />
-          Own this business?
+        <div className={styles.action_modal}>
+          <Button
+            text="Claim listing"
+            size="small"
+            variant="outlined"
+            onClick={() => router.push(`/claim/${listingId}`)}
+          />
+          <p className="text-left">Own this business?</p>
         </div>
       )}
       {!isViewPage && (

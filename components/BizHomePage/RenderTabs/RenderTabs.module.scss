@@ -38,17 +38,6 @@
   }
 }
 
-.free_deals_popover {
-  color: white;
-  font-weight: $font-semi-bold;
-  background-color: $bg-400 !important;
-  &:hover {
-    div {
-      background-color: $bg-400 !important;
-    }
-  }
-}
-
 .info_card_container {
   position: relative;
 
@@ -61,6 +50,7 @@
     padding: 6px;
     cursor: pointer;
     fill: white;
+    z-index: 1;
 
     &:hover {
       fill: $primary-500;
