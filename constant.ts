@@ -50,9 +50,7 @@ export const getFilterLabels = (filter, currency) => [
   {
     isShow: !!filter.maxPrice && !!currency,
     label: "Price",
-    value: `${currency + " " + filter.minPrice} - ${
-      currency + " " + filter.maxPrice
-    }`,
+    value: `${filter.minPrice} - ${filter.maxPrice + " " + currency}`,
   },
 ];
 

@@ -11,7 +11,6 @@ import Icon from "components/Icon/Icon";
 import Details from "components/BizHomePage/Details/Details";
 import EditAction from "components/BizHomePage/EditAction/EditAction";
 import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard";
-import OnboardChecklist from "components/BizHomePage/OnboardChecklist/OnboardChecklist";
 import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import { Categories, ListingHomePageScreens } from "enums";
@@ -247,6 +246,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setLogo(listing.logo);
         setTags(tagArray);
         setReviews(reviewArray);
+        setPhoneNumber(rawPhoneNumber);
         setFacilities(rawFacilities);
         setItemList(listingArray);
         setMenuList(menuArray);
