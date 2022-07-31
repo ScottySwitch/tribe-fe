@@ -88,7 +88,7 @@ const Deals = () => {
       <SectionLayout className={styles.collection_banner}>
         <Image
           src={require("public/images/deals-banner.svg")}
-          alt=""
+          alt="collections-banner"
           layout="fill"
           objectFit="cover"
           className={styles.collection_banner_img}

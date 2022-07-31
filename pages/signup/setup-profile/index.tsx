@@ -281,7 +281,7 @@ const StepTwo = ({ show, onBackStep, onSubmit, formData }: any) => {
                 <div className={styles.avatar}>
                   <Image
                     src={item.avatar}
-                    alt=""
+                    alt="avatar"
                     layout="fixed"
                     width={50}
                     height={50}

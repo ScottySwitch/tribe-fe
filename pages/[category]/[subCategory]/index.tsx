@@ -219,7 +219,7 @@ const SubCategoryPage = (context) => {
                 onClick={() => router.push(`${img.linkActive}`)}
               >
                 <Image
-                  alt=""
+                  alt="banner"
                   layout="intrinsic"
                   src={img.imgUrl}
                   objectFit="contain"

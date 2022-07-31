@@ -204,7 +204,7 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             <Image
               src={require("public/images/no-review.svg")}
               width={100}
-              alt=""
+              alt="no-review"
             />
             <p>There are no review yet</p>
           </div>

@@ -87,7 +87,7 @@ const TabContent = ({
   if (!(Array.isArray(list) && list.length)) {
     return (
       <div className="flex flex-col items-center justify-center">
-        <Image src={blankImg} width={100} alt="" />
+        <Image src={blankImg} width={100} alt="image_empty_box" />
         <p>{blankText}</p>
         {!isViewPage && (
           <Button

@@ -524,7 +524,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 <Image
                   src={require("public/images/stripe.svg")}
                   width="60px"
-                  alt=""
+                  alt="stripe-image"
                 />
                 Stripe
               </div>
@@ -570,7 +570,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             src={require("public/images/success-submit.svg")}
             width={100}
             height={100}
-            alt=""
+            alt="result-alt"
           />
           <div className={styles.header}>First step success!</div>
           <div>

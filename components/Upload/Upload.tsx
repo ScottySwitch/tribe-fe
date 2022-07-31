@@ -254,7 +254,14 @@ const Upload = (props: UploadProps) => {
             {detectIsVideo(src) ? (
               <video id="video" src={src} controls className={styles.video} />
             ) : (
-              src && <Image src={src} alt="" layout="fill" objectFit="cover" />
+              src && (
+                <Image
+                  src={src}
+                  alt="thumbnail"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              )
             )}
           </div>
         ))}
@@ -295,7 +302,7 @@ const Upload = (props: UploadProps) => {
         <div className="flex flex-col items-center">
           <Image
             src={require("public/images/upcoming-feature.svg")}
-            alt=""
+            alt="upcoming-feature-alt"
             layout="fixed"
             height={150}
             width={150}

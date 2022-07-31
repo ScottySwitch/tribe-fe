@@ -127,7 +127,7 @@ const ReviewsPage = () => {
           height="30%"
           layout="responsive"
           objectFit="cover"
-          alt=""
+          alt="banner"
         />
         <SectionLayout
           className={styles.section_review_search_box}
@@ -183,7 +183,7 @@ const ReviewsPage = () => {
             src="https://picsum.photos/300/600"
             height={600}
             width={300}
-            alt=""
+            alt="advertisement-alt"
           />
         </div>
       </SectionLayout>

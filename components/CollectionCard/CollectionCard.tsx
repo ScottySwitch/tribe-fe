@@ -20,7 +20,7 @@ const CollectionCard = (props: CollectionCardProps) => {
       {/* <div className={styles.banner}> */}
       {imgUrl ? (
         <Image
-          alt=""
+          alt="thumbnail"
           layout="intrinsic"
           height={350}
           width={270}
