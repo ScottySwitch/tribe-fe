@@ -103,7 +103,7 @@ const Footer = (props: {
           {newNavList.map((nav) => {
             return (
               <div key={nav.category} className={styles.nav}>
-                <div className={styles.header}>{nav.category}</div>
+                <h3 className={styles.header}>{nav.category}</h3>
                 <div className={styles.item_container}>
                   {nav.items.map((item: any) => (
                     <div

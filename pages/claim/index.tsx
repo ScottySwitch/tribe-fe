@@ -157,7 +157,7 @@ const ClaimPage = () => {
         </SectionLayout>
       </div>
       <SectionLayout className={styles.section_two}>
-        <div className={styles.header}>Grow your business with Tribes</div>
+        <h1 className={styles.header}>Grow your business with Tribes</h1>
         <div className={styles.advantage}>
           <Image
             src={require("public/images/take-control.svg")}
@@ -165,7 +165,7 @@ const ClaimPage = () => {
             alt=""
           />
           <div className={styles.description}>
-            <div className={styles.title}>Take control of your listing</div>
+            <h2 className={styles.title}>Take control of your listing</h2>
             <p className={styles.content}>
               Customise your listing details, upload photos, and more to show
               customers what makes your business special.
@@ -179,7 +179,7 @@ const ClaimPage = () => {
             alt=""
           />
           <div className={styles.description}>
-            <div className={styles.title}>Respond to reviews</div>
+            <h2 className={styles.title}>Respond to reviews</h2>
             <p className={styles.content}>
               Analyse reviews that can help your company overall customer
               satisfaction and Increase brand awareness to reach your targetted
@@ -194,7 +194,7 @@ const ClaimPage = () => {
             alt=""
           />
           <div className={styles.description}>
-            <div className={styles.title}>Track your performance</div>
+            <h2 className={styles.title}>Track your performance</h2>
             <p className={styles.content}>
               Use analytics to keep track of the number of products sold and to
               determine if a product is performing poorly so that you can
@@ -205,7 +205,7 @@ const ClaimPage = () => {
       </SectionLayout>
       <SectionLayout backgroundColor childrenClassName="overflow-hidden">
         <div className={styles.why_tribes}>
-          <div className={styles.why_tribes_title}>Why Tribes?</div>
+          <h1 className={styles.why_tribes_title}>Why Tribes?</h1>
           <div className={styles.why_tribes_container}>
             <div className={styles.why_tribes_scrollbox}>
               {whyTribes.map((card, index) => (
