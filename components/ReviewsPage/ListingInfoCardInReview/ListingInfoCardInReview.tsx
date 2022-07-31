@@ -28,7 +28,7 @@ const ReviewBizInfoCard = (props) => {
             height="100%"
             width="100%"
             layout="responsive"
-            alt=""
+            alt="banner-listing"
           />
         )}
       </div>

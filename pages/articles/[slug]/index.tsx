@@ -129,7 +129,7 @@ const ArticlesDetailPage = (props: any) => {
         <div className={styles.cover_container}>
           <Image
             src={article.imgUrl || require("public/images/default-avatar.svg")}
-            alt=""
+            alt="banner"
             layout="fill"
             className={styles.cover_image}
           />
@@ -222,9 +222,9 @@ const ArticlesDetailPage = (props: any) => {
             </div> */}
             {isArray(article.bizlisting) && (
               <>
-                <h5 className="mb-[24px] font-bold text-base">
+                <h3 className="mb-[24px] font-bold text-base">
                   Brands you can find:
-                </h5>
+                </h3>
                 <div className="my-7">
                   <Carousel responsive={infoCardResponsive}>
                     {isArray(article.bizlisting) &&

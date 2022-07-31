@@ -28,7 +28,7 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
               key: get(item, "attributes.deal.data.id"),
               title: get(item, "attributes.deal.data.attributes.name"),
               imgUrl: get(item, "attributes.deal.data.attributes.images[0]"),
-              expiredAt: get(item, "attributes.deal.data.attributes.end_date"),
+              endDate: get(item, "attributes.deal.data.attributes.end_date"),
               startDate: get(
                 item,
                 "attributes.deal.data.attributes.start_date"
@@ -69,7 +69,7 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
               key={index}
               title={item.title}
               imgUrl={item.imgUrl}
-              expiredAt={item.expiredAt}
+              endDate={item.endDate}
               type={item.type}
               favourite
               startDate={item.startDate}

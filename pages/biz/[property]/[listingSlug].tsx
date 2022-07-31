@@ -12,7 +12,11 @@ import { get, orderBy } from "lodash";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import BizListingApi from "services/biz-listing";
-import { calcRateNumber, censoredPhoneNumber } from "utils";
+import {
+  calcRateNumber,
+  censoredPhoneNumber,
+  formatCardItemProps,
+} from "utils";
 
 import styles from "styles/Property.module.scss";
 import TabsHorizontal from "components/TabsHorizontal/TabsHorizontal";
@@ -34,57 +38,14 @@ const PropertiesContainer = ({
   return (
     <div className="flex flex-wrap gap-10">
       {Array.isArray(list) && list.length > 0 ? (
-        list.map((item) => {
-          const formatItem = {
-            id: get(item, "attributes.id") || item.id,
-            images: item?.images || item.menu_file || [],
-            firstImage:
-              item.imgUrl ||
-              get(item, "images[0]") ||
-              get(item, "menu_file[0]"),
-            name: get(item, "attributes.name") || item.name || "",
-            price: get(item, "attributes.price") || item.price || "",
-            description:
-              get(item, "attributes.description") ||
-              item.information ||
-              item.description ||
-              "",
-            expiredAt:
-              get(item, "attributes.expire_at") ||
-              item.expireAt ||
-              item?.start_date?.replaceAll("-", "/") ||
-              "",
-            endDate: get(item, "attributes.end_date") || item.end_date || "",
-            startDate:
-              get(item, "attributes.start_date") || item.start_date || "",
-            termsConditions:
-              get(item, "attributes.terms_conditions") ||
-              item.terms_conditions ||
-              item.conditions ||
-              "",
-          };
-
-          return (
-            <div
-              key={formatItem.id}
-              onClick={() => onShowDetailModal?.(formatItem)}
-            >
-              <CardItem
-                imgUrl={
-                  formatItem.firstImage || "https://picsum.photos/200/300"
-                }
-                title={formatItem.name}
-                price={formatItem.price}
-                description={formatItem.description}
-                expiredAt={formatItem.expiredAt}
-                termsConditions={formatItem.termsConditions}
-                conditions={formatItem.termsConditions}
-                endDate={formatItem.endDate}
-                startDate={formatItem.startDate}
-              />
-            </div>
-          );
-        })
+        list.map((item, index) => (
+          <div
+            key={index}
+            onClick={() => onShowDetailModal?.(formatCardItemProps(item))}
+          >
+            <CardItem {...formatCardItemProps(item)} />
+          </div>
+        ))
       ) : (
         <div>There is no data yet</div>
       )}

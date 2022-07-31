@@ -21,97 +21,6 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 import { calcRateNumber } from "utils";
 import Link from "next/link";
 
-const dummyPromotion = [
-  {
-    images: ["https://picsum.photos/130"],
-    title:
-      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
-    expiredAt: "April 17, 2022 - April 17, 2022",
-    type: 1,
-    link: "/",
-    favourite: false,
-  },
-  {
-    images: ["https://picsum.photos/130"],
-    title:
-      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
-    expiredAt: "April 17, 2022 - April 30, 2022",
-    type: 1,
-    link: "/",
-    favourite: false,
-  },
-  {
-    images: ["https://picsum.photos/130"],
-    title:
-      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
-    expiredAt: "April 17, 2022 - April 24, 2022",
-    type: 1,
-    link: "/",
-    favourite: false,
-  },
-  {
-    images: ["https://picsum.photos/130"],
-    title:
-      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
-    expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 1,
-    link: "/",
-    favourite: false,
-  },
-  {
-    images: ["https://picsum.photos/130"],
-    title:
-      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
-    expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 1,
-    link: "/",
-    favourite: false,
-  },
-  {
-    images: ["https://picsum.photos/130"],
-    title:
-      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
-    expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 1,
-    link: "/",
-    favourite: false,
-  },
-  {
-    images: ["https://picsum.photos/130"],
-    title:
-      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
-    expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 1,
-    link: "/",
-    favourite: false,
-  },
-  {
-    images: ["https://picsum.photos/130"],
-    title:
-      "Complimentary top up set (mushroom soup with garlic bread) with every main purchased",
-    expiredAt: "April 17, 2022 - April 28, 2022",
-    type: 1,
-    link: "/",
-    favourite: false,
-  },
-];
-
-const dummyBanner = [
-  "https://picsum.photos/1185/255",
-  "https://picsum.photos/1185/255//",
-  "https://picsum.photos/1185/255/",
-];
-
-const dummyDealsDetails: IDealsDetails = {
-  name: "Evertop Hainanese Boneless Chicken",
-  imgUrl: "https://picsum.photos/678/169",
-  offers:
-    "Complimentary top up set (mushroom soup with garlic bread) with every main purchased.",
-  valid: "April 17, 2022 - April 17, 2022",
-  conditions:
-    "A valid tribe listing pass must be presented upon payment to enjoy the offer.",
-};
-
 const dummyProductDetails: IProduct = {
   id: 678,
   name: "Evertop Hainanese Boneless Chicken / Evertop Hainanese Boneless Chicken Evertop Hainanese Boneless Chicken ",
@@ -216,7 +125,7 @@ const PromotionsPage = () => {
             width={1188}
             height={400}
             layout="responsive"
-            alt="alt"
+            alt="banner"
           />
         </div>
       </SectionLayout>
@@ -241,7 +150,7 @@ const PromotionsPage = () => {
                     key={index}
                     title={get(promotion, "attributes.name")}
                     imgUrl={get(promotion, "attributes.images[0]")}
-                    expiredAt={`${get(
+                    endDate={`${get(
                       promotion,
                       "attributes.start_date"
                     )} - ${get(promotion, "attributes.end_date")}`}
@@ -298,7 +207,7 @@ const PromotionsPage = () => {
                     key={index}
                     title={get(promotion, "attributes.name")}
                     imgUrl={get(promotion, "attributes.images[0]")}
-                    expiredAt={`${get(
+                    endDate={`${get(
                       promotion,
                       "attributes.start_date"
                     )} - ${get(promotion, "attributes.end_date")}`}
@@ -394,7 +303,7 @@ const PromotionsPage = () => {
                     key={index}
                     title={get(promotion, "attributes.name")}
                     imgUrl={get(promotion, "attributes.images[0]")}
-                    expiredAt={`${get(
+                    endDate={`${get(
                       promotion,
                       "attributes.start_date"
                     )} - ${get(promotion, "attributes.end_date")}`}

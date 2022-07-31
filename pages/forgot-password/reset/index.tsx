@@ -32,7 +32,7 @@ const ResetPasswordPage = (props: ResetPasswordProps) => {
           </div>
           <Image
             src={"/icons/change-ps-success.svg"}
-            alt=""
+            alt="result-alt"
             width={120}
             height={120}
           />

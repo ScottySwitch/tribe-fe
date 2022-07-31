@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
-import { changeToSlugify, formatBizlistingArray, isArray } from "utils";
+import { changeToSlugify, formatBizlistingArray, formatCardItemProps, isArray } from "utils";
 
 type Object = {
   [key: string]: any;
@@ -132,7 +132,7 @@ const Collection = (props) => {
         {collectionDetail.banner && (
           <Image
             src={collectionDetail.banner}
-            alt=""
+            alt="banner"
             layout="fill"
             objectFit="cover"
             className={`${styles.collection_banner_img} ${styles.collection_banner_desktop}`}
@@ -141,19 +141,19 @@ const Collection = (props) => {
         {collectionDetail.bannerMobile && (
           <Image
             src={collectionDetail.bannerMobile}
-            alt=""
+            alt="banner"
             layout="fill"
             objectFit="cover"
             className={styles.collection_banner_mobile}
           />
         )}
         <div className={styles.collection_context_container}>
-          <div className={styles.collection_name}>
+          <h1 className={styles.collection_name}>
             {collectionDetail.collectionName}
-          </div>
-          <div className={styles.collection_description}>
+          </h1>
+          <h2 className={styles.collection_description}>
             {collectionDetail.description}
-          </div>
+          </h2>
         </div>
       </SectionLayout>
       <SectionLayout>
@@ -173,17 +173,7 @@ const Collection = (props) => {
             listing.map((item) => (
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={item.images[0]}
-                  title={item.title}
-                  rate={item.rate}
-                  rateNumber={item.rateNumber}
-                  followerNumber={item.followerNumber}
-                  price={item.price}
-                  currency={item.currency}
-                  categories={item.categories}
-                  tags={item.tags}
-                  isVerified={item.isVerified}
-                  description={item.description}
+                  {...formatCardItemProps(item)}
                   onClick={() => router.push(`/biz/home/${item.slug}`)}
                 />
               </div>

@@ -11,6 +11,20 @@ import { IAddListingForm } from "pages/add-listing";
 import { ListCardProps } from "./components/UserProfilePage/PanelContributed/PanelContributed";
 import { useRouter } from "next/router";
 
+export const reportResultType = [
+  {
+    title: "Success!",
+    message:
+      "Thank you for your report. We will review the report and take action within 24 hours!",
+    textButton: "Close",
+  },
+  {
+    title: "Fail!",
+    message: "Oops, something wrong. Please try again later.",
+    textButton: "Try again",
+  },
+];
+
 export const videoExtensions = [
   ".flv",
   ".mp4",

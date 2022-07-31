@@ -65,7 +65,7 @@ const Banner = (props: BannerProps) => {
                   />
                 ) : (
                   <Image
-                    alt=""
+                    alt="banner"
                     layout="intrinsic"
                     height={300}
                     width={300}

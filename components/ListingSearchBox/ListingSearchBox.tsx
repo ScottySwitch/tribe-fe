@@ -39,7 +39,7 @@ const ListingSearchBox = (props: ListingSearchBoxProps) => {
 
   return (
     <div className={styles.listing_search_box}>
-      <div className={styles.title}>{title}</div>
+      <h1 className={styles.title}>{title}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-5 lg:gap-x-4 gap-y-4 lg:gap-y-0">
         <div className="col-span-2">
           <Select

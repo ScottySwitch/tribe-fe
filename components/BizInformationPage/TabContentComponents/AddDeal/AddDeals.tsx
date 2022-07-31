@@ -111,8 +111,8 @@ const AddDeals = (props: AddDealsProps) => {
                 }
               />
               <Input
-                value={deal.information || deal.description}
-                placeholder="Deal information"
+                value={deal.description}
+                placeholder="Deal description"
                 onChange={(e: any) =>
                   handleChangeDeal(deal.id, "description", e.target.value)
                 }
@@ -128,14 +128,14 @@ const AddDeals = (props: AddDealsProps) => {
                     moment(deal.end_date, "YYYY-MM-DD").toDate()) ||
                   new Date()
                 }
-                onChange={(e: any) => handleChangeDeal(deal.id, "end_date", e)}
+                onChange={(e: any) => handleChangeDeal(deal.id, "endDate", e)}
               />
               <Input
-                value={deal.termsConditions || deal.terms_conditions}
+                value={deal.termsConditions}
                 label="Terms and Conditions"
                 placeholder="A valid tribe listing pass must be presented upon payment to enjoy the offer."
                 onChange={(e: any) =>
-                  handleChangeDeal(deal.id, "terms_conditions", e.target.value)
+                  handleChangeDeal(deal.id, "termsConditions", e.target.value)
                 }
               />
               {multiple && <AddDealButton />}

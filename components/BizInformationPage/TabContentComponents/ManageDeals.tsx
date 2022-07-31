@@ -18,6 +18,7 @@ import useGetRevision from "hooks/useGetRevision";
 
 import styles from "./TabContent.module.scss";
 import DealDetailModal from "components/DealDetailModal/DealDetailModal";
+import { formatDeals } from "utils";
 
 interface ManageDealProps {
   bizListingId?: number | string;
@@ -59,13 +60,14 @@ const ManageDeals = (props: ManageDealProps) => {
     const activeDeals: any = [];
     const pastDeals: any = [];
     const dealList = get(revisionListing, "deals");
+    const formattedDeals = formatDeals(dealList);
 
-    Array.isArray(dealList) &&
-      dealList.forEach((deal: any) => {
+    Array.isArray(formattedDeals) &&
+      formattedDeals.forEach((deal: any) => {
         const startDate =
-          get(deal, "start_date") && new Date(get(deal, "start_date"));
-        const endDate =
-          get(deal, "end_date") && new Date(get(deal, "end_date"));
+          get(deal, "startDate") && new Date(get(deal, "startDate"));
+
+        const endDate = get(deal, "endDate") && new Date(get(deal, "endDate"));
         if (startDate <= currentDate && currentDate <= endDate) {
           activeDeals.push(deal);
         } else {
@@ -87,16 +89,17 @@ const ManageDeals = (props: ManageDealProps) => {
     const currentDealIds = isArray(revisionListing.deals)
       ? revisionListing.deals.map((item) => item.id)
       : [];
-    console.log(deals);
+
     const deal = {
+      ...deals[0],
+      end_date:
+        moment(get(deals, "[0].endDate")).format("YYYY-MM-DD") + "T:00:00.000Z",
+      terms_condistions: get(deals, "[0].termsConditions"),
       is_revision: isRevision,
       biz_listing_revision: isRevision
         ? revisionListing.id
         : await getRevisionId({ products: currentDealIds }),
-      ...deals[0],
     };
-
-    console.log(deal);
 
     const submitDealApi = deal.isEdited
       ? DealApi.updateDeal(deal.id, deal)
@@ -156,13 +159,7 @@ const ManageDeals = (props: ManageDealProps) => {
       key: "date",
       title: "DATE",
       render: (item: any) => {
-        // console.timeLog(item.end_date);
-        // const endDate =
-        //   typeof item.end_date === "string"
-        //     ? item.end_date
-        //     : moment(new Date(item.end_date)).format("YYYY-MM-DD");
-        // return endDate;
-        return moment(item.end_date || "").format("YYYY-MMM-DD");
+        return moment(item.endDate || "").format("YYYY/MM/DD");
       },
       width: "30%",
     },
@@ -315,6 +312,7 @@ const ManageDeals = (props: ManageDealProps) => {
           dealList={[selectedDeal]}
           onCancel={() => setScreen(ManageDealsScreens.LIST)}
           onSubmit={(e) => {
+            console.log("e", e);
             setScreen(ManageDealsScreens.LIST);
             submitDeal(e);
           }}
@@ -328,7 +326,6 @@ const ManageDeals = (props: ManageDealProps) => {
       <DealDetailModal
         data={{
           ...selectedDeal,
-          end_date: moment(selectedDeal.end_date || "").format("YYYY-MMM-DD"),
         }}
         visible={showDealDetailModal}
         onClose={() => setShowDealDetailModal(false)}

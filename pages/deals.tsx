@@ -18,7 +18,7 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
 import useTrans from "hooks/useTrans";
-import { formatBizlistingArray } from "utils";
+import { formatBizlistingArray, formatCardItemProps } from "utils";
 
 const allTab = [{ label: "All", value: undefined }];
 const categoryTabList: any[] = categories.map((item) => ({
@@ -82,16 +82,16 @@ const Deals = () => {
       <SectionLayout className={styles.collection_banner}>
         <Image
           src={require("public/images/deals-banner.svg")}
-          alt=""
+          alt="deals-banner"
           layout="fill"
           objectFit="cover"
           className={styles.collection_banner_img}
         />
         <div className={styles.collection_context_container}>
-          <div className={styles.collection_name}>Exclusive deals</div>
-          <div className={styles.collection_description}>
+          <h1 className={styles.collection_name}>Exclusive deals</h1>
+          <h2 className={styles.collection_description}>
             Get the hottest and earliest promotions
-          </div>
+          </h2>
         </div>
       </SectionLayout>
       <SectionLayout childrenClassName="flex justify-between flex-wrap">
@@ -111,17 +111,7 @@ const Deals = () => {
             listingsHaveDeals.map((item) => (
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={item.images[0]}
-                  title={item.title}
-                  rate={item.rate}
-                  rateNumber={item.rateNumber}
-                  followerNumber={item.followerNumber}
-                  price={item.price}
-                  currency={item.currency?.toUpperCase()}
-                  categories={item.categories}
-                  tags={item.tags}
-                  isVerified={item.isVerified}
-                  description={item.description}
+                  {...formatCardItemProps(item)}
                   onClick={() => router.push(`/biz/home/${item.slug}`)}
                 />
               </div>

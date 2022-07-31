@@ -12,7 +12,7 @@ import Button from "components/Button/Button";
 import BizListingApi from "services/biz-listing";
 import InforCard from "components/InforCard/InforCard";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { changeToSlugify } from "utils";
+import { changeToSlugify, formatCardItemProps } from "utils";
 
 import styles from "styles/Claim.module.scss";
 
@@ -135,7 +135,7 @@ const ClaimPage = () => {
           width="100%"
           height="30%"
           layout="responsive"
-          alt=""
+          alt="banner"
           objectFit="cover"
         />
         <SectionLayout className={styles.section_claim_search_box}>
@@ -157,15 +157,15 @@ const ClaimPage = () => {
         </SectionLayout>
       </div>
       <SectionLayout className={styles.section_two}>
-        <div className={styles.header}>Grow your business with Tribes</div>
+        <h1 className={styles.header}>Grow your business with Tribes</h1>
         <div className={styles.advantage}>
           <Image
             src={require("public/images/take-control.svg")}
             width={600}
-            alt=""
+            alt="take-control-alt"
           />
           <div className={styles.description}>
-            <div className={styles.title}>Take control of your listing</div>
+            <h2 className={styles.title}>Take control of your listing</h2>
             <p className={styles.content}>
               Customise your listing details, upload photos, and more to show
               customers what makes your business special.
@@ -176,10 +176,10 @@ const ClaimPage = () => {
           <Image
             src={require("public/images/respond-to-reviews.svg")}
             width={600}
-            alt=""
+            alt="respond-to-reviews-alt"
           />
           <div className={styles.description}>
-            <div className={styles.title}>Respond to reviews</div>
+            <h2 className={styles.title}>Respond to reviews</h2>
             <p className={styles.content}>
               Analyse reviews that can help your company overall customer
               satisfaction and Increase brand awareness to reach your targetted
@@ -191,10 +191,10 @@ const ClaimPage = () => {
           <Image
             src={require("public/images/track-perfomance.svg")}
             width={600}
-            alt=""
+            alt="track-perfomance-alt"
           />
           <div className={styles.description}>
-            <div className={styles.title}>Track your performance</div>
+            <h2 className={styles.title}>Track your performance</h2>
             <p className={styles.content}>
               Use analytics to keep track of the number of products sold and to
               determine if a product is performing poorly so that you can
@@ -205,11 +205,11 @@ const ClaimPage = () => {
       </SectionLayout>
       <SectionLayout backgroundColor childrenClassName="overflow-hidden">
         <div className={styles.why_tribes}>
-          <div className={styles.why_tribes_title}>Why Tribes?</div>
+          <h1 className={styles.why_tribes_title}>Why Tribes?</h1>
           <div className={styles.why_tribes_container}>
             <div className={styles.why_tribes_scrollbox}>
               {whyTribes.map((card, index) => (
-                <InforCard key={index} {...card} />
+                <InforCard key={index} {...formatCardItemProps(card)} />
               ))}
             </div>
           </div>

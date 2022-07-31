@@ -16,7 +16,12 @@ import CollectionApi from "services/collection";
 import BannerApi from "services/banner";
 import CategoryApi from "services/category";
 import Loader from "components/Loader/Loader";
-import { formatBanner, formatListingArray, isArray } from "utils";
+import {
+  formatBanner,
+  formatCardItemProps,
+  formatListingArray,
+  isArray,
+} from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import { Ilisting } from "type";
 import {
@@ -27,11 +32,13 @@ import {
 } from "constant";
 import { CategoryText } from "enums";
 import styles from "styles/Home.module.scss";
+import Head from "next/head";
 
 const Home: NextPage = (props: any) => {
   const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
     props;
 
+  const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState<number>(16);
   // const [listingForYou, setListingForYou] = useState<Ilisting[]>([]);
@@ -42,10 +49,30 @@ const Home: NextPage = (props: any) => {
     stay: Ilisting[];
     transport: Ilisting[];
   }>();
-
+  const { locale } = useRouter();
   const router = useRouter();
   const { user } = useContext(UserInforContext);
   const { location } = user;
+
+  useEffect(() => {
+    switch (locale) {
+      case "sg":
+        setTitle(
+          "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
+        );
+        break;
+      case "id":
+        setTitle(
+          "Tribes : Dapatkan Informasi Travelling Seputar Tempat Makan Halal dan Penginapan"
+        );
+        break;
+      default:
+        setTitle(
+          "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
+        );
+        break;
+    }
+  }, [locale]);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -103,6 +130,9 @@ const Home: NextPage = (props: any) => {
 
   return (
     <div>
+      <Head>
+        <title>{title}</title>
+      </Head>
       {isArray(listBanners) && (
         <SectionLayout>
           <Carousel responsive={homeBannerResponsive}>
@@ -113,7 +143,7 @@ const Home: NextPage = (props: any) => {
                 onClick={() => router.push(`${img.linkActive}`)}
               >
                 <Image
-                  alt=""
+                  alt="banner"
                   layout="intrinsic"
                   src={img.imgUrl}
                   objectFit="contain"
@@ -150,17 +180,7 @@ const Home: NextPage = (props: any) => {
             {listingExclusiveDeal?.map((card) => (
               <div key={card.name} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -189,17 +209,7 @@ const Home: NextPage = (props: any) => {
             {listings?.buy.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -213,17 +223,7 @@ const Home: NextPage = (props: any) => {
             {listings?.seeAndDo.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -250,17 +250,7 @@ const Home: NextPage = (props: any) => {
             {listings?.eat.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
+                  {...formatCardItemProps(card)}
                   onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
@@ -277,20 +267,8 @@ const Home: NextPage = (props: any) => {
             {listings?.transport.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  {...formatCardItemProps(card)}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))}
@@ -303,20 +281,8 @@ const Home: NextPage = (props: any) => {
             {listings?.stay.map((card) => (
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
-                  imgUrl={get(card, "images[0]")}
-                  title={card.title}
-                  rate={card.rate}
-                  rateNumber={card.rateNumber}
-                  followerNumber={card.followerNumber}
-                  price={card.price}
-                  currency={card?.currency?.toUpperCase()}
-                  categories={card.categories}
-                  tags={card.tags}
-                  isVerified={card.isVerified}
-                  description={card.description}
-                  onClick={() => {
-                    window.location.href = `/biz/home/${card.slug}`;
-                  }}
+                  {...formatCardItemProps(card)}
+                  onClick={() => router.push(`/biz/home/${card.slug}`)}
                 />
               </div>
             ))}
@@ -368,10 +334,10 @@ const Home: NextPage = (props: any) => {
       )} */}
       <div className={styles.introduction}>
         <SectionLayout transparent>
-          <div className={styles.header}>
+          <h1 className={styles.header}>
             A <span>Curated Platform & Experience</span>
             <p>For The Muslim Lifestyle</p>
-          </div>
+          </h1>
           {curatedList.map((item, index) => (
             <div key={index} className="flex gap-3 mt-5">
               <Icon icon="star-2" color="#e60112" />

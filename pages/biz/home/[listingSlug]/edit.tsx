@@ -1,10 +1,7 @@
 import { orderBy } from "lodash";
 import get from "lodash/get";
-import moment from "moment";
-import parseISO from "date-fns/parseISO";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import VideoThumbnail from "react-video-thumbnail";
 
 import Loader from "components/Loader/Loader";
 import Icon from "components/Icon/Icon";
@@ -13,20 +10,20 @@ import EditAction from "components/BizHomePage/EditAction/EditAction";
 import ListingInforCard from "components/BizHomePage/ListingInforCard/ListingInforCard";
 import RenderTabs from "components/BizHomePage/RenderTabs/RenderTabs";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { Categories, ListingHomePageScreens } from "enums";
+import { Categories, CategoryText, ListingHomePageScreens } from "enums";
 import BizListingApi from "../../../../services/biz-listing";
 import AddMenu from "components/BizInformationPage/TabContentComponents/AddMenu/AddMenu";
 import AddItems from "components/BizInformationPage/TabContentComponents/AddItems/AddItems";
 import AddDeals from "components/BizInformationPage/TabContentComponents/AddDeal/AddDeals";
 import ReviewApi from "services/review";
 import Facilities from "components/BizHomePage/Facilities/Facilities";
-import { IOption } from "type";
+import { IOption, IReviewData } from "type";
 import Tags from "components/BizHomePage/Tags/Tags";
 import HomeOpenHours from "components/BizHomePage/HomeOpenHours/HomeOpenHours";
 import {
-  defaultAddlistingForm,
   getAddItemsFields,
   optionsReportListing,
+  reportResultType,
 } from "constant";
 import ProductApi from "../../../../services/product";
 import MenuApi from "../../../../services/menu";
@@ -37,7 +34,20 @@ import Contacts from "components/BizHomePage/Contacts/Contacts";
 import HomepageReviews from "components/BizHomePage/HomepageReviews/HomepageReviews";
 import { IAddListingForm } from "pages/add-listing";
 import Banner from "components/BizHomePage/Banner/Banner";
-import { isPaidUser } from "utils";
+import {
+  checkHasSocialLink,
+  formatDeals,
+  formatListingItems,
+  formatMenu,
+  formatOptions,
+  formatSubmittedDeals,
+  formatSubmittedListingItem,
+  getIndex,
+  getParentId,
+  isPaidUser,
+} from "utils";
+import { IOpenHours } from "components/OpenHours/OpenHours";
+import Head from "next/head";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 import ReportModal from "../../../../components/ReportModal/ReportModal";
 import ReportApi from "../../../../services/report";
@@ -51,16 +61,24 @@ import styles from "styles/BizHomepage.module.scss";
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
   const { user, updateUser } = useContext(UserInforContext);
+  const { locale } = useRouter();
+
+  const [title, setTitle] = useState(
+    "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
+  );
+
+  const router = useRouter();
+  const { query } = router;
+  const { listingSlug } = query;
 
   const [showShareModal, setShowShareModal] = useState(false);
-  const [userInfo, setUserInfo] = useState<any>({});
   const [category, setCategory] = useState(Categories.EAT);
   const [screen, setScreen] = useState(ListingHomePageScreens.HOME);
   const [description, setDescription] = useState<string>("");
   const [facilities, setFacilities] = useState<IAddListingForm | undefined>();
   const [tags, setTags] = useState<IOption[]>([]);
   const [tagOptions, setTagOptions] = useState<IOption[]>([]);
-  const [openHours, setOpenHours] = useState([]);
+  const [openHours, setOpenHours] = useState<IOpenHours>([]);
   const [reviews, setReviews] = useState<{ [key: string]: any }[]>([]);
   const [listingRate, setListingRate] = useState(1);
   const [klookUrl, setKlookUrl] = useState<string>("");
@@ -90,143 +108,74 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [isShowReportModal, setIsShowReportModal] = useState<boolean>(false);
   const [showResultModal, setShowResultModal] = useState<boolean>(false);
   const [submitResult, setSubmitResult] = useState<boolean>(false);
-  const resultType = [
-    {
-      title: "Success!",
-      message:
-        "Thank you for your report. We will review the report and take action within 24 hours!",
-      textButton: "Close",
-    },
-    {
-      title: "Fail!",
-      message: "Oops, something wrong. Please try again later.",
-      textButton: "Try again",
-    },
-  ];
-  const hasSocialLink =
-    bizListing.email ||
-    bizListing.website ||
-    get(bizListing, "social_info.twitter") ||
-    get(bizListing, "social_info.facebook") ||
-    get(bizListing, "social_info.instagram")
-      ? true
-      : false;
 
-  const router = useRouter();
-  const { query } = router;
-  const { listingSlug } = query;
-
-  const formatOptions = (list) =>
-    Array.isArray(list)
-      ? list.map((item: any) => ({
-          label: item.label,
-          value: item.value,
-          id: item.id,
-        }))
-      : [];
+  useEffect(() => {
+    if (get(bizListing, "categories[0].slug") === CategoryText.EAT) {
+      switch (locale) {
+        case "sg":
+          setTitle(
+            `Find Halal ${bizListing.name} and see ${bizListing.name} Menu Online | Tribes`
+          );
+          break;
+        case "id":
+          setTitle(
+            `Lihat ${bizListing.name} Halal dan cek ${bizListing.name} Menu Online | Tribes`
+          );
+          break;
+        default:
+          setTitle(
+            `Find Halal ${bizListing.name} and see ${bizListing.name} Menu Online | Tribes`
+          );
+          break;
+      }
+    }
+  }, [bizListing, locale]);
 
   useEffect(() => {
     const getListingData = async (listingSlug) => {
-      let data;
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      if (isViewPage) {
-        //if normal user go to normal listing homepage
-        data = await BizListingApi.getInfoBizListingBySlug(listingSlug);
-      } else {
-        //if normal users go to edit listing homepage
-        data = await BizListingApi.getInfoOwnerBizListingBySlug(listingSlug);
-        if (get(data, "data.is_revision") === true) {
-          setIsRevision(true);
-        }
-        //they will be redirected to home if do not own the listing
-        get(data, "data.is_owner") !== true && (window.location.href = "/");
-      }
-      const listing = get(data, "data.data[0]");
+      const listing = isViewPage
+        ? await BizListingApi.getInfoBizListingBySlug(listingSlug)
+            .then((res) => get(res, "data.data[0]"))
+            .catch((error) => {})
+        : await BizListingApi.getInfoOwnerBizListingBySlug(listingSlug)
+            .then((res) => {
+              get(res, "data.is_revision") && setIsRevision(true);
+              //they will be redirected to home if do not own the listing
+              !get(res, "data.is_owner") && (window.location.href = "/");
+              return get(res, "data.data[0]");
+            })
+            .catch((error) => {});
+
       if (listing) {
         updateUser({
           now_biz_listing: listing,
         });
-        setUserInfo(userInfo);
         const rawTags = listing.tags || [];
         const rawFacilities = listing.facilities_data || [];
         const rawPhoneNumber = listing.phone_number;
-        const defaultPhone = censoredPhoneNumber(rawPhoneNumber);
-        let rawListing = listing.products || [];
-        rawListing = orderBy(rawListing, ["is_pinned"], ["desc"]);
-        const listingArray = rawListing.map((item) => ({
-          name: item.name,
-          is_revision: item.is_revision,
-          parent_id: item.parent_id,
-          price: item.price,
-          id: item.id,
-          description: item.description,
-          images: item.images,
-          imgUrl: get(item, "images[0]"),
-          discount: item.discount_percent,
-          tags: item.tags,
-          websiteUrl: item.website_url,
-          klookUrl: item.klook_url,
-          isEdited: false,
-          currency: item.currency,
-          discountType: item.currency_discount,
-        }));
-        const rawMenu = listing.menus || [];
-        const menuArray = rawMenu.map((item) => ({
-          id: item.id,
-          is_revision: item.is_revision,
-          parent_id: item.parent_id,
-          name: item.name,
-          images: item.menu_file,
-          imgUrl: item.menu_file[0],
-          isChange: false,
-        }));
-        let rawDeal = listing.deals || [];
-        rawDeal = orderBy(rawDeal, ["is_pinned"], ["desc"]);
-        const dealArray = rawDeal.map((item) => ({
-          id: item.id,
-          is_revision: item.is_revision,
-          parent_id: item.parent_id,
-          name: item.name,
-          images: item.images,
-          imgUrl: get(item, "images[0]"),
-          information: item.description,
-          termsConditions: item.terms_conditions,
-          startDate: moment(item.start_date).format("YYYY/MM/DD"),
-          endDate: moment(item.end_date).format("YYYY/MM/DD"),
-          validUntil: moment(item.end_date).format("YYYY/MM/DD"),
-          isChange: false,
-        }));
-        const rawBizInvoices = listing.biz_invoices || [];
-        const bizInvoicesArray = rawBizInvoices.map((item) => ({
-          id: item.id,
-        }));
+        const rawDeals = orderBy(listing.deals, ["is_pinned"], ["desc"]);
+        let rawListingItems = orderBy(
+          listing.products,
+          ["is_pinned"],
+          ["desc"]
+        );
+
         const tagArray = formatOptions(rawTags);
-
-        const rawReview = listing.reviews || [];
-        let reviewArray: any = [];
-        rawReview.map((item) => {
-          if (!item.is_revision) {
-            reviewArray.push({
+        const formattedItems = formatListingItems(rawListingItems);
+        const formattedMenu = formatMenu(listing.menus);
+        const formattedDeals = formatDeals(rawDeals);
+        const formattedTagOptions = formatOptions(listing.tag_options);
+        const formattedBizInvoices = isArray(listing.biz_invoices)
+          ? listing.biz_invoices.map((item) => ({
               id: item.id,
-              content: item.content,
-              rating: item.rating,
-              images: item.images,
-              reply_reviews: item.reply_reviews,
-              date_create_reply: item.date_create_reply,
-              user: item.user,
-              visited_date: item.visited_date,
-              reply_accepted: item?.reply_accepted,
-            });
-          }
-        });
-        const rawTagOptions = listing.tag_options || [];
-        const tagOptionsArray = rawTagOptions.map((item) => ({
-          label: item.label,
-          value: item.value,
-          id: item.id,
-        }));
+            }))
+          : [];
 
-        setTagOptions(tagOptionsArray);
+        const formattedReviews: IReviewData[] = isArray(listing.reviews)
+          ? listing.reviews.filter((item) => !item.is_revision)
+          : [];
+
+        setTagOptions(formattedTagOptions);
         setBizListing(listing);
         setAction(listing.action);
         setListingImages(listing.images || []);
@@ -245,42 +194,25 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         setFacilitiesData(listing.facilities_data);
         setLogo(listing.logo);
         setTags(tagArray);
-        setReviews(reviewArray);
+        setReviews(formattedReviews);
         setPhoneNumber(rawPhoneNumber);
         setFacilities(rawFacilities);
-        setItemList(listingArray);
-        setMenuList(menuArray);
-        setDealList(dealArray);
-        setBizInvoices(bizInvoicesArray);
+        setPhoneNumber(rawPhoneNumber);
+        setItemList(formattedItems);
+        setMenuList(formattedMenu);
+        setDealList(formattedDeals);
+        setBizInvoices(formattedBizInvoices);
         setListingRate(listing.rate);
-        if (listing?.expiration_date) {
-          // if (get(listing, "biz_invoices.length") > 0) {
-          setIsPaid(isPaidUser(listing.expiration_date));
-        } else {
-          setIsPaid(false);
-        }
+        setIsPaid(isPaidUser(listing.expiration_date));
       }
-      setIsLoading(false);
     };
 
-    if (listingSlug) {
-      setIsLoading(true);
-      getListingData(listingSlug);
-    }
+    listingSlug &&
+      getListingData(listingSlug).finally(() => setIsLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingSlug, isViewPage]);
 
-  // TODO: check function upload multiple images
-  const handleChangeImages = (srcImages) => setListingImages(srcImages);
-  const handleChangeLogo = (srcImages) => setLogo(srcImages);
-  const handleSetPriceRange = (priceRange) => setPriceRange(priceRange);
-  const handleSetSocialInfo = (socialInfo) => setSocialInfo(socialInfo);
-  const handleSetPhoneNumber = (phoneNumber) => setPhoneNumber(phoneNumber);
-  const handleSetDescription = (description) => setDescription(description);
-  const handleSetFacilities = (facilities) => setFacilitiesData(facilities);
-  const handleSetTags = (tags) => setTags(tags);
-  const handleSetOpenHours = (openHours) => setOpenHours(openHours);
-  const handleSetAction = (action: string, value: string) =>
-    setAction({ label: action, value: value });
+  const handleCancel = () => setScreen(ListingHomePageScreens.HOME);
   const handleSetItemList = (list: { [key: string]: string }[]) => {
     setItemList(list);
     setScreen(ListingHomePageScreens.HOME);
@@ -293,13 +225,10 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     setMenuList(menu);
     setScreen(ListingHomePageScreens.HOME);
   };
-  const handleCancel = () => setScreen(ListingHomePageScreens.HOME);
 
   const handleSubmitReply = (reply, review) => {
     const newReviewArray: { [key: string]: any }[] = reviews;
-    const indexReviewSelected = newReviewArray.findIndex(
-      (item: any) => item.id === review.id
-    );
+    const indexReviewSelected = getIndex(review.id, newReviewArray);
     newReviewArray[indexReviewSelected].isEdit = true;
     newReviewArray[indexReviewSelected].reply_reviews = reply;
     newReviewArray[indexReviewSelected].date_create_reply = new Date();
@@ -307,15 +236,10 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   };
 
   const handleSubmitReportBizListing = async (data?: any) => {
-    let userInfo;
-    if (typeof localStorage.getItem("user") !== null) {
-      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    }
-    const userId = userInfo.id || null;
     const body = {
       type: "listing",
       reason: data,
-      user: userId,
+      user: user.id,
       biz_listing: bizListing.id,
     };
 
@@ -334,7 +258,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    let bizListingRevisionCreateId;
     const currentItemList = [...itemList].filter(
       (item) => !item.isNew && !item.isEdited
     );
@@ -356,111 +279,73 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     const editedDealList = dealList.filter(
       (item) => !item.isNew && item.isEdited
     );
+
+    const updateRevisionListingData = {
+      description: description,
+      min_price: parseFloat(priceRange?.min) || null,
+      max_price: parseFloat(priceRange?.max) || null,
+      currency: priceRange?.currency.toLocaleLowerCase() || null,
+      action: action,
+      images: listingImages,
+      website: socialInfo,
+      phone_number: phoneNumber,
+      facilities_data: facilitiesData,
+      open_hours: openHours,
+      tags: tags.map((item) => item.id),
+      is_verified: false,
+      logo: logo,
+      is_accepted: false,
+      expiration_date: bizListing.expiration_date,
+      subscription: bizListing.subscription,
+      products: currentItemList.map((item) => item.id),
+      menus: currentMenuList.map((item) => item.id),
+      deals: currentDealList.map((item) => item.id),
+      reviews: reviews.map((item) => item.id),
+    };
+
+    const createBizListingRevisionData = {
+      ...updateRevisionListingData,
+      name: get(bizListing, "name"),
+      slug: get(bizListing, "slug"),
+      biz_listing: bizListing.id.toString(),
+      parent_id: bizListing.id.toString(),
+      email: bizListing.email,
+      city: bizListing.city,
+      country: bizListing.country,
+      address: bizListing.address,
+      social_info: bizListing.social_info,
+      biz_invoices: bizInvoices.map((item) => item.id) || [],
+      categories: bizListing.categories.map((item) => item.id) || [],
+    };
+
+    let revisionId;
     if (isRevision) {
-      await BizListingRevision.updateBizListingRevision(bizListing.id, {
-        description: description,
-        // price_range: priceRange,
-        min_price: parseFloat(priceRange?.min) || null,
-        max_price: parseFloat(priceRange?.max) || null,
-        currency: priceRange?.currency.toLocaleLowerCase() || null,
-        action: action,
-        images: listingImages,
-        website: socialInfo,
-        phone_number: phoneNumber,
-        facilities_data: facilitiesData,
-        open_hours: openHours,
-        tags: tags.map((item) => item.id),
-        is_verified: false,
-        logo: logo,
-        is_accepted: false,
-        expiration_date: bizListing.expiration_date,
-        subscription: bizListing.subscription,
-        products: currentItemList.map((item) => item.id) || [],
-        menus: currentMenuList.map((item) => item.id) || [],
-        deals: currentDealList.map((item) => item.id) || [],
-        reviews: reviews.map((item) => item.id) || [],
-      }).then((response) => {
-        console.log(response);
-      });
+      await BizListingRevision.updateBizListingRevision(
+        bizListing.id,
+        updateRevisionListingData
+      );
     } else {
-      await BizListingRevision.createBizListingRevision({
-        name: get(bizListing, "name"),
-        slug: get(bizListing, "slug"),
-        biz_listing: bizListing.id.toString(),
-        parent_id: bizListing.id.toString(),
-        description: description,
-        // price_range: priceRange,
-        email: bizListing.email,
-        min_price: parseFloat(priceRange?.min) || null,
-        max_price: parseFloat(priceRange?.max) || null,
-        currency: priceRange?.currency.toLocaleLowerCase() || null,
-        action: action,
-        city: bizListing.city,
-        country: bizListing.country,
-        address: bizListing.address,
-        images: listingImages,
-        website: socialInfo,
-        phone_number: phoneNumber,
-        facilities_data: facilitiesData,
-        open_hours: openHours,
-        tags: tags.map((item) => item.id),
-        is_verified: false,
-        is_accepted: false,
-        subscription: bizListing.subscription,
-        logo: logo,
-        expiration_date: bizListing.expiration_date,
-        social_info: bizListing.social_info,
-        products: currentItemList.map((item) => item.id) || [],
-        menus: currentMenuList.map((item) => item.id) || [],
-        deals: currentDealList.map((item) => item.id) || [],
-        biz_invoices: bizInvoices.map((item) => item.id) || [],
-        reviews: reviews.map((item) => item.id) || [],
-        categories: bizListing.categories.map((item) => item.id) || [],
-      }).then((response) => {
-        console.log(response);
-        bizListingRevisionCreateId = get(response, "data.data.id");
-      });
+      await BizListingRevision.createBizListingRevision(
+        createBizListingRevisionData
+      ).then((response) => (revisionId = get(response, "data.data.id")));
     }
 
-    //API ItemList
+    //Create items
     await Promise.all(
-      newItemList.map(async (item) => {
-        const CreateData = {
-          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
-          name: item.name,
-          description: item.description,
-          price: item.price,
-          discount_percent: item.discount,
-          tags: item.tags,
-          images: item.images,
-          website_url: item.websiteUrl,
-          klook_url: item.klookUrl,
-          is_revision: true,
-          currency: item.currency,
-          currency_discount: item.discountType,
-        };
-        await ProductApi.createProduct(CreateData);
-      })
+      newItemList.map(
+        async (item) =>
+          await ProductApi.createProduct(
+            formatSubmittedListingItem(item, revisionId, bizListing.id)
+          )
+      )
     );
+
+    //Update Items
     await Promise.all(
       editedItemList.map(async (item) => {
-        const parent_id = !item.is_revision
-          ? item.id.toString()
-          : item.parent_id
-          ? item.parent_id.toString()
-          : "";
         const updateData = {
-          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
-          name: item.name,
-          description: item.description,
-          price: item.price,
-          discount_percent: item.discount,
-          tags: item.tags,
-          images: item.images,
-          website_url: item.websiteUrl,
-          klook_url: item.klookUrl,
-          is_revision: true,
-          parent_id: parent_id,
+          parent_id: getParentId(item),
+          ...formatSubmittedListingItem(item, revisionId, bizListing.id),
         };
         item.is_revision
           ? await ProductApi.updateProduct(item.id, updateData)
@@ -468,77 +353,50 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       })
     );
 
-    //API MenuList
+    //Create menus
     await Promise.all(
       newMenuList.map(async (item) => {
-        const CreateData = {
-          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
+        const createdMenuData = {
+          biz_listing_revision: revisionId || bizListing.id,
           name: item.name,
           menu_file: item.images,
           is_revision: true,
         };
-        await MenuApi.createMenu(CreateData);
+        await MenuApi.createMenu(createdMenuData);
       })
     );
+
+    //Update menus
     await Promise.all(
       editedMenuList.map(async (item) => {
-        const parent_id = !item.is_revision
-          ? item.id.toString()
-          : item.parent_id
-          ? item.parent_id.toString()
-          : "";
-        const updateData = {
-          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
+        const updateMenuData = {
+          parent_id: getParentId(item),
+          biz_listing_revision: revisionId || bizListing.id,
           name: item.name,
           menu_file: item.images,
           is_revision: true,
-          parent_id: parent_id,
         };
         item.is_revision
-          ? await MenuApi.updateMenu(item.id, updateData)
-          : await MenuApi.createMenu(updateData);
+          ? await MenuApi.updateMenu(item.id, updateMenuData)
+          : await MenuApi.createMenu(updateMenuData);
       })
     );
 
     //API DealList
     await Promise.all(
-      newDealList.map(async (item) => {
-        let convertEndDate =
-          moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z";
-        const CreateData = {
-          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
-          name: item.name,
-          description: item.information,
-          images: item.images,
-          terms_conditions: item.termsConditions,
-          start_date: new Date(),
-          end_date: convertEndDate,
-          is_revision: true,
-          category: get(bizListing, "categories[0].id"),
-        };
-        await DealApi.createDeal(CreateData);
-      })
+      newDealList.map(
+        async (item) =>
+          await DealApi.createDeal(
+            formatSubmittedDeals(item, revisionId, bizListing)
+          )
+      )
     );
+
     await Promise.all(
       editedDealList.map(async (item) => {
-        const parent_id = !item.is_revision
-          ? item.id.toString()
-          : item.parent_id
-          ? item.parent_id.toString()
-          : "";
-        let convertEndDate =
-          moment(item.validUntil).format("YYYY-MM-DD") + "T:00:00.000Z";
         const updateData = {
-          biz_listing_revision: bizListingRevisionCreateId || bizListing.id,
-          name: item.name,
-          description: item.information,
-          images: item.images,
-          start_date: new Date(),
-          terms_conditions: item.termsConditions,
-          end_date: convertEndDate,
-          is_revision: true,
-          parent_id: parent_id,
-          category: get(bizListing, "categories[0].id"),
+          parent_id: getParentId(item),
+          ...formatSubmittedDeals(item, revisionId, bizListing),
         };
         item.is_revision
           ? await DealApi.updateDeal(item.id, updateData)
@@ -563,6 +421,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         }
       })
     );
+
     window.location.reload();
   };
 
@@ -571,11 +430,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   }
 
   if (isLoading) {
-    return (
-      <div className="w-full flex justify-center items-center my-20">
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
   const listingActions = [
@@ -592,37 +447,38 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     { text: "Share", icon: "share", callBack: () => setShowShareModal(true) },
   ];
 
-  console.log("bizListing", bizListing);
-
   return (
     <div className={styles.listing_homepage}>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <SectionLayout show={screen === ListingHomePageScreens.HOME}>
         <Banner
           isViewPage={isViewPage}
           isPaid={isPaid}
           listingImages={listingImages}
           listingId={bizListing.id}
-          onChangeImages={handleChangeImages}
+          onChangeImages={(srcImages) => setListingImages(srcImages)}
         />
-        <div className={styles.breadcrumbs}>
+        <h1 className={styles.breadcrumbs}>
           Home <Icon icon="carret-right" size={14} color="#7F859F" />
           {bizListing.name}
-        </div>
+        </h1>
         <ListingInforCard
           isVerified={isVerified}
-          key={userInfo}
+          key={bizListing}
           isPaid={isPaid}
           isViewPage={isViewPage}
           logo={logo}
-          handleChangeLogo={handleChangeLogo}
+          handleChangeLogo={(srcImages) => setLogo(srcImages)}
           bizListing={bizListing}
           priceRange={priceRange}
           socialInfo={socialInfo}
           phoneNumber={phoneNumber}
-          onSetPriceRange={handleSetPriceRange}
-          onSetSocialInfo={handleSetSocialInfo}
-          onSetPhoneNumber={handleSetPhoneNumber}
-          userInfo={userInfo}
+          onSetPriceRange={(priceRange) => setPriceRange(priceRange)}
+          onSetSocialInfo={(socialInfo) => setSocialInfo(socialInfo)}
+          onSetPhoneNumber={(phoneNumber) => setPhoneNumber(phoneNumber)}
+          userInfo={bizListing}
         />
         <Break />
         <div className="flex gap-2">
@@ -648,7 +504,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               isLoading={isLoading}
               isPaid={isPaid}
               action={action}
-              onApplyAction={handleSetAction}
+              onApplyAction={(action, value) =>
+                setAction({ label: action, value: value })
+              }
               onPublishPage={handleSubmit}
             />
           </div>
@@ -659,7 +517,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             <Details
               isViewPage={isViewPage}
               description={description}
-              onSetDescription={handleSetDescription}
+              onSetDescription={(description) => setDescription(description)}
             />
             <Break
               show={
@@ -671,7 +529,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 category={category}
                 isViewPage={isViewPage}
                 facilities={facilitiesData}
-                onSetFacilities={handleSetFacilities}
+                onSetFacilities={(facilities) => setFacilitiesData(facilities)}
                 // facilityOptions={facilityOptions}
               />
             )}
@@ -680,7 +538,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               <Tags
                 isViewPage={isViewPage}
                 tags={tags}
-                onSetTags={handleSetTags}
+                onSetTags={(tags) => setTags(tags)}
                 tagOptions={tagOptions}
               />
             )}
@@ -688,7 +546,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             <HomeOpenHours
               isViewPage={isViewPage}
               openHours={openHours}
-              onSetOpenHours={handleSetOpenHours}
+              onSetOpenHours={(openHours) => setOpenHours(openHours)}
             />
             <Break />
             <>
@@ -715,8 +573,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               onSubmitReply={(value, id) => handleSubmitReply(value, id)}
               // onChangeReviewsSequence={handleChangeReviewsSequence}
             />
-            <Break show={hasSocialLink} />
-            {hasSocialLink && (
+            <Break show={checkHasSocialLink(bizListing)} />
+            {checkHasSocialLink(bizListing) && (
               <Contacts
                 email={bizListing?.email}
                 websiteUrl={bizListing?.website}
@@ -733,7 +591,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               handleSubmitReportBizListing={handleSubmitReportBizListing}
             />
             <ResultModal
-              resultType={resultType}
+              resultType={reportResultType}
               visible={showResultModal}
               isSuccess={submitResult}
               onClose={() => setShowResultModal(false)}
