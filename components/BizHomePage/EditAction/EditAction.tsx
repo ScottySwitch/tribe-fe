@@ -13,6 +13,7 @@ import { get } from "lodash";
 import { UserInforContext } from "Context/UserInforContext";
 import { ClaimStep } from "enums";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import Image from "next/image";
 
 interface EditActionProps {
   isOwned?: boolean;
@@ -205,6 +206,14 @@ const EditAction = (props: EditActionProps) => {
             variant="outlined"
             onClick={handleLogin}
           />
+          <div className={styles.icon_free}>
+            <Image
+              src={require("public/icons/free.svg")}
+              width={35}
+              height={35}
+              alt="icon_free"
+            />
+          </div>
           <p className="text-left">Own this business?</p>
         </div>
       )}
