@@ -1,7 +1,7 @@
 import { get, isArray } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import Button from "components/Button/Button";
 import DealDetailModal from "components/DealDetailModal/DealDetailModal";
@@ -22,6 +22,7 @@ import Popover from "components/Popover/Popover";
 import moment from "moment";
 import UpgradePopup from "components/UpgradePopup/UpgradePopup";
 import { formatCardItemProps } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
 
 const initSelectedTab = (category) => {
   switch (category) {
@@ -72,6 +73,7 @@ const TabContent = ({
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>({});
   const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const { user, updateUser } = useContext(UserInforContext);
 
   const isDeal = selectedTab === ListingTabs.DEAL;
   const isProduct =
@@ -202,6 +204,8 @@ const RenderTabs = (props: {
   const [selectedTab, setSelectedTab] = useState<ListingTabs>(
     initSelectedTab(category).itemType
   );
+  const { user, updateUser } = useContext(UserInforContext);
+
   let tabContent;
   switch (selectedTab) {
     case ListingTabs.SERVICE:
@@ -253,7 +257,6 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.MENU:
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
       const blankTextMenu = isPaid
         ? "There are no menu yet"
         : "Upgrade to upload";
@@ -273,8 +276,7 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.DEAL:
-      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const blankTextDeal = get(userInfo, "token")
+      const blankTextDeal = get(user, "token")
         ? isPaid
           ? "There are no deal yet"
           : "Upgrade to upload"
@@ -286,7 +288,7 @@ const RenderTabs = (props: {
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={get(userInfo, "token") ? (isPaid ? dealList : []) : []}
+          list={get(user, "token") ? (isPaid ? dealList : []) : []}
           blankImg={require("public/images/no-product.svg")}
           blankText={blankTextDeal}
           buttonText="Add deals now"
