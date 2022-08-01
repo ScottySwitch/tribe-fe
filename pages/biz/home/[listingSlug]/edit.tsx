@@ -439,11 +439,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       icon: "chat",
       callBack: () => router.push(`#reviews`),
     },
-    {
-      text: "Direction",
-      icon: "map-1",
-      callBack: () => window.open("some_url_here"),
-    },
+    // {
+    //   text: "Direction",
+    //   icon: "map-1",
+    //   callBack: () => window.open("some_url_here"),
+    // },
     { text: "Share", icon: "share", callBack: () => setShowShareModal(true) },
   ];
 
@@ -497,7 +497,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         <div className={styles.body}>
           <div className={styles.right_col}>
             <EditAction
-              listingId={bizListing.id}
+              listingId={bizListing.id_listing}
               klookUrl={klookUrl}
               isOwned={get(bizListing, "listing_roles.length") > 0}
               isViewPage={isViewPage}

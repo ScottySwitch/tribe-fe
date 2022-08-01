@@ -12,6 +12,7 @@ import Router from "next/router";
 import { get } from "lodash";
 import { UserInforContext } from "Context/UserInforContext";
 import { ClaimStep } from "enums";
+import AuthPopup from "components/AuthPopup/AuthPopup";
 
 interface EditActionProps {
   isOwned?: boolean;
@@ -50,6 +51,7 @@ const EditAction = (props: EditActionProps) => {
   const [showLearnMore, setShowLearnMore] = useState(false);
   const [showWatchVideo, setShowWatchVideo] = useState(false);
   const [showShopOnWebsite, setShowShopOnWebWebsite] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [actionValue, setActionValue] = useState("");
 
   const router = useRouter();
@@ -177,6 +179,13 @@ const EditAction = (props: EditActionProps) => {
     });
   };
 
+  const handleLogin = () => {
+    updateUser({
+      type_handle: "Claim",
+    });
+    user?.token ? router.push(`/claim/${listingId}`) : setShowAuthPopup(true);
+  };
+
   return (
     <React.Fragment>
       {isViewPage && isPaid && action?.value && (
@@ -194,7 +203,7 @@ const EditAction = (props: EditActionProps) => {
             text="Claim listing"
             size="small"
             variant="outlined"
-            onClick={() => router.push(`/claim/${listingId}`)}
+            onClick={handleLogin}
           />
           <p className="text-left">Own this business?</p>
         </div>
@@ -317,6 +326,10 @@ const EditAction = (props: EditActionProps) => {
           </Modal>
         )
       )}
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </React.Fragment>
   );
 };

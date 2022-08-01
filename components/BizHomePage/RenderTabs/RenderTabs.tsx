@@ -154,7 +154,7 @@ const TabContent = ({
                 onCardClick={() => handleOpenDetailModal(item)}
                 {...formatCardItemProps(item)}
               />
-              {isItem && (
+              {isItem && !isViewPage && (
                 <div className={styles.delete} onClick={() => onDelete(item)}>
                   <Icon icon="delete" />
                 </div>
@@ -257,9 +257,8 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.MENU:
-      const blankTextMenu = isPaid
-        ? "There are no menu yet"
-        : "Upgrade to upload";
+      const blankTextMenu =
+        isPaid || isViewPage ? "There are no menu yet" : "Upgrade to upload";
       tabContent = (
         <TabContent
           isPaid={isPaid}
@@ -277,7 +276,7 @@ const RenderTabs = (props: {
       break;
     case ListingTabs.DEAL:
       const blankTextDeal = get(user, "token")
-        ? isPaid
+        ? isPaid || isViewPage
           ? "There are no deal yet"
           : "Upgrade to upload"
         : "Login/sign up to see deals";
@@ -305,7 +304,8 @@ const RenderTabs = (props: {
           {initSelectedTab(category).tabList.map((tab) =>
             !isPaid &&
             (tab.value === ListingTabs.DEAL ||
-              tab.value === ListingTabs.MENU) ? (
+              tab.value === ListingTabs.MENU) &&
+            !isViewPage ? (
               <UpgradePopup>
                 <Heading key={tab.text} text={tab.text} selected={false} />
               </UpgradePopup>

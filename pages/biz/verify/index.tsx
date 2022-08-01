@@ -231,6 +231,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           paymentMethod: "free",
           transaction_id: "",
         });
+        await bizListingApi.createListingRole({
+          bizListingId: id,
+          name: user.role,
+        });
         setShowResultModal(true);
       } else {
         alert("Wrong OTP");
@@ -238,6 +242,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
     } else {
       const result = await AuthApi.otpPhoneConfirm({ otp });
       if (result.data.success) {
+        await bizListingApi.createListingRole({
+          bizListingId: id,
+          name: user.role,
+        });
         setVerifyStep(VerifySteps.CONFIRM_EMAIL);
       } else {
         alert("Wrong OTP");
