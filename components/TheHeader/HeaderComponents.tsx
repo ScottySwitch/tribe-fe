@@ -125,7 +125,7 @@ export const SwitchAccountsContent = () => {
               get(item, "logo[0]") ||
               require("public/images/default-page-avatar.svg")
             }
-            alt=""
+            alt="logo"
             width={30}
             height={30}
             style={{ borderRadius: "50%" }}
@@ -144,7 +144,7 @@ export const SwitchAccountsContent = () => {
       >
         <Image
           src={user.user_avatar || require("public/images/default-avatar.svg")}
-          alt=""
+          alt="avatar"
           width={30}
           height={30}
           style={{ borderRadius: "50%" }}
@@ -208,7 +208,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
         >
           <Image
             src={user.avatar || require("public/images/default-avatar.svg")}
-            alt=""
+            alt="avatar"
             width={40}
             height={40}
             className={styles.avatar}
@@ -239,7 +239,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
         </Popover>
         <Image
           src={user.avatar || require("public/images/default-page-avatar.svg")}
-          alt=""
+          alt="avatar"
           width={40}
           height={40}
           onClick={() =>

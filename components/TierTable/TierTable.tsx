@@ -110,7 +110,7 @@ const RecommendTag = () => (
   <div className={styles.recommended}>
     <Image
       src={require("public/images/recommended.svg")}
-      alt=""
+      alt="recommended-alt"
       layout="fixed"
       height={37}
     />
@@ -307,7 +307,7 @@ const MobileTierTable = ({
                         src={require(notProvided
                           ? "public/images/x-mark.svg"
                           : "public/images/check-mark.svg")}
-                        alt=""
+                        alt="check_mark_alt"
                         layout="fixed"
                         width={14}
                         height={14}

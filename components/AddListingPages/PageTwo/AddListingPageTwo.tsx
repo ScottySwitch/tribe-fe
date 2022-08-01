@@ -8,7 +8,12 @@ import Question from "components/Question/Question";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import Select from "components/Select/Select";
 import SelectInput from "components/SelectInput/SelectInput";
-import { countryList, locations, formattedAreaCodes, socialMediaOptions } from "constant";
+import {
+  countryList,
+  locations,
+  formattedAreaCodes,
+  socialMediaOptions,
+} from "constant";
 import Image from "next/image";
 import { IAddListingForm } from "pages/add-listing";
 import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils";
@@ -38,7 +43,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
       contact: data.contact,
       email: data.email,
       socialMedia: data.socialMedia,
-      typeMedia: data?.typeMedia
+      typeMedia: data?.typeMedia,
     },
   });
 
@@ -56,7 +61,8 @@ const AddListingPageTwo = (props: AddListingProps) => {
   const formattedSocialMediaOptions = socialMediaOptions.map((item) => ({
     label: (
       <div className="flex gap-2 items-center">
-        <Image src={item.icon} width={20} alt="" layout="fixed" /> {item.label}
+        <Image src={item.icon} width={20} alt="icon_social" layout="fixed" />{" "}
+        {item.label}
       </div>
     ),
     value: item.value,
@@ -163,9 +169,9 @@ const AddListingPageTwo = (props: AddListingProps) => {
             placeholder="https://www.facebook.com/YourFacebook"
             onChange={(e) => {
               // console.log(e.select)
-              const select = e.select as IOption
-              setValue("socialMedia", e.input)
-              setValue("typeMedia", select.value)
+              const select = e.select as IOption;
+              setValue("socialMedia", e.input);
+              setValue("typeMedia", select.value);
             }}
             options={formattedSocialMediaOptions}
             value={formatSelectInputValue(

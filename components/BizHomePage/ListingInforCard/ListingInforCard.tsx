@@ -259,10 +259,13 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     max: string;
     currency: string;
   }>(priceRange || {});
-  const [newPhoneNumber, setNewPhoneNumber] = useState<string | number>(
-    phoneNumber
-  );
-  const [newSocialInfo, setNewSocialInfo] = useState<string>(socialInfo);
+  const [newPhoneNumber, setNewPhoneNumber] = useState<string | number>("");
+  const [newSocialInfo, setNewSocialInfo] = useState<string>("");
+
+  useEffect(() => {
+    setNewPriceRange(priceRange);
+    setNewSocialInfo(socialInfo);
+  }, [priceRange, socialInfo]);
 
   const [showPriceRangeModal, setShowPriceRangeModal] = useState(false);
   const [showSocialInfoModal, setShowSocialInfoModal] = useState(false);
@@ -298,7 +301,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
                   className={styles.verified_icon}
                   height={30}
                   width={60}
-                  alt=""
+                  alt="icon-verify"
                 />
               </div>
             )}
@@ -341,6 +344,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             <div className={styles.contact_right}>
               <Icon icon="web-color" size={20} />
               <SocialInfo
+                key={newSocialInfo}
                 isPaid={isPaid}
                 isViewPage={isViewPage}
                 newSocialInfo={newSocialInfo}

@@ -85,7 +85,7 @@ const ShareModal = (props: ShareModalProps) => {
         <div className={styles.social} onClick={handleCopyUrl}>
           <Image
             src={require("public/icons/copy-link.svg")}
-            alt=""
+            alt="icon-copy"
             layout="fixed"
           />
         </div>

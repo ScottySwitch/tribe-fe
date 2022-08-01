@@ -36,7 +36,7 @@ const ListingCard = (props: ListingCardProps) => {
       <div className={styles.left_col}>
         <div className={styles.listing_details}>
           <div className={styles.listing_details_avatar}>
-            {avatar && <Image src={avatar} layout="fill" alt="" />}
+            {avatar && <Image src={avatar} layout="fill" alt="avatar" />}
           </div>
           <div className={styles.listing_details_infor}>
             <div className={styles.listing_details_infor_name}>{name}</div>

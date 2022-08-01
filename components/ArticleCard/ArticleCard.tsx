@@ -14,7 +14,7 @@ const ArticleCard = (props: CollectionCardProps) => {
     <div className={styles.article_card} style={{ width }}>
       <div className={styles.banner}>
         {imgUrl && (
-          <Image alt="" layout="fill" src={imgUrl} objectFit="cover" />
+          <Image alt="thumbnail" layout="fill" src={imgUrl} objectFit="cover" />
         )}
       </div>
       <div className={styles.body}>

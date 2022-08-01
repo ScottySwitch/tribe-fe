@@ -27,7 +27,6 @@ const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props;
   const [isFavourite, setIsFavourite] = useState<boolean>(true);
   const [showShareModal, setShowShareModal] = useState(false);
-  console.log("data", data);
   useEffect(() => {
     const checkFavouriteDeal = async () => {
       const dataFavouriteDeal = await FavouriteDealApi.checkIsFavourite(

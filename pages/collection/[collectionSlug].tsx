@@ -132,7 +132,7 @@ const Collection = (props) => {
         {collectionDetail.banner && (
           <Image
             src={collectionDetail.banner}
-            alt=""
+            alt="banner"
             layout="fill"
             objectFit="cover"
             className={`${styles.collection_banner_img} ${styles.collection_banner_desktop}`}
@@ -141,7 +141,7 @@ const Collection = (props) => {
         {collectionDetail.bannerMobile && (
           <Image
             src={collectionDetail.bannerMobile}
-            alt=""
+            alt="banner"
             layout="fill"
             objectFit="cover"
             className={styles.collection_banner_mobile}

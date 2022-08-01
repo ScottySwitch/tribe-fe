@@ -324,7 +324,7 @@ const AddListing = () => {
             src={require("public/images/success-submit.svg")}
             width={100}
             height={100}
-            alt=""
+            alt="result-alt"
           />
           <div>
             <strong>Thank you</strong>

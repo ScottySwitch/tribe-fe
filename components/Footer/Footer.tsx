@@ -66,7 +66,7 @@ const Footer = (props: {
             >
               <Image
                 src={require("public/images/facebook_svg.svg")}
-                alt=""
+                alt="icon-facebook"
                 width={41}
               />
             </div>
@@ -81,7 +81,7 @@ const Footer = (props: {
             >
               <Image
                 src={require("public/images/tiktok_svg.svg")}
-                alt=""
+                alt="icon-titok"
                 width={41}
               />
             </div>
@@ -93,7 +93,7 @@ const Footer = (props: {
             >
               <Image
                 src={require("public/images/instagram_svg.svg")}
-                alt=""
+                alt="icon-instagram"
                 width={41}
               />
             </div>

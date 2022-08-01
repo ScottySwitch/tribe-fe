@@ -225,7 +225,7 @@ const Category = (props: any) => {
         {categoryInfor.bannerSrc && (
           <Image
             src={categoryInfor.bannerSrc}
-            alt=""
+            alt="banner_category"
             layout="fill"
             objectFit="contain"
             className={`${styles.collection_banner_img} ${styles.banner_desktop}`}
@@ -233,7 +233,7 @@ const Category = (props: any) => {
         )}
         {categoryInfor.bannerMobileSrc && (
           <Image
-            alt=""
+            alt="banner_category"
             src={categoryInfor.bannerMobileSrc}
             layout="fill"
             objectFit="contain"
@@ -259,7 +259,7 @@ const Category = (props: any) => {
                 objectFit="contain"
                 width={500}
                 height={200}
-                alt=""
+                alt="banner"
               />
             </div>
           ))}
@@ -279,7 +279,7 @@ const Category = (props: any) => {
               <div className={styles.sub_category_icon}>
                 <Image
                   src={item.icon || "https://picsum.photos/200/300"}
-                  alt=""
+                  alt="logo"
                   layout="fill"
                 />
               </div>
