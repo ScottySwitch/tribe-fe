@@ -146,7 +146,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
           <SelectInput
             label="Phone number ( optional )"
             selectPlaceholder="Area code"
-            placeholder="Your phone number"
+            placeholder="Store’s phone number"
             shouldControlShowValue
             options={formattedAreaCodes}
             value={formatSelectInputValue(

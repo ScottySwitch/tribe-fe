@@ -18,18 +18,13 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
 import useTrans from "hooks/useTrans";
-import {
-  formatBizlistingArray,
-  formatCardItemProps,
-  getListingUrl,
-} from "utils";
+import { formatCardItemProps } from "utils";
 
-const allTab = [{ label: "All", value: undefined }];
-const categoryTabList: any[] = categories.map((item) => ({
+const categoryTabList: ITab[] = categories.map((item) => ({
   label: item.slug,
   value: item.value,
+  content: <div></div>,
 }));
-const tabList: any[] = allTab.concat(categoryTabList);
 
 const Deals = () => {
   const trans = useTrans();
@@ -39,7 +34,7 @@ const Deals = () => {
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState<Categories>();
+  const [selectedTab, setSelectedTab] = useState<Categories>(Categories.BUY);
   const [pagination, setPagination] = useState(defaultPagination);
   const [listingsHaveDeals, setListingsHaveDeals] = useState<{
     [key: string]: any;
@@ -47,24 +42,33 @@ const Deals = () => {
 
   useEffect(() => {
     const getListingsHaveDeals = async () => {
-      const response = await bizListingApi.getListingCustom({
-        idCategory: selectedTab,
-        limit: 28,
-        hasDeals: true,
-        page: pagination.page,
-      });
-      console.log(response);
-      const mappedData = formatBizlistingArray(get(response, "data.data"));
-      setPagination({
-        ...pagination,
-        total: get(response, "data.meta.pagination.total"),
-      });
+      const response = await bizListingApi.getBizListingsHaveDealsByCategoryId(
+        selectedTab
+      );
+      const mappedData =
+        Array.isArray(get(response, "data.data")) &&
+        get(response, "data.data").map((item) => ({
+          images: get(item, "attributes.images") || [],
+          title: get(item, "attributes.name"),
+          slug: get(item, "attributes.slug"),
+          isVerified: get(item, "attributes.is_verified"),
+          address: get(item, "attributes.address"),
+          country: get(item, "attributes.country"),
+          description: get(item, "attributes.description"),
+          // followerNumber: get(item, "user_listing_follows.length"),
+          // tags: get(item, "attributes.tags"),
+          // categories: get(item, "attributes.categories"),
+          price: get(item, "attributes.min_price") || "",
+          currency: get(item, "attributes.currency") || "",
+          // rate: get(item, "attributes.rate"),
+          // rateNumber: get(item, "attributes.rate_number"),
+        }));
       setListingsHaveDeals(mappedData);
       setLoading(false);
     };
 
     getListingsHaveDeals();
-  }, [pagination.page, selectedTab]);
+  }, [pagination, selectedTab]);
 
   if (loading) {
     return (
@@ -86,7 +90,7 @@ const Deals = () => {
       <SectionLayout className={styles.collection_banner}>
         <Image
           src={require("public/images/deals-banner.svg")}
-          alt="deals-banner"
+          alt="collections-banner"
           layout="fill"
           objectFit="cover"
           className={styles.collection_banner_img}
@@ -101,7 +105,7 @@ const Deals = () => {
       <SectionLayout childrenClassName="flex justify-between flex-wrap">
         <div className="flex">
           <TabsHorizontal
-            tablist={tabList}
+            tablist={categoryTabList}
             type="secondary-no-outline"
             selectedTab={selectedTab}
             className="pt-[6px]"
@@ -116,22 +120,15 @@ const Deals = () => {
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(item)}
-                  onClick={() =>
-                    router.push(
-                      `/${getListingUrl(
-                        get(item, "categories[0]"),
-                        get(item, "categoryLinks[0].attributes.value"),
-                        item.slug
-                      )}`
-                    )
-                  }
+                  onClick={() => router.push(`/biz/home/${item.slug}`)}
                 />
               </div>
             ))}
         </div>
+
         <TopSearches />
       </SectionLayout>
-      <SectionLayout show={pagination.total > 1}>
+      <SectionLayout show={pagination.page > 1}>
         <Pagination
           limit={30}
           total={pagination.total}

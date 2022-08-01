@@ -535,7 +535,7 @@ export const serviceTabList = [
     screen: ListingHomePageScreens.ADD_DEALS,
   },
   {
-    text: "Services",
+    text: "Products",
     value: ListingTabs.SERVICE,
     screen: ListingHomePageScreens.ADD_ITEMS,
   },

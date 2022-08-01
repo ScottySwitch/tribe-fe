@@ -213,7 +213,7 @@ const LoginPage = (context) => {
             </Link>
           </div>
           <div className={styles.break}>
-            <span>Or log in with</span>
+            <span>Or Sign up with</span>
           </div>
           <div className={styles.socials}>
             <a rel="noopener noreferrer" href={routeGoogleLogin}>

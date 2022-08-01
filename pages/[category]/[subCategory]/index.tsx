@@ -215,8 +215,9 @@ const SubCategoryPage = (context) => {
     <div>
       <SectionLayout className="pt-0">
         <div className={styles.breadcrumbs}>
-          Home <Icon icon="carret-right" size={14} color="#7F859F" />
-          {category}
+          <span onClick={() => router.push(`/`)}>Home</span>{" "}
+          <Icon icon="carret-right" size={14} color="#7F859F" />
+          <span onClick={() => router.push(`/${category}`)}>{category}</span>
           <Icon icon="carret-right" size={14} color="#7F859F" />
           {categoryLink}
         </div>
