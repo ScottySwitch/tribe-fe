@@ -75,6 +75,7 @@ const SavedDealsPanel = (props: { data: PromotionProps[] }) => {
               startDate={item.startDate}
               onUnSaveDeal={() => handleRemoveFavorite(item)}
               onCardClick={() => {
+                console.log("check");
                 setShowDealDetailModal(true);
                 setSelectedDeal(item);
               }}

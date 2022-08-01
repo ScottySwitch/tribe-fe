@@ -38,7 +38,7 @@ const ListCard = (props: {
             className="w-full"
             isFavourited={true}
             onFavouritedClick={() => onRemoveFavourite(card)}
-            // onClick={() => router.push(`biz/home/${card.slug}`)}
+            onClick={() => router.push(`/biz/home/${card.slug}`)}
           />
         ))}
     </div>
