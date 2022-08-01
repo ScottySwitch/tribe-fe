@@ -115,7 +115,7 @@ const BizInformation = (props) => {
         type_handle: "Claim",
       });
       router.push({
-        pathname: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+        pathname: `/claim/${get(user, "now_biz_listing.listing_id")}`,
         query: {
           firstStep: ClaimStep.CHOOSE_TIER,
         },

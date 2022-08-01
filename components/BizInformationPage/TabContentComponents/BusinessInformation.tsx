@@ -128,7 +128,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         </div>
         <div
           className={styles.upgrade_now}
-          onClick={() => router.push(`/claim/${get(formData, "id_listing")}`)}
+          onClick={() => router.push(`/claim/${get(formData, "listing_id")}`)}
         >
           Upgrade now
         </div>

@@ -497,7 +497,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         <div className={styles.body}>
           <div className={styles.right_col}>
             <EditAction
-              listingId={bizListing.id_listing}
+              listingId={bizListing.listing_id}
               klookUrl={klookUrl}
               isOwned={get(bizListing, "listing_roles.length") > 0}
               isViewPage={isViewPage}
