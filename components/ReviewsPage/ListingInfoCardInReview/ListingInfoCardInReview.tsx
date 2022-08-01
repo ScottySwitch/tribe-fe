@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import styles from "./ListingInfoCardInReview.module.scss";
 
-const ReviewBizInfoCard = (props) => {
+const ListingInfoCardInReview = (props) => {
   const {
     title,
     rate,
@@ -13,18 +13,18 @@ const ReviewBizInfoCard = (props) => {
     imgUrl,
     tags,
     location,
-    slug,
+    listingUrl,
   } = props;
   const router = useRouter();
 
-  const handleDirectToHomepage = () => router.push(`/biz/home/${slug}`);
+  const handleDirectToHomepage = () => router.push(`/${listingUrl}`);
 
   return (
     <div className={styles.biz_info}>
       <div className={styles.avatar} onClick={handleDirectToHomepage}>
         {imgUrl && (
           <Image
-            src={imgUrl}
+            src={imgUrl || require("public/images/default-page-avatar.svg")}
             height="100%"
             width="100%"
             layout="responsive"
@@ -74,4 +74,4 @@ const ReviewBizInfoCard = (props) => {
   );
 };
 
-export default ReviewBizInfoCard;
+export default ListingInfoCardInReview;

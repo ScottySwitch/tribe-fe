@@ -1,4 +1,4 @@
-import { isArray, randomId } from "utils";
+import { getListingUrl, isArray, randomId } from "utils";
 import { useEffect, useState, useContext } from "react";
 import Image from "next/image";
 import SectionLayout from "components/SectionLayout/SectionLayout";
@@ -155,27 +155,28 @@ const ReviewsPage = () => {
           </h3>
           <div className="review-list">
             {isArray(listingSearchResult) &&
-              listingSearchResult.map(
-                (review) =>
+              listingSearchResult.map((rawReview) => {
+                const review = rawReview.attributes || {};
+                return (
                   review && (
                     <ReviewCard
-                      slug={get(review, "attributes.slug")}
                       key={review.id}
                       id={review.id}
-                      title={get(review, "attributes.name")}
-                      imgUrl={
-                        get(review, "attributes.images[0]") ||
-                        "https://picsum.photos/200/300"
-                      }
-                      isVerified={get(review, "attributes.is_verified")}
-                      rateNumber={calcRateNumber(
-                        get(review, "attributes.reviews")
-                      )}
-                      location={get(review, "attributes.address")}
+                      title={get(review, "name")}
+                      imgUrl={get(review, "images[0]")}
+                      isVerified={get(review, "is_verified")}
+                      rateNumber={calcRateNumber(get(review, "reviews"))}
+                      location={get(review, "address")}
                       onSubmit={handleSubmit}
+                      listingUrl={getListingUrl(
+                        get(review, "categories.data[0].attributes.slug"),
+                        get(review, "category_links.data[0].attributes.value"),
+                        get(review, "slug")
+                      )}
                     />
                   )
-              )}
+                );
+              })}
           </div>
         </div>
         <div className={`${styles.advertisement} mt-8`}>

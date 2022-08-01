@@ -3,7 +3,15 @@ import { IOption } from "type";
 import moment from "moment";
 import parseISO from "date-fns/parseISO";
 import { locations, videoExtensions } from "constant";
-import { format } from "path";
+
+export const getListingUrl = (category, categoryLink, slug) => {
+  const categorySlug = category || "category";
+  if (categoryLink) {
+    return `${categorySlug}/${categoryLink}/${slug}`;
+  } else {
+    return `${categorySlug}/sub-${categorySlug}/${slug}`;
+  }
+};
 
 export const formatCardItemProps = (item) => ({
   title: get(item, "attributes.name") || item.name || item.title || "",

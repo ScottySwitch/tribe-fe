@@ -13,7 +13,7 @@ import ListingSearch, {
   ListingMenuFooter,
 } from "components/ListingSearch/ListingSearch";
 import bizListingApi from "services/biz-listing";
-import { changeToSlugify } from "utils";
+import { changeToSlugify, getListingUrl } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import AuthApi from "services/auth";
 
@@ -118,8 +118,12 @@ const Header = (props: HeaderProps) => {
   };
 
   const handleDirectToBizHome = (item) => {
-    get(item, "attributes.slug") &&
-      router.push(`/biz/home/${item.attributes.slug}`);
+    const listingUrl = getListingUrl(
+      get(item, "attributes.categories.data[0].attributes.slug"),
+      get(item, "attributes.category_links.data[0].attributes.value"),
+      get(item, "attributes.slug")
+    );
+    router.push(`/${listingUrl}`);
   };
 
   return (
