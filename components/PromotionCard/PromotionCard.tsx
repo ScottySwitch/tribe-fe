@@ -55,6 +55,7 @@ const PromotionCard = (props: PromotionProps) => {
       <div className={avatarClassName}>
         {imgUrl && (
           <Image
+            onClick={onCardClick}
             src={imgUrl || require("public/images/default-avatar.svg")}
             width="100%"
             height="100%"
