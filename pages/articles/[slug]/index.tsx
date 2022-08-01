@@ -20,6 +20,7 @@ import {
   calcDistanceFromNow,
   calcRateNumber,
   formatArticleDetails,
+  getListingUrl,
 } from "../../../utils";
 import showdown from "showdown";
 import moment from "moment";
@@ -245,8 +246,16 @@ const ArticlesDetailPage = (props: any) => {
                           tags={card.tags}
                           iconTag={true}
                           isVerified={card.isVerified}
-                          onClick={() => router.push(`/biz/home/${card.slug}`)}
                           className="max-w-[95%] w-full"
+                          onClick={() =>
+                            router.push(
+                              `/${getListingUrl(
+                                get(card, "categories[0]"),
+                                get(card, "categoryLinks[0].attributes.value"),
+                                card.slug
+                              )}`
+                            )
+                          }
                         />
                       ))}
                   </Carousel>

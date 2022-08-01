@@ -90,6 +90,7 @@ const getAllCollectionByCollectionSlug = async (
       populate: [
         "category",
         "biz_listings.categories",
+        "biz_listings.category_links",
         "biz_listings.user_listing_follows",
         "biz_listings.tags",
         "biz_listings.reviews",

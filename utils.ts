@@ -1,3 +1,4 @@
+import { Categories, CategoryText } from "./enums";
 import { get } from "lodash";
 import { IOption } from "type";
 import moment from "moment";
@@ -5,7 +6,13 @@ import parseISO from "date-fns/parseISO";
 import { locations, videoExtensions } from "constant";
 
 export const getListingUrl = (category, categoryLink, slug) => {
-  const categorySlug = category || "category";
+  let categorySlug = "category";
+  if (category === "Buy") categorySlug = CategoryText.BUY;
+  if (category === "Eat") categorySlug = CategoryText.EAT;
+  if (category === "Transport") categorySlug = CategoryText.TRANSPORT;
+  if (category === "Stay") categorySlug = CategoryText.STAY;
+  if (category === "See & Do") categorySlug = CategoryText.SEE_AND_DO;
+
   if (categoryLink) {
     return `${categorySlug}/${categoryLink}/${slug}`;
   } else {
@@ -43,6 +50,7 @@ export const formatCardItemProps = (item) => ({
   rateNumber: item.rateNumber,
   followerNumber: item.followerNumber,
   categories: item.categories,
+  categoryLinks: item.category_links,
   tags: item.tags,
   isVerified: item.isVerified,
 });
@@ -298,8 +306,8 @@ export const formatListingArray = (rawListing) =>
         followerNumber: get(item, "user_listing_follows.length"),
         tags: get(item, "tags"),
         categories: get(item, "categories"),
+        categoryLinks: get(item, "category_links") || [],
         price: get(item, "min_price") || "",
-        // currency: get(get(item, "price_range.currency") || "",
         currency: get(item, "currency") || "",
         rate: get(item, "rating"),
         rateNumber: get(item, "rate_number"),
@@ -392,6 +400,7 @@ export const formatBizlistingArray = (rawListing) =>
         ),
         tags: arrayLabeltags(get(item, "attributes.tags.data")),
         categories: arrayLabelCategory(get(item, "attributes.categories.data")),
+        categoryLinks: get(item, "attributes.category_links.data"),
         price: get(item, "attributes.min_price") || "",
         currency: get(item, "attributes.currency") || "",
         rate: get(item, "attributes.rating"),

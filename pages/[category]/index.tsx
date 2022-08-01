@@ -35,6 +35,7 @@ import {
   formatArticle,
   formatCategoryLink,
   formatCardItemProps,
+  getListingUrl,
 } from "utils";
 
 import styles from "styles/Home.module.scss";
@@ -294,7 +295,16 @@ const Category = (props: any) => {
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(card)}
-                  onClick={() => router.push(`/biz/home/${card.slug}`)}
+                  onClick={() => {
+                    console.log("sss", card);
+                    router.push(
+                      `/${getListingUrl(
+                        get(card, "categories[0]"),
+                        get(card, "categoryLinks[0].attributes.value"),
+                        card.slug
+                      )}`
+                    );
+                  }}
                 />
               </div>
             ))}
@@ -322,7 +332,16 @@ const Category = (props: any) => {
             <div key={card.title} className="pb-5 pt-3">
               <InforCard
                 {...formatCardItemProps(card)}
-                onClick={() => router.push(`/biz/home/${card.slug}`)}
+                onClick={() => {
+                  console.log(card);
+                  router.push(
+                    `/${getListingUrl(
+                      get(card, "categories[0]"),
+                      get(card, "categoryLinks[0].attributes.value"),
+                      card.slug
+                    )}`
+                  );
+                }}
               />
             </div>
           ))}

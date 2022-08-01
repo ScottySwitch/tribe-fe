@@ -22,6 +22,7 @@ import {
   changeToSlugify,
   formatBizlistingArray,
   formatCardItemProps,
+  getListingUrl,
   isArray,
 } from "utils";
 
@@ -180,7 +181,15 @@ const Collection = (props) => {
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(item)}
-                  onClick={() => router.push(`/biz/home/${item.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(item, "categories[0]"),
+                        get(item, "categoryLinks[0].attributes.value"),
+                        item.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}
