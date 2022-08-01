@@ -10,6 +10,7 @@ import styles from "./PanelFavouried.module.scss";
 import UserApi from "services/user";
 import Loader from "components/Loader/Loader";
 import { useRouter } from "next/router";
+import { formatCardItemProps, getListingUrl } from "utils";
 
 const ListCard = (props: {
   data: { [key: string]: any }[];
@@ -17,28 +18,27 @@ const ListCard = (props: {
 }) => {
   const { data, onRemoveFavourite } = props;
   const router = useRouter();
+
+  const handleDirectToHomeListing = (item) => {
+    const listingUrl = getListingUrl(
+      get(item, "categories[0]"),
+      get(item, "category_links[0]"),
+      item.slug
+    );
+    router.push(`/${listingUrl}`);
+  };
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
       {Array.isArray(data) &&
         data.map((card, index) => (
           <InforCard
             key={card.slug}
-            imgUrl={card.imgUrl}
-            title={card.title}
-            rate={card.rate}
-            rateNumber={card.rateNumber}
-            followerNumber={card.followerNumber}
-            price={card.price}
-            currency={card.currency?.toUpperCase()}
-            categories={card.categories}
-            tags={card.tags}
-            iconTag={true}
-            isVerified={card.isVerified}
-            description={card.description}
+            {...formatCardItemProps(card)}
             className="w-full"
             isFavourited={true}
             onFavouritedClick={() => onRemoveFavourite(card)}
-            onClick={() => router.push(`/biz/home/${card.slug}`)}
+            onClick={() => handleDirectToHomeListing(card)}
           />
         ))}
     </div>
@@ -77,6 +77,7 @@ const FavouriedPanel = () => {
             currency: item.currency?.toUpperCase() || "",
             rate: item.rate,
             rateNumber: item.rate_number,
+            category_links: item.category_links,
           }))) ||
         [];
       setFavouriteListings(listings);

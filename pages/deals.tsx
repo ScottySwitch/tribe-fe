@@ -18,7 +18,11 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
 import useTrans from "hooks/useTrans";
-import { formatBizlistingArray, formatCardItemProps } from "utils";
+import {
+  formatBizlistingArray,
+  formatCardItemProps,
+  getListingUrl,
+} from "utils";
 
 const allTab = [{ label: "All", value: undefined }];
 const categoryTabList: any[] = categories.map((item) => ({
@@ -42,8 +46,6 @@ const Deals = () => {
   }>([]);
 
   useEffect(() => {
-    console.log("selected", selectedTab);
-
     const getListingsHaveDeals = async () => {
       const response = await bizListingApi.getListingCustom({
         idCategory: selectedTab,
@@ -51,6 +53,7 @@ const Deals = () => {
         hasDeals: true,
         page: pagination.page,
       });
+      console.log(response);
       const mappedData = formatBizlistingArray(get(response, "data.data"));
       setPagination({
         ...pagination,
@@ -112,7 +115,15 @@ const Deals = () => {
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(item)}
-                  onClick={() => router.push(`/biz/home/${item.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(item, "categories[0]"),
+                        get(item, "categoryLinks[0].attributes.value"),
+                        item.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}

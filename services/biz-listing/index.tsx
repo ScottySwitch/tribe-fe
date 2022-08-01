@@ -629,6 +629,9 @@ const getListingCustom = async (data: any) => {
       user_listing_favourites: {
         id: true,
       },
+      category_links: {
+        data: ["id", "attributes"],
+      },
       categories: {
         name: true,
       },

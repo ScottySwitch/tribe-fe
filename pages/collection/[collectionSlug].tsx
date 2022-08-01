@@ -18,7 +18,13 @@ import { useRouter } from "next/router";
 import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
-import { changeToSlugify, formatBizlistingArray, formatCardItemProps, isArray } from "utils";
+import {
+  changeToSlugify,
+  formatBizlistingArray,
+  formatCardItemProps,
+  getListingUrl,
+  isArray,
+} from "utils";
 
 type Object = {
   [key: string]: any;
@@ -174,7 +180,15 @@ const Collection = (props) => {
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(item)}
-                  onClick={() => router.push(`/biz/home/${item.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(item, "categories[0]"),
+                        get(item, "categoryLinks[0].attributes.value"),
+                        item.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}
