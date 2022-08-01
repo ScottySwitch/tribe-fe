@@ -108,7 +108,7 @@ export const ReviewForm = (props) => {
 };
 
 interface IReviewCardProps {
-  slug: string;
+  listingUrl?: string;
   id: string | number;
   title: string;
   imgUrl: string;
@@ -120,7 +120,7 @@ interface IReviewCardProps {
 
 const ReviewCard = (props: IReviewCardProps) => {
   const {
-    slug,
+    listingUrl,
     id,
     title,
     imgUrl,
@@ -159,18 +159,19 @@ const ReviewCard = (props: IReviewCardProps) => {
             </div>
           )}
           <Image
-            src={imgUrl}
+            src={imgUrl || require("public/images/default-page-avatar.svg")}
             width="100%"
             height="56%"
             layout="responsive"
             className="rounded-lg"
+            objectFit="contain"
             alt="review_featured_image"
           />
         </div>
         <div className={styles.display_mobile}>
           <h4
             className={styles.title}
-            onClick={() => router.push(`/biz/home/${slug}`)}
+            onClick={() => router.push(`/${listingUrl}`)}
           >
             {title}
           </h4>
@@ -200,7 +201,7 @@ const ReviewCard = (props: IReviewCardProps) => {
         <div className={styles.display_desktop}>
           <h4
             className={styles.title}
-            onClick={() => router.push(`/biz/home/${slug}`)}
+            onClick={() => router.push(`/${listingUrl}`)}
           >
             {title}
           </h4>

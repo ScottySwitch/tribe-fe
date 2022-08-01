@@ -61,6 +61,9 @@ const getListingBySlug = async (
       categories: {
         data: ["id", "attributes"],
       },
+      category_links: {
+        data: ["id", "attributes"],
+      },
       listing_roles: {
         data: ["id", "attributes"],
       },
