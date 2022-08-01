@@ -551,6 +551,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             <Break />
             <>
               <RenderTabs
+                key={category}
                 isViewPage={isViewPage}
                 isPaid={isPaid}
                 menuList={menuList}
