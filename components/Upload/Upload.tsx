@@ -232,7 +232,7 @@ const Upload = (props: UploadProps) => {
       type_handle: "Claim",
     });
     Router.push({
-      href: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+      href: `/claim/${get(user, "now_biz_listing.listing_id")}`,
       query: {
         firstStep: ClaimStep.CHOOSE_TIER,
       },

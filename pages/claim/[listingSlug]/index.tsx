@@ -82,10 +82,6 @@ const ClaimListing = (context) => {
       return alert("Please select your role");
     }
 
-    await BizListingApi.createListingRole({
-      bizListingId: listingId,
-      name: role,
-    });
     setClaimStep(ClaimStep.CHOOSE_TIER);
     userInfo = {
       ...userInfo,
