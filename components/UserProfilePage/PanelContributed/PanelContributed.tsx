@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { isLocalURL } from "next/dist/shared/lib/router/router";
 import Loader from "components/Loader/Loader";
 import { useRouter } from "next/router";
+import { getListingUrl } from "utils";
 interface IBiz {
   title: string;
   imgUrl: string;
@@ -38,6 +39,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
         const reviewListing = get(item, "review") || {};
         const bizListing =
           get(item, "biz_listing") || get(item, "biz_listing_revision") || {};
+        console.log("bizListing", bizListing);
         return (
           <UserReviewCard
             key={index}
@@ -58,15 +60,16 @@ const ListCard = (props: { data: ListCardProps[] }) => {
             }
           >
             <ListingInfoCardInReview
+              listingUrl={getListingUrl(
+                get(bizListing, "categories[0]"),
+                get(bizListing, "category_links[0]"),
+                get(bizListing, "slug")
+              )}
               title={bizListing.name}
-              imgUrl={
-                get(bizListing, "images[0]") ||
-                require("public/images/default-page-avatar.svg")
-              }
+              imgUrl={get(bizListing, "images[0]")}
               location={`${bizListing.address}, ${bizListing.country}`}
               rate={bizListing.rate}
               rateNumber={bizListing.rate_number}
-              slug={bizListing.slug}
               tags={bizListing.tags}
               followerNumber={
                 get(bizListing, "user_listing_follows.length") || "0"
