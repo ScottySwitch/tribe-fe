@@ -254,7 +254,6 @@ const ListingInforCard = (props: ListingInforCardProps) => {
     onSetPhoneNumber,
     onSetPriceRange,
   } = props;
-  console.log("socialInfo", socialInfo);
   const [newPriceRange, setNewPriceRange] = useState<{
     min: string;
     max: string;
