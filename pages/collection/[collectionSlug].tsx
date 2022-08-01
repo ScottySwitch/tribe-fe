@@ -18,7 +18,12 @@ import { useRouter } from "next/router";
 import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
-import { changeToSlugify, formatBizlistingArray, formatCardItemProps, isArray } from "utils";
+import {
+  changeToSlugify,
+  formatBizlistingArray,
+  formatCardItemProps,
+  isArray,
+} from "utils";
 
 type Object = {
   [key: string]: any;
@@ -124,7 +129,8 @@ const Collection = (props) => {
     <div>
       <SectionLayout className="py-0 pb-3">
         <div className={styles.breadcrumbs}>
-          Home <Icon icon="carret-right" size={14} color="#7F859F" />
+          <span onClick={() => router.push("/")}>Home</span>{" "}
+          <Icon icon="carret-right" size={14} color="#7F859F" />
           Collection
         </div>
       </SectionLayout>
@@ -156,7 +162,7 @@ const Collection = (props) => {
           </h2>
         </div>
       </SectionLayout>
-      <SectionLayout>
+      {/* <SectionLayout>
         <div className="flex">
           <TabsHorizontal
             tablist={tabList}
@@ -166,7 +172,7 @@ const Collection = (props) => {
             onChangeTab={(e: CategoryText) => setSelectedTab(e)}
           />
         </div>
-      </SectionLayout>
+      </SectionLayout> */}
       <SectionLayout>
         <div className="flex flex-wrap gap-3 md:gap-2 lg:gap-5">
           {Array.isArray(listing) &&

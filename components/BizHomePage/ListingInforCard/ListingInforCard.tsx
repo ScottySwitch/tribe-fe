@@ -469,7 +469,7 @@ const ListingInforCard = (props: ListingInforCardProps) => {
       >
         <div className="px-[30px] py-5">
           <Input
-            placeholder="Type Social Info"
+            placeholder="Enter Phone Number"
             value={newPhoneNumber}
             onChange={(e: any) => setNewPhoneNumber(e.target.value)}
           />

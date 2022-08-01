@@ -35,15 +35,13 @@ const Deals = () => {
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState<Categories>(Categories.BUY);
+  const [selectedTab, setSelectedTab] = useState<Categories>();
   const [pagination, setPagination] = useState(defaultPagination);
   const [listingsHaveDeals, setListingsHaveDeals] = useState<{
     [key: string]: any;
   }>([]);
 
   useEffect(() => {
-    console.log("selected", selectedTab);
-
     const getListingsHaveDeals = async () => {
       const response = await bizListingApi.getListingCustom({
         idCategory: selectedTab,
@@ -75,7 +73,8 @@ const Deals = () => {
     <div>
       <SectionLayout className="py-0 pb-3">
         <div className={styles.breadcrumbs}>
-          Home <Icon icon="carret-right" size={14} color="#7F859F" />
+          <span onClick={() => router.push("/")}>Home</span>{" "}
+          <Icon icon="carret-right" size={14} color="#7F859F" />
           Deals
         </div>
       </SectionLayout>

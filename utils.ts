@@ -28,7 +28,7 @@ export const formatCardItemProps = (item) => ({
   imgUrl:
     item.imgUrl ||
     get(item, "images.[0]") ||
-    require("public/images/default-avatar.svg"),
+    require("public/images/default-thumbnail.png"),
   description: get(item, "attributes.description") || item.description,
   currency: (get(item, "attributes.currency") || item.currency)?.toUpperCase(),
   discountUnit:

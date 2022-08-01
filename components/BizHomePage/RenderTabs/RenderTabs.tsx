@@ -218,7 +218,7 @@ const RenderTabs = (props: {
           onDelete={onDelete}
           list={itemList}
           blankImg={require("public/images/no-product.svg")}
-          blankText="There are no services yet"
+          blankText="There are no products yet"
           buttonText="Add Service now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
         />
