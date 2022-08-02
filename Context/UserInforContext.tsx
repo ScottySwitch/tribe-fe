@@ -1,5 +1,5 @@
 import { locations, loginInforItem } from "constant";
-import { UserType } from "enums";
+import { UserTypes } from "enums";
 import { Router, useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { getBrowserLocation } from "utils";
@@ -21,7 +21,7 @@ const defaultUserInformation: { [key: string]: any } = {
 export const UserInforContext = React.createContext({
   user: defaultUserInformation,
   updateUser: (infor: IUser) => {},
-  deleteUser: () => {},
+  logout: () => {},
 });
 
 export const UserInforProvider = ({ children }) => {
@@ -40,19 +40,19 @@ export const UserInforProvider = ({ children }) => {
         first_name: localLoginInfo.first_name,
         last_name: localLoginInfo.last_name,
         avatar:
-          localLoginInfo.user_type === UserType.NORMAL_USER
+          localLoginInfo.user_type === UserTypes.NORMAL_USER
             ? localLoginInfo.user_avatar
             : localLoginInfo.avatar,
         user_avatar: localLoginInfo.user_avatar,
         owner_listings: localLoginInfo.owner_listings,
-        user_type: localLoginInfo.user_type || UserType.NORMAL_USER,
+        user_type: localLoginInfo.user_type || UserTypes.NORMAL_USER,
       });
     };
 
     setDefaulUserInfor();
   }, []);
 
-  const deleteUser = () => {
+  const logout = () => {
     localStorage.removeItem("user");
     setUser({});
   };
@@ -69,7 +69,7 @@ export const UserInforProvider = ({ children }) => {
 
   const contextDefaultValue = {
     user: user,
-    deleteUser,
+    logout,
     updateUser,
   };
 

@@ -6,12 +6,13 @@ interface CollectionCardProps {
   title?: string;
   time?: string;
   width?: string | number;
+  onClick?: () => void;
 }
 
 const ArticleCard = (props: CollectionCardProps) => {
-  const { imgUrl, title, time, width } = props;
+  const { onClick, imgUrl, title, time, width } = props;
   return (
-    <div className={styles.article_card} style={{ width }}>
+    <div className={styles.article_card} style={{ width }} onClick={onClick}>
       <div className={styles.banner}>
         {imgUrl && (
           <Image alt="thumbnail" layout="fill" src={imgUrl} objectFit="cover" />

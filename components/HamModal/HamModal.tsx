@@ -7,13 +7,19 @@ import Button from "components/Button/Button";
 import Menu from "components/Menu/Menu";
 import Modal from "components/Modal/Modal";
 import Tabs from "components/Tabs/Tabs";
-import { categories } from "constant";
+import {
+  categories,
+  freeInformationList,
+  paidInformationList,
+  user,
+} from "constant";
 import { ILoginInfor } from "pages/_app";
 import AuthPopup from "components/AuthPopup/AuthPopup";
+import { SwitchAccountsContent } from "components/TheHeader/HeaderComponents";
+import { UserTypes } from "enums";
+import BizAccountManagementPanel from "components/BizAccountManagementPanel/BizAccountManagementPanel";
 
 import styles from "./HamModal.module.scss";
-import { SwitchAccountsContent } from "components/TheHeader/HeaderComponents";
-import { UserType } from "enums";
 
 const HamModalHeader = ({
   loginInfor,
@@ -69,6 +75,7 @@ const HamModal = (props: HamModalProps) => {
   const [showSwitchModal, setShowSwitchModal] = useState(false);
 
   const router = useRouter();
+  const { user } = useContext(UserInforContext);
 
   useEffect(() => {
     setShowSwitchModal(false);
@@ -203,24 +210,36 @@ const HamModal = (props: HamModalProps) => {
         mobilePosition="right"
         onClose={() => onSetShowHamModal(false)}
       >
-        <div className={styles.ham_modal}>
-          <HamModalHeader
-            loginInfor={loginInfor}
-            gotoLogin={gotoLogin}
-            gotoSignup={gotoSignup}
-          />
-          <Menu
-            loginInfor={loginInfor}
-            mobile
-            onShowHamModal={(value) => onSetShowHamModal(value)}
-            onShowCategoriesModal={() => setShowCategoriesModal(true)}
-            onShowAuthPopup={() => setShowAuthPopup(true)}
-            onShowSwitchModal={() => {
-              onSetShowHamModal(false);
-              setShowSwitchModal(true);
-            }}
-          />
-        </div>
+        {user.user_type === UserTypes.BIZ_USER ? (
+          <div className="flex flex-col gap-3 px-3 pt-10">
+            <BizAccountManagementPanel
+              onSelectTab={(tab) => {}}
+              onShowSwitchModal={() => {
+                onSetShowHamModal(false);
+                setShowSwitchModal(true);
+              }}
+            />
+          </div>
+        ) : (
+          <div className={styles.ham_modal}>
+            <HamModalHeader
+              loginInfor={loginInfor}
+              gotoLogin={gotoLogin}
+              gotoSignup={gotoSignup}
+            />
+            <Menu
+              loginInfor={loginInfor}
+              mobile
+              onShowHamModal={(value) => onSetShowHamModal(value)}
+              onShowCategoriesModal={() => setShowCategoriesModal(true)}
+              onShowAuthPopup={() => setShowAuthPopup(true)}
+              onShowSwitchModal={() => {
+                onSetShowHamModal(false);
+                setShowSwitchModal(true);
+              }}
+            />
+          </div>
+        )}
       </Modal>
       <Modal
         visible={showCategoriesModal}

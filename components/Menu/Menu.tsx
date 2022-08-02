@@ -7,9 +7,10 @@ import { languages, locations } from "constant";
 import { ILoginInfor } from "pages/_app";
 import { UserInforContext } from "Context/UserInforContext";
 import { ProfileTabs } from "enums";
-import styles from "./Menu.module.scss";
 import Select from "components/Select/Select";
 import useTrans from "hooks/useTrans";
+
+import styles from "./Menu.module.scss";
 
 interface MenuMenuProps {
   loginInfor: ILoginInfor;
@@ -33,7 +34,7 @@ const Menu = (props: MenuMenuProps) => {
   const { locale, pathname, asPath } = router;
   const trans = useTrans();
 
-  const { user, deleteUser, updateUser } = useContext(UserInforContext);
+  const { user, logout, updateUser } = useContext(UserInforContext);
   const { location } = user;
 
   const checkLogin = (href: string) => {
@@ -80,14 +81,14 @@ const Menu = (props: MenuMenuProps) => {
 
   const handleLogout = () => {
     window.location.href = "/";
-    deleteUser();
+    logout();
   };
 
   // const handleOpenSwitchAccountModal = () => {};
 
   // const handleSwitchToNormalUser = () => {
   //   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-  //   userInfo.type = UserType.NORMAL_USER;
+  //   userInfo.type = UserTypes.NORMAL_USER;
   //   localStorage.setItem("user", JSON.stringify(userInfo));
   //   router.push("/");
   //   router.reload();

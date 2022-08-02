@@ -11,12 +11,13 @@ import Icon from "components/Icon/Icon";
 import Button from "components/Button/Button";
 import Menu from "components/Menu/Menu";
 import { ILoginInfor } from "pages/_app";
-import { UserType } from "enums";
+import { UserTypes } from "enums";
 
 import { UserInforContext } from "Context/UserInforContext";
 import Modal from "components/Modal/Modal";
 
 import styles from "./Header.module.scss";
+import { isPaidUser } from "utils";
 
 export const formatLanguages = () => {
   return languages.map((lang) => ({
@@ -99,15 +100,17 @@ export const SwitchAccountsContent = () => {
     updateUser({
       avatar: user.user_avatar,
       current_listing_slug: undefined,
-      user_type: UserType.NORMAL_USER,
+      user_type: UserTypes.NORMAL_USER,
     });
   };
 
   const handleSwitchListing = async (item) => {
+    console.log("listing--------", item);
     updateUser({
       avatar: get(item, "logo[0]"),
       current_listing_slug: get(item, "slug"),
-      user_type: UserType.BIZ_USER,
+      user_type: UserTypes.BIZ_USER,
+      is_paid: isPaidUser(item.expiration_date),
     });
     router.push(`/biz/home/${item.slug}/edit`);
   };
@@ -138,10 +141,7 @@ export const SwitchAccountsContent = () => {
           </div>
         </div>
       ))}
-      <div
-        className="cursor-pointer flex items-center gap-3"
-        onClick={handleSwitchToNormalUser}
-      >
+      <div className={styles.user_account} onClick={handleSwitchToNormalUser}>
         <Image
           src={user.user_avatar || require("public/images/default-avatar.svg")}
           alt="avatar"
@@ -180,7 +180,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
       <div
         className={classNames(styles.gadget_group, {
           [styles.hide]: !(
-            user.token && user.user_type === UserType.NORMAL_USER
+            user.token && user.user_type === UserTypes.NORMAL_USER
           ),
         })}
       >
@@ -228,7 +228,7 @@ export const UserInfor = ({ loginInfor = {} }: { loginInfor: ILoginInfor }) => {
       </div>
       <div
         className={classNames(styles.gadget_group, {
-          [styles.hide]: !(user.token && user.user_type === UserType.BIZ_USER),
+          [styles.hide]: !(user.token && user.user_type === UserTypes.BIZ_USER),
         })}
       >
         <Popover content={<SwitchAccountsContent />} position="bottom-left">

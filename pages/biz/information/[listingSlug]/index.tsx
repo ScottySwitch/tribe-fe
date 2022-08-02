@@ -28,6 +28,7 @@ import moment from "moment";
 import ConfirmModal from "components/ConfirmModal";
 import EmailApi from "services/email";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
+import BizAccountManagementPanel from "components/BizAccountManagementPanel/BizAccountManagementPanel";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;
@@ -53,11 +54,12 @@ const BizInformation = (props) => {
     },
   ];
 
-  const informationList = isPaid ? paidInformationList : freeInformationList;
-  const [selectedTab, setSelectedTab] = useState(informationList[0].label);
+  const [selectedTab, setSelectedTab] = useState(
+    InformationList.BUSINESS_INFORMATION
+  );
 
   const router = useRouter();
-  const { user, deleteUser, updateUser } = useContext(UserInforContext);
+  const { user, updateUser } = useContext(UserInforContext);
 
   const Content = () => {
     return (
@@ -189,39 +191,15 @@ const BizInformation = (props) => {
     }
   };
 
-  const handleLogout = () => {
-    deleteUser();
-    window.location.href = "/";
-  };
-
   return (
     <SectionLayout backgroundColor>
       <div className={styles.biz_information}>
         <div className={styles.left_col}>
           <div className={styles.left_col_bottom}>
-            {informationList.map((item) => (
-              <div
-                className="flex gap-3 justify-between"
-                key={item.label}
-                onClick={() => setSelectedTab(item.label)}
-              >
-                <Heading
-                  icon={item.icon}
-                  type="tab"
-                  text={item.label}
-                  selected={selectedTab === item.label}
-                />
-                {item.star && <Icon icon="star-2" color="#653fff" />}
-              </div>
-            ))}
-            <div className="flex gap-3 justify-between" onClick={handleLogout}>
-              <Heading
-                icon="logout"
-                type="tab"
-                text="Log out"
-                selected={false}
-              />
-            </div>
+            <BizAccountManagementPanel
+              selectedTab={selectedTab}
+              onSelectTab={(tab) => setSelectedTab(tab)}
+            />
           </div>
         </div>
         <div className={styles.right_col}>{tabContent()}</div>

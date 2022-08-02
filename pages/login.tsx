@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { MouseEventHandler, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
@@ -6,20 +7,13 @@ import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
-import Modal, { ModalHeader } from "components/Modal/Modal";
+import { ModalHeader } from "components/Modal/Modal";
 import { removeZeroInPhoneNumber, validateEmail } from "utils";
 
 import styles from "styles/Auth.module.scss";
-import { useRouter } from "next/router";
-import { loginInforItem } from "constant";
-import { UserType } from "enums";
 import AuthApi from "../services/auth";
-import BizApi from "services/biz-listing";
-import BizInvoice from "services/biz-invoice";
-import ClaimListingApi from "services/claim-listing";
-import { formattedAreaCodes, phoneAreaCodes } from "constant";
+import { formattedAreaCodes } from "constant";
 import SelectInput from "components/SelectInput/SelectInput";
-import { get } from "lodash";
 import bizListingApi from "services/biz-listing";
 import { UserInforContext } from "Context/UserInforContext";
 

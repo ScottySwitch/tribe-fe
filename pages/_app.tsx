@@ -9,7 +9,7 @@ import Header from "components/TheHeader/Header";
 import HamModal from "components/HamModal/HamModal";
 import BizApi from "services/biz-listing";
 import ContributeTabBar from "components/ContributeTabBar/ContributeTabBar";
-import { Tiers, UserType } from "enums";
+import { Tiers, UserTypes } from "enums";
 import AuthApi from "../services/auth";
 import {
   IUser,
@@ -26,7 +26,7 @@ import Button from "components/Button/Button";
 
 export type ILoginInfor = {
   token?: string;
-  type?: UserType;
+  type?: UserTypes;
   tier?: Tiers;
   avatar?: string;
   first_name?: string;
@@ -101,17 +101,18 @@ function MyApp({ Component, pageProps }: AppProps) {
         slug: get(item, "attributes.slug"),
         id: item.id,
         items: Array.isArray(get(item, "attributes.category_links.data"))
-          ? get(item, "attributes.category_links.data")
-              .map((navItem, index) => ({
+          ? get(item, "attributes.category_links.data").map(
+              (navItem, index) => ({
                 label: get(navItem, "attributes.label"),
                 value: get(navItem, "attributes.value"),
                 href: `/${get(item, "attributes.slug")}/${get(
                   navItem,
                   "attributes.value"
                 )}`,
-              }))
-              // .slice(0, 5)
-          : [],
+              })
+            )
+          : // .slice(0, 5)
+            [],
       }));
       setNavList(categoryArray);
     };
@@ -136,17 +137,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     const handleScroll = function () {
       var currentScrollPos = window.pageYOffset;
       if (prevScrollpos < currentScrollPos && !showHamModal && isAuthPage) {
-        header.style.top = "-120px";
+        header.style.top = header && screen.width < 501 ? "-120px" : "-60px";
       } else {
         header.style.top = "0";
       }
       prevScrollpos = currentScrollPos;
     };
 
-    if (header && screen.width < 501) {
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [showHamModal, isAuthPage]);
 
   return (

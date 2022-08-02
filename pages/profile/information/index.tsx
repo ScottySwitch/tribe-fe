@@ -18,7 +18,7 @@ const ProfileInformationPage = () => {
   );
 
   const router = useRouter();
-  const { deleteUser } = useContext(UserInforContext);
+  const { logout } = useContext(UserInforContext);
 
   const tabContent = () => {
     switch (selectedTab) {
@@ -32,7 +32,7 @@ const ProfileInformationPage = () => {
   };
 
   const handleLogout = () => {
-    deleteUser();
+    logout();
     window.location.href = "/";
   };
 

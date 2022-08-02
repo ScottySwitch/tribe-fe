@@ -87,7 +87,7 @@ export enum ClaimStep {
   CHOOSE_TIER = "choose_tierr",
 }
 
-export enum UserType {
+export enum UserTypes {
   NORMAL_USER = "normal_user",
   BIZ_USER = "biz_user",
 }
