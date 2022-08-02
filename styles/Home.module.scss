@@ -72,7 +72,7 @@
 .tab_filter,
 .for_you {
   position: sticky;
-  top: 120px;
+  top: 60px;
   background-color: white;
   z-index: 2;
   left: 0;
@@ -97,6 +97,7 @@
   .quick_filter_container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     overflow-x: auto;
     height: max-content;
     width: 100%;
@@ -104,8 +105,8 @@
     overflow-y: visible !important;
 
     .scroll_box {
-      padding: 4px 0 10px 0;
       display: flex;
+      align-items: center;
       width: max-content;
       gap: 6px;
       overflow-y: visible !important;
@@ -113,12 +114,14 @@
       position: relative;
 
       .sub_category_more {
+        padding: 10px 0;
         position: relative;
       }
     }
   }
 
   .mobile_filter_button {
+    margin-bottom: 10px;
     display: none;
   }
 }

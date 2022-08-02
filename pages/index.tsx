@@ -34,10 +34,17 @@ import {
 import { CategoryText } from "enums";
 import styles from "styles/Home.module.scss";
 import Head from "next/head";
+import ArticleCard from "components/ArticleCard/ArticleCard";
+import ArticleApi from "services/article";
 
 const Home: NextPage = (props: any) => {
-  const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
-    props;
+  const {
+    listingExclusiveDeal,
+    listBanners,
+    // listHomeArticles,
+    listCollections,
+    listCategories,
+  } = props;
 
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
@@ -217,7 +224,6 @@ const Home: NextPage = (props: any) => {
         <SectionLayout title="Where to Buy" seeMore={CategoryText.BUY}>
           <Carousel responsive={infoCardResponsive}>
             {listings?.buy.map((card) => {
-              console.log("========================", card);
               return (
                 <div key={card.title} className="pb-5 pt-3 pl-3">
                   <InforCard
@@ -262,12 +268,13 @@ const Home: NextPage = (props: any) => {
       )}
       {/* <SectionLayout backgroundColor title="Featured Articles">
         <Carousel responsive={homeCuratedResponsive}>
-          {listHomeArticles?.map((item, index) => (
+          {listHomeArticles.map((item, index) => (
             <div key={index} className="pb-5 pt-3 pl-3">
               <ArticleCard
                 title={item.title}
                 imgUrl={item.imgUrl}
                 time={item.time}
+                onClick={() => router.push(`/articles/${item.slug}`)}
               />
             </div>
           ))}

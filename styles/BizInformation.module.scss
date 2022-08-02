@@ -51,4 +51,14 @@
       gap: 30px;
     }
   }
+
+  @media screen and (max-width: $mobile) {
+    .left_col {
+      display: none;
+    }
+
+    .right_col {
+      width: 100%;
+    }
+  }
 }

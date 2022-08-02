@@ -8,6 +8,7 @@ interface HeadingProps {
   onClick?: () => void;
   className?: string;
   selected?: boolean;
+  color?: string;
   type?: "default" | "tab";
 }
 
@@ -16,6 +17,7 @@ const Heading = (props: HeadingProps) => {
     text,
     icon,
     onClick,
+    color,
     className,
     selected = true,
     type = "default",
@@ -26,7 +28,7 @@ const Heading = (props: HeadingProps) => {
     "cursor-pointer": onClick,
   });
   return (
-    <h3 className={headingCLassName} onClick={onClick}>
+    <h3 style={{ color }} className={headingCLassName} onClick={onClick}>
       <Icon icon={icon || ""} className={styles.icon} />
       {text}
     </h3>

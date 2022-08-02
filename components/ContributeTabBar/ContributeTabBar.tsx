@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import styles from "./ContributeTabBar.module.scss";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { Tiers, UserType } from "enums";
+import { Tiers, UserTypes } from "enums";
 import { ProfileTabs } from "enums";
 
 export interface ContributeProps {
@@ -15,7 +15,7 @@ export interface ContributeProps {
 
 export type ILoginInfor = {
   token?: string;
-  type?: UserType;
+  type?: UserTypes;
   tier?: Tiers;
   avatar?: string;
 };

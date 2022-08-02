@@ -8,8 +8,7 @@ import {
   AuthPhonePayload,
   AuthForgetPasswordByPhone,
 } from "../../types/auth";
-import { UserType } from "../../enums";
-const qs = require("qs");
+import { UserTypes } from "../../enums";
 
 const signUpByEmail = async (params: AuthEmailPayload) => {
   localStorage.removeItem("user");
@@ -99,7 +98,7 @@ const getMe = async () => {
   // }
   if (localStorage.getItem("user")) {
     if (!userInfo.user_type) {
-      me.data.user_type = UserType.NORMAL_USER;
+      me.data.user_type = UserTypes.NORMAL_USER;
     } else {
       me.data.user_type = userInfo.user_type;
     }
