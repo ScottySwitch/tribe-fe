@@ -25,7 +25,6 @@ import { formatCardItemProps } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 
 const initSelectedTab = (category) => {
-  console.log(category);
   switch (category) {
     case Categories.BUY:
       return { itemType: ListingTabs.PRODUCT, tabList: productTabList };
@@ -69,12 +68,11 @@ const TabContent = ({
 }: TabContentProps) => {
   const router = useRouter();
   const { query } = router;
-  const { listingSlug } = query;
+  const { category, subCategory, listingSlug } = query;
 
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>({});
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-  const { user, updateUser } = useContext(UserInforContext);
 
   const isDeal = selectedTab === ListingTabs.DEAL;
   const isProduct =
@@ -165,7 +163,11 @@ const TabContent = ({
       </div>
       <div
         className={styles.see_all}
-        onClick={() => router.push(`/biz/${selectedTab}/${listingSlug}`)}
+        onClick={() =>
+          router.push(
+            `/${category}/${subCategory}/${listingSlug}/${selectedTab}/`
+          )
+        }
       >
         See all
       </div>
