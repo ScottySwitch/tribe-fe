@@ -297,7 +297,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 "attributes.category_links.data[0].attributes.value"
               ),
               get(dataListing, "attributes.slug")
-            )}`
+            )}/edit`
           );
         });
     } else {
