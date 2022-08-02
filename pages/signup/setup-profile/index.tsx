@@ -44,7 +44,7 @@ const StepOne = ({
   const [uploadAvatar, setUploadAvatar] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setValue, getValues, register, handleSubmit } = useForm({
+  const { setValue, getValues, register, handleSubmit, watch } = useForm({
     defaultValues: {
       name: formData.name,
       country: formData.country,
@@ -191,6 +191,7 @@ const StepOne = ({
             className="w-1/2"
             text="Next"
             type="submit"
+            disabled={!(watch("name") && watch("gender") && watch("birthday"))}
             isLoading={isLoading}
           />
         </div>
