@@ -125,7 +125,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Question question="What is the category best associated with this service?">
+          <Question question="What is the category best associated with this service? *">
             <div className="flex flex-wrap gap-2">
               {Array.isArray(categoryLinks) &&
                 categoryLinks.map((opt) => (
@@ -152,7 +152,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
               onClick={() => setShowTagsModal(true)}
             />
           </Question>
-          <Question question="What are the opening hours?" optional>
+          <Question question="What are the opening hours? *">
             <PreviewValue valueKey="openHours" value={getValues("openHours")} />
             <br />
             <Button
@@ -226,7 +226,7 @@ const AddTransportInfor = (props: AddTransportInforProps) => {
               onClick={onPrevPage}
             />
             <Button
-              disabled={!isEdit && !isValid}
+              disabled={!(!isEdit && isValid && selectCategoryLink)}
               text={isEdit ? "Apply change" : "Continue"}
               size="small"
               width={270}

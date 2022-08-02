@@ -19,6 +19,7 @@ export interface SelectInputProps
   prefix?: ReactNode;
   suffix?: ReactNode;
   isClearable?: boolean;
+  required?: boolean;
   helperText?: string;
   options?: any[];
   width?: string | number;
@@ -46,6 +47,7 @@ const SelectInput = (props: SelectInputProps) => {
     className,
     prefix,
     suffix,
+    required,
     variant = "outlined",
     helperText,
     size = "medium",
@@ -94,7 +96,11 @@ const SelectInput = (props: SelectInputProps) => {
   return (
     <div className={selectInputWrapperClassName} style={{ width }}>
       <div className={styles.container}>
-        {label && <label htmlFor={id}>{label}</label>}
+        {label && (
+          <label htmlFor={id}>
+            {label} {required && <span className={styles.error}>*</span>}
+          </label>
+        )}
         <div className={styles.content}>
           {prefix && <div>{prefix}</div>}
           {selectPosition === "suffix" && (

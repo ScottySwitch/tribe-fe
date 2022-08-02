@@ -531,6 +531,9 @@ const getFavouriteDeals = async () => {
 const getListingCustom = async (data: any) => {
   let filter: any = {};
   let pagination: any = {};
+  if (data?.slug) {
+    filter.slug = data.slug;
+  }
   if (data?.country) {
     filter.country = data.country;
   }

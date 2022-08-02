@@ -69,7 +69,7 @@ const AddListingPageOne = (props: AddListingProps) => {
       </p>
       <Link href="/add-listing/guide">View our listing guidelines</Link>
       <br />
-      <Question question="Firstly, tell us. Which category would you like to add?">
+      <Question question="Firstly, tell us. Which category would you like to add? *">
         <ChooseCategory
           category={category}
           setCategory={(e) => setCategory(e)}
