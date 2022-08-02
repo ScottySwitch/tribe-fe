@@ -150,7 +150,8 @@ const AddListingPageTwo = (props: AddListingProps) => {
               select: "+65",
               input: "",
             }}
-            label="Phone number ( optional )"
+            required
+            label="Phone number"
             selectPlaceholder="Area code"
             placeholder="Store’s phone number"
             shouldControlShowValue

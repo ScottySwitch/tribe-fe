@@ -121,6 +121,12 @@
   border-right: 1px solid $bg-200;
 }
 
+.error {
+  color: $primary-500;
+  font-weight: 500;
+  margin-top: 5px;
+}
+
 @media screen and (max-width: $mobile) {
   .collection_card {
     .title {
