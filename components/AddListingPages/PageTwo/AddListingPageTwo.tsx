@@ -144,6 +144,10 @@ const AddListingPageTwo = (props: AddListingProps) => {
         </Question>
         <Question show question="Contact">
           <SelectInput
+            defaultValue={{
+              select: "+65",
+              input: "",
+            }}
             label="Phone number ( optional )"
             selectPlaceholder="Area code"
             placeholder="Store’s phone number"

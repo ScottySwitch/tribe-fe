@@ -393,6 +393,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         <div className={styles.form}>
           <div className={styles.header}>Enter phone number</div>
           <SelectInput
+            defaultValue={{
+              select: "+65",
+              input: "",
+            }}
             width="100%"
             label="Phone number"
             placeholder="your phone number"

@@ -5,6 +5,12 @@ import moment from "moment";
 import parseISO from "date-fns/parseISO";
 import { locations, videoExtensions } from "constant";
 
+export const validateEmail = (emailAdress) => {
+  let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return emailAdress.match(regexEmail) ? true : false
+}
+
+
 export const getListingUrl = (category, categoryLink, slug) => {
   let categorySlug = "category";
   if (category === "Buy") categorySlug = CategoryText.BUY;

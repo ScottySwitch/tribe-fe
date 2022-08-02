@@ -7,7 +7,7 @@ import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Modal, { ModalHeader } from "components/Modal/Modal";
-import { removeZeroInPhoneNumber } from "utils";
+import { removeZeroInPhoneNumber, validateEmail } from "utils";
 
 import styles from "styles/Auth.module.scss";
 import { useRouter } from "next/router";
@@ -52,6 +52,7 @@ const LoginPage = (context) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginError, setIsLoginError] = useState<boolean>(false);
+  const [areaCode, setAreaCode] = useState("");
 
   const router = useRouter();
   const { user, updateUser } = useContext(UserInforContext);
@@ -174,6 +175,10 @@ const LoginPage = (context) => {
         <div className={styles.body}>
           {method === LoginMethod.PHONE_NUMBER ? (
             <SelectInput
+              defaultValue={{
+                select: "+65",
+                input: "",
+              }}
               selectWidth="max-content"
               isClearable
               label="Phone number"
@@ -181,7 +186,10 @@ const LoginPage = (context) => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) => setPhoneNumber(removeZeroInPhoneNumber(e))}
+              onChange={(e: any) => {
+                setAreaCode(e.select);
+                setPhoneNumber(removeZeroInPhoneNumber(e));
+              }}
             />
           ) : (
             <Input
@@ -226,7 +234,13 @@ const LoginPage = (context) => {
           <Button
             id="login-button"
             text="Log in"
-            disabled={!((!!email || !!phoneNumber) && !!password)}
+            disabled={
+              !(
+                ((!!email && validateEmail(email)) ||
+                  (!!phoneNumber && !!areaCode)) &&
+                !!password
+              )
+            }
             onClick={handleLogin}
             isLoading={isLoading}
           />
