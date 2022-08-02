@@ -99,7 +99,8 @@ const InforCard = (props: InforCardProps) => {
           </div>
         )}
         <Image
-          src={imgUrl || require("public/images/default-avatar.svg")}
+          onClick={onClick}
+          src={imgUrl || require("public/images/default-thumbnail.png")}
           alt="thumbnail"
           layout="fill"
           objectFit="cover"

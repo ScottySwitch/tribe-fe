@@ -18,7 +18,11 @@ import TabsHorizontal, { ITab } from "components/TabsHorizontal/TabsHorizontal";
 import { Categories, CategoryText } from "enums";
 import { categories } from "constant";
 import useTrans from "hooks/useTrans";
-import { formatBizlistingArray, formatCardItemProps } from "utils";
+import {
+  formatBizlistingArray,
+  formatCardItemProps,
+  getListingUrl,
+} from "utils";
 
 const allTab = [{ label: "All", value: undefined }];
 const categoryTabList: any[] = categories.map((item) => ({
@@ -35,15 +39,13 @@ const Deals = () => {
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState<Categories>(Categories.BUY);
+  const [selectedTab, setSelectedTab] = useState<Categories>();
   const [pagination, setPagination] = useState(defaultPagination);
   const [listingsHaveDeals, setListingsHaveDeals] = useState<{
     [key: string]: any;
   }>([]);
 
   useEffect(() => {
-    console.log("selected", selectedTab);
-
     const getListingsHaveDeals = async () => {
       const response = await bizListingApi.getListingCustom({
         idCategory: selectedTab,
@@ -51,6 +53,7 @@ const Deals = () => {
         hasDeals: true,
         page: pagination.page,
       });
+      console.log(response);
       const mappedData = formatBizlistingArray(get(response, "data.data"));
       setPagination({
         ...pagination,
@@ -75,7 +78,8 @@ const Deals = () => {
     <div>
       <SectionLayout className="py-0 pb-3">
         <div className={styles.breadcrumbs}>
-          Home <Icon icon="carret-right" size={14} color="#7F859F" />
+          <span onClick={() => router.push("/")}>Home</span>{" "}
+          <Icon icon="carret-right" size={14} color="#7F859F" />
           Deals
         </div>
       </SectionLayout>
@@ -112,7 +116,15 @@ const Deals = () => {
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(item)}
-                  onClick={() => router.push(`/biz/home/${item.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(item, "categories[0]"),
+                        get(item, "categoryLinks[0].attributes.value"),
+                        item.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}

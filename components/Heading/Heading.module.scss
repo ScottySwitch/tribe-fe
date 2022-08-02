@@ -35,6 +35,7 @@
 
   &.un_selected {
     font-weight: $font-light;
+    color: $bg-500;
 
     .icon {
       max-width: 0;

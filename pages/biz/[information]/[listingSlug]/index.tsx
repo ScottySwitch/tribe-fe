@@ -1,36 +1,31 @@
+import moment from "moment";
+import { Router, useRouter } from "next/router";
 import { get, isArray } from "lodash";
 import { useContext, useEffect, useState } from "react";
 
 import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation";
 import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals";
 import ProductListing from "components/BizInformationPage/TabContentComponents/ProductListing";
-import Icon from "components/Icon/Icon";
-import Heading from "components/Heading/Heading";
 import BizListing from "services/biz-listing";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import { ClaimStep, InformationList } from "enums";
+import { ClaimStep, InformationList, InformationSlugList } from "enums";
 import BusinessDetail from "components/BizInformationPage/TabContentComponents/BusinessDetail";
 import TierTable from "components/TierTable/TierTable";
 import Verification from "components/BizInformationPage/TabContentComponents/Verification";
 import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos";
 import BizListingApi from "../../../../services/biz-listing";
-import {
-  paidInformationList,
-  freeInformationList,
-  defaultAddlistingForm,
-} from "constant";
-
-import styles from "styles/BizInformation.module.scss";
-import { Router, useRouter } from "next/router";
+import { defaultAddlistingForm } from "constant";
 import { UserInforContext } from "Context/UserInforContext";
 import { isPaidUser } from "utils";
-import moment from "moment";
 import ConfirmModal from "components/ConfirmModal";
 import EmailApi from "services/email";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
+import BizAccountManagementPanel from "components/BizAccountManagementPanel/BizAccountManagementPanel";
+
+import styles from "styles/BizInformation.module.scss";
 
 const BizInformation = (props) => {
-  const { listingSlug } = props;
+  const { listingSlug, information } = props;
   const [loading, setLoading] = useState<boolean>(true);
   const [isPaid, setIsPaid] = useState(true);
   const [listing, setListing] = useState(defaultAddlistingForm);
@@ -53,11 +48,8 @@ const BizInformation = (props) => {
     },
   ];
 
-  const informationList = isPaid ? paidInformationList : freeInformationList;
-  const [selectedTab, setSelectedTab] = useState(informationList[0].label);
-
   const router = useRouter();
-  const { user, deleteUser, updateUser } = useContext(UserInforContext);
+  const { user, updateUser } = useContext(UserInforContext);
 
   const Content = () => {
     return (
@@ -115,7 +107,7 @@ const BizInformation = (props) => {
         type_handle: "Claim",
       });
       router.push({
-        pathname: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+        pathname: `/claim/${get(user, "now_biz_listing.listing_id")}`,
         query: {
           firstStep: ClaimStep.CHOOSE_TIER,
         },
@@ -135,8 +127,8 @@ const BizInformation = (props) => {
   };
 
   const tabContent = () => {
-    switch (selectedTab) {
-      case InformationList.BUSINESS_INFORMATION:
+    switch (information) {
+      case InformationSlugList.BUSINESS_INFORMATION:
         return (
           <BusinessInformation
             isRevision={isRevision}
@@ -145,7 +137,7 @@ const BizInformation = (props) => {
             onSubmit={onSubmit}
           />
         );
-      case InformationList.BUSINESS_DETAIL:
+      case InformationSlugList.BUSINESS_DETAIL:
         return (
           <BusinessDetail
             listing={listing}
@@ -153,13 +145,13 @@ const BizInformation = (props) => {
             onSubmit={onSubmit}
           />
         );
-      case InformationList.PRODUCT_LISTING:
+      case InformationSlugList.PRODUCT_LISTING:
         return <ProductListing isPaid={isPaid} />;
-      case InformationList.PHOTOS_VIDEOS:
+      case InformationSlugList.PHOTOS_VIDEOS:
         return <PhotosVideos />;
-      case InformationList.MANAGE_DEALS:
+      case InformationSlugList.MANAGE_DEALS:
         return <ManageDeals bizListingId={listing.id} />;
-      case InformationList.ANALYTICS:
+      case InformationSlugList.ANALYTICS:
         return (
           <SectionLayout
             title="Analytics"
@@ -169,29 +161,26 @@ const BizInformation = (props) => {
             <div />
           </SectionLayout>
         );
-      case InformationList.CHANGE_ACCOUNT_TIER:
+      case InformationSlugList.CHANGE_ACCOUNT_TIER:
         return (
-          <TierTable
-            expirationDate={moment(listing?.expiration_date).format(
-              "YYYY/MM/DD"
-            )}
-            isChangeTier
-            isPaid={isPaid}
-            isPayYearly={isPayYearly}
-            onSetIsPayYearly={(e) => setIsPayYearly(e)}
-            onDirectToVerification={handleHref}
-          />
+          <div className="pt-10 px-3">
+            <TierTable
+              expirationDate={moment(listing?.expiration_date).format(
+                "YYYY/MM/DD"
+              )}
+              isChangeTier
+              isPaid={isPaid}
+              isPayYearly={isPayYearly}
+              onSetIsPayYearly={(e) => setIsPayYearly(e)}
+              onDirectToVerification={handleHref}
+            />
+          </div>
         );
-      case InformationList.VERIFICATION:
+      case InformationSlugList.VERIFICATION:
         return <Verification listing={listing} isPaid={isPaid} />;
       default:
         return <div />;
     }
-  };
-
-  const handleLogout = () => {
-    deleteUser();
-    window.location.href = "/";
   };
 
   return (
@@ -199,29 +188,7 @@ const BizInformation = (props) => {
       <div className={styles.biz_information}>
         <div className={styles.left_col}>
           <div className={styles.left_col_bottom}>
-            {informationList.map((item) => (
-              <div
-                className="flex gap-3 justify-between"
-                key={item.label}
-                onClick={() => setSelectedTab(item.label)}
-              >
-                <Heading
-                  icon={item.icon}
-                  type="tab"
-                  text={item.label}
-                  selected={selectedTab === item.label}
-                />
-                {item.star && <Icon icon="star-2" color="#653fff" />}
-              </div>
-            ))}
-            <div className="flex gap-3 justify-between" onClick={handleLogout}>
-              <Heading
-                icon="logout"
-                type="tab"
-                text="Log out"
-                selected={false}
-              />
-            </div>
+            <BizAccountManagementPanel />
           </div>
         </div>
         <div className={styles.right_col}>{tabContent()}</div>
@@ -243,8 +210,8 @@ const BizInformation = (props) => {
   );
 };
 export const getServerSideProps = async (context) => {
-  const { listingSlug } = context.query;
-  return { props: { listingSlug: listingSlug } };
+  const { listingSlug, information } = context.query;
+  return { props: { listingSlug: listingSlug, information: information } };
 };
 
 export default BizInformation;

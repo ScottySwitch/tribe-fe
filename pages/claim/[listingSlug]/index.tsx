@@ -49,7 +49,8 @@ const ClaimListing = (context) => {
       setListing(data.data.data);
       updateUser({
         biz_id: listingId,
-        biz_slug: get(listing, "attributes.slug"),
+        current_listing_slug: get(data, "data.data.attributes.slug"),
+        biz_slug: get(data, "data.data.attributes.slug"),
         pay_price: "150",
       });
     };
@@ -82,10 +83,6 @@ const ClaimListing = (context) => {
       return alert("Please select your role");
     }
 
-    await BizListingApi.createListingRole({
-      bizListingId: listingId,
-      name: role,
-    });
     setClaimStep(ClaimStep.CHOOSE_TIER);
     userInfo = {
       ...userInfo,

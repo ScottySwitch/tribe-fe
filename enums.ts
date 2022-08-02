@@ -58,6 +58,18 @@ export enum ListingHomePageScreens {
   ADD_DEALS = "add-deals",
 }
 
+export enum InformationSlugList {
+  BUSINESS_INFORMATION = "information",
+  BUSINESS_DETAIL = "detail",
+  PHOTOS_VIDEOS = "media",
+  PRODUCT_LISTING = "products",
+  MANAGE_DEALS = "deals",
+  ANALYTICS = "Analytics",
+  CHANGE_ACCOUNT_TIER = "account-tier",
+  VERIFICATION = "verification",
+  LOGOUT = "log-out",
+}
+
 export enum InformationList {
   BUSINESS_INFORMATION = "Business information",
   BUSINESS_DETAIL = "Business  detail",
@@ -87,7 +99,7 @@ export enum ClaimStep {
   CHOOSE_TIER = "choose_tierr",
 }
 
-export enum UserType {
+export enum UserTypes {
   NORMAL_USER = "normal_user",
   BIZ_USER = "biz_user",
 }

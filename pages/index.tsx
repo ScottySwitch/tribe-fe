@@ -20,6 +20,7 @@ import {
   formatBanner,
   formatCardItemProps,
   formatListingArray,
+  getListingUrl,
   isArray,
 } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
@@ -33,10 +34,17 @@ import {
 import { CategoryText } from "enums";
 import styles from "styles/Home.module.scss";
 import Head from "next/head";
+import ArticleCard from "components/ArticleCard/ArticleCard";
+import ArticleApi from "services/article";
 
 const Home: NextPage = (props: any) => {
-  const { listingExclusiveDeal, listBanners, listCollections, listCategories } =
-    props;
+  const {
+    listingExclusiveDeal,
+    listBanners,
+    // listHomeArticles,
+    listCollections,
+    listCategories,
+  } = props;
 
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
@@ -80,6 +88,7 @@ const Home: NextPage = (props: any) => {
       const data = await BizListingApi.getAllBizlitingPinnedByCategory(
         location
       );
+      console.log("data", data);
       const buyListingArray = formatListingArray(get(data, "data.data[0]"));
       const seeListingArray = formatListingArray(get(data, "data.data[1]"));
       const eatListingArray = formatListingArray(get(data, "data.data[2]"));
@@ -181,7 +190,15 @@ const Home: NextPage = (props: any) => {
               <div key={card.name} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(card)}
-                  onClick={() => router.push(`/biz/home/${card.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(card, "categories[0]"),
+                        get(card, "categoryLinks[0]"),
+                        card.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}
@@ -206,14 +223,24 @@ const Home: NextPage = (props: any) => {
       {isArray(listings?.buy) && (
         <SectionLayout title="Where to Buy" seeMore={CategoryText.BUY}>
           <Carousel responsive={infoCardResponsive}>
-            {listings?.buy.map((card) => (
-              <div key={card.title} className="pb-5 pt-3 pl-3">
-                <InforCard
-                  {...formatCardItemProps(card)}
-                  onClick={() => router.push(`/biz/home/${card.slug}`)}
-                />
-              </div>
-            ))}
+            {listings?.buy.map((card) => {
+              return (
+                <div key={card.title} className="pb-5 pt-3 pl-3">
+                  <InforCard
+                    {...formatCardItemProps(card)}
+                    onClick={() =>
+                      router.push(
+                        `/${getListingUrl(
+                          get(card, "categories[0]"),
+                          get(card, "categoryLinks[0]"),
+                          card.slug
+                        )}`
+                      )
+                    }
+                  />
+                </div>
+              );
+            })}
           </Carousel>
         </SectionLayout>
       )}
@@ -224,7 +251,15 @@ const Home: NextPage = (props: any) => {
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(card)}
-                  onClick={() => router.push(`/biz/home/${card.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(card, "categories[0]"),
+                        get(card, "categoryLinks[0]"),
+                        card.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}
@@ -233,12 +268,13 @@ const Home: NextPage = (props: any) => {
       )}
       {/* <SectionLayout backgroundColor title="Featured Articles">
         <Carousel responsive={homeCuratedResponsive}>
-          {listHomeArticles?.map((item, index) => (
+          {listHomeArticles.map((item, index) => (
             <div key={index} className="pb-5 pt-3 pl-3">
               <ArticleCard
                 title={item.title}
                 imgUrl={item.imgUrl}
                 time={item.time}
+                onClick={() => router.push(`/articles/${item.slug}`)}
               />
             </div>
           ))}
@@ -251,7 +287,15 @@ const Home: NextPage = (props: any) => {
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(card)}
-                  onClick={() => router.push(`/biz/home/${card.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(card, "categories[0]"),
+                        get(card, "categoryLinks[0]"),
+                        card.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}
@@ -268,7 +312,15 @@ const Home: NextPage = (props: any) => {
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(card)}
-                  onClick={() => router.push(`/biz/home/${card.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(card, "categories[0]"),
+                        get(card, "categoryLinks[0]"),
+                        card.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}
@@ -282,7 +334,15 @@ const Home: NextPage = (props: any) => {
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(card)}
-                  onClick={() => router.push(`/biz/home/${card.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(card, "categories[0]"),
+                        get(card, "categoryLinks[0]"),
+                        card.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}

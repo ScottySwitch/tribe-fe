@@ -22,6 +22,7 @@ import {
   changeToSlugify,
   formatBizlistingArray,
   formatCardItemProps,
+  getListingUrl,
   isArray,
 } from "utils";
 
@@ -88,7 +89,8 @@ const Collection = (props) => {
     <div>
       <SectionLayout className="py-0 pb-3">
         <div className={styles.breadcrumbs}>
-          Home <Icon icon="carret-right" size={14} color="#7F859F" />
+          <span onClick={() => router.push("/")}>Home</span>{" "}
+          <Icon icon="carret-right" size={14} color="#7F859F" />
           Collection
         </div>
       </SectionLayout>
@@ -116,7 +118,15 @@ const Collection = (props) => {
               <div key={item?.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(item)}
-                  onClick={() => router.push(`/biz/home/${item.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(item, "categories[0]"),
+                        get(item, "categoryLinks[0].attributes.value"),
+                        item.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}

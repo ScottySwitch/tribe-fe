@@ -439,11 +439,11 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       icon: "chat",
       callBack: () => router.push(`#reviews`),
     },
-    {
-      text: "Direction",
-      icon: "map-1",
-      callBack: () => window.open("some_url_here"),
-    },
+    // {
+    //   text: "Direction",
+    //   icon: "map-1",
+    //   callBack: () => window.open("some_url_here"),
+    // },
     { text: "Share", icon: "share", callBack: () => setShowShareModal(true) },
   ];
 
@@ -461,7 +461,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
           onChangeImages={(srcImages) => setListingImages(srcImages)}
         />
         <h1 className={styles.breadcrumbs}>
-          Home <Icon icon="carret-right" size={14} color="#7F859F" />
+          <span onClick={() => router.push("/")}>Home</span>{" "}
+          <Icon icon="carret-right" size={14} color="#7F859F" />
           {bizListing.name}
         </h1>
         <ListingInforCard
@@ -497,7 +498,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         <div className={styles.body}>
           <div className={styles.right_col}>
             <EditAction
-              listingId={bizListing.id}
+              listingId={bizListing.listing_id}
               klookUrl={klookUrl}
               isOwned={get(bizListing, "listing_roles.length") > 0}
               isViewPage={isViewPage}
@@ -551,6 +552,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             <Break />
             <>
               <RenderTabs
+                key={category}
                 isViewPage={isViewPage}
                 isPaid={isPaid}
                 menuList={menuList}

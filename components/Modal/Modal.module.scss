@@ -120,7 +120,7 @@
     &.show {
       .container {
         margin-top: 0;
-        max-height: 1000px;
+        max-height: 85vh;
       }
     }
     .container {
@@ -170,7 +170,9 @@
       z-index: 2;
 
       .container {
+        top: 0;
         right: 0;
+        max-height: 100vh;
       }
     }
   }

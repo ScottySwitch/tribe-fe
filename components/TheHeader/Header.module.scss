@@ -1,5 +1,13 @@
 @import "styles/variables.scss";
 
+.user_account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid $bg-200;
+}
+
 .header {
   z-index: 4;
   position: sticky;

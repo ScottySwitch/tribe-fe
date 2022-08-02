@@ -150,7 +150,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Question question="What is the category best associated with this store?">
+          <Question question="What is the category best associated with this store? *">
             <div className="flex flex-wrap gap-2">
               {Array.isArray(categoryLinks) &&
                 categoryLinks.map((opt) => (
@@ -196,7 +196,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
               onClick={() => setShowTagsModal(true)}
             />
           </Question>
-          <Question question="What are the opening hours?" optional>
+          <Question question="What are the opening hours? *">
             <PreviewValue valueKey="openHours" value={getValues("openHours")} />
             <br />
             <Button
@@ -288,7 +288,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
               size="small"
               width={270}
               type="submit"
-              disabled={!isEdit && !isValid}
+              disabled={!(!isEdit && isValid && selectCategoryLink)}
             />
           </div>
         </form>

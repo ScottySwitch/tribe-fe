@@ -20,6 +20,7 @@ import {
   formatCardItemProps,
   formatCategoryLink,
   formatListingArray,
+  getListingUrl,
 } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 import Button from "components/Button/Button";
@@ -214,8 +215,9 @@ const SubCategoryPage = (context) => {
     <div>
       <SectionLayout className="pt-0">
         <div className={styles.breadcrumbs}>
-          Home <Icon icon="carret-right" size={14} color="#7F859F" />
-          {category}
+          <span onClick={() => router.push(`/`)}>Home</span>{" "}
+          <Icon icon="carret-right" size={14} color="#7F859F" />
+          <span onClick={() => router.push(`/${category}`)}>{category}</span>
           <Icon icon="carret-right" size={14} color="#7F859F" />
           {categoryLink}
         </div>
@@ -282,14 +284,25 @@ const SubCategoryPage = (context) => {
       </SectionLayout>
       <SectionLayout show={isArray(listings)}>
         <div className="flex flex-wrap gap-5 sm:gap-2 lg:gap-8">
-          {listings.map((item) => (
-            <div key={item.title} className="pb-5 pt-3">
-              <InforCard
-                {...formatCardItemProps(item)}
-                onClick={() => router.push(`/biz/home/${item.slug}`)}
-              />
-            </div>
-          ))}
+          {listings.map((item) => {
+            console.log("item", item);
+            return (
+              <div key={item.title} className="pb-5 pt-3">
+                <InforCard
+                  {...formatCardItemProps(item)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(item, "categories[0]"),
+                        get(item, "categoryLinks[0]"),
+                        item.slug
+                      )}`
+                    )
+                  }
+                />
+              </div>
+            );
+          })}
         </div>
         {pagination.total > 0 && (
           <Pagination

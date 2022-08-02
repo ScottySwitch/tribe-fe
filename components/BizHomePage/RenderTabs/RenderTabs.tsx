@@ -1,7 +1,7 @@
 import { get, isArray } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import Button from "components/Button/Button";
 import DealDetailModal from "components/DealDetailModal/DealDetailModal";
@@ -22,6 +22,7 @@ import Popover from "components/Popover/Popover";
 import moment from "moment";
 import UpgradePopup from "components/UpgradePopup/UpgradePopup";
 import { formatCardItemProps } from "utils";
+import { UserInforContext } from "Context/UserInforContext";
 
 const initSelectedTab = (category) => {
   switch (category) {
@@ -67,7 +68,7 @@ const TabContent = ({
 }: TabContentProps) => {
   const router = useRouter();
   const { query } = router;
-  const { listingSlug } = query;
+  const { category, subCategory, listingSlug } = query;
 
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>({});
@@ -88,7 +89,7 @@ const TabContent = ({
   if (!(Array.isArray(list) && list.length)) {
     return (
       <div className="flex flex-col items-center justify-center">
-        <Image src={blankImg} width={100} alt="image_empty_box" />
+        <Image src={blankImg} width={100} height={170} alt="image_empty_box" />
         <p>{blankText}</p>
         {!isViewPage && (
           <Button
@@ -152,7 +153,7 @@ const TabContent = ({
                 onCardClick={() => handleOpenDetailModal(item)}
                 {...formatCardItemProps(item)}
               />
-              {isItem && (
+              {isItem && !isViewPage && (
                 <div className={styles.delete} onClick={() => onDelete(item)}>
                   <Icon icon="delete" />
                 </div>
@@ -162,7 +163,11 @@ const TabContent = ({
       </div>
       <div
         className={styles.see_all}
-        onClick={() => router.push(`/biz/${selectedTab}/${listingSlug}`)}
+        onClick={() =>
+          router.push(
+            `/${category}/${subCategory}/${listingSlug}/${selectedTab}/`
+          )
+        }
       >
         See all
       </div>
@@ -202,6 +207,8 @@ const RenderTabs = (props: {
   const [selectedTab, setSelectedTab] = useState<ListingTabs>(
     initSelectedTab(category).itemType
   );
+  const { user, updateUser } = useContext(UserInforContext);
+
   let tabContent;
   switch (selectedTab) {
     case ListingTabs.SERVICE:
@@ -214,7 +221,7 @@ const RenderTabs = (props: {
           onDelete={onDelete}
           list={itemList}
           blankImg={require("public/images/no-product.svg")}
-          blankText="There are no services yet"
+          blankText="There are no products yet"
           buttonText="Add Service now"
           onClick={() => onSetScreen(ListingHomePageScreens.ADD_ITEMS)}
         />
@@ -253,10 +260,8 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.MENU:
-      let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const blankTextMenu = isPaid
-        ? "There are no menu yet"
-        : "Upgrade to upload";
+      const blankTextMenu =
+        isPaid || isViewPage ? "There are no menu yet" : "Upgrade to upload";
       tabContent = (
         <TabContent
           isPaid={isPaid}
@@ -273,9 +278,8 @@ const RenderTabs = (props: {
       );
       break;
     case ListingTabs.DEAL:
-      userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-      const blankTextDeal = get(userInfo, "token")
-        ? isPaid
+      const blankTextDeal = get(user, "token")
+        ? isPaid || isViewPage
           ? "There are no deal yet"
           : "Upgrade to upload"
         : "Login/sign up to see deals";
@@ -286,7 +290,7 @@ const RenderTabs = (props: {
           isViewPage={isViewPage}
           cardItem={PromotionCard}
           onDelete={onDelete}
-          list={get(userInfo, "token") ? (isPaid ? dealList : []) : []}
+          list={get(user, "token") ? (isPaid ? dealList : []) : []}
           blankImg={require("public/images/no-product.svg")}
           blankText={blankTextDeal}
           buttonText="Add deals now"
@@ -296,26 +300,29 @@ const RenderTabs = (props: {
       break;
   }
 
+  console.log("selectedTab", selectedTab);
+
   return (
     <div className="w-full">
       <div className="flex gap-5 items-center justify-between">
         <div className="flex gap-5 items-center">
-          {initSelectedTab(category).tabList.map((tab) =>
-            !isPaid &&
-            (tab.value === ListingTabs.DEAL ||
-              tab.value === ListingTabs.MENU) ? (
+          {initSelectedTab(category).tabList.map((tab) => {
+            return !isPaid &&
+              (tab.value === ListingTabs.DEAL ||
+                tab.value === ListingTabs.MENU) &&
+              !isViewPage ? (
               <UpgradePopup>
                 <Heading key={tab.text} text={tab.text} selected={false} />
               </UpgradePopup>
             ) : (
               <Heading
-                key={tab.text}
+                key={selectedTab + tab.text}
                 selected={selectedTab === tab.value}
                 text={tab.text}
                 onClick={() => setSelectedTab(tab.value)}
               />
-            )
-          )}
+            );
+          })}
         </div>
         {!isViewPage &&
           (isPaid ||

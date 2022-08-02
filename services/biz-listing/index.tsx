@@ -61,6 +61,9 @@ const getListingBySlug = async (
       categories: {
         data: ["id", "attributes"],
       },
+      category_links: {
+        data: ["id", "attributes"],
+      },
       listing_roles: {
         data: ["id", "attributes"],
       },
@@ -528,6 +531,9 @@ const getFavouriteDeals = async () => {
 const getListingCustom = async (data: any) => {
   let filter: any = {};
   let pagination: any = {};
+  if (data?.slug) {
+    filter.slug = data.slug;
+  }
   if (data?.country) {
     filter.country = data.country;
   }
@@ -625,6 +631,9 @@ const getListingCustom = async (data: any) => {
       },
       user_listing_favourites: {
         id: true,
+      },
+      category_links: {
+        data: ["id", "attributes"],
       },
       categories: {
         name: true,

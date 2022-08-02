@@ -20,11 +20,10 @@ import {
   removeZeroInPhoneNumber,
 } from "utils";
 import { useRouter } from "next/router";
-import styles from "./TabContent.module.scss";
-import useGetRevision from "hooks/useGetRevision";
 import BizListingRevision from "services/biz-listing-revision";
-import Select from "components/Select/Select";
 import { UserInforContext } from "Context/UserInforContext";
+
+import styles from "./TabContent.module.scss";
 
 export const socialMedias = [
   { label: <Icon icon="twitter-logo" />, value: "twitter" },
@@ -128,7 +127,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         </div>
         <div
           className={styles.upgrade_now}
-          onClick={() => router.push(`/claim/${get(formData, "id_listing")}`)}
+          onClick={() => router.push(`/claim/${get(formData, "listing_id")}`)}
         >
           Upgrade now
         </div>
@@ -143,13 +142,14 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         title="Business information"
         className={styles.information}
         containerClassName="w-full"
+        childrenClassName={styles.information_children}
       >
         <Break />
         <Upload
           type="avatar"
-          className="justify-start"
           disabled
           fileList={getValues("logo")}
+          className={styles.logo}
         />
         <br />
         <div className={styles.name}>{getValues("name")}</div>
@@ -198,7 +198,7 @@ const BusinessInformation = (props: BusinessInformationProps) => {
         <Break />
         <Button
           text="Edit information"
-          width={300}
+          className={styles.edit_btn}
           onClick={() => {
             setIsEdit(true);
           }}
@@ -213,15 +213,13 @@ const BusinessInformation = (props: BusinessInformationProps) => {
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmitForm)}>
-          <div>
-            <Upload
-              key={getValues("logo")}
-              type="avatar"
-              className="justify-start"
-              fileList={getValues("logo")}
-              onChange={(imgs) => setValue("logo", imgs)}
-            />
-          </div>
+          <Upload
+            key={getValues("logo")}
+            type="avatar"
+            className={styles.logo}
+            fileList={getValues("logo")}
+            onChange={(imgs) => setValue("logo", imgs)}
+          />
           <Question question="Name & Desccription">
             <Input label="Business name" register={register("name")} readOnly />
             <br />

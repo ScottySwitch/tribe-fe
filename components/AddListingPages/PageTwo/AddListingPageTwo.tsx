@@ -31,7 +31,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
   const { data, show, onUpdateFormData, onNextPage, onPrevPage } = props;
   const [isOnlineLocation, setIsOnlineLocation] = useState(false);
 
-  const { register, handleSubmit, getValues, setValue } = useForm({
+  const { register, handleSubmit, getValues, setValue, watch } = useForm({
     defaultValues: {
       businessName: data.businessName,
       description: data.description,
@@ -75,6 +75,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
         <br />
         <Question show question="Name & Description">
           <Input
+            required
             label="Business name"
             placeholder="Name of the business"
             register={register("businessName")}
@@ -116,6 +117,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
               />
               <br />
               <Input
+                required
                 register={register("address")}
                 label="Street address"
                 placeholder="50 Bussorah St, Singapore 199466"
@@ -144,23 +146,33 @@ const AddListingPageTwo = (props: AddListingProps) => {
         </Question>
         <Question show question="Contact">
           <SelectInput
-            label="Phone number ( optional )"
+            defaultValue={{
+              select: "+65",
+              input: "",
+            }}
+            required
+            label="Phone number"
             selectPlaceholder="Area code"
-            placeholder="Your phone number"
+            placeholder="Store’s phone number"
             shouldControlShowValue
             options={formattedAreaCodes}
             value={formatSelectInputValue(
               getValues("contact"),
               formattedAreaCodes
             )}
-            onChange={(e) => setValue("contact", removeZeroInPhoneNumber(e))}
+            onChange={(e) => {
+              console.log("contact", e);
+              setValue("contact", removeZeroInPhoneNumber(e));
+            }}
           />
           <br />
           <Input
+            label="Email"
+            required
             type="email"
             register={register("email")}
             size="large"
-            placeholder="Email (optional)"
+            placeholder="Email"
           />
         </Question>
         <Question show question="Social media">
@@ -195,7 +207,15 @@ const AddListingPageTwo = (props: AddListingProps) => {
             size="small"
             width={270}
             type="submit"
-            disabled={!country}
+            disabled={
+              !(
+                country &&
+                watch("businessName") &&
+                watch("email") &&
+                watch("contact") &&
+                (isOnlineLocation || watch("address"))
+              )
+            }
           />
         </div>
       </SectionLayout>

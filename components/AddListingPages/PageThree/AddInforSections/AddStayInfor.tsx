@@ -145,7 +145,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question
             show={!facilityMode}
-            question="What is the category best associated with this accommodation?"
+            question="What is the category best associated with this accommodation? *"
           >
             <div className="flex flex-wrap gap-2">
               {Array.isArray(categoryLinks) &&
@@ -177,8 +177,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
           </Question>
           <Question
             show={!facilityMode}
-            question="What are the opening hours?"
-            optional
+            question="What are the opening hours? *"
           >
             <PreviewValue valueKey="openHours" value={getValues("openHours")} />
             <br />
@@ -342,7 +341,7 @@ const AddStayInfor = (props: AddStayInforProps) => {
               size="small"
               width={270}
               type="submit"
-              disabled={!isEdit && !isValid}
+              disabled={!(!isEdit && isValid && selectCategoryLink)}
             />
           </div>
         </form>

@@ -11,6 +11,10 @@
     color: $bg-700;
     font-size: $text-md;
   }
+
+  .edit_btn {
+    width: 270px;
+  }
 }
 
 .delete_action {
@@ -21,21 +25,21 @@
   cursor: pointer;
 }
 
+.tips_button {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+
+  .tips {
+    background-color: $blue-50;
+    border-radius: $border-radius;
+    padding: 10px 20px;
+  }
+}
+
 .product_listing,
 .photos_videos {
   padding: 30px;
-
-  .tips_button {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-
-    .tips {
-      background-color: $blue-50;
-      border-radius: $border-radius;
-      padding: 10px 20px;
-    }
-  }
 
   .product_container {
     padding: 10px;
@@ -87,18 +91,6 @@
     }
   }
 
-  .tips_button {
-    gap: 20px;
-    display: flex;
-    justify-content: space-between;
-
-    .tips {
-      background-color: $blue-50;
-      border-radius: $border-radius;
-      padding: 10px 20px;
-    }
-  }
-
   .name {
     font-weight: $font-bold;
   }
@@ -130,4 +122,37 @@
   font-weight: $font-normal;
   font-size: $text-md;
   cursor: pointer;
+}
+
+@media screen and (max-width: $mobile) {
+  .information {
+    display: flex;
+    align-items: center;
+
+    .information_children {
+      .logo {
+        justify-content: center;
+      }
+
+      .edit_btn {
+        width: 100%;
+      }
+    }
+  }
+
+  .tips_button {
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+
+    .tips {
+      background-color: $blue-50;
+      border-radius: $border-radius;
+      padding: 10px 20px;
+    }
+
+    button {
+      width: 100% !important;
+    }
+  }
 }

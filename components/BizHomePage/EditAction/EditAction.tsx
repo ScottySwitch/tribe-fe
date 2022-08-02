@@ -12,6 +12,8 @@ import Router from "next/router";
 import { get } from "lodash";
 import { UserInforContext } from "Context/UserInforContext";
 import { ClaimStep } from "enums";
+import AuthPopup from "components/AuthPopup/AuthPopup";
+import Image from "next/image";
 
 interface EditActionProps {
   isOwned?: boolean;
@@ -50,6 +52,7 @@ const EditAction = (props: EditActionProps) => {
   const [showLearnMore, setShowLearnMore] = useState(false);
   const [showWatchVideo, setShowWatchVideo] = useState(false);
   const [showShopOnWebsite, setShowShopOnWebWebsite] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [actionValue, setActionValue] = useState("");
 
   const router = useRouter();
@@ -170,11 +173,18 @@ const EditAction = (props: EditActionProps) => {
       type_handle: "Claim",
     });
     Router.push({
-      pathname: `/claim/${get(user, "now_biz_listing.id_listing")}`,
+      pathname: `/claim/${get(user, "now_biz_listing.listing_id")}`,
       query: {
         firstStep: ClaimStep.CHOOSE_TIER,
       },
     });
+  };
+
+  const handleLogin = () => {
+    updateUser({
+      type_handle: "Claim",
+    });
+    user?.token ? router.push(`/claim/${listingId}`) : setShowAuthPopup(true);
   };
 
   return (
@@ -194,8 +204,16 @@ const EditAction = (props: EditActionProps) => {
             text="Claim listing"
             size="small"
             variant="outlined"
-            onClick={() => router.push(`/claim/${listingId}`)}
+            onClick={handleLogin}
           />
+          <div className={styles.icon_free}>
+            <Image
+              src={require("public/icons/free.svg")}
+              width={35}
+              height={35}
+              alt="icon_free"
+            />
+          </div>
           <p className="text-left">Own this business?</p>
         </div>
       )}
@@ -289,6 +307,10 @@ const EditAction = (props: EditActionProps) => {
             <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">
               {action.type === "phone" ? (
                 <SelectInput
+                  defaultValue={{
+                    select: "+65",
+                    input: "",
+                  }}
                   id={action.label}
                   label="Phone number"
                   placeholder="your phone number"
@@ -317,6 +339,10 @@ const EditAction = (props: EditActionProps) => {
           </Modal>
         )
       )}
+      <AuthPopup
+        onClose={() => setShowAuthPopup(false)}
+        visible={showAuthPopup}
+      />
     </React.Fragment>
   );
 };

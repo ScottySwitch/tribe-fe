@@ -7,7 +7,7 @@ import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Modal, { ModalHeader } from "components/Modal/Modal";
-import { removeZeroInPhoneNumber } from "utils";
+import { removeZeroInPhoneNumber, validateEmail } from "utils";
 
 import styles from "styles/Auth.module.scss";
 import { useRouter } from "next/router";
@@ -169,6 +169,10 @@ const SignupPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className={styles.body}>
           {method === LoginMethod.PHONE ? (
             <SelectInput
+              defaultValue={{
+                select: "+65",
+                input: "",
+              }}
               label="Phone number"
               placeholder="Phone number"
               selectPlaceholder="Area code"
@@ -209,7 +213,7 @@ const SignupPage = () => {
             register={register("receivePromotions", { required: false })}
           />
           <div className={styles.break}>
-            <span>Or log in with</span>
+            <span>Or Sign up with</span>
           </div>
           <div className={styles.socials}>
             <a rel="noopener noreferrer" href={routeGoogleLogin}>
@@ -223,7 +227,13 @@ const SignupPage = () => {
             text="Sign up"
             type="submit"
             isLoading={isLoading}
-            disabled={!(isValid && otpReceiver)}
+            disabled={
+              !(
+                isValid &&
+                otpReceiver &&
+                (validateEmail(otpReceiver) || method === LoginMethod.PHONE)
+              )
+            }
           />
           <div className={styles.sign_up}>
             Already have account?

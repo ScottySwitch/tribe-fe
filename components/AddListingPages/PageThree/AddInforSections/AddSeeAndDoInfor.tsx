@@ -110,6 +110,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
   };
 
   const handleSelectCategoryLink = async (opt) => {
+    console.log("opt", opt);
     setValue("categoryLinks", opt.id);
     setSelectCategoryLink(opt.id);
 
@@ -132,7 +133,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
       >
         <Break />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Question question="What is the category best associated with this service?">
+          <Question question="What is the category best associated with this service? *">
             <div className="flex flex-wrap gap-2">
               {Array.isArray(categoryLinks) &&
                 categoryLinks.map((opt) => (
@@ -159,7 +160,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
               onClick={() => setShowTagsModal(true)}
             />
           </Question>
-          <Question question="What are the opening hours?" optional>
+          <Question question="What are the opening hours? *">
             <PreviewValue valueKey="openHours" value={getValues("openHours")} />
             <br />
             <Button
@@ -252,7 +253,7 @@ const AddSeeAndDoInfor = (props: AddSeeAndDoInforProps) => {
               size="small"
               width={270}
               type="submit"
-              disabled={!isEdit && !isValid}
+              disabled={!(!isEdit && isValid && selectCategoryLink)}
             />
           </div>
         </form>

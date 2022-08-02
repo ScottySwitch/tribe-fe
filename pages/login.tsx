@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { MouseEventHandler, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
@@ -6,20 +7,13 @@ import Button from "components/Button/Button";
 import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
-import Modal, { ModalHeader } from "components/Modal/Modal";
-import { removeZeroInPhoneNumber } from "utils";
+import { ModalHeader } from "components/Modal/Modal";
+import { removeZeroInPhoneNumber, validateEmail } from "utils";
 
 import styles from "styles/Auth.module.scss";
-import { useRouter } from "next/router";
-import { loginInforItem } from "constant";
-import { UserType } from "enums";
 import AuthApi from "../services/auth";
-import BizApi from "services/biz-listing";
-import BizInvoice from "services/biz-invoice";
-import ClaimListingApi from "services/claim-listing";
-import { formattedAreaCodes, phoneAreaCodes } from "constant";
+import { formattedAreaCodes } from "constant";
 import SelectInput from "components/SelectInput/SelectInput";
-import { get } from "lodash";
 import bizListingApi from "services/biz-listing";
 import { UserInforContext } from "Context/UserInforContext";
 
@@ -52,6 +46,7 @@ const LoginPage = (context) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginError, setIsLoginError] = useState<boolean>(false);
+  const [areaCode, setAreaCode] = useState("");
 
   const router = useRouter();
   const { user, updateUser } = useContext(UserInforContext);
@@ -174,6 +169,10 @@ const LoginPage = (context) => {
         <div className={styles.body}>
           {method === LoginMethod.PHONE_NUMBER ? (
             <SelectInput
+              defaultValue={{
+                select: "+65",
+                input: "",
+              }}
               selectWidth="max-content"
               isClearable
               label="Phone number"
@@ -181,7 +180,10 @@ const LoginPage = (context) => {
               selectPlaceholder="Area code"
               options={formattedAreaCodes}
               shouldControlShowValue
-              onChange={(e) => setPhoneNumber(removeZeroInPhoneNumber(e))}
+              onChange={(e: any) => {
+                setAreaCode(e.select);
+                setPhoneNumber(removeZeroInPhoneNumber(e));
+              }}
             />
           ) : (
             <Input
@@ -213,7 +215,7 @@ const LoginPage = (context) => {
             </Link>
           </div>
           <div className={styles.break}>
-            <span>Or log in with</span>
+            <span>Or Sign up with</span>
           </div>
           <div className={styles.socials}>
             <a rel="noopener noreferrer" href={routeGoogleLogin}>
@@ -226,7 +228,13 @@ const LoginPage = (context) => {
           <Button
             id="login-button"
             text="Log in"
-            disabled={!((!!email || !!phoneNumber) && !!password)}
+            disabled={
+              !(
+                ((!!email && validateEmail(email)) ||
+                  (!!phoneNumber && !!areaCode)) &&
+                !!password
+              )
+            }
             onClick={handleLogin}
             isLoading={isLoading}
           />

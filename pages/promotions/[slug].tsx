@@ -18,7 +18,7 @@ import PromotionApi from "services/promotion";
 import get from "lodash/get";
 import { useRouter } from "next/router";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { calcRateNumber } from "utils";
+import { calcRateNumber, getListingUrl } from "utils";
 import Link from "next/link";
 
 const dummyProductDetails: IProduct = {
@@ -224,7 +224,7 @@ const PromotionsPage = () => {
       {/* End HOT DEALS */}
 
       {/* Start loop biz_listing components */}
-      {bizListings.map(
+      {bizListings?.map(
         (bizListing, index) =>
           Array.isArray(get(bizListing, "biz_listings.data")) &&
           get(bizListing, "biz_listings.data").length > 0 && (
