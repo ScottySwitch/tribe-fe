@@ -11,6 +11,10 @@
     color: $bg-700;
     font-size: $text-md;
   }
+
+  .edit_btn {
+    width: 270px;
+  }
 }
 
 .delete_action {
@@ -130,4 +134,21 @@
   font-weight: $font-normal;
   font-size: $text-md;
   cursor: pointer;
+}
+
+@media screen and (max-width: $mobile) {
+  .information {
+    display: flex;
+    align-items: center;
+
+    .information_children {
+      .logo {
+        justify-content: center;
+      }
+
+      .edit_btn {
+        width: 100%;
+      }
+    }
+  }
 }

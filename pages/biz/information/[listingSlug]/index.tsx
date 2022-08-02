@@ -1,11 +1,11 @@
+import moment from "moment";
+import { Router, useRouter } from "next/router";
 import { get, isArray } from "lodash";
 import { useContext, useEffect, useState } from "react";
 
 import BusinessInformation from "components/BizInformationPage/TabContentComponents/BusinessInformation";
 import ManageDeals from "components/BizInformationPage/TabContentComponents/ManageDeals";
 import ProductListing from "components/BizInformationPage/TabContentComponents/ProductListing";
-import Icon from "components/Icon/Icon";
-import Heading from "components/Heading/Heading";
 import BizListing from "services/biz-listing";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import { ClaimStep, InformationList } from "enums";
@@ -14,21 +14,15 @@ import TierTable from "components/TierTable/TierTable";
 import Verification from "components/BizInformationPage/TabContentComponents/Verification";
 import PhotosVideos from "components/BizInformationPage/TabContentComponents/PhotosVideos";
 import BizListingApi from "../../../../services/biz-listing";
-import {
-  paidInformationList,
-  freeInformationList,
-  defaultAddlistingForm,
-} from "constant";
-
-import styles from "styles/BizInformation.module.scss";
-import { Router, useRouter } from "next/router";
+import { defaultAddlistingForm } from "constant";
 import { UserInforContext } from "Context/UserInforContext";
 import { isPaidUser } from "utils";
-import moment from "moment";
 import ConfirmModal from "components/ConfirmModal";
 import EmailApi from "services/email";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 import BizAccountManagementPanel from "components/BizAccountManagementPanel/BizAccountManagementPanel";
+
+import styles from "styles/BizInformation.module.scss";
 
 const BizInformation = (props) => {
   const { listingSlug } = props;

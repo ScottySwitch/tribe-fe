@@ -17,7 +17,7 @@ import { UserInforContext } from "Context/UserInforContext";
 import Modal from "components/Modal/Modal";
 
 import styles from "./Header.module.scss";
-import { isPaidUser } from "utils";
+import { getListingUrl, isPaidUser } from "utils";
 
 export const formatLanguages = () => {
   return languages.map((lang) => ({
@@ -112,7 +112,13 @@ export const SwitchAccountsContent = () => {
       user_type: UserTypes.BIZ_USER,
       is_paid: isPaidUser(item.expiration_date),
     });
-    router.push(`/biz/home/${item.slug}/edit`);
+    router.push(
+      `/${getListingUrl(
+        get(item, "categories[0]"),
+        get(item, "categoryLinks[0]"),
+        item.slug
+      )}`
+    );
   };
 
   return (
