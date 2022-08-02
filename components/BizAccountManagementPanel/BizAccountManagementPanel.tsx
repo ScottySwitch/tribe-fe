@@ -4,15 +4,20 @@ import Icon from "components/Icon/Icon";
 import { InformationList } from "enums";
 import { UserInforContext } from "Context/UserInforContext";
 import { freeInformationList, paidInformationList } from "constant";
+import { useRouter } from "next/router";
 
 interface BizAccountManagementPanelProps {
   selectedTab?: string;
   onShowSwitchModal?: () => void;
-  onSelectTab?: (e: InformationList) => void;
 }
 
 const BizAccountManagementPanel = (props: BizAccountManagementPanelProps) => {
-  const { selectedTab, onShowSwitchModal, onSelectTab } = props;
+  const { onShowSwitchModal } = props;
+
+  const router = useRouter();
+  const {
+    query: { information },
+  } = router;
 
   const { logout, user } = useContext(UserInforContext);
 
@@ -31,13 +36,15 @@ const BizAccountManagementPanel = (props: BizAccountManagementPanelProps) => {
         <div
           key={item.label}
           className="flex gap-3 justify-between"
-          onClick={() => onSelectTab?.(item.label)}
+          onClick={() =>
+            router.push(`/biz/${item.slug}/${user.current_listing_slug}`)
+          }
         >
           <Heading
             icon={item.icon}
             text={item.label}
             type="tab"
-            selected={selectedTab === item.label}
+            selected={information === item.slug}
           />
           {item.star && <Icon icon="star-2" color="#653fff" />}
         </div>

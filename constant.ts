@@ -1,4 +1,4 @@
-import { CategoryText, CurrencyValues } from "./enums";
+import { CategoryText, CurrencyValues, InformationSlugList } from "./enums";
 import { UserProps } from "components/UserProfilePage/PanelAbout/PanelAbout";
 import {
   Categories,
@@ -450,28 +450,88 @@ export const previewInfo = [
 ];
 
 export const paidInformationList = [
-  { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
-  { label: InformationList.BUSINESS_DETAIL, icon: "business" },
-  { label: InformationList.PHOTOS_VIDEOS, icon: "camera-color" },
-  { label: InformationList.PRODUCT_LISTING, icon: "buy-color", star: true },
-  { label: InformationList.MANAGE_DEALS, icon: "deal", star: true },
-  { label: InformationList.ANALYTICS, icon: "chart", star: true },
-  { label: InformationList.CHANGE_ACCOUNT_TIER, icon: "reward-color" },
-  { label: InformationList.VERIFICATION, icon: "like-color-2" },
-];
-
-export const freeInformationList = [
-  { label: InformationList.BUSINESS_INFORMATION, icon: "user-color-2" },
-  { label: InformationList.BUSINESS_DETAIL, icon: "business" },
-  { label: InformationList.PHOTOS_VIDEOS, icon: "camera-color" },
-  { label: InformationList.PRODUCT_LISTING, icon: "buy-color" },
-  { label: InformationList.ANALYTICS, icon: "chart" },
+  {
+    label: InformationList.BUSINESS_INFORMATION,
+    icon: "user-color-2",
+    slug: InformationSlugList.BUSINESS_INFORMATION,
+  },
+  {
+    label: InformationList.BUSINESS_DETAIL,
+    icon: "business",
+    slug: InformationSlugList.BUSINESS_DETAIL,
+  },
+  {
+    label: InformationList.PHOTOS_VIDEOS,
+    icon: "camera-color",
+    slug: InformationSlugList.PHOTOS_VIDEOS,
+  },
+  {
+    label: InformationList.PRODUCT_LISTING,
+    icon: "buy-color",
+    star: true,
+    slug: InformationSlugList.PRODUCT_LISTING,
+  },
+  {
+    label: InformationList.MANAGE_DEALS,
+    icon: "deal",
+    star: true,
+    slug: InformationSlugList.MANAGE_DEALS,
+  },
+  {
+    label: InformationList.ANALYTICS,
+    icon: "chart",
+    star: true,
+    slug: InformationSlugList.ANALYTICS,
+  },
   {
     label: InformationList.CHANGE_ACCOUNT_TIER,
     icon: "reward-color",
+    slug: InformationSlugList.CHANGE_ACCOUNT_TIER,
+  },
+  {
+    label: InformationList.VERIFICATION,
+    icon: "like-color-2",
+    slug: InformationSlugList.VERIFICATION,
+  },
+];
+
+export const freeInformationList = [
+  {
+    label: InformationList.BUSINESS_INFORMATION,
+    icon: "user-color-2",
+    slug: InformationSlugList.BUSINESS_INFORMATION,
+  },
+  {
+    label: InformationList.BUSINESS_DETAIL,
+    icon: "business",
+    slug: InformationSlugList.BUSINESS_DETAIL,
+  },
+  {
+    label: InformationList.PHOTOS_VIDEOS,
+    icon: "camera-color",
+    slug: InformationSlugList.PHOTOS_VIDEOS,
+  },
+  {
+    label: InformationList.PRODUCT_LISTING,
+    icon: "buy-color",
+    slug: InformationSlugList.PRODUCT_LISTING,
+  },
+  {
+    label: InformationList.ANALYTICS,
+    icon: "chart",
+    slug: InformationSlugList.ANALYTICS,
+  },
+  {
+    label: InformationList.CHANGE_ACCOUNT_TIER,
+    icon: "reward-color",
+    slug: InformationSlugList.CHANGE_ACCOUNT_TIER,
     star: true,
   },
-  { label: InformationList.VERIFICATION, icon: "like-color-2" },
+  {
+    label: InformationList.VERIFICATION,
+    icon: "like-color-2",
+    slug: InformationSlugList.VERIFICATION,
+  },
 ];
 
 export const userInformationList = [

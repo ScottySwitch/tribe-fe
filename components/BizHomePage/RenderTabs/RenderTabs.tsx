@@ -25,13 +25,14 @@ import { formatCardItemProps } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 
 const initSelectedTab = (category) => {
+  console.log(category);
   switch (category) {
     case Categories.BUY:
-      return { itemType: ListingTabs.DEAL, tabList: productTabList };
+      return { itemType: ListingTabs.PRODUCT, tabList: productTabList };
     case Categories.EAT:
-      return { itemType: ListingTabs.DEAL, tabList: eatTabList };
+      return { itemType: ListingTabs.DISH, tabList: eatTabList };
     default:
-      return { itemType: ListingTabs.DEAL, tabList: serviceTabList };
+      return { itemType: ListingTabs.SERVICE, tabList: serviceTabList };
   }
 };
 
@@ -90,7 +91,7 @@ const TabContent = ({
   if (!(Array.isArray(list) && list.length)) {
     return (
       <div className="flex flex-col items-center justify-center">
-        <Image src={blankImg} width={100} alt="image_empty_box" />
+        <Image src={blankImg} width={100} height={170} alt="image_empty_box" />
         <p>{blankText}</p>
         {!isViewPage && (
           <Button
@@ -297,27 +298,29 @@ const RenderTabs = (props: {
       break;
   }
 
+  console.log("selectedTab", selectedTab);
+
   return (
     <div className="w-full">
       <div className="flex gap-5 items-center justify-between">
         <div className="flex gap-5 items-center">
-          {initSelectedTab(category).tabList.map((tab) =>
-            !isPaid &&
-            (tab.value === ListingTabs.DEAL ||
-              tab.value === ListingTabs.MENU) &&
-            !isViewPage ? (
+          {initSelectedTab(category).tabList.map((tab) => {
+            return !isPaid &&
+              (tab.value === ListingTabs.DEAL ||
+                tab.value === ListingTabs.MENU) &&
+              !isViewPage ? (
               <UpgradePopup>
                 <Heading key={tab.text} text={tab.text} selected={false} />
               </UpgradePopup>
             ) : (
               <Heading
-                key={tab.text}
+                key={selectedTab + tab.text}
                 selected={selectedTab === tab.value}
                 text={tab.text}
                 onClick={() => setSelectedTab(tab.value)}
               />
-            )
-          )}
+            );
+          })}
         </div>
         {!isViewPage &&
           (isPaid ||

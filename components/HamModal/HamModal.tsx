@@ -211,9 +211,8 @@ const HamModal = (props: HamModalProps) => {
         onClose={() => onSetShowHamModal(false)}
       >
         {user.user_type === UserTypes.BIZ_USER ? (
-          <div className="flex flex-col gap-3 px-3 pt-10">
+          <div className="flex flex-col gap-5 px-3 pt-10">
             <BizAccountManagementPanel
-              onSelectTab={(tab) => {}}
               onShowSwitchModal={() => {
                 onSetShowHamModal(false);
                 setShowSwitchModal(true);

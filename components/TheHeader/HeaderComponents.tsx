@@ -105,7 +105,6 @@ export const SwitchAccountsContent = () => {
   };
 
   const handleSwitchListing = async (item) => {
-    console.log("listing--------", item);
     updateUser({
       avatar: get(item, "logo[0]"),
       current_listing_slug: get(item, "slug"),
@@ -117,7 +116,7 @@ export const SwitchAccountsContent = () => {
         get(item, "categories[0]"),
         get(item, "categoryLinks[0]"),
         item.slug
-      )}`
+      )}/edit`
     );
   };
 
