@@ -71,7 +71,7 @@ const Home: NextPage = (props: any) => {
         break;
       case "id":
         setTitle(
-          "Tribes : Dapatkan Informasi Travelling Seputar Tempat Makan Halal dan Penginapan"
+          "Tribes: Dapatkan Informasi Travelling Seputar Tempat Makan Halal dan Penginapan"
         );
         break;
       default:
