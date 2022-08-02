@@ -307,6 +307,10 @@ const EditAction = (props: EditActionProps) => {
             <div className="p-[30px] pt-0 flex flex-col items-center w-full gap-5">
               {action.type === "phone" ? (
                 <SelectInput
+                  defaultValue={{
+                    select: "+65",
+                    input: "",
+                  }}
                   id={action.label}
                   label="Phone number"
                   placeholder="your phone number"
