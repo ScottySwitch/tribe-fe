@@ -153,7 +153,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Question
             show={!facilityMode}
-            question="What is the category best associated with this place?"
+            question="What is the category best associated with this place? *"
           >
             <div className="flex flex-wrap gap-2">
               {Array.isArray(categoryLinks) &&
@@ -184,8 +184,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
           </Question>
           <Question
             show={!facilityMode}
-            question="What are the opening hours? "
-            optional
+            question="What are the opening hours? *"
           >
             <PreviewValue valueKey="openHours" value={getValues("openHours")} />
             <br />
@@ -385,7 +384,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               size="small"
               width={270}
               type="submit"
-              disabled={!isEdit && !isValid}
+              disabled={!(!isEdit && isValid && selectCategoryLink)}
             />
           </div>
         </form>
