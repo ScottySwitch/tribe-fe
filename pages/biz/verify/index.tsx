@@ -16,7 +16,7 @@ import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
 import Select from "components/Select/Select";
 import Upload from "components/Upload/Upload";
-import { Tiers, UserType, VerifySteps } from "enums";
+import { Tiers, UserTypes, VerifySteps } from "enums";
 import { getListingUrl, removeZeroInPhoneNumber } from "utils";
 import AuthApi from "../../../services/auth";
 import UserApi from "../../../services/user";
@@ -275,7 +275,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         owner_listings: res.data.data,
         avatar: get(claimedListing, "logo[0]"),
         // current_listing_slug: claimedListing.slug,
-        user_type: UserType.BIZ_USER,
+        user_type: UserTypes.BIZ_USER,
       };
       updateUser(updatedUserInfor);
     });
