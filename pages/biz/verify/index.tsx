@@ -17,7 +17,7 @@ import Modal from "components/Modal/Modal";
 import Select from "components/Select/Select";
 import Upload from "components/Upload/Upload";
 import { Tiers, UserType, VerifySteps } from "enums";
-import { removeZeroInPhoneNumber } from "utils";
+import { getListingUrl, removeZeroInPhoneNumber } from "utils";
 import AuthApi from "../../../services/auth";
 import UserApi from "../../../services/user";
 import BizInvoinceApi from "../../../services/biz-invoice";
@@ -52,6 +52,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
   const [payPrice, setPayPrice] = useState<string>("");
   const [time, setTime] = useState<number>(30);
   const [type, setType] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user, updateUser } = useContext(UserInforContext);
 
@@ -217,7 +218,9 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       .updateBizListing(parseInt(id), {
         number_verify: phoneNumber,
       })
-      .then((res) => setClaimedListing(get(res, "data.data.attributes")));
+      .then((res) => {
+        setClaimedListing(get(res, "data.data.attributes"));
+      });
     setVerifyStep(VerifySteps.CONFIRM_OTP);
   };
 
@@ -271,14 +274,32 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const updatedUserInfor = {
         owner_listings: res.data.data,
         avatar: get(claimedListing, "logo[0]"),
-        current_listing_slug: claimedListing.slug,
+        // current_listing_slug: claimedListing.slug,
         user_type: UserType.BIZ_USER,
       };
       updateUser(updatedUserInfor);
     });
 
     if (userInfo.role || userInfo.type_handle) {
-      router.push(`/biz/home/${userInfo.current_listing_slug}/edit/`);
+      setIsLoading(true);
+      const data = await bizListingApi
+        .getListingCustom({
+          slug: userInfo.current_listing_slug,
+        })
+        .then((res) => {
+          const dataListing = res.data.data[0];
+          console.log("dataListing", dataListing);
+          router.push(
+            `/${getListingUrl(
+              get(dataListing, "attributes.categories.data[0].attributes.name"),
+              get(
+                dataListing,
+                "attributes.category_links.data[0].attributes.value"
+              ),
+              get(dataListing, "attributes.slug")
+            )}`
+          );
+        });
     } else {
       router.push(`/`);
     }
@@ -592,6 +613,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             <p> Let&rsquo;s fill in some info and get the ball rolling.</p>
           </div>
           <Button
+            isLoading={isLoading}
             text="View store page"
             size="small"
             width="70%"

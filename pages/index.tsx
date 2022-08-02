@@ -327,7 +327,15 @@ const Home: NextPage = (props: any) => {
               <div key={card.title} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(card)}
-                  onClick={() => router.push(`/biz/home/${card.slug}`)}
+                  onClick={() =>
+                    router.push(
+                      `/${getListingUrl(
+                        get(card, "categories[0]"),
+                        get(card, "categoryLinks[0]"),
+                        card.slug
+                      )}`
+                    )
+                  }
                 />
               </div>
             ))}

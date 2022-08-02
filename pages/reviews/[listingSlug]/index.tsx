@@ -148,7 +148,7 @@ const AddReviewPage = () => {
                 Tribes member to get ideas and make better planning. Thank you!
               </h2>
               <h2 className={`${styles.note} mb-6`}>
-                Your overall rating of this h2lace
+                Your overall rating of this place
               </h2>
               <div className="flex mb-6">
                 <Rate
@@ -159,7 +159,11 @@ const AddReviewPage = () => {
                 />
                 <div className={styles.cta_click}>{ratingType}</div>
               </div>
-              <ReviewForm positionButton="right" onSubmit={handleSubmit} />
+              <ReviewForm
+                rating={rating}
+                positionButton="right"
+                onSubmit={handleSubmit}
+              />
             </div>
             {/* render when there are related reviews */}
             {isRecent && (
