@@ -210,9 +210,10 @@ const Properties = (context) => {
             type="secondary-no-outline"
             selectedTab={selectedTab}
             className="pt-[6px]"
-            onChangeTab={(e) => {
+            onChangeTab={(property) => {
+              setSelectedTab(property);
               router.push(
-                `/${category}/${subCategory}/${listingSlug}/${selectedTab}/`,
+                `/${category}/${subCategory}/${listingSlug}/${property}/`,
                 undefined,
                 {
                   shallow: false,
