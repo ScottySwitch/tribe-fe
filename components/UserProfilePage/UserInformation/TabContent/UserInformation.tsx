@@ -42,7 +42,10 @@ const ModalNewPhone = (props) => {
         <div className={`${styles.form_group} px-4`}>
           <SelectInput
             defaultValue={{
-              select: "+65",
+              select: {
+                label: "Singapore",
+                value: "+65",
+              },
               input: "",
             }}
             size="large"

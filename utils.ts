@@ -224,6 +224,7 @@ export const calcRateNumber = (reviewsData) => {
 };
 
 export const removeZeroInPhoneNumber = (e) => {
+  console.log('e = ', e)
   let phoneNumber = "";
   if (e.input?.[0] == 0) {
     phoneNumber = e?.select?.value + e?.input?.substr(1, e.input.length - 1);

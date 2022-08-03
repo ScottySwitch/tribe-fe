@@ -115,7 +115,10 @@ const ForgotPasswordPage = () => {
           {method === LoginMethod.PHONE_NUMBER ? (
             <SelectInput
               defaultValue={{
-                select: "+65",
+                select: {
+                  label: "Singapore",
+                  value: "+65",
+                },
                 input: "",
               }}
               label="Phone number"

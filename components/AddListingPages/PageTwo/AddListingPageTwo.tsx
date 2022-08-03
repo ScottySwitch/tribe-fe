@@ -147,7 +147,10 @@ const AddListingPageTwo = (props: AddListingProps) => {
         <Question show question="Contact">
           <SelectInput
             defaultValue={{
-              select: "+65",
+              select: {
+                label: "Singapore",
+                value: "+65",
+              },
               input: "",
             }}
             required
