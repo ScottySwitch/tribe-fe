@@ -27,11 +27,11 @@ import { UserInforContext } from "Context/UserInforContext";
 const initSelectedTab = (category) => {
   switch (category) {
     case Categories.BUY:
-      return { itemType: ListingTabs.PRODUCT, tabList: productTabList };
+      return { itemType: ListingTabs.DEAL, tabList: productTabList };
     case Categories.EAT:
-      return { itemType: ListingTabs.DISH, tabList: eatTabList };
+      return { itemType: ListingTabs.DEAL, tabList: eatTabList };
     default:
-      return { itemType: ListingTabs.SERVICE, tabList: serviceTabList };
+      return { itemType: ListingTabs.DEAL, tabList: serviceTabList };
   }
 };
 
