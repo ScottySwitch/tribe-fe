@@ -19,14 +19,7 @@ const ReportModal = (props: ReportModalProps) => {
 
   const handleOnSubmit = () => {
     const reason = currentOption === "Other" ? anotherReason : currentOption;
-    console.log("reason", reason);
-    console.log("anotherReason", anotherReason);
-    console.log("currentOption", currentOption);
-    console.log(
-      "check",
-      !(currentOption || (currentOption === "Other" && anotherReason))
-    );
-    // onSubmit?.(reason);
+    onSubmit?.(reason);
   };
   return (
     <Modal visible={visible} width="100%" maxWidth={578}>

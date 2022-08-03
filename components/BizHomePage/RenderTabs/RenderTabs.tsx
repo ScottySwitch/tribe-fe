@@ -149,6 +149,7 @@ const TabContent = ({
               style={{ width: isDeal ? "100%" : "" }}
             >
               <CardItem
+                className={styles.small_infor_card}
                 onClick={() => handleOpenDetailModal(item)}
                 onCardClick={() => handleOpenDetailModal(item)}
                 {...formatCardItemProps(item)}
@@ -299,7 +300,6 @@ const RenderTabs = (props: {
       );
       break;
   }
-
 
   return (
     <div className="w-full">

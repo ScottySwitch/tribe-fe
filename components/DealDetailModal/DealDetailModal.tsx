@@ -25,19 +25,19 @@ interface DealDetailModalProps extends ModalProps {
 
 const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props;
-  const [isFavourite, setIsFavourite] = useState<boolean>(true);
+  const [isFavourite, setIsFavourite] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState(false);
   useEffect(() => {
     const checkFavouriteDeal = async () => {
       const dataFavouriteDeal = await FavouriteDealApi.checkIsFavourite(
         data.id
       );
-      if (get(dataFavouriteDeal, "data.data.length") == 0) {
-        setIsFavourite(false);
-      }
+      get(dataFavouriteDeal, "data.data.length") == 0
+        ? setIsFavourite(true)
+        : setIsFavourite(false);
     };
     checkFavouriteDeal();
-  }, []);
+  }, [data]);
 
   const handleAddFavouriteDeal = async (id) => {
     const data = await DealFavouriteApi.createDealFavourite(id);
@@ -129,7 +129,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
               width="max-content"
               prefix={<Icon icon="like-stroke" color="#ffffff" />}
               onClick={() => handleAddFavouriteDeal(data.id)}
-              disabled={isFavourite}
+              disabled={!isFavourite}
             />
           </div>
           <Button
