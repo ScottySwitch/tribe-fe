@@ -25,7 +25,6 @@ import { formatCardItemProps } from "utils";
 import { UserInforContext } from "Context/UserInforContext";
 
 const initSelectedTab = (category) => {
-  console.log(category);
   switch (category) {
     case Categories.BUY:
       return { itemType: ListingTabs.PRODUCT, tabList: productTabList };
@@ -298,7 +297,6 @@ const RenderTabs = (props: {
       break;
   }
 
-  console.log("selectedTab", selectedTab);
 
   return (
     <div className="w-full">

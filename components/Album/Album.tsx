@@ -127,28 +127,29 @@ export const Album = (props: AlbumProps) => {
   };
 
   const onSubmit = async () => {
-    setShowReportModal(false);
-    const body = {
-      type: "media",
-      reason: reason,
-      user: user.id,
-      biz_listing: listingId,
-      link_media: images,
-    };
+    console.log("reason", reason);
+    // setShowReportModal(false);
+    // const body = {
+    //   type: "media",
+    //   reason: reason,
+    //   user: user.id,
+    //   biz_listing: listingId,
+    //   link_media: images,
+    // };
 
-    await reportApi
-      .createReport(body)
-      .then((res) => {
-        setSubmitResult(true);
-        setReason("default");
-      })
-      .catch((error) => {
-        setSubmitResult(false);
-      })
-      .finally(() => {
-        setShowReportModal(false);
-        setShowResultModal(true);
-      });
+    // await reportApi
+    //   .createReport(body)
+    //   .then((res) => {
+    //     setSubmitResult(true);
+    //     setReason("default");
+    //   })
+    //   .catch((error) => {
+    //     setSubmitResult(false);
+    //   })
+    //   .finally(() => {
+    //     setShowReportModal(false);
+    //     setShowResultModal(true);
+    //   });
   };
 
   const notOtherReason = reportReasons?.slice(0, 5).map((item) => item.value);
@@ -268,7 +269,12 @@ export const Album = (props: AlbumProps) => {
               width={100}
               onClick={handleCloseReportModal}
             />
-            <Button text="Submit" width={150} onClick={onSubmit} />
+            <Button
+              text="Submit"
+              width={150}
+              onClick={onSubmit}
+              disabled={!(reason && reason !== "default")}
+            />
           </div>
         </div>
       </Modal>
