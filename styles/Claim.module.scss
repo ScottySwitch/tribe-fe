@@ -69,7 +69,7 @@
     }
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: $medium-tablet) {
     .section_two {
       padding-top: 270px;
 

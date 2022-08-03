@@ -19,6 +19,7 @@ import get from "lodash/get";
 import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard";
 import { dummyTopSearchKeywords } from "constant";
 import ContributeApi from "services/contribute";
+import { getListingUrl } from "utils";
 
 const AddReviewPage = () => {
   const router = useRouter();
@@ -76,7 +77,21 @@ const AddReviewPage = () => {
 
   const handleCloseModal = () => {
     setIsShowResultModal(false);
-    router.push(`/biz/home/${listingSlug}`);
+    const category = get(
+      bizListing,
+      "attributes.categories.data[0].attributes.name"
+    );
+    const categoryLink = get(
+      bizListing,
+      "attributes.category_links.data[0].attributes.value"
+    );
+    router.push(
+      `/${getListingUrl(
+        category,
+        categoryLink,
+        get(bizListing, "attributes.slug")
+      )}`
+    );
   };
 
   const handleSubmit = async (dataSend) => {

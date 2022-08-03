@@ -362,6 +362,8 @@ const getBizListingReviews = async (bizListingSlug: any) => {
         reviews: {
           populate: ["user"],
         },
+        categories: "*",
+        category_links: "*",
       },
     },
     {
