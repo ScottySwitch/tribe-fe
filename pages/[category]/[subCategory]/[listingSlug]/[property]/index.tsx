@@ -54,8 +54,9 @@ const PropertiesContainer = ({
 };
 
 const Properties = (context) => {
-  const { listingSlug, property } = context;
+  const { category, subCategory, listingSlug, property } = context;
   const router = useRouter();
+
   const { user, updateUser } = useContext(UserInforContext);
 
   const upperCaseTitle = property?.[0].toUpperCase() + property?.slice(1);
@@ -209,10 +210,15 @@ const Properties = (context) => {
             type="secondary-no-outline"
             selectedTab={selectedTab}
             className="pt-[6px]"
-            onChangeTab={(e) => {
-              router.push(`/biz/${e}/${listingSlug}`, undefined, {
-                shallow: false,
-              });
+            onChangeTab={(property) => {
+              setSelectedTab(property);
+              router.push(
+                `/${category}/${subCategory}/${listingSlug}/${property}/`,
+                undefined,
+                {
+                  shallow: false,
+                }
+              );
             }}
           />
         </div>
@@ -234,6 +240,8 @@ export async function getServerSideProps(props) {
   // Pass data to the page via props
   return {
     props: {
+      category: props.query.category || "",
+      subCategory: props.query.subCategory || "",
       listingSlug: props.query.listingSlug || "",
       property: props.query.property || "",
     },

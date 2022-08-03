@@ -1,6 +1,10 @@
+import { get } from "lodash";
+import Image from "next/image";
+import { useContext, useEffect, useRef, useState } from "react";
+import Slider, { Settings } from "react-slick";
 import classNames from "classnames";
+
 import Button from "components/Button/Button";
-import Checkbox from "components/Checkbox/Checkbox";
 import Icon from "components/Icon/Icon";
 import Input from "components/Input/Input";
 import Modal from "components/Modal/Modal";
@@ -8,10 +12,6 @@ import Radio from "components/Radio/Radio";
 import ResultModal from "components/ReviewsPage/ResultModal/ResultModal";
 import { reportReasons } from "constant";
 import { UserInforContext } from "Context/UserInforContext";
-import { get } from "lodash";
-import Image from "next/image";
-import { useContext, useEffect, useRef, useState } from "react";
-import Slider, { Settings } from "react-slick";
 import reportApi from "services/report";
 import { detectIsVideo } from "utils";
 import { isArray } from "utils";

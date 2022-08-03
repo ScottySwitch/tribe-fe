@@ -73,11 +73,6 @@ const Category = (props: any) => {
     switch (category) {
       case CategoryText.EAT:
         switch (locale) {
-          case "sg":
-            setTitle(
-              "Find Halal Restaurant in Singapore and Order Food Online | Tribes"
-            );
-            break;
           case "id":
             setTitle(
               "Cari Restoran Halal di Singapura dan Pesan Makanan Online | Tribes"
