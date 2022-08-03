@@ -27,6 +27,7 @@ import UserApi from "services/user";
 import { UserInforContext } from "Context/UserInforContext";
 
 import styles from "./TabContent.module.scss";
+import { watch } from "fs";
 
 const ModalNewPhone = (props) => {
   const { visible, onClose, onNext } = props;
@@ -99,8 +100,15 @@ const UserInformation = () => {
   const [showModalOTP, setShowModalOTP] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<{ [key: string]: any }>({});
 
-  const { register, handleSubmit, setValue, getValues, formState, reset } =
-    useForm({ mode: "onChange" });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState,
+    reset,
+    watch,
+  } = useForm({ mode: "onChange" });
 
   const { updateUser } = useContext(UserInforContext);
 
@@ -287,6 +295,7 @@ const UserInformation = () => {
             />
           </div>
           <Button
+            disabled={!watch("first_name")}
             text="Save"
             type="submit"
             className="w-full lg:max-w-max ml-auto text-sm"

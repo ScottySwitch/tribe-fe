@@ -140,16 +140,16 @@ const Category = (props: any) => {
     switch (category) {
       case CategoryText.BUY:
         defaultCategoryInfor = {
-          bannerSrc: "/images/buy-banner-1.svg",
-          bannerMobileSrc: "/images/buy-banner-mobile.svg",
+          bannerSrc: "/images/banner-buy.jpg",
+          bannerMobileSrc: "/images/buy-banner-mobile.jpg",
           categoryName: "Buy",
           categoryDescription: "Explore a range of items.",
         };
         break;
       case CategoryText.EAT:
         defaultCategoryInfor = {
-          bannerSrc: "/images/eat-banner-1.svg",
-          bannerMobileSrc: "/images/eat-banner-mobile.svg",
+          bannerSrc: "/images/eat-banner.jpg",
+          bannerMobileSrc: "/images/eat-banner-mobile.jpg",
           categoryName: "Eat",
           categoryDescription:
             "Explore a wide array of cuisine types across different cultures.",
@@ -157,8 +157,8 @@ const Category = (props: any) => {
         break;
       case CategoryText.SEE_AND_DO:
         defaultCategoryInfor = {
-          bannerSrc: "/images/see-and-do-banner-1.svg",
-          bannerMobileSrc: "/images/see-and-do-banner-mobile.svg",
+          bannerSrc: "/images/see-and-do-banner.jpg",
+          bannerMobileSrc: "/images/see-and-do-banner-mobile.jpg",
           categoryName: "See and Do",
           categoryDescription:
             "Explore a wide array of cuisine types across different cultures.",
@@ -166,8 +166,8 @@ const Category = (props: any) => {
         break;
       case CategoryText.STAY:
         defaultCategoryInfor = {
-          bannerSrc: "/images/stay-banner-1.svg",
-          bannerMobileSrc: "/images/stay-banner-mobile.svg",
+          bannerSrc: "/images/stay-banner.jpg",
+          bannerMobileSrc: "/images/stay-banner-mobile.jpg",
           categoryName: "Stay",
           categoryDescription:
             "Explore famous attractions, key landmarks and experience localized activities. ",
@@ -175,8 +175,8 @@ const Category = (props: any) => {
         break;
       case CategoryText.TRANSPORT:
         defaultCategoryInfor = {
-          bannerSrc: "/images/transport-banner-1.svg",
-          bannerMobileSrc: "/images/transport-banner-mobile.svg",
+          bannerSrc: "/images/transport-banner.jpg",
+          bannerMobileSrc: "/images/transport-banner-mobile.jpg",
           categoryName: "Transport",
           categoryDescription: "Find the best way to get around.",
         };
