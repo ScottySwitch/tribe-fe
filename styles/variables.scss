@@ -42,10 +42,16 @@ $line-height: 1;
 $box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
 
 //break-points
+$medium-desktop: 1400px;
+$small-desktop: 1315px;
 $big-tablet: 1024px;
 $tablet: 900px;
+$medium-tablet: 768px;
+$small-tablet: 675px;
 $mobile: 500px;
+$medium-mobile: 450px;
 $small-mobile: 380px;
+$mini-mobile: 360px;
 
 ///colors
 $blue-100: #d9efff;

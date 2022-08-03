@@ -88,7 +88,7 @@
   }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: $medium-mobile) {
   .section_layout {
     .container {
       width: 90%;
@@ -113,7 +113,7 @@
   }
 }
 
-@media screen and (max-width: 370px) {
+@media screen and (max-width: $small-mobile) {
   .section_layout {
     .container {
       width: 100%;

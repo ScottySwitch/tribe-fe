@@ -91,7 +91,7 @@
   }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: $mini-mobile) {
   .auth_popup {
     padding-top: 15px;
     height: 190px;
