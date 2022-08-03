@@ -85,7 +85,7 @@ export const ReviewForm = (props) => {
           size="large"
           options={monthOfTwoYearsOptions()}
           onChange={(e: any) => {
-            setVisitedDate(e.value);
+            setVisitedDate(e.label);
           }}
         />
       </div>

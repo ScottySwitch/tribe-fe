@@ -205,7 +205,6 @@ export const monthOfTwoYearsOptions = () => {
     label: moment(item).format("MMMM YYYY"),
     value: item,
   }));
-
   return monthsOfTwoYearsOptions;
 };
 

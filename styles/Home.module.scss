@@ -420,7 +420,7 @@
   }
 }
 
-@media screen and (max-width: 370px) {
+@media screen and (max-width: $small-mobile) {
   .collection_banner {
     .collection_context_container {
       text-shadow: 2px 2px 3px #6a616152;
