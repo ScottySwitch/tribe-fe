@@ -288,7 +288,7 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
               size="small"
               width={270}
               type="submit"
-              disabled={!(!isEdit && isValid && selectCategoryLink)}
+              disabled={!(isEdit || (isValid && selectCategoryLink))}
             />
           </div>
         </form>

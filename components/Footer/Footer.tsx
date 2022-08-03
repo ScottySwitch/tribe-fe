@@ -35,7 +35,7 @@ const Footer = (props: {
       },
       {
         category: "Business owners",
-        items: [{ label: "Claim yourself", value: "", href: "/claim" }],
+        items: [{ label: "Claim your listing", value: "", href: "/claim" }],
       },
       {
         category: "About",

@@ -25,6 +25,7 @@ const Verification = (props: VerificationProps) => {
       <Break />
       {listing.number_verify && (
         <Input
+          className={styles.input_verify}
           label="Verify Personal phone number"
           value={numberVerify(listing.number_verify)}
           size="large"
@@ -36,6 +37,7 @@ const Verification = (props: VerificationProps) => {
         <React.Fragment>
           <br />
           <Input
+            className={styles.input_verify}
             label="Verify Personal phone number"
             value={listing.provided}
             size="large"

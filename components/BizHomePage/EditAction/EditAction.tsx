@@ -308,7 +308,10 @@ const EditAction = (props: EditActionProps) => {
               {action.type === "phone" ? (
                 <SelectInput
                   defaultValue={{
-                    select: "+65",
+                    select: {
+                      label: "Singapore",
+                      value: "+65",
+                    },
                     input: "",
                   }}
                   id={action.label}

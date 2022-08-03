@@ -170,7 +170,10 @@ const SignupPage = () => {
           {method === LoginMethod.PHONE ? (
             <SelectInput
               defaultValue={{
-                select: "+65",
+                select: {
+                  label: "Singapore",
+                  value: "+65",
+                },
                 input: "",
               }}
               label="Phone number"

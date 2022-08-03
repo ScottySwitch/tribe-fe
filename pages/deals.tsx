@@ -110,10 +110,10 @@ const Deals = () => {
         </div>
       </SectionLayout>
       <SectionLayout>
-        <div className="flex flex-wrap gap-10">
+        <div className="flex flex-wrap justify-between sm:gap-10">
           {Array.isArray(listingsHaveDeals) &&
             listingsHaveDeals.map((item) => (
-              <div key={item?.title} className="pb-5 pt-3 pl-3">
+              <div key={item?.title} className="sm:pb-5 m:pl-3 pt-3">
                 <InforCard
                   {...formatCardItemProps(item)}
                   onClick={() =>

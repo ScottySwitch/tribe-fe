@@ -156,3 +156,9 @@
     }
   }
 }
+
+@media screen and (max-width: 400px) {
+  .input_verify {
+    width: 240px !important;
+  }
+}

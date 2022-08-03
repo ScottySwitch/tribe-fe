@@ -170,7 +170,10 @@ const LoginPage = (context) => {
           {method === LoginMethod.PHONE_NUMBER ? (
             <SelectInput
               defaultValue={{
-                select: "+65",
+                select: {
+                  label: "Singapore",
+                  value: "+65",
+                },
                 input: "",
               }}
               selectWidth="max-content"
@@ -181,6 +184,7 @@ const LoginPage = (context) => {
               options={formattedAreaCodes}
               shouldControlShowValue
               onChange={(e: any) => {
+                console.log("e", e);
                 setAreaCode(e.select);
                 setPhoneNumber(removeZeroInPhoneNumber(e));
               }}

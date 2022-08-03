@@ -117,6 +117,7 @@
   .section_layout {
     .container {
       width: 100%;
+      padding: 0 5px;
       .children {
         justify-content: space-around;
       }
