@@ -415,7 +415,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
           <div className={styles.header}>Enter phone number</div>
           <SelectInput
             defaultValue={{
-              select: "+65",
+              select: {
+                label: "Singapore",
+                value: "+65",
+              },
               input: "",
             }}
             width="100%"

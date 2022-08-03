@@ -1125,7 +1125,7 @@ export const reportReasons = [
   },
   {
     label: "Other",
-    value: "Your reason",
+    value: "",
   },
 ];
 

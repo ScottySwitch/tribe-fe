@@ -107,7 +107,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
               <Select
                 required
                 label="Country"
-                placeholder="Singapore"
+                placeholder="Please select your country"
                 options={locations}
                 value={getValues("country")}
                 onChange={(e) => {
@@ -147,7 +147,10 @@ const AddListingPageTwo = (props: AddListingProps) => {
         <Question show question="Contact">
           <SelectInput
             defaultValue={{
-              select: "+65",
+              select: {
+                label: "Singapore",
+                value: "+65",
+              },
               input: "",
             }}
             required

@@ -268,7 +268,12 @@ export const Album = (props: AlbumProps) => {
               width={100}
               onClick={handleCloseReportModal}
             />
-            <Button text="Submit" width={150} onClick={onSubmit} />
+            <Button
+              text="Submit"
+              width={150}
+              onClick={onSubmit}
+              disabled={!(reason && reason !== "default")}
+            />
           </div>
         </div>
       </Modal>

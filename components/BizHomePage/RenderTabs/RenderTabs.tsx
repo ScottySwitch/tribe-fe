@@ -27,11 +27,11 @@ import { UserInforContext } from "Context/UserInforContext";
 const initSelectedTab = (category) => {
   switch (category) {
     case Categories.BUY:
-      return { itemType: ListingTabs.PRODUCT, tabList: productTabList };
+      return { itemType: ListingTabs.DEAL, tabList: productTabList };
     case Categories.EAT:
-      return { itemType: ListingTabs.DISH, tabList: eatTabList };
+      return { itemType: ListingTabs.DEAL, tabList: eatTabList };
     default:
-      return { itemType: ListingTabs.SERVICE, tabList: serviceTabList };
+      return { itemType: ListingTabs.DEAL, tabList: serviceTabList };
   }
 };
 
@@ -149,6 +149,7 @@ const TabContent = ({
               style={{ width: isDeal ? "100%" : "" }}
             >
               <CardItem
+                className={styles.small_infor_card}
                 onClick={() => handleOpenDetailModal(item)}
                 onCardClick={() => handleOpenDetailModal(item)}
                 {...formatCardItemProps(item)}
@@ -299,8 +300,6 @@ const RenderTabs = (props: {
       );
       break;
   }
-
-  console.log("selectedTab", selectedTab);
 
   return (
     <div className="w-full">
