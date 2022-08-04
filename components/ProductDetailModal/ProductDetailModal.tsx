@@ -18,6 +18,7 @@ export interface IProduct {
   price?: string | number;
   priceSale?: string | number;
   discount?: string | number;
+  klookUrl?: string;
   description?: string;
   type: "paid" | "klook" | "free" | "";
 }
@@ -31,6 +32,7 @@ interface ProductDetailsModalProps extends ModalProps {
 
 const ProductDetailModal = (props: ProductDetailsModalProps) => {
   const { data, visible, onClose, onShare, onKlook, onBookNow } = props;
+  console.log("data", props.data);
   const [showShareModal, setShowShareModal] = useState(false);
   const router = useRouter();
   const { asPath } = router;
@@ -102,22 +104,22 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
               </ScrollingBox>
             )}
             <div className={styles.call_to_action}>
-              {data?.type && data?.type !== "free" && (
-                <Button
-                  text="Book on KLOOK"
-                  backgroundColor="#FF5B02"
-                  className="text-sm"
-                  onClick={onKlook}
-                />
-              )}
-              {data?.type === "paid" && (
-                <Button
-                  text="Book now"
-                  backgroundColor="#E60112"
-                  className="text-sm"
-                  onClick={onBookNow}
-                />
-              )}
+              {/* {data?.type && data?.type !== "free" && ( */}
+              <Button
+                text="Book on KLOOK"
+                backgroundColor="#FF5B02"
+                className="text-sm"
+                onClick={() => window.open(data.klookUrl, "_blank")?.focus()}
+              />
+              {/* )} */}
+              {/* {data?.type === "paid" && ( */}
+              <Button
+                text="Book now"
+                backgroundColor="#E60112"
+                className="text-sm"
+                onClick={onBookNow}
+              />
+              {/* )} */}
             </div>
           </div>
         </div>
