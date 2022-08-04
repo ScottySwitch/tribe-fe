@@ -44,11 +44,13 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
     onShare?.();
   };
 
-  const calcPrice = data.discount
-    ? (_.toNumber(data.price) * (_.toNumber(data.discount) / 100 + 1)).toFixed(
-        2
-      )
-    : null;
+  const calcPrice =
+    data.discount && data.price
+      ? (
+          _.toNumber(data.price) *
+          (_.toNumber(data.discount) / 100 + 1)
+        ).toFixed(2)
+      : null;
 
   return (
     <React.Fragment>
