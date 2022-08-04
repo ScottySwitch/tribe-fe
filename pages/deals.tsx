@@ -53,7 +53,6 @@ const Deals = () => {
         hasDeals: true,
         page: pagination.page,
       });
-      console.log(response);
       const mappedData = formatBizlistingArray(get(response, "data.data"));
       setPagination({
         ...pagination,
@@ -73,6 +72,21 @@ const Deals = () => {
       </SectionLayout>
     );
   }
+
+  const handleHref = (item: any) => {
+    const url = `/${getListingUrl(
+      get(item, "categories[0]"),
+      get(item, "categoryLinks[0].attributes.value"),
+      item.slug
+    )}`;
+    router.push(
+      {
+        pathname: url,
+        query: { referrer: "deals" },
+      },
+      url
+    );
+  };
 
   return (
     <div>
@@ -116,15 +130,7 @@ const Deals = () => {
               <div key={item?.title} className="sm:pb-5 m:pl-3 pt-3">
                 <InforCard
                   {...formatCardItemProps(item)}
-                  onClick={() =>
-                    router.push(
-                      `/${getListingUrl(
-                        get(item, "categories[0]"),
-                        get(item, "categoryLinks[0].attributes.value"),
-                        item.slug
-                      )}`
-                    )
-                  }
+                  onClick={() => handleHref(item)}
                 />
               </div>
             ))}

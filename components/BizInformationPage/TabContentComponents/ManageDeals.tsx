@@ -312,7 +312,6 @@ const ManageDeals = (props: ManageDealProps) => {
           dealList={[selectedDeal]}
           onCancel={() => setScreen(ManageDealsScreens.LIST)}
           onSubmit={(e) => {
-            console.log("e", e);
             setScreen(ManageDealsScreens.LIST);
             submitDeal(e);
           }}

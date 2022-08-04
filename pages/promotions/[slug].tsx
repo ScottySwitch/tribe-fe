@@ -326,11 +326,11 @@ const PromotionsPage = () => {
         onFavourite={() => handleFavourite()}
       />
 
-      <ProductDetailsModal
+      {/* <ProductDetailsModal
         visible={showModalProductDetails}
         data={dummyProductDetails}
         onClose={() => setShowModalProductDetails(false)}
-      />
+      /> */}
       <AuthPopup
         onClose={() => setShowAuthPopup(false)}
         visible={showAuthPopup}

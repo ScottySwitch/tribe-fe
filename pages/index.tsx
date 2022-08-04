@@ -88,7 +88,6 @@ const Home: NextPage = (props: any) => {
       const data = await BizListingApi.getAllBizlitingPinnedByCategory(
         location
       );
-      console.log("data", data);
       const buyListingArray = formatListingArray(get(data, "data.data[0]"));
       const seeListingArray = formatListingArray(get(data, "data.data[1]"));
       const eatListingArray = formatListingArray(get(data, "data.data[2]"));
