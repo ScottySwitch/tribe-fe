@@ -238,7 +238,6 @@ const ProductListing = (props: ProductListingProps) => {
           placeholders={getAddItemsFields(Categories.BUY).placeholder}
           onCancel={() => setScreen(ProductListingScreens.LIST)}
           onSubmit={(e) => {
-            console.log(e);
             setScreen(ProductListingScreens.LIST);
             submitProduct(e);
           }}

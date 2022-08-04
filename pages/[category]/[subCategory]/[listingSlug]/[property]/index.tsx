@@ -16,6 +16,7 @@ import {
   calcRateNumber,
   censoredPhoneNumber,
   formatCardItemProps,
+  isPaidUser,
 } from "utils";
 
 import styles from "styles/Property.module.scss";
@@ -97,11 +98,10 @@ const Properties = (context) => {
       if (get(listingDetail, "categories[0].slug") === CategoryText.EAT) {
         setIsEatListing(true);
       }
-      const bizInvoice = listingDetail.biz_invoices || [];
       const rawPhoneNumber = listingDetail.phone_number;
       const defaultPhone = censoredPhoneNumber(rawPhoneNumber);
-      if (bizInvoice.length > 0) {
-        setIsPaid(true);
+      if (isPaidUser(listingDetail.expiration_date)) {
+        setIsPaid(isPaidUser(listingDetail.expiration_date));
         setPhoneNumber(rawPhoneNumber);
       } else {
         setPhoneNumber(defaultPhone);
@@ -228,6 +228,7 @@ const Properties = (context) => {
         <TopSearches />
       </SectionLayout>
       <DetailModal
+        isPaid={isPaid}
         visible={showDetailModal}
         data={selectedItem}
         onClose={() => setShowDetailModal(false)}

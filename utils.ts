@@ -38,6 +38,7 @@ export const formatCardItemProps = (item) => ({
     get(item, "attributes.startDate") ||
     (item.startDate && moment(item.startDate).format("YYYY/MM/DD")) ||
     (item.start_date && moment(item.start_date).format("YYYY/MM/DD")),
+  images: get(item, "attributes.images") || item.images,
   imgUrl:
     item.imgUrl ||
     get(item, "images.[0]") ||
@@ -48,6 +49,8 @@ export const formatCardItemProps = (item) => ({
     get(item, "attributes.discount_unit") ||
     item.discountUnit ||
     item.discount_unit,
+  klookUrl: get(item, "attributes.klook_url") || item.klook_url || "",
+  websiteUrl: get(item, "attributes.website_url") || item.website_url || "",
   termsConditions:
     get(item, "attributes.terms_conditions") ||
     item.termsConditions ||
@@ -229,7 +232,6 @@ export const removeZeroInPhoneNumber = (e) => {
   } else {
     phoneNumber = e?.select?.value + e?.input;
   }
-  console.log("phone string", phoneNumber);
   return phoneNumber;
 };
 

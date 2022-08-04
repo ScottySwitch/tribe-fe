@@ -285,7 +285,6 @@ const SubCategoryPage = (context) => {
       <SectionLayout show={isArray(listings)}>
         <div className="flex flex-wrap gap-5 sm:gap-2 lg:gap-8">
           {listings.map((item) => {
-            console.log("item", item);
             return (
               <div key={item.title} className="pb-5 pt-3">
                 <InforCard

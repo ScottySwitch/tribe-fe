@@ -289,9 +289,9 @@ const AddListing = () => {
         <div className="px-[30px] gap-6 flex flex-col">
           {previewInfo.map((row) => {
             return (
-              <div key={row.question} className="flex gap-20">
-                <div className="flex flex-wrap w-3/5">{row.question}</div>
-                <div className="w-2/5">
+              <div key={row.question} className="flex gap-10 sm:gap-20">
+                <div className="flex flex-wrap w-1/5 ">{row.question}</div>
+                <div className="w-4/5 sm:w-2/5">
                   <PreviewValue
                     valueKey={row.valueKey}
                     value={get(formData, row.valueKey)}

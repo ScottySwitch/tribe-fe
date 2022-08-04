@@ -28,7 +28,7 @@ export interface InforCardProps {
   validUntil?: any;
   isFavourited?: boolean;
   onFavouritedClick?: () => void;
-  onClick?: () => void;
+  onClick?: (item?: any) => void;
 }
 
 const InforCard = (props: InforCardProps) => {

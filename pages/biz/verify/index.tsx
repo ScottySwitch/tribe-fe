@@ -288,7 +288,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
         })
         .then((res) => {
           const dataListing = res.data.data[0];
-          console.log("dataListing", dataListing);
           router.push(
             `/${getListingUrl(
               get(dataListing, "attributes.categories.data[0].attributes.name"),
@@ -386,12 +385,10 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
 
   const handleUploadFrontImagesIdentity = useCallback((srcImages) => {
     setFrontImageIdentity(srcImages);
-    console.log("srcImages", srcImages);
   }, []);
 
   const handleUploadBackImagesIdentity = useCallback((srcImages) => {
     setBackImageIdentity(srcImages);
-    console.log("srcImages", srcImages);
   }, []);
 
   const requireOTP = async () => {
@@ -496,7 +493,6 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
               className="mt-3"
               placeholder="Driving Licence"
               onChange={(e) => {
-                console.log(e);
                 setType(e);
               }}
             />

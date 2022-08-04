@@ -32,3 +32,10 @@
     font-weight: $font-light;
   }
 }
+
+@media screen and (max-width: $small-tablet){
+  .open_hours_container {
+    gap: unset;
+    justify-content: space-between;
+  }
+}

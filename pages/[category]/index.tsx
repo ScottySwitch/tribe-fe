@@ -291,7 +291,6 @@ const Category = (props: any) => {
                 <InforCard
                   {...formatCardItemProps(card)}
                   onClick={() => {
-                    console.log("sss", card);
                     router.push(
                       `/${getListingUrl(
                         get(card, "categories[0]"),
@@ -427,7 +426,6 @@ const Category = (props: any) => {
 //   });
 //   const dataCategoryLinks =
 //     await CategoryLinkApi.getCategoryLinksByCategorySlug(category);
-//   console.log("dataCategoryLink", dataCategoryLinks.data.data);
 //   // const dataCategoryArticles = await ArticleApi.getArticlesByCategoryId(categoryId);
 //   const rawListingExclusiveDealAray = get(dataExclusiveDeal, "data.data");
 //   const rawListBanners = get(dataBanners, "data.data");

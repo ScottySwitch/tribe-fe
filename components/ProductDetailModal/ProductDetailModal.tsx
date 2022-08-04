@@ -10,6 +10,7 @@ import Album from "components/Album/Album";
 
 import styles from "./ProductDetailModal.module.scss";
 import { get } from "lodash";
+import _ from "lodash";
 
 export interface IProduct {
   id: number;
@@ -18,6 +19,8 @@ export interface IProduct {
   price?: string | number;
   priceSale?: string | number;
   discount?: string | number;
+  klookUrl?: string;
+  websiteUrl?: string;
   description?: string;
   type: "paid" | "klook" | "free" | "";
 }
@@ -27,10 +30,11 @@ interface ProductDetailsModalProps extends ModalProps {
   onShare?: () => void;
   onKlook?: () => void;
   onBookNow?: () => void;
+  isPaid?: boolean;
 }
 
 const ProductDetailModal = (props: ProductDetailsModalProps) => {
-  const { data, visible, onClose, onShare, onKlook, onBookNow } = props;
+  const { data, visible, isPaid, onClose, onShare, onKlook, onBookNow } = props;
   const [showShareModal, setShowShareModal] = useState(false);
   const router = useRouter();
   const { asPath } = router;
@@ -39,6 +43,14 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
     setShowShareModal(true);
     onShare?.();
   };
+
+  const calcPrice =
+    data.discount && data.price
+      ? (
+          _.toNumber(data.price) *
+          (_.toNumber(data.discount) / 100 + 1)
+        ).toFixed(2)
+      : null;
 
   return (
     <React.Fragment>
@@ -60,11 +72,11 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
             <h2 className={styles.title}>{data.name}</h2>
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex items-center gap-[16px]">
-                {data.priceSale ? (
+                {calcPrice ? (
                   <div>
                     <div className={styles.price_sale}>
                       <span>$</span>
-                      <span>{data.priceSale}</span>
+                      <span>{calcPrice}</span>
                     </div>
                     <div className={styles.price}>
                       <span>$</span>
@@ -102,20 +114,22 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
               </ScrollingBox>
             )}
             <div className={styles.call_to_action}>
-              {data?.type && data?.type !== "free" && (
+              {data.klookUrl && (
                 <Button
                   text="Book on KLOOK"
                   backgroundColor="#FF5B02"
                   className="text-sm"
-                  onClick={onKlook}
+                  onClick={() => window.open(data.klookUrl, "_blank")?.focus()}
                 />
               )}
-              {data?.type === "paid" && (
+              {(data?.type === "paid" || isPaid) && data?.websiteUrl && (
                 <Button
                   text="Book now"
                   backgroundColor="#E60112"
                   className="text-sm"
-                  onClick={onBookNow}
+                  onClick={() =>
+                    window.open(data.websiteUrl, "_blank")?.focus()
+                  }
                 />
               )}
             </div>

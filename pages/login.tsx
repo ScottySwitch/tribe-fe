@@ -184,7 +184,6 @@ const LoginPage = (context) => {
               options={formattedAreaCodes}
               shouldControlShowValue
               onChange={(e: any) => {
-                console.log("e", e);
                 setAreaCode(e.select);
                 setPhoneNumber(removeZeroInPhoneNumber(e));
               }}
