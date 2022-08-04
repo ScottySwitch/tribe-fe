@@ -173,6 +173,7 @@ const TabContent = ({
         See all
       </div>
       <DetailModal
+        isPaid={isPaid}
         visible={showDetailModal}
         data={selectedItem}
         onClose={() => setShowDetailModal(false)}
