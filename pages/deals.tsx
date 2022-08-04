@@ -82,7 +82,7 @@ const Deals = () => {
     router.push(
       {
         pathname: url,
-        query: { fromDeals: true },
+        query: { isFromDeals: true },
       },
       url
     );

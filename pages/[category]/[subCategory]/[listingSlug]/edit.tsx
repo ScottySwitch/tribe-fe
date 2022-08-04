@@ -69,7 +69,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const router = useRouter();
   const { query } = router;
-  const { listingSlug, fromDeals } = query;
+  const { listingSlug, isFromDeals } = query;
 
   const [showShareModal, setShowShareModal] = useState(false);
   const [category, setCategory] = useState(Categories.EAT);
@@ -111,7 +111,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   useEffect(() => {
     const element = document.querySelector("#renderTabs");
-    if (element && fromDeals) {
+    if (element && isFromDeals) {
       element.scrollIntoView({
         behavior: "smooth",
         block: "center",
