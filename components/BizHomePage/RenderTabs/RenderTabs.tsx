@@ -187,6 +187,7 @@ const TabContent = ({
 };
 
 const RenderTabs = (props: {
+  id?: string;
   isPaid?: boolean;
   isViewPage?: boolean;
   itemList: any[];
@@ -197,6 +198,7 @@ const RenderTabs = (props: {
   onDelete: (e: { [key: string]: any }) => void;
 }) => {
   const {
+    id,
     isPaid,
     isViewPage,
     itemList,
@@ -303,7 +305,7 @@ const RenderTabs = (props: {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full" id={id}>
       <div className="flex gap-5 items-center justify-between">
         <div className="flex gap-5 items-center">
           {initSelectedTab(category).tabList.map((tab) => {

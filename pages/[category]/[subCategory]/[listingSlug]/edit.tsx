@@ -69,7 +69,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
 
   const router = useRouter();
   const { query } = router;
-  const { listingSlug } = query;
+  const { listingSlug, fromDeals } = query;
 
   const [showShareModal, setShowShareModal] = useState(false);
   const [category, setCategory] = useState(Categories.EAT);
@@ -110,6 +110,13 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const [submitResult, setSubmitResult] = useState<boolean>(false);
 
   useEffect(() => {
+    const element = document.querySelector("#renderTabs");
+    if (element && fromDeals) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
     if (get(bizListing, "categories[0].slug") === CategoryText.EAT) {
       switch (locale) {
         case "sg":
@@ -552,6 +559,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             <Break />
             <>
               <RenderTabs
+                id="renderTabs"
                 key={category}
                 isViewPage={isViewPage}
                 isPaid={isPaid}

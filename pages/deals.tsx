@@ -73,6 +73,21 @@ const Deals = () => {
     );
   }
 
+  const handleHref = (item: any) => {
+    const url = `/${getListingUrl(
+      get(item, "categories[0]"),
+      get(item, "categoryLinks[0].attributes.value"),
+      item.slug
+    )}`;
+    router.push(
+      {
+        pathname: url,
+        query: { fromDeals: true },
+      },
+      url
+    );
+  };
+
   return (
     <div>
       <SectionLayout className="py-0 pb-3">
@@ -115,15 +130,7 @@ const Deals = () => {
               <div key={item?.title} className="sm:pb-5 m:pl-3 pt-3">
                 <InforCard
                   {...formatCardItemProps(item)}
-                  onClick={() =>
-                    router.push(
-                      `/${getListingUrl(
-                        get(item, "categories[0]"),
-                        get(item, "categoryLinks[0].attributes.value"),
-                        item.slug
-                      )}`
-                    )
-                  }
+                  onClick={() => handleHref(item)}
                 />
               </div>
             ))}
