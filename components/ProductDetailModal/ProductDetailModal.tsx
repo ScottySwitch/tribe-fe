@@ -44,6 +44,12 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
     onShare?.();
   };
 
+  const calcPrice = data.discount
+    ? (_.toNumber(data.price) * (_.toNumber(data.discount) / 100 + 1)).toFixed(
+        2
+      )
+    : null;
+
   return (
     <React.Fragment>
       <Modal visible={visible} width="100%" maxWidth={1328} onClose={onClose}>
@@ -64,16 +70,11 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
             <h2 className={styles.title}>{data.name}</h2>
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex items-center gap-[16px]">
-                {data.discount ? (
+                {calcPrice ? (
                   <div>
                     <div className={styles.price_sale}>
                       <span>$</span>
-                      <span>
-                        {(
-                          _.toNumber(data.price) *
-                          (_.toNumber(data.discount) / 100 + 1)
-                        ).toFixed(2)}
-                      </span>
+                      <span>{calcPrice}</span>
                     </div>
                     <div className={styles.price}>
                       <span>$</span>

@@ -82,7 +82,7 @@ const Deals = () => {
     router.push(
       {
         pathname: url,
-        query: { isFromDeals: true },
+        query: { referrer: "deals" },
       },
       url
     );
