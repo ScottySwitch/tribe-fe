@@ -164,7 +164,6 @@ const AddListingPageTwo = (props: AddListingProps) => {
               formattedAreaCodes
             )}
             onChange={(e) => {
-              console.log("contact", e);
               setValue("contact", removeZeroInPhoneNumber(e));
             }}
           />

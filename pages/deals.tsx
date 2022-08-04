@@ -53,7 +53,6 @@ const Deals = () => {
         hasDeals: true,
         page: pagination.page,
       });
-      console.log(response);
       const mappedData = formatBizlistingArray(get(response, "data.data"));
       setPagination({
         ...pagination,

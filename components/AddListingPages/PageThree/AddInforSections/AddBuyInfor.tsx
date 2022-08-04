@@ -305,7 +305,6 @@ const AddBuyInfor = (props: AddBuyInforProps) => {
           onCancel={() => setShowOpenHoursModal(false)}
           onSubmit={(openHours) => {
             setShowOpenHoursModal(false);
-            console.log(openHours);
             setValue("openHours", openHours);
           }}
         />

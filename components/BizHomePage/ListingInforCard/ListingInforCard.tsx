@@ -378,7 +378,6 @@ const ListingInforCard = (props: ListingInforCardProps) => {
             options={currencyOptions}
             value={newPriceRange?.currency}
             onChange={(e) => {
-              console.log("e", e);
               setNewPriceRange({
                 ...newPriceRange,
                 currency: e.value,

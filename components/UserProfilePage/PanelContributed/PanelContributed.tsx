@@ -39,7 +39,6 @@ const ListCard = (props: { data: ListCardProps[] }) => {
         const reviewListing = get(item, "review") || {};
         const bizListing =
           get(item, "biz_listing") || get(item, "biz_listing_revision") || {};
-        console.log("bizListing", bizListing);
         return (
           <UserReviewCard
             key={index}
