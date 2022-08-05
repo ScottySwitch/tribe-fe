@@ -128,6 +128,21 @@ const Home: NextPage = (props: any) => {
   //   setLoading(false);
   // };
 
+  const handleHref = (item: any) => {
+    const url = `/${getListingUrl(
+      get(item, "categories[0]"),
+      get(item, "categoryLinks[0].attributes.value"),
+      item.slug
+    )}`;
+    router.push(
+      {
+        pathname: url,
+        query: { referrer: "deals" },
+      },
+      url
+    );
+  };
+
   if (loading) {
     return (
       <SectionLayout childrenClassName="flex justify-center">
@@ -189,15 +204,7 @@ const Home: NextPage = (props: any) => {
               <div key={card.name} className="pb-5 pt-3 pl-3">
                 <InforCard
                   {...formatCardItemProps(card)}
-                  onClick={() =>
-                    router.push(
-                      `/${getListingUrl(
-                        get(card, "categories[0]"),
-                        get(card, "categoryLinks[0]"),
-                        card.slug
-                      )}`
-                    )
-                  }
+                  onClick={() => handleHref(card)}
                 />
               </div>
             ))}
