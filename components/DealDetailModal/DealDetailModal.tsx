@@ -9,6 +9,7 @@ import get from "lodash/get";
 import DealFavouriteApi from "services/user-deal-favourite";
 import ShareModal from "components/ShareModal/ShareModal";
 import FavouriteDealApi from "services/user-deal-favourite";
+import { useRouter } from "next/router";
 import moment from "moment";
 export interface IDealsDetails {
   name: string;
@@ -25,6 +26,8 @@ interface DealDetailModalProps extends ModalProps {
 
 const DealDetailModal = (props: DealDetailModalProps) => {
   const { data, visible, onClose, onShare, onFavourite } = props;
+  const router = useRouter();
+  const { asPath } = router;
   const [isFavourite, setIsFavourite] = useState<boolean>(false);
   const [showShareModal, setShowShareModal] = useState(false);
   useEffect(() => {
@@ -145,7 +148,7 @@ const DealDetailModal = (props: DealDetailModalProps) => {
         </div>
       </Modal>
       <ShareModal
-        url=""
+        url={asPath}
         onClose={() => setShowShareModal(false)}
         visible={showShareModal}
       />

@@ -68,7 +68,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   );
 
   const router = useRouter();
-  const { query } = router;
+  const { query, asPath } = router;
   const { listingSlug, referrer } = query;
 
   const [showShareModal, setShowShareModal] = useState(false);
@@ -652,7 +652,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         />
       </SectionLayout>
       <ShareModal
-        url=""
+        url={asPath}
         onClose={() => setShowShareModal(false)}
         visible={showShareModal}
       />

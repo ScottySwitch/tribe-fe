@@ -203,18 +203,18 @@ const ClaimPage = () => {
           </div>
         </div>
       </SectionLayout>
-      <SectionLayout backgroundColor childrenClassName="overflow-hidden">
+      {/* <SectionLayout backgroundColor childrenClassName="overflow-hidden">
         <div className={styles.why_tribes}>
           <h1 className={styles.why_tribes_title}>Why Tribes?</h1>
           <div className={styles.why_tribes_container}>
             <div className={styles.why_tribes_scrollbox}>
-              {whyTribes.map((card, index) => (
+              {whyTribes.map((card, index) =>s (
                 <InforCard key={index} {...formatCardItemProps(card)} />
               ))}
             </div>
           </div>
         </div>
-      </SectionLayout>
+      </SectionLayout> */}
       <SectionLayout
         className={styles.top_search}
         containerClassName={styles.top_search_container}
