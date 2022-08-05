@@ -293,7 +293,7 @@ const Category = (props: any) => {
                   onClick={() => {
                     router.push(
                       `/${getListingUrl(
-                        get(card, "categories[0]"),
+                        get(card, "categories[0].attributes.name"),
                         get(card, "categoryLinks[0].attributes.value"),
                         card.slug
                       )}`

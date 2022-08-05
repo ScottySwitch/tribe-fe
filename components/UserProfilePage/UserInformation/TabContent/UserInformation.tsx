@@ -209,6 +209,7 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <Input
+              required
               label="First name"
               size="small"
               register={register("first_name")}
