@@ -25,6 +25,7 @@ interface ShareModalProps {
 
 const ShareModal = (props: ShareModalProps) => {
   const { onClose, visible, url } = props;
+  console.log("url", url?.slice(1));
 
   const handleCopyUrl = () =>
     navigator.clipboard
@@ -49,34 +50,34 @@ const ShareModal = (props: ShareModalProps) => {
       <div className={styles.share_container}>
         <FacebookShareButton
           className={styles.social}
-          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url}`}
+          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url?.slice(1)}`}
         >
           <FacebookIcon borderRadius={100} size={50} />
           Facebook
         </FacebookShareButton>
         <LineShareButton
-          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url}`}
+          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url?.slice(1)}`}
           className={styles.social}
         >
           <LineIcon borderRadius={100} size={50} />
           Line
         </LineShareButton>
         <TelegramShareButton
-          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url}`}
+          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url?.slice(1)}`}
           className={styles.social}
         >
           <TelegramIcon borderRadius={100} size={50} />
           Telegram
         </TelegramShareButton>
         <TwitterShareButton
-          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url}`}
+          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url?.slice(1)}`}
           className={styles.social}
         >
           <TwitterIcon borderRadius={100} size={50} />
           Twitter
         </TwitterShareButton>
         <WhatsappShareButton
-          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url}`}
+          url={`${process.env.NEXT_PUBLIC_DOMAIN}${url?.slice(1)}`}
           className={styles.social}
         >
           <WhatsappIcon borderRadius={100} size={50} />
@@ -94,4 +95,4 @@ const ShareModal = (props: ShareModalProps) => {
   );
 };
 
-export default ShareModal
+export default ShareModal;
