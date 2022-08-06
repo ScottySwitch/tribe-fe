@@ -329,7 +329,9 @@ const AddListing = () => {
           <div>
             <strong>Thank you</strong>
           </div>
-          <p>Thank you for contributing to our listings!</p>
+          <p>
+            Your review is currently under review and will be up in no time!
+          </p>
           <Button
             className="mt-5"
             text="Continue"

@@ -68,7 +68,7 @@ const Menu = (props: MenuMenuProps) => {
     // { icon: "like-color-2", label: "Referral code" },
     {
       icon: "business",
-      label: "Tribes for Businesses",
+      label: "Claim your listing",
       onClick: () => router.push("/claim"),
     },
     {
