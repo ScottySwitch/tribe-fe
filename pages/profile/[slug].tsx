@@ -123,6 +123,7 @@ const ProfilePage = (context) => {
   });
 
   useEffect(() => {
+    setSelectedTab(slug);
     const getUserInfor = () =>
       ContributeApi.getUserContribute()
         .then(async (res) => {
@@ -148,7 +149,7 @@ const ProfilePage = (context) => {
     } else {
       getUserInfor();
     }
-  }, [router]);
+  }, [router, slug]);
 
   const TabList: ITab[] = [
     {
@@ -197,6 +198,7 @@ const ProfilePage = (context) => {
         />
         <GroupHeadingTwo contributions={contributionNumber || "0"} points={0} />
         <TabsHorizontal
+          key={selectedTab}
           selectedTab={selectedTab}
           tablist={TabList}
           type="secondary-no-outline"
