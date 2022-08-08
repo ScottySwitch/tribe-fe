@@ -116,20 +116,16 @@ const PromotionsPage = () => {
       <SectionLayout
         className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}
       >
-        <div>
+        {get(promotion, "main_banner.data.attributes.url") && (
           <Image
-            src={
-              get(promotion, "main_banner.data.attributes.url") ||
-              "https://picsum.photos/1188/400"
-            }
+            src={get(promotion, "main_banner.data.attributes.url")}
             width={1188}
             height={400}
             layout="responsive"
             alt="banner"
           />
-        </div>
+        )}
       </SectionLayout>
-
       {/* Start FEATURED VOUCHERS */}
       {Array.isArray(get(promotion, "deals.data")) &&
         get(promotion, "deals.data").length > 0 && (
