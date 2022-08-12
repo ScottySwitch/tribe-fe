@@ -46,7 +46,13 @@ const Home: NextPage = (props: any) => {
     listCategories,
   } = props;
 
-  const [title, setTitle] = useState("");
+  const [metaTitle, setMetaTitle] = useState(
+    "Get Exclusive Deals For Muslim Friendly Products | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Register. Don't have a Tribes account yet? Join now to gain access to exclusive deals from Muslim Friendly brands around the world!"
+  );
+
   const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState<number>(16);
   // const [listingForYou, setListingForYou] = useState<Ilisting[]>([]);
@@ -65,17 +71,17 @@ const Home: NextPage = (props: any) => {
   useEffect(() => {
     switch (locale) {
       case "sg":
-        setTitle(
+        setMetaTitle(
           "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
         );
         break;
       case "id":
-        setTitle(
+        setMetaTitle(
           "Tribes: Dapatkan Informasi Travelling Seputar Tempat Makan Halal dan Penginapan"
         );
         break;
       default:
-        setTitle(
+        setMetaTitle(
           "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
         );
         break;
@@ -154,7 +160,8 @@ const Home: NextPage = (props: any) => {
   return (
     <div>
       <Head>
-        <title>{title}</title>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
       </Head>
       {isArray(listBanners) && (
         <SectionLayout>

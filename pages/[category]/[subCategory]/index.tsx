@@ -32,6 +32,8 @@ import useGetCountry from "hooks/useGetCountry";
 import Select from "components/Select/Select";
 
 import styles from "styles/Home.module.scss";
+import { CategoryText } from "enums";
+import Head from "next/head";
 
 interface IType {
   [key: string]: any;
@@ -42,8 +44,16 @@ const SubCategoryPage = (context) => {
   const { category, categoryLink } = context;
 
   const router = useRouter();
+  const { locale } = useRouter();
   const { user } = useContext(UserInforContext);
   const { location } = user;
+
+  const [metaTitle, setMetaTitle] = useState(
+    "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Explore and discover Muslim Friendly eateries"
+  );
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
   const defaultFilterOptions: IFilter = {
@@ -68,6 +78,35 @@ const SubCategoryPage = (context) => {
   const [filter, setFilter] = useState<IFilter | {} | any>(
     defaultFilterOptions
   );
+
+  useEffect(() => {
+    switch (category) {
+      case CategoryText.EAT:
+        setMetaTitle(`Browse ${categoryLink} | Tribes by HHWT`);
+        setMetaDescription("Explore and discover Muslim Friendly eateries");
+        break;
+      case CategoryText.BUY:
+        setMetaTitle(`Browse ${categoryLink} | Tribes by HHWT`);
+        setMetaDescription("Explore and discover Muslim Friendly products");
+        break;
+      case CategoryText.TRANSPORT:
+        setMetaTitle(`Browse ${categoryLink} | Tribes by HHWT`);
+        setMetaDescription(
+          "Explore and discover flights, ferries, buses and other modes of transport!"
+        );
+        break;
+      case CategoryText.STAY:
+        setMetaTitle(`Browse ${categoryLink} | Tribes by HHWT`);
+        setMetaDescription("Explore and discover the best places to stay!");
+        break;
+      case CategoryText.SEE_AND_DO:
+        setMetaTitle(`Browse ${categoryLink} | Tribes by HHWT`);
+        setMetaDescription(
+          "Explore and discover exciting activities and sight-seeing spots!"
+        );
+        break;
+    }
+  }, [locale, category, categoryLink]);
 
   useEffect(() => {
     const getData = async () => {
@@ -213,6 +252,10 @@ const SubCategoryPage = (context) => {
 
   return (
     <div>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <SectionLayout className="pt-0">
         <div className={styles.breadcrumbs}>
           <span onClick={() => router.push(`/`)}>Home</span>{" "}

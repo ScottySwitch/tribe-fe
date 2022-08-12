@@ -16,10 +16,18 @@ import { useForm } from "react-hook-form";
 import BizListingApi from "../../../services/biz-listing";
 import BizListingRevisionApi from "services/biz-listing-revision";
 import { UserInforContext } from "Context/UserInforContext";
+import Head from "next/head";
 
 const defaultListing = listingSearchResult[0];
 
 const ClaimListing = (context) => {
+  const [metaTitle, setMetaTitle] = useState(
+    "Claim your Listing | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Own a store? Claim full control of your page by claiming it!"
+  );
+
   const { user, updateUser } = useContext(UserInforContext);
   const { firstStep } = context;
   const [listing, setListing] = useState<{ [key: string]: any }>({});
@@ -104,6 +112,10 @@ const ClaimListing = (context) => {
 
   return (
     <React.Fragment>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <SectionLayout
         title="Claim your FREE Listing"
         show={claimStep === ClaimStep.CLAIM_FREE_LISTING}

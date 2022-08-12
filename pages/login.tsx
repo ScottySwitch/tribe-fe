@@ -16,6 +16,7 @@ import { formattedAreaCodes } from "constant";
 import SelectInput from "components/SelectInput/SelectInput";
 import bizListingApi from "services/biz-listing";
 import { UserInforContext } from "Context/UserInforContext";
+import Head from "next/head";
 
 export enum LoginMethod {
   PHONE_NUMBER = "phone-number",
@@ -50,6 +51,13 @@ const LoginPage = (context) => {
 
   const router = useRouter();
   const { user, updateUser } = useContext(UserInforContext);
+
+  const [metaTitle, setMetaTitle] = useState(
+    "Login Now To Start Exploring | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Welcome to Tribes! Sign in now"
+  );
 
   useEffect(() => {
     const loginButton = document.getElementById("login-button");
@@ -144,6 +152,10 @@ const LoginPage = (context) => {
 
   return (
     <div className={styles.auth}>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <div className={styles.form_container}>
         <ModalHeader alignTitle="center">Log in</ModalHeader>
 

@@ -25,6 +25,7 @@ import CategoryLinkAPi from "services/category-link";
 import { get } from "lodash";
 import categoryLink from "services/category-link";
 import moment from "moment";
+import Head from "next/head";
 
 export enum ProfileSteps {
   STEP_ONE = "step_one",
@@ -43,6 +44,13 @@ const StepOne = ({
   const router = useRouter();
   const [uploadAvatar, setUploadAvatar] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [metaTitle, setMetaTitle] = useState(
+    "Sign Up Today To Be Part of the Community | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Register. Don't have a Tribes account yet? Join now to gain access to exclusive deals from Muslim Friendly brands around the world!"
+  );
 
   const { setValue, getValues, register, handleSubmit, watch } = useForm({
     defaultValues: {
@@ -133,6 +141,10 @@ const StepOne = ({
 
   return (
     <div>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <ModalHeader alignTitle="center">
         <div>Almost there... set up your profile</div>
       </ModalHeader>
@@ -207,6 +219,13 @@ const StepTwo = ({ show, onBackStep, onSubmit, formData }: any) => {
     { [key: string]: any }[]
   >([]);
 
+  const [metaTitle, setMetaTitle] = useState(
+    "Get Exclusive Deals For Muslim Friendly Products | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Welcome to Tribes! Enter your email address to sign in or register for a new account!"
+  );
+
   useEffect(() => {
     getCategoryLinks();
   }, []);
@@ -253,6 +272,10 @@ const StepTwo = ({ show, onBackStep, onSubmit, formData }: any) => {
 
   return (
     <div>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <ModalHeader alignTitle="left">
         <div>
           <div>👋 &nbsp; Hello {formData.name}</div>

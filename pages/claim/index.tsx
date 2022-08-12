@@ -15,6 +15,7 @@ import AuthPopup from "components/AuthPopup/AuthPopup";
 import { changeToSlugify, formatCardItemProps } from "utils";
 
 import styles from "styles/Claim.module.scss";
+import Head from "next/head";
 
 const RightColumn = (props: { listing: { [key: string]: any } }) => {
   const { listing } = props;
@@ -59,6 +60,13 @@ const RightColumn = (props: { listing: { [key: string]: any } }) => {
 };
 
 const ClaimPage = () => {
+  const [metaTitle, setMetaTitle] = useState(
+    "Claim your Listing | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Own a store? Claim full control of your page by claiming it!"
+  );
+
   const [listing, setListing] = useState<{ [key: string]: any }>();
   const [bizListing, setBizListing] = useState([]);
   const [searchKey, setSearchKey] = useState("");
@@ -129,6 +137,10 @@ const ClaimPage = () => {
   ];
   return (
     <div className={styles.claim}>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <div className="relative bg-white">
         <Image
           src={require("/public/images/default-banner.svg")}

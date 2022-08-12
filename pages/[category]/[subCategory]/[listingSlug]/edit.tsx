@@ -63,13 +63,16 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { user, updateUser } = useContext(UserInforContext);
   const { locale } = useRouter();
 
-  const [title, setTitle] = useState(
+  const [metaTitle, setMetaTitle] = useState(
     "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Explore and discover Muslim Friendly eateries"
   );
 
   const router = useRouter();
   const { query, asPath } = router;
-  const { listingSlug, referrer } = query;
+  const { categoryLink, listingSlug, referrer } = query;
 
   const [showShareModal, setShowShareModal] = useState(false);
   const [category, setCategory] = useState(Categories.EAT);
@@ -117,24 +120,48 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         block: "center",
       });
     }
-    if (get(bizListing, "categories[0].slug") === CategoryText.EAT) {
-      switch (locale) {
-        case "sg":
-          setTitle(
-            `Find Halal ${bizListing.name} and see ${bizListing.name} Menu Online | Tribes`
-          );
-          break;
-        case "id":
-          setTitle(
-            `Lihat ${bizListing.name} Halal dan cek ${bizListing.name} Menu Online | Tribes`
-          );
-          break;
-        default:
-          setTitle(
-            `Find Halal ${bizListing.name} and see ${bizListing.name} Menu Online | Tribes`
-          );
-          break;
-      }
+
+    switch (get(bizListing, "categories[0].slug")) {
+      case CategoryText.EAT:
+        switch (locale) {
+          case "sg":
+            setMetaTitle(`${bizListing.name} | Tribes by HHWT`);
+            break;
+          case "id":
+            setMetaTitle(
+              `Lihat ${bizListing.name} Halal dan cek ${bizListing.name} Menu Online | Tribes`
+            );
+            break;
+          default:
+            setMetaTitle(`${bizListing.name} | Tribes by HHWT`);
+            break;
+        }
+        setMetaDescription(
+          "Enjoy limited-time exclusive offers. Find out more today!"
+        );
+        break;
+      case CategoryText.BUY:
+        setMetaTitle(`${bizListing.name} | Tribes by HHWT`);
+        setMetaDescription(
+          "Enjoy limited-time exclusive offers. Find out more today!"
+        );
+        break;
+      case CategoryText.TRANSPORT:
+        setMetaTitle(`${bizListing.name} | Tribes by HHWT`);
+        setMetaDescription(
+          "Explore and discover flights, ferries, buses and other modes of transport!"
+        );
+        break;
+      case CategoryText.STAY:
+        setMetaTitle(`${bizListing.name} | Tribes by HHWT`);
+        setMetaDescription("Explore and discover the best places to stay!");
+        break;
+      case CategoryText.SEE_AND_DO:
+        setMetaTitle(`${bizListing.name} | Tribes by HHWT`);
+        setMetaDescription(
+          "Explore and discover exciting activities and sight-seeing spots!"
+        );
+        break;
     }
   }, [bizListing, locale]);
 
@@ -457,7 +484,8 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   return (
     <div className={styles.listing_homepage}>
       <Head>
-        <title>{title}</title>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
       </Head>
       <SectionLayout show={screen === ListingHomePageScreens.HOME}>
         <Banner
