@@ -16,6 +16,7 @@ import SelectInput from "components/SelectInput/SelectInput";
 import { formattedAreaCodes, phoneAreaCodes } from "constant";
 import { get } from "lodash";
 import { useForm } from "react-hook-form";
+import Head from "next/head";
 
 export enum LoginMethod {
   PHONE = "phone",
@@ -63,6 +64,13 @@ const SignupPage = () => {
       receivePromotions: true,
     },
   });
+
+  const [metaTitle, setMetaTitle] = useState(
+    "Sign Up Today To Be Part of the Community | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Register. Don't have a Tribes account yet? Join now to gain access to exclusive deals from Muslim Friendly brands around the world!"
+  );
 
   const onSubmit = async (form: any) => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
@@ -148,6 +156,10 @@ const SignupPage = () => {
 
   return (
     <div className={styles.auth}>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <div className={styles.form_container}>
         <ModalHeader alignTitle="center">Sign up</ModalHeader>
         <div className={styles.tabs}>

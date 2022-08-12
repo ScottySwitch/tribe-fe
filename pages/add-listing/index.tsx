@@ -22,6 +22,7 @@ import BizListingApi from "../../services/biz-listing";
 import BizListingRevisionApi from "services/biz-listing-revision";
 import ContributeApi from "services/contribute";
 import { UserInforContext } from "Context/UserInforContext";
+import Head from "next/head";
 
 export interface IAddListingForm {
   id?: number;
@@ -82,6 +83,13 @@ const AddListing = () => {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showSubmitResult, setShowSubmitResult] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [metaTitle, setMetaTitle] = useState(
+    "Create a Listing | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Know a place that's not listed? Share it with the community!"
+  );
 
   const router = useRouter();
 
@@ -232,6 +240,10 @@ const AddListing = () => {
 
   return (
     <div className={styles.add_listing}>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <AddListingPageOne
         show={pageNumber === 1}
         onUpdateFormData={handleUpdateFormData}
