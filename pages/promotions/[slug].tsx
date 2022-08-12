@@ -10,7 +10,6 @@ import PromotionCard from "components/PromotionCard/PromotionCard";
 import Image from "next/image";
 import CarouselBanner from "components/CarouselBanner/CarouselBanner";
 import SectionLayout from "components/SectionLayout/SectionLayout";
-import DividerSection from "components/DividerSection/DividerSection";
 import ScrollingBox from "components/ScrollingBox/ScrollingBox";
 import styles from "styles/Promotions.module.scss";
 import { useEffect, useState } from "react";
@@ -19,37 +18,7 @@ import get from "lodash/get";
 import { useRouter } from "next/router";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 import { calcRateNumber, getListingUrl } from "utils";
-import Link from "next/link";
-
-const dummyProductDetails: IProduct = {
-  id: 678,
-  name: "Evertop Hainanese Boneless Chicken / Evertop Hainanese Boneless Chicken Evertop Hainanese Boneless Chicken ",
-  images: [
-    "https://picsum.photos/300/301",
-    "https://picsum.photos/200/311",
-    "https://picsum.photos/200/299",
-    "https://picsum.photos/200/312",
-    "https://picsum.photos/300/301",
-    "https://picsum.photos/200/311",
-    "https://picsum.photos/201/302",
-    "https://picsum.photos/202/310",
-    "https://picsum.photos/221/302",
-    "https://picsum.photos/252/310",
-  ],
-  price: 40.35,
-  priceSale: 37.35,
-  discount: 40,
-  description: `
-    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
-    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
-    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
-    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
-    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
-    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
-    <p>Please allow us to choose one for you. We cannot guarantee a specific color. The KONG Puppy toy is customized for a growing puppy’s baby teeth, the unique, natural rubber formula is the most gentle within the KONG rubber toy line. Designed to meet the needs of a puppy’s 28-baby teeth, it helps teach appropriate chewing behavior while offering enrichment and satisfying a younger pup’s instinctual needs. Meanwhile, the erratic bounces make it ideal for those pups that just want to play.</p>
-  `,
-  type: "paid",
-};
+import DividerSection from "components/DividerSection/DividerSection";
 
 const PromotionsPage = () => {
   const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>();
@@ -83,6 +52,9 @@ const PromotionsPage = () => {
   } = useRouter();
 
   const [promotion, setPromotion] = useState<any>([]);
+  const [backgroundColor, setBackgroundColor] = useState([]);
+  const [backgroundColorBar, setBackgroundColorBar] = useState([]);
+  const [titleColor, setTitleColor] = useState([]);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   useEffect(() => {
@@ -96,6 +68,11 @@ const PromotionsPage = () => {
       setBizListings(
         get(promotionData, "[0].attributes.microsite_biz_listings")
       );
+      setBackgroundColor(get(promotionData, "[0].attributes.background_color"));
+      setBackgroundColorBar(
+        get(promotionData, "[0].attributes.background_color_bar")
+      );
+      setTitleColor(get(promotionData, "[0].attributes.title_color"));
     };
     if (slug) {
       getPromotionBySlug(slug).catch((e) => console.log(e));
@@ -111,10 +88,14 @@ const PromotionsPage = () => {
     }
   };
 
+  const sectionLayoutStyle: any = {
+    backgroundColor: backgroundColor ? backgroundColor : "#f599a0",
+  };
+
   return (
-    <div className={styles.wrapper_promotions}>
+    <div className={styles.wrapper_promotions} style={sectionLayoutStyle}>
       <SectionLayout
-        className={`${styles.section_layout_background_color} pt-0 pb-8 md:pb-12`}
+        className={`${styles.section_layout_inherit} pt-0 pb-8 md:pb-12`}
       >
         {get(promotion, "main_banner.data.attributes.url") && (
           <Image
@@ -130,9 +111,11 @@ const PromotionsPage = () => {
       {Array.isArray(get(promotion, "deals.data")) &&
         get(promotion, "deals.data").length > 0 && (
           <SectionLayout
-            className={`${styles.section_layout_background_color} pt-0 pb-10`}
+            className={`${styles.section_layout_inherit} pt-0 pb-10`}
           >
             <DividerSection
+              color={titleColor}
+              backgroundColor={backgroundColor}
               title="FEATURED VOUCHERS"
               className="mb-5 md:mb-8"
             />
@@ -166,9 +149,14 @@ const PromotionsPage = () => {
       {Array.isArray(get(promotion, "banners.data")) &&
         get(promotion, "banners.data").length > 0 && (
           <SectionLayout
-            className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}
+            className={`${styles.section_layout_inherit} pt-0 pb-12 md:pb-16`}
           >
-            <DividerSection title="BANNERS" className="mb-5 md:mb-8" />
+            <DividerSection
+              color={titleColor}
+              backgroundColor={backgroundColor}
+              title="BANNERS"
+              className="mb-5 md:mb-8"
+            />
             <CarouselBanner>
               {get(promotion, "banners.data").map((banner: any) => (
                 <Image
@@ -190,9 +178,14 @@ const PromotionsPage = () => {
       {Array.isArray(get(promotion, "hot_deals.data")) &&
         get(promotion, "hot_deals.data").length > 0 && (
           <SectionLayout
-            className={`${styles.section_layout_background_color} pt-0 pb-10`}
+            className={`${styles.section_layout_inherit} pt-0 pb-10`}
           >
-            <DividerSection title="HOT DEALS" className="mb-5 md:mb-8" />
+            <DividerSection
+              color={titleColor}
+              backgroundColor={backgroundColor}
+              title="HOT DEALS"
+              className="mb-5 md:mb-8"
+            />
             <ScrollingBox
               className={styles.scrolling_box_custom}
               maxHeight={475}
@@ -225,10 +218,12 @@ const PromotionsPage = () => {
           Array.isArray(get(bizListing, "biz_listings.data")) &&
           get(bizListing, "biz_listings.data").length > 0 && (
             <SectionLayout
-              className={`${styles.section_layout_background_color} pt-0 pb-12 md:pb-16`}
+              className={`${styles.section_layout_inherit} pt-0 pb-12 md:pb-16`}
               key={index}
             >
               <DividerSection
+                color={titleColor}
+                backgroundColor={backgroundColor}
                 title={bizListing.title}
                 className="mb-5 md:mb-8"
               />
@@ -295,9 +290,14 @@ const PromotionsPage = () => {
       {Array.isArray(get(promotion, "more_deals.data")) &&
         get(promotion, "more_deals.data").length > 0 && (
           <SectionLayout
-            className={`${styles.section_layout_background_color} pt-0 pb-10`}
+            className={`${styles.section_layout_inherit} pt-0 pb-10`}
           >
-            <DividerSection title="Shop more deals" className="mb-5 md:mb-8" />
+            <DividerSection
+              color={titleColor}
+              backgroundColor={backgroundColor}
+              title="Shop more deals"
+              className="mb-5 md:mb-8"
+            />
             <ScrollingBox
               className={styles.scrolling_box_custom}
               maxHeight={475}
