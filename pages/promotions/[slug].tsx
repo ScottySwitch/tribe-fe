@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 import { calcRateNumber, getListingUrl } from "utils";
 import Link from "next/link";
+import Loader from "components/Loader/Loader";
 
 const dummyProductDetails: IProduct = {
   id: 678,
@@ -84,6 +85,7 @@ const PromotionsPage = () => {
 
   const [promotion, setPromotion] = useState<any>([]);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getPromotionBySlug = async (slug) => {
@@ -93,6 +95,7 @@ const PromotionsPage = () => {
         router.push("/");
       }
       setPromotion(get(promotionData, "[0].attributes"));
+      setIsLoading(false);
       setBizListings(
         get(promotionData, "[0].attributes.microsite_biz_listings")
       );
@@ -110,6 +113,10 @@ const PromotionsPage = () => {
       setShowAuthPopup(true);
     }
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className={styles.wrapper_promotions}>

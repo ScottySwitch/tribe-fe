@@ -134,7 +134,7 @@ const AddListingPageTwo = (props: AddListingProps) => {
             <Select
               required
               label="Country"
-              placeholder="Singapore"
+              placeholder="Please select your country"
               options={locations}
               value={getValues("country")}
               onChange={(e) => {
