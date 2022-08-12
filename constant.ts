@@ -408,6 +408,12 @@ export const currencyOptions = [
   { label: "MYR", value: CurrencyValues.MYR },
   { label: "SGD", value: CurrencyValues.SGD },
   { label: "IDR", value: CurrencyValues.IDR },
+  { label: "JPY", value: CurrencyValues.JPY },
+  { label: "HKD", value: CurrencyValues.HKD },
+  { label: "CNY", value: CurrencyValues.CNY },
+  { label: "AUD", value: CurrencyValues.AUD },
+  { label: "GBP", value: CurrencyValues.GBP },
+  { label: "EUR", value: CurrencyValues.EUR },
 ];
 
 export const discountTypeOptions = [

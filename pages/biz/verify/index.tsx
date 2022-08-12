@@ -459,7 +459,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
             </div>
           </div>
           <Button
-            text="Receive OTP"
+            text="Confirm OTP"
             onClick={handleConfirmOTP}
             disabled={!otp}
           />

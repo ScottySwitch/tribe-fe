@@ -12,6 +12,12 @@ export enum CurrencyValues {
   MYR = "myr",
   SGD = "sgd",
   IDR = "idr",
+  JPY = 'jpy',
+  HKD = 'hkd',
+  CNY = 'cny',
+  AUD = 'aud',
+  GBP = 'gbp',
+  EUR = 'eur',
   PERCENTAGE = "%",
 }
 

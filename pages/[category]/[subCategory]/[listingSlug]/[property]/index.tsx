@@ -39,14 +39,17 @@ const PropertiesContainer = ({
   return (
     <div className="flex flex-wrap gap-10">
       {Array.isArray(list) && list.length > 0 ? (
-        list.map((item, index) => (
-          <div
-            key={index}
-            onClick={() => onShowDetailModal?.(formatCardItemProps(item))}
-          >
-            <CardItem {...formatCardItemProps(item)} />
-          </div>
-        ))
+        list.map((item, index) => {
+          console.log("item", item);
+          return (
+            <div
+              key={index}
+              onClick={() => onShowDetailModal?.(formatCardItemProps(item))}
+            >
+              <CardItem {...formatCardItemProps(item)} />
+            </div>
+          );
+        })
       ) : (
         <div>There is no data yet</div>
       )}
