@@ -9,6 +9,8 @@ import classNames from "classnames";
 import styles from "styles/Auth.module.scss";
 import { useEffect, useState } from "react";
 import AuthApi from "../../../services/auth";
+import Heading from "components/Heading/Heading";
+import Head from "next/head";
 
 const OtpPage = (context) => {
   const { method, otpReceiver } = context;
@@ -16,6 +18,14 @@ const OtpPage = (context) => {
   const [valueOtp, setValueOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState<number>(30);
+
+  const [metaTitle, setMetaTitle] = useState(
+    "Sign Up Today To Be Part of the Community | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Register. Don't have a Tribes account yet? Join now to gain access to exclusive deals from Muslim Friendly brands around the world!"
+  );
+
   const returnTime = (time) => {
     if (time === 0) {
       return "00";
@@ -97,6 +107,10 @@ const OtpPage = (context) => {
 
   return (
     <div className={styles.auth}>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <div className={styles.form_container}>
         <ModalHeader alignTitle="center">Sign up</ModalHeader>
         <div className={styles.body}>

@@ -18,6 +18,7 @@ import { useDebounce } from "usehooks-ts";
 import { changeToSlugify } from "utils";
 import { useRouter } from "next/router";
 import useGetCountry from "hooks/useGetCountry";
+import Head from "next/head";
 
 const ReviewsPage = () => {
   const { user } = useContext(UserInforContext);
@@ -30,6 +31,11 @@ const ReviewsPage = () => {
   const [listingSearchResult, setListingSearchResult] = useState<any>([]);
   const debouncedSearchTerm = useDebounce(changeToSlugify(searchKey), 500);
   const router = useRouter();
+
+  const [metaTitle, setMetaTitle] = useState("Write a Review | Tribes by HHWT");
+  const [metaDescription, setMetaDescription] = useState(
+    "Been to a place or bought a product? Share your experience with the community!"
+  );
 
   const resultType = [
     {
@@ -120,6 +126,10 @@ const ReviewsPage = () => {
 
   return (
     <div className={`${styles.review}`}>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <div className="relative pb-6 bg-white">
         <Image
           src="https://picsum.photos/1440"

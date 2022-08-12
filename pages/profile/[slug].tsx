@@ -25,6 +25,8 @@ import { get } from "lodash";
 
 import styles from "styles/Profile.module.scss";
 import ContributeApi from "services/contribute";
+import Header from "components/TheHeader/Header";
+import Head from "next/head";
 
 const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
   const { name, imageUrl } = props;
@@ -122,6 +124,11 @@ const ProfilePage = (context) => {
     approved: [],
   });
 
+  const [metaTitle, setMetaTitle] = useState("My Account | Tribes by HHWT");
+  const [metaDescription, setMetaDescription] = useState(
+    "Access your profile page"
+  );
+
   useEffect(() => {
     setSelectedTab(slug);
     const getUserInfor = () =>
@@ -182,6 +189,10 @@ const ProfilePage = (context) => {
 
   return (
     <div className="wrapper-profile">
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <div className={styles.section_cover_image}>
         <CoverImage
           layout="fill"
