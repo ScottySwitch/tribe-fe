@@ -4,6 +4,12 @@
   position: relative;
   width: 100%;
 
+  &.special {
+    .slick_slide > div {
+      width: 99% !important;
+    }    
+  }
+
   .slick_slide > div {
     display: grid;
     place-items: center;

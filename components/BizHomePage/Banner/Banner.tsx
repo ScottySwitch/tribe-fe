@@ -14,7 +14,7 @@ interface BannerProps {
   isPaid?: boolean;
   listingImages: string[];
   listingId?: string | number;
-  onChangeImages: (images: string[]) => void;
+  onChangeImages?: (images: string[]) => void;
 }
 
 const CenterIcon = () => (

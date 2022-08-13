@@ -4,6 +4,10 @@
   &_background_color {
     background-color: $primary-20;
   }
+
+  &_inherit {
+    background-color: inherit;
+  }
 }
 .scrolling_box_custom {
   width: calc(100% + 25px);
