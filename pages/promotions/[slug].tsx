@@ -18,8 +18,10 @@ import PromotionApi from "services/promotion";
 import get from "lodash/get";
 import { useRouter } from "next/router";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { calcRateNumber, getListingUrl } from "utils";
+import { calcRateNumber, formatArrayImages, getListingUrl } from "utils";
 import DividerSection from "components/DividerSection/DividerSection";
+import Banner from "components/MicrositePage/Banner";
+import { format } from "path";
 
 const PromotionsPage = () => {
   const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>();
@@ -53,6 +55,7 @@ const PromotionsPage = () => {
   } = useRouter();
 
   const [promotion, setPromotion] = useState<any>([]);
+  const [banners, setBanners] = useState<any>([]);
   const [backgroundColor, setBackgroundColor] = useState([]);
   const [backgroundColorBar, setBackgroundColorBar] = useState([]);
   const [titleColor, setTitleColor] = useState([]);
@@ -65,6 +68,11 @@ const PromotionsPage = () => {
       if (promotionData.length === 0) {
         router.push("/");
       }
+      const arrayImages = formatArrayImages(
+        get(promotionData, "[0].attributes.main_banner.data")
+      );
+      console.log("arrayImages", arrayImages);
+      setBanners(arrayImages);
       setPromotion(get(promotionData, "[0].attributes"));
       setBizListings(
         get(promotionData, "[0].attributes.microsite_biz_listings")
@@ -95,7 +103,7 @@ const PromotionsPage = () => {
 
   return (
     <div className={styles.wrapper_promotions} style={sectionLayoutStyle}>
-      <SectionLayout
+      {/* <SectionLayout
         className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-8 md:pb-12`}
       >
         {get(promotion, "main_banner.data.attributes.url") && (
@@ -107,6 +115,9 @@ const PromotionsPage = () => {
             alt="banner"
           />
         )}
+      </SectionLayout> */}
+      <SectionLayout>
+        <Banner key={banners} listingImages={banners} />
       </SectionLayout>
       {/* Start FEATURED VOUCHERS */}
       {Array.isArray(get(promotion, "deals.data")) &&

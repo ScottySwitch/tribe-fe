@@ -469,6 +469,9 @@ export const formatCategoryLink = (rawCategoryLink) =>
       }))
     : [];
 
+export const formatArrayImages = (rawImages) => 
+  isArray(rawImages) ? rawImages.map((item) => (get(item, 'attributes.url') || require("public/images/default-thumbnail.png"))) : [];
+
 export const arrayLabeltags = (rawTag) =>
   Array.isArray(rawTag)
     ? rawTag.map((item) => get(item, "attributes.label"))

@@ -155,6 +155,23 @@ export const dummyTopSearchKeywords = [
   "Desserts",
 ];
 
+export const micrositeBannerResponsive = {
+  show: 1,
+  scroll: 1,
+  xsShow: 1,
+  xsScroll: 1,
+  smShow: 1,
+  smScroll: 1,
+  mdShow: 1,
+  mdScroll: 1,
+  lgShow: 1,
+  lgScroll: 1,
+  xlShow: 1,
+  xlScroll: 1,
+  xxlShow: 1,
+  xxlScroll: 1,
+}
+
 export const homeCuratedResponsive = {
   xsShow: 1,
   xsScroll: 1,

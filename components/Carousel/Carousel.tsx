@@ -11,10 +11,11 @@ interface CarouselProps {
   responsive?: { [key: string]: number };
   isShow?: boolean;
   className?: string;
+  isMicrosite?: boolean;
 }
 
 const Carousel = (props: CarouselProps) => {
-  const { children, responsive, className, isShow = true } = props;
+  const { children, responsive, className, isShow = true, isMicrosite } = props;
 
   const horizontalSliderRef = useRef<any>(null);
 
@@ -96,8 +97,14 @@ const Carousel = (props: CarouselProps) => {
     return <div />;
   }
 
+  const carouselClass = classNames(
+    className,
+    styles.carousel,
+    isMicrosite && styles.special
+  );
+
   return (
-    <div className={classNames(className, styles.carousel)}>
+    <div className={carouselClass}>
       <div onClick={handlePrevHorizontalSlide} className={styles.btn_prev}>
         <Icon icon="carret-left" size={20} />
       </div>
