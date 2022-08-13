@@ -6,6 +6,16 @@
   border-radius: 50px;
   overflow: hidden;
 
+  &.color {
+    &::before {
+      display: none;
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
   &::before {
     content: "";
     position: absolute;

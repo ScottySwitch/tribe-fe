@@ -12,6 +12,7 @@ import CarouselBanner from "components/CarouselBanner/CarouselBanner";
 import SectionLayout from "components/SectionLayout/SectionLayout";
 import ScrollingBox from "components/ScrollingBox/ScrollingBox";
 import styles from "styles/Promotions.module.scss";
+import style from "components/SectionLayout/SectionLayout.module.scss";
 import { useEffect, useState } from "react";
 import PromotionApi from "services/promotion";
 import get from "lodash/get";
@@ -89,13 +90,13 @@ const PromotionsPage = () => {
   };
 
   const sectionLayoutStyle: any = {
-    backgroundColor: backgroundColor ? backgroundColor : "#f599a0",
+    backgroundColor: backgroundColor ? backgroundColor : "#fef1f2",
   };
 
   return (
     <div className={styles.wrapper_promotions} style={sectionLayoutStyle}>
       <SectionLayout
-        className={`${styles.section_layout_inherit} pt-0 pb-8 md:pb-12`}
+        className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-8 md:pb-12`}
       >
         {get(promotion, "main_banner.data.attributes.url") && (
           <Image
@@ -111,11 +112,11 @@ const PromotionsPage = () => {
       {Array.isArray(get(promotion, "deals.data")) &&
         get(promotion, "deals.data").length > 0 && (
           <SectionLayout
-            className={`${styles.section_layout_inherit} pt-0 pb-10`}
+            className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-10`}
           >
             <DividerSection
               color={titleColor}
-              backgroundColor={backgroundColor}
+              backgroundColor={backgroundColorBar}
               title="FEATURED VOUCHERS"
               className="mb-5 md:mb-8"
             />
@@ -149,11 +150,11 @@ const PromotionsPage = () => {
       {Array.isArray(get(promotion, "banners.data")) &&
         get(promotion, "banners.data").length > 0 && (
           <SectionLayout
-            className={`${styles.section_layout_inherit} pt-0 pb-12 md:pb-16`}
+            className={`${styles.section_layout_inherit} ${styles.special} pt-0 pb-12 md:pb-16`}
           >
             <DividerSection
               color={titleColor}
-              backgroundColor={backgroundColor}
+              backgroundColor={backgroundColorBar}
               title="BANNERS"
               className="mb-5 md:mb-8"
             />
@@ -178,11 +179,11 @@ const PromotionsPage = () => {
       {Array.isArray(get(promotion, "hot_deals.data")) &&
         get(promotion, "hot_deals.data").length > 0 && (
           <SectionLayout
-            className={`${styles.section_layout_inherit} pt-0 pb-10`}
+            className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-10`}
           >
             <DividerSection
               color={titleColor}
-              backgroundColor={backgroundColor}
+              backgroundColor={backgroundColorBar}
               title="HOT DEALS"
               className="mb-5 md:mb-8"
             />
@@ -218,16 +219,16 @@ const PromotionsPage = () => {
           Array.isArray(get(bizListing, "biz_listings.data")) &&
           get(bizListing, "biz_listings.data").length > 0 && (
             <SectionLayout
-              className={`${styles.section_layout_inherit} pt-0 pb-12 md:pb-16`}
+              className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-12 md:pb-16`}
               key={index}
             >
               <DividerSection
                 color={titleColor}
-                backgroundColor={backgroundColor}
+                backgroundColor={backgroundColorBar}
                 title={bizListing.title}
                 className="mb-5 md:mb-8"
               />
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
                 {Array.isArray(get(bizListing, "biz_listings.data")) &&
                   get(bizListing, "biz_listings.data")?.map((card, index) => (
                     <InforCard
@@ -290,11 +291,11 @@ const PromotionsPage = () => {
       {Array.isArray(get(promotion, "more_deals.data")) &&
         get(promotion, "more_deals.data").length > 0 && (
           <SectionLayout
-            className={`${styles.section_layout_inherit} pt-0 pb-10`}
+            className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-10`}
           >
             <DividerSection
               color={titleColor}
-              backgroundColor={backgroundColor}
+              backgroundColor={backgroundColorBar}
               title="Shop more deals"
               className="mb-5 md:mb-8"
             />

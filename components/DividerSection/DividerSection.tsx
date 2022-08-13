@@ -14,8 +14,17 @@ const DividerSection = (props: IDividerSection) => {
     color: color ? color : "#ffffff",
   };
 
+  const backgroundColorBar: any = {
+    backgroundColor: backgroundColor ? backgroundColor : "#e60112",
+  };
+
   return (
-    <div className={`${styles.divider_section} ${className}`}>
+    <div
+      className={`${styles.divider_section} ${className} ${
+        backgroundColor && styles.color
+      }`}
+      style={backgroundColorBar}
+    >
       <h1
         style={titleColor}
         className={`${styles.divider_section_title} uppercase text-center font-extrabold`}
