@@ -54,8 +54,11 @@ const Category = (props: any) => {
   } = router;
   const defaultPagination = { page: 1, total: 0, limit: 28 };
 
-  const [title, setTitle] = useState(
+  const [metaTitle, setMetaTitle] = useState(
     "Tribes: Get travel information and recommendation for what to eat, buy, things to do, where to stay and how to get there"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Explore and discover Muslim Friendly eateries"
   );
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState(defaultPagination);
@@ -74,16 +77,38 @@ const Category = (props: any) => {
       case CategoryText.EAT:
         switch (locale) {
           case "id":
-            setTitle(
+            setMetaTitle(
               "Cari Restoran Halal di Singapura dan Pesan Makanan Online | Tribes"
             );
             break;
           default:
-            setTitle(
+            setMetaTitle(
               "Find Halal Restaurant in Singapore and Order Food Online | Tribes"
             );
             break;
         }
+        break;
+      case CategoryText.BUY:
+        setMetaTitle("Browse Products | Tribes by HHWT");
+        setMetaDescription("Explore and discover Muslim Friendly products");
+        break;
+      case CategoryText.TRANSPORT:
+        setMetaTitle(
+          "Browse the Different Modes of Transport | Tribes by HHWT"
+        );
+        setMetaDescription(
+          "Explore and discover flights, ferries, buses and other modes of transport!"
+        );
+        break;
+      case CategoryText.STAY:
+        setMetaTitle("Browse Places to Stay | Tribes by HHWT");
+        setMetaDescription("Explore and discover the best places to stay!");
+        break;
+      case CategoryText.SEE_AND_DO:
+        setMetaTitle("Browse Activities & Sight-seeing spots | Tribes by HHWT");
+        setMetaDescription(
+          "Explore and discover exciting activities and sight-seeing spots!"
+        );
         break;
     }
   }, [locale, category]);
@@ -215,7 +240,8 @@ const Category = (props: any) => {
   return (
     <div>
       <Head>
-        <title>{title}</title>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
       </Head>
       <SectionLayout className={styles.main_catbanner}>
         {categoryInfor.bannerSrc && (

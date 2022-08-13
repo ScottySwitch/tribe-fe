@@ -22,6 +22,7 @@ import { calcRateNumber, formatArrayImages, getListingUrl } from "utils";
 import DividerSection from "components/DividerSection/DividerSection";
 import Banner from "components/MicrositePage/Banner";
 import { format } from "path";
+import Loader from "components/Loader/Loader";
 
 const PromotionsPage = () => {
   const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>();
@@ -60,6 +61,7 @@ const PromotionsPage = () => {
   const [backgroundColorBar, setBackgroundColorBar] = useState([]);
   const [titleColor, setTitleColor] = useState([]);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getPromotionBySlug = async (slug) => {
@@ -74,6 +76,7 @@ const PromotionsPage = () => {
       console.log("arrayImages", arrayImages);
       setBanners(arrayImages);
       setPromotion(get(promotionData, "[0].attributes"));
+      setIsLoading(false);
       setBizListings(
         get(promotionData, "[0].attributes.microsite_biz_listings")
       );
@@ -100,6 +103,9 @@ const PromotionsPage = () => {
   const sectionLayoutStyle: any = {
     backgroundColor: backgroundColor ? backgroundColor : "#fef1f2",
   };
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className={styles.wrapper_promotions} style={sectionLayoutStyle}>

@@ -20,6 +20,7 @@ import UserReviewCard from "components/ReviewsPage/UserReviewCard/UserReviewCard
 import { dummyTopSearchKeywords } from "constant";
 import ContributeApi from "services/contribute";
 import { getListingUrl } from "utils";
+import Head from "next/head";
 
 const AddReviewPage = () => {
   const router = useRouter();
@@ -32,6 +33,11 @@ const AddReviewPage = () => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [reviews, setReviews] = useState<any>();
   const [bizListing, setBizListing] = useState<any>();
+
+  const [metaTitle, setMetaTitle] = useState("Write a Review | Tribes by HHWT");
+  const [metaDescription, setMetaDescription] = useState(
+    "Been to a place or bought a product? Share your experience with the community!"
+  );
 
   const resultType = [
     {
@@ -123,6 +129,10 @@ const AddReviewPage = () => {
   return (
     bizListing && (
       <div className={styles.review_add_new}>
+        <Head>
+          <title>{metaTitle}</title>
+          <meta name="description" content={metaDescription} />
+        </Head>
         <SectionLayout>
           <div className={styles.container}>
             <div

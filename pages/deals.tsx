@@ -23,6 +23,7 @@ import {
   formatCardItemProps,
   getListingUrl,
 } from "utils";
+import Head from "next/head";
 
 const allTab = [{ label: "All", value: undefined }];
 const categoryTabList: any[] = categories.map((item) => ({
@@ -37,6 +38,13 @@ const Deals = () => {
   const { query } = router;
 
   const defaultPagination = { page: 1, total: 0, limit: 28 };
+
+  const [metaTitle, setMetaTitle] = useState(
+    "Deals of the Day | Tribes by HHWT"
+  );
+  const [metaDescription, setMetaDescription] = useState(
+    "Explore and discover deals from Muslim Friendly brands!"
+  );
 
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<Categories>();
@@ -90,6 +98,10 @@ const Deals = () => {
 
   return (
     <div>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       <SectionLayout className="py-0 pb-3">
         <div className={styles.breadcrumbs}>
           <span onClick={() => router.push("/")}>Home</span>{" "}
@@ -124,7 +136,7 @@ const Deals = () => {
         </div>
       </SectionLayout>
       <SectionLayout>
-        <div className="flex flex-wrap justify-between sm:gap-10">
+        <div className="flex flex-wrap justify-between sm:justify-start sm:gap-10">
           {Array.isArray(listingsHaveDeals) &&
             listingsHaveDeals.map((item) => (
               <div key={item?.title} className="sm:pb-5 m:pl-3 pt-3">
