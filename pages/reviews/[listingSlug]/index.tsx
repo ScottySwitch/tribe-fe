@@ -43,7 +43,7 @@ const AddReviewPage = () => {
     {
       title: "Thank you",
       message:
-        "Thank you for sharing your experience and helping to improve this listing!",
+        "Thank you for your contribution. Your submission is currently under review and will be up in no time!",
       textButton: "Close",
     },
     {
@@ -200,16 +200,21 @@ const AddReviewPage = () => {
                   </h2>
                 </div>
                 {reviews.length > 0 &&
-                  reviews.map((review, index) => (
-                    <UserReviewCard
-                      key={index}
-                      user={get(review, "attributes.user.data.attributes")}
-                      listImage={get(review, "attributes.images")}
-                      content={get(review, "attributes.content")}
-                      dateVisit={get(review, "attributes.visited_date")}
-                      rating={get(review, "attributes.rating")}
-                    />
-                  ))}
+                  reviews.map((review, index) => {
+                    console.log("review", review);
+                    if (get(review, "attributes.is_revision") != true) {
+                      return (
+                        <UserReviewCard
+                          key={index}
+                          user={get(review, "attributes.user.data.attributes")}
+                          listImage={get(review, "attributes.images")}
+                          content={get(review, "attributes.content")}
+                          dateVisit={get(review, "attributes.visited_date")}
+                          rating={get(review, "attributes.rating")}
+                        />
+                      );
+                    }
+                  })}
               </div>
             )}
           </div>
