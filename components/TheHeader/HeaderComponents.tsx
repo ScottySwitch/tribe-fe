@@ -116,7 +116,7 @@ export const SwitchAccountsContent = () => {
         get(item, "categories.data[0].attributes.name"),
         get(item, "category_links.data[0].attributes.value"),
         get(item, "slug")
-      )}`
+      )}/edit`
     );
   };
 
