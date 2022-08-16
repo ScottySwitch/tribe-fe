@@ -11,6 +11,7 @@ import Album from "components/Album/Album";
 import styles from "./ProductDetailModal.module.scss";
 import { get } from "lodash";
 import _ from "lodash";
+import { CategoryText } from "enums";
 
 export interface IProduct {
   id: number;
@@ -35,9 +36,11 @@ interface ProductDetailsModalProps extends ModalProps {
 
 const ProductDetailModal = (props: ProductDetailsModalProps) => {
   const { data, visible, isPaid, onClose, onShare, onKlook, onBookNow } = props;
+  console.log("data", data);
   const [showShareModal, setShowShareModal] = useState(false);
   const router = useRouter();
-  const { asPath } = router;
+  const { asPath, query } = router;
+  const { category } = query;
 
   const handleShare = () => {
     setShowShareModal(true);
@@ -124,7 +127,9 @@ const ProductDetailModal = (props: ProductDetailsModalProps) => {
               )}
               {(data?.type === "paid" || isPaid) && data?.websiteUrl && (
                 <Button
-                  text="Book now"
+                  text={
+                    category === CategoryText.EAT ? "Order now" : "Book now"
+                  }
                   backgroundColor="#E60112"
                   className="text-sm"
                   onClick={() =>

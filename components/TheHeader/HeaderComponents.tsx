@@ -113,10 +113,10 @@ export const SwitchAccountsContent = () => {
     });
     router.push(
       `/${getListingUrl(
-        get(item, "categories[0]"),
-        get(item, "categoryLinks[0]"),
-        item.slug
-      )}/edit`
+        get(item, "categories.data[0].attributes.name"),
+        get(item, "category_links.data[0].attributes.value"),
+        get(item, "slug")
+      )}`
     );
   };
 

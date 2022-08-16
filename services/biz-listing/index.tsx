@@ -1,4 +1,5 @@
 import { productTypes } from "components/AddListingPages/PageThree/constant";
+import { categories } from "constant";
 import { Categories, CategoryText } from "enums";
 import category from "services/category";
 import categoryLink from "services/category-link";
@@ -281,7 +282,7 @@ const getOwnerBizListingBySlug = async (bizListingSlug: any) => {
           },
         ],
       },
-      populate: "*",
+      populate: ["categories", "category_links"],
     },
     {
       encodeValuesOnly: true,
@@ -327,7 +328,7 @@ const getOwnerBizListing = async (bizListingSlug?: any) => {
           },
         ],
       },
-      // populate: "*",
+      populate: ["categories", "category_links"],
     },
     {
       encodeValuesOnly: true,
