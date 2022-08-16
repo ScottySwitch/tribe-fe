@@ -36,6 +36,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
   return (
     <div className="flex flex-col gap-5">
       {data?.map((item: ListCardProps, index) => {
+        const user = get(item, "user");
         const reviewListing = get(item, "review") || {};
         const bizListing =
           get(item, "biz_listing") || get(item, "biz_listing_revision") || {};
@@ -43,7 +44,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
           <UserReviewCard
             key={index}
             isDivider
-            avatarUrl={reviewListing.avatar}
+            avatarUrl={user.avatar}
             listImage={reviewListing.images}
             actions={false}
             content={reviewListing.content}

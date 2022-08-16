@@ -41,7 +41,7 @@ const ReviewsPage = () => {
     {
       title: "Thank you",
       message:
-        "Thank you for sharing your experience and helping to improve this listing!",
+        "Thank you for your contribution. Your submission is currently under review and will be up in no time!",
       textButton: "Close",
     },
     {

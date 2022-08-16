@@ -38,10 +38,11 @@ export const formatCardItemProps = (item) => ({
     get(item, "attributes.startDate") ||
     (item.startDate && moment(item.startDate).format("YYYY/MM/DD")) ||
     (item.start_date && moment(item.start_date).format("YYYY/MM/DD")),
-  images: get(item, "attributes.images") || item.images,
+  images: get(item, "attributes.images") || item.images || get(item, "attributes.menu_file") || item.menu_file,
   imgUrl:
     item.imgUrl ||
     get(item, "images.[0]") ||
+    get(item, "menu_file.[0]") ||
     require("public/images/default-thumbnail.png"),
   description: get(item, "attributes.description") || item.description,
   currency: (get(item, "attributes.currency") || item.currency)?.toUpperCase(),
@@ -468,6 +469,9 @@ export const formatCategoryLink = (rawCategoryLink) =>
         slug: get(item, "attributes.value"),
       }))
     : [];
+
+export const formatArrayImages = (rawImages) => 
+  isArray(rawImages) ? rawImages.map((item) => (get(item, 'attributes.url') || require("public/images/default-thumbnail.png"))) : [];
 
 export const arrayLabeltags = (rawTag) =>
   Array.isArray(rawTag)

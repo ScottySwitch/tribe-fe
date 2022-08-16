@@ -23,6 +23,7 @@ import { locations } from "constant";
 import styles from "styles/App.module.scss";
 import Toast from "components/Toast/Toast";
 import Button from "components/Button/Button";
+import Head from "next/head";
 
 export type ILoginInfor = {
   token?: string;
@@ -150,6 +151,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <UserInforProvider>
+      <Head>
+        <meta
+          property="og:image"
+          content="https://exploretribes.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdefault-thumbnail.1402cbdd.png&w=1920&q=75"
+        />
+      </Head>
       <Loading />
       <div className={styles.app}>
         <Header

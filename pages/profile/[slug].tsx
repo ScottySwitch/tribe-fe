@@ -135,6 +135,7 @@ const ProfilePage = (context) => {
       ContributeApi.getUserContribute()
         .then(async (res) => {
           const contributionRawData = get(res, "data.data");
+          console.log("contributionRawData", contributionRawData);
           let contributionData: IContributions = {
             pending: [],
             approved: [],

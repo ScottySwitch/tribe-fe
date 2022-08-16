@@ -6,6 +6,12 @@
   z-index: 1;
   background-color: white;
 
+  &.special {
+    .container {
+      width: 90%;
+    }
+  }
+
   .container {
     margin: auto;
     width: $content-width;

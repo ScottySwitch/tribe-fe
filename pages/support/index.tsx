@@ -12,8 +12,8 @@ import { useEffect, useState } from "react";
 import styles from "styles/PageTemplate.module.scss";
 
 const dummyBreadcrumbs: BreadcrumbsProps[] = [
-  { text: "Home", path: "/home" },
-  { text: "User", path: "/user" },
+  { text: "Home", path: "/" },
+  { text: "User", path: "/profile/favourited" },
   { text: "Support", path: "/support" },
 ];
 
