@@ -22,15 +22,14 @@ const ForDealPopup = (props: ForDealPopupProps) => {
   };
   return (
     <Modal
+      title=""
       mobilePosition="center"
       transparent
       visible={visible}
       onClose={onClose}
     >
       <div className={styles.auth_popup}>
-        <div className={styles.close} onClick={onClose}>
-          &#x2715;
-        </div>
+        <div className={styles.close} onClick={onClose}></div>
         <div className={styles.button_container}>
           <Button text="Log in" className={styles.login} onClick={goToLogin} />
           <Button

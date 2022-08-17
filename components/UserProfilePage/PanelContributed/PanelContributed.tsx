@@ -44,9 +44,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
           <UserReviewCard
             key={index}
             isDivider
-            avatarUrl={
-              user.avatar || require("public/images/default-page-avatar.svg")
-            }
+            avatarUrl={user.avatar}
             listImage={reviewListing.images}
             actions={false}
             content={reviewListing.content}
