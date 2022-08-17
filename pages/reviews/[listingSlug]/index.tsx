@@ -205,6 +205,10 @@ const AddReviewPage = () => {
                     if (get(review, "attributes.is_revision") != true) {
                       return (
                         <UserReviewCard
+                          avatarUrl={get(
+                            review,
+                            "attributes.user.data.attributes.avatar"
+                          )}
                           key={index}
                           user={get(review, "attributes.user.data.attributes")}
                           listImage={get(review, "attributes.images")}

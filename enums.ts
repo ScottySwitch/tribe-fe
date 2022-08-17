@@ -94,7 +94,7 @@ export enum UserInformationList {
   NOTIFICATION_SETTINGS = "Notification settings",
   REFERRAL_CODE = "Referral code",
   POINT_HISTORY = "Point history",
-  TRIBES_FOR_BUSINESSES = "Tribes for Businesses",
+  TRIBES_FOR_BUSINESSES = "Claim your listing",
   SUPPORT = "Support",
   TERMS_CONDITIONS = "Terms & Conditions",
   LOGOUT = "Log out",
