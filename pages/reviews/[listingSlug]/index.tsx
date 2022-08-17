@@ -205,6 +205,13 @@ const AddReviewPage = () => {
                     if (get(review, "attributes.is_revision") != true) {
                       return (
                         <UserReviewCard
+                          avatarUrl={
+                            get(
+                              review,
+                              "attributes.user.data.attributes.avatar"
+                            ) ||
+                            require("public/images/default-page-avatar.svg")
+                          }
                           key={index}
                           user={get(review, "attributes.user.data.attributes")}
                           listImage={get(review, "attributes.images")}
