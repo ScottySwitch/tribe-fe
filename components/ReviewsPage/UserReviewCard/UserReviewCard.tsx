@@ -134,7 +134,11 @@ const UserReviewCard = (props: UserReviewCardProps) => {
         <div className={styles.review_avatar}>
           {(user?.avatar || avatarUrl) && (
             <Image
-              src={user?.avatar || avatarUrl}
+              src={
+                user?.avatar ||
+                avatarUrl ||
+                require("public/images/default-page-avatar.svg")
+              }
               height={56}
               width={56}
               alt="avatar"
