@@ -267,7 +267,7 @@ const TermsConditionsPage = () => {
             <li>
               (ix) download any Content unless it’s expressly made available for
               download by Tribes
-            </li>
+            </li> 
           </ol>
           <br />
           <h2 className="underline font-bold">
