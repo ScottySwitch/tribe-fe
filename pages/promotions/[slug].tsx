@@ -261,7 +261,7 @@ const PromotionsPage = () => {
       {/* Start loop biz_listing components */}
       {bizListings?.map((bizListing, index) => {
         return (
-          <div>
+          <div key={index}>
             {Array.isArray(get(bizListing, "biz_listings.data")) &&
               get(bizListing, "biz_listings.data").length > 0 && (
                 <SectionLayout
