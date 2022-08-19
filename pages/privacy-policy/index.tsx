@@ -33,7 +33,7 @@ const TermsConditionsPage = () => {
           <br />
           <p>
             1.1 Welcome to the Tribes platform by Hello Travel Pte Ltd (the
-            "Site" or “Tribes”). Please read the following Terms of Service
+            "Site" or "Tribes"). Please read the following Terms of Service
             carefully before using this Site or opening a Tribes account
             ("Account") so that you are aware of your legal rights and
             obligations with respect to Tribes by Hello Travel Pte Ltd and its

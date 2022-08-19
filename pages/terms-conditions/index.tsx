@@ -33,7 +33,7 @@ const TermsConditionsPage = () => {
           <br />
           <p>
             1.1 Welcome to the Tribes platform by Hello Travel Pte Ltd (the
-            "Platform" or “Tribes”). Please read the following Terms of Service
+            "Platform" or "Tribes"). Please read the following Terms of Service
             carefully before using this Platform or opening a Tribes account
             ("Account") so that you are aware of your legal rights and
             obligations with respect to Tribes and its affiliates and
@@ -56,7 +56,7 @@ const TermsConditionsPage = () => {
             1.2 The Services we provide or make available include (a) the
             Platform, (b) the features provided or introduced from time to time
             on the Platform and software made available through the Platform,
-            including, but not limited to, “Tribes Deals”, User Generated
+            including, but not limited to, "Tribes Deals", User Generated
             Content, Listings information (c) all information, linked pages,
             features, data, text, images, photographs, graphics, music, sounds,
             video, messages, tags, content, programming, software, tools,
@@ -66,7 +66,7 @@ const TermsConditionsPage = () => {
             features added to or augmenting the Services are also subjected to
             these Terms of Use. These Terms of Use shall bind all users who use
             the Platform and/or any Services provided by us such as our
-            customers and/ or consumers (“Users”, “User”, “you” or “your”).
+            customers and/ or consumers ("Users", "User", "you" or "your").
           </p>
           <br />
           <p>
@@ -87,7 +87,7 @@ const TermsConditionsPage = () => {
             1.4 Please do not use or access the Platform and/or our Services if
             you are under the age of eighteen (18) or the legal age for giving
             consent hereunder pursuant to the applicable laws in your
-            jurisdiction (“Legal Age”). If you are below the Legal Age, you must
+            jurisdiction ("Legal Age"). If you are below the Legal Age, you must
             get permission from a parent or legal guardian to open an Account
             and that parent or legal guardian must agree to these Terms of Use
             on your behalf. If you are the parent or legal guardian of a minor
@@ -129,7 +129,7 @@ const TermsConditionsPage = () => {
             </span>
             to understand how Tribes collects and uses the information
             associated with your Account and/or your use of the Services (the
-            “User Information”). By using the Services or providing information
+            "User Information"). By using the Services or providing information
             on the Platform, you: (i) consent to Tribes’ collection, use,
             disclosure and/or processing of your Content, personal data and User
             Information as described in the Privacy Policy; (ii) agree and
@@ -142,10 +142,10 @@ const TermsConditionsPage = () => {
           <br />
           <p>
             2.2 Users in possession of another User’s personal data through the
-            use of the Services (the “Receiving Party”) hereby agree that, they
+            use of the Services (the "Receiving Party") hereby agree that, they
             will (i) comply with all applicable personal data protection laws
             with respect to any such data; (ii) allow the User whose personal
-            data the Receiving Party has collected (the “Disclosing Party”) to
+            data the Receiving Party has collected (the "Disclosing Party") to
             remove his or her data so collected from the Receiving Party’s
             database; and (iii) allow the Disclosing Party to review what
             information have been collected about them by the Receiving Party,
@@ -395,8 +395,8 @@ const TermsConditionsPage = () => {
           </p>
           <ol className={styles.none_style}>
             <li>
-              (i) Constitutes mass mailings or “spamming”, “junk mail”, “chain
-              letters” or “pyramid schemes”;
+              (i) Constitutes mass mailings or "spamming", "junk mail", "chain
+              letters" or "pyramid schemes";
             </li>
             <li>
               (ii) Impersonates any person or entity or otherwise misrepresents
