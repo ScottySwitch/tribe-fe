@@ -274,7 +274,11 @@ const Category = (props: any) => {
       <SectionLayout show={isArray(bannerArray)}>
         <Carousel responsive={homeBannerResponsive}>
           {bannerArray.map((img, index) => (
-            <div key={index} className={styles.banner_card}>
+            <div
+              key={index}
+              className={styles.banner_card}
+              onClick={() => router.push(`${img.linkActive}`)}
+            >
               <Image
                 layout="intrinsic"
                 src={img.imgUrl}

@@ -1,5 +1,14 @@
 @use "./variables.scss" as *;
 
+.banner {
+  aspect-ratio: 1188 / 400 !important;
+  height: unset !important;
+
+  video {
+    object-fit: fill !important;
+  }
+}
+
 .section_layout {
   &_background_color {
     background-color: $primary-20;

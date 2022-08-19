@@ -295,7 +295,7 @@ const getOwnerBizListingBySlug = async (bizListingSlug: any) => {
 
 const getInfoOwnerBizListingBySlug = async (bizListingSlug: any) => {
   let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-  const url = `/api/biz-listings/owner-bizlisting-information/?slug=${bizListingSlug}&userId=${userInfo.id}`;
+  const url = `/api/biz-listings/owner-bizlisting-information/?slug=${bizListingSlug}&userId=${userInfo.id}&email=${userInfo.email}`;
   return await Api.get(url);
 };
 

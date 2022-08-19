@@ -61,3 +61,12 @@
     }
   }
 }
+
+@media screen and (max-width: $mobile) {
+  .carousel {
+    width: 95%;
+    .slick_slide > div {
+      width: 100%;
+    }
+  }
+}

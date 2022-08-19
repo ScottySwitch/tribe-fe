@@ -14,7 +14,7 @@ import { randomId } from "utils";
 interface FacilitiesProps {
   category: Categories;
   isViewPage?: boolean;
-  facilities: IAddListingForm;
+  facilities: any;
   onSetFacilities: (data: any) => void;
 }
 
@@ -25,7 +25,7 @@ const Facilities = (props: FacilitiesProps) => {
   const showNumber = 6;
 
   //flat all facilities into array of string
-  const facilityArray: string[] | undefined = facilities
+  const facilityArray: string[] | undefined | any = facilities
     ? Object.values(facilities).flat()
     : [];
 

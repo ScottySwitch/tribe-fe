@@ -107,10 +107,10 @@ const AddEatInfor = (props: AddEatInforProps) => {
     TagApi.getTags()
       .then((res) => setDescribeTags(get(res, "data.data") || []))
       .catch((e) => console.log(e));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = (data) => {
+    console.log("data", data);
     onPreview?.(data);
     onEdit?.(data);
   };
@@ -380,6 +380,7 @@ const AddEatInfor = (props: AddEatInforProps) => {
               onClick={onPrevPage}
             />
             <Button
+              onClick={() => console.log("oke")}
               text={isEdit ? "Apply change" : "Continue"}
               size="small"
               width={270}
