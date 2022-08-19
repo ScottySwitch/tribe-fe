@@ -91,14 +91,14 @@ const TermsConditionsPage = () => {
             contractual clauses, consent clauses that apply in relation to the
             collection, storage, use, disclosure and/or processing of your
             personal data by us and is not intended to override those notices or
-            clauses unless we state expressly otherwise.{" "}
+            clauses unless we state expressly otherwise.
           </p>
           <br />
           <p>
             1.5 This Policy applies to both buyers and sellers who use the
             Services except where expressly stated otherwise.
           </p>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">
             2. WHEN WILL TRIBES COLLECT PERSONAL DATA?
           </h2>
@@ -150,9 +150,9 @@ const TermsConditionsPage = () => {
           <br />
           <p>
             The above does not purport to be exhaustive and sets out some common
-            instances of when personal data about you may be collected.{" "}
+            instances of when personal data about you may be collected.
           </p>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">
             3. WHAT PERSONAL DATA WILL Tribes COLLECT?
           </h2>
@@ -203,7 +203,7 @@ const TermsConditionsPage = () => {
             </li>
             <li>aggregate data on content the User engages with.</li>
           </ol>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">
             4. Withdrawal of Consent to Continued Use, Disclosure, Storing
             and/or Processing of Personal Data
@@ -234,7 +234,7 @@ const TermsConditionsPage = () => {
             contact information to send newsletters from us and from our related
             companies
           </p>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">
             5. Updating Your Personal Data
           </h2>
@@ -257,7 +257,7 @@ const TermsConditionsPage = () => {
             personal data if your personal data is still necessary for the
             above-stated purposes.
           </p>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">
             6. Accessing and Correcting Your Personal Data
           </h2>
@@ -281,7 +281,7 @@ const TermsConditionsPage = () => {
             your personal data records. If so, we will inform you of the fee
             before processing your request.
           </p>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">
             7. Security of Your Personal Data
           </h2>
@@ -317,7 +317,7 @@ const TermsConditionsPage = () => {
             the security of your information and are constantly reviewing and
             enhancing our information security measures.
           </p>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">8. Retention of Personal Data</h2>
           <br />
           <p>
@@ -362,7 +362,7 @@ const TermsConditionsPage = () => {
             and take necessary steps to prevent any misuse of the Services on
             the Platform.
           </p>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">
             10. Collection of Computer Data
           </h2>
@@ -415,7 +415,7 @@ const TermsConditionsPage = () => {
             on the applicable privacy policies of those websites to determine
             how they will handle any information they collect from you.
           </p>
-          <br />{" "}
+          <br />
           <h2 className="underline font-bold">
             11. Questions, Feedback, Concerns, Suggestions or Complaints
           </h2>
@@ -433,7 +433,7 @@ const TermsConditionsPage = () => {
           <p>
             If you would like to access your personal data that is retained by
             us or amend any personal data, please feel free to contact us via
-            email at{" "}
+            email at
             <a
               style={{ color: "#3faeff" }}
               href="mailto:tribes@havehalalwilltravel.com"

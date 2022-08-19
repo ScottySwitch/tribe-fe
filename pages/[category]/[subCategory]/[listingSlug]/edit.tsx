@@ -473,7 +473,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
       icon: "chat",
       callBack: () => {
         const element = document.querySelector("#reviews");
-        if (element && referrer === "deals") {
+        if (element) {
           element.scrollIntoView({
             behavior: "smooth",
             block: "center",

@@ -94,7 +94,7 @@ const TermsConditionsPage = () => {
             who is creating an account, you must accept the terms of this
             agreement on the minor’s behalf and you will be responsible for all
             the use of the account or company services using such
-            account,whether such account is currently open or created later.{" "}
+            account,whether such account is currently open or created later.
           </p>
           <br />
           <p>
@@ -110,7 +110,7 @@ const TermsConditionsPage = () => {
             posting the revised Terms of Service on this Platform. Your
             continued use of this Platform and the new features after such
             changes have been posted shall constitute your acceptance of such
-            revised Terms of Service.{" "}
+            revised Terms of Service.
           </p>
           <br /> <h2 className="underline font-bold">2. Privacy Policy</h2>
           <br />
@@ -119,14 +119,14 @@ const TermsConditionsPage = () => {
             data privacy and complying with data protection principles and
             provisions under applicable laws. To better protect your rights we
             have provided the Tribes Privacy Policy to explain our privacy
-            practices in detail. Please review the Privacy Policy{" "}
+            practices in detail. Please review the Privacy Policy
             <span
               onClick={() => router.push("/privacy-policy")}
               className="cursor-pointer"
               style={{ color: "#3faeff" }}
             >
               here
-            </span>{" "}
+            </span>
             to understand how Tribes collects and uses the information
             associated with your Account and/or your use of the Services (the
             “User Information”). By using the Services or providing information
@@ -483,7 +483,7 @@ const TermsConditionsPage = () => {
             during or after its presentation), as well as the Content of others.
             In all instances in which your Content is displayed on the Services,
             we shall provide attribution by using the name and/or trademark that
-            you submit in connection with your Content.{" "}
+            you submit in connection with your Content.
           </p>
           <br />
           <h2 className="underline font-bold">7. Contests and personal data</h2>
