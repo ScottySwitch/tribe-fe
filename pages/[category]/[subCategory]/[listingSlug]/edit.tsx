@@ -471,7 +471,15 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
     {
       text: "Reviews",
       icon: "chat",
-      callBack: () => router.push(`#reviews`),
+      callBack: () => {
+        const element = document.querySelector("#reviews");
+        if (element && referrer === "deals") {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      },
     },
     // {
     //   text: "Direction",
