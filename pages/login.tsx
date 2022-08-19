@@ -258,6 +258,9 @@ const LoginPage = (context) => {
             <span>
               <Link href="/signup"> Sign up now</Link>
             </span>
+            <p className="mt-[3px]">
+              By proceeding, you agree to our Terms & Conditions{" "}
+            </p>
           </div>
         </div>
         <div className={styles.footer} onClick={() => router.push("/claim")}>

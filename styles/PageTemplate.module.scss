@@ -15,9 +15,16 @@
   }
 
   ol {
+    &.none_style {
+      list-style-type: none;
+    }    
     padding-left: 20px;
     list-style-type: decimal;
     margin-bottom: 16px;
+
+    li {
+      margin-bottom: 15px;
+    }
   }
 }
 
