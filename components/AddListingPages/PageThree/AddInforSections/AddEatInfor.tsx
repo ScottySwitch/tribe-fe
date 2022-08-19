@@ -110,7 +110,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
   }, []);
 
   const onSubmit = (data) => {
-    console.log("data", data);
     onPreview?.(data);
     onEdit?.(data);
   };
@@ -380,7 +379,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
               onClick={onPrevPage}
             />
             <Button
-              onClick={() => console.log("oke")}
               text={isEdit ? "Apply change" : "Continue"}
               size="small"
               width={270}
