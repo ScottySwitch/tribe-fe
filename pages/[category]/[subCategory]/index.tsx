@@ -144,7 +144,7 @@ const SubCategoryPage = (context) => {
 
   useEffect(() => {
     const getBizListings = async () => {
-      setLoading(true);
+      // setLoading(true);
       const params = {
         category,
         categoryLinks: categoryLink,
