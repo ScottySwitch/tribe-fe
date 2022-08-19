@@ -143,7 +143,7 @@ const ClaimPage = () => {
       </Head>
       <div className="relative bg-white">
         <Image
-          src={require("/public/images/default-banner.svg")}
+          src={require("/public/images/bg-claim-listing.png")}
           width="100%"
           height="30%"
           layout="responsive"
