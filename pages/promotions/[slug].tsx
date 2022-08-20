@@ -23,6 +23,7 @@ import {
   formatArrayImages,
   formatArticle,
   getListingUrl,
+  isArray,
 } from "utils";
 import DividerSection from "components/DividerSection/DividerSection";
 import Banner from "components/MicrositePage/Banner";
@@ -32,6 +33,7 @@ import ArticleApi from "../../services/article";
 import Carousel from "components/Carousel/Carousel";
 import Link from "next/link";
 import ArticleCard from "components/ArticleCard/ArticleCard";
+import classNames from "classnames";
 
 const PromotionsPage = () => {
   const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>();
@@ -133,19 +135,6 @@ const PromotionsPage = () => {
 
   return (
     <div className={styles.wrapper_promotions} style={sectionLayoutStyle}>
-      {/* <SectionLayout
-        className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-8 md:pb-12`}
-      >
-        {get(promotion, "main_banner.data.attributes.url") && (
-          <Image
-            src={get(promotion, "main_banner.data.attributes.url")}
-            width={1188}
-            height={400}
-            layout="responsive"
-            alt="banner"
-          />
-        )}
-      </SectionLayout> */}
       <SectionLayout>
         <Banner
           className={styles.banner}
@@ -260,107 +249,95 @@ const PromotionsPage = () => {
 
       {/* Start loop biz_listing components */}
       {bizListings?.map((bizListing, index) => {
+        const dataBizlisting = get(bizListing, "biz_listings.data");
+
         return (
           <div key={index}>
-            {Array.isArray(get(bizListing, "biz_listings.data")) &&
-              get(bizListing, "biz_listings.data").length > 0 && (
-                <SectionLayout
-                  className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-12 md:pb-16`}
-                  key={index}
-                >
-                  <DividerSection
-                    color={titleColor}
-                    backgroundColor={backgroundColorBar}
-                    title={bizListing.title}
-                    className="mb-5 md:mb-8"
-                  />
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-                    {Array.isArray(get(bizListing, "biz_listings.data")) &&
-                      get(bizListing, "biz_listings.data")?.map(
-                        (card, index) => (
-                          <InforCard
-                            key={index}
-                            imgUrl={
-                              get(card, "attributes.images")
-                                ? card.attributes.images[0]
-                                : "https://picsum.photos/200/300"
-                            }
-                            title={get(card, "attributes.name")}
-                            rate={calcRateNumber(
-                              get(card, "attributes.reviews.data")
-                            )}
-                            rateNumber={
-                              get(card, "attributes.reviews.data")
-                                ? get(card, "attributes.reviews.data").length
-                                : 0
-                            }
-                            followerNumber={
-                              get(card, "attributes.user_listing_follows.data")
-                                ? get(
-                                    card,
-                                    "attributes.user_listing_follows.data"
-                                  ).length
-                                : 0
-                            }
-                            description={get(card, "attributes.description")}
-                            price={get(card, "attributes.min_price")}
-                            currency={
-                              get(card, "attributes.currency")
-                                ? get(
-                                    card,
-                                    "attributes.currency"
-                                  )?.toUpperCase()
-                                : ""
-                            }
-                            categories={card.categories}
-                            tags={get(card, "attributes.tags.data")}
-                            iconTag={true}
-                            isVerified={get(card, "attributes.is_verified")}
-                            className="w-full"
-                            onClick={() => {
-                              router.push(
-                                `/${getListingUrl(
-                                  get(
-                                    card,
-                                    "attributes.categories.data[0].attributes.name"
-                                  ),
-                                  get(
-                                    card,
-                                    "attributes.category_links.data[0].attributes.value"
-                                  ),
-                                  get(card, "attributes.slug")
-                                )}`
-                              );
-                            }}
-                          />
-                        )
+            {isArray(dataBizlisting) && (
+              <SectionLayout
+                className={classNames(
+                  styles.section_layout_inherit,
+                  style.special
+                )}
+                key={index}
+              >
+                <DividerSection
+                  color={titleColor}
+                  backgroundColor={backgroundColorBar}
+                  title={bizListing.title}
+                  className="mb-5 md:mb-8"
+                />
+                {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8"> */}
+                <div className={styles.lists}>
+                  {dataBizlisting?.map((card, index) => (
+                    <InforCard
+                      key={index}
+                      imgUrl={
+                        get(card, "attributes.images[0]") ||
+                        require("public/images/default-thumbnail.png")
+                      }
+                      title={get(card, "attributes.name")}
+                      rate={calcRateNumber(
+                        get(card, "attributes.reviews.data")
                       )}
-                  </div>
-                </SectionLayout>
-              )}
-            {index === 0 &&
-              Array.isArray(articleArray) &&
-              articleArray.length > 0 && (
-                <SectionLayout backgroundColor title="Articles">
-                  <Carousel responsive={homeCuratedResponsive}>
-                    {articleArray?.map((item, index) => (
-                      <Link
-                        href={`/articles/${item.slug}`}
-                        passHref
-                        key={index}
-                      >
-                        <div className="pb-5 pt-3 pl-3">
-                          <ArticleCard
-                            title={item.title}
-                            imgUrl={item.imgUrl}
-                            time={item.time}
-                          />
-                        </div>
-                      </Link>
-                    ))}
-                  </Carousel>
-                </SectionLayout>
-              )}
+                      rateNumber={
+                        get(card, "attributes.reviews.data.length") || 0
+                      }
+                      followerNumber={
+                        get(
+                          card,
+                          "attributes.user_listing_follows.data.length"
+                        ) || 0
+                      }
+                      description={get(card, "attributes.description")}
+                      price={get(card, "attributes.min_price")}
+                      currency={get(
+                        card,
+                        "attributes.currency",
+                        ""
+                      ).toUpperCase()}
+                      categories={card.categories}
+                      tags={get(card, "attributes.tags.data")}
+                      iconTag={true}
+                      isVerified={get(card, "attributes.is_verified")}
+                      className="w-full"
+                      onClick={() => {
+                        router.push(
+                          `/${getListingUrl(
+                            get(
+                              card,
+                              "attributes.categories.data[0].attributes.name"
+                            ),
+                            get(
+                              card,
+                              "attributes.category_links.data[0].attributes.value"
+                            ),
+                            get(card, "attributes.slug")
+                          )}`
+                        );
+                      }}
+                    />
+                  ))}
+                </div>
+              </SectionLayout>
+            )}
+            {index === 0 && isArray(articleArray) && (
+              <SectionLayout backgroundColor title="Articles">
+                <Carousel responsive={homeCuratedResponsive}>
+                  {articleArray?.map((item, index) => (
+                    <Link href={`/articles/${item.slug}`} passHref key={index}>
+                      <div className="pb-5 pt-3 pl-3">
+                        <ArticleCard
+                          title={item.title}
+                          imgUrl={item.imgUrl}
+                          time={item.time}
+                        />
+                      </div>
+                    </Link>
+                  ))}
+                </Carousel>
+              </SectionLayout>
+            )}
           </div>
         );
       })}

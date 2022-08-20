@@ -571,18 +571,6 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
                 !isViewPage || (facilitiesData && isEmptyObject(facilitiesData))
               }
             />
-            {/* {(facilitiesData && isEmptyObject(facilitiesData)) ||
-              (!isViewPage && (
-                <Facilities
-                  category={category}
-                  isViewPage={isViewPage}
-                  facilities={facilitiesData}
-                  onSetFacilities={(facilities) =>
-                    setFacilitiesData(facilities)
-                  }
-                  // facilityOptions={facilityOptions}
-                />
-              ))} */}
             <Facilities
               category={category}
               isViewPage={isViewPage}
