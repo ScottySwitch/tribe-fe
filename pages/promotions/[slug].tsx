@@ -22,6 +22,7 @@ import {
   calcRateNumber,
   formatArrayImages,
   formatArticle,
+  formatCardItemProps,
   getListingUrl,
   isArray,
 } from "utils";
@@ -267,39 +268,11 @@ const PromotionsPage = () => {
                   title={bizListing.title}
                   className="mb-5 md:mb-8"
                 />
-                {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8"> */}
                 <div className={styles.lists}>
                   {dataBizlisting?.map((card, index) => (
                     <InforCard
                       key={index}
-                      imgUrl={
-                        get(card, "attributes.images[0]") ||
-                        require("public/images/default-thumbnail.png")
-                      }
-                      title={get(card, "attributes.name")}
-                      rate={calcRateNumber(
-                        get(card, "attributes.reviews.data")
-                      )}
-                      rateNumber={
-                        get(card, "attributes.reviews.data.length") || 0
-                      }
-                      followerNumber={
-                        get(
-                          card,
-                          "attributes.user_listing_follows.data.length"
-                        ) || 0
-                      }
-                      description={get(card, "attributes.description")}
-                      price={get(card, "attributes.min_price")}
-                      currency={get(
-                        card,
-                        "attributes.currency",
-                        ""
-                      ).toUpperCase()}
-                      categories={card.categories}
-                      tags={get(card, "attributes.tags.data")}
-                      iconTag={true}
-                      isVerified={get(card, "attributes.is_verified")}
+                      {...formatCardItemProps(card)}
                       className="w-full"
                       onClick={() => {
                         router.push(
