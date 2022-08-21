@@ -107,7 +107,6 @@ const AddEatInfor = (props: AddEatInforProps) => {
     TagApi.getTags()
       .then((res) => setDescribeTags(get(res, "data.data") || []))
       .catch((e) => console.log(e));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = (data) => {

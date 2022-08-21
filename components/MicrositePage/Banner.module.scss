@@ -12,3 +12,9 @@
     }
   }
 }
+
+@media screen and (max-width: $mobile){
+  .banners {
+    width: 95% !important;
+  }
+}

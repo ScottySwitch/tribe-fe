@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Album from "components/Album/Album";
 import Carousel from "components/Carousel/Carousel";
 import Icon from "components/Icon/Icon";
@@ -15,11 +16,13 @@ import { detectIsVideo, isArray } from "utils";
 import styles from "./Banner.module.scss";
 interface BannerProps {
   listingImages: string[];
+  className?: string;
 }
 
 const Banner = (props: BannerProps) => {
-  const { listingImages } = props;
+  const { listingImages, className } = props;
   console.log("listingImages", listingImages);
+
   return (
     <React.Fragment>
       <Carousel
@@ -27,12 +30,12 @@ const Banner = (props: BannerProps) => {
         responsive={micrositeBannerResponsive}
         key={get(listingImages, "length")}
         isShow={isArray(listingImages)}
-        className={`${styles.banners} ${styles.special}`}
+        className={classNames(styles.banners, styles.special, className)}
       >
         {isArray(listingImages) &&
           listingImages.map((img, index) => (
             <div key={index}>
-              <div className={styles.banner_card}>
+              <div className={classNames(styles.banner_card, className)}>
                 {detectIsVideo(img) ? (
                   <video controls={true} src={img} autoPlay={true} />
                 ) : (
