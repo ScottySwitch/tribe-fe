@@ -1,4 +1,4 @@
-import { inforCardList } from "constant";
+import { homeCuratedResponsive, inforCardList } from "constant";
 import DealsDetailsModal, {
   IDealsDetails,
 } from "components/DealDetailModal/DealDetailModal";
@@ -18,11 +18,23 @@ import PromotionApi from "services/promotion";
 import get from "lodash/get";
 import { useRouter } from "next/router";
 import AuthPopup from "components/AuthPopup/AuthPopup";
-import { calcRateNumber, formatArrayImages, getListingUrl } from "utils";
+import {
+  calcRateNumber,
+  formatArrayImages,
+  formatArticle,
+  formatCardItemProps,
+  getListingUrl,
+  isArray,
+} from "utils";
 import DividerSection from "components/DividerSection/DividerSection";
 import Banner from "components/MicrositePage/Banner";
 import { format } from "path";
 import Loader from "components/Loader/Loader";
+import ArticleApi from "../../services/article";
+import Carousel from "components/Carousel/Carousel";
+import Link from "next/link";
+import ArticleCard from "components/ArticleCard/ArticleCard";
+import classNames from "classnames";
 
 const PromotionsPage = () => {
   const [showModalDealsDetails, setShowModalDealsDetails] = useState<boolean>();
@@ -55,6 +67,11 @@ const PromotionsPage = () => {
     query: { slug },
   } = useRouter();
 
+  interface IType {
+    [key: string]: any;
+  }
+  [];
+
   const [promotion, setPromotion] = useState<any>([]);
   const [banners, setBanners] = useState<any>([]);
   const [backgroundColor, setBackgroundColor] = useState([]);
@@ -62,6 +79,7 @@ const PromotionsPage = () => {
   const [titleColor, setTitleColor] = useState([]);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [articleArray, setArticleArray] = useState<IType[]>([]);
 
   useEffect(() => {
     const getPromotionBySlug = async (slug) => {
@@ -86,8 +104,17 @@ const PromotionsPage = () => {
       );
       setTitleColor(get(promotionData, "[0].attributes.title_color"));
     };
+    const getArticles = async () => {
+      const dataArticles = await ArticleApi.getArticleCustomer({
+        page: 1,
+        limit: 16,
+      });
+      const rawArticle = formatArticle(get(dataArticles, "data.data"));
+      setArticleArray(rawArticle);
+    };
     if (slug) {
       getPromotionBySlug(slug).catch((e) => console.log(e));
+      getArticles();
     }
   }, [slug]);
 
@@ -109,21 +136,12 @@ const PromotionsPage = () => {
 
   return (
     <div className={styles.wrapper_promotions} style={sectionLayoutStyle}>
-      {/* <SectionLayout
-        className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-8 md:pb-12`}
-      >
-        {get(promotion, "main_banner.data.attributes.url") && (
-          <Image
-            src={get(promotion, "main_banner.data.attributes.url")}
-            width={1188}
-            height={400}
-            layout="responsive"
-            alt="banner"
-          />
-        )}
-      </SectionLayout> */}
       <SectionLayout>
-        <Banner key={banners} listingImages={banners} />
+        <Banner
+          className={styles.banner}
+          key={banners}
+          listingImages={banners}
+        />
       </SectionLayout>
       {/* Start FEATURED VOUCHERS */}
       {Array.isArray(get(promotion, "deals.data")) &&
@@ -231,56 +249,30 @@ const PromotionsPage = () => {
       {/* End HOT DEALS */}
 
       {/* Start loop biz_listing components */}
-      {bizListings?.map(
-        (bizListing, index) =>
-          Array.isArray(get(bizListing, "biz_listings.data")) &&
-          get(bizListing, "biz_listings.data").length > 0 && (
-            <SectionLayout
-              className={`${styles.section_layout_inherit} ${style.special} pt-0 pb-12 md:pb-16`}
-              key={index}
-            >
-              <DividerSection
-                color={titleColor}
-                backgroundColor={backgroundColorBar}
-                title={bizListing.title}
-                className="mb-5 md:mb-8"
-              />
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-2 md:gap-x-5 gap-y-4 md:gap-y-8">
-                {Array.isArray(get(bizListing, "biz_listings.data")) &&
-                  get(bizListing, "biz_listings.data")?.map((card, index) => (
+      {bizListings?.map((bizListing, index) => {
+        const dataBizlisting = get(bizListing, "biz_listings.data");
+
+        return (
+          <div key={index}>
+            {isArray(dataBizlisting) && (
+              <SectionLayout
+                className={classNames(
+                  styles.section_layout_inherit,
+                  style.special
+                )}
+                key={index}
+              >
+                <DividerSection
+                  color={titleColor}
+                  backgroundColor={backgroundColorBar}
+                  title={bizListing.title}
+                  className="mb-5 md:mb-8"
+                />
+                <div className={styles.lists}>
+                  {dataBizlisting?.map((card, index) => (
                     <InforCard
                       key={index}
-                      imgUrl={
-                        get(card, "attributes.images")
-                          ? card.attributes.images[0]
-                          : "https://picsum.photos/200/300"
-                      }
-                      title={get(card, "attributes.name")}
-                      rate={calcRateNumber(
-                        get(card, "attributes.reviews.data")
-                      )}
-                      rateNumber={
-                        get(card, "attributes.reviews.data")
-                          ? get(card, "attributes.reviews.data").length
-                          : 0
-                      }
-                      followerNumber={
-                        get(card, "attributes.user_listing_follows.data")
-                          ? get(card, "attributes.user_listing_follows.data")
-                              .length
-                          : 0
-                      }
-                      description={get(card, "attributes.description")}
-                      price={get(card, "attributes.min_price")}
-                      currency={
-                        get(card, "attributes.currency")
-                          ? get(card, "attributes.currency")?.toUpperCase()
-                          : ""
-                      }
-                      categories={card.categories}
-                      tags={get(card, "attributes.tags.data")}
-                      iconTag={true}
-                      isVerified={get(card, "attributes.is_verified")}
+                      {...formatCardItemProps(card)}
                       className="w-full"
                       onClick={() => {
                         router.push(
@@ -299,10 +291,29 @@ const PromotionsPage = () => {
                       }}
                     />
                   ))}
-              </div>
-            </SectionLayout>
-          )
-      )}
+                </div>
+              </SectionLayout>
+            )}
+            {index === 0 && isArray(articleArray) && (
+              <SectionLayout backgroundColor title="Articles">
+                <Carousel responsive={homeCuratedResponsive}>
+                  {articleArray?.map((item, index) => (
+                    <Link href={`/articles/${item.slug}`} passHref key={index}>
+                      <div className="pb-5 pt-3 pl-3">
+                        <ArticleCard
+                          title={item.title}
+                          imgUrl={item.imgUrl}
+                          time={item.time}
+                        />
+                      </div>
+                    </Link>
+                  ))}
+                </Carousel>
+              </SectionLayout>
+            )}
+          </div>
+        );
+      })}
 
       {/* Start Shop more deals */}
       {Array.isArray(get(promotion, "more_deals.data")) &&

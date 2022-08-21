@@ -568,27 +568,25 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
             />
             <Break
               show={
-                !isViewPage && facilitiesData && isEmptyObject(facilitiesData)
+                !isViewPage || (facilitiesData && isEmptyObject(facilitiesData))
               }
             />
-            {facilitiesData && isEmptyObject(facilitiesData) && (
-              <Facilities
-                category={category}
-                isViewPage={isViewPage}
-                facilities={facilitiesData}
-                onSetFacilities={(facilities) => setFacilitiesData(facilities)}
-                // facilityOptions={facilityOptions}
-              />
-            )}
-            <Break show={!isViewPage && isArray(tags)} />
-            {isArray(tags) && (
-              <Tags
-                isViewPage={isViewPage}
-                tags={tags}
-                onSetTags={(tags) => setTags(tags)}
-                tagOptions={tagOptions}
-              />
-            )}
+            <Facilities
+              category={category}
+              isViewPage={isViewPage}
+              facilities={facilitiesData}
+              onSetFacilities={(facilities) => setFacilitiesData(facilities)}
+            />
+            <Break show={!isViewPage || isArray(tags)} />
+            {(isViewPage && isEmptyObject(tags)) ||
+              (!isViewPage && (
+                <Tags
+                  isViewPage={isViewPage}
+                  tags={tags}
+                  onSetTags={(tags) => setTags(tags)}
+                  tagOptions={tagOptions}
+                />
+              ))}
             <Break show={!isViewPage} />
             <HomeOpenHours
               isViewPage={isViewPage}
@@ -622,7 +620,7 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
               onSubmitReply={(value, id) => handleSubmitReply(value, id)}
               // onChangeReviewsSequence={handleChangeReviewsSequence}
             />
-            <Break show={checkHasSocialLink(bizListing)} />
+            <Break show={checkHasSocialLink(bizListing) || !isViewPage} />
             {checkHasSocialLink(bizListing) && (
               <Contacts
                 email={bizListing?.email}
