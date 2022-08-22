@@ -42,6 +42,7 @@ export const formatCardItemProps = (item) => ({
   imgUrl:
     item.imgUrl ||
     get(item, "images.[0]") ||
+    get(item, "attributes.images.[0]") ||
     get(item, "menu_file.[0]") ||
     require("public/images/default-thumbnail.png"),
   description: get(item, "attributes.description") || item.description,
