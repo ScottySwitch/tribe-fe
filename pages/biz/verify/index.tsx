@@ -338,7 +338,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
       const nowDay = moment();
       let expiration_date =
         price == "1200" ? nowDay.add(365, "day") : nowDay.add(90, "day");
-      const subscribe_plan = price == "300" ? "annual" : "quarterly";
+      const subscribe_plan = price == "1200" ? "annual" : "quarterly";
       await bizListingApi.updateBizListing(parseInt(userInfo.biz_id), {
         expiration_date: expiration_date.format("YYYY-MM-DD") + "T:00:00.000Z",
         subscribe_plan: subscribe_plan,
