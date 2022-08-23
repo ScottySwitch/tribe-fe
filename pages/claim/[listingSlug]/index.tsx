@@ -59,7 +59,7 @@ const ClaimListing = (context) => {
         biz_id: listingId,
         current_listing_slug: get(data, "data.data.attributes.slug"),
         biz_slug: get(data, "data.data.attributes.slug"),
-        pay_price: "150",
+        pay_price: "300",
       });
     };
     if (listingId) {
