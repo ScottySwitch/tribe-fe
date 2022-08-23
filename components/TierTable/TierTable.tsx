@@ -95,8 +95,8 @@ const tiers = [
   },
   {
     name: "Basic Tier",
-    quarter_price: "SGD 150",
-    yearly_price: "SGD 600",
+    quarter_price: "SGD 300",
+    yearly_price: "SGD 1200",
     demo: Tiers.BASIC,
     description:
       "With advance features to help you promote your business. Suitable for medium and large business.",
@@ -151,10 +151,10 @@ const DesktopTierTable = ({
   const handleChangePayPrice = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     setIsPayYearly?.(!isPayYearly);
-    if (userInfo.pay_price === "600") {
-      userInfo = { ...userInfo, pay_price: "150" };
+    if (userInfo.pay_price === "1200") {
+      userInfo = { ...userInfo, pay_price: "300" };
     } else {
-      userInfo = { ...userInfo, pay_price: "600" };
+      userInfo = { ...userInfo, pay_price: "1200" };
     }
     localStorage.setItem("user", JSON.stringify(userInfo));
   };
@@ -195,7 +195,9 @@ const DesktopTierTable = ({
                   <Link href={"/"}>View Demo page</Link>
                   {isChangeTier &&
                     expirationDate &&
-                    tier.value !== Tiers.FREE && <p className="mt-[3px]">{expirationDate}</p>}
+                    tier.value !== Tiers.FREE && (
+                      <p className="mt-[3px]">{expirationDate}</p>
+                    )}
                 </div>
                 <br />
                 {((tier.value !== Tiers.FREE && !isPaid) ||
@@ -261,10 +263,10 @@ const MobileTierTable = ({
   const handleChangePayPrice = () => {
     let userInfo = JSON.parse(localStorage.getItem("user") || "{}");
     setIsPayYearly?.(!isPayYearly);
-    if (userInfo.pay_price === "600") {
-      userInfo = { ...userInfo, pay_price: "150" };
+    if (userInfo.pay_price === "1200") {
+      userInfo = { ...userInfo, pay_price: "300" };
     } else {
-      userInfo = { ...userInfo, pay_price: "600" };
+      userInfo = { ...userInfo, pay_price: "1200" };
     }
     localStorage.setItem("user", JSON.stringify(userInfo));
   };

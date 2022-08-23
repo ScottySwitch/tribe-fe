@@ -214,7 +214,7 @@ const AddListing = () => {
     await ContributeApi.createContribute(dataSendContribute);
     userInfo = {
       ...userInfo,
-      pay_price: "150",
+      pay_price: "300",
       biz_id: get(result, "data.data.id"),
       biz_slug: get(result, "data.data.attributes.slug"),
       role: get(formData, "role.label"),
