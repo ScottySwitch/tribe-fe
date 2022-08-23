@@ -577,7 +577,7 @@ const BizUserVerify = (props: BizUserVerifyProps) => {
                 className="css style"
                 type="button"
                 id="SS_ProductCheckout"
-                data-id={payPrice === "1200" ? 10 : 9}
+                data-id={payPrice === "1200" ? 2 : 1}
                 data-url={baseURL}
                 text="Next"
                 onClick={handleSubmit}
