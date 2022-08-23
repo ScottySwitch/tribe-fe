@@ -44,6 +44,7 @@ const ListCard = (props: { data: ListCardProps[] }) => {
           <UserReviewCard
             key={index}
             isDivider
+            user={user}
             avatarUrl={user.avatar}
             listImage={reviewListing.images}
             actions={false}
