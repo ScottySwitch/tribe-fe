@@ -49,12 +49,7 @@ const GroupHeadingOne = (props: {
         </div>
         <h2 className={styles.name}>{displayName || name}</h2>
       </div>
-      {/* <CompleteProfileCard
-        stepCurrent={3}
-        stepCompleted={5}
-        linkable="/profile/information"
-        className={styles.CompleteProfileCard_desktop}
-      /> */}
+      <CompleteProfileCard className={styles.CompleteProfileCard_desktop} />
     </div>
   );
 };
@@ -139,7 +134,6 @@ const ProfilePage = (context) => {
       ContributeApi.getUserContribute()
         .then(async (res) => {
           const contributionRawData = get(res, "data.data");
-          console.log("contributionRawData", contributionRawData);
           let contributionData: IContributions = {
             pending: [],
             approved: [],
