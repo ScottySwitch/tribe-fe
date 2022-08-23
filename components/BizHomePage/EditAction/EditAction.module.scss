@@ -78,5 +78,9 @@
   .action_modal {
     width: 100%;
     top: 0;
+
+    &.action_modal {
+      display: none;
+    }
   }
 }

@@ -88,6 +88,10 @@ const PromotionsPage = () => {
       if (promotionData.length === 0) {
         router.push("/");
       }
+      const rawArticle = formatArticle(
+        get(promotionData, "[0].attributes.microsite_articles.articles.data")
+      );
+      console.log("rawArticle", rawArticle);
       const arrayImages = formatArrayImages(
         get(promotionData, "[0].attributes.main_banner.data")
       );
@@ -98,23 +102,15 @@ const PromotionsPage = () => {
       setBizListings(
         get(promotionData, "[0].attributes.microsite_biz_listings")
       );
+      setArticleArray(rawArticle);
       setBackgroundColor(get(promotionData, "[0].attributes.background_color"));
       setBackgroundColorBar(
         get(promotionData, "[0].attributes.background_color_bar")
       );
       setTitleColor(get(promotionData, "[0].attributes.title_color"));
     };
-    const getArticles = async () => {
-      const dataArticles = await ArticleApi.getArticleCustomer({
-        page: 1,
-        limit: 16,
-      });
-      const rawArticle = formatArticle(get(dataArticles, "data.data"));
-      setArticleArray(rawArticle);
-    };
     if (slug) {
       getPromotionBySlug(slug).catch((e) => console.log(e));
-      getArticles();
     }
   }, [slug]);
 
