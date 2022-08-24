@@ -252,7 +252,7 @@ const EditAction = (props: EditActionProps) => {
         <div
           className={classNames(
             styles.action_modal,
-            isViewPage && styles.is_view
+            isViewPage && styles.hidden
           )}
         >
           <Button
