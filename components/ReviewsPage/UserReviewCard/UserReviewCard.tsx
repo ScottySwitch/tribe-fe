@@ -18,6 +18,7 @@ export interface UserReviewCardProps {
   replyAt?: string;
   idReview?: string;
   className?: string;
+  name?: string;
   isPaid?: boolean;
   actions?: boolean;
   replyAccepted?: boolean;
@@ -49,6 +50,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     reply,
     replyAt,
     className = "",
+    name,
     avatarUrl = "https://picsum.photos/200",
     content,
     listImage,
@@ -101,9 +103,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
       <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
         <div className={styles.header}>
           <h6 className={styles.name}>
-            <span>
-              {(user?.first_name || "") + " " + (user?.last_name || "")}
-            </span>
+            <span>{name}</span>
             {censorshipLabel && (
               <span className="font-normal ml-2">{censorshipLabel}</span>
             )}
@@ -132,19 +132,17 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     <div className={userReviewCardClassName}>
       <div className={styles.group_heading}>
         <div className={styles.review_avatar}>
-          {(user?.avatar || avatarUrl) && (
-            <Image
-              src={
-                user?.avatar ||
-                avatarUrl ||
-                require("public/images/default-page-avatar.svg")
-              }
-              height={56}
-              width={56}
-              alt="avatar"
-              className="rounded-full"
-            />
-          )}
+          <Image
+            src={
+              user?.avatar ||
+              avatarUrl ||
+              require("public/images/default-page-avatar.svg")
+            }
+            height={56}
+            width={56}
+            alt="avatar"
+            className="rounded-full"
+          />
         </div>
         <UserReviewHeader show={layout === "split"} />
       </div>

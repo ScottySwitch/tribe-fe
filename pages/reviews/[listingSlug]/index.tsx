@@ -209,6 +209,20 @@ const AddReviewPage = () => {
                             review,
                             "attributes.user.data.attributes.avatar"
                           )}
+                          name={
+                            get(
+                              review,
+                              "attributes.user.data.attributes.display_name"
+                            ) ||
+                            get(
+                              review,
+                              "attributes.user.data.attributes.first_name"
+                            ) +
+                              get(
+                                review,
+                                "attributes.user.data.attributes.last_name"
+                              )
+                          }
                           key={index}
                           user={get(review, "attributes.user.data.attributes")}
                           listImage={get(review, "attributes.images")}
