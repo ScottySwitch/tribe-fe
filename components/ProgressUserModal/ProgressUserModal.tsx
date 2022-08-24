@@ -74,7 +74,7 @@ const ProgressUserModal = (props: ProgressUserModalProps) => {
 
   return (
     <React.Fragment>
-      <Modal visible={visible} width="100%" maxWidth={778} onClose={onClose}>
+      <Modal visible={visible} width="90%" maxWidth={778} onClose={onClose}>
         <div className={styles.container}>
           <div className={styles.close} onClick={onClose}>
             <Icon icon="cancel-mobile" />
@@ -94,7 +94,7 @@ const ProgressUserModal = (props: ProgressUserModalProps) => {
                 key={opt.value}
                 label={opt.label}
                 id={opt.value}
-                className={classNames(styles.text, styles.item)}
+                className={classNames(styles.text, styles.item, opt.checked && styles.checked)}
                 checked={opt.checked}
                 onClick={() =>
                   router.push(

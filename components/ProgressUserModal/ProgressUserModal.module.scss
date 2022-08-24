@@ -83,6 +83,11 @@
       &:not(:last-of-type) { 
         margin-bottom: 20px;
       }
+
+      &.checked {
+        color: $bg-300;
+        text-decoration-line: line-through;
+      }
     }
   }
 } 
@@ -90,4 +95,50 @@
 .break {
   margin-top: 55px;
   margin-bottom: 16px;
+}
+
+@media screen and (max-width: $medium-tablet) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left {
+    padding: 25px;
+    width: 100%;
+    &::after {
+      display: none;
+    }
+
+    .progress {
+      margin-bottom: 0px;
+    }
+  }
+
+  .right {
+    width: 100%;
+  }
+
+  .break {
+    margin-top: 35px;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .container {
+    .title {
+      margin-bottom: 15px;
+    }
+  }
+
+  .left {
+    padding: 17px;
+  }
+   
+  .right {
+    .text {
+      &.content {
+        margin-bottom: 15px; 
+      }
+    }
+  }
 }
