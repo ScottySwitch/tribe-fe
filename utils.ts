@@ -4,6 +4,7 @@ import { IOption } from "type";
 import moment from "moment";
 import parseISO from "date-fns/parseISO";
 import { locations, videoExtensions } from "constant";
+import { useMediaQuery } from "usehooks-ts";
 
 export const validateEmail = (emailAdress) => {
   let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -483,3 +484,17 @@ export const arrayLabelCategory = (rawCategory) =>
   Array.isArray(rawCategory)
     ? rawCategory.map((item) => get(item, "attributes.name"))
     : [];
+
+export const calcProgressuser = (user: any) => {
+  let step = 0;
+  if (user.first_name && user.last_name) step = step + 1;
+  if (user.birthday) step = step + 1;
+  if (user.phone_number) step = step + 1;
+  if (user.gender) step = step + 1;
+  if (user.email) step = step + 1;
+  if (user.educate_level) step = step + 1;
+  if (user.industry) step = step + 1;
+  if (user.display_name) step = step + 1;
+  if (get(user, 'category_links.length') > 0) step = step + 1;
+  return step;
+}

@@ -18,6 +18,7 @@ export interface UserReviewCardProps {
   replyAt?: string;
   idReview?: string;
   className?: string;
+  name?: string;
   isPaid?: boolean;
   actions?: boolean;
   replyAccepted?: boolean;
@@ -49,6 +50,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
     reply,
     replyAt,
     className = "",
+    name,
     avatarUrl = "https://picsum.photos/200",
     content,
     listImage,
@@ -101,10 +103,7 @@ const UserReviewCard = (props: UserReviewCardProps) => {
       <div className="flex items-center justify-between flex-wrap w-full mb-2.5">
         <div className={styles.header}>
           <h6 className={styles.name}>
-            <span>
-              {user?.display_name ||
-                (user?.first_name || "") + " " + (user?.last_name || "")}
-            </span>
+            <span>{name}</span>
             {censorshipLabel && (
               <span className="font-normal ml-2">{censorshipLabel}</span>
             )}

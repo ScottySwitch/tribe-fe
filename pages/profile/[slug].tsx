@@ -28,12 +28,8 @@ import ContributeApi from "services/contribute";
 import Header from "components/TheHeader/Header";
 import Head from "next/head";
 
-const GroupHeadingOne = (props: {
-  displayName?: string;
-  name: string;
-  imageUrl?: string;
-}) => {
-  const { name, imageUrl, displayName } = props;
+const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
+  const { name, imageUrl } = props;
   return (
     <div className={styles.group_heading_one}>
       <div className="flex items-end flex-wrap lg:flex-nowrap">
@@ -47,14 +43,9 @@ const GroupHeadingOne = (props: {
             alt="avatar"
           />
         </div>
-        <h2 className={styles.name}>{displayName || name}</h2>
+        <h2 className={styles.name}>{name}</h2>
       </div>
-      {/* <CompleteProfileCard
-        stepCurrent={3}
-        stepCompleted={5}
-        linkable="/profile/information"
-        className={styles.CompleteProfileCard_desktop}
-      /> */}
+      <CompleteProfileCard className={styles.CompleteProfileCard_desktop} />
     </div>
   );
 };
@@ -139,7 +130,6 @@ const ProfilePage = (context) => {
       ContributeApi.getUserContribute()
         .then(async (res) => {
           const contributionRawData = get(res, "data.data");
-          console.log("contributionRawData", contributionRawData);
           let contributionData: IContributions = {
             pending: [],
             approved: [],
@@ -209,8 +199,10 @@ const ProfilePage = (context) => {
         containerClassName={styles.section_profile_container}
       >
         <GroupHeadingOne
-          displayName={user.display_name}
-          name={`${user.first_name} ${user.last_name || ""}`}
+          name={
+            `${user.display_name}` ||
+            `${user.first_name} ${user.last_name || ""}`
+          }
           imageUrl={user.avatar}
         />
         <GroupHeadingTwo contributions={contributionNumber || "0"} points={0} />
