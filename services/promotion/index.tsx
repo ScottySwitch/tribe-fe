@@ -20,6 +20,7 @@ const getPromotionBySlug = async (slug: any) => {
         "8": "microsite_biz_listings.biz_listings.user_listing_follows",
         "9": "microsite_biz_listings.biz_listings.categories",
         "10": "microsite_biz_listings.biz_listings.category_links",
+        "11": "microsite_articles.articles.thumbnail",
       },
     },
     {

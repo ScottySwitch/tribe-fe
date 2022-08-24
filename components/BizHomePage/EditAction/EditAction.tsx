@@ -14,6 +14,7 @@ import { UserInforContext } from "Context/UserInforContext";
 import { ClaimStep } from "enums";
 import AuthPopup from "components/AuthPopup/AuthPopup";
 import Image from "next/image";
+import classNames from "classnames";
 
 interface EditActionProps {
   isOwned?: boolean;
@@ -248,7 +249,12 @@ const EditAction = (props: EditActionProps) => {
         </div>
       )}
       {klookUrl && (
-        <div className={styles.action_modal}>
+        <div
+          className={classNames(
+            styles.action_modal,
+            isViewPage && styles.hidden
+          )}
+        >
           <Button
             text="Book on KLOOK"
             size="small"

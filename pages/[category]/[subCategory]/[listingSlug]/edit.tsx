@@ -57,6 +57,7 @@ import Button from "components/Button/Button";
 import ShareModal from "components/ShareModal/ShareModal";
 
 import styles from "styles/BizHomepage.module.scss";
+import EditPageTabBar from "components/EditPageTabBar/EditPageTabBar";
 
 const EditListingHomepage = (props: { isViewPage?: boolean }) => {
   const { isViewPage } = props;
@@ -693,6 +694,9 @@ const EditListingHomepage = (props: { isViewPage?: boolean }) => {
         onClose={() => setShowShareModal(false)}
         visible={showShareModal}
       />
+      {isViewPage && isPaid && (
+        <EditPageTabBar action={action} klookUrl={klookUrl} />
+      )}
     </div>
   );
 };

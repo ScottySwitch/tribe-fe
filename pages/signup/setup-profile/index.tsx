@@ -55,6 +55,7 @@ const StepOne = ({
   const { setValue, getValues, register, handleSubmit, watch } = useForm({
     defaultValues: {
       name: formData.name,
+      displayName: formData.displayName,
       country: formData.country,
       education: formData.education,
       gender: formData.gender,
@@ -114,6 +115,7 @@ const StepOne = ({
       moment(data.birthday).format("YYYY-MM-DD") + "T:00:00.000Z";
 
     let dataSend: any = {
+      display_name: data.displayName,
       first_name: data.name,
       gender: data.gender,
       birthday: convertBirthday,
@@ -157,6 +159,10 @@ const StepOne = ({
           />
         </div>
         <Input placeholder="Your name" register={register("name")} />
+        <Input
+          placeholder="Your display name"
+          register={register("displayName")}
+        />
         <Select
           placeholder="Your country"
           options={countryList}
