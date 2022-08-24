@@ -179,6 +179,16 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
                 user={
                   get(review, "user.data.attributes") || get(review, "user")
                 }
+                name={
+                  get(review, "user.data.attributes.display_name") ||
+                  get(review, "user.display_name") ||
+                  get(review, "user.data.attributes.first_name") ||
+                  get(review, "user.first_name") ||
+                  "" + " " + get(review, "user.data.attributes.last_name") ||
+                  get(review, "user.last_name") ||
+                  ""
+                }
+                avatarUrl={get(review, "user.data.attributes.avatar")}
                 bizListingId={bizListingId}
                 listImage={get(review, "images")}
                 content={get(review, "content")}
@@ -234,7 +244,19 @@ const HomepageReviews = (props: HomepageReviewsProps) => {
             isPaid={isPaid}
             actions={false}
             bizListingId={bizListingId}
-            user={get(selectedReview, "user.data.attributes")}
+            // user={get(selectedReview, "user.data.attributes")}
+            name={
+              get(selectedReview, "user.data.attributes.display_name") ||
+              get(selectedReview, "user.display_name") ||
+              get(selectedReview, "user.data.attributes.first_name") ||
+              get(selectedReview, "user.first_name") ||
+              "" +
+                " " +
+                get(selectedReview, "user.data.attributes.last_name") ||
+              get(selectedReview, "user.last_name") ||
+              ""
+            }
+            avatarUrl={get(selectedReview, "user.data.attributes.avatar")}
             listImage={get(selectedReview, "images")}
             content={get(selectedReview, "content")}
             dateVisit={get(selectedReview, "visited_date")}
