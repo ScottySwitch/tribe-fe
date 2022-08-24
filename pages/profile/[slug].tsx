@@ -27,9 +27,12 @@ import styles from "styles/Profile.module.scss";
 import ContributeApi from "services/contribute";
 import Header from "components/TheHeader/Header";
 import Head from "next/head";
+import ProgressUserModal from "components/ProgressUserModal/ProgressUserModal";
 
 const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
   const { name, imageUrl } = props;
+  const [isVisible, setIsVisible] = useState(false);
+
   return (
     <div className={styles.group_heading_one}>
       <div className="flex items-end flex-wrap lg:flex-nowrap">
@@ -45,7 +48,15 @@ const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
         </div>
         <h2 className={styles.name}>{name}</h2>
       </div>
-      <CompleteProfileCard className={styles.CompleteProfileCard_desktop} />
+      <CompleteProfileCard
+        icon="like-color-2"
+        onClick={() => setIsVisible(true)}
+        className={styles.CompleteProfileCard_desktop}
+      />
+      <ProgressUserModal
+        visible={isVisible}
+        onClose={() => setIsVisible(false)}
+      />  
     </div>
   );
 };

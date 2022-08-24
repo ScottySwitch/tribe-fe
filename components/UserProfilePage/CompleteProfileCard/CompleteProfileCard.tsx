@@ -30,20 +30,18 @@ const ProgressComplete = (props: ProgressCompleteProps) => {
 
 export interface CompleteProfileCardProps extends ProgressCompleteProps {
   className?: string;
+  icon?: string;
+  onClick?: () => void;
 }
 
 const CompleteProfileCard = (props: CompleteProfileCardProps) => {
-  const { className = "" } = props;
+  const { className = "", onClick, icon } = props;
 
   const stepCompleted = 9;
 
   const { user } = useContext(UserInforContext);
 
   const stepCurrent = calcProgressuser(user);
-
-  const handleHref = () => {
-    console.log(1);
-  };
 
   return (
     <div className={`${className} ${styles.card}`}>
@@ -52,17 +50,19 @@ const CompleteProfileCard = (props: CompleteProfileCardProps) => {
         stepCompleted={stepCompleted}
       />
       <div className="flex items-center">
-        <Icon icon="like-color-2" className="mr-4" />
+        {icon && <Icon icon={icon} className="mr-4" />}
         <div className={styles.note_cta}>
           {stepCurrent !== stepCompleted ? (
             <div>
               <span>
-                {`${stepCurrent}/${stepCompleted} `} steps to complete your
-                profile!
+                {!icon && "👏"} {`${stepCurrent}/${stepCompleted} `} steps to
+                complete your profile!
               </span>
-              <span>
-                <a onClick={handleHref}>Complete it.</a>
-              </span>
+              {onClick && (
+                <span>
+                  <a onClick={onClick}>Complete it.</a>
+                </span>
+              )}
             </div>
           ) : (
             "Congratulations. Your profile has been completed."

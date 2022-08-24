@@ -498,3 +498,16 @@ export const calcProgressuser = (user: any) => {
   if (get(user, 'category_links.length') > 0) step = step + 1;
   return step;
 }
+
+export const formatUserContentPreferences = (items) => {
+  let value = "";
+  if (isArray(items)) {
+    for (let index = 0; index < items.length; index++) {
+      value = value + `${items[index].label}`;
+      if (index !== items.length - 1) {
+        value = value + ', ';
+      }
+    }
+  }
+  return value;
+}
