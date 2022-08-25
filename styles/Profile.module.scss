@@ -72,7 +72,7 @@
   }
 }
 
-.CompleteProfileCard_mobile {
+.complete_profilecard_mobile {
   display: none;
 }
 
@@ -129,14 +129,14 @@
 }
 
 @media screen and (max-width: $tablet) {
-  .CompleteProfileCard_mobile {
+  .complete_profilecard_mobile {
     display: block;
     margin-bottom: 30px;
   }
   .group {
     &_heading {
       &_one {
-        .CompleteProfileCard_desktop {
+        .complete_profilecard_desktop {
           display: none;
         }
       }

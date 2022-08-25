@@ -35,6 +35,7 @@ export interface SelectProps {
   menuPortalTarget?: any;
   ellipsis?: boolean;
   isClearable?: boolean;
+  autoFocus?: boolean;
   variant?: "filled" | "outlined" | "no-outlined";
   size?: "small" | "medium" | "large";
   inputRef?: any;
@@ -54,6 +55,7 @@ const Select = (props: SelectProps) => {
     helperText,
     id,
     width,
+    autoFocus,
     menuLeft,
     menuPortalTarget,
     prefixIcon,
@@ -228,6 +230,7 @@ const Select = (props: SelectProps) => {
                 opt.value === selected ||
                 opt.value === (selected as IOption)?.value
             )}
+            autoFocus={autoFocus}
             placeholder={placeholder}
             isClearable={isClearable}
             closeMenuOnSelect={closeMenuOnSelect || !isMulti}

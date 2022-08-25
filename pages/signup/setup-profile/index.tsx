@@ -342,10 +342,13 @@ const StepTwo = ({ show, onBackStep, onSubmit, formData }: any) => {
 };
 
 const SetupProfilePage = () => {
-  const [step, setStep] = useState(ProfileSteps.STEP_ONE);
-  const [formData, setFormData] = useState({});
-
   const router = useRouter();
+  const { query } = router;
+  const { stepProcess } = query;
+
+  const [step, setStep] = useState(stepProcess || ProfileSteps.STEP_ONE);
+
+  const [formData, setFormData] = useState({});
 
   const handleNextStep = (data) => {
     setFormData({ ...formData, ...data });

@@ -27,9 +27,14 @@ import styles from "styles/Profile.module.scss";
 import ContributeApi from "services/contribute";
 import Header from "components/TheHeader/Header";
 import Head from "next/head";
+import ProgressUserModal from "components/ProgressUserModal/ProgressUserModal";
 
-const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
-  const { name, imageUrl } = props;
+const GroupHeadingOne = (props: {
+  name: string;
+  imageUrl?: string;
+  onClick?: () => void;
+}) => {
+  const { name, imageUrl, onClick } = props;
   return (
     <div className={styles.group_heading_one}>
       <div className="flex items-end flex-wrap lg:flex-nowrap">
@@ -45,7 +50,11 @@ const GroupHeadingOne = (props: { name: string; imageUrl?: string }) => {
         </div>
         <h2 className={styles.name}>{name}</h2>
       </div>
-      <CompleteProfileCard className={styles.CompleteProfileCard_desktop} />
+      <CompleteProfileCard
+        icon="like-color-2"
+        onClick={onClick}
+        className={styles.complete_profilecard_desktop}
+      />
     </div>
   );
 };
@@ -54,8 +63,9 @@ const GroupHeadingTwo = (props: {
   contributions: number;
   following?: number;
   points: number;
+  onClick?: () => void;
 }) => {
-  const { contributions, following, points } = props;
+  const { contributions, following, points, onClick } = props;
   const router = useRouter();
   const [numberFollow, setNumberFollow] = useState<number>(0);
   useEffect(() => {
@@ -91,12 +101,11 @@ const GroupHeadingTwo = (props: {
           onClick={() => router.push("/profile/information")}
         />
       </div>
-      {/* <CompleteProfileCard
-        stepCurrent={3}
-        stepCompleted={5}
-        linkable="/profile/information"
-        className={styles.CompleteProfileCard_mobile}
-      /> */}
+      <CompleteProfileCard
+        icon="like-color-2"
+        onClick={onClick}
+        className={styles.complete_profilecard_mobile}
+      />
     </React.Fragment>
   );
 };
@@ -123,6 +132,8 @@ const ProfilePage = (context) => {
   const [metaDescription, setMetaDescription] = useState(
     "Access your profile page"
   );
+
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setSelectedTab(slug);
@@ -204,8 +215,13 @@ const ProfilePage = (context) => {
             `${user.first_name} ${user.last_name || ""}`
           }
           imageUrl={user.avatar}
+          onClick={() => setIsVisible(true)}
         />
-        <GroupHeadingTwo contributions={contributionNumber || "0"} points={0} />
+        <GroupHeadingTwo
+          onClick={() => setIsVisible(true)}
+          contributions={contributionNumber || "0"}
+          points={0}
+        />
         <TabsHorizontal
           key={selectedTab}
           selectedTab={selectedTab}
@@ -217,6 +233,10 @@ const ProfilePage = (context) => {
           }
         />
         <TopSearches className={styles.top_searches} />
+        <ProgressUserModal
+          visible={isVisible}
+          onClose={() => setIsVisible(false)}
+        />
       </SectionLayout>
     </div>
   );
