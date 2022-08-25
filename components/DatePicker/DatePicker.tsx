@@ -11,6 +11,7 @@ interface DatePickerProps {
   size?: string;
   label?: string;
   prefixIcon?: boolean;
+  autoFocus?: boolean;
   suffixIcon?: boolean;
   placeholder?: string;
   maxDate?: Date;
@@ -27,6 +28,7 @@ const DatePicker = (props: DatePickerProps) => {
     placeholder,
     maxDate = new Date(),
     minDate,
+    autoFocus,
     size,
     label,
     onChange,
@@ -47,6 +49,7 @@ const DatePicker = (props: DatePickerProps) => {
       <div className={styles.input_field}>
         {prefixIcon && <Icon icon="calendar-2" color="#7F859F" />}
         <ReactDatePicker
+          autoFocus={autoFocus}
           className={styles.date_picker}
           dateFormat="dd/MM/yyyy"
           selected={localValue}

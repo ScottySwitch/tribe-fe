@@ -11,6 +11,7 @@ import {
   genderOptions,
   industryList,
   phoneAreaCodes,
+  user,
 } from "constant";
 import DatePicker from "components/DatePicker/DatePicker";
 import Input from "components/Input/Input";
@@ -21,13 +22,20 @@ import Upload from "components/Upload/Upload";
 import Button from "components/Button/Button";
 import Modal, { ModalFooter } from "components/Modal/Modal";
 import AuthApi from "services/auth";
-import { formatSelectInputValue, removeZeroInPhoneNumber } from "utils";
+import {
+  formatSelectInputValue,
+  formatUserContentPreferences,
+  removeZeroInPhoneNumber,
+} from "utils";
 import Loader from "components/Loader/Loader";
 import UserApi from "services/user";
 import { UserInforContext } from "Context/UserInforContext";
 
+import { useRouter } from "next/router";
 import styles from "./TabContent.module.scss";
 import { watch } from "fs";
+import classNames from "classnames";
+import { ProfileSteps } from "pages/signup/setup-profile";
 
 const ModalNewPhone = (props) => {
   const { visible, onClose, onNext } = props;
@@ -103,6 +111,10 @@ const UserInformation = () => {
   const [showModalOTP, setShowModalOTP] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<{ [key: string]: any }>({});
 
+  const router = useRouter();
+  const { query } = router;
+  const { field } = query;
+
   const {
     register,
     handleSubmit,
@@ -121,6 +133,8 @@ const UserInformation = () => {
       const userData = get(response, "data") || {};
       setUserInfor(userData);
       reset({
+        content_preferences: userData.category_links,
+        display_name: userData.display_name,
         first_name: userData.first_name,
         last_name: userData.last_name,
         email: userData.email,
@@ -207,18 +221,30 @@ const UserInformation = () => {
               onChange={(imgs) => setValue("avatar", imgs[0])}
             />
           </div>
-          <div className={styles.form_group}>
+          <div className={classNames(styles.form_group, "flex flex-row gap-2")}>
             <Input
+              className="w-1/2"
               required
               label="First name"
+              autoFocus={field === "first_name"}
               size="small"
               register={register("first_name")}
             />
             <br />
             <Input
+              className="w-1/2"
               label="Last name"
+              autoFocus={field === "last_name"}
               size="small"
               register={register("last_name")}
+            />
+          </div>
+          <div className={styles.form_group}>
+            <Input
+              autoFocus={field === "display_name"}
+              label="Display name"
+              size="small"
+              register={register("display_name")}
             />
           </div>
           <div className={styles.form_group}>
@@ -255,6 +281,7 @@ const UserInformation = () => {
           <div className={styles.form_group}>
             <Input
               register={register("email")}
+              autoFocus={field === "email"}
               size="large"
               placeholder="Email"
             />
@@ -276,6 +303,7 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <DatePicker
+              autoFocus={field === "birthday"}
               key={getValues("birthday")}
               placeholder="Birthday"
               onChange={(e) => setValue("birthday", e)}
@@ -284,6 +312,7 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <Select
+              autoFocus={field === "educate_level"}
               placeholder="Education level"
               options={educationLevels}
               value={getValues("educate_level")}
@@ -292,10 +321,35 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <Select
+              autoFocus={field === "industry"}
               placeholder="Industry"
               options={industryList}
               value={getValues("industry")}
               onChange={(e) => setValue("industry", e.value)}
+            />
+          </div>
+          <div
+            className={styles.form_group}
+            onClick={() =>
+              router.push(
+                {
+                  pathname: "/signup/setup-profile",
+                  query: { stepProcess: ProfileSteps.STEP_TWO },
+                },
+                "/signup/setup-profile"
+              )
+            }
+          >
+            <Select
+              label="Content preferences"
+              autoFocus={field === "content_preferences"}
+              placeholder={
+                getValues("content_preferences")
+                  ? formatUserContentPreferences(
+                      getValues("content_preferences")
+                    )
+                  : ""
+              }
             />
           </div>
           <Button
