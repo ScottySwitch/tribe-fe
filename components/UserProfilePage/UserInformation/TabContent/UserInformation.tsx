@@ -226,7 +226,7 @@ const UserInformation = () => {
               className="w-1/2"
               required
               label="First name"
-              autoFocus={field === "first_name" ? true : false}
+              autoFocus={field === "first_name"}
               size="small"
               register={register("first_name")}
             />
@@ -234,14 +234,14 @@ const UserInformation = () => {
             <Input
               className="w-1/2"
               label="Last name"
-              autoFocus={field === "last_name" ? true : false}
+              autoFocus={field === "last_name"}
               size="small"
               register={register("last_name")}
             />
           </div>
           <div className={styles.form_group}>
             <Input
-              autoFocus={field === "display_name" ? true : false}
+              autoFocus={field === "display_name"}
               label="Display name"
               size="small"
               register={register("display_name")}
@@ -281,7 +281,7 @@ const UserInformation = () => {
           <div className={styles.form_group}>
             <Input
               register={register("email")}
-              autoFocus={field === "email" ? true : false}
+              autoFocus={field === "email"}
               size="large"
               placeholder="Email"
             />
@@ -303,7 +303,7 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <DatePicker
-              autoFocus={field === "birthday" ? true : false}
+              autoFocus={field === "birthday"}
               key={getValues("birthday")}
               placeholder="Birthday"
               onChange={(e) => setValue("birthday", e)}
@@ -312,7 +312,7 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <Select
-              autoFocus={field === "educate_level" ? true : false}
+              autoFocus={field === "educate_level"}
               placeholder="Education level"
               options={educationLevels}
               value={getValues("educate_level")}
@@ -321,7 +321,7 @@ const UserInformation = () => {
           </div>
           <div className={styles.form_group}>
             <Select
-              autoFocus={field === "industry" ? true : false}
+              autoFocus={field === "industry"}
               placeholder="Industry"
               options={industryList}
               value={getValues("industry")}
@@ -342,7 +342,7 @@ const UserInformation = () => {
           >
             <Select
               label="Content preferences"
-              autoFocus={field === "content_preferences" ? true : false}
+              autoFocus={field === "content_preferences"}
               placeholder={
                 getValues("content_preferences")
                   ? formatUserContentPreferences(

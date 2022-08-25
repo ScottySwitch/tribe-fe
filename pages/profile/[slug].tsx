@@ -53,7 +53,7 @@ const GroupHeadingOne = (props: {
       <CompleteProfileCard
         icon="like-color-2"
         onClick={onClick}
-        className={styles.CompleteProfileCard_desktop}
+        className={styles.complete_profilecard_desktop}
       />
     </div>
   );
@@ -104,7 +104,7 @@ const GroupHeadingTwo = (props: {
       <CompleteProfileCard
         icon="like-color-2"
         onClick={onClick}
-        className={styles.CompleteProfileCard_mobile}
+        className={styles.complete_profilecard_mobile}
       />
     </React.Fragment>
   );
