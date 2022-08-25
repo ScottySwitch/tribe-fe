@@ -35,6 +35,7 @@ const GroupHeadingOne = (props: {
   onClick?: () => void;
 }) => {
   const { name, imageUrl, onClick } = props;
+  console.log("name", name);
   return (
     <div className={styles.group_heading_one}>
       <div className="flex items-end flex-wrap lg:flex-nowrap">
@@ -120,6 +121,7 @@ const ProfilePage = (context) => {
   const { slug }: any = router.query;
 
   const { user } = useContext(UserInforContext);
+  console.log("user", user);
 
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<string>(context.slug);
@@ -211,8 +213,7 @@ const ProfilePage = (context) => {
       >
         <GroupHeadingOne
           name={
-            `${user.display_name}` ||
-            `${user.first_name} ${user.last_name || ""}`
+            user.display_name || `${user.first_name} ${user.last_name || ""}`
           }
           imageUrl={user.avatar}
           onClick={() => setIsVisible(true)}
