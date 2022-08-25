@@ -58,7 +58,7 @@ const ProgressUserModal = (props: ProgressUserModalProps) => {
     {
       label: "Add Content Preferences",
       value: "content_preferences",
-      checked: !!(get(user, "category_links.length") > 0),
+      checked: get(user, "category_links.length") > 0,
     },
     {
       label: "Add First & Last Name",
@@ -68,7 +68,7 @@ const ProgressUserModal = (props: ProgressUserModalProps) => {
     {
       label: "Add Display Name",
       value: "display_name",
-      checked: !!user?.display_name ? true : false,
+      checked: !!user?.display_name,
     },
   ];
 
