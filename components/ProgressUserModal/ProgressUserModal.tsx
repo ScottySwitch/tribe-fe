@@ -28,47 +28,47 @@ const ProgressUserModal = (props: ProgressUserModalProps) => {
     {
       label: "Add Birthday",
       value: "birthday",
-      checked: user?.birthday ? true : false,
+      checked: !!user?.birthday,
     },
     {
       label: "Add Gender",
       value: "gender",
-      checked: user?.gender ? true : false,
+      checked: !!user?.gender,
     },
     {
       label: "Add Mobile Number",
       value: "phone_number",
-      checked: user?.phone_number ? true : false,
+      checked: !!user?.phone_number,
     },
     {
       label: "Add Email Address",
       value: "email",
-      checked: user?.email ? true : false,
+      checked: !!user?.email,
     },
     {
       label: "Add Education Level",
       value: "educate_level",
-      checked: user?.educate_level ? true : false,
+      checked: !!user?.educate_level,
     },
     {
       label: "Add Industry",
       value: "industry",
-      checked: user?.industry ? true : false,
+      checked: !!user?.industry,
     },
     {
       label: "Add Content Preferences",
       value: "content_preferences",
-      checked: get(user, "category_links.length") > 0 ? true : false,
+      checked: !!(get(user, "category_links.length") > 0),
     },
     {
       label: "Add First & Last Name",
       value: "birthday",
-      checked: user?.birthday ? true : false,
+      checked: !!user?.birthday,
     },
     {
       label: "Add Display Name",
       value: "display_name",
-      checked: user?.display_name ? true : false,
+      checked: !!user?.display_name ? true : false,
     },
   ];
 
@@ -94,7 +94,11 @@ const ProgressUserModal = (props: ProgressUserModalProps) => {
                 key={opt.value}
                 label={opt.label}
                 id={opt.value}
-                className={classNames(styles.text, styles.item, opt.checked && styles.checked)}
+                className={classNames(
+                  styles.text,
+                  styles.item,
+                  opt.checked && styles.checked
+                )}
                 checked={opt.checked}
                 onClick={() =>
                   router.push(
