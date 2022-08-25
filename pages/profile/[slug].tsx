@@ -121,7 +121,6 @@ const ProfilePage = (context) => {
   const { slug }: any = router.query;
 
   const { user } = useContext(UserInforContext);
-  console.log("user", user);
 
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<string>(context.slug);
