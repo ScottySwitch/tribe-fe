@@ -9,4 +9,4 @@ services:
       dockerfile: deployment/Dockerfile
     restart: unless-stopped
     ports:
-      - '80:3000'
+      - '3000:3000'
