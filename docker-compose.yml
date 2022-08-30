@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+
+  tribes-fe:
+    container_name: tribes-be
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile
+    restart: unless-stopped
+    ports:
+      - '80:3000'
