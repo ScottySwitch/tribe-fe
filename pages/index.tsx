@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { get } from "lodash";
 import Image from "next/image";
 import { useRouter } from "next/router";
-
+import dynamic from 'next/dynamic';
 import Button from "components/Button/Button";
 import Carousel from "components/Carousel/Carousel";
 import CollectionCard from "components/CollectionCard/CollectionCard";
@@ -36,7 +36,8 @@ import styles from "styles/Home.module.scss";
 import Head from "next/head";
 import ArticleCard from "components/ArticleCard/ArticleCard";
 import ArticleApi from "services/article";
-
+import foo from '../foo.js';
+const foo = dynamic(import('../foo.js'), { ssr: false });
 const Home: NextPage = (props: any) => {
   const {
     listingExclusiveDeal,
